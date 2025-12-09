@@ -113,6 +113,14 @@ export const FeaturedDeals = () => (
           <CarouselPrevious className="relative inset-0 translate-x-0 translate-y-0 h-12 w-12 border-primary/30 bg-card/50 hover:bg-primary/20 hover:border-primary" />
           <CarouselNext className="relative inset-0 translate-x-0 translate-y-0 h-12 w-12 border-primary/30 bg-card/50 hover:bg-primary/20 hover:border-primary" />
         </div>
+        
+        {/* CTA Button */}
+        <div className="flex justify-center mt-10">
+          <Button size="lg" className="group">
+            Unlock Deals
+            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </div>
       </Carousel>
     </div>
   </section>
