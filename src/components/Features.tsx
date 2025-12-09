@@ -3,7 +3,7 @@ import { Badge } from "@/components/Badge";
 
 const features = [
   { 
-    title: "Real-world assets, not memes", 
+    title: "Backed by audited assets", 
     desc: "Curated deals in real estate and luxury, vetted with institutional diligence.", 
     icon: Gem 
   },
