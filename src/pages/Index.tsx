@@ -4,7 +4,6 @@ import { SocialProof } from "@/components/SocialProof";
 import { Features } from "@/components/Features";
 import { FeaturedDeals } from "@/components/FeaturedDeals";
 import { HowItWorks } from "@/components/HowItWorks";
-import { Pillars } from "@/components/Pillars";
 import { Marketplace } from "@/components/Marketplace";
 import { AssetClasses } from "@/components/AssetClasses";
 import { WorkWithUs } from "@/components/WorkWithUs";
@@ -18,12 +17,10 @@ const Index = () => {
       <FeaturedDeals />
       <Features />
       <HowItWorks />
-      <Pillars />
       <Marketplace />
       <AssetClasses />
       <SocialProof />
       <WorkWithUs />
-      <Footer />
       <Footer />
     </div>
   );
