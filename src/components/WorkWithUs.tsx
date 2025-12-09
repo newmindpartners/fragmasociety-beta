@@ -43,7 +43,7 @@ export const WorkWithUs = () => (
               <div>
                 <h4 className="font-semibold text-foreground">White-Glove Structuring</h4>
                 <p className="text-sm text-muted-foreground">
-                  Our team architects your offering from legal framework to token economics.
+                  Our team will design the best deal with legal and technical support.
                 </p>
               </div>
             </div>
