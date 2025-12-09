@@ -1,30 +1,28 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Coins, TrendingUp, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { useState } from "react";
 
-const interestOptions = [
-  "Own a piece of Film & Entertainment",
-  "Own a piece of Real Estate & Hospitality",
-  "Own a piece of Financial Instruments (bonds, funds, revenue-sharing, etc.)",
-  "Own a piece of Luxury Goods & Collectibles (art, spirits, watches, etc.)",
-  "Build a diversified portfolio of alternative assets",
-  "Use Fragma to raise capital for my asset",
+const features = [
+  {
+    icon: Coins,
+    title: "OWN",
+    description: "Fractional stakes in real assets",
+  },
+  {
+    icon: TrendingUp,
+    title: "EARN",
+    description: "Automated yield distribution when assets pay out",
+  },
+  {
+    icon: RefreshCw,
+    title: "EXIT",
+    description: "Secondary market options for potential liquidity",
+  },
 ];
 
 export const Hero = () => {
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-
-  const toggleInterest = (interest: string) => {
-    setSelectedInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((i) => i !== interest)
-        : [...prev, interest]
-    );
-  };
-
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <AnimatedBackground />
@@ -38,15 +36,13 @@ export const Hero = () => {
         >
           <Badge>NEW • Tokenized RWA on Cardano</Badge>
           <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-tight mb-6">
-            Own a Piece <br />
+            Next-Gen Community <br />
             <span className="text-gradient">
-              of the Stories
+              Investment Platform
             </span>
-            <br />
-            You Love
           </h1>
-          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-            Fractional ownership in film, funds, equity, real estate and more — curated deals for eligible investors.
+          <p className="text-lg text-muted-foreground mb-16 max-w-2xl mx-auto leading-relaxed">
+            Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
           </p>
         </motion.div>
 
@@ -54,25 +50,23 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-3xl mx-auto"
+          className="max-w-4xl mx-auto"
         >
-          <h3 className="text-center text-foreground font-medium mb-6">
-            What brings you here today?
-          </h3>
-          
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {interestOptions.map((option) => (
-              <button
-                key={option}
-                onClick={() => toggleInterest(option)}
-                className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
-                  selectedInterests.includes(option)
-                    ? "bg-primary text-primary-foreground border-primary shadow-turquoise"
-                    : "bg-card/50 text-muted-foreground border-border/50 hover:border-primary/50 hover:text-foreground"
-                }`}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:border-primary/50 transition-all duration-300"
               >
-                {option}
-              </button>
+                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                  <feature.icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">{feature.description}</p>
+              </motion.div>
             ))}
           </div>
 
