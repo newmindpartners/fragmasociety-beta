@@ -15,14 +15,15 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <Hero />
-      <SocialProof />
       <FeaturedDeals />
       <Features />
       <HowItWorks />
       <Pillars />
       <Marketplace />
       <AssetClasses />
+      <SocialProof />
       <WorkWithUs />
+      <Footer />
       <Footer />
     </div>
   );
