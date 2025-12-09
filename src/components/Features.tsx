@@ -9,7 +9,7 @@ const features = [
   },
   { 
     title: "Infrastructure you can trust", 
-    desc: "Bank-level security, multi-sig wallets and ZK compliance controls.", 
+    desc: "Bank-level security with institutional custody and audited payouts.", 
     icon: Lock 
   },
   { 
