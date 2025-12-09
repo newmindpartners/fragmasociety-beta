@@ -119,28 +119,6 @@ export const WorkWithUs = () => (
             </motion.div>
           </div>
 
-          {/* Decorative floating elements */}
-          <motion.div
-            animate={{ y: [-10, 10, -10] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-4 -right-4 p-4 bg-card rounded-xl border border-border/50 shadow-lg"
-          >
-            <div className="text-center">
-              <p className="text-2xl font-bold text-primary">$2.4B+</p>
-              <p className="text-xs text-muted-foreground">Assets Listed</p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            animate={{ y: [10, -10, 10] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/3 -left-4 p-3 bg-card rounded-xl border border-border/50 shadow-lg"
-          >
-            <div className="text-center">
-              <p className="text-xl font-bold text-foreground">127</p>
-              <p className="text-xs text-muted-foreground">Signature Deals</p>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </div>
