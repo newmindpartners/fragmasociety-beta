@@ -1,79 +1,86 @@
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { useState } from "react";
+
+const interestOptions = [
+  "Own a piece of Film & Entertainment",
+  "Own a piece of Real Estate & Hospitality",
+  "Own a piece of Financial Instruments (bonds, funds, revenue-sharing, etc.)",
+  "Own a piece of Luxury Goods & Collectibles (art, spirits, watches, etc.)",
+  "Build a diversified portfolio of alternative assets",
+  "Use Fragma to raise capital for my asset",
+];
 
 export const Hero = () => {
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+
+  const toggleInterest = (interest: string) => {
+    setSelectedInterests((prev) =>
+      prev.includes(interest)
+        ? prev.filter((i) => i !== interest)
+        : [...prev, interest]
+    );
+  };
+
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <AnimatedBackground />
       
-      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
+          className="text-center max-w-4xl mx-auto"
         >
           <Badge>NEW • Tokenized RWA on Cardano</Badge>
           <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-tight mb-6">
-            Invest with <br />
+            Own a Piece <br />
             <span className="text-gradient">
-              Industry Leaders.
+              of the Stories
             </span>
+            <br />
+            You Love
           </h1>
-          <p className="text-lg text-muted-foreground mb-8 max-w-lg leading-relaxed">
-            Fragma Society lets you buy fractional stakes in curated real‑world assets – from champion riders to iconic real estate. Built on regulated, bank‑grade infrastructure.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <Button variant="hero" size="lg">Browse live deals</Button>
-            <Button variant="outline" size="lg">How it works</Button>
-          </div>
-          <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
-            <CheckCircle size={12} className="text-primary" /> From €50 per slice 
-            <span className="w-1 h-1 bg-muted-foreground rounded-full" /> Non-custodial 
-            <span className="w-1 h-1 bg-muted-foreground rounded-full" /> Capital at risk
+          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+            Fractional ownership in film, funds, equity, real estate and more — curated deals for eligible investors.
           </p>
         </motion.div>
 
-        {/* Right Hero Card */}
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative"
+          className="max-w-3xl mx-auto"
         >
-          <div className="relative glass rounded-2xl p-6 shadow-card max-w-md mx-auto transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-            <div className="absolute -top-3 -right-3 w-20 h-20 bg-primary rounded-full blur-2xl opacity-20 animate-pulse" />
-            
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-muted to-card border-2 border-primary overflow-hidden flex items-center justify-center">
-                <span className="text-2xl font-serif font-bold text-primary">BB</span>
-              </div>
-              <div>
-                <h3 className="text-foreground font-bold text-lg">Bryan Balsinger</h3>
-                <p className="text-primary text-sm">Elite Show Jumping Portfolio</p>
-              </div>
-            </div>
+          <h3 className="text-center text-foreground font-medium mb-6">
+            What brings you here today?
+          </h3>
+          
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {interestOptions.map((option) => (
+              <button
+                key={option}
+                onClick={() => toggleInterest(option)}
+                className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
+                  selectedInterests.includes(option)
+                    ? "bg-primary text-primary-foreground border-primary shadow-turquoise"
+                    : "bg-card/50 text-muted-foreground border-border/50 hover:border-primary/50 hover:text-foreground"
+                }`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-background/50 p-3 rounded-lg border border-foreground/5">
-                <p className="text-xs text-muted-foreground">Target Yield</p>
-                <p className="text-foreground font-mono font-bold text-lg">12-18%</p>
-              </div>
-              <div className="bg-background/50 p-3 rounded-lg border border-foreground/5">
-                <p className="text-xs text-muted-foreground">Min Ticket</p>
-                <p className="text-foreground font-mono font-bold text-lg">€250</p>
-              </div>
-            </div>
-
-            <div className="w-full h-1 bg-muted rounded-full mb-6 overflow-hidden">
-              <div className="w-[72%] h-full bg-primary shadow-turquoise" />
-            </div>
-            
-            <Button className="w-full">Join Deal</Button>
+          <div className="flex justify-center">
+            <Button variant="hero" size="lg" className="group">
+              Browse Deals
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Button>
           </div>
         </motion.div>
       </div>
