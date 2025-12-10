@@ -233,7 +233,7 @@ export const FundHero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9, duration: 0.8 }}
             >
-              Dual-engine fund for family offices and institutional investors.
+              Dual-engine fund combining stable yield with growth potential.
             </motion.p>
             
             {/* Feature pills */}
