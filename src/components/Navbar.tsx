@@ -10,8 +10,8 @@ export const Navbar = () => {
   return (
     <nav className="fixed w-full z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-serif font-bold text-foreground tracking-wider">
-          FRAGMA
+        <Link to="/" className="flex items-center">
+          <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8" />
         </Link>
         
         <div className="hidden md:flex gap-8 text-sm font-medium text-muted-foreground">

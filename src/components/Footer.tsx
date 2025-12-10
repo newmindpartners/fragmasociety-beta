@@ -1,9 +1,13 @@
 export const Footer = () => (
-  <footer className="bg-background border-t border-foreground/10 pt-20 pb-10">
-    <div className="container mx-auto px-6">
+  <footer className="relative pt-20 pb-10 overflow-hidden">
+    {/* Gradient Background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/10" />
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+    
+    <div className="container mx-auto px-6 relative z-10">
       <div className="grid md:grid-cols-4 gap-12 mb-16">
         <div className="col-span-1">
-          <div className="text-2xl font-serif font-bold text-foreground mb-4">FRAGMA</div>
+          <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8 mb-4" />
           <p className="text-muted-foreground text-sm">
             Making real-world assets simple to own, earn from and trade.
           </p>
