@@ -192,7 +192,7 @@ export const FundHero = () => {
             {
               icon: Key,
               title: "JOIN INVESTOR BOARD",
-              description: "Access the Fragma investor community and exclusive benefits."
+              description: "Become a Fragma investor board member and get access to exclusive benefits."
             },
             {
               icon: RefreshCw,
