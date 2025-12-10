@@ -167,6 +167,10 @@ export const FundHero = () => {
                   <p className="text-sm text-muted-foreground">Vehicle</p>
                   <p className="text-foreground">Luxembourg Securitisation</p>
                 </div>
+                <div className="pt-2 border-t border-border/50">
+                  <p className="text-sm text-muted-foreground">Secondary Market</p>
+                  <p className="text-foreground">Order book marketplace for fast & easy exit</p>
+                </div>
               </div>
             </div>
           </motion.div>
