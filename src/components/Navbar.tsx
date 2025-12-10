@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="fixed w-full z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5">
@@ -17,12 +19,23 @@ export const Navbar = () => {
         <div className="hidden md:flex gap-8 text-sm font-medium text-muted-foreground">
           <a href="/#features" className="hover:text-primary transition-colors">How it works</a>
           <a href="/#marketplace" className="hover:text-primary transition-colors">Marketplace</a>
-          <Link to="/fund" className="hover:text-primary transition-colors">Fragma Fund</Link>
+          <Link to="/auth" className="hover:text-primary transition-colors">Fragma Strategy</Link>
           <a href="/#partners" className="hover:text-primary transition-colors">Partners</a>
         </div>
 
-        <div className="hidden md:block">
-          <Button variant="outline" size="sm">Launch App</Button>
+        <div className="hidden md:flex items-center gap-3">
+          {user ? (
+            <>
+              <Link to="/strategy">
+                <Button variant="outline" size="sm">Investor Portal</Button>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={() => signOut()}>Sign Out</Button>
+            </>
+          ) : (
+            <Link to="/auth">
+              <Button variant="outline" size="sm">Investor Login</Button>
+            </Link>
+          )}
         </div>
 
         <button className="md:hidden text-foreground" onClick={() => setIsOpen(!isOpen)}>
@@ -30,7 +43,6 @@ export const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -42,9 +54,13 @@ export const Navbar = () => {
             <div className="p-6 flex flex-col gap-4">
               <a href="/#features" className="text-foreground hover:text-primary transition-colors">How it works</a>
               <a href="/#marketplace" className="text-foreground hover:text-primary transition-colors">Marketplace</a>
-              <Link to="/fund" className="text-foreground hover:text-primary transition-colors">Fragma Fund</Link>
+              <Link to="/auth" className="text-foreground hover:text-primary transition-colors">Fragma Strategy</Link>
               <a href="/#partners" className="text-foreground hover:text-primary transition-colors">Partners</a>
-              <Button className="w-full">Launch App</Button>
+              {user ? (
+                <Button onClick={() => signOut()}>Sign Out</Button>
+              ) : (
+                <Link to="/auth"><Button className="w-full">Investor Login</Button></Link>
+              )}
             </div>
           </motion.div>
         )}

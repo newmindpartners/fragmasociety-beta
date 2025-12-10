@@ -7,7 +7,7 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Marketplace } from "@/components/Marketplace";
 import { AssetClasses } from "@/components/AssetClasses";
 import { WorkWithUs } from "@/components/WorkWithUs";
-import { FundCTA } from "@/components/FundCTA";
+import { StrategyCTA } from "@/components/StrategyCTA";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
@@ -22,7 +22,7 @@ const Index = () => {
       <Marketplace />
       <SocialProof />
       <WorkWithUs />
-      <FundCTA />
+      <StrategyCTA />
       <Footer />
     </div>
   );
