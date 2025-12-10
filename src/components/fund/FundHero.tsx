@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, Phone, TrendingUp, Key, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 
@@ -175,6 +175,48 @@ export const FundHero = () => {
             </div>
           </motion.div>
         </div>
+        
+        {/* 3 Key Points Highlights */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="grid md:grid-cols-3 gap-4 mt-16"
+        >
+          {[
+            {
+              icon: TrendingUp,
+              title: "EARN STEADY YIELD",
+              description: "From diversified real-world & digital infrastructure assets."
+            },
+            {
+              icon: Key,
+              title: "PROFESSIONAL GOVERNANCE",
+              description: "Luxembourg structure with institutional-grade oversight."
+            },
+            {
+              icon: RefreshCw,
+              title: "TRADE ANYTIME",
+              description: "Secondary liquidity on Fragma Society marketplace."
+            }
+          ].map((point, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + index * 0.1 }}
+              className="glass rounded-xl p-6 border border-border/50 hover:border-primary/30 transition-colors"
+            >
+              <point.icon className="w-6 h-6 text-muted-foreground mb-4" />
+              <h4 className="text-sm font-bold text-foreground tracking-wide mb-1">
+                {point.title}
+              </h4>
+              <p className="text-sm text-muted-foreground">
+                {point.description}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
