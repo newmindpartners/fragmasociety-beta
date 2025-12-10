@@ -191,8 +191,8 @@ export const FundHero = () => {
             },
             {
               icon: Key,
-              title: "PROFESSIONAL GOVERNANCE",
-              description: "Luxembourg structure with institutional-grade oversight."
+              title: "JOIN INVESTOR BOARD",
+              description: "Access the Fragma investor community and exclusive benefits."
             },
             {
               icon: RefreshCw,
