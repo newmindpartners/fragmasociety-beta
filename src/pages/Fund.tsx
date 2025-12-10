@@ -6,6 +6,7 @@ import { FundStrategy } from "@/components/fund/FundStrategy";
 import { FundPillars } from "@/components/fund/FundPillars";
 import { FundReturns } from "@/components/fund/FundReturns";
 import { FundStructure } from "@/components/fund/FundStructure";
+import { FundSecondaryMarket } from "@/components/fund/FundSecondaryMarket";
 import { FundRisk } from "@/components/fund/FundRisk";
 import { FundInvestors } from "@/components/fund/FundInvestors";
 import { FundProcess } from "@/components/fund/FundProcess";
@@ -21,6 +22,7 @@ const Fund = () => {
       <FundPillars />
       <FundReturns />
       <FundStructure />
+      <FundSecondaryMarket />
       <FundRisk />
       <FundInvestors />
       <FundProcess />
