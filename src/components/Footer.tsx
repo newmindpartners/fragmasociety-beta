@@ -1,8 +1,20 @@
 export const Footer = () => (
   <footer className="relative pt-20 pb-10 overflow-hidden">
-    {/* Gradient Background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/10" />
-    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+    {/* Dark Navy Base */}
+    <div className="absolute inset-0 bg-[hsl(220,30%,8%)]" />
+    
+    {/* Studio Spotlight Effects */}
+    <div className="absolute inset-0">
+      {/* Top-left turquoise glow */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-[120px]" />
+      {/* Center-right subtle turquoise */}
+      <div className="absolute top-1/2 -right-20 w-80 h-80 bg-primary/15 rounded-full blur-[100px]" />
+      {/* Bottom center soft glow */}
+      <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[600px] h-64 bg-primary/10 rounded-full blur-[140px]" />
+    </div>
+    
+    {/* Top border accent */}
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
     
     <div className="container mx-auto px-6 relative z-10">
       <div className="grid md:grid-cols-4 gap-12 mb-16">
