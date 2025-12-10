@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { StrategyHero } from "@/components/strategy/StrategyHero";
@@ -13,17 +11,12 @@ import { StrategyRisk } from "@/components/strategy/StrategyRisk";
 import { StrategyInvestors } from "@/components/strategy/StrategyInvestors";
 import { StrategyProcess } from "@/components/strategy/StrategyProcess";
 import { StrategyPartners } from "@/components/strategy/StrategyPartners";
+import { StrategyCTA } from "@/components/StrategyCTA";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Strategy = () => {
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/auth");
-    }
-  }, [user, loading, navigate]);
+  const isAuthenticated = !loading && !!user;
 
   if (loading) {
     return (
@@ -33,24 +26,31 @@ const Strategy = () => {
     );
   }
 
-  if (!user) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <StrategyHero />
+      
+      {/* Public sections - always visible */}
+      <StrategyHero isAuthenticated={isAuthenticated} />
       <StrategyAtGlance />
-      <StrategyOverview />
       <StrategyPillars />
-      <StrategyReturns />
-      <StrategyStructure />
-      <StrategySecondaryMarket />
-      <StrategyRisk />
-      <StrategyInvestors />
-      <StrategyProcess />
-      <StrategyPartners />
+      
+      {/* Authenticated sections - only visible after login */}
+      {isAuthenticated ? (
+        <>
+          <StrategyOverview />
+          <StrategyReturns />
+          <StrategyStructure />
+          <StrategySecondaryMarket />
+          <StrategyRisk />
+          <StrategyInvestors />
+          <StrategyProcess />
+          <StrategyPartners />
+        </>
+      ) : (
+        <StrategyCTA />
+      )}
+      
       <Footer />
     </div>
   );

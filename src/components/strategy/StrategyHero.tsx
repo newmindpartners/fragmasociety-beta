@@ -1,7 +1,8 @@
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { ArrowRight, Phone, TrendingUp, Shield, Zap, BarChart3, AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Phone, TrendingUp, Shield, Zap, BarChart3, AlertTriangle, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const StrategyAnimatedBackground = () => (
   <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -122,6 +123,58 @@ const MetricCircle = ({ value, label, sublabel, disclaimer, delay, size = "md" }
   );
 };
 
+const LockedMetricCircle = ({ delay, size = "md" }: { delay: number; size?: "lg" | "md" }) => {
+  const circleSize = size === "lg" ? 180 : 140;
+  const strokeWidth = size === "lg" ? 6 : 5;
+  const radius = (circleSize - strokeWidth * 2) / 2;
+  const circumference = 2 * Math.PI * radius;
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="relative group"
+      style={{ width: circleSize, height: circleSize }}
+    >
+      <motion.div
+        className="absolute inset-0 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 blur-xl"
+        animate={{ opacity: 0.3 }}
+      />
+      
+      <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox={`0 0 ${circleSize} ${circleSize}`}>
+        <circle
+          cx={circleSize / 2}
+          cy={circleSize / 2}
+          r={radius}
+          fill="none"
+          stroke="hsl(var(--border))"
+          strokeWidth={strokeWidth}
+          opacity={0.3}
+        />
+        <motion.circle
+          cx={circleSize / 2}
+          cy={circleSize / 2}
+          r={radius}
+          fill="none"
+          stroke="hsl(var(--muted))"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference * 0.5 }}
+          transition={{ delay: delay + 0.3, duration: 1.5, ease: "easeOut" }}
+        />
+      </svg>
+      
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-3">
+        <Lock className="w-6 h-6 text-muted-foreground mb-1" />
+        <span className="text-xs text-muted-foreground">Login to view</span>
+      </div>
+    </motion.div>
+  );
+};
+
 const FeatureCard = ({ icon: Icon, title, delay }: { icon: any; title: string; delay: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -140,28 +193,11 @@ const FeatureCard = ({ icon: Icon, title, delay }: { icon: any; title: string; d
   </motion.div>
 );
 
-export const StrategyHero = () => {
-  const metrics = [
-    { 
-      value: "8%", 
-      label: "p.a.", 
-      sublabel: "Target Distribution",
-      disclaimer: "Target net annual distribution: 8% p.a. (not guaranteed)"
-    },
-    { 
-      value: "10-12%", 
-      label: "p.a.", 
-      sublabel: "Target Range",
-      disclaimer: "Illustrative target net return: 10–12% p.a. (base case scenario, not guaranteed)"
-    },
-    { 
-      value: "15%", 
-      label: "IRR", 
-      sublabel: "Target Net",
-      disclaimer: "Target net IRR (base case): 15% – actual results may be lower or higher"
-    },
-  ];
+interface StrategyHeroProps {
+  isAuthenticated?: boolean;
+}
 
+export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => {
   const features = [
     { icon: TrendingUp, title: "Income-Focused" },
     { icon: Shield, title: "Luxembourg Structure" },
@@ -174,20 +210,22 @@ export const StrategyHero = () => {
       <StrategyAnimatedBackground />
       
       <div className="container mx-auto px-6 relative z-10">
-        {/* Risk Warning Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3"
-        >
-          <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-          <div className="text-sm">
-            <p className="text-amber-200 font-medium mb-1">Important Risk Information</p>
-            <p className="text-amber-200/70 text-xs">
-              Target returns only. No guarantee. Capital at risk. Unlisted, illiquid securities – you may not be able to sell quickly or at all. Past performance and targets are not reliable indicators of future results.
-            </p>
-          </div>
-        </motion.div>
+        {/* Risk Warning Banner - only show when authenticated */}
+        {isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3"
+          >
+            <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="text-amber-200 font-medium mb-1">Important Risk Information</p>
+              <p className="text-amber-200/70 text-xs">
+                Target returns only. No guarantee. Capital at risk. Unlisted, illiquid securities – you may not be able to sell quickly or at all. Past performance and targets are not reliable indicators of future results.
+              </p>
+            </div>
+          </motion.div>
+        )}
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
@@ -243,7 +281,10 @@ export const StrategyHero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9, duration: 0.8 }}
             >
-              Dual-engine strategy combining stable yield with growth potential.
+              {isAuthenticated 
+                ? "Dual-engine strategy combining stable yield with growth potential."
+                : "Income-focused strategy with regular distributions. Combining real-world and digital infrastructure assets in a Luxembourg securitisation structure."
+              }
             </motion.p>
             
             <motion.div 
@@ -263,16 +304,35 @@ export const StrategyHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.6, duration: 0.6 }}
             >
-              <Button size="lg" className="group btn-glow relative overflow-hidden">
-                <span className="relative z-10 flex items-center">
-                  Request PPM
-                  <ArrowRight size={18} className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
-                </span>
-              </Button>
-              <Button variant="outline" size="lg" className="group">
-                <Phone size={18} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                Book Call
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <Button size="lg" className="group btn-glow relative overflow-hidden">
+                    <span className="relative z-10 flex items-center">
+                      Request PPM
+                      <ArrowRight size={18} className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+                    </span>
+                  </Button>
+                  <Button variant="outline" size="lg" className="group">
+                    <Phone size={18} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                    Book Call
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild size="lg" className="group btn-glow relative overflow-hidden">
+                    <Link to="/auth">
+                      <span className="relative z-10 flex items-center">
+                        Access Investor Portal
+                        <ArrowRight size={18} className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+                      </span>
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" className="group">
+                    <Phone size={18} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                    Book Call
+                  </Button>
+                </>
+              )}
             </motion.div>
             
             <motion.p 
@@ -281,7 +341,10 @@ export const StrategyHero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.8, duration: 0.5 }}
             >
-              Professional investors only. Capital at risk.
+              {isAuthenticated 
+                ? "Professional investors only. Capital at risk."
+                : "Capital at risk. Not suitable for everyone. For professional / qualified investors only."
+              }
             </motion.p>
           </motion.div>
           
@@ -293,38 +356,58 @@ export const StrategyHero = () => {
             className="hidden lg:flex flex-col items-center justify-center"
           >
             <div className="relative">
-              <motion.div
-                className="flex justify-center mb-6"
-                initial={{ y: -20 }}
-                animate={{ y: 0 }}
-                transition={{ delay: 0.7, type: "spring" }}
-              >
-                <MetricCircle 
-                  value="8%" 
-                  label="p.a." 
-                  sublabel="Target Distribution"
-                  disclaimer="Target net annual distribution: 8% p.a. (not guaranteed)"
-                  delay={0.8}
-                  size="lg"
-                />
-              </motion.div>
-              
-              <div className="flex gap-8 justify-center">
-                <MetricCircle 
-                  value="10-12%" 
-                  label="p.a." 
-                  sublabel="Target Range"
-                  disclaimer="Illustrative target: 10–12% p.a. (not guaranteed)"
-                  delay={1}
-                />
-                <MetricCircle 
-                  value="15%" 
-                  label="IRR" 
-                  sublabel="Target Net"
-                  disclaimer="Target net IRR: 15% – results may vary"
-                  delay={1.2}
-                />
-              </div>
+              {isAuthenticated ? (
+                <>
+                  <motion.div
+                    className="flex justify-center mb-6"
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.7, type: "spring" }}
+                  >
+                    <MetricCircle 
+                      value="8%" 
+                      label="p.a." 
+                      sublabel="Target Distribution"
+                      disclaimer="Target net annual distribution: 8% p.a. (not guaranteed)"
+                      delay={0.8}
+                      size="lg"
+                    />
+                  </motion.div>
+                  
+                  <div className="flex gap-8 justify-center">
+                    <MetricCircle 
+                      value="10-12%" 
+                      label="p.a." 
+                      sublabel="Target Range"
+                      disclaimer="Illustrative target: 10–12% p.a. (not guaranteed)"
+                      delay={1}
+                    />
+                    <MetricCircle 
+                      value="15%" 
+                      label="IRR" 
+                      sublabel="Target Net"
+                      disclaimer="Target net IRR: 15% – results may vary"
+                      delay={1.2}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <motion.div
+                    className="flex justify-center mb-6"
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.7, type: "spring" }}
+                  >
+                    <LockedMetricCircle delay={0.8} size="lg" />
+                  </motion.div>
+                  
+                  <div className="flex gap-8 justify-center">
+                    <LockedMetricCircle delay={1} />
+                    <LockedMetricCircle delay={1.2} />
+                  </div>
+                </>
+              )}
             </div>
             
             {/* Bottom info card */}
@@ -348,7 +431,7 @@ export const StrategyHero = () => {
                   ))}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">60/40 Split</p>
+                  <p className="text-sm font-medium text-foreground">Dual-Engine Approach</p>
                   <p className="text-xs text-muted-foreground">Income • Equity</p>
                 </div>
               </div>
@@ -378,6 +461,20 @@ export const StrategyHero = () => {
                   <span className="text-muted-foreground">Ecosystem</span>
                 </motion.div>
               </div>
+              
+              {!isAuthenticated && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.8 }}
+                  className="mt-4 pt-4 border-t border-border/50 text-center"
+                >
+                  <Link to="/auth" className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center justify-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    Login for detailed metrics
+                  </Link>
+                </motion.div>
+              )}
             </motion.div>
           </motion.div>
         </div>
