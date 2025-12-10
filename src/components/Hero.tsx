@@ -3,20 +3,21 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
-
 export const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
+  return <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <AnimatedBackground />
       
       <div className="container mx-auto px-6 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-4xl mx-auto"
-        >
-          <Badge>NEW • Tokenized RWA on Cardano</Badge>
+        <motion.div initial={{
+        opacity: 0,
+        y: 30
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} transition={{
+        duration: 0.8
+      }} className="text-center max-w-4xl mx-auto">
+          <Badge>COMING SOON</Badge>
           <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-tight mb-6">
             Next-Gen Community <br />
             <span className="text-gradient">
@@ -35,6 +36,5 @@ export const Hero = () => {
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>;
 };
