@@ -17,38 +17,11 @@ export const FundPartners = () => {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Strategic Allocators */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="bg-card border border-border rounded-xl p-8"
-          >
-            <h3 className="text-xl font-serif font-bold text-foreground mb-4">Strategic Allocators</h3>
-            <p className="text-muted-foreground mb-6">
-              Fragma Fund can serve as a core or satellite allocation within existing alternative, private credit or digital infrastructure buckets. We work with CIOs and portfolio managers to tailor reporting, risk analytics and co-investment opportunities.
-            </p>
-            <ul className="space-y-2 mb-6">
-              <li className="text-sm text-muted-foreground flex gap-2">
-                <span className="text-primary">•</span>
-                Co-investment SPVs for larger tickets or specific strategies.
-              </li>
-              <li className="text-sm text-muted-foreground flex gap-2">
-                <span className="text-primary">•</span>
-                Access to Fragma's broader RWA/tokenisation pipeline and marketplace.
-              </li>
-            </ul>
-            <Button className="group">
-              Arrange CIO/IC briefing
-              <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.div>
-
+        <div className="max-w-2xl mx-auto">
           {/* Distribution Partners */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="bg-card border border-border rounded-xl p-8"
           >
