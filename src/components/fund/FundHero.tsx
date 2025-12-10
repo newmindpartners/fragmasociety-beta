@@ -85,11 +85,11 @@ export const FundHero = () => {
             <Badge className="mb-6">FRAGMA FUND • LUXEMBOURG STRUCTURE</Badge>
             
             <h1 className="text-4xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
-              Invest with Fragma Fund.{" "}
+              Fragma Fund.{" "}
               <span className="text-gradient">
-                Secured yield & growth
+                Yield & Growth
               </span>{" "}
-              from real-world and digital infrastructure.
+              Engineered.
             </h1>
             
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
