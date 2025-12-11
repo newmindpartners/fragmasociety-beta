@@ -72,7 +72,7 @@ const StepNode = ({
         {/* Main circle */}
         <motion.div 
           className={`
-            relative w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10
+            relative w-16 h-16 rounded-full flex items-center justify-center z-10
             transition-all duration-500
             ${isActive 
               ? "bg-primary text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary))]" 
@@ -84,14 +84,7 @@ const StepNode = ({
           animate={isActive ? { scale: [1, 1.05, 1] } : {}}
           transition={{ duration: 0.5 }}
         >
-          <motion.span
-            key={step.step}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {step.step}
-          </motion.span>
+          <step.icon size={24} strokeWidth={1.5} />
         </motion.div>
       </motion.div>
       
@@ -170,22 +163,16 @@ export const HowItWorks = () => {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  // Auto-play logic
+  // Auto-play logic - loops continuously
   useEffect(() => {
-    if (!isInView || isPaused || hasAnimated) return;
+    if (!isInView || isPaused) return;
     
     const interval = setInterval(() => {
-      setActiveStep((prev) => {
-        if (prev >= 2) {
-          setHasAnimated(true);
-          return 2;
-        }
-        return prev + 1;
-      });
+      setActiveStep((prev) => (prev + 1) % 3);
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [isInView, isPaused, hasAnimated]);
+  }, [isInView, isPaused]);
 
   const handleStepClick = (index: number) => {
     setIsPaused(true);
@@ -281,7 +268,7 @@ export const HowItWorks = () => {
                 {/* Circle on rail */}
                 <motion.div 
                   className={`
-                    absolute -left-[52px] top-0 w-10 h-10 rounded-full flex items-center justify-center font-bold z-10
+                    absolute -left-[52px] top-0 w-10 h-10 rounded-full flex items-center justify-center z-10
                     transition-all duration-500
                     ${activeStep >= i 
                       ? "bg-primary text-primary-foreground shadow-[0_0_20px_-5px_hsl(var(--primary))]" 
@@ -291,7 +278,7 @@ export const HowItWorks = () => {
                   animate={activeStep === i ? { scale: [1, 1.1, 1] } : {}}
                   transition={{ duration: 0.5 }}
                 >
-                  {step.step}
+                  <step.icon size={18} strokeWidth={1.5} />
                 </motion.div>
                 
                 <button
