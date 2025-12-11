@@ -11,36 +11,195 @@ const assetCategories = [
   { id: "fund", label: "Fund" },
 ];
 
-const assetData: Record<string, { ticker: string; change: number; volume: string; gradient: string }> = {
-  all: { ticker: "FRG-VILLA-01", change: 4.2, volume: "€485k", gradient: "from-primary via-cyan-500 to-emerald-500" },
-  realestate: { ticker: "FRG-ESTATE-02", change: 2.8, volume: "€312k", gradient: "from-emerald-400 via-teal-500 to-cyan-500" },
-  film: { ticker: "FRG-FILM-01", change: 5.1, volume: "€567k", gradient: "from-violet-400 via-purple-500 to-fuchsia-500" },
-  credit: { ticker: "FRG-CREDIT-02", change: 1.9, volume: "€234k", gradient: "from-amber-400 via-orange-500 to-rose-500" },
-  fund: { ticker: "FRG-FUND-01", change: 3.1, volume: "€324k", gradient: "from-primary via-blue-500 to-indigo-500" },
+interface OrderBookData {
+  asks: { price: number; size: number; depth: number }[];
+  bids: { price: number; size: number; depth: number }[];
+  midPrice: number;
+  spread: string;
+  change: string;
+}
+
+const assetData: Record<string, { 
+  ticker: string; 
+  change: number; 
+  volume: string; 
+  gradient: string;
+  orderBook: OrderBookData;
+}> = {
+  all: { 
+    ticker: "FRG-VILLA-01", 
+    change: 4.2, 
+    volume: "€485k", 
+    gradient: "from-primary via-cyan-500 to-emerald-500",
+    orderBook: {
+      asks: [
+        { price: 524.50, size: 1.82, depth: 85 },
+        { price: 522.25, size: 0.94, depth: 60 },
+        { price: 520.00, size: 1.45, depth: 75 },
+        { price: 518.75, size: 0.68, depth: 40 },
+        { price: 516.50, size: 2.10, depth: 95 },
+      ],
+      bids: [
+        { price: 514.25, size: 1.56, depth: 80 },
+        { price: 512.00, size: 0.89, depth: 50 },
+        { price: 510.50, size: 2.34, depth: 100 },
+        { price: 508.25, size: 1.12, depth: 65 },
+        { price: 506.00, size: 0.77, depth: 45 },
+      ],
+      midPrice: 515.38,
+      spread: "0.22",
+      change: "+0.42"
+    }
+  },
+  realestate: { 
+    ticker: "FRG-ESTATE-02", 
+    change: 2.8, 
+    volume: "€312k", 
+    gradient: "from-emerald-400 via-teal-500 to-cyan-500",
+    orderBook: {
+      asks: [
+        { price: 892.00, size: 0.45, depth: 70 },
+        { price: 888.50, size: 1.20, depth: 90 },
+        { price: 885.25, size: 0.78, depth: 55 },
+        { price: 882.00, size: 1.95, depth: 100 },
+        { price: 879.75, size: 0.62, depth: 45 },
+      ],
+      bids: [
+        { price: 876.50, size: 1.34, depth: 85 },
+        { price: 873.25, size: 0.91, depth: 60 },
+        { price: 870.00, size: 2.15, depth: 95 },
+        { price: 867.50, size: 0.56, depth: 40 },
+        { price: 864.25, size: 1.78, depth: 75 },
+      ],
+      midPrice: 878.13,
+      spread: "0.18",
+      change: "+1.25"
+    }
+  },
+  film: { 
+    ticker: "FRG-FILM-01", 
+    change: 5.1, 
+    volume: "€567k", 
+    gradient: "from-violet-400 via-purple-500 to-fuchsia-500",
+    orderBook: {
+      asks: [
+        { price: 156.80, size: 3.45, depth: 95 },
+        { price: 154.50, size: 2.10, depth: 75 },
+        { price: 152.25, size: 1.88, depth: 60 },
+        { price: 150.00, size: 4.20, depth: 100 },
+        { price: 148.75, size: 1.55, depth: 50 },
+      ],
+      bids: [
+        { price: 146.50, size: 2.78, depth: 85 },
+        { price: 144.25, size: 1.92, depth: 65 },
+        { price: 142.00, size: 3.45, depth: 90 },
+        { price: 140.50, size: 1.25, depth: 45 },
+        { price: 138.25, size: 2.10, depth: 70 },
+      ],
+      midPrice: 147.63,
+      spread: "0.34",
+      change: "+2.15"
+    }
+  },
+  credit: { 
+    ticker: "FRG-CREDIT-02", 
+    change: 1.9, 
+    volume: "€234k", 
+    gradient: "from-amber-400 via-orange-500 to-rose-500",
+    orderBook: {
+      asks: [
+        { price: 1025.00, size: 0.28, depth: 65 },
+        { price: 1022.50, size: 0.52, depth: 80 },
+        { price: 1020.00, size: 0.35, depth: 50 },
+        { price: 1017.75, size: 0.88, depth: 95 },
+        { price: 1015.25, size: 0.42, depth: 55 },
+      ],
+      bids: [
+        { price: 1012.50, size: 0.65, depth: 75 },
+        { price: 1010.00, size: 0.38, depth: 45 },
+        { price: 1007.75, size: 0.95, depth: 100 },
+        { price: 1005.25, size: 0.48, depth: 60 },
+        { price: 1002.50, size: 0.72, depth: 85 },
+      ],
+      midPrice: 1013.88,
+      spread: "0.12",
+      change: "+0.18"
+    }
+  },
+  fund: { 
+    ticker: "FRG-FUND-01", 
+    change: 3.1, 
+    volume: "€324k", 
+    gradient: "from-primary via-blue-500 to-indigo-500",
+    orderBook: {
+      asks: [
+        { price: 102.45, size: 12.50, depth: 90 },
+        { price: 101.80, size: 8.75, depth: 70 },
+        { price: 101.25, size: 15.20, depth: 100 },
+        { price: 100.90, size: 6.40, depth: 55 },
+        { price: 100.50, size: 10.80, depth: 80 },
+      ],
+      bids: [
+        { price: 100.10, size: 9.25, depth: 75 },
+        { price: 99.75, size: 14.50, depth: 95 },
+        { price: 99.40, size: 7.80, depth: 60 },
+        { price: 99.00, size: 11.20, depth: 85 },
+        { price: 98.65, size: 5.90, depth: 50 },
+      ],
+      midPrice: 100.30,
+      spread: "0.20",
+      change: "+0.85"
+    }
+  },
 };
 
-// Generate smooth curve data
+// Generate smooth curve data with deterministic seed
 const generatePriceData = (seed: number) => {
   const points: { x: number; y: number }[] = [];
-  let price = 500 + seed * 10;
+  const basePrice = [500, 878, 147, 1013, 100][seed] || 500;
+  let price = basePrice;
+  // Use seed for pseudo-random but consistent data
+  const random = (i: number) => {
+    const x = Math.sin(seed * 1000 + i * 9999) * 10000;
+    return x - Math.floor(x);
+  };
   for (let i = 0; i < 50; i++) {
-    price += (Math.random() - 0.48) * 3;
-    price = Math.max(480, Math.min(540, price));
+    price += (random(i) - 0.48) * (basePrice * 0.006);
+    price = Math.max(basePrice * 0.95, Math.min(basePrice * 1.08, price));
     points.push({ x: i, y: price });
   }
   return points;
 };
 
-// Smooth SVG Area Chart with gradient
+// Smooth SVG Area Chart with animated trading cursor
 const PremiumChart = ({ 
   data, 
   isVisible, 
-  gradient 
 }: { 
   data: { x: number; y: number }[];
   isVisible: boolean;
-  gradient: string;
 }) => {
+  const [cursorProgress, setCursorProgress] = useState(0);
+  
+  // Animate cursor along the line
+  useEffect(() => {
+    if (!isVisible) return;
+    
+    const startDelay = setTimeout(() => {
+      const animate = () => {
+        setCursorProgress(prev => {
+          const next = prev + 0.003;
+          return next >= 1 ? 0 : next;
+        });
+      };
+      
+      const interval = setInterval(animate, 50);
+      return () => clearInterval(interval);
+    }, 2000);
+    
+    return () => clearTimeout(startDelay);
+  }, [isVisible]);
+
   const width = 380;
   const height = 220;
   const padding = { top: 20, right: 10, bottom: 20, left: 10 };
@@ -53,6 +212,20 @@ const PremiumChart = ({
   
   const xScale = (x: number) => padding.left + (x / (data.length - 1)) * chartW;
   const yScale = (y: number) => padding.top + chartH - ((y - minY) / (maxY - minY)) * chartH;
+  
+  // Get point at progress along the curve
+  const getPointAtProgress = (progress: number) => {
+    const index = Math.floor(progress * (data.length - 1));
+    const nextIndex = Math.min(index + 1, data.length - 1);
+    const t = (progress * (data.length - 1)) - index;
+    
+    const x = data[index].x + (data[nextIndex].x - data[index].x) * t;
+    const y = data[index].y + (data[nextIndex].y - data[index].y) * t;
+    
+    return { x: xScale(x), y: yScale(y), price: y };
+  };
+  
+  const cursorPoint = getPointAtProgress(cursorProgress);
   
   // Catmull-Rom to Bezier conversion for smooth curves
   const catmullRomToBezier = (points: { x: number; y: number }[]) => {
@@ -109,6 +282,14 @@ const PremiumChart = ({
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
+        
+        <filter id="cursorGlow">
+          <feGaussianBlur stdDeviation="8" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
       
       {/* Subtle grid */}
@@ -150,6 +331,87 @@ const PremiumChart = ({
         transition={{ duration: 1.8, ease: [0.22, 0.61, 0.36, 1] }}
       />
       
+      {/* Animated trading cursor following the line */}
+      {isVisible && cursorProgress > 0 && (
+        <g>
+          {/* Vertical line from cursor to bottom */}
+          <motion.line
+            x1={cursorPoint.x}
+            y1={cursorPoint.y}
+            x2={cursorPoint.x}
+            y2={height - padding.bottom}
+            stroke="hsl(var(--primary))"
+            strokeWidth="1"
+            strokeDasharray="3 3"
+            strokeOpacity={0.4}
+          />
+          
+          {/* Horizontal line to left edge */}
+          <motion.line
+            x1={padding.left}
+            y1={cursorPoint.y}
+            x2={cursorPoint.x}
+            y2={cursorPoint.y}
+            stroke="hsl(var(--primary))"
+            strokeWidth="1"
+            strokeDasharray="3 3"
+            strokeOpacity={0.4}
+          />
+          
+          {/* Cursor outer glow */}
+          <circle
+            cx={cursorPoint.x}
+            cy={cursorPoint.y}
+            r="12"
+            fill="hsl(var(--primary))"
+            opacity={0.15}
+            filter="url(#cursorGlow)"
+          />
+          
+          {/* Cursor ring */}
+          <circle
+            cx={cursorPoint.x}
+            cy={cursorPoint.y}
+            r="8"
+            fill="transparent"
+            stroke="hsl(180 70% 55%)"
+            strokeWidth="1.5"
+            opacity={0.6}
+          />
+          
+          {/* Cursor dot */}
+          <circle
+            cx={cursorPoint.x}
+            cy={cursorPoint.y}
+            r="4"
+            fill="hsl(160 70% 50%)"
+            filter="url(#dotGlow)"
+          />
+          
+          {/* Price tooltip */}
+          <g transform={`translate(${cursorPoint.x + 10}, ${cursorPoint.y - 10})`}>
+            <rect
+              x="0"
+              y="-10"
+              width="55"
+              height="20"
+              rx="4"
+              fill="hsl(var(--card))"
+              stroke="hsl(var(--primary))"
+              strokeWidth="0.5"
+              strokeOpacity={0.3}
+            />
+            <text
+              x="8"
+              y="4"
+              className="text-[9px] font-mono fill-primary"
+            >
+              €{cursorPoint.price.toFixed(2)}
+            </text>
+          </g>
+        </g>
+      )}
+      
       {/* Animated endpoint */}
       <motion.circle
         cx={xScale(lastPoint.x)}
@@ -162,7 +424,7 @@ const PremiumChart = ({
         transition={{ duration: 0.4, delay: 1.5 }}
       />
       
-      {/* Pulsing ring */}
+      {/* Pulsing ring at endpoint */}
       <motion.circle
         cx={xScale(lastPoint.x)}
         cy={yScale(lastPoint.y)}
@@ -182,23 +444,7 @@ const PremiumChart = ({
 };
 
 // Premium Order Book with depth visualization
-const OrderBook = ({ isVisible }: { isVisible: boolean }) => {
-  const asks = [
-    { price: 524.50, size: 1.82, depth: 85 },
-    { price: 522.25, size: 0.94, depth: 60 },
-    { price: 520.00, size: 1.45, depth: 75 },
-    { price: 518.75, size: 0.68, depth: 40 },
-    { price: 516.50, size: 2.10, depth: 95 },
-  ];
-  
-  const bids = [
-    { price: 514.25, size: 1.56, depth: 80 },
-    { price: 512.00, size: 0.89, depth: 50 },
-    { price: 510.50, size: 2.34, depth: 100 },
-    { price: 508.25, size: 1.12, depth: 65 },
-    { price: 506.00, size: 0.77, depth: 45 },
-  ];
-
+const OrderBook = ({ isVisible, orderBookData }: { isVisible: boolean; orderBookData: OrderBookData }) => {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -218,31 +464,34 @@ const OrderBook = ({ isVisible }: { isVisible: boolean }) => {
       
       {/* Asks (sells) */}
       <div className="flex-1 flex flex-col justify-end py-1">
-        {asks.map((order, i) => (
-          <motion.div
-            key={`ask-${i}`}
-            className="relative group cursor-pointer"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
-            transition={{ delay: 0.8 + i * 0.06, duration: 0.4 }}
-          >
-            {/* Depth bar */}
+        <AnimatePresence mode="wait">
+          {orderBookData.asks.map((order, i) => (
             <motion.div
-              className="absolute inset-y-0 right-0 bg-gradient-to-l from-rose-500/15 to-transparent"
-              initial={{ width: 0 }}
-              animate={{ width: isVisible ? `${order.depth}%` : 0 }}
-              transition={{ delay: 1 + i * 0.06, duration: 0.5 }}
-            />
-            
-            <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
-              <span className="font-mono text-rose-400/90">€{order.price.toFixed(2)}</span>
-              <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
-            </div>
-            
-            {/* Hover effect */}
-            <div className="absolute inset-0 bg-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </motion.div>
-        ))}
+              key={`ask-${order.price}`}
+              className="relative group cursor-pointer"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ delay: 0.8 + i * 0.06, duration: 0.4 }}
+            >
+              {/* Depth bar */}
+              <motion.div
+                className="absolute inset-y-0 right-0 bg-gradient-to-l from-rose-500/15 to-transparent"
+                initial={{ width: 0 }}
+                animate={{ width: isVisible ? `${order.depth}%` : 0 }}
+                transition={{ delay: 1 + i * 0.06, duration: 0.5 }}
+              />
+              
+              <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
+                <span className="font-mono text-rose-400/90">€{order.price.toFixed(2)}</span>
+                <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
+              </div>
+              
+              {/* Hover effect */}
+              <div className="absolute inset-0 bg-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
       
       {/* Spread indicator */}
@@ -254,48 +503,59 @@ const OrderBook = ({ isVisible }: { isVisible: boolean }) => {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-mono font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-              €515.38
-            </span>
+            <AnimatePresence mode="wait">
+              <motion.span 
+                key={orderBookData.midPrice}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                className="text-lg font-mono font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent"
+              >
+                €{orderBookData.midPrice.toFixed(2)}
+              </motion.span>
+            </AnimatePresence>
             <motion.span
               className="text-xs text-emerald-400"
               animate={{ opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              +0.42%
+              {orderBookData.change}%
             </motion.span>
           </div>
-          <span className="text-[10px] text-muted-foreground/60">0.22% spread</span>
+          <span className="text-[10px] text-muted-foreground/60">{orderBookData.spread}% spread</span>
         </div>
       </motion.div>
       
       {/* Bids (buys) */}
       <div className="flex-1 py-1">
-        {bids.map((order, i) => (
-          <motion.div
-            key={`bid-${i}`}
-            className="relative group cursor-pointer"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
-            transition={{ delay: 1.0 + i * 0.06, duration: 0.4 }}
-          >
-            {/* Depth bar */}
+        <AnimatePresence mode="wait">
+          {orderBookData.bids.map((order, i) => (
             <motion.div
-              className="absolute inset-y-0 right-0 bg-gradient-to-l from-emerald-500/15 to-transparent"
-              initial={{ width: 0 }}
-              animate={{ width: isVisible ? `${order.depth}%` : 0 }}
-              transition={{ delay: 1.2 + i * 0.06, duration: 0.5 }}
-            />
-            
-            <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
-              <span className="font-mono text-emerald-400/90">€{order.price.toFixed(2)}</span>
-              <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
-            </div>
-            
-            {/* Hover effect */}
-            <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </motion.div>
-        ))}
+              key={`bid-${order.price}`}
+              className="relative group cursor-pointer"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ delay: 1.0 + i * 0.06, duration: 0.4 }}
+            >
+              {/* Depth bar */}
+              <motion.div
+                className="absolute inset-y-0 right-0 bg-gradient-to-l from-emerald-500/15 to-transparent"
+                initial={{ width: 0 }}
+                animate={{ width: isVisible ? `${order.depth}%` : 0 }}
+                transition={{ delay: 1.2 + i * 0.06, duration: 0.5 }}
+              />
+              
+              <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
+                <span className="font-mono text-emerald-400/90">€{order.price.toFixed(2)}</span>
+                <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
+              </div>
+              
+              {/* Hover effect */}
+              <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -555,7 +815,6 @@ export const Marketplace = () => {
                   <PremiumChart 
                     data={priceData} 
                     isVisible={isInView} 
-                    gradient={currentAsset.gradient}
                   />
                   
                   {/* Chart label */}
@@ -567,7 +826,7 @@ export const Marketplace = () => {
                 
                 {/* Order book */}
                 <div className="col-span-2">
-                  <OrderBook isVisible={isInView} />
+                  <OrderBook isVisible={isInView} orderBookData={currentAsset.orderBook} />
                 </div>
               </div>
               
