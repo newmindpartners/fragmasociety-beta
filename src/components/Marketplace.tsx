@@ -227,7 +227,7 @@ export const Marketplace = () => {
             Your assets, your price, your pace.
           </h2>
           <p className="text-muted-foreground mb-8">
-            The Fragma Society marketplace lets you trade your tokenised slices peer-to-peer. 
+            The Fragma Society marketplace lets you trade your tokenised assets peer-to-peer. 
             Place limit orders, see depth in the order book, and manage your portfolio 24/7 – without giving up custody.
           </p>
           <ul className="space-y-4 mb-8">
@@ -375,7 +375,7 @@ export const Marketplace = () => {
                           className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm border border-white/10 rounded px-2 py-1 whitespace-nowrap z-20"
                         >
                           <span className="text-primary">€{(450 + i * 5)}</span>
-                          <span className="text-muted-foreground"> • {(Math.random() * 2 + 0.5).toFixed(2)} slices</span>
+                          <span className="text-muted-foreground"> • {(Math.random() * 2 + 0.5).toFixed(2)} tokens</span>
                         </motion.div>
                       )}
                     </AnimatePresence>
