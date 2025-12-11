@@ -7,7 +7,7 @@ import {
   RefreshCw,
   Sparkles,
   Lock,
-  Gem,
+  Coins,
   CircleDollarSign,
   Zap
 } from "lucide-react";
@@ -125,7 +125,7 @@ export const StrategyCTA = () => {
                 transition={{ duration: 2, repeat: Infinity }}
                 className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center"
               >
-                <Gem className="w-5 h-5 text-primary-foreground" />
+                <Coins className="w-5 h-5 text-primary-foreground" />
               </motion.div>
             </div>
           </div>
