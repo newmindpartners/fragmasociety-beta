@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
@@ -8,31 +8,36 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import bryanBalsingerImg from "@/assets/bryan-balsinger.png";
 
 const deals = [
   { 
     name: "Bryan Balsinger", 
     role: "Double European Champion",
     subtitle: "Jumping",
-    initials: "BB"
+    initials: "BB",
+    image: bryanBalsingerImg
   },
   { 
     name: "Philippe Naouri", 
     role: "Malibu Mid-Century",
     subtitle: "Villa Designer",
-    initials: "PN"
+    initials: "PN",
+    image: null
   },
   { 
     name: "Tim Levy", 
     role: "Hollywood Blockbuster",
     subtitle: "Film Financier",
-    initials: "TL"
+    initials: "TL",
+    image: null
   },
   { 
     name: "André Messika", 
     role: "Master Diamantaire",
     subtitle: "",
-    initials: "AM"
+    initials: "AM",
+    image: null
   },
 ];
 
@@ -41,9 +46,10 @@ interface SignatureCardProps {
   role: string;
   subtitle: string;
   initials: string;
+  image?: string | null;
 }
 
-const SignatureCard = ({ name, role, subtitle, initials }: SignatureCardProps) => (
+const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardProps) => (
   <motion.div 
     whileHover={{ y: -5 }}
     className="relative h-[400px] flex flex-col"
@@ -58,13 +64,21 @@ const SignatureCard = ({ name, role, subtitle, initials }: SignatureCardProps) =
       </p>
     </div>
     
-    {/* Avatar placeholder area */}
+    {/* Avatar area */}
     <div className="flex-1 flex items-end justify-center -mt-2 relative">
-      <div className="w-32 h-32 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 flex items-center justify-center border border-border/30">
-        <span className="text-4xl font-serif font-bold text-muted-foreground/50">
-          {initials}
-        </span>
-      </div>
+      {image ? (
+        <img 
+          src={image} 
+          alt={name}
+          className="h-48 w-auto object-contain"
+        />
+      ) : (
+        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 flex items-center justify-center border border-border/30">
+          <span className="text-4xl font-serif font-bold text-muted-foreground/50">
+            {initials}
+          </span>
+        </div>
+      )}
     </div>
   </motion.div>
 );
