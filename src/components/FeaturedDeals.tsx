@@ -65,12 +65,12 @@ const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardP
     </div>
     
     {/* Avatar area - overlaps from bottom */}
-    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20">
+    <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center">
       {image ? (
         <img 
           src={image} 
           alt={name}
-          className="h-80 w-auto object-contain drop-shadow-2xl"
+          className="w-full h-auto object-contain drop-shadow-2xl"
         />
       ) : (
         <div className="w-32 h-32 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 flex items-center justify-center border border-border/30 mb-4">
