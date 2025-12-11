@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { SocialProof } from "@/components/SocialProof";
 import { Features } from "@/components/Features";
 import { FeaturedDeals } from "@/components/FeaturedDeals";
 import { HowItWorks } from "@/components/HowItWorks";
@@ -25,7 +24,6 @@ const Index = () => {
         <Features />
         <HowItWorks />
         <Marketplace />
-        <SocialProof />
         <WorkWithUs />
         <StrategyCTA />
         <Footer />
