@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Key, Coins, DoorOpen } from "lucide-react";
+import { ArrowRight, Key, Coins, ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 
@@ -17,7 +17,7 @@ const highlights = [
   {
     label: "EXIT",
     description: "Trade on secondary market",
-    Icon: DoorOpen
+    Icon: ArrowLeftRight
   }
 ];
 
