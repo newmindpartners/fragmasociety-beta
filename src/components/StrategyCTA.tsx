@@ -22,28 +22,36 @@ export const StrategyCTA = () => {
           className="text-center max-w-3xl mx-auto"
         >
           <span className="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider uppercase rounded-full bg-primary/10 text-primary border border-primary/20">
-            FRAGMA STRATEGY
+            EXCLUSIVE INVESTMENT VEHICLE
           </span>
           
           <h2 className="text-3xl lg:text-5xl font-serif font-bold text-foreground mb-6">
-            Invest With Us
+            Fragma Strategy
           </h2>
           
-          <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            Income-focused strategy with regular distributions. Combining real-world 
-            and digital infrastructure assets in a Luxembourg securitisation structure.
+          <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+            A dedicated institutional-grade investment vehicle — distinct from marketplace deals.
+          </p>
+          
+          <p className="text-base text-muted-foreground/80 mb-8 leading-relaxed max-w-2xl mx-auto">
+            Access a professionally managed portfolio combining SME credit, BTC mining, AI infrastructure, 
+            and ecosystem equity through a single Luxembourg securitisation structure with target distributions 
+            and secondary market liquidity.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-6">
             <div className="glass px-4 py-2 rounded-full flex items-center gap-2">
               <Shield className="w-4 h-4 text-primary" />
-              <span className="text-muted-foreground text-sm">Luxembourg Structure</span>
+              <span className="text-muted-foreground text-sm">Managed Portfolio</span>
             </div>
             <div className="glass px-4 py-2 rounded-full">
-              <span className="text-muted-foreground text-sm">Income + Growth</span>
+              <span className="text-muted-foreground text-sm">Luxembourg Securitisation</span>
             </div>
             <div className="glass px-4 py-2 rounded-full">
-              <span className="text-muted-foreground text-sm">Secondary Liquidity</span>
+              <span className="text-muted-foreground text-sm">Target Distributions</span>
+            </div>
+            <div className="glass px-4 py-2 rounded-full">
+              <span className="text-muted-foreground text-sm">Secondary Market</span>
             </div>
           </div>
 
