@@ -11,6 +11,7 @@ import {
 import bryanBalsingerImg from "@/assets/bryan-balsinger.png";
 import philippeNaouriImg from "@/assets/philippe-naouri.png";
 import timLevyImg from "@/assets/tim-levy.png";
+import andreMessikaImg from "@/assets/andre-messika.png";
 
 const deals = [
   { 
@@ -39,7 +40,7 @@ const deals = [
     role: "Master Diamantaire",
     subtitle: "",
     initials: "AM",
-    image: null
+    image: andreMessikaImg
   },
 ];
 
