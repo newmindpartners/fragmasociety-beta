@@ -19,7 +19,7 @@ export const Navbar = () => {
         <div className="hidden md:flex gap-8 text-sm font-medium text-muted-foreground">
           <a href="/#features" className="hover:text-primary transition-colors">How it works</a>
           <a href="/#marketplace" className="hover:text-primary transition-colors">Marketplace</a>
-          <Link to="/auth" className="hover:text-primary transition-colors">Fragma Strategy</Link>
+          <Link to="/strategy" className="hover:text-primary transition-colors">Invest with us</Link>
           <a href="/#partners" className="hover:text-primary transition-colors">Partners</a>
         </div>
 
@@ -54,7 +54,7 @@ export const Navbar = () => {
             <div className="p-6 flex flex-col gap-4">
               <a href="/#features" className="text-foreground hover:text-primary transition-colors">How it works</a>
               <a href="/#marketplace" className="text-foreground hover:text-primary transition-colors">Marketplace</a>
-              <Link to="/auth" className="text-foreground hover:text-primary transition-colors">Fragma Strategy</Link>
+              <Link to="/strategy" className="text-foreground hover:text-primary transition-colors">Invest with us</Link>
               <a href="/#partners" className="text-foreground hover:text-primary transition-colors">Partners</a>
               {user ? (
                 <Button onClick={() => signOut()}>Sign Out</Button>
