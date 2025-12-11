@@ -124,9 +124,9 @@ export const FeaturedDeals = () => (
         }}
         className="w-full"
       >
-        <CarouselContent className="-ml-4">
+        <CarouselContent className="-ml-6">
           {deals.map((deal, i) => (
-            <CarouselItem key={i} className="pl-4 md:basis-1/2 lg:basis-1/4">
+            <CarouselItem key={i} className="pl-6 md:basis-1/2 lg:basis-[30%]">
               <SignatureCard {...deal} />
             </CarouselItem>
           ))}
