@@ -55,7 +55,7 @@ const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardP
     className="relative h-[480px] flex flex-col"
   >
     {/* Card info box at top */}
-    <div className="bg-gradient-to-br from-[hsl(225,65%,22%)] to-[hsl(225,65%,14%)] rounded-2xl p-6 pt-8 pb-32 text-center relative z-10 border border-primary/20 h-[340px]">
+    <div className="bg-gradient-to-t from-black/80 to-[hsl(225,50%,18%)]/70 backdrop-blur-xl rounded-2xl p-6 pt-8 pb-32 text-center relative z-10 h-[340px]">
       <p className="text-muted-foreground text-sm mb-2">Invest with</p>
       <h3 className="font-serif text-2xl font-bold text-foreground mb-6">{name}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">
