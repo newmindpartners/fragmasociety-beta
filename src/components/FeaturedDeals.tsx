@@ -54,8 +54,19 @@ const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardP
     whileHover={{ y: -5 }}
     className="relative h-[400px] flex flex-col"
   >
+    {/* Avatar area - overlaps on top */}
+    {image && (
+      <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-20">
+        <img 
+          src={image} 
+          alt={name}
+          className="h-72 w-auto object-contain drop-shadow-2xl"
+        />
+      </div>
+    )}
+    
     {/* Card info box */}
-    <div className="bg-gradient-to-br from-[hsl(225,65%,20%)] to-[hsl(225,65%,12%)] rounded-2xl p-6 pt-5 pb-8 text-center relative z-10 border border-primary/20">
+    <div className={`bg-gradient-to-br from-[hsl(225,65%,20%)] to-[hsl(225,65%,12%)] rounded-2xl p-6 text-center relative z-10 border border-primary/20 ${image ? 'mt-auto pt-8 pb-6' : 'pt-5 pb-8'}`}>
       <p className="text-muted-foreground text-sm mb-1">Invest with</p>
       <h3 className="font-serif text-2xl font-bold text-foreground mb-3">{name}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">
@@ -64,22 +75,16 @@ const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardP
       </p>
     </div>
     
-    {/* Avatar area */}
-    <div className="flex-1 flex items-end justify-center -mt-2 relative">
-      {image ? (
-        <img 
-          src={image} 
-          alt={name}
-          className="h-48 w-auto object-contain"
-        />
-      ) : (
+    {/* Fallback initials for cards without image */}
+    {!image && (
+      <div className="flex-1 flex items-end justify-center -mt-2 relative">
         <div className="w-32 h-32 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 flex items-center justify-center border border-border/30">
           <span className="text-4xl font-serif font-bold text-muted-foreground/50">
             {initials}
           </span>
         </div>
-      )}
-    </div>
+      </div>
+    )}
   </motion.div>
 );
 
