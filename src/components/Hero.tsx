@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Layers, TrendingUp, ArrowRightLeft } from "lucide-react";
+import { ArrowRight, Key, Coins, DoorOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 
@@ -7,17 +7,17 @@ const highlights = [
   {
     label: "OWN",
     description: "Fractional stakes from €50",
-    Icon: Layers
+    Icon: Key
   },
   {
     label: "EARN",
     description: "Automated yield distributions",
-    Icon: TrendingUp
+    Icon: Coins
   },
   {
     label: "EXIT",
     description: "Trade on secondary market",
-    Icon: ArrowRightLeft
+    Icon: DoorOpen
   }
 ];
 
@@ -40,7 +40,7 @@ export const Hero = () => {
             Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
           </p>
 
-          <div className="flex justify-center mb-16">
+          <div className="flex justify-center mb-20">
             <Button variant="hero" size="lg" className="group">
               Browse Deals
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -48,95 +48,71 @@ export const Hero = () => {
           </div>
 
           {/* OWN - EARN - EXIT highlights */}
-          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12">
+          <div className="flex flex-col md:flex-row justify-center items-stretch gap-6 md:gap-8 max-w-3xl mx-auto">
             {highlights.map((item, index) => (
               <motion.div
                 key={item.label}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ 
-                  duration: 0.6, 
-                  delay: 0.5 + index * 0.15,
-                  ease: [0.25, 0.46, 0.45, 0.94]
+                  duration: 0.8, 
+                  delay: 0.6 + index * 0.2,
+                  ease: [0.16, 1, 0.3, 1]
                 }}
-                className="group relative"
+                className="flex-1 group"
               >
-                {/* Card container */}
-                <motion.div 
-                  className="relative p-6 rounded-2xl bg-gradient-to-b from-card/60 to-card/30 backdrop-blur-xl border border-white/5 cursor-pointer overflow-hidden"
-                  whileHover={{ 
-                    y: -8,
-                    transition: { duration: 0.3, ease: "easeOut" }
-                  }}
-                >
-                  {/* Glow effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative h-full p-8 text-center">
+                  {/* Subtle border */}
+                  <div className="absolute inset-0 rounded-2xl border border-white/[0.08] group-hover:border-primary/30 transition-colors duration-700" />
                   
-                  {/* Top edge glow */}
-                  <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {/* Background glow on hover */}
+                  <motion.div 
+                    className="absolute inset-0 rounded-2xl bg-primary/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                  />
                   
-                  {/* Icon with animation */}
+                  {/* Icon container */}
                   <motion.div
-                    className="relative mx-auto mb-3 w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ duration: 0.3 }}
+                    className="relative inline-flex items-center justify-center w-14 h-14 mb-5"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <item.Icon 
-                      className="text-primary transition-all duration-300 group-hover:scale-110" 
-                      size={24} 
-                      strokeWidth={1.5}
+                    {/* Icon ring */}
+                    <div className="absolute inset-0 rounded-full border border-primary/20 group-hover:border-primary/40 transition-colors duration-500" />
+                    
+                    {/* Rotating ring on hover */}
+                    <motion.div
+                      className="absolute inset-[-2px] rounded-full border border-transparent border-t-primary/50"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                      style={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
                     />
                     
-                    {/* Shimmer effect */}
-                    <motion.div
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: "100%" }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                    <item.Icon 
+                      className="text-primary/70 group-hover:text-primary transition-colors duration-500" 
+                      size={22} 
+                      strokeWidth={1.5}
                     />
                   </motion.div>
                   
-                  {/* Label */}
-                  <motion.span 
-                    className="block text-primary font-bold text-lg tracking-wider mb-1"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {item.label}
-                  </motion.span>
+                  {/* Label with underline animation */}
+                  <div className="relative mb-2">
+                    <span className="text-foreground font-semibold text-base tracking-[0.2em] uppercase">
+                      {item.label}
+                    </span>
+                    <motion.div 
+                      className="absolute -bottom-1 left-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+                      initial={{ width: 0, x: "-50%" }}
+                      whileHover={{ width: "60%" }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                    />
+                  </div>
                   
                   {/* Description */}
-                  <p className="text-muted-foreground text-sm transition-colors duration-300 group-hover:text-foreground/80">
+                  <p className="text-muted-foreground/70 text-sm group-hover:text-muted-foreground transition-colors duration-500">
                     {item.description}
                   </p>
-                  
-                  {/* Floating particles */}
-                  <motion.div
-                    className="absolute -bottom-1 left-1/2 w-1 h-1 rounded-full bg-primary/60"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ 
-                      opacity: [0, 0.8, 0],
-                      y: [-10, -30],
-                      x: [-5, 5]
-                    }}
-                    transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5 }}
-                  />
-                  <motion.div
-                    className="absolute -bottom-1 left-1/3 w-1.5 h-1.5 rounded-full bg-primary/40"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ 
-                      opacity: [0, 0.6, 0],
-                      y: [-10, -25],
-                      x: [5, -5]
-                    }}
-                    transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 0.3 }}
-                  />
-                </motion.div>
-                
-                {/* Connector line (desktop only) */}
-                {index < highlights.length - 1 && (
-                  <div className="hidden md:block absolute -right-6 top-1/2 -translate-y-1/2 w-px h-12 bg-gradient-to-b from-transparent via-border/50 to-transparent" />
-                )}
+                </div>
               </motion.div>
             ))}
           </div>
