@@ -114,8 +114,7 @@ export const WorkWithUs = () => (
                 </div>
               </div>
               <p className="text-sm text-muted-foreground italic">
-                "Tokenizing our portfolio opened doors to investors we never could have reached. 
-                The team made it seamless."
+                "Partnering with Fragma on the Elite Race Horses Fund allowed us to bring world-class investors into the sport. Together, we're creating the next champion."
               </p>
             </motion.div>
           </div>
