@@ -388,44 +388,44 @@ const PremiumChart = ({
             filter="url(#dotGlow)"
           />
           
-          {/* Price tooltip - larger and more visible */}
-          <g transform={`translate(${cursorPoint.x + 12}, ${cursorPoint.y - 18})`}>
+          {/* Price tooltip - large and prominent */}
+          <g transform={`translate(${cursorPoint.x + 14}, ${cursorPoint.y - 24})`}>
             {/* Background shadow */}
             <rect
               x="0"
-              y="-14"
-              width="78"
-              height="32"
-              rx="6"
+              y="-18"
+              width="95"
+              height="42"
+              rx="8"
               fill="hsl(var(--background))"
-              opacity={0.9}
+              opacity={0.95}
             />
             {/* Main background */}
             <rect
               x="0"
-              y="-14"
-              width="78"
-              height="32"
-              rx="6"
+              y="-18"
+              width="95"
+              height="42"
+              rx="8"
               fill="hsl(var(--card))"
               stroke="hsl(var(--primary))"
-              strokeWidth="1"
-              strokeOpacity={0.5}
+              strokeWidth="1.5"
+              strokeOpacity={0.6}
             />
             {/* Gradient overlay */}
             <rect
               x="0"
-              y="-14"
-              width="78"
-              height="32"
-              rx="6"
+              y="-18"
+              width="95"
+              height="42"
+              rx="8"
               fill="url(#chartLineGradient)"
-              opacity={0.1}
+              opacity={0.15}
             />
             <text
-              x="10"
-              y="6"
-              className="text-[14px] font-mono font-bold fill-primary"
+              x="12"
+              y="10"
+              className="text-[18px] font-mono font-bold fill-primary"
             >
               €{cursorPoint.price.toFixed(2)}
             </text>
