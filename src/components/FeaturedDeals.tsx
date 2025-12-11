@@ -55,7 +55,7 @@ interface SignatureCardProps {
 const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardProps) => (
   <motion.div 
     whileHover={{ y: -5 }}
-    className="relative h-[750px] flex flex-col group cursor-pointer"
+    className="relative h-[700px] w-[250px] flex flex-col group cursor-pointer"
   >
     {/* Card info box at top */}
     <div className="bg-gradient-to-t from-black/80 to-[hsl(225,50%,18%)]/70 backdrop-blur-xl rounded-2xl p-8 pt-10 pb-36 text-center relative z-10 h-[380px] overflow-hidden">
@@ -124,9 +124,9 @@ export const FeaturedDeals = () => (
         }}
         className="w-full"
       >
-        <CarouselContent className="-ml-6">
+        <CarouselContent className="-ml-4">
           {deals.map((deal, i) => (
-            <CarouselItem key={i} className="pl-6 md:basis-1/2 lg:basis-[30%]">
+            <CarouselItem key={i} className="pl-4 basis-auto">
               <SignatureCard {...deal} />
             </CarouselItem>
           ))}
