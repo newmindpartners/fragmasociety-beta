@@ -67,15 +67,15 @@ const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardP
       </p>
       
       {/* Hover overlay with button */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center rounded-2xl">
-        <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center rounded-2xl z-30">
+        <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground relative z-40">
           Register to see detail
         </Button>
       </div>
     </div>
     
     {/* Avatar area - overlaps from bottom */}
-    <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center">
+    <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none group-hover:pointer-events-none">
       {image ? (
         <img 
           src={image} 
