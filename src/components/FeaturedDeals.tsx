@@ -55,7 +55,7 @@ interface SignatureCardProps {
 const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardProps) => (
   <motion.div 
     whileHover={{ y: -5 }}
-    className="relative h-[700px] w-[250px] flex flex-col group cursor-pointer"
+    className="relative h-[700px] w-[350px] flex flex-col group cursor-pointer"
   >
     {/* Card info box at top */}
     <div className="bg-gradient-to-t from-black/80 to-[hsl(225,50%,18%)]/70 backdrop-blur-xl rounded-2xl p-8 pt-10 pb-36 text-center relative z-10 h-[380px] overflow-hidden">
