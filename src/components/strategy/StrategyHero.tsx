@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Phone, TrendingUp, Shield, Zap, BarChart3, AlertTriangle, Lock, Landmark, Cpu, Bitcoin, Building2 } from "lucide-react";
+import { ArrowRight, Phone, TrendingUp, Shield, Zap, BarChart3, AlertTriangle, Lock, Landmark, Cpu, Bitcoin, Building2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -404,14 +404,21 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 mb-8"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-card/80 border border-primary/30 backdrop-blur-sm mb-8"
             >
-              <motion.div 
-                className="w-2 h-2 rounded-full bg-primary"
-                animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <span className="text-xs font-medium tracking-wider text-primary uppercase">Fragma Strategy</span>
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-4 h-4 text-primary" />
+              </motion.div>
+              <span className="text-sm font-bold tracking-[0.15em] text-primary uppercase">Exclusive Investment Vehicle</span>
+              <motion.div
+                animate={{ rotate: [0, -360] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-4 h-4 text-primary" />
+              </motion.div>
             </motion.div>
             
             <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-[1.1] mb-6">
