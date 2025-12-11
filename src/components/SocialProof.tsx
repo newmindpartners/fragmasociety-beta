@@ -1,8 +1,11 @@
 import { Shield } from "lucide-react";
 
 export const SocialProof = () => (
-  <div className="w-full bg-card border-t border-primary/20 py-8">
-    <div className="container mx-auto px-6 text-center">
+  <div className="relative w-full py-8">
+    {/* Glassmorphism container */}
+    <div className="absolute inset-0 bg-card/30 backdrop-blur-xl border-y border-white/5" />
+    
+    <div className="container mx-auto px-6 text-center relative z-10">
       <h4 className="text-muted-foreground text-sm font-medium mb-6 uppercase tracking-widest">
         Trusted Partners & Regulated Rails
       </h4>

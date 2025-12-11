@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 
 export const Marketplace = () => (
-  <section id="marketplace" className="relative w-full py-20 lg:py-28 bg-secondary/50">
-    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+  <section id="marketplace" className="relative w-full py-20 lg:py-28">
+    {/* Glassmorphism container */}
+    <div className="absolute inset-0 bg-card/50 backdrop-blur-xl border-y border-white/5" />
+    
+    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
       <div>
         <Badge>Marketplace</Badge>
         <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-6">
@@ -28,7 +31,7 @@ export const Marketplace = () => (
       </div>
 
       {/* Mock Trading UI */}
-      <div className="relative bg-background border border-foreground/10 rounded-xl p-4 shadow-card font-mono text-xs">
+      <div className="relative bg-background/60 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl shadow-primary/5 font-mono text-xs">
         <div className="flex justify-between items-center mb-4 border-b border-foreground/5 pb-2">
           <div className="flex gap-4">
             <span className="text-foreground font-bold">FRG-VILLA-01</span>

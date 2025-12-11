@@ -20,8 +20,11 @@ const features = [
 ];
 
 export const Features = () => (
-  <section id="features" className="relative w-full py-20 lg:py-28 bg-card">
-    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16">
+  <section id="features" className="relative w-full py-20 lg:py-28">
+    {/* Glassmorphism container */}
+    <div className="absolute inset-0 bg-card/40 backdrop-blur-xl border-y border-white/5" />
+    
+    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 relative z-10">
       <div>
         <Badge>Why Fragma Society</Badge>
         <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-6">
@@ -34,7 +37,7 @@ export const Features = () => (
       <div className="space-y-8">
         {features.map((item, i) => (
           <div key={i} className="flex gap-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-full bg-primary/10 backdrop-blur-sm flex items-center justify-center shrink-0 border border-primary/20">
               <item.icon className="text-primary" size={24} />
             </div>
             <div>
