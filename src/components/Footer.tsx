@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Footer = () => (
   <footer className="relative pt-20 pb-10 overflow-hidden">
     {/* Dark Navy Base */}
@@ -29,7 +31,8 @@ export const Footer = () => (
           <ul className="space-y-2 text-muted-foreground text-sm">
             <li className="hover:text-primary cursor-pointer transition-colors">Marketplace</li>
             <li className="hover:text-primary cursor-pointer transition-colors">How it Works</li>
-            <li className="hover:text-primary cursor-pointer transition-colors">Assets</li>
+            <li><a href="/#work-with-us" className="hover:text-primary transition-colors">Launch your Signature Deal</a></li>
+            <li><Link to="/strategy" className="hover:text-primary transition-colors">Invest with us</Link></li>
           </ul>
         </div>
         <div>

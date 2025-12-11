@@ -5,7 +5,7 @@ import { ArrowRight, Star, TrendingUp, Shield } from "lucide-react";
 import workWithUsHero from "@/assets/work-with-us-hero.png";
 
 export const WorkWithUs = () => (
-  <section className="relative w-full py-24 lg:py-32 bg-gradient-to-b from-background via-card to-background overflow-hidden">
+  <section id="work-with-us" className="relative w-full py-24 lg:py-32 bg-gradient-to-b from-background via-card to-background overflow-hidden">
     {/* Background decorative elements */}
     <div className="absolute inset-0 pointer-events-none">
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />

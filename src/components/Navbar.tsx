@@ -35,6 +35,7 @@ export const Navbar = () => {
           <a href="/#features" className="hover:text-primary transition-colors">How it works</a>
           <a href="/#marketplace" className="hover:text-primary transition-colors">Marketplace</a>
           <Link to="/strategy" className="hover:text-primary transition-colors">Invest with us</Link>
+          <a href="/#work-with-us" className="hover:text-primary transition-colors">Launch your Signature Deal</a>
           <a href="/#partners" className="hover:text-primary transition-colors">Partners</a>
         </div>
 
@@ -70,6 +71,7 @@ export const Navbar = () => {
               <a href="/#features" className="text-foreground hover:text-primary transition-colors">How it works</a>
               <a href="/#marketplace" className="text-foreground hover:text-primary transition-colors">Marketplace</a>
               <Link to="/strategy" className="text-foreground hover:text-primary transition-colors">Invest with us</Link>
+              <a href="/#work-with-us" className="text-foreground hover:text-primary transition-colors">Launch your Signature Deal</a>
               <a href="/#partners" className="text-foreground hover:text-primary transition-colors">Partners</a>
               {user ? (
                 <Button onClick={() => signOut()}>Sign Out</Button>
