@@ -177,7 +177,7 @@ export const HowItWorks = () => {
     
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % 4);
-    }, 2500);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isInView, isPaused]);
