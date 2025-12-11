@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import bryanBalsingerImg from "@/assets/bryan-balsinger.png";
+import philippeNaouriImg from "@/assets/philippe-naouri.png";
 
 const deals = [
   { 
@@ -23,7 +24,7 @@ const deals = [
     role: "Malibu Mid-Century",
     subtitle: "Villa Designer",
     initials: "PN",
-    image: null
+    image: philippeNaouriImg
   },
   { 
     name: "Tim Levy", 
