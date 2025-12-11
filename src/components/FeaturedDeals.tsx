@@ -8,16 +8,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import bryanBalsingerImg from "@/assets/bryan-balsiger-horses.png";
+import bryanBalsingerImg from "@/assets/bryan-balsinger.png";
 import philippeNaouriImg from "@/assets/philippe-naouri.png";
 import timLevyImg from "@/assets/tim-levy.png";
 import andreMessikaImg from "@/assets/andre-messika.png";
 
 const deals = [
   { 
-    name: "Bryan Balsiger", 
-    role: "European Champion Jumping",
-    subtitle: "Elite Horses Fund",
+    name: "Bryan Balsinger", 
+    role: "Double European Champion",
+    subtitle: "Jumping",
     initials: "BB",
     image: bryanBalsingerImg
   },
