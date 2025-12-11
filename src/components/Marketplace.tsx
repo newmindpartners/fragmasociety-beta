@@ -869,6 +869,53 @@ export const Marketplace = () => {
             </div>
           </motion.div>
         </div>
+        
+        {/* Partners Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 20 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mt-24 pt-16 border-t border-white/5"
+        >
+          <p className="text-center text-sm text-muted-foreground/60 uppercase tracking-widest mb-10">
+            Trusted Partners & Infrastructure
+          </p>
+          
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8">
+            {[
+              { name: "Woodlaw", subtitle: "Luxembourg" },
+              { name: "House of Web3", subtitle: "Luxembourg" },
+              { name: "Swissquote", subtitle: "" },
+              { name: "Bank Frick", subtitle: "" },
+              { name: "Realiz", subtitle: "" },
+              { name: "DFNS", subtitle: "Wallet" },
+            ].map((partner, idx) => (
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+                transition={{ duration: 0.4, delay: 0.9 + idx * 0.1 }}
+                className="group flex flex-col items-center"
+              >
+                <div className="relative px-6 py-3 rounded-xl bg-card/50 border border-white/5 hover:border-primary/20 transition-all duration-300">
+                  {/* Hover glow */}
+                  <div className="absolute inset-0 rounded-xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="relative flex flex-col items-center">
+                    <span className="font-semibold text-foreground/80 group-hover:text-foreground transition-colors text-sm tracking-wide">
+                      {partner.name}
+                    </span>
+                    {partner.subtitle && (
+                      <span className="text-[10px] text-muted-foreground/50 uppercase tracking-wider mt-0.5">
+                        {partner.subtitle}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
