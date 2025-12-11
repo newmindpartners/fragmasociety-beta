@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import bryanBalsingerImg from "@/assets/bryan-balsinger.png";
 import philippeNaouriImg from "@/assets/philippe-naouri.png";
+import timLevyImg from "@/assets/tim-levy.png";
 
 const deals = [
   { 
@@ -31,7 +32,7 @@ const deals = [
     role: "Hollywood Blockbuster",
     subtitle: "Film Financier",
     initials: "TL",
-    image: null
+    image: timLevyImg
   },
   { 
     name: "André Messika", 
