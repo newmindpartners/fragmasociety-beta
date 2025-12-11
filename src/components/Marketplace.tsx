@@ -877,43 +877,116 @@ export const Marketplace = () => {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="mt-24 pt-16 border-t border-white/5"
         >
-          <p className="text-center text-sm text-muted-foreground/60 uppercase tracking-widest mb-10">
+          <p className="text-center text-sm text-muted-foreground/60 uppercase tracking-widest mb-12">
             Trusted Partners & Infrastructure
           </p>
           
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8">
-            {[
-              { name: "Woodlaw", subtitle: "Luxembourg" },
-              { name: "House of Web3", subtitle: "Luxembourg" },
-              { name: "Swissquote", subtitle: "" },
-              { name: "Bank Frick", subtitle: "" },
-              { name: "Realiz", subtitle: "" },
-              { name: "DFNS", subtitle: "Wallet" },
-            ].map((partner, idx) => (
-              <motion.div
-                key={partner.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
-                transition={{ duration: 0.4, delay: 0.9 + idx * 0.1 }}
-                className="group flex flex-col items-center"
-              >
-                <div className="relative px-6 py-3 rounded-xl bg-card/50 border border-white/5 hover:border-primary/20 transition-all duration-300">
-                  {/* Hover glow */}
-                  <div className="absolute inset-0 rounded-xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  <div className="relative flex flex-col items-center">
-                    <span className="font-semibold text-foreground/80 group-hover:text-foreground transition-colors text-sm tracking-wide">
-                      {partner.name}
-                    </span>
-                    {partner.subtitle && (
-                      <span className="text-[10px] text-muted-foreground/50 uppercase tracking-wider mt-0.5">
-                        {partner.subtitle}
-                      </span>
-                    )}
-                  </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-12">
+            {/* Woud Law */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+              transition={{ duration: 0.4, delay: 0.9 }}
+              className="group"
+            >
+              <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-card/40 border border-white/5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300">
+                <svg className="w-6 h-6 text-primary/70 group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 3L4 7v6c0 5 3.5 9.74 8 11 4.5-1.26 8-6 8-11V7l-8-4z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                <div className="flex flex-col">
+                  <span className="font-bold text-foreground/90 group-hover:text-foreground text-base tracking-wide">WOUD</span>
+                  <span className="text-[9px] text-muted-foreground/50 uppercase tracking-widest">Law Firm</span>
                 </div>
-              </motion.div>
-            ))}
+              </div>
+            </motion.div>
+            
+            {/* House of Web3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+              transition={{ duration: 0.4, delay: 1.0 }}
+              className="group"
+            >
+              <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-card/40 border border-white/5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300">
+                <svg className="w-7 h-7 text-primary/70 group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
+                </svg>
+                <div className="flex flex-col">
+                  <span className="font-bold text-foreground/90 group-hover:text-foreground text-base">House of Web3</span>
+                  <span className="text-[9px] text-muted-foreground/50 uppercase tracking-widest">Luxembourg</span>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Swissquote */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+              transition={{ duration: 0.4, delay: 1.1 }}
+              className="group"
+            >
+              <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-card/40 border border-white/5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300">
+                <div className="w-7 h-7 rounded bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">SQ</span>
+                </div>
+                <span className="font-bold text-foreground/90 group-hover:text-foreground text-base tracking-wide">Swissquote</span>
+              </div>
+            </motion.div>
+            
+            {/* Bank Frick */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+              transition={{ duration: 0.4, delay: 1.2 }}
+              className="group"
+            >
+              <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-card/40 border border-white/5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300">
+                <div className="w-7 h-7 rounded bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">BF</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-bold text-foreground/90 group-hover:text-foreground text-base">Bank Frick</span>
+                  <span className="text-[9px] text-muted-foreground/50 uppercase tracking-widest">Liechtenstein</span>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Realiz */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+              transition={{ duration: 0.4, delay: 1.3 }}
+              className="group"
+            >
+              <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-card/40 border border-white/5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300">
+                <svg className="w-6 h-6 text-cyan-400 group-hover:text-cyan-300 transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span className="font-bold text-foreground/90 group-hover:text-foreground text-base tracking-wide">Realiz</span>
+              </div>
+            </motion.div>
+            
+            {/* DFNS */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
+              transition={{ duration: 0.4, delay: 1.4 }}
+              className="group"
+            >
+              <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-card/40 border border-white/5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-bold text-foreground/90 group-hover:text-foreground text-base">Dfns</span>
+                  <span className="text-[9px] text-muted-foreground/50 uppercase tracking-widest">Wallet Infra</span>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
