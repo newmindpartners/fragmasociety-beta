@@ -10,7 +10,7 @@ export const Navbar = () => {
   const { user, signOut } = useAuth();
 
   return (
-    <nav className="fixed w-full z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5">
+    <nav className="fixed w-full z-50 bg-background/40 backdrop-blur-2xl border-b border-white/5">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8" />
@@ -49,7 +49,7 @@ export const Navbar = () => {
             initial={{ height: 0 }} 
             animate={{ height: 'auto' }} 
             exit={{ height: 0 }}
-            className="md:hidden bg-card overflow-hidden"
+            className="md:hidden bg-background/60 backdrop-blur-xl overflow-hidden border-b border-white/5"
           >
             <div className="p-6 flex flex-col gap-4">
               <a href="/#features" className="text-foreground hover:text-primary transition-colors">How it works</a>
