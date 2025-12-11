@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Badge";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, TrendingUp, Shield } from "lucide-react";
+import workWithUsHero from "@/assets/work-with-us-hero.png";
 
 export const WorkWithUs = () => (
   <section className="relative w-full py-24 lg:py-32 bg-gradient-to-b from-background via-card to-background overflow-hidden">
@@ -88,8 +89,8 @@ export const WorkWithUs = () => (
           {/* Main image container */}
           <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
             <img
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=700&fit=crop&crop=faces"
-              alt="Industry leader in professional setting"
+              src={workWithUsHero}
+              alt="Industry leader with horses"
               className="w-full h-[500px] lg:h-[600px] object-cover"
             />
             {/* Gradient overlay */}
