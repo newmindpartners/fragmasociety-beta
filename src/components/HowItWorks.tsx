@@ -338,18 +338,15 @@ export const HowItWorks = () => {
         {/* CTA Strip */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={activeStep === 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-12 pt-8 border-t border-white/5"
         >
           <p className="text-foreground font-medium mb-4">Ready to own your first slice?</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Button variant="default" size="lg" className="group">
               Create account
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button variant="outline" size="lg" className="border-primary/50 text-primary hover:bg-primary/10">
-              See live deals
             </Button>
           </div>
         </motion.div>
