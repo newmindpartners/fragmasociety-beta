@@ -52,12 +52,12 @@ interface SignatureCardProps {
 const SignatureCard = ({ name, role, subtitle, initials, image }: SignatureCardProps) => (
   <motion.div 
     whileHover={{ y: -5 }}
-    className="relative h-[420px] flex flex-col"
+    className="relative h-[480px] flex flex-col"
   >
     {/* Card info box at top */}
-    <div className="bg-gradient-to-br from-[hsl(225,65%,22%)] to-[hsl(225,65%,14%)] rounded-2xl p-6 pt-6 pb-24 text-center relative z-10 border border-primary/20 h-[280px]">
-      <p className="text-muted-foreground text-sm mb-1">Invest with</p>
-      <h3 className="font-serif text-2xl font-bold text-foreground mb-4">{name}</h3>
+    <div className="bg-gradient-to-br from-[hsl(225,65%,22%)] to-[hsl(225,65%,14%)] rounded-2xl p-6 pt-8 pb-32 text-center relative z-10 border border-primary/20 h-[340px]">
+      <p className="text-muted-foreground text-sm mb-2">Invest with</p>
+      <h3 className="font-serif text-2xl font-bold text-foreground mb-6">{name}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">
         {role}
         {subtitle && <><br />{subtitle}</>}
