@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,25 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, signOut } = useAuth();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="fixed w-full z-50 bg-background/40 backdrop-blur-2xl border-b border-white/5">
+    <nav 
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrolled 
+          ? "bg-background/60 backdrop-blur-2xl border-b border-white/10" 
+          : "bg-transparent border-b border-transparent"
+      }`}
+    >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8" />
