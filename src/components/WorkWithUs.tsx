@@ -106,11 +106,11 @@ export const WorkWithUs = () => (
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-bold text-lg">JM</span>
+                  <span className="text-primary font-bold text-lg">BB</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground">James Mitchell</h4>
-                  <p className="text-sm text-muted-foreground">Real Estate Magnate</p>
+                  <h4 className="font-semibold text-foreground">Bryan Balsiger</h4>
+                  <p className="text-sm text-muted-foreground">Double European Champion Jumping</p>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground italic">
