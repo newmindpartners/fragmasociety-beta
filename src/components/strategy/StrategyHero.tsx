@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Phone, TrendingUp, Shield, Zap, BarChart3, AlertTriangle, Lock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Phone, TrendingUp, Shield, Zap, BarChart3, AlertTriangle, Lock, Landmark, Cpu, Bitcoin, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const StrategyAnimatedBackground = () => (
@@ -29,6 +29,172 @@ const StrategyAnimatedBackground = () => (
     />
   </div>
 );
+
+// Strategy data for the animated showcase
+const strategies = [
+  {
+    id: 1,
+    title: "SME Credit",
+    subtitle: "Private Lending",
+    description: "Secured lending to established SMEs with stable cash flows",
+    icon: Landmark,
+    color: "from-emerald-500/20 to-teal-500/20",
+    yield: "8-12%",
+    category: "Income"
+  },
+  {
+    id: 2,
+    title: "BTC Mining",
+    subtitle: "Digital Infrastructure",
+    description: "Institutional-grade Bitcoin mining operations",
+    icon: Bitcoin,
+    color: "from-amber-500/20 to-orange-500/20",
+    yield: "Variable",
+    category: "Income"
+  },
+  {
+    id: 3,
+    title: "AI/HPC Infra",
+    subtitle: "Compute Power",
+    description: "High-performance computing for AI workloads",
+    icon: Cpu,
+    color: "from-violet-500/20 to-purple-500/20",
+    yield: "10-15%",
+    category: "Growth"
+  },
+  {
+    id: 4,
+    title: "Ecosystem Equity",
+    subtitle: "Strategic Positions",
+    description: "Equity stakes in digital infrastructure companies",
+    icon: Building2,
+    color: "from-primary/20 to-accent/20",
+    yield: "Capital Gains",
+    category: "Growth"
+  }
+];
+
+const StrategyCard = ({ strategy, isActive, onClick }: { strategy: typeof strategies[0]; isActive: boolean; onClick: () => void }) => {
+  const Icon = strategy.icon;
+  
+  return (
+    <motion.div
+      onClick={onClick}
+      className={`relative cursor-pointer rounded-2xl p-5 transition-all duration-500 ${
+        isActive 
+          ? 'glass border border-primary/30 shadow-lg shadow-primary/10' 
+          : 'bg-card/30 border border-border/20 hover:border-border/40'
+      }`}
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      layout
+    >
+      {isActive && (
+        <motion.div
+          layoutId="strategyActiveGlow"
+          className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        />
+      )}
+      
+      <div className="relative z-10 flex items-start gap-4">
+        <motion.div 
+          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${strategy.color} flex items-center justify-center flex-shrink-0`}
+          animate={{ rotate: isActive ? [0, 5, -5, 0] : 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Icon className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-muted-foreground'} transition-colors duration-300`} />
+        </motion.div>
+        
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between mb-1">
+            <h3 className={`font-semibold ${isActive ? 'text-foreground' : 'text-muted-foreground'} transition-colors duration-300`}>
+              {strategy.title}
+            </h3>
+            <span className={`text-xs px-2 py-0.5 rounded-full ${
+              strategy.category === 'Income' 
+                ? 'bg-emerald-500/10 text-emerald-400' 
+                : 'bg-violet-500/10 text-violet-400'
+            }`}>
+              {strategy.category}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground/70">{strategy.subtitle}</p>
+          
+          <AnimatePresence>
+            {isActive && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                  {strategy.description}
+                </p>
+                <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/20">
+                  <div>
+                    <span className="text-xs text-muted-foreground/60">Target Yield</span>
+                    <p className="text-sm font-medium text-primary">{strategy.yield}</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const StrategiesShowcase = () => {
+  const [activeStrategy, setActiveStrategy] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStrategy((prev) => (prev + 1) % strategies.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+  
+  return (
+    <div className="space-y-3">
+      {strategies.map((strategy, index) => (
+        <motion.div
+          key={strategy.id}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.8 + index * 0.15, duration: 0.5 }}
+        >
+          <StrategyCard
+            strategy={strategy}
+            isActive={activeStrategy === index}
+            onClick={() => setActiveStrategy(index)}
+          />
+        </motion.div>
+      ))}
+      
+      <div className="flex justify-center gap-2 pt-4">
+        {strategies.map((_, index) => (
+          <motion.button
+            key={index}
+            onClick={() => setActiveStrategy(index)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeStrategy === index 
+                ? 'w-8 bg-primary' 
+                : 'w-2 bg-border hover:bg-muted-foreground/50'
+            }`}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 interface MetricCircleProps {
   value: string;
@@ -348,134 +514,89 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
             </motion.p>
           </motion.div>
           
-          {/* Right Column - Metric Circles */}
+          {/* Right Column - Animated Strategies Showcase */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="hidden lg:flex flex-col items-center justify-center"
+            className="hidden lg:block"
           >
             <div className="relative">
-              {isAuthenticated ? (
-                <>
-                  <motion.div
-                    className="flex justify-center mb-6"
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    transition={{ delay: 0.7, type: "spring" }}
-                  >
-                    <MetricCircle 
-                      value="8%" 
-                      label="p.a." 
-                      sublabel="Target Distribution"
-                      disclaimer="Target net annual distribution: 8% p.a. (not guaranteed)"
-                      delay={0.8}
-                      size="lg"
-                    />
-                  </motion.div>
-                  
-                  <div className="flex gap-8 justify-center">
-                    <MetricCircle 
-                      value="10-12%" 
-                      label="p.a." 
-                      sublabel="Target Range"
-                      disclaimer="Illustrative target: 10–12% p.a. (not guaranteed)"
-                      delay={1}
-                    />
-                    <MetricCircle 
-                      value="15%" 
-                      label="IRR" 
-                      sublabel="Target Net"
-                      disclaimer="Target net IRR: 15% – results may vary"
-                      delay={1.2}
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <motion.div
-                    className="flex justify-center mb-6"
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    transition={{ delay: 0.7, type: "spring" }}
-                  >
-                    <LockedMetricCircle delay={0.8} size="lg" />
-                  </motion.div>
-                  
-                  <div className="flex gap-8 justify-center">
-                    <LockedMetricCircle delay={1} />
-                    <LockedMetricCircle delay={1.2} />
-                  </div>
-                </>
-              )}
-            </div>
-            
-            {/* Bottom info card */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.4, duration: 0.6 }}
-              whileHover={{ scale: 1.02 }}
-              className="mt-10 glass rounded-2xl p-6 max-w-sm shine"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="flex -space-x-2">
-                  {["from-primary to-accent", "from-accent to-primary", "from-primary/80 to-accent/80"].map((gradient, i) => (
-                    <motion.div
-                      key={i}
-                      className={`w-8 h-8 rounded-full bg-gradient-to-br ${gradient} border-2 border-background`}
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 1.5 + i * 0.1 }}
-                    />
-                  ))}
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">Dual-Engine Approach</p>
-                  <p className="text-xs text-muted-foreground">Income • Equity</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <motion.div 
-                  className="p-2 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors cursor-default"
-                  whileHover={{ x: 2 }}
-                >
-                  <span className="text-muted-foreground">SME Credit</span>
-                </motion.div>
-                <motion.div 
-                  className="p-2 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors cursor-default"
-                  whileHover={{ x: 2 }}
-                >
-                  <span className="text-muted-foreground">BTC Mining</span>
-                </motion.div>
-                <motion.div 
-                  className="p-2 rounded-lg bg-accent/5 hover:bg-accent/10 transition-colors cursor-default"
-                  whileHover={{ x: 2 }}
-                >
-                  <span className="text-muted-foreground">AI/HPC Infra</span>
-                </motion.div>
-                <motion.div 
-                  className="p-2 rounded-lg bg-accent/5 hover:bg-accent/10 transition-colors cursor-default"
-                  whileHover={{ x: 2 }}
-                >
-                  <span className="text-muted-foreground">Ecosystem</span>
-                </motion.div>
-              </div>
+              {/* Floating decorative elements */}
+              <motion.div
+                className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-br from-primary/10 to-transparent blur-2xl"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.5, 0.3] 
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-gradient-to-tr from-accent/10 to-transparent blur-2xl"
+                animate={{ 
+                  scale: [1.2, 1, 1.2],
+                  opacity: [0.2, 0.4, 0.2] 
+                }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              />
               
-              {!isAuthenticated && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.8 }}
-                  className="mt-4 pt-4 border-t border-border/50 text-center"
-                >
-                  <Link to="/auth" className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center justify-center gap-1">
-                    <Lock className="w-3 h-3" />
-                    Login for detailed metrics
-                  </Link>
-                </motion.div>
-              )}
-            </motion.div>
+              {/* Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="mb-6"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <motion.div 
+                    className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.8, duration: 0.8 }}
+                  />
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Investment Strategies</span>
+                  <motion.div 
+                    className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.8, duration: 0.8 }}
+                  />
+                </div>
+              </motion.div>
+              
+              {/* Strategy Cards */}
+              <StrategiesShowcase />
+              
+              {/* Bottom stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.6, duration: 0.6 }}
+                className="mt-6 grid grid-cols-3 gap-4"
+              >
+                {[
+                  { label: "Income Sleeve", value: "60%" },
+                  { label: "Equity Sleeve", value: "40%" },
+                  { label: "Strategies", value: "4" }
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    className="text-center p-3 rounded-xl bg-card/30 border border-border/20"
+                    whileHover={{ scale: 1.05, borderColor: 'hsl(var(--primary) / 0.3)' }}
+                  >
+                    <motion.p 
+                      className="text-2xl font-bold text-gradient"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1.8 + i * 0.1, type: "spring" }}
+                    >
+                      {stat.value}
+                    </motion.p>
+                    <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>
