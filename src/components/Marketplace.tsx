@@ -1,522 +1,602 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { CheckCircle, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/Badge";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { ArrowUpRight, Shield, Zap, Lock, TrendingUp, Activity } from "lucide-react";
+import { Button } from "./ui/button";
 
-// Asset types for multi-asset tabs
-const assets = [
-  { id: "all", label: "All", ticker: "FRG-VILLA-01", change: "+4.2%", vol: "€142k", hue: 0 },
-  { id: "real-estate", label: "Real Estate", ticker: "FRG-VILLA-01", change: "+4.2%", vol: "€142k", hue: 0 },
-  { id: "film", label: "Film", ticker: "FRG-FILM-01", change: "+2.8%", vol: "€89k", hue: 20 },
-  { id: "credit", label: "Credit", ticker: "FRG-CREDIT-02", change: "+1.5%", vol: "€215k", hue: -10 },
-  { id: "fund", label: "Fund", ticker: "FRG-FUND-01", change: "+3.1%", vol: "€324k", hue: 10 },
+const assetCategories = [
+  { id: "all", label: "All" },
+  { id: "realestate", label: "Real Estate" },
+  { id: "film", label: "Film" },
+  { id: "credit", label: "Credit" },
+  { id: "fund", label: "Fund" },
 ];
 
-// Generate initial chart data
-const generateChartData = () => [40, 55, 48, 65, 58, 72, 68, 82, 78, 92].map(h => ({ height: h, glow: false }));
+const assetData: Record<string, { ticker: string; change: number; volume: string; gradient: string }> = {
+  all: { ticker: "FRG-VILLA-01", change: 4.2, volume: "€485k", gradient: "from-primary via-cyan-500 to-emerald-500" },
+  realestate: { ticker: "FRG-ESTATE-02", change: 2.8, volume: "€312k", gradient: "from-emerald-400 via-teal-500 to-cyan-500" },
+  film: { ticker: "FRG-FILM-01", change: 5.1, volume: "€567k", gradient: "from-violet-400 via-purple-500 to-fuchsia-500" },
+  credit: { ticker: "FRG-CREDIT-02", change: 1.9, volume: "€234k", gradient: "from-amber-400 via-orange-500 to-rose-500" },
+  fund: { ticker: "FRG-FUND-01", change: 3.1, volume: "€324k", gradient: "from-primary via-blue-500 to-indigo-500" },
+};
 
-// Generate order book data
-const generateOrderBook = () => ({
-  asks: Array.from({ length: 6 }, (_, i) => ({
-    price: 500 + i * 5,
-    size: (Math.random() * 2 + 0.5).toFixed(2),
-    highlighted: false,
-    filled: false,
-  })),
-  bids: Array.from({ length: 6 }, (_, i) => ({
-    price: 490 - i * 5,
-    size: (Math.random() * 2 + 0.5).toFixed(2),
-    highlighted: false,
-    filled: false,
-  })),
-});
+// Generate smooth curve data
+const generatePriceData = (seed: number) => {
+  const points: { x: number; y: number }[] = [];
+  let price = 500 + seed * 10;
+  for (let i = 0; i < 50; i++) {
+    price += (Math.random() - 0.48) * 3;
+    price = Math.max(480, Math.min(540, price));
+    points.push({ x: i, y: price });
+  }
+  return points;
+};
 
-// Animated number component
-const AnimatedNumber = ({ value, suffix = "" }: { value: string; suffix?: string }) => {
+// Smooth SVG Area Chart with gradient
+const PremiumChart = ({ 
+  data, 
+  isVisible, 
+  gradient 
+}: { 
+  data: { x: number; y: number }[];
+  isVisible: boolean;
+  gradient: string;
+}) => {
+  const width = 380;
+  const height = 220;
+  const padding = { top: 20, right: 10, bottom: 20, left: 10 };
+  
+  const chartW = width - padding.left - padding.right;
+  const chartH = height - padding.top - padding.bottom;
+  
+  const minY = Math.min(...data.map(d => d.y)) - 10;
+  const maxY = Math.max(...data.map(d => d.y)) + 10;
+  
+  const xScale = (x: number) => padding.left + (x / (data.length - 1)) * chartW;
+  const yScale = (y: number) => padding.top + chartH - ((y - minY) / (maxY - minY)) * chartH;
+  
+  // Catmull-Rom to Bezier conversion for smooth curves
+  const catmullRomToBezier = (points: { x: number; y: number }[]) => {
+    const result: string[] = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[Math.max(i - 1, 0)];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[Math.min(i + 2, points.length - 1)];
+      
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+      
+      result.push(`C ${xScale(cp1x)} ${yScale(cp1y)} ${xScale(cp2x)} ${yScale(cp2y)} ${xScale(p2.x)} ${yScale(p2.y)}`);
+    }
+    return result.join(' ');
+  };
+  
+  const scaledPoints = data.map((p, i) => ({ x: i, y: p.y }));
+  const linePath = `M ${xScale(0)} ${yScale(data[0].y)} ${catmullRomToBezier(scaledPoints)}`;
+  const areaPath = `${linePath} L ${xScale(data.length - 1)} ${height - padding.bottom} L ${padding.left} ${height - padding.bottom} Z`;
+  
+  const lastPoint = data[data.length - 1];
+
   return (
-    <motion.span
-      key={value}
-      initial={{ opacity: 0, y: -5 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 5 }}
-      transition={{ duration: 0.3 }}
-    >
-      {value}{suffix}
-    </motion.span>
+    <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
+      <defs>
+        <linearGradient id="chartAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
+          <stop offset="40%" stopColor="hsl(var(--primary))" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+        </linearGradient>
+        
+        <linearGradient id="chartLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
+          <stop offset="50%" stopColor="hsl(180 70% 55%)" />
+          <stop offset="100%" stopColor="hsl(160 70% 50%)" />
+        </linearGradient>
+        
+        <filter id="chartGlow">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        
+        <filter id="dotGlow">
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      
+      {/* Subtle grid */}
+      {[0, 1, 2, 3].map((i) => (
+        <motion.line
+          key={i}
+          x1={padding.left}
+          y1={padding.top + (i * chartH) / 3}
+          x2={width - padding.right}
+          y2={padding.top + (i * chartH) / 3}
+          stroke="hsl(var(--muted-foreground))"
+          strokeOpacity={0.08}
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: isVisible ? 1 : 0 }}
+          transition={{ duration: 0.6, delay: i * 0.08 }}
+        />
+      ))}
+      
+      {/* Area fill */}
+      <motion.path
+        d={areaPath}
+        fill="url(#chartAreaGradient)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        transition={{ duration: 1, delay: 0.3 }}
+      />
+      
+      {/* Main line */}
+      <motion.path
+        d={linePath}
+        fill="none"
+        stroke="url(#chartLineGradient)"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        filter="url(#chartGlow)"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: isVisible ? 1 : 0 }}
+        transition={{ duration: 1.8, ease: [0.22, 0.61, 0.36, 1] }}
+      />
+      
+      {/* Animated endpoint */}
+      <motion.circle
+        cx={xScale(lastPoint.x)}
+        cy={yScale(lastPoint.y)}
+        r="5"
+        fill="hsl(160 70% 50%)"
+        filter="url(#dotGlow)"
+        initial={{ scale: 0 }}
+        animate={{ scale: isVisible ? 1 : 0 }}
+        transition={{ duration: 0.4, delay: 1.5 }}
+      />
+      
+      {/* Pulsing ring */}
+      <motion.circle
+        cx={xScale(lastPoint.x)}
+        cy={yScale(lastPoint.y)}
+        r="8"
+        fill="transparent"
+        stroke="hsl(160 70% 50%)"
+        strokeWidth="1.5"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ 
+          scale: isVisible ? [1, 1.8, 1] : 0.8, 
+          opacity: isVisible ? [0.6, 0, 0.6] : 0 
+        }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+      />
+    </svg>
+  );
+};
+
+// Premium Order Book with depth visualization
+const OrderBook = ({ isVisible }: { isVisible: boolean }) => {
+  const asks = [
+    { price: 524.50, size: 1.82, depth: 85 },
+    { price: 522.25, size: 0.94, depth: 60 },
+    { price: 520.00, size: 1.45, depth: 75 },
+    { price: 518.75, size: 0.68, depth: 40 },
+    { price: 516.50, size: 2.10, depth: 95 },
+  ];
+  
+  const bids = [
+    { price: 514.25, size: 1.56, depth: 80 },
+    { price: 512.00, size: 0.89, depth: 50 },
+    { price: 510.50, size: 2.34, depth: 100 },
+    { price: 508.25, size: 1.12, depth: 65 },
+    { price: 506.00, size: 0.77, depth: 45 },
+  ];
+
+  return (
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-white/5">
+        <span className="text-[10px] uppercase tracking-widest text-muted-foreground/70 font-medium">Order Book</span>
+        <div className="flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[9px] text-muted-foreground">Live</span>
+        </div>
+      </div>
+      
+      {/* Column headers */}
+      <div className="grid grid-cols-2 gap-4 px-3 py-1.5 text-[9px] uppercase tracking-wider text-muted-foreground/50 border-b border-white/5">
+        <span>Price</span>
+        <span className="text-right">Size</span>
+      </div>
+      
+      {/* Asks (sells) */}
+      <div className="flex-1 flex flex-col justify-end py-1">
+        {asks.map((order, i) => (
+          <motion.div
+            key={`ask-${i}`}
+            className="relative group cursor-pointer"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
+            transition={{ delay: 0.8 + i * 0.06, duration: 0.4 }}
+          >
+            {/* Depth bar */}
+            <motion.div
+              className="absolute inset-y-0 right-0 bg-gradient-to-l from-rose-500/15 to-transparent"
+              initial={{ width: 0 }}
+              animate={{ width: isVisible ? `${order.depth}%` : 0 }}
+              transition={{ delay: 1 + i * 0.06, duration: 0.5 }}
+            />
+            
+            <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
+              <span className="font-mono text-rose-400/90">€{order.price.toFixed(2)}</span>
+              <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
+            </div>
+            
+            {/* Hover effect */}
+            <div className="absolute inset-0 bg-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </motion.div>
+        ))}
+      </div>
+      
+      {/* Spread indicator */}
+      <motion.div
+        className="px-3 py-2.5 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-y border-primary/20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        transition={{ delay: 1.2, duration: 0.4 }}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-mono font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              €515.38
+            </span>
+            <motion.span
+              className="text-xs text-emerald-400"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              +0.42%
+            </motion.span>
+          </div>
+          <span className="text-[10px] text-muted-foreground/60">0.22% spread</span>
+        </div>
+      </motion.div>
+      
+      {/* Bids (buys) */}
+      <div className="flex-1 py-1">
+        {bids.map((order, i) => (
+          <motion.div
+            key={`bid-${i}`}
+            className="relative group cursor-pointer"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
+            transition={{ delay: 1.0 + i * 0.06, duration: 0.4 }}
+          >
+            {/* Depth bar */}
+            <motion.div
+              className="absolute inset-y-0 right-0 bg-gradient-to-l from-emerald-500/15 to-transparent"
+              initial={{ width: 0 }}
+              animate={{ width: isVisible ? `${order.depth}%` : 0 }}
+              transition={{ delay: 1.2 + i * 0.06, duration: 0.5 }}
+            />
+            
+            <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
+              <span className="font-mono text-emerald-400/90">€{order.price.toFixed(2)}</span>
+              <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
+            </div>
+            
+            {/* Hover effect */}
+            <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 };
 
 export const Marketplace = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   
-  const [entranceComplete, setEntranceComplete] = useState(false);
-  const [storyPlayed, setStoryPlayed] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [priceData, setPriceData] = useState(() => generatePriceData(0));
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   
-  const [chartData, setChartData] = useState(generateChartData);
-  const [orderBook, setOrderBook] = useState(generateOrderBook);
-  const [currentAsset, setCurrentAsset] = useState(assets[0]);
-  const [showScanLine, setShowScanLine] = useState(false);
-  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
-  const [hoveredOrder, setHoveredOrder] = useState<{ type: 'bid' | 'ask'; index: number } | null>(null);
+  // Auto-rotate categories
+  useEffect(() => {
+    if (!isInView || isHovered) return;
+    
+    const categories = Object.keys(assetData);
+    const interval = setInterval(() => {
+      setActiveCategory(prev => {
+        const idx = categories.indexOf(prev);
+        return categories[(idx + 1) % categories.length];
+      });
+    }, 7000);
+    
+    return () => clearInterval(interval);
+  }, [isInView, isHovered]);
   
-  // Story animation states
-  const [storyStep, setStoryStep] = useState(0);
-  const [showOrderPill, setShowOrderPill] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-
-  // Entrance animation sequence
+  // Update data on category change
   useEffect(() => {
-    if (!isInView) return;
-    
-    const timeline = setTimeout(() => {
-      setShowScanLine(true);
-      setTimeout(() => {
-        setShowScanLine(false);
-        setEntranceComplete(true);
-      }, 500);
-    }, 1200);
-    
-    return () => clearTimeout(timeline);
-  }, [isInView]);
-
-  // Play story once after entrance
-  useEffect(() => {
-    if (!entranceComplete || storyPlayed) return;
-    
-    const storyTimeline = async () => {
-      await new Promise(r => setTimeout(r, 500));
-      setStoryStep(1); // Highlight order row
-      
-      await new Promise(r => setTimeout(r, 800));
-      setShowOrderPill(true);
-      
-      await new Promise(r => setTimeout(r, 1200));
-      setShowOrderPill(false);
-      setStoryStep(2); // Fill order
-      
-      await new Promise(r => setTimeout(r, 400));
-      setShowConfetti(true);
-      
-      await new Promise(r => setTimeout(r, 600));
-      setShowConfetti(false);
-      setStoryStep(0);
-      setStoryPlayed(true);
-    };
-    
-    storyTimeline();
-  }, [entranceComplete, storyPlayed]);
-
-  // Idle animation loop - chart micro-ticks
-  useEffect(() => {
-    if (!entranceComplete) return;
-    
-    const interval = setInterval(() => {
-      setChartData(prev => {
-        const newData = [...prev];
-        const randomIndex = Math.floor(Math.random() * newData.length);
-        const change = (Math.random() - 0.5) * 6;
-        newData[randomIndex] = {
-          height: Math.max(30, Math.min(100, newData[randomIndex].height + change)),
-          glow: true
-        };
-        setTimeout(() => {
-          setChartData(p => p.map((d, i) => i === randomIndex ? { ...d, glow: false } : d));
-        }, 400);
-        return newData;
-      });
-    }, 3500);
-    
-    return () => clearInterval(interval);
-  }, [entranceComplete]);
-
-  // Idle animation - order book micro-ticks
-  useEffect(() => {
-    if (!entranceComplete) return;
-    
-    const interval = setInterval(() => {
-      setOrderBook(prev => {
-        const type = Math.random() > 0.5 ? 'bids' : 'asks';
-        const newBook = { ...prev };
-        const orders = [...newBook[type]];
-        
-        // Shift orders and add new one
-        if (Math.random() > 0.3) {
-          orders.shift();
-          const basePrice = type === 'bids' ? 490 : 500;
-          const offset = type === 'bids' ? -orders.length * 5 : orders.length * 5;
-          orders.push({
-            price: basePrice + offset + Math.floor(Math.random() * 3) - 1,
-            size: (Math.random() * 2 + 0.5).toFixed(2),
-            highlighted: false,
-            filled: false,
-          });
-        }
-        
-        newBook[type] = orders;
-        return newBook;
-      });
-    }, 4000);
-    
-    return () => clearInterval(interval);
-  }, [entranceComplete]);
-
-  // Auto-rotate tabs
-  useEffect(() => {
-    if (!entranceComplete || isHovered) return;
-    
-    const interval = setInterval(() => {
-      setActiveTab(prev => (prev + 1) % assets.length);
-    }, 8000);
-    
-    return () => clearInterval(interval);
-  }, [entranceComplete, isHovered]);
-
-  // Update current asset when tab changes
-  useEffect(() => {
-    setCurrentAsset(assets[activeTab]);
-    setChartData(generateChartData());
-    setOrderBook(generateOrderBook());
-  }, [activeTab]);
-
-  // Mouse parallax
+    const seed = Object.keys(assetData).indexOf(activeCategory);
+    setPriceData(generatePriceData(seed));
+  }, [activeCategory]);
+  
+  const currentAsset = assetData[activeCategory];
+  
+  // Mouse parallax for depth effect
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
     const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-    setMousePos({ x: x * 3, y: y * 3 });
+    setMousePos({ x: x * 4, y: y * 4 });
   }, []);
 
-  const cardVariants = {
-    hidden: { opacity: 0, x: 24 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.5, ease: [0.22, 0.61, 0.36, 1] as const }
-    }
-  };
-
-  const innerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { delay: 0.3, duration: 0.4 }
-    }
-  };
+  const features = [
+    { icon: Shield, title: "Non-custodial ownership", desc: "Your assets stay in your wallet" },
+    { icon: Zap, title: "Set your own price", desc: "Place limit orders at any level" },
+    { icon: Lock, title: "On-chain settlement", desc: "Instant, verifiable execution" },
+  ];
 
   return (
-    <section ref={sectionRef} id="marketplace" className="relative w-full py-20 lg:py-28 overflow-hidden">
-      {/* Glassmorphism container */}
-      <div className="absolute inset-0 bg-card/50 backdrop-blur-xl border-y border-white/5" />
+    <section ref={sectionRef} className="py-28 lg:py-36 relative overflow-hidden">
+      {/* Ambient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card/30" />
+      <div className="absolute top-1/4 left-0 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[200px] -translate-x-1/2" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-cyan-500/3 rounded-full blur-[180px] translate-x-1/3" />
       
-      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
-        {/* Left Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <Badge>Marketplace</Badge>
-          <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-6">
-            Your assets, your price, your pace.
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            The Fragma Society marketplace lets you trade your tokenised assets peer-to-peer. 
-            Place limit orders, see depth in the order book, and manage your portfolio 24/7 – without giving up custody.
-          </p>
-          <ul className="space-y-4 mb-8">
-            {[
-              'You keep control (non-custodial)', 
-              'Set your own price (limit orders)', 
-              'On-chain settlement when trades execute'
-            ].map((item, i) => (
-              <motion.li 
-                key={item} 
-                className="flex items-center gap-3 text-foreground"
-                initial={{ opacity: 0, x: -10 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.3 + i * 0.1, duration: 0.4 }}
-              >
-                <CheckCircle size={16} className="text-primary flex-shrink-0" /> {item}
-              </motion.li>
-            ))}
-          </ul>
-          <Button className="group">
-            Explore marketplace UI
-            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </motion.div>
-
-        {/* Living Order Book Card */}
-        <motion.div
-          ref={cardRef}
-          variants={cardVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
-          onMouseMove={handleMouseMove}
-          style={{
-            transform: `translate(${mousePos.x}px, ${mousePos.y}px)`,
-          }}
-          className="relative bg-[hsl(222,47%,8%)] backdrop-blur-md border border-white/10 rounded-xl shadow-2xl shadow-primary/10 font-mono text-xs overflow-hidden transition-transform duration-200 ease-out"
-        >
-          {/* Subtle noise texture overlay */}
-          <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
-          
-          {/* Outer glow */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-transparent to-primary/10 rounded-xl blur-xl opacity-50" />
-          
-          <motion.div 
-            variants={innerVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="relative p-4"
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
+          {/* Left - Content */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }}
+            transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            {/* Asset Tabs */}
-            <div className="flex gap-1 mb-3">
-              {assets.map((asset, i) => (
-                <button
-                  key={asset.id}
-                  onClick={() => { setActiveTab(i); setIsHovered(true); }}
-                  className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider transition-all duration-300 ${
-                    activeTab === i 
-                      ? "bg-primary/20 text-primary border border-primary/30" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                  }`}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 15 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-cyan-500/10 border border-primary/20 mb-8"
+            >
+              <Activity className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
+                Secondary Marketplace
+              </span>
+            </motion.div>
+            
+            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-foreground mb-8 leading-[1.1]">
+              Your assets,{" "}
+              <span className="relative">
+                <span className="bg-gradient-to-r from-primary via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+                  your price,
+                </span>
+                <motion.div
+                  className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-cyan-400 to-emerald-400 rounded-full"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: isInView ? 1 : 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                />
+              </span>{" "}
+              your pace.
+            </h2>
+            
+            <p className="text-lg text-muted-foreground mb-12 leading-relaxed max-w-lg">
+              The Fragma Society marketplace lets you trade tokenised assets peer-to-peer. 
+              Place limit orders, see depth in the order book, and manage your portfolio 24/7.
+            </p>
+            
+            <div className="space-y-5 mb-12">
+              {features.map((feature, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -20 }}
+                  transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
+                  className="flex items-start gap-4 group"
                 >
-                  {asset.label}
-                </button>
+                  <div className="relative">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all duration-300">
+                      <feature.icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="absolute inset-0 rounded-xl bg-primary/20 blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-0.5">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                  </div>
+                </motion.div>
               ))}
             </div>
             
-            {/* Ticker Row */}
-            <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
-              <div className="flex gap-4 items-center">
-                <AnimatePresence mode="wait">
-                  <motion.span 
-                    key={currentAsset.ticker}
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 5 }}
-                    className="text-foreground font-bold text-sm"
-                  >
-                    {currentAsset.ticker}
-                  </motion.span>
-                </AnimatePresence>
-                <AnimatePresence mode="wait">
-                  <AnimatedNumber value={currentAsset.change} />
-                </AnimatePresence>
-              </div>
-              <motion.div 
-                className="text-muted-foreground"
-                animate={{ opacity: [0.9, 1, 0.9] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 15 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <Button 
+                size="lg" 
+                className="relative overflow-hidden bg-gradient-to-r from-primary to-cyan-500 hover:opacity-90 text-primary-foreground border-0 gap-2 group px-8"
               >
-                24h Vol: <AnimatePresence mode="wait"><AnimatedNumber value={currentAsset.vol} /></AnimatePresence>
-              </motion.div>
-            </div>
+                <span className="relative z-10">Explore Marketplace</span>
+                <ArrowUpRight className="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </Button>
+            </motion.div>
+          </motion.div>
+          
+          {/* Right - Trading Terminal */}
+          <motion.div
+            ref={cardRef}
+            initial={{ opacity: 0, y: 50, rotateX: 8 }}
+            animate={{ 
+              opacity: isInView ? 1 : 0, 
+              y: isInView ? 0 : 50, 
+              rotateX: isInView ? 0 : 8 
+            }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.22, 0.61, 0.36, 1] }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
+            onMouseMove={handleMouseMove}
+            style={{ 
+              transform: `perspective(1200px) translate(${mousePos.x}px, ${mousePos.y}px)`,
+              transformStyle: "preserve-3d"
+            }}
+            className="relative lg:ml-8"
+          >
+            {/* Multi-layer glow effect */}
+            <div className="absolute -inset-8 bg-gradient-conic from-primary/20 via-cyan-500/10 via-emerald-500/10 to-primary/20 rounded-3xl blur-3xl opacity-40 animate-spin-slow" style={{ animationDuration: '20s' }} />
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/15 to-cyan-500/15 rounded-2xl blur-2xl opacity-60" />
             
-            <div className="flex gap-4 h-64">
-              {/* Chart Area */}
-              <div className="flex-1 flex items-end justify-between gap-1 pb-4 border-b border-white/5 relative">
-                {/* Grid lines */}
-                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div 
-                      key={i} 
-                      className="border-t border-white/5"
-                      initial={{ scaleX: 0 }}
-                      animate={isInView ? { scaleX: 1 } : {}}
-                      transition={{ delay: 0.5 + i * 0.05, duration: 0.4 }}
-                    />
+            {/* Main card */}
+            <div className="relative bg-gradient-to-br from-card/95 via-card to-card/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl shadow-primary/5 overflow-hidden">
+              {/* Animated gradient orb */}
+              <motion.div
+                className={`absolute -top-32 -right-32 w-64 h-64 bg-gradient-to-br ${currentAsset.gradient} rounded-full blur-3xl opacity-20`}
+                animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              />
+              
+              {/* Header with tabs */}
+              <div className="relative border-b border-white/5 p-4 pb-3">
+                {/* Category pills */}
+                <div className="flex items-center gap-1.5 mb-4 overflow-x-auto scrollbar-hide">
+                  {assetCategories.map((cat) => (
+                    <motion.button
+                      key={cat.id}
+                      onClick={() => { setActiveCategory(cat.id); setIsHovered(true); }}
+                      className={`relative px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded-lg whitespace-nowrap transition-all duration-300
+                        ${activeCategory === cat.id 
+                          ? 'text-primary-foreground' 
+                          : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {activeCategory === cat.id && (
+                        <motion.div
+                          layoutId="activeCategoryPill"
+                          className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-cyan-500 rounded-lg"
+                          transition={{ type: "spring", duration: 0.4, bounce: 0.15 }}
+                        />
+                      )}
+                      <span className="relative z-10">{cat.label}</span>
+                    </motion.button>
                   ))}
                 </div>
                 
-                {/* Chart Bars */}
-                {chartData.map((bar, i) => (
-                  <motion.div
-                    key={i}
-                    className="relative w-full group cursor-pointer"
-                    style={{ height: "100%" }}
-                    onMouseEnter={() => setHoveredBar(i)}
-                    onMouseLeave={() => setHoveredBar(null)}
-                  >
-                    <motion.div 
-                      className={`absolute bottom-0 w-full rounded-sm transition-all duration-200 ${
-                        bar.glow ? "bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.6)]" : "bg-primary/30"
-                      } ${hoveredBar === i ? "bg-primary/50" : ""} ${
-                        storyStep === 2 && i === chartData.length - 1 ? "bg-primary shadow-[0_0_15px_hsl(var(--primary)/0.8)]" : ""
-                      }`}
-                      initial={{ height: 0 }}
-                      animate={{ 
-                        height: `${bar.height}%`,
-                        y: hoveredBar === i ? -2 : 0
-                      }}
-                      transition={{ 
-                        height: { delay: 0.7 + i * 0.05, duration: 0.5, ease: [0.34, 1.56, 0.64, 1] },
-                        y: { duration: 0.15 }
-                      }}
-                    />
-                    
-                    {/* Bar Tooltip */}
-                    <AnimatePresence>
-                      {hoveredBar === i && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 5 }}
-                          className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm border border-white/10 rounded px-2 py-1 whitespace-nowrap z-20"
-                        >
-                          <span className="text-primary">€{(450 + i * 5)}</span>
-                          <span className="text-muted-foreground"> • {(Math.random() * 2 + 0.5).toFixed(2)} tokens</span>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    
-                    {/* Connection line when order is hovered */}
-                    {hoveredOrder && i === chartData.length - 1 - hoveredOrder.index && (
-                      <motion.div
-                        initial={{ scaleY: 0 }}
-                        animate={{ scaleY: 1 }}
-                        className="absolute bottom-0 left-1/2 w-px bg-primary/50 origin-bottom"
-                        style={{ height: "100%" }}
-                      />
-                    )}
-                  </motion.div>
-                ))}
-                
-                {/* Scan line animation */}
-                <AnimatePresence>
-                  {showScanLine && (
+                {/* Ticker info row */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
                     <motion.div
-                      initial={{ left: 0, opacity: 1 }}
-                      animate={{ left: "100%", opacity: [1, 1, 0] }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                      className="absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-primary to-transparent shadow-[0_0_10px_hsl(var(--primary))]"
-                    />
-                  )}
-                </AnimatePresence>
-                
-                {/* Story confetti */}
-                <AnimatePresence>
-                  {showConfetti && (
-                    <>
-                      {[...Array(3)].map((_, i) => (
+                      className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-500/10 flex items-center justify-center border border-white/10"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <TrendingUp className="w-5 h-5 text-primary" />
+                    </motion.div>
+                    
+                    <div>
+                      <AnimatePresence mode="wait">
                         <motion.div
-                          key={i}
-                          initial={{ opacity: 1, y: 0, x: 0 }}
-                          animate={{ 
-                            opacity: 0, 
-                            y: -30 - i * 10, 
-                            x: (i - 1) * 15 
-                          }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.6 }}
-                          className="absolute bottom-20 right-4 w-1.5 h-1.5 rounded-full bg-primary"
-                        />
-                      ))}
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
-              
-              {/* Order Book */}
-              <div className="w-32 hidden sm:block border-l border-white/5 pl-4">
-                <div className="text-muted-foreground mb-2 text-[10px] uppercase tracking-wider">Order Book</div>
-                
-                {/* Asks */}
-                {orderBook.asks.map((order, i) => (
-                  <motion.div 
-                    key={`ask-${i}`}
-                    className={`flex justify-between mb-1 px-1 -mx-1 rounded transition-all duration-200 cursor-pointer ${
-                      hoveredOrder?.type === 'ask' && hoveredOrder.index === i 
-                        ? "bg-destructive/10 border border-destructive/30" 
-                        : ""
-                    }`}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.8 + i * 0.05, duration: 0.3 }}
-                    onMouseEnter={() => setHoveredOrder({ type: 'ask', index: i })}
-                    onMouseLeave={() => setHoveredOrder(null)}
-                  >
-                    <span className="text-destructive/80">{order.price}</span>
-                    <span className="text-muted-foreground">{order.size}</span>
-                  </motion.div>
-                ))}
-                
-                {/* Spread */}
-                <div className="my-2 border-t border-white/5 relative">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-                    animate={{ opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </div>
-                
-                {/* Bids */}
-                {orderBook.bids.map((order, i) => (
-                  <motion.div 
-                    key={`bid-${i}`}
-                    className={`flex justify-between mb-1 px-1 -mx-1 rounded transition-all duration-200 cursor-pointer ${
-                      hoveredOrder?.type === 'bid' && hoveredOrder.index === i 
-                        ? "bg-primary/10 border border-primary/30" 
-                        : ""
-                    } ${
-                      storyStep === 1 && i === 0 
-                        ? "bg-primary/20 border border-primary/50 shadow-[0_0_10px_hsl(var(--primary)/0.3)]" 
-                        : ""
-                    } ${
-                      storyStep === 2 && i === 0 
-                        ? "bg-primary/40" 
-                        : ""
-                    }`}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: order.filled ? 0.5 : 1, x: 0 }}
-                    transition={{ delay: 0.8 + i * 0.05, duration: 0.3 }}
-                    onMouseEnter={() => setHoveredOrder({ type: 'bid', index: i })}
-                    onMouseLeave={() => setHoveredOrder(null)}
-                  >
-                    <span className="text-primary">{order.price}</span>
-                    <span className="text-muted-foreground">{order.size}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Story Order Pill */}
-            <AnimatePresence>
-              {showOrderPill && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute right-20 top-1/2 -translate-y-1/2 bg-background/95 backdrop-blur-md border border-primary/30 rounded-lg p-3 shadow-xl shadow-primary/20"
-                >
-                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Place Order</div>
-                  <div className="flex gap-4 text-xs">
-                    <div>
-                      <div className="text-muted-foreground">Amount</div>
-                      <div className="text-foreground font-medium">1.25 slices</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Est. Cost</div>
-                      <div className="text-primary font-medium">€612.50</div>
+                          key={currentAsset.ticker}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.3 }}
+                          className="font-mono font-bold text-base text-foreground"
+                        >
+                          {currentAsset.ticker}
+                        </motion.div>
+                      </AnimatePresence>
+                      <div className="flex items-center gap-2">
+                        <motion.span
+                          key={currentAsset.change}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="text-xs font-mono text-emerald-400"
+                        >
+                          +{currentAsset.change.toFixed(1)}%
+                        </motion.span>
+                        <span className="text-[10px] text-muted-foreground/60">24h</span>
+                      </div>
                     </div>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  
+                  <div className="text-right">
+                    <div className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-0.5">24h Volume</div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentAsset.volume}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="font-mono font-semibold text-foreground"
+                      >
+                        {currentAsset.volume}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Main content area */}
+              <div className="grid grid-cols-5 min-h-[340px]">
+                {/* Chart section */}
+                <div className="col-span-3 p-4 border-r border-white/5 relative">
+                  <PremiumChart 
+                    data={priceData} 
+                    isVisible={isInView} 
+                    gradient={currentAsset.gradient}
+                  />
+                  
+                  {/* Chart label */}
+                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-cyan-500" />
+                    <span className="text-[10px] text-muted-foreground/60">Price (EUR)</span>
+                  </div>
+                </div>
+                
+                {/* Order book */}
+                <div className="col-span-2">
+                  <OrderBook isVisible={isInView} />
+                </div>
+              </div>
+              
+              {/* Footer */}
+              <div className="relative border-t border-white/5 px-4 py-3 flex items-center justify-between bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent">
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    className="flex items-center gap-2"
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  >
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 shadow-lg shadow-emerald-500/30" />
+                    <span className="text-[11px] text-muted-foreground">Real-time</span>
+                  </motion.div>
+                  <div className="h-3 w-px bg-white/10" />
+                  <span className="text-[11px] text-muted-foreground/60">Powered by Fragma</span>
+                </div>
+                
+                <Button 
+                  size="sm" 
+                  className="h-8 bg-gradient-to-r from-primary to-cyan-500 hover:opacity-90 text-primary-foreground text-xs gap-1.5 border-0"
+                >
+                  Trade
+                  <ArrowUpRight className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
