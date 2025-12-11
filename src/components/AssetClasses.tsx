@@ -74,24 +74,27 @@ const AssetCard = ({ asset, index, isActive, isHovered, onHover, onClick }: Asse
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
       onClick={() => onClick(index)}
-      className={cn(
-        "relative p-6 rounded-2xl cursor-pointer transition-all duration-300",
-        "bg-gradient-to-b from-[hsl(225,50%,15%)]/60 to-[hsl(225,50%,10%)]/80",
-        "backdrop-blur-xl border border-white/5",
-        "before:absolute before:inset-0 before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-300",
-        "before:bg-gradient-to-t before:from-transparent before:to-white/5",
-        isHovered && "before:opacity-100",
-        isActive && "border-primary/40 shadow-[0_0_30px_-5px_hsl(var(--primary)/0.3)]"
-      )}
-      style={{
-        transform: isHovered 
-          ? "translateY(-8px) perspective(1000px) rotateX(2deg)" 
-          : "translateY(0) perspective(1000px) rotateX(0deg)",
-        boxShadow: isHovered 
-          ? "0 20px 40px -15px rgba(0,0,0,0.5), 0 0 0 1px hsl(var(--primary)/0.3)" 
-          : "0 4px 20px -10px rgba(0,0,0,0.3)"
-      }}
+      className="relative"
     >
+      <div
+        className={cn(
+          "relative p-6 rounded-2xl cursor-pointer transition-all duration-300",
+          "bg-gradient-to-b from-[hsl(225,50%,15%)]/60 to-[hsl(225,50%,10%)]/80",
+          "backdrop-blur-xl border border-white/5",
+          "before:absolute before:inset-0 before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-300",
+          "before:bg-gradient-to-t before:from-transparent before:to-white/5",
+          isHovered && "before:opacity-100",
+          isActive && "border-primary/40 shadow-[0_0_30px_-5px_hsl(var(--primary)/0.3)]"
+        )}
+        style={{
+          transform: isHovered 
+            ? "translateY(-8px) scale(1.02)" 
+            : "translateY(0) scale(1)",
+          boxShadow: isHovered 
+            ? "0 20px 40px -15px rgba(0,0,0,0.5), 0 0 0 1px hsl(var(--primary)/0.3)" 
+            : "0 4px 20px -10px rgba(0,0,0,0.3)"
+        }}
+      >
       {/* Inner glow at top */}
       <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       
@@ -161,6 +164,7 @@ const AssetCard = ({ asset, index, isActive, isHovered, onHover, onClick }: Asse
           </motion.p>
         )}
       </AnimatePresence>
+      </div>
     </motion.div>
   );
 };
