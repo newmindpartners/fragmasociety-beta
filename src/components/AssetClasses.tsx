@@ -184,8 +184,8 @@ export const AssetClasses = () => {
       ref={sectionRef}
       className="relative w-full py-20 lg:py-28 overflow-hidden"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
+      {/* Background - transparent to blend with page */}
+      <div className="absolute inset-0 bg-transparent" />
       
       {/* Moving spotlight */}
       <motion.div
