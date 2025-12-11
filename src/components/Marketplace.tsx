@@ -852,7 +852,7 @@ export const Marketplace = () => {
               </div>
               
               {/* Footer */}
-              <div className="relative border-t border-white/5 px-4 py-3 flex items-center justify-between bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent">
+              <div className="relative border-t border-white/5 px-4 py-3 flex items-center justify-center bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent">
                 <div className="flex items-center gap-3">
                   <motion.div
                     className="flex items-center gap-2"
@@ -865,14 +865,6 @@ export const Marketplace = () => {
                   <div className="h-3 w-px bg-white/10" />
                   <span className="text-[11px] text-muted-foreground/60">Powered by Fragma</span>
                 </div>
-                
-                <Button 
-                  size="sm" 
-                  className="h-8 bg-gradient-to-r from-primary to-cyan-500 hover:opacity-90 text-primary-foreground text-xs gap-1.5 border-0"
-                >
-                  Trade
-                  <ArrowUpRight className="w-3 h-3" />
-                </Button>
               </div>
             </div>
           </motion.div>
