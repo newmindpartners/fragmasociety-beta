@@ -255,23 +255,23 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                 transition={{ delay: 0.3, duration: 0.7 }}
                 className="block"
               >
-                Yield &
+                A Smarter Way
               </motion.span>
               <motion.span 
-                className="text-gradient block"
+                className="block"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.7 }}
               >
-                Growth
+                to <span className="text-gradient">Earn</span> and
               </motion.span>
               <motion.span
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7, duration: 0.7 }}
-                className="block"
+                className="text-gradient block"
               >
-                Engineered.
+                Grow.
               </motion.span>
             </h1>
             
