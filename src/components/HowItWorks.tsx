@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Search, CreditCard, TrendingUp } from "lucide-react";
+import { ArrowRight, Search, CreditCard, TrendingUp, ArrowLeftRight } from "lucide-react";
 
 const steps = [
   {
@@ -28,6 +28,14 @@ const steps = [
     icon: TrendingUp,
     content: "When the asset pays out, your share is automatically distributed to your account or wallet and tracked in your dashboard.",
     bullets: ["Real-time yield tracking", "Reinvest or withdraw anytime"]
+  },
+  {
+    step: 4,
+    title: "Exit",
+    desc: "Trade on secondary market",
+    icon: ArrowLeftRight,
+    content: "Sell your position anytime on our secondary marketplace. Find buyers, set your price, and exit on your own terms.",
+    bullets: ["24/7 secondary market access", "Transparent pricing & instant settlement"]
   }
 ];
 
@@ -168,7 +176,7 @@ export const HowItWorks = () => {
     if (!isInView || isPaused) return;
     
     const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % 3);
+      setActiveStep((prev) => (prev + 1) % 4);
     }, 2500);
 
     return () => clearInterval(interval);
@@ -179,8 +187,8 @@ export const HowItWorks = () => {
     setActiveStep(index);
   };
 
-  // Calculate progress line width
-  const progressWidth = activeStep === 0 ? 0 : activeStep === 1 ? 50 : 100;
+  // Calculate progress line width (4 steps: 0%, 33%, 66%, 100%)
+  const progressWidth = (activeStep / 3) * 100;
 
   return (
     <section ref={sectionRef} className="relative w-full py-20 lg:py-28">
@@ -195,7 +203,7 @@ export const HowItWorks = () => {
         >
           <Badge>How It Works</Badge>
           <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-4">
-            Three steps to fractional ownership
+            Four steps to fractional ownership
           </h2>
           <p className="text-muted-foreground mb-16 max-w-lg mx-auto">
             From discovery to earnings in minutes
