@@ -710,7 +710,7 @@ export const Marketplace = () => {
                 size="lg" 
                 variant="outline"
                 disabled
-                className="relative overflow-hidden border-primary/40 text-primary/70 cursor-not-allowed px-8 gap-2"
+                className="relative overflow-hidden border-2 border-primary bg-primary/10 text-primary font-semibold cursor-not-allowed px-8 gap-2"
               >
                 <span>Coming Soon</span>
               </Button>
