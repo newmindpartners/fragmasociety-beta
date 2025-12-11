@@ -708,11 +708,11 @@ export const Marketplace = () => {
             >
               <Button 
                 size="lg" 
-                className="relative overflow-hidden bg-gradient-to-r from-primary to-cyan-500 hover:opacity-90 text-primary-foreground border-0 gap-2 group px-8"
+                variant="outline"
+                disabled
+                className="relative overflow-hidden border-primary/40 text-primary/70 cursor-not-allowed px-8 gap-2"
               >
-                <span className="relative z-10">Explore Marketplace</span>
-                <ArrowUpRight className="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span>Coming Soon</span>
               </Button>
             </motion.div>
           </motion.div>
