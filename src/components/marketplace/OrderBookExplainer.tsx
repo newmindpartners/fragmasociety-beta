@@ -32,6 +32,7 @@ const AnimatedOrderBook = () => {
   const [tradeExecutions, setTradeExecutions] = useState<TradeExecution[]>([]);
   const [showTradeFlash, setShowTradeFlash] = useState(false);
   const [lastTradeSide, setLastTradeSide] = useState<'buy' | 'sell'>('buy');
+  const [matchingRows, setMatchingRows] = useState<{ bidIndex: number; askIndex: number } | null>(null);
 
   // Dynamic data updates with trade executions
   useEffect(() => {
@@ -55,7 +56,11 @@ const AnimatedOrderBook = () => {
     // Trade execution animation
     const tradeInterval = setInterval(() => {
       const tradeSide = Math.random() > 0.5 ? 'buy' : 'sell';
+      const bidIdx = Math.floor(Math.random() * 5);
+      const askIdx = Math.floor(Math.random() * 5);
+      
       setLastTradeSide(tradeSide as 'buy' | 'sell');
+      setMatchingRows({ bidIndex: bidIdx, askIndex: askIdx });
       setShowTradeFlash(true);
       
       const newTrade: TradeExecution = {
@@ -69,7 +74,8 @@ const AnimatedOrderBook = () => {
       
       setTimeout(() => {
         setShowTradeFlash(false);
-      }, 600);
+        setMatchingRows(null);
+      }, 800);
     }, 4000);
 
     return () => {
@@ -211,28 +217,36 @@ const AnimatedOrderBook = () => {
               <span className="text-right">Total</span>
             </div>
             <div className="space-y-1">
-              {bids.map((bid, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer relative overflow-hidden bg-background/50 hover:bg-muted/30"
-                >
-                  {/* Depth bar - always neutral */}
-                  <div 
-                    className="absolute left-0 top-0 bottom-0 bg-muted/10"
-                    style={{ width: `${(bid.total / 5) * 100}%` }}
-                  />
-                  <span className="font-semibold relative z-10 text-foreground">€{bid.price.toFixed(2)}</span>
-                  <span className="text-center text-foreground relative z-10">
-                    {formatNumber(bid.size)}
-                  </span>
-                  <span className="text-right text-muted-foreground relative z-10">€{bid.total.toFixed(2)}M</span>
-                </motion.div>
-              ))}
+              {bids.map((bid, i) => {
+                const isMatching = matchingRows?.bidIndex === i;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    animate={isMatching ? { scale: [1, 1.05, 1] } : {}}
+                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer relative overflow-hidden transition-colors ${
+                      isMatching ? 'bg-green-500' : 'bg-background/50 hover:bg-muted/30'
+                    }`}
+                  >
+                    {/* Depth bar - hidden when matching */}
+                    {!isMatching && (
+                      <div 
+                        className="absolute left-0 top-0 bottom-0 bg-muted/10"
+                        style={{ width: `${(bid.total / 5) * 100}%` }}
+                      />
+                    )}
+                    <span className={`font-semibold relative z-10 ${isMatching ? 'text-white' : 'text-foreground'}`}>€{bid.price.toFixed(2)}</span>
+                    <span className={`text-center relative z-10 ${isMatching ? 'text-white' : 'text-foreground'}`}>
+                      {formatNumber(bid.size)}
+                    </span>
+                    <span className={`text-right relative z-10 ${isMatching ? 'text-white/80' : 'text-muted-foreground'}`}>€{bid.total.toFixed(2)}M</span>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
@@ -244,28 +258,36 @@ const AnimatedOrderBook = () => {
               <span className="text-right">Total</span>
             </div>
             <div className="space-y-1">
-              {asks.map((ask, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  whileHover={{ scale: 1.02, x: -5 }}
-                  className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer relative overflow-hidden bg-background/50 hover:bg-muted/30"
-                >
-                  {/* Depth bar - always neutral */}
-                  <div 
-                    className="absolute right-0 top-0 bottom-0 bg-muted/10"
-                    style={{ width: `${(ask.total / 5) * 100}%` }}
-                  />
-                  <span className="font-semibold relative z-10 text-foreground">€{ask.price.toFixed(2)}</span>
-                  <span className="text-center text-foreground relative z-10">
-                    {formatNumber(ask.size)}
-                  </span>
-                  <span className="text-right text-muted-foreground relative z-10">€{ask.total.toFixed(2)}M</span>
-                </motion.div>
-              ))}
+              {asks.map((ask, i) => {
+                const isMatching = matchingRows?.askIndex === i;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    whileHover={{ scale: 1.02, x: -5 }}
+                    animate={isMatching ? { scale: [1, 1.05, 1] } : {}}
+                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer relative overflow-hidden transition-colors ${
+                      isMatching ? 'bg-red-500' : 'bg-background/50 hover:bg-muted/30'
+                    }`}
+                  >
+                    {/* Depth bar - hidden when matching */}
+                    {!isMatching && (
+                      <div 
+                        className="absolute right-0 top-0 bottom-0 bg-muted/10"
+                        style={{ width: `${(ask.total / 5) * 100}%` }}
+                      />
+                    )}
+                    <span className={`font-semibold relative z-10 ${isMatching ? 'text-white' : 'text-foreground'}`}>€{ask.price.toFixed(2)}</span>
+                    <span className={`text-center relative z-10 ${isMatching ? 'text-white' : 'text-foreground'}`}>
+                      {formatNumber(ask.size)}
+                    </span>
+                    <span className={`text-right relative z-10 ${isMatching ? 'text-white/80' : 'text-muted-foreground'}`}>€{ask.total.toFixed(2)}M</span>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>
