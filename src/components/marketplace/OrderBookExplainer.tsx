@@ -10,10 +10,10 @@ interface TradeExecution {
 }
 
 const assets = [
-  { name: "Paris Loft - Marais", category: "Real Estate", symbol: "RE-PAR" },
+  { name: "Fragma One Fund", category: "Fund", symbol: "FND-ONE" },
+  { name: "Real Estate Fund", category: "Real Estate", symbol: "RE-FND" },
+  { name: "SME Bonds Swiss", category: "Private Credit", symbol: "PC-SME" },
   { name: "Blockbuster Film Rights", category: "Entertainment", symbol: "ENT-BFR" },
-  { name: "Vintage Rolex Daytona", category: "Luxury", symbol: "LUX-RLX" },
-  { name: "SME Credit Pool A", category: "Private Credit", symbol: "PC-SMA" },
   { name: "AI Data Center Equity", category: "Infrastructure", symbol: "INF-ADC" },
 ];
 
