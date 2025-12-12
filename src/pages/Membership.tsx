@@ -97,6 +97,7 @@ const TIERS = {
       { icon: Users, label: "Elite Networking Lounge" },
       { icon: Rocket, label: "3-Day Early Access to Public Deals" },
       { icon: Lock, label: "Access to Off-Market Fragma Deals" },
+      { icon: Zap, label: "Unlimited Deals Investments" },
       { icon: PieChart, label: "Portfolio Pro Tools (digest, alerts, planner)" },
       { icon: FileText, label: "Full Tax Exports" },
       { icon: MessageCircle, label: "VIP Support (WhatsApp, Priority)" },
