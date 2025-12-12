@@ -5,8 +5,8 @@ const steps = [
   {
     icon: Wallet,
     step: "01",
-    title: "Connect your wallet",
-    description: "Your assets remain fully in your control. No account creation, no KYC hassle."
+    title: "Login and create your wallet",
+    description: "Your assets remain fully in your control. Quick signup, no KYC hassle."
   },
   {
     icon: Search,
