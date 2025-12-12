@@ -76,6 +76,7 @@ const TIERS = {
       { icon: Video, label: "Expert Webinars (monthly) + Replays" },
       { icon: BookOpen, label: "Research Reports" },
       { icon: Eye, label: "Unlimited Asset Watchlist" },
+      { icon: Zap, label: "3 Deals Investments per Year" },
       { icon: FileText, label: "Basic Tax Export" },
       { icon: Rocket, label: "Early Window Previews on New Listings" },
     ],
