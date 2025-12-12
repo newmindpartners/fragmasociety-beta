@@ -26,7 +26,7 @@ const navSections: NavSection[] = [
       { label: "Live Deals", href: "/#marketplace", description: "Browse current investment opportunities", icon: Zap, badge: "Hot" },
       { label: "Buy & Sell", href: "/#marketplace", description: "Secondary marketplace for trading", icon: ShoppingCart },
       { label: "How It Works", href: "/#features", description: "Understand the investment process", icon: HelpCircle },
-      { label: "Investor Membership", href: "/auth", description: "Exclusive benefits for members", icon: Crown, isRoute: true },
+      { label: "Investor Membership", href: "/membership", description: "Exclusive benefits for members", icon: Crown, isRoute: true },
       { label: "Fragma One", href: "/strategy", description: "Invest with us", icon: Briefcase, isRoute: true, badge: "New" },
     ],
   },
