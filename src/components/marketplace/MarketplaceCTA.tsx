@@ -60,7 +60,7 @@ export const MarketplaceCTA = () => {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex items-center justify-center">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -68,20 +68,6 @@ export const MarketplaceCTA = () => {
               <Button size="lg" className="btn-glow group text-lg px-8 py-6">
                 Explore Marketplace
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-primary/30 hover:bg-primary/10 text-lg px-8 py-6"
-              >
-                <BookOpen className="mr-2 h-5 w-5" />
-                Learn How It Works
               </Button>
             </motion.div>
           </div>
