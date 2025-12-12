@@ -224,10 +224,7 @@ const AnimatedOrderBook = () => {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                     whileHover={{ scale: 1.02, x: 5 }}
-                    animate={isMatching ? { 
-                      scale: [1, 1.03, 1],
-                      boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 20px 4px rgba(34, 197, 94, 0.5)", "0 0 0 0 rgba(34, 197, 94, 0)"]
-                    } : {}}
+                    animate={isMatching ? { scale: [1, 1.05, 1] } : {}}
                     className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden bg-background/50 hover:bg-muted/30"
                   >
                     {/* Depth bar - always neutral */}
@@ -237,19 +234,7 @@ const AnimatedOrderBook = () => {
                       animate={{ width: `${(bid.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
                     />
-                    {/* Match animation - no border, just glow */}
-                    <AnimatePresence>
-                      {isMatching && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="absolute inset-0 bg-green-500/20 rounded-lg"
-                        />
-                      )}
-                    </AnimatePresence>
-                    <span className={`font-semibold relative z-10 transition-colors ${isMatching ? 'text-green-400' : 'text-foreground'}`}>€{bid.price.toFixed(2)}</span>
+                    <span className="font-semibold relative z-10 text-foreground">€{bid.price.toFixed(2)}</span>
                     <motion.span 
                       key={bid.size}
                       initial={{ opacity: 0.5 }}
@@ -283,10 +268,7 @@ const AnimatedOrderBook = () => {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                     whileHover={{ scale: 1.02, x: -5 }}
-                    animate={isMatching ? { 
-                      scale: [1, 1.03, 1],
-                      boxShadow: ["0 0 0 0 rgba(239, 68, 68, 0)", "0 0 20px 4px rgba(239, 68, 68, 0.5)", "0 0 0 0 rgba(239, 68, 68, 0)"]
-                    } : {}}
+                    animate={isMatching ? { scale: [1, 1.05, 1] } : {}}
                     className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden bg-background/50 hover:bg-muted/30"
                   >
                     {/* Depth bar - always neutral */}
@@ -296,19 +278,7 @@ const AnimatedOrderBook = () => {
                       animate={{ width: `${(ask.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
                     />
-                    {/* Match animation - no border, just glow */}
-                    <AnimatePresence>
-                      {isMatching && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="absolute inset-0 bg-red-500/20 rounded-lg"
-                        />
-                      )}
-                    </AnimatePresence>
-                    <span className={`font-semibold relative z-10 transition-colors ${isMatching ? 'text-red-400' : 'text-foreground'}`}>€{ask.price.toFixed(2)}</span>
+                    <span className="font-semibold relative z-10 text-foreground">€{ask.price.toFixed(2)}</span>
                     <motion.span 
                       key={ask.size}
                       initial={{ opacity: 0.5 }}
