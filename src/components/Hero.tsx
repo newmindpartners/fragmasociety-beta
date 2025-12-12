@@ -32,9 +32,11 @@ export const Hero = () => {
           className="text-center max-w-4xl mx-auto"
         >
           <Badge>COMING SOON</Badge>
+          <p className="text-lg md:text-xl text-gradient font-medium tracking-wide mb-4">
+            Fractional, liquid, Compliant.
+          </p>
           <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-tight mb-6">
-            Buy and sell real world assets. <br />
-            <span className="text-gradient">Fractional, liquid, Compliant.</span>
+            Buy and sell real world assets.
           </h1>
           <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
             Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
