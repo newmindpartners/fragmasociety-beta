@@ -1,186 +1,309 @@
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Wallet, Network, BookOpen, Link2, TrendingUp } from "lucide-react";
+import { ArrowRight, Wallet, Network, BookOpen, Link2, TrendingUp, Shield, Zap, Lock, Eye, CheckCircle2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
-const LiveOrderBook = () => {
-  const [bids, setBids] = useState([
-    { price: 99.85, size: 25000, total: 2496250 },
-    { price: 99.80, size: 50000, total: 4990000 },
-    { price: 99.75, size: 35000, total: 3491250 },
-    { price: 99.70, size: 42000, total: 4187400 },
-    { price: 99.65, size: 28000, total: 2790200 },
-  ]);
+const features = [
+  { 
+    icon: Wallet, 
+    title: "Non-custodial", 
+    description: "Your keys, your assets",
+    color: "from-emerald-500 to-teal-500"
+  },
+  { 
+    icon: Network, 
+    title: "Decentralized", 
+    description: "No single point of failure",
+    color: "from-blue-500 to-cyan-500"
+  },
+  { 
+    icon: BookOpen, 
+    title: "Order Book", 
+    description: "Professional trading",
+    color: "from-violet-500 to-purple-500"
+  },
+  { 
+    icon: Link2, 
+    title: "On-chain", 
+    description: "Transparent settlement",
+    color: "from-orange-500 to-amber-500"
+  },
+  { 
+    icon: TrendingUp, 
+    title: "Options", 
+    description: "Advanced strategies",
+    color: "from-pink-500 to-rose-500"
+  },
+  { 
+    icon: Shield, 
+    title: "Secure", 
+    description: "Cardano powered",
+    color: "from-primary to-accent"
+  },
+];
 
-  const [asks, setAsks] = useState([
-    { price: 100.15, size: 20000, total: 2003000 },
-    { price: 100.20, size: 45000, total: 4509000 },
-    { price: 100.25, size: 30000, total: 3007500 },
-    { price: 100.30, size: 38000, total: 3811400 },
-    { price: 100.35, size: 22000, total: 2207700 },
-  ]);
-
-  const [lastTrade, setLastTrade] = useState({ price: 100.00, change: 0.15 });
+const FeatureShowcase = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    if (isHovered) return;
     const interval = setInterval(() => {
-      // Simulate micro-movements in the order book
-      setBids(prev => prev.map(bid => ({
-        ...bid,
-        size: bid.size + Math.floor((Math.random() - 0.5) * 1000),
-        total: (bid.size + Math.floor((Math.random() - 0.5) * 1000)) * bid.price
-      })));
-      setAsks(prev => prev.map(ask => ({
-        ...ask,
-        size: ask.size + Math.floor((Math.random() - 0.5) * 1000),
-        total: (ask.size + Math.floor((Math.random() - 0.5) * 1000)) * ask.price
-      })));
-    }, 2000);
+      setActiveIndex((prev) => (prev + 1) % features.length);
+    }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [isHovered]);
+
+  const activeFeature = features[activeIndex];
+  const ActiveIcon = activeFeature.icon;
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, delay: 0.3 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="relative"
+      className="relative aspect-square max-w-lg mx-auto"
     >
-      {/* Glow effect */}
+      {/* Outer rotating ring */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0"
+      >
+        <svg className="w-full h-full" viewBox="0 0 400 400">
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="200"
+            cy="200"
+            r="190"
+            fill="none"
+            stroke="url(#ringGradient)"
+            strokeWidth="1"
+            strokeDasharray="20 10"
+          />
+        </svg>
+      </motion.div>
+
+      {/* Middle pulsing ring */}
       <motion.div
         animate={{ 
-          opacity: isHovered ? 0.6 : 0.3,
-          scale: isHovered ? 1.05 : 1
+          scale: [1, 1.05, 1],
+          opacity: [0.3, 0.5, 0.3]
         }}
-        className="absolute inset-0 bg-primary/20 rounded-2xl blur-3xl"
+        transition={{ duration: 3, repeat: Infinity }}
+        className="absolute inset-8 rounded-full border border-primary/30"
       />
-      
-      {/* Scan line animation */}
+
+      {/* Inner glow ring */}
       <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: "200%" }}
-        transition={{ duration: 2, repeat: Infinity, repeatDelay: 8 }}
-        className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-primary/20 to-transparent pointer-events-none z-20 rounded-2xl"
+        animate={{ 
+          boxShadow: [
+            "0 0 60px hsl(var(--primary) / 0.2), inset 0 0 60px hsl(var(--primary) / 0.1)",
+            "0 0 100px hsl(var(--primary) / 0.3), inset 0 0 80px hsl(var(--primary) / 0.15)",
+            "0 0 60px hsl(var(--primary) / 0.2), inset 0 0 60px hsl(var(--primary) / 0.1)"
+          ]
+        }}
+        transition={{ duration: 4, repeat: Infinity }}
+        className="absolute inset-16 rounded-full bg-gradient-to-br from-card/80 to-background/90 backdrop-blur-xl border border-primary/20"
       />
 
-      <div className="glass rounded-2xl p-6 relative z-10 border border-primary/20 backdrop-blur-xl">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <motion.p 
-              className="text-xs text-muted-foreground tracking-wider"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              FRAGMA MARKETPLACE
-            </motion.p>
-            <motion.p 
-              className="text-xl font-serif font-bold text-foreground"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              Live Order Book
-            </motion.p>
-          </div>
-          <motion.div 
-            className="flex items-center gap-2"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <span className="w-2 h-2 rounded-full bg-green-500" />
-            <span className="text-xs text-green-400">Live</span>
-          </motion.div>
-        </div>
+      {/* Feature icons orbiting */}
+      <div className="absolute inset-0">
+        {features.map((feature, i) => {
+          const angle = (i * 360) / features.length - 90;
+          const radius = 42;
+          const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
+          const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
+          const isActive = i === activeIndex;
+          const Icon = feature.icon;
 
-        {/* Price Display */}
-        <div className="grid grid-cols-3 gap-4 mb-6 p-4 rounded-xl bg-background/50">
-          <div className="text-center">
-            <p className="text-xs text-muted-foreground mb-1">Last Price</p>
-            <motion.p 
-              className="text-2xl font-bold text-foreground"
-              key={lastTrade.price}
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 0.3 }}
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{ left: `${x}%`, top: `${y}%` }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ 
+                scale: isActive ? 1.3 : 1,
+                opacity: 1,
+              }}
+              transition={{ 
+                delay: 0.5 + i * 0.1,
+                duration: 0.4,
+                type: "spring",
+                stiffness: 200
+              }}
+              onClick={() => setActiveIndex(i)}
             >
-              €{lastTrade.price.toFixed(2)}
-            </motion.p>
-          </div>
-          <div className="text-center">
-            <p className="text-xs text-muted-foreground mb-1">24h Change</p>
-            <p className="text-2xl font-bold text-green-400">+{lastTrade.change}%</p>
-          </div>
-          <div className="text-center">
-            <p className="text-xs text-muted-foreground mb-1">Spread</p>
-            <p className="text-2xl font-bold text-primary">0.30%</p>
-          </div>
-        </div>
-
-        {/* Order Book */}
-        <div className="grid grid-cols-2 gap-4">
-          {/* Bids */}
-          <div>
-            <div className="grid grid-cols-3 gap-1 text-xs text-muted-foreground mb-2 px-2">
-              <span>Price</span>
-              <span className="text-right">Size</span>
-              <span className="text-right">Total</span>
-            </div>
-            {bids.map((bid, i) => (
               <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 + i * 0.1 }}
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(34, 197, 94, 0.15)" }}
-                className="grid grid-cols-3 gap-1 text-sm py-2 px-2 rounded bg-green-500/10 mb-1 cursor-pointer transition-colors"
+                animate={isActive ? {
+                  boxShadow: [
+                    "0 0 0px hsl(var(--primary) / 0)",
+                    "0 0 30px hsl(var(--primary) / 0.6)",
+                    "0 0 0px hsl(var(--primary) / 0)"
+                  ]
+                } : {}}
+                transition={{ duration: 1.5, repeat: isActive ? Infinity : 0 }}
+                className={`relative -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 ${
+                  isActive 
+                    ? "bg-gradient-to-br " + feature.color + " shadow-lg" 
+                    : "bg-card/80 border border-border/50 hover:border-primary/50"
+                }`}
               >
-                <span className="text-green-400 font-medium">€{bid.price.toFixed(2)}</span>
-                <motion.span 
-                  className="text-right text-foreground"
-                  key={bid.size}
-                  animate={{ opacity: [0.5, 1] }}
-                >
-                  {bid.size.toLocaleString()}
-                </motion.span>
-                <span className="text-right text-muted-foreground">€{(bid.total / 1000000).toFixed(2)}M</span>
+                <Icon className={`w-6 h-6 ${isActive ? "text-white" : "text-muted-foreground"}`} />
+                
+                {/* Connection line to center */}
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute w-8 h-0.5 bg-gradient-to-r from-primary to-transparent origin-right"
+                  style={{
+                    right: "100%",
+                    transform: `rotate(${angle + 180}deg)`,
+                  }}
+                />
               </motion.div>
-            ))}
-          </div>
 
-          {/* Asks */}
-          <div>
-            <div className="grid grid-cols-3 gap-1 text-xs text-muted-foreground mb-2 px-2">
-              <span>Price</span>
-              <span className="text-right">Size</span>
-              <span className="text-right">Total</span>
-            </div>
-            {asks.map((ask, i) => (
+              {/* Label */}
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                  >
+                    <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full border border-primary/20">
+                      {feature.title}
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Center content */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center relative z-10">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ scale: 0.5, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.5, opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
+              className="flex flex-col items-center"
+            >
+              {/* Large feature icon */}
               <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 + i * 0.1 }}
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(239, 68, 68, 0.15)" }}
-                className="grid grid-cols-3 gap-1 text-sm py-2 px-2 rounded bg-red-500/10 mb-1 cursor-pointer transition-colors"
+                className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${activeFeature.color} flex items-center justify-center mb-4 shadow-2xl`}
+                animate={{ 
+                  rotate: [0, 5, -5, 0],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
               >
-                <span className="text-red-400 font-medium">€{ask.price.toFixed(2)}</span>
-                <motion.span 
-                  className="text-right text-foreground"
-                  key={ask.size}
-                  animate={{ opacity: [0.5, 1] }}
-                >
-                  {ask.size.toLocaleString()}
-                </motion.span>
-                <span className="text-right text-muted-foreground">€{(ask.total / 1000000).toFixed(2)}M</span>
+                <ActiveIcon className="w-10 h-10 text-white" />
               </motion.div>
-            ))}
-          </div>
+
+              {/* Feature title */}
+              <motion.h3
+                className="text-2xl font-serif font-bold text-foreground mb-1"
+              >
+                {activeFeature.title}
+              </motion.h3>
+              
+              {/* Feature description */}
+              <motion.p
+                className="text-sm text-muted-foreground"
+              >
+                {activeFeature.description}
+              </motion.p>
+
+              {/* Checkmark indicator */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring" }}
+                className="mt-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                <span className="text-xs text-primary font-medium">Available on Fragma</span>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
+
+      {/* Floating particles */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1.5 h-1.5 rounded-full bg-primary/40"
+          style={{
+            left: `${20 + Math.random() * 60}%`,
+            top: `${20 + Math.random() * 60}%`,
+          }}
+          animate={{
+            y: [0, -20, 0],
+            x: [0, Math.random() > 0.5 ? 10 : -10, 0],
+            opacity: [0.2, 0.6, 0.2],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 2,
+            repeat: Infinity,
+            delay: i * 0.3,
+          }}
+        />
+      ))}
+
+      {/* Progress indicators */}
+      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+        {features.map((_, i) => (
+          <motion.button
+            key={i}
+            onClick={() => setActiveIndex(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === activeIndex ? "w-8 bg-primary" : "w-1.5 bg-muted hover:bg-muted-foreground"
+            }`}
+            whileHover={{ scale: 1.2 }}
+          />
+        ))}
+      </div>
+
+      {/* Corner accents */}
+      <motion.div
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/40 rounded-tl-lg"
+      />
+      <motion.div
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+        className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/40 rounded-tr-lg"
+      />
+      <motion.div
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+        className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/40 rounded-bl-lg"
+      />
+      <motion.div
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
+        className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/40 rounded-br-lg"
+      />
     </motion.div>
   );
 };
@@ -199,27 +322,8 @@ const FeaturePill = ({ icon: Icon, text, delay }: { icon: any; text: string; del
 );
 
 export const MarketplaceHero = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
-
-  const springConfig = { damping: 25, stiffness: 150 };
-  const x = useSpring(mouseX, springConfig);
-  const y = useSpring(mouseY, springConfig);
-
   return (
-    <section 
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      className="relative min-h-screen flex items-center pt-20 overflow-hidden"
-    >
+    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
       
@@ -245,12 +349,6 @@ export const MarketplaceHero = () => {
 
       {/* Grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
-
-      {/* Mouse follower glow */}
-      <motion.div
-        style={{ x, y }}
-        className="absolute w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] pointer-events-none -translate-x-1/2 -translate-y-1/2"
-      />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -303,9 +401,9 @@ export const MarketplaceHero = () => {
             </motion.div>
           </div>
 
-          {/* Right Content - Live Order Book */}
+          {/* Right Content - Feature Showcase Animation */}
           <div className="hidden lg:block">
-            <LiveOrderBook />
+            <FeatureShowcase />
           </div>
         </div>
       </div>
