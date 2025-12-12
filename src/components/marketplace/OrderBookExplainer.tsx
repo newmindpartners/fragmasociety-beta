@@ -11,24 +11,24 @@ interface TradeExecution {
 
 const AnimatedOrderBook = () => {
   const [bids, setBids] = useState([
-    { price: 99.85, size: 21628, total: 2.21 },
-    { price: 99.80, size: 47056, total: 4.65 },
-    { price: 99.75, size: 29241, total: 2.99 },
-    { price: 99.70, size: 46023, total: 4.55 },
-    { price: 99.65, size: 26939, total: 2.66 },
+    { price: 1245.50, size: 21628, total: 2.21 },
+    { price: 892.25, size: 47056, total: 4.65 },
+    { price: 456.80, size: 29241, total: 2.99 },
+    { price: 187.35, size: 46023, total: 4.55 },
+    { price: 89.90, size: 26939, total: 2.66 },
   ]);
 
   const [asks, setAsks] = useState([
-    { price: 100.15, size: 16207, total: 1.72 },
-    { price: 100.20, size: 49376, total: 4.97 },
-    { price: 100.25, size: 29524, total: 2.92 },
-    { price: 100.30, size: 41270, total: 4.05 },
-    { price: 100.35, size: 21320, total: 2.11 },
+    { price: 1248.75, size: 16207, total: 1.72 },
+    { price: 895.50, size: 49376, total: 4.97 },
+    { price: 459.20, size: 29524, total: 2.92 },
+    { price: 189.85, size: 41270, total: 4.05 },
+    { price: 92.45, size: 21320, total: 2.11 },
   ]);
 
-  const [lastPrice, setLastPrice] = useState(100.00);
-  const [change24h, setChange24h] = useState(0.15);
-  const [spread, setSpread] = useState(0.30);
+  const [lastPrice, setLastPrice] = useState(1247.00);
+  const [change24h, setChange24h] = useState(2.35);
+  const [spread, setSpread] = useState(0.26);
   const [tradeExecutions, setTradeExecutions] = useState<TradeExecution[]>([]);
   const [showTradeFlash, setShowTradeFlash] = useState(false);
   const [lastTradeSide, setLastTradeSide] = useState<'buy' | 'sell'>('buy');
@@ -63,9 +63,12 @@ const AnimatedOrderBook = () => {
       setMatchingRows({ bidIndex: bidIdx, askIndex: askIdx });
       setShowTradeFlash(true);
       
+      const priceOptions = [89.90, 187.35, 456.80, 892.25, 1245.50, 1248.75, 895.50, 459.20, 189.85, 92.45];
+      const randomPrice = priceOptions[Math.floor(Math.random() * priceOptions.length)];
+      
       const newTrade: TradeExecution = {
         id: Date.now(),
-        price: 100.00 + (Math.random() - 0.5) * 0.3,
+        price: randomPrice + (Math.random() - 0.5) * 2,
         size: Math.floor(Math.random() * 5000) + 1000,
         side: tradeSide as 'buy' | 'sell',
       };
