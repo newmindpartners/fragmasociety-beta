@@ -54,13 +54,6 @@ const AnimatedOrderBook = () => {
         size: Math.max(10000, ask.size + Math.floor((Math.random() - 0.5) * 2000)),
         total: +Math.max(1, ask.total + (Math.random() - 0.5) * 0.3).toFixed(2),
       })));
-
-      // Random highlight flash
-      const side = Math.random() > 0.5 ? 'bid' : 'ask';
-      const index = Math.floor(Math.random() * 5);
-      setHighlightedRow({ side, index });
-      setTimeout(() => setHighlightedRow(null), 300);
-
       // Update metrics
       setLastPrice(prev => +(prev + (Math.random() - 0.5) * 0.1).toFixed(2));
       setChange24h(prev => +(prev + (Math.random() - 0.5) * 0.02).toFixed(2));
@@ -268,17 +261,17 @@ const AnimatedOrderBook = () => {
                     whileHover={{ scale: 1.02, x: 5 }}
                     animate={isMatching ? { 
                       scale: [1, 1.03, 1],
-                      boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 20px 4px rgba(34, 197, 94, 0.4)", "0 0 0 0 rgba(34, 197, 94, 0)"]
+                      boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 20px 4px rgba(34, 197, 94, 0.5)", "0 0 0 0 rgba(34, 197, 94, 0)"]
                     } : {}}
-                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-colors relative overflow-hidden ${
-                      highlightedRow?.side === 'bid' && highlightedRow?.index === i
+                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden ${
+                      isMatching
                         ? 'bg-green-500/30'
-                        : 'bg-green-500/10 hover:bg-green-500/20'
+                        : 'bg-muted/30 hover:bg-muted/50'
                     }`}
                   >
-                    {/* Depth bar */}
+                    {/* Depth bar - neutral unless matching */}
                     <motion.div
-                      className="absolute left-0 top-0 bottom-0 bg-green-500/20"
+                      className={`absolute left-0 top-0 bottom-0 ${isMatching ? 'bg-green-500/30' : 'bg-muted/20'}`}
                       initial={{ width: 0 }}
                       animate={{ width: `${(bid.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
@@ -291,11 +284,11 @@ const AnimatedOrderBook = () => {
                           animate={{ x: 0, opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="absolute inset-0 border-2 border-green-400 rounded-lg"
+                          className="absolute inset-0 border-2 border-green-400 rounded-lg bg-green-500/10"
                         />
                       )}
                     </AnimatePresence>
-                    <span className="text-green-400 font-semibold relative z-10">€{bid.price.toFixed(2)}</span>
+                    <span className={`font-semibold relative z-10 transition-colors ${isMatching ? 'text-green-400' : 'text-foreground'}`}>€{bid.price.toFixed(2)}</span>
                     <motion.span 
                       key={bid.size}
                       initial={{ opacity: 0.5 }}
@@ -331,17 +324,17 @@ const AnimatedOrderBook = () => {
                     whileHover={{ scale: 1.02, x: -5 }}
                     animate={isMatching ? { 
                       scale: [1, 1.03, 1],
-                      boxShadow: ["0 0 0 0 rgba(239, 68, 68, 0)", "0 0 20px 4px rgba(239, 68, 68, 0.4)", "0 0 0 0 rgba(239, 68, 68, 0)"]
+                      boxShadow: ["0 0 0 0 rgba(239, 68, 68, 0)", "0 0 20px 4px rgba(239, 68, 68, 0.5)", "0 0 0 0 rgba(239, 68, 68, 0)"]
                     } : {}}
-                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-colors relative overflow-hidden ${
-                      highlightedRow?.side === 'ask' && highlightedRow?.index === i
+                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden ${
+                      isMatching
                         ? 'bg-red-500/30'
-                        : 'bg-red-500/10 hover:bg-red-500/20'
+                        : 'bg-muted/30 hover:bg-muted/50'
                     }`}
                   >
-                    {/* Depth bar */}
+                    {/* Depth bar - neutral unless matching */}
                     <motion.div
-                      className="absolute right-0 top-0 bottom-0 bg-red-500/20"
+                      className={`absolute right-0 top-0 bottom-0 ${isMatching ? 'bg-red-500/30' : 'bg-muted/20'}`}
                       initial={{ width: 0 }}
                       animate={{ width: `${(ask.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
@@ -354,11 +347,11 @@ const AnimatedOrderBook = () => {
                           animate={{ x: 0, opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="absolute inset-0 border-2 border-red-400 rounded-lg"
+                          className="absolute inset-0 border-2 border-red-400 rounded-lg bg-red-500/10"
                         />
                       )}
                     </AnimatePresence>
-                    <span className="text-red-400 font-semibold relative z-10">€{ask.price.toFixed(2)}</span>
+                    <span className={`font-semibold relative z-10 transition-colors ${isMatching ? 'text-red-400' : 'text-foreground'}`}>€{ask.price.toFixed(2)}</span>
                     <motion.span 
                       key={ask.size}
                       initial={{ opacity: 0.5 }}
