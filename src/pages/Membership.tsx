@@ -72,12 +72,9 @@ const TIERS = {
     icon: Star,
     color: "from-primary to-primary-glow",
     features: [
-      { icon: Check, label: "Everything in Explorer", highlight: true },
-      { icon: GraduationCap, label: "Advanced Courses" },
-      { icon: FileText, label: "Investment Opportunity Breakdowns" },
+      { icon: Check, label: "Everything in Explorer" },
       { icon: Video, label: "Expert Webinars (monthly) + Replays" },
       { icon: BookOpen, label: "Research Reports" },
-      { icon: PieChart, label: "Portfolio Construction & Risk Models" },
       { icon: Eye, label: "Unlimited Asset Watchlist" },
       { icon: FileText, label: "Basic Tax Export" },
       { icon: Rocket, label: "Early Window Previews on New Listings" },
