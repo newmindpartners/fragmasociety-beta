@@ -31,6 +31,7 @@ const AnimatedOrderBook = () => {
   const [spread, setSpread] = useState(0.30);
   const [tradeExecutions, setTradeExecutions] = useState<TradeExecution[]>([]);
   const [showTradeFlash, setShowTradeFlash] = useState(false);
+  const [lastTradeSide, setLastTradeSide] = useState<'buy' | 'sell'>('buy');
 
   // Dynamic data updates with trade executions
   useEffect(() => {
@@ -53,13 +54,15 @@ const AnimatedOrderBook = () => {
 
     // Trade execution animation
     const tradeInterval = setInterval(() => {
+      const tradeSide = Math.random() > 0.5 ? 'buy' : 'sell';
+      setLastTradeSide(tradeSide as 'buy' | 'sell');
       setShowTradeFlash(true);
       
       const newTrade: TradeExecution = {
         id: Date.now(),
         price: 100.00 + (Math.random() - 0.5) * 0.3,
         size: Math.floor(Math.random() * 5000) + 1000,
-        side: Math.random() > 0.5 ? 'buy' : 'sell',
+        side: tradeSide as 'buy' | 'sell',
       };
       
       setTradeExecutions(prev => [newTrade, ...prev.slice(0, 2)]);
@@ -92,9 +95,11 @@ const AnimatedOrderBook = () => {
             >
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1.5, opacity: [0, 0.4, 0] }}
+                animate={{ scale: 1.5, opacity: [0, 0.5, 0] }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-primary/50"
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full ${
+                  lastTradeSide === 'buy' ? 'bg-green-500' : 'bg-red-500'
+                }`}
               />
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -102,8 +107,10 @@ const AnimatedOrderBook = () => {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2"
               >
-                <CheckCircle2 className="w-8 h-8 text-primary" />
-                <span className="text-primary font-bold text-lg whitespace-nowrap">Trade Matched!</span>
+                <CheckCircle2 className={`w-8 h-8 ${lastTradeSide === 'buy' ? 'text-green-400' : 'text-red-400'}`} />
+                <span className={`font-bold text-lg whitespace-nowrap ${lastTradeSide === 'buy' ? 'text-green-400' : 'text-red-400'}`}>
+                  Trade Matched!
+                </span>
               </motion.div>
             </motion.div>
           )}
@@ -171,17 +178,21 @@ const AnimatedOrderBook = () => {
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     exit={{ opacity: 0, x: 20, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-muted/30 text-foreground border border-border/30"
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border ${
+                      trade.side === 'buy' 
+                        ? 'bg-green-500/20 text-green-400 border-green-500/40' 
+                        : 'bg-red-500/20 text-red-400 border-red-500/40'
+                    }`}
                   >
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: [0, 1.2, 1] }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Zap className="w-3 h-3 text-primary" />
+                      <Zap className="w-3 h-3" />
                     </motion.div>
                     <span>€{trade.price.toFixed(2)}</span>
-                    <span className="text-muted-foreground">×</span>
+                    <span className="opacity-60">×</span>
                     <span>{formatNumber(trade.size)}</span>
                   </motion.div>
                 ))}
