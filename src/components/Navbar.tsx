@@ -41,7 +41,8 @@ const navSections: NavSection[] = [
     label: "Learn",
     items: [
       { label: "Community Center", href: "/#partners", description: "Connect with fellow investors", icon: Users },
-      { label: "Documentation", href: "/#features", description: "Guides, FAQs and resources", icon: FileText },
+      { label: "Documentation", href: "/#features", description: "Guides and resources", icon: FileText },
+      { label: "FAQ", href: "/faq", description: "Frequently asked questions", icon: HelpCircle, isRoute: true },
     ],
   },
 ];
