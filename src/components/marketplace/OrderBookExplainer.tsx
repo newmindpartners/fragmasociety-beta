@@ -9,7 +9,18 @@ interface TradeExecution {
   side: 'buy' | 'sell';
 }
 
+const assets = [
+  { name: "Paris Loft - Marais", category: "Real Estate", symbol: "RE-PAR" },
+  { name: "Blockbuster Film Rights", category: "Entertainment", symbol: "ENT-BFR" },
+  { name: "Vintage Rolex Daytona", category: "Luxury", symbol: "LUX-RLX" },
+  { name: "SME Credit Pool A", category: "Private Credit", symbol: "PC-SMA" },
+  { name: "AI Data Center Equity", category: "Infrastructure", symbol: "INF-ADC" },
+];
+
 const AnimatedOrderBook = () => {
+  const [currentAssetIndex, setCurrentAssetIndex] = useState(0);
+  const currentAsset = assets[currentAssetIndex];
+
   const [bids, setBids] = useState([
     { price: 1245.50, size: 21628, total: 2.21 },
     { price: 892.25, size: 47056, total: 4.65 },
@@ -33,6 +44,14 @@ const AnimatedOrderBook = () => {
   const [showTradeFlash, setShowTradeFlash] = useState(false);
   const [lastTradeSide, setLastTradeSide] = useState<'buy' | 'sell'>('buy');
   const [matchingRows, setMatchingRows] = useState<{ bidIndex: number; askIndex: number } | null>(null);
+
+  // Rotate assets every 6 seconds
+  useEffect(() => {
+    const assetInterval = setInterval(() => {
+      setCurrentAssetIndex(prev => (prev + 1) % assets.length);
+    }, 6000);
+    return () => clearInterval(assetInterval);
+  }, []);
 
   // Dynamic data updates with trade executions
   useEffect(() => {
@@ -125,11 +144,21 @@ const AnimatedOrderBook = () => {
           )}
         </AnimatePresence>
 
-        {/* Header */}
+        {/* Header with Asset Name */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Fragma Marketplace</p>
-            <h3 className="text-xl font-serif font-bold text-foreground">Live Order Book</h3>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">{currentAsset.category}</span>
+              <span className="text-xs text-primary font-mono">{currentAsset.symbol}</span>
+            </div>
+            <motion.h3 
+              key={currentAsset.name}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-xl font-serif font-bold text-foreground"
+            >
+              {currentAsset.name}
+            </motion.h3>
           </div>
           <div className="flex items-center gap-2">
             <motion.div
