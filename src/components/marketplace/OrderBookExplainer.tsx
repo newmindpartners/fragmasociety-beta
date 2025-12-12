@@ -350,7 +350,9 @@ export const OrderBookExplainer = () => {
   ];
 
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 section-mesh relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div

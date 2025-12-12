@@ -257,7 +257,8 @@ export const SmartVaults = () => {
   ];
 
   return (
-    <section className="py-24 bg-card relative overflow-hidden">
+    <section className="py-24 section-solid-primary relative overflow-hidden">
+      <div className="absolute inset-0 section-lines opacity-50" />
       <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[150px] -translate-y-1/2" />
       
       <div className="container mx-auto px-6 relative z-10">

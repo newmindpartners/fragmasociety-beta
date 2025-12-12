@@ -54,8 +54,9 @@ export const MarketplaceDifference = () => {
   ];
 
   return (
-    <section className="py-24 bg-card relative overflow-hidden">
+    <section className="py-24 section-gradient-diagonal relative overflow-hidden">
       {/* Background effects */}
+      <div className="absolute inset-0 section-dots opacity-30" />
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[200px]" />
       
       <div className="container mx-auto px-6 relative z-10">

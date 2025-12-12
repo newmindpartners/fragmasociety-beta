@@ -327,7 +327,8 @@ const TwoWayOrderDemo = () => {
 
 export const TwoWayOrders = () => {
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 section-gradient-radial relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-primary/5 to-transparent" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[200px]" />
       
       <div className="container mx-auto px-6 relative z-10">

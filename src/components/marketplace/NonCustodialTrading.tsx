@@ -56,7 +56,8 @@ export const NonCustodialTrading = () => {
   ];
 
   return (
-    <section className="py-24 bg-card relative overflow-hidden">
+    <section className="py-24 section-gradient-bottom-glow relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[200px]" />
       
       <div className="container mx-auto px-6 relative z-10">
