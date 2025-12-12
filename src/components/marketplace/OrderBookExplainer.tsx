@@ -31,7 +31,6 @@ const AnimatedOrderBook = () => {
   const [spread, setSpread] = useState(0.30);
   const [tradeExecutions, setTradeExecutions] = useState<TradeExecution[]>([]);
   const [showTradeFlash, setShowTradeFlash] = useState(false);
-  const [matchingAnimation, setMatchingAnimation] = useState<{ bidIndex: number; askIndex: number } | null>(null);
 
   // Dynamic data updates with trade executions
   useEffect(() => {
@@ -54,29 +53,20 @@ const AnimatedOrderBook = () => {
 
     // Trade execution animation
     const tradeInterval = setInterval(() => {
-      const bidIndex = Math.floor(Math.random() * 5);
-      const askIndex = Math.floor(Math.random() * 5);
+      setShowTradeFlash(true);
       
-      // Start matching animation
-      setMatchingAnimation({ bidIndex, askIndex });
+      const newTrade: TradeExecution = {
+        id: Date.now(),
+        price: 100.00 + (Math.random() - 0.5) * 0.3,
+        size: Math.floor(Math.random() * 5000) + 1000,
+        side: Math.random() > 0.5 ? 'buy' : 'sell',
+      };
+      
+      setTradeExecutions(prev => [newTrade, ...prev.slice(0, 2)]);
       
       setTimeout(() => {
-        setShowTradeFlash(true);
-        
-        const newTrade: TradeExecution = {
-          id: Date.now(),
-          price: 100.00 + (Math.random() - 0.5) * 0.3,
-          size: Math.floor(Math.random() * 5000) + 1000,
-          side: Math.random() > 0.5 ? 'buy' : 'sell',
-        };
-        
-        setTradeExecutions(prev => [newTrade, ...prev.slice(0, 2)]);
-        
-        setTimeout(() => {
-          setShowTradeFlash(false);
-          setMatchingAnimation(null);
-        }, 600);
-      }, 400);
+        setShowTradeFlash(false);
+      }, 600);
     }, 4000);
 
     return () => {
@@ -102,9 +92,9 @@ const AnimatedOrderBook = () => {
             >
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1.5, opacity: [0, 0.6, 0] }}
+                animate={{ scale: 1.5, opacity: [0, 0.4, 0] }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-r from-green-400 to-primary"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-primary/50"
               />
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -112,8 +102,8 @@ const AnimatedOrderBook = () => {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2"
               >
-                <CheckCircle2 className="w-8 h-8 text-green-400" />
-                <span className="text-green-400 font-bold text-lg whitespace-nowrap">Trade Matched!</span>
+                <CheckCircle2 className="w-8 h-8 text-primary" />
+                <span className="text-primary font-bold text-lg whitespace-nowrap">Trade Matched!</span>
               </motion.div>
             </motion.div>
           )}
@@ -181,18 +171,14 @@ const AnimatedOrderBook = () => {
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     exit={{ opacity: 0, x: 20, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium ${
-                      trade.side === 'buy' 
-                        ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                    }`}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-muted/30 text-foreground border border-border/30"
                   >
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: [0, 1.2, 1] }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Zap className="w-3 h-3" />
+                      <Zap className="w-3 h-3 text-primary" />
                     </motion.div>
                     <span>€{trade.price.toFixed(2)}</span>
                     <span className="text-muted-foreground">×</span>
@@ -214,39 +200,28 @@ const AnimatedOrderBook = () => {
               <span className="text-right">Total</span>
             </div>
             <div className="space-y-1">
-              {bids.map((bid, i) => {
-                const isMatching = matchingAnimation?.bidIndex === i;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    whileHover={{ scale: 1.02, x: 5 }}
-                    animate={isMatching ? { scale: [1, 1.05, 1] } : {}}
-                    className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden bg-background/50 hover:bg-muted/30"
-                  >
-                    {/* Depth bar - always neutral */}
-                    <motion.div
-                      className="absolute left-0 top-0 bottom-0 bg-muted/10"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(bid.total / 5) * 100}%` }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <span className="font-semibold relative z-10 text-foreground">€{bid.price.toFixed(2)}</span>
-                    <motion.span 
-                      key={bid.size}
-                      initial={{ opacity: 0.5 }}
-                      animate={{ opacity: 1 }}
-                      className="text-center text-foreground relative z-10"
-                    >
-                      {formatNumber(bid.size)}
-                    </motion.span>
-                    <span className="text-right text-muted-foreground relative z-10">€{bid.total.toFixed(2)}M</span>
-                  </motion.div>
-                );
-              })}
+              {bids.map((bid, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer relative overflow-hidden bg-background/50 hover:bg-muted/30"
+                >
+                  {/* Depth bar - always neutral */}
+                  <div 
+                    className="absolute left-0 top-0 bottom-0 bg-muted/10"
+                    style={{ width: `${(bid.total / 5) * 100}%` }}
+                  />
+                  <span className="font-semibold relative z-10 text-foreground">€{bid.price.toFixed(2)}</span>
+                  <span className="text-center text-foreground relative z-10">
+                    {formatNumber(bid.size)}
+                  </span>
+                  <span className="text-right text-muted-foreground relative z-10">€{bid.total.toFixed(2)}M</span>
+                </motion.div>
+              ))}
             </div>
           </div>
 
@@ -258,39 +233,28 @@ const AnimatedOrderBook = () => {
               <span className="text-right">Total</span>
             </div>
             <div className="space-y-1">
-              {asks.map((ask, i) => {
-                const isMatching = matchingAnimation?.askIndex === i;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    whileHover={{ scale: 1.02, x: -5 }}
-                    animate={isMatching ? { scale: [1, 1.05, 1] } : {}}
-                    className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden bg-background/50 hover:bg-muted/30"
-                  >
-                    {/* Depth bar - always neutral */}
-                    <motion.div
-                      className="absolute right-0 top-0 bottom-0 bg-muted/10"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(ask.total / 5) * 100}%` }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <span className="font-semibold relative z-10 text-foreground">€{ask.price.toFixed(2)}</span>
-                    <motion.span 
-                      key={ask.size}
-                      initial={{ opacity: 0.5 }}
-                      animate={{ opacity: 1 }}
-                      className="text-center text-foreground relative z-10"
-                    >
-                      {formatNumber(ask.size)}
-                    </motion.span>
-                    <span className="text-right text-muted-foreground relative z-10">€{ask.total.toFixed(2)}M</span>
-                  </motion.div>
-                );
-              })}
+              {asks.map((ask, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  whileHover={{ scale: 1.02, x: -5 }}
+                  className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer relative overflow-hidden bg-background/50 hover:bg-muted/30"
+                >
+                  {/* Depth bar - always neutral */}
+                  <div 
+                    className="absolute right-0 top-0 bottom-0 bg-muted/10"
+                    style={{ width: `${(ask.total / 5) * 100}%` }}
+                  />
+                  <span className="font-semibold relative z-10 text-foreground">€{ask.price.toFixed(2)}</span>
+                  <span className="text-center text-foreground relative z-10">
+                    {formatNumber(ask.size)}
+                  </span>
+                  <span className="text-right text-muted-foreground relative z-10">€{ask.total.toFixed(2)}M</span>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
