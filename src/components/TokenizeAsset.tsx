@@ -140,21 +140,21 @@ const AssetTransformAnimation = () => {
       return;
     }
 
-    // Animation cycle duration: 5 seconds total per asset
-    const cycleDuration = 5000;
+    // Animation cycle duration: 9 seconds total per asset (slower)
+    const cycleDuration = 9000;
     
     const runCycle = () => {
       setStage(1); // Show asset
       
-      const timer2 = setTimeout(() => setStage(2), 1500); // Tokenize
-      const timer3 = setTimeout(() => setStage(3), 3000); // Marketplace
+      const timer2 = setTimeout(() => setStage(2), 2500); // Tokenize (longer)
+      const timer3 = setTimeout(() => setStage(3), 5500); // Marketplace (longer)
       const timer4 = setTimeout(() => {
         // Reset and move to next asset
         setStage(0);
         setTimeout(() => {
           setActiveAsset((prev) => (prev + 1) % assetIcons.length);
           setCycleKey((prev) => prev + 1);
-        }, 300);
+        }, 500);
       }, cycleDuration);
 
       return [timer2, timer3, timer4];
@@ -163,7 +163,7 @@ const AssetTransformAnimation = () => {
     // Start first cycle
     const initialTimer = setTimeout(() => {
       runCycle();
-    }, 500);
+    }, 800);
 
     return () => {
       clearTimeout(initialTimer);
@@ -173,10 +173,10 @@ const AssetTransformAnimation = () => {
   const ActiveIcon = assetIcons[activeAsset].icon;
 
   return (
-    <div ref={containerRef} className="relative h-[400px] flex items-center justify-center">
+    <div ref={containerRef} className="relative h-[550px] flex items-center justify-center">
       {/* Background glow */}
       <motion.div
-        className="absolute w-[300px] h-[300px] rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-[100px]"
+        className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-[120px]"
         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 4, repeat: Infinity }}
       />
@@ -192,137 +192,248 @@ const AssetTransformAnimation = () => {
         />
       ))}
 
-      {/* Stage 1: Real Asset */}
-      <AnimatePresence mode="wait">
-        {stage >= 1 && stage < 2 && (
-          <motion.div
-            key="asset"
-            initial={{ scale: 0, opacity: 0, rotateY: -90 }}
-            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-            exit={{ scale: 0.5, opacity: 0, filter: "blur(20px)" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute"
-          >
-            <div className={`w-32 h-32 rounded-2xl bg-gradient-to-br ${assetIcons[activeAsset].color} p-1`}>
-              <div className="w-full h-full rounded-xl bg-background/90 flex items-center justify-center">
-                <ActiveIcon className="w-16 h-16 text-primary" />
-              </div>
-            </div>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-center mt-4 text-sm font-medium text-muted-foreground"
+      {/* Main animation container */}
+      <div className="relative flex flex-col items-center">
+        {/* Stage 1: Real Asset */}
+        <AnimatePresence mode="wait">
+          {stage >= 1 && stage < 2 && (
+            <motion.div
+              key="asset"
+              initial={{ scale: 0, opacity: 0, rotateY: -90 }}
+              animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+              exit={{ scale: 0.8, opacity: 0, filter: "blur(10px)" }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center"
             >
-              {assetIcons[activeAsset].label}
-            </motion.p>
-          </motion.div>
-        )}
-
-        {/* Stage 2: Tokenization */}
-        {stage >= 2 && stage < 3 && (
-          <motion.div
-            key="tokens"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute"
-          >
-            <div className="grid grid-cols-3 gap-3">
-              {[...Array(9)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: i * 0.08, type: "spring", stiffness: 200 }}
-                  className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center"
-                >
-                  <Coins className="w-5 h-5 text-primary-foreground" />
-                </motion.div>
-              ))}
-            </div>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="text-center mt-6 text-sm font-medium text-primary"
-            >
-              Tokenizing...
-            </motion.p>
-          </motion.div>
-        )}
-
-        {/* Stage 3: Marketplace */}
-        {stage >= 3 && (
-          <motion.div
-            key="marketplace"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute w-full max-w-[280px]"
-          >
-            <div className="card-premium p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-primary">ORDER BOOK</span>
-                <motion.div
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="w-2 h-2 rounded-full bg-emerald-500"
-                />
+              {/* Glowing ring */}
+              <motion.div
+                className="absolute w-48 h-48 rounded-full border-2 border-primary/30"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              
+              <div className={`w-40 h-40 rounded-3xl bg-gradient-to-br ${assetIcons[activeAsset].color} p-1.5 shadow-2xl shadow-primary/20`}>
+                <div className="w-full h-full rounded-2xl bg-background/95 flex items-center justify-center backdrop-blur-sm">
+                  <ActiveIcon className="w-20 h-20 text-primary" strokeWidth={1.5} />
+                </div>
               </div>
               
-              {/* Mock order book */}
-              <div className="space-y-1.5">
-                {[
-                  { price: "€105", amount: "25", type: "sell" },
-                  { price: "€102", amount: "50", type: "sell" },
-                  { price: "€100", amount: "100", type: "mid" },
-                  { price: "€98", amount: "75", type: "buy" },
-                  { price: "€95", amount: "40", type: "buy" },
-                ].map((order, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + i * 0.1 }}
-                    className={`flex justify-between items-center text-xs py-1 px-2 rounded ${
-                      order.type === "sell" ? "bg-rose-500/10 text-rose-400" :
-                      order.type === "buy" ? "bg-emerald-500/10 text-emerald-400" :
-                      "bg-primary/10 text-primary font-medium"
-                    }`}
-                  >
-                    <span>{order.price}</span>
-                    <span>{order.amount} tokens</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="text-center mt-4 text-sm font-medium text-emerald-400"
-            >
-              Listed & Trading
-            </motion.p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mt-6 text-center"
+              >
+                <p className="text-xl font-semibold text-foreground mb-1">
+                  {assetIcons[activeAsset].label}
+                </p>
+                <p className="text-sm text-muted-foreground">Your real-world asset</p>
+              </motion.div>
+            </motion.div>
+          )}
 
-      {/* Stage indicators */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-3">
-        {["Asset", "Tokenize", "Trade"].map((label, i) => (
-          <motion.div
-            key={label}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all duration-300 ${
-              stage > i ? "bg-primary/20 text-primary" : "bg-muted/50 text-muted-foreground"
-            }`}
-            animate={{ scale: stage === i + 1 ? 1.1 : 1 }}
-          >
-            <div className={`w-1.5 h-1.5 rounded-full ${stage > i ? "bg-primary" : "bg-muted-foreground"}`} />
-            {label}
-          </motion.div>
-        ))}
+          {/* Stage 2: Tokenization - Improved visualization */}
+          {stage >= 2 && stage < 3 && (
+            <motion.div
+              key="tokens"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.6 }}
+              className="flex flex-col items-center"
+            >
+              {/* Tokenization visual - Asset breaking into tokens */}
+              <div className="relative w-56 h-56 flex items-center justify-center">
+                {/* Central glow */}
+                <motion.div
+                  className="absolute w-32 h-32 rounded-full bg-primary/30 blur-xl"
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+                
+                {/* Tokens emerging in a circle pattern */}
+                {[...Array(8)].map((_, i) => {
+                  const angle = (i * 45 * Math.PI) / 180;
+                  const radius = 70;
+                  const x = Math.cos(angle) * radius;
+                  const y = Math.sin(angle) * radius;
+                  
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ scale: 0, x: 0, y: 0, opacity: 0 }}
+                      animate={{ 
+                        scale: 1, 
+                        x: x, 
+                        y: y, 
+                        opacity: 1,
+                        rotate: [0, 10, -10, 0]
+                      }}
+                      transition={{ 
+                        delay: i * 0.1, 
+                        duration: 0.8,
+                        type: "spring", 
+                        stiffness: 150,
+                        rotate: { delay: i * 0.1 + 0.8, duration: 2, repeat: Infinity }
+                      }}
+                      className="absolute w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30"
+                    >
+                      <Coins className="w-7 h-7 text-primary-foreground" />
+                    </motion.div>
+                  );
+                })}
+                
+                {/* Center token */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                  className="relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary via-accent to-primary flex items-center justify-center shadow-xl shadow-primary/40"
+                >
+                  <Coins className="w-8 h-8 text-primary-foreground" />
+                </motion.div>
+              </div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="mt-6 text-center"
+              >
+                <p className="text-xl font-semibold text-primary mb-1">
+                  Tokenizing Asset
+                </p>
+                <p className="text-sm text-muted-foreground">Fractionalizing into digital tokens</p>
+              </motion.div>
+              
+              {/* Progress bar */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="mt-4 w-48 h-2 bg-muted/30 rounded-full overflow-hidden"
+              >
+                <motion.div
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 2.5, ease: "easeInOut" }}
+                  className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* Stage 3: Marketplace */}
+          {stage >= 3 && (
+            <motion.div
+              key="marketplace"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center w-full max-w-[340px]"
+            >
+              <div className="card-premium p-5 w-full shadow-2xl shadow-primary/10">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                      <ArrowLeftRight className="w-4 h-4 text-primary" />
+                    </div>
+                    <span className="text-sm font-semibold text-foreground">ORDER BOOK</span>
+                  </div>
+                  <motion.div
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="flex items-center gap-1.5"
+                  >
+                    <span className="text-xs text-emerald-400">LIVE</span>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                  </motion.div>
+                </div>
+                
+                {/* Mock order book - bigger */}
+                <div className="space-y-2">
+                  {[
+                    { price: "€105.00", amount: "25", type: "sell" },
+                    { price: "€102.50", amount: "50", type: "sell" },
+                    { price: "€100.00", amount: "100", type: "mid" },
+                    { price: "€98.00", amount: "75", type: "buy" },
+                    { price: "€95.50", amount: "40", type: "buy" },
+                  ].map((order, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 + i * 0.12 }}
+                      className={`flex justify-between items-center text-sm py-2 px-3 rounded-lg ${
+                        order.type === "sell" ? "bg-rose-500/10 text-rose-400" :
+                        order.type === "buy" ? "bg-emerald-500/10 text-emerald-400" :
+                        "bg-primary/20 text-primary font-semibold"
+                      }`}
+                    >
+                      <span className="font-medium">{order.price}</span>
+                      <span>{order.amount} tokens</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
+                className="mt-6 text-center"
+              >
+                <p className="text-xl font-semibold text-emerald-400 mb-1">
+                  Listed & Trading
+                </p>
+                <p className="text-sm text-muted-foreground">Available on secondary marketplace</p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Stage indicators - Bigger and clearer */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-4">
+        {[
+          { label: "Asset", icon: Building2 },
+          { label: "Tokenize", icon: Coins },
+          { label: "Trade", icon: ArrowLeftRight }
+        ].map((item, i) => {
+          const Icon = item.icon;
+          const isActive = stage === i + 1;
+          const isComplete = stage > i + 1;
+          
+          return (
+            <motion.div
+              key={item.label}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-500 ${
+                isActive 
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
+                  : isComplete 
+                    ? "bg-primary/20 text-primary" 
+                    : "bg-muted/30 text-muted-foreground"
+              }`}
+              animate={{ 
+                scale: isActive ? 1.1 : 1,
+                y: isActive ? -4 : 0
+              }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Icon className="w-4 h-4" />
+              <span>{item.label}</span>
+              {isComplete && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="w-4 h-4 rounded-full bg-primary flex items-center justify-center"
+                >
+                  <span className="text-[10px] text-primary-foreground">✓</span>
+                </motion.div>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
