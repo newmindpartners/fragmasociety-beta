@@ -8,8 +8,7 @@ import {
   Sparkles,
   Lock,
   Coins,
-  CircleDollarSign,
-  Zap
+  Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -248,12 +247,9 @@ export const StrategyCTA = () => {
               </Link>
             </Button>
             
-            <Button asChild variant="outline" size="lg" className="group px-8 py-6 text-base border-primary/30 hover:border-primary/60 hover:bg-primary/5">
-              <Link to="/strategy" className="flex items-center gap-3">
-                <CircleDollarSign className="w-4 h-4 text-primary" />
-                <span>View Strategy Details</span>
-                <Zap className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
+            <Button variant="outline" size="lg" className="group px-8 py-6 text-base border-primary/30 hover:border-primary/60 hover:bg-primary/5">
+              <Phone className="w-4 h-4 text-primary mr-3" />
+              <span>Book a Call</span>
             </Button>
           </motion.div>
 
