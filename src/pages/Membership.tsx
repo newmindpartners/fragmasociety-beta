@@ -92,10 +92,11 @@ const TIERS = {
     icon: Crown,
     color: "from-amber-500 to-yellow-500",
     features: [
-      { icon: Check, label: "Everything in Premium", highlight: true },
+      { icon: Check, label: "Everything in Premium" },
       { icon: Calendar, label: "Private Events (virtual & in-person)" },
       { icon: Users, label: "Elite Networking Lounge" },
       { icon: Rocket, label: "3-Day Early Access to Public Deals" },
+      { icon: Lock, label: "Access to Off-Market Fragma Deals" },
       { icon: PieChart, label: "Portfolio Pro Tools (digest, alerts, planner)" },
       { icon: FileText, label: "Full Tax Exports" },
       { icon: MessageCircle, label: "VIP Support (WhatsApp, Priority)" },
