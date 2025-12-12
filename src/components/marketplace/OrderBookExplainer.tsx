@@ -228,15 +228,11 @@ const AnimatedOrderBook = () => {
                       scale: [1, 1.03, 1],
                       boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 20px 4px rgba(34, 197, 94, 0.5)", "0 0 0 0 rgba(34, 197, 94, 0)"]
                     } : {}}
-                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden ${
-                      isMatching
-                        ? 'bg-green-500/30'
-                        : 'bg-muted/30 hover:bg-muted/50'
-                    }`}
+                    className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden bg-background/50 hover:bg-muted/30"
                   >
-                    {/* Depth bar - neutral unless matching */}
+                    {/* Depth bar - always neutral */}
                     <motion.div
-                      className={`absolute left-0 top-0 bottom-0 ${isMatching ? 'bg-green-500/30' : 'bg-muted/20'}`}
+                      className="absolute left-0 top-0 bottom-0 bg-muted/10"
                       initial={{ width: 0 }}
                       animate={{ width: `${(bid.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
@@ -291,15 +287,11 @@ const AnimatedOrderBook = () => {
                       scale: [1, 1.03, 1],
                       boxShadow: ["0 0 0 0 rgba(239, 68, 68, 0)", "0 0 20px 4px rgba(239, 68, 68, 0.5)", "0 0 0 0 rgba(239, 68, 68, 0)"]
                     } : {}}
-                    className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden ${
-                      isMatching
-                        ? 'bg-red-500/30'
-                        : 'bg-muted/30 hover:bg-muted/50'
-                    }`}
+                    className="grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden bg-background/50 hover:bg-muted/30"
                   >
-                    {/* Depth bar - neutral unless matching */}
+                    {/* Depth bar - always neutral */}
                     <motion.div
-                      className={`absolute right-0 top-0 bottom-0 ${isMatching ? 'bg-red-500/30' : 'bg-muted/20'}`}
+                      className="absolute right-0 top-0 bottom-0 bg-muted/10"
                       initial={{ width: 0 }}
                       animate={{ width: `${(ask.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
