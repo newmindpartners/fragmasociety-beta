@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
   Check, 
   Crown, 
@@ -17,7 +16,6 @@ import {
   Rocket,
   MessageCircle,
   Lock,
-  Sparkles,
   ArrowRight,
   Loader2,
   ChevronRight,
@@ -51,9 +49,6 @@ const TIERS = {
     description: "Start your investment journey with essential tools",
     badge: null,
     icon: Zap,
-    gradient: "from-slate-400 via-slate-500 to-slate-600",
-    glowColor: "rgba(148, 163, 184, 0.3)",
-    borderColor: "border-slate-500/20",
     features: [
       { icon: TrendingUp, label: "Weekly Market Analysis & Trends" },
       { icon: BookOpen, label: "Tokenization Case Studies" },
@@ -73,9 +68,6 @@ const TIERS = {
     description: "Advanced tools for serious investors seeking growth",
     badge: "Most Popular",
     icon: Star,
-    gradient: "from-primary via-primary to-primary-glow",
-    glowColor: "rgba(var(--primary), 0.4)",
-    borderColor: "border-primary/30",
     features: [
       { icon: Check, label: "Everything in Explorer" },
       { icon: Video, label: "Expert Webinars (monthly) + Replays" },
@@ -96,9 +88,6 @@ const TIERS = {
     description: "Exclusive access for top-tier investors",
     badge: "VIP",
     icon: Crown,
-    gradient: "from-amber-400 via-yellow-500 to-orange-500",
-    glowColor: "rgba(251, 191, 36, 0.4)",
-    borderColor: "border-amber-500/30",
     features: [
       { icon: Check, label: "Everything in Premium" },
       { icon: Calendar, label: "Private Events (virtual & in-person)" },
@@ -115,364 +104,180 @@ const TIERS = {
 
 const tierOrder = ["explorer", "premium", "elite"] as const;
 
-// Animated background component
-const AnimatedBackground = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {/* Gradient orbs */}
-    <motion.div
-      animate={{ 
-        x: [0, 100, 0],
-        y: [0, -50, 0],
-        scale: [1, 1.2, 1],
-      }}
-      transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px]"
-    />
-    <motion.div
-      animate={{ 
-        x: [0, -80, 0],
-        y: [0, 60, 0],
-        scale: [1, 1.1, 1],
-      }}
-      transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-1/3 -right-32 w-[600px] h-[600px] bg-amber-500/15 rounded-full blur-[120px]"
-    />
-    <motion.div
-      animate={{ 
-        x: [0, 50, 0],
-        y: [0, -30, 0],
-      }}
-      transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-primary-glow/10 rounded-full blur-[100px]"
-    />
-    
-    {/* Grid pattern */}
-    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
-    
-    {/* Noise texture */}
-    <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }} />
-  </div>
-);
-
-// Premium tier card component
+// Clean tier card component
 const TierCard = ({ 
   tier, 
   isCurrentPlan, 
   isAuthenticated, 
   onSubscribe, 
   isLoading,
-  index
 }: { 
   tier: typeof TIERS.explorer;
   isCurrentPlan: boolean;
   isAuthenticated: boolean;
   onSubscribe: (priceId: string) => void;
   isLoading: boolean;
-  index: number;
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const Icon = tier.icon;
   const isPaid = tier.priceId !== null;
   const isPremium = tier.id === "premium";
   const isElite = tier.id === "elite";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`relative group ${isPremium ? "lg:-mt-8 lg:mb-8 z-10" : "z-0"}`}
-    >
-      {/* Animated badge */}
+    <div className={`relative flex flex-col h-full ${isPremium ? "lg:-mt-4 lg:mb-4" : ""}`}>
+      {/* Badge */}
       {tier.badge && (
-        <motion.div
-          initial={{ opacity: 0, y: 10, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.5 + index * 0.15 }}
-          className="absolute -top-5 left-1/2 -translate-x-1/2 z-20"
-        >
-          <motion.div 
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg ${
-              isElite 
-                ? "bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-500 text-black" 
-                : "bg-gradient-to-r from-primary to-primary-glow text-white"
-            }`}
-          >
-            <span className="flex items-center gap-1.5">
-              {isElite ? <Crown size={12} /> : <Sparkles size={12} />}
-              {tier.badge}
-            </span>
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* Card glow effect */}
-      <motion.div
-        animate={{ 
-          opacity: isHovered ? 0.6 : 0,
-          scale: isHovered ? 1 : 0.95,
-        }}
-        transition={{ duration: 0.4 }}
-        className={`absolute -inset-1 rounded-[2rem] bg-gradient-to-b ${tier.gradient} blur-xl`}
-      />
-
-      {/* Main card */}
-      <motion.div 
-        animate={{ 
-          y: isHovered ? -8 : 0,
-          scale: isHovered ? 1.02 : 1,
-        }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className={`relative h-full rounded-[1.75rem] border backdrop-blur-xl transition-all duration-500 overflow-hidden ${
-          isCurrentPlan 
-            ? `${tier.borderColor} bg-gradient-to-b from-white/[0.08] to-white/[0.02]` 
-            : isPremium
-              ? "border-primary/40 bg-gradient-to-b from-primary/[0.08] via-background/90 to-background/80"
-              : "border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-background/80 hover:border-white/20"
-        }`}
-      >
-        {/* Animated border gradient for premium */}
-        {isPremium && (
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="absolute -inset-[1px] rounded-[1.75rem] opacity-60"
-            style={{
-              background: "conic-gradient(from 0deg, transparent, hsl(var(--primary)), transparent 30%)",
-            }}
-          />
-        )}
-
-        {/* Inner content wrapper */}
-        <div className="relative p-8 lg:p-10">
-          {/* Current plan indicator */}
-          <AnimatePresence>
-            {isCurrentPlan && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute top-6 right-6"
-              >
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30">
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-2 h-2 rounded-full bg-primary"
-                  />
-                  <span className="text-xs font-semibold text-primary">Active</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Icon with animated background */}
-          <motion.div 
-            className="relative mb-8"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.div
-              animate={{ 
-                rotate: isHovered ? 180 : 0,
-                scale: isHovered ? 1.1 : 1,
-              }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className={`absolute inset-0 w-16 h-16 rounded-2xl bg-gradient-to-br ${tier.gradient} opacity-20 blur-lg`}
-            />
-            <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${tier.gradient} flex items-center justify-center shadow-lg`}>
-              <Icon className="w-8 h-8 text-white" strokeWidth={1.5} />
-            </div>
-            
-            {/* Floating particles on hover */}
-            <AnimatePresence>
-              {isHovered && (
-                <>
-                  {[...Array(3)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
-                      animate={{ 
-                        opacity: [0, 1, 0],
-                        scale: [0, 1, 0],
-                        x: [0, (i - 1) * 30],
-                        y: [0, -40 - i * 10],
-                      }}
-                      transition={{ duration: 1, delay: i * 0.1 }}
-                      className={`absolute top-0 left-8 w-2 h-2 rounded-full bg-gradient-to-r ${tier.gradient}`}
-                    />
-                  ))}
-                </>
-              )}
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Name & Price */}
-          <div className="mb-6">
-            <h3 className="text-2xl font-bold text-foreground mb-2">{tier.name}</h3>
-            <div className="flex items-baseline gap-1.5">
-              <motion.span 
-                className={`text-5xl font-bold bg-gradient-to-r ${tier.gradient} bg-clip-text text-transparent`}
-                animate={{ opacity: isHovered ? 1 : 0.9 }}
-              >
-                {tier.price}
-              </motion.span>
-              {isPaid && (
-                <span className="text-muted-foreground text-sm">/month</span>
-              )}
-            </div>
-            <p className="text-muted-foreground text-sm mt-3 leading-relaxed">{tier.description}</p>
-          </div>
-
-          {/* CTA Button */}
-          <div className="mb-8">
-            {isCurrentPlan ? (
-              <Button 
-                variant="outline" 
-                className="w-full h-12 border-primary/30 text-primary hover:bg-primary/10 rounded-xl font-semibold"
-                disabled
-              >
-                <Check size={18} className="mr-2" />
-                Current Plan
-              </Button>
-            ) : !isAuthenticated ? (
-              <Link to="/auth" className="block">
-                <Button 
-                  className={`w-full h-12 rounded-xl font-semibold group overflow-hidden relative ${
-                    isPremium 
-                      ? "bg-gradient-to-r from-primary to-primary-glow hover:shadow-lg hover:shadow-primary/25" 
-                      : isElite
-                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-black hover:shadow-lg hover:shadow-amber-500/25"
-                        : "bg-muted hover:bg-muted/80"
-                  }`}
-                >
-                  <motion.span 
-                    className="relative z-10 flex items-center gap-2"
-                    animate={{ x: isHovered ? 0 : 0 }}
-                  >
-                    {isPaid ? "Sign Up to Subscribe" : "Get Started Free"}
-                    <motion.span
-                      animate={{ x: isHovered ? 4 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ArrowRight size={16} />
-                    </motion.span>
-                  </motion.span>
-                </Button>
-              </Link>
-            ) : isPaid ? (
-              <Button 
-                className={`w-full h-12 rounded-xl font-semibold group overflow-hidden relative ${
-                  isPremium 
-                    ? "bg-gradient-to-r from-primary to-primary-glow hover:shadow-lg hover:shadow-primary/25" 
-                    : "bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-black hover:shadow-lg hover:shadow-amber-500/25"
-                }`}
-                onClick={() => onSubscribe(tier.priceId!)}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <Loader2 size={18} className="animate-spin" />
-                    Processing...
-                  </span>
-                ) : (
-                  <motion.span 
-                    className="relative z-10 flex items-center gap-2"
-                  >
-                    Subscribe Now
-                    <motion.span
-                      animate={{ x: isHovered ? 4 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ArrowRight size={16} />
-                    </motion.span>
-                  </motion.span>
-                )}
-              </Button>
-            ) : (
-              <Button 
-                variant="outline" 
-                className="w-full h-12 border-white/10 hover:bg-white/5 rounded-xl font-semibold"
-                disabled
-              >
-                Free Forever
-              </Button>
-            )}
-          </div>
-
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className={`w-full border-t ${tier.borderColor}`} />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="px-3 bg-background text-xs text-muted-foreground uppercase tracking-wider">
-                What's included
-              </span>
-            </div>
-          </div>
-
-          {/* Features with staggered animation */}
-          <div className="space-y-4">
-            {tier.features.map((feature, featureIndex) => {
-              const FeatureIcon = feature.icon;
-              const isHighlight = feature.label.startsWith("Everything in");
-              
-              return (
-                <motion.div
-                  key={featureIndex}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + featureIndex * 0.05 }}
-                  whileHover={{ x: 4 }}
-                  className={`flex items-start gap-3 group/feature cursor-default ${
-                    isHighlight ? "text-primary" : "text-muted-foreground"
-                  }`}
-                >
-                  <motion.div 
-                    whileHover={{ scale: 1.2, rotate: 10 }}
-                    className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center ${
-                      isHighlight 
-                        ? "bg-primary/20" 
-                        : "bg-white/[0.05] group-hover/feature:bg-primary/10"
-                    } transition-colors`}
-                  >
-                    <FeatureIcon size={14} className={isHighlight ? "text-primary" : "text-primary/60 group-hover/feature:text-primary"} />
-                  </motion.div>
-                  <span className={`text-sm leading-relaxed ${isHighlight ? "font-medium" : "group-hover/feature:text-foreground"} transition-colors`}>
-                    {feature.label}
-                  </span>
-                </motion.div>
-              );
-            })}
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+          <div className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide ${
+            isElite 
+              ? "bg-amber-500 text-black" 
+              : "bg-primary text-primary-foreground"
+          }`}>
+            {tier.badge}
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      )}
+
+      {/* Card */}
+      <div className={`flex flex-col h-full rounded-2xl border p-8 ${
+        isPremium 
+          ? "border-primary bg-primary/[0.03]" 
+          : isElite
+            ? "border-amber-500/30 bg-amber-500/[0.02]"
+            : "border-border bg-card"
+      }`}>
+        {/* Current plan indicator */}
+        {isCurrentPlan && (
+          <div className="absolute top-4 right-4">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="text-xs font-medium text-primary">Active</span>
+            </div>
+          </div>
+        )}
+
+        {/* Icon */}
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${
+          isPremium 
+            ? "bg-primary text-primary-foreground" 
+            : isElite
+              ? "bg-amber-500 text-black"
+              : "bg-muted text-muted-foreground"
+        }`}>
+          <Icon className="w-6 h-6" strokeWidth={1.5} />
+        </div>
+
+        {/* Name & Price */}
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-foreground mb-2">{tier.name}</h3>
+          <div className="flex items-baseline gap-1">
+            <span className={`text-4xl font-bold ${
+              isPremium 
+                ? "text-primary" 
+                : isElite
+                  ? "text-amber-500"
+                  : "text-foreground"
+            }`}>
+              {tier.price}
+            </span>
+            {isPaid && (
+              <span className="text-muted-foreground text-sm">/month</span>
+            )}
+          </div>
+          <p className="text-muted-foreground text-sm mt-2">{tier.description}</p>
+        </div>
+
+        {/* CTA Button */}
+        <div className="mb-6">
+          {isCurrentPlan ? (
+            <Button 
+              variant="outline" 
+              className="w-full h-11 rounded-lg"
+              disabled
+            >
+              <Check size={16} className="mr-2" />
+              Current Plan
+            </Button>
+          ) : !isAuthenticated ? (
+            <Link to="/auth" className="block">
+              <Button 
+                className={`w-full h-11 rounded-lg font-medium ${
+                  isPremium 
+                    ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
+                    : isElite
+                      ? "bg-amber-500 hover:bg-amber-600 text-black"
+                      : "bg-muted hover:bg-muted/80 text-foreground"
+                }`}
+              >
+                {isPaid ? "Sign Up to Subscribe" : "Get Started Free"}
+                <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </Link>
+          ) : isPaid ? (
+            <Button 
+              className={`w-full h-11 rounded-lg font-medium ${
+                isPremium 
+                  ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
+                  : "bg-amber-500 hover:bg-amber-600 text-black"
+              }`}
+              onClick={() => onSubscribe(tier.priceId!)}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 size={16} className="animate-spin" />
+                  Processing...
+                </span>
+              ) : (
+                <>
+                  Subscribe Now
+                  <ArrowRight size={16} className="ml-2" />
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button 
+              variant="outline" 
+              className="w-full h-11 rounded-lg"
+              disabled
+            >
+              Free Forever
+            </Button>
+          )}
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-border mb-6" />
+
+        {/* Features */}
+        <div className="space-y-3 flex-1">
+          {tier.features.map((feature, featureIndex) => {
+            const FeatureIcon = feature.icon;
+            const isHighlight = feature.label.startsWith("Everything in");
+            
+            return (
+              <div
+                key={featureIndex}
+                className={`flex items-start gap-3 ${
+                  isHighlight ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center mt-0.5 ${
+                  isHighlight ? "bg-primary/10" : "bg-muted"
+                }`}>
+                  <FeatureIcon size={12} className={isHighlight ? "text-primary" : "text-muted-foreground"} />
+                </div>
+                <span className={`text-sm leading-relaxed ${isHighlight ? "font-medium" : ""}`}>
+                  {feature.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 };
-
-// Trust indicator component
-const TrustIndicator = ({ icon: IconComponent, label, delay }: { icon: typeof Shield; label: string; delay: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay }}
-    whileHover={{ scale: 1.05, y: -2 }}
-    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm"
-  >
-    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-      <IconComponent size={18} className="text-primary" />
-    </div>
-    <span className="text-sm font-medium text-foreground">{label}</span>
-  </motion.div>
-);
 
 const Membership = () => {
   const { user, session } = useAuth();
@@ -610,91 +415,62 @@ const Membership = () => {
   const currentTierId = getCurrentTierId();
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24">
-        <AnimatedBackground />
-
-        <div className="container mx-auto px-6 relative z-10">
+      <section className="pt-32 pb-20">
+        <div className="container mx-auto px-6">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center max-w-4xl mx-auto mb-20"
-          >
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/20 to-primary-glow/20 border border-primary/30 text-primary text-sm font-semibold mb-8"
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              >
-                <Crown size={16} />
-              </motion.div>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
+              <Crown size={14} />
               Investor Membership
-            </motion.div>
+            </div>
             
-            <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-[1.1] mb-8">
-              Unlock Your
-              <br />
-              <span className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
-                Investment Potential
-              </span>
+            <h1 className="text-4xl lg:text-5xl font-serif font-bold text-foreground leading-tight mb-6">
+              Choose Your Membership
             </h1>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Choose the perfect membership tier to access exclusive tools, insights, and opportunities tailored to your investment journey.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Select the plan that matches your investment goals and unlock exclusive benefits.
             </p>
-          </motion.div>
+          </div>
 
           {/* Subscription Status */}
-          <AnimatePresence>
-            {isAuthenticated && currentProductId && (
-              <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                className="max-w-lg mx-auto mb-16"
-              >
-                <div className="relative p-6 rounded-2xl bg-gradient-to-r from-primary/10 to-primary-glow/10 border border-primary/20 backdrop-blur-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Active Membership</p>
-                      <p className="text-xl font-bold text-foreground flex items-center gap-2">
-                        {TIERS[currentTierId as keyof typeof TIERS]?.name}
-                        <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-semibold">Active</span>
+          {isAuthenticated && currentProductId && (
+            <div className="max-w-md mx-auto mb-12">
+              <div className="p-5 rounded-xl bg-primary/5 border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Active Membership</p>
+                    <p className="text-lg font-semibold text-foreground flex items-center gap-2">
+                      {TIERS[currentTierId as keyof typeof TIERS]?.name}
+                    </p>
+                    {subscriptionEnd && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Renews {new Date(subscriptionEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                       </p>
-                      {subscriptionEnd && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Renews {new Date(subscriptionEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                        </p>
-                      )}
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleManageSubscription}
-                      disabled={isLoading}
-                      className="border-primary/30 text-primary hover:bg-primary/10 rounded-xl"
-                    >
-                      <RefreshCw size={14} className="mr-2" />
-                      Manage
-                    </Button>
+                    )}
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleManageSubscription}
+                    disabled={isLoading}
+                    className="rounded-lg"
+                  >
+                    <RefreshCw size={14} className="mr-2" />
+                    Manage
+                  </Button>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
+          )}
 
           {/* Pricing Cards */}
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto items-start">
-            {tierOrder.map((tierId, index) => (
+          <div className="grid lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {tierOrder.map((tierId) => (
               <TierCard
                 key={tierId}
                 tier={TIERS[tierId]}
@@ -702,83 +478,60 @@ const Membership = () => {
                 isAuthenticated={isAuthenticated}
                 onSubscribe={handleSubscribe}
                 isLoading={isLoading}
-                index={index}
               />
             ))}
           </div>
 
           {/* Trust Indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-20 flex flex-wrap justify-center gap-4"
-          >
-            <TrustIndicator icon={Shield} label="Secure Payments" delay={0.1} />
-            <TrustIndicator icon={CreditCard} label="Powered by Stripe" delay={0.2} />
-            <TrustIndicator icon={RefreshCw} label="Cancel Anytime" delay={0.3} />
-            <TrustIndicator icon={MessageCircle} label="24/7 Support" delay={0.4} />
-          </motion.div>
+          <div className="mt-16 flex flex-wrap justify-center gap-6">
+            {[
+              { icon: Shield, label: "Secure Payments" },
+              { icon: CreditCard, label: "Powered by Stripe" },
+              { icon: RefreshCw, label: "Cancel Anytime" },
+              { icon: MessageCircle, label: "24/7 Support" },
+            ].map((item, index) => (
+              <div key={index} className="flex items-center gap-2 text-muted-foreground">
+                <item.icon size={16} />
+                <span className="text-sm">{item.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/30 to-transparent" />
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6"
-            >
-              <HelpCircle size={16} />
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
+              <HelpCircle size={14} />
               FAQ
-            </motion.div>
-            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-foreground mb-4">
-              Questions? We've Got Answers
+            </div>
+            <h2 className="text-3xl font-serif font-bold text-foreground mb-3">
+              Frequently Asked Questions
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            <p className="text-muted-foreground">
               Everything you need to know about our membership plans
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-3xl mx-auto"
-          >
-            <Accordion type="single" collapsible className="space-y-4">
+          <div className="max-w-2xl mx-auto">
+            <Accordion type="single" collapsible className="space-y-3">
               {[
                 {
                   value: "billing-1",
                   question: "How does billing work?",
-                  answer: "Your membership is billed monthly on the same date you subscribed. All payments are processed securely through Stripe. You'll receive an email receipt for each payment, and you can view your billing history in the customer portal."
+                  answer: "Your membership is billed monthly on the same date you subscribed. All payments are processed securely through Stripe. You'll receive an email receipt for each payment."
                 },
                 {
                   value: "billing-2",
                   question: "What payment methods do you accept?",
-                  answer: "We accept all major credit and debit cards including Visa, Mastercard, American Express, and Discover. We also support Apple Pay, Google Pay, and bank transfers in select regions."
+                  answer: "We accept all major credit and debit cards including Visa, Mastercard, American Express, and Discover. We also support Apple Pay and Google Pay."
                 },
                 {
                   value: "upgrade-1",
                   question: "How do I upgrade my membership?",
-                  answer: "You can upgrade your membership at any time from this page. When you upgrade, you'll be charged the prorated difference for the remainder of your billing period. Your new benefits will be available immediately."
-                },
-                {
-                  value: "upgrade-2",
-                  question: "Can I switch between plans?",
-                  answer: "Absolutely! You can upgrade or downgrade at any time. When upgrading, you get immediate access with prorated billing. When downgrading, your current plan remains active until the end of the billing period."
+                  answer: "You can upgrade your membership at any time from this page. When you upgrade, you'll be charged the prorated difference for the remainder of your billing period."
                 },
                 {
                   value: "cancel-1",
@@ -786,46 +539,34 @@ const Membership = () => {
                   answer: "You can cancel anytime through the 'Manage Subscription' button. Once canceled, you'll retain access to paid features until the end of your current billing period."
                 },
                 {
-                  value: "cancel-2",
-                  question: "What happens when I cancel?",
-                  answer: "Your membership remains active until the end of your billing period. After that, you'll be moved to the free Explorer tier. Your account data and history will be preserved."
-                },
-                {
                   value: "general-1",
                   question: "Do I need a membership to invest?",
-                  answer: "No, you can invest with any tier including Explorer. Paid memberships provide enhanced research tools, earlier access to deals, and exclusive content to help you make informed decisions."
+                  answer: "No, you can invest with any tier including Explorer. Paid memberships provide enhanced research tools, earlier access to deals, and exclusive content."
                 },
                 {
                   value: "general-2",
                   question: "How do I contact support?",
                   answer: "Explorer and Premium members can reach support via email. Elite members enjoy VIP support through a dedicated WhatsApp group with priority response times."
                 },
-              ].map((faq, index) => (
-                <motion.div
+              ].map((faq) => (
+                <AccordionItem 
                   key={faq.value}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
+                  value={faq.value} 
+                  className="bg-background border border-border rounded-lg px-5"
                 >
-                  <AccordionItem 
-                    value={faq.value} 
-                    className="bg-background/60 backdrop-blur-sm border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30 transition-colors"
-                  >
-                    <AccordionTrigger className="text-left hover:no-underline py-6 group">
-                      <span className="font-semibold text-foreground group-hover:text-primary transition-colors flex items-center gap-3">
-                        <ChevronRight size={16} className="text-primary/60 transition-transform group-data-[state=open]:rotate-90" />
-                        {faq.question}
-                      </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground pb-6 pl-7">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
+                  <AccordionTrigger className="text-left hover:no-underline py-4">
+                    <span className="font-medium text-foreground flex items-center gap-2">
+                      <ChevronRight size={14} className="text-muted-foreground" />
+                      {faq.question}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground pb-4 pl-6 text-sm">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
               ))}
             </Accordion>
-          </motion.div>
+          </div>
         </div>
       </section>
 
