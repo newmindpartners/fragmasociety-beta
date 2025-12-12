@@ -238,7 +238,7 @@ export const StrategyCTA = () => {
             <Button asChild size="lg" className="group relative overflow-hidden btn-glow px-8 py-6 text-base">
               <Link to="/auth" className="flex items-center gap-3">
                 <Lock className="w-4 h-4" />
-                <span>Access Investor Portal</span>
+                <span>Register to view strategy details</span>
                 <motion.div
                   animate={{ x: [0, 5, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
