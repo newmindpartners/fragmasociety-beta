@@ -1,6 +1,6 @@
-import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDown, ArrowUp, Zap, Target, Clock, Eye, CheckCircle2 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 interface TradeExecution {
   id: number;
@@ -29,16 +29,9 @@ const AnimatedOrderBook = () => {
   const [lastPrice, setLastPrice] = useState(100.00);
   const [change24h, setChange24h] = useState(0.15);
   const [spread, setSpread] = useState(0.30);
-  const [highlightedRow, setHighlightedRow] = useState<{ side: 'bid' | 'ask', index: number } | null>(null);
   const [tradeExecutions, setTradeExecutions] = useState<TradeExecution[]>([]);
   const [showTradeFlash, setShowTradeFlash] = useState(false);
   const [matchingAnimation, setMatchingAnimation] = useState<{ bidIndex: number; askIndex: number } | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const cursorX = useSpring(mouseX, { stiffness: 500, damping: 30 });
-  const cursorY = useSpring(mouseY, { stiffness: 500, damping: 30 });
 
   // Dynamic data updates with trade executions
   useEffect(() => {
@@ -92,38 +85,10 @@ const AnimatedOrderBook = () => {
     };
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
-
   const formatNumber = (num: number) => num.toLocaleString();
 
   return (
-    <div 
-      ref={containerRef}
-      className="relative"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Tracking Cursor */}
-      <motion.div
-        className="pointer-events-none absolute w-8 h-8 rounded-full border-2 border-primary/60 z-50 hidden lg:block mix-blend-screen"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-      >
-        <motion.div
-          className="absolute inset-0 rounded-full bg-primary/20 backdrop-blur-sm"
-          animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.2, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
-      
+    <div className="relative">
       <div className="glass rounded-2xl p-6 relative z-10 overflow-hidden">
         {/* Trade Execution Flash Overlay */}
         <AnimatePresence>
