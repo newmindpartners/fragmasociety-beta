@@ -241,15 +241,15 @@ const AnimatedOrderBook = () => {
                       animate={{ width: `${(bid.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
                     />
-                    {/* Match line animation */}
+                    {/* Match animation - no border, just glow */}
                     <AnimatePresence>
                       {isMatching && (
                         <motion.div
-                          initial={{ x: "100%", opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="absolute inset-0 border-2 border-green-400 rounded-lg bg-green-500/10"
+                          className="absolute inset-0 bg-green-500/20 rounded-lg"
                         />
                       )}
                     </AnimatePresence>
@@ -304,15 +304,15 @@ const AnimatedOrderBook = () => {
                       animate={{ width: `${(ask.total / 5) * 100}%` }}
                       transition={{ duration: 0.5 }}
                     />
-                    {/* Match line animation */}
+                    {/* Match animation - no border, just glow */}
                     <AnimatePresence>
                       {isMatching && (
                         <motion.div
-                          initial={{ x: "-100%", opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="absolute inset-0 border-2 border-red-400 rounded-lg bg-red-500/10"
+                          className="absolute inset-0 bg-red-500/20 rounded-lg"
                         />
                       )}
                     </AnimatePresence>
