@@ -476,7 +476,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                   <Button asChild size="lg" className="group btn-glow relative overflow-hidden">
                     <Link to="/auth">
                       <span className="relative z-10 flex items-center">
-                        Access Investor Portal
+                        Register to view strategy details
                         <ArrowRight size={18} className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
                       </span>
                     </Link>
