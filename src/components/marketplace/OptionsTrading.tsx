@@ -93,7 +93,8 @@ export const OptionsTrading = () => {
   const IconComponent = currentOption.icon;
 
   return (
-    <section className="py-24 bg-card relative overflow-hidden">
+    <section className="py-24 section-navy relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
       <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[200px]" />
       
       <div className="container mx-auto px-6 relative z-10">

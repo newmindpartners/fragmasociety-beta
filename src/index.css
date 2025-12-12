@@ -130,6 +130,56 @@
     background-image: var(--gradient-card);
   }
 
+  /* Section Background Variations */
+  .section-dark {
+    background: hsl(230 50% 2%);
+  }
+
+  .section-navy {
+    background: hsl(225 65% 6%);
+  }
+
+  .section-gradient-radial {
+    background: radial-gradient(ellipse at 50% 0%, hsl(225 65% 12%) 0%, hsl(230 50% 2%) 70%);
+  }
+
+  .section-gradient-diagonal {
+    background: linear-gradient(135deg, hsl(225 65% 8%) 0%, hsl(230 50% 4%) 50%, hsl(225 60% 10%) 100%);
+  }
+
+  .section-mesh {
+    background: 
+      radial-gradient(at 20% 30%, hsl(172 83% 50% / 0.08) 0%, transparent 50%),
+      radial-gradient(at 80% 70%, hsl(204 100% 60% / 0.06) 0%, transparent 50%),
+      hsl(230 50% 2%);
+  }
+
+  .section-solid-primary {
+    background: linear-gradient(180deg, hsl(172 83% 50% / 0.05) 0%, hsl(225 65% 6%) 100%);
+  }
+
+  .section-gradient-horizontal {
+    background: linear-gradient(90deg, hsl(225 65% 8%) 0%, hsl(230 50% 4%) 50%, hsl(225 65% 8%) 100%);
+  }
+
+  .section-dots {
+    background-image: radial-gradient(hsl(var(--primary) / 0.1) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-color: hsl(230 50% 3%);
+  }
+
+  .section-lines {
+    background: 
+      repeating-linear-gradient(90deg, hsl(var(--primary) / 0.03) 0px, hsl(var(--primary) / 0.03) 1px, transparent 1px, transparent 80px),
+      hsl(225 65% 6%);
+  }
+
+  .section-gradient-bottom-glow {
+    background: 
+      radial-gradient(ellipse at 50% 100%, hsl(172 83% 50% / 0.1) 0%, transparent 50%),
+      hsl(230 50% 2%);
+  }
+
   .shadow-turquoise {
     box-shadow: var(--shadow-turquoise);
   }

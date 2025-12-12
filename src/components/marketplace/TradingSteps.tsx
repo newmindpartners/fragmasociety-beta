@@ -42,7 +42,8 @@ const steps = [
 
 export const TradingSteps = () => {
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 section-mesh relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
       <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[200px]" />
       
       <div className="container mx-auto px-6 relative z-10">
