@@ -33,8 +33,8 @@ export const Hero = () => {
         >
           <Badge>COMING SOON</Badge>
           <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-tight mb-6">
-            Next-Gen Community <br />
-            <span className="text-gradient">Investment Platform</span>
+            Your Real-World Marketplace <br />
+            <span className="text-gradient">Fractional, Liquid, Yours</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
             Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
