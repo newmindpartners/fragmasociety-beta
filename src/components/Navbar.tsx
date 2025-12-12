@@ -49,7 +49,7 @@ export const Navbar = () => {
             </>
           ) : (
             <Link to="/auth">
-              <Button variant="outline" size="sm">Investor Login</Button>
+              <Button variant="outline" size="sm">Login / GET STARTED</Button>
             </Link>
           )}
         </div>
@@ -76,7 +76,7 @@ export const Navbar = () => {
               {user ? (
                 <Button onClick={() => signOut()}>Sign Out</Button>
               ) : (
-                <Link to="/auth"><Button className="w-full">Investor Login</Button></Link>
+                <Link to="/auth"><Button className="w-full">Login / GET STARTED</Button></Link>
               )}
             </div>
           </motion.div>
