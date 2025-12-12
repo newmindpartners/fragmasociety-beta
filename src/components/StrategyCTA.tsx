@@ -171,7 +171,7 @@ export const StrategyCTA = () => {
             className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6"
           >
             <span className="text-foreground">Fragma</span>{" "}
-            <span className="text-gradient">Strategy</span>
+            <span className="text-gradient">One</span>
           </motion.h2>
           
           {/* Subtitle with reveal animation */}
@@ -180,20 +180,9 @@ export const StrategyCTA = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-4 leading-relaxed"
+            className="text-xl md:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto"
           >
-            A dedicated institutional-grade investment vehicle
-          </motion.p>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="text-base md:text-lg text-muted-foreground/70 mb-12 leading-relaxed max-w-2xl mx-auto"
-          >
-            Access a professionally managed portfolio combining SME credit, BTC mining, AI infrastructure, 
-            and ecosystem equity through a single Luxembourg securitisation structure.
+            One fund. Broad exposure to real-world yield & digital infrastructure. Powered by the Fragma ecosystem.
           </motion.p>
 
           {/* Feature cards with staggered animation */}
