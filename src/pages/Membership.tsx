@@ -52,14 +52,12 @@ const TIERS = {
     icon: Zap,
     color: "from-slate-500 to-slate-600",
     features: [
-      { icon: Newspaper, label: "Daily News" },
-      { icon: GraduationCap, label: "Basic Education" },
       { icon: TrendingUp, label: "Weekly Market Analysis & Trends" },
       { icon: BookOpen, label: "Tokenization Case Studies" },
       { icon: Users, label: "Community Access (discussions, live Q&A)" },
       { icon: Calendar, label: "Events Lobby" },
-      { icon: Bell, label: "Weekly Updates (Sunday payout dates)" },
       { icon: Eye, label: "Watchlist on 1 Asset" },
+      { icon: Rocket, label: "Invest in 1 Deal (if eligible)" },
     ],
   },
   premium: {
