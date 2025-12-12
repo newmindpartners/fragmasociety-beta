@@ -628,6 +628,7 @@ export const Marketplace = () => {
     { icon: Shield, title: "Non-custodial ownership", desc: "Your assets stay in your wallet" },
     { icon: Zap, title: "Set your own price", desc: "Place limit orders at any level" },
     { icon: Lock, title: "On-chain settlement", desc: "Instant, verifiable execution" },
+    { icon: TrendingUp, title: "Options trading", desc: "Hedge or speculate with derivatives" },
   ];
 
   return (
