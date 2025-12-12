@@ -17,7 +17,10 @@ import {
   Gem,
   Film,
   Landmark,
-  Sparkles
+  Sparkles,
+  Palette,
+  Wine,
+  Trophy
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -28,6 +31,9 @@ const assetIcons = [
   { icon: Gem, label: "Luxury Goods", color: "from-violet-500 to-purple-500" },
   { icon: Film, label: "Film Rights", color: "from-amber-500 to-orange-500" },
   { icon: Landmark, label: "Credit", color: "from-cyan-500 to-sky-500" },
+  { icon: Palette, label: "Art", color: "from-rose-500 to-pink-500" },
+  { icon: Wine, label: "Wine", color: "from-red-500 to-rose-500" },
+  { icon: Trophy, label: "Sports Memorabilia", color: "from-yellow-500 to-amber-500" },
 ];
 
 const steps = [
@@ -124,6 +130,7 @@ const FloatingParticle = ({ delay, size, x, y }: { delay: number; size: number; 
 const AssetTransformAnimation = () => {
   const [stage, setStage] = useState(0);
   const [activeAsset, setActiveAsset] = useState(0);
+  const [cycleKey, setCycleKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.5 });
 
@@ -133,21 +140,35 @@ const AssetTransformAnimation = () => {
       return;
     }
 
-    const stageTimers = [
-      setTimeout(() => setStage(1), 500),
-      setTimeout(() => setStage(2), 2000),
-      setTimeout(() => setStage(3), 3500),
-    ];
+    // Animation cycle duration: 5 seconds total per asset
+    const cycleDuration = 5000;
+    
+    const runCycle = () => {
+      setStage(1); // Show asset
+      
+      const timer2 = setTimeout(() => setStage(2), 1500); // Tokenize
+      const timer3 = setTimeout(() => setStage(3), 3000); // Marketplace
+      const timer4 = setTimeout(() => {
+        // Reset and move to next asset
+        setStage(0);
+        setTimeout(() => {
+          setActiveAsset((prev) => (prev + 1) % assetIcons.length);
+          setCycleKey((prev) => prev + 1);
+        }, 300);
+      }, cycleDuration);
 
-    const assetTimer = setInterval(() => {
-      setActiveAsset((prev) => (prev + 1) % assetIcons.length);
-    }, 4000);
+      return [timer2, timer3, timer4];
+    };
+
+    // Start first cycle
+    const initialTimer = setTimeout(() => {
+      runCycle();
+    }, 500);
 
     return () => {
-      stageTimers.forEach(clearTimeout);
-      clearInterval(assetTimer);
+      clearTimeout(initialTimer);
     };
-  }, [isInView]);
+  }, [isInView, cycleKey]);
 
   const ActiveIcon = assetIcons[activeAsset].icon;
 
