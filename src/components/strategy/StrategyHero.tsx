@@ -39,7 +39,7 @@ const strategies = [
     description: "Secured lending to established SMEs with stable cash flows",
     icon: Landmark,
     color: "from-emerald-500/20 to-teal-500/20",
-    yield: "8-12%",
+    focus: "Income Focus",
     category: "Income"
   },
   {
@@ -49,7 +49,7 @@ const strategies = [
     description: "Institutional-grade Bitcoin mining operations",
     icon: Bitcoin,
     color: "from-amber-500/20 to-orange-500/20",
-    yield: "Variable",
+    focus: "Variable Returns",
     category: "Income"
   },
   {
@@ -59,7 +59,7 @@ const strategies = [
     description: "High-performance computing for AI workloads",
     icon: Cpu,
     color: "from-violet-500/20 to-purple-500/20",
-    yield: "10-15%",
+    focus: "Growth Potential",
     category: "Growth"
   },
   {
@@ -69,7 +69,7 @@ const strategies = [
     description: "Equity stakes in digital infrastructure companies",
     icon: Building2,
     color: "from-primary/20 to-accent/20",
-    yield: "Capital Gains",
+    focus: "Capital Appreciation",
     category: "Growth"
   }
 ];
@@ -137,8 +137,8 @@ const StrategyCard = ({ strategy, isActive, onClick }: { strategy: typeof strate
                 </p>
                 <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/20">
                   <div>
-                    <span className="text-xs text-muted-foreground/60">Target Yield</span>
-                    <p className="text-sm font-medium text-primary">{strategy.yield}</p>
+                    <span className="text-xs text-muted-foreground/60">Strategy Focus</span>
+                    <p className="text-sm font-medium text-primary">{strategy.focus}</p>
                   </div>
                 </div>
               </motion.div>
