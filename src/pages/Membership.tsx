@@ -21,7 +21,8 @@ import {
   ChevronRight,
   Shield,
   CreditCard,
-  RefreshCw
+  RefreshCw,
+  Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +31,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -50,12 +57,12 @@ const TIERS = {
     badge: null,
     icon: Zap,
     features: [
-      { icon: TrendingUp, label: "Weekly Market Analysis & Trends" },
-      { icon: BookOpen, label: "Tokenization Case Studies" },
-      { icon: Users, label: "Community Access (discussions, live Q&A)" },
-      { icon: Calendar, label: "Events Lobby" },
-      { icon: Eye, label: "Watchlist on 1 Asset" },
-      { icon: Rocket, label: "1 Deal Investment per Year (up to $3,000, if eligible)" },
+      { icon: TrendingUp, label: "Weekly Market Analysis & Trends", tooltip: "Receive curated weekly insights on market movements, emerging opportunities, and key trends in alternative investments." },
+      { icon: BookOpen, label: "Tokenization Case Studies", tooltip: "Access detailed case studies showing how real-world assets are tokenized, including success stories and lessons learned." },
+      { icon: Users, label: "Community Access (discussions, live Q&A)", tooltip: "Join our active community of investors for discussions, networking, and live Q&A sessions with industry experts." },
+      { icon: Calendar, label: "Events Lobby", tooltip: "Browse and register for upcoming webinars, workshops, and networking events in the Fragma ecosystem." },
+      { icon: Eye, label: "Watchlist on 1 Asset", tooltip: "Track one asset of your choice with price alerts and updates delivered to your dashboard." },
+      { icon: Rocket, label: "1 Deal Investment per Year (up to $3,000, if eligible)", tooltip: "Participate in one investment opportunity annually with a maximum investment of $3,000, subject to eligibility requirements." },
     ],
   },
   premium: {
@@ -69,13 +76,13 @@ const TIERS = {
     badge: "Most Popular",
     icon: Star,
     features: [
-      { icon: Check, label: "Everything in Explorer" },
-      { icon: Video, label: "Expert Webinars (monthly) + Replays" },
-      { icon: BookOpen, label: "Research Reports" },
-      { icon: Eye, label: "Unlimited Asset Watchlist" },
-      { icon: Zap, label: "3 Deal Investments per Year (up to $10,000, if eligible)" },
-      { icon: FileText, label: "Basic Tax Export" },
-      { icon: Rocket, label: "Early Window Previews on New Listings" },
+      { icon: Check, label: "Everything in Explorer", tooltip: "All features from the Explorer tier are included in your Premium membership." },
+      { icon: Video, label: "Expert Webinars (monthly) + Replays", tooltip: "Attend exclusive monthly webinars with industry experts and access full replay library on-demand." },
+      { icon: BookOpen, label: "Research Reports", tooltip: "Deep-dive research reports on asset classes, market sectors, and specific investment opportunities." },
+      { icon: Eye, label: "Unlimited Asset Watchlist", tooltip: "Track unlimited assets with personalized alerts, price movements, and real-time updates." },
+      { icon: Zap, label: "3 Deal Investments per Year (up to $10,000, if eligible)", tooltip: "Participate in up to three investment opportunities annually with a maximum of $10,000 per deal, subject to eligibility." },
+      { icon: FileText, label: "Basic Tax Export", tooltip: "Export your investment activity in a format ready for tax reporting and financial planning." },
+      { icon: Rocket, label: "Early Window Previews on New Listings", tooltip: "Get exclusive previews of upcoming investment opportunities before they go live to the general community." },
     ],
   },
   elite: {
@@ -89,15 +96,15 @@ const TIERS = {
     badge: "VIP",
     icon: Crown,
     features: [
-      { icon: Check, label: "Everything in Premium" },
-      { icon: Calendar, label: "Private Events (virtual & in-person)" },
-      { icon: Users, label: "Elite Networking Lounge" },
-      { icon: Rocket, label: "3-Day Early Access to Public Deals" },
-      { icon: Lock, label: "Access to Off-Market Fragma Deals" },
-      { icon: Zap, label: "Unlimited Deals Investments" },
-      { icon: PieChart, label: "Portfolio Pro Tools (digest, alerts, planner)" },
-      { icon: FileText, label: "Full Tax Exports" },
-      { icon: MessageCircle, label: "VIP Support (WhatsApp, Priority)" },
+      { icon: Check, label: "Everything in Premium", tooltip: "All features from Premium tier are included in your Elite membership." },
+      { icon: Calendar, label: "Private Events (virtual & in-person)", tooltip: "Exclusive invitations to private investor events, both virtual roundtables and in-person gatherings." },
+      { icon: Users, label: "Elite Networking Lounge", tooltip: "Access a private networking space to connect with other Elite members and industry leaders." },
+      { icon: Rocket, label: "3-Day Early Access to Public Deals", tooltip: "Get priority access to invest in public deals 3 days before they open to other members." },
+      { icon: Lock, label: "Access to Off-Market Fragma Deals", tooltip: "Exclusive access to private, off-market investment opportunities not available to other membership tiers." },
+      { icon: Zap, label: "Unlimited Deals Investments", tooltip: "No limits on the number of deals you can participate in annually (subject to deal-specific terms)." },
+      { icon: PieChart, label: "Portfolio Pro Tools (digest, alerts, planner)", tooltip: "Advanced portfolio management with automated digests, smart alerts, and financial planning tools." },
+      { icon: FileText, label: "Full Tax Exports", tooltip: "Comprehensive tax documentation including detailed transaction history, gains/losses reports, and jurisdiction-specific formats." },
+      { icon: MessageCircle, label: "VIP Support (WhatsApp, Priority)", tooltip: "Direct WhatsApp access to our support team with priority response times and dedicated assistance." },
     ],
   },
 };
@@ -250,30 +257,42 @@ const TierCard = ({
         <div className="border-t border-border mb-6" />
 
         {/* Features */}
-        <div className="space-y-3 flex-1">
-          {tier.features.map((feature, featureIndex) => {
-            const FeatureIcon = feature.icon;
-            const isHighlight = feature.label.startsWith("Everything in");
-            
-            return (
-              <div
-                key={featureIndex}
-                className={`flex items-start gap-3 ${
-                  isHighlight ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center mt-0.5 ${
-                  isHighlight ? "bg-primary/10" : "bg-muted"
-                }`}>
-                  <FeatureIcon size={12} className={isHighlight ? "text-primary" : "text-muted-foreground"} />
+        <TooltipProvider delayDuration={200}>
+          <div className="space-y-3 flex-1">
+            {tier.features.map((feature, featureIndex) => {
+              const FeatureIcon = feature.icon;
+              const isHighlight = feature.label.startsWith("Everything in");
+              
+              return (
+                <div
+                  key={featureIndex}
+                  className={`flex items-start gap-3 ${
+                    isHighlight ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center mt-0.5 ${
+                    isHighlight ? "bg-primary/10" : "bg-muted"
+                  }`}>
+                    <FeatureIcon size={12} className={isHighlight ? "text-primary" : "text-muted-foreground"} />
+                  </div>
+                  <span className={`text-sm leading-relaxed flex-1 ${isHighlight ? "font-medium" : ""}`}>
+                    {feature.label}
+                  </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="flex-shrink-0 mt-0.5 opacity-50 hover:opacity-100 transition-opacity">
+                        <Info size={14} className="text-muted-foreground" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-[250px] text-xs">
+                      {feature.tooltip}
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
-                <span className={`text-sm leading-relaxed ${isHighlight ? "font-medium" : ""}`}>
-                  {feature.label}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </TooltipProvider>
       </div>
     </div>
   );
