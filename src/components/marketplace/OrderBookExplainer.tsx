@@ -1,80 +1,228 @@
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowDown, ArrowUp, Zap, Target, Clock, Eye } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const AnimatedOrderBook = () => {
-  const [matchedIndex, setMatchedIndex] = useState<number | null>(null);
+  const [bids, setBids] = useState([
+    { price: 99.85, size: 21628, total: 2.21 },
+    { price: 99.80, size: 47056, total: 4.65 },
+    { price: 99.75, size: 29241, total: 2.99 },
+    { price: 99.70, size: 46023, total: 4.55 },
+    { price: 99.65, size: 26939, total: 2.66 },
+  ]);
 
-  const buyers = [
-    { price: 98, label: "Buyer A" },
-    { price: 97, label: "Buyer B" },
-    { price: 95, label: "Buyer C" },
-  ];
+  const [asks, setAsks] = useState([
+    { price: 100.15, size: 16207, total: 1.72 },
+    { price: 100.20, size: 49376, total: 4.97 },
+    { price: 100.25, size: 29524, total: 2.92 },
+    { price: 100.30, size: 41270, total: 4.05 },
+    { price: 100.35, size: 21320, total: 2.11 },
+  ]);
 
-  const sellers = [
-    { price: 99, label: "Seller X" },
-    { price: 101, label: "Seller Y" },
-    { price: 103, label: "Seller Z" },
-  ];
+  const [lastPrice, setLastPrice] = useState(100.00);
+  const [change24h, setChange24h] = useState(0.15);
+  const [spread, setSpread] = useState(0.30);
+  const [highlightedRow, setHighlightedRow] = useState<{ side: 'bid' | 'ask', index: number } | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const cursorX = useSpring(mouseX, { stiffness: 500, damping: 30 });
+  const cursorY = useSpring(mouseY, { stiffness: 500, damping: 30 });
+
+  // Dynamic data updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBids(prev => prev.map(bid => ({
+        ...bid,
+        size: bid.size + Math.floor((Math.random() - 0.5) * 2000),
+        total: +(bid.total + (Math.random() - 0.5) * 0.3).toFixed(2),
+      })));
+      
+      setAsks(prev => prev.map(ask => ({
+        ...ask,
+        size: ask.size + Math.floor((Math.random() - 0.5) * 2000),
+        total: +(ask.total + (Math.random() - 0.5) * 0.3).toFixed(2),
+      })));
+
+      // Random highlight flash
+      const side = Math.random() > 0.5 ? 'bid' : 'ask';
+      const index = Math.floor(Math.random() * 5);
+      setHighlightedRow({ side, index });
+      setTimeout(() => setHighlightedRow(null), 300);
+
+      // Update metrics
+      setLastPrice(prev => +(prev + (Math.random() - 0.5) * 0.1).toFixed(2));
+      setChange24h(prev => +(prev + (Math.random() - 0.5) * 0.02).toFixed(2));
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  const formatNumber = (num: number) => num.toLocaleString();
 
   return (
-    <div className="relative">
+    <div 
+      ref={containerRef}
+      className="relative"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Tracking Cursor */}
       <motion.div
-        animate={{ opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute inset-0 bg-primary/10 rounded-2xl blur-3xl"
-      />
+        className="pointer-events-none absolute w-6 h-6 rounded-full border-2 border-primary z-50 hidden lg:block"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+      >
+        <motion.div
+          className="absolute inset-1 rounded-full bg-primary/30"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        />
+      </motion.div>
       
-      <div className="glass rounded-2xl p-8 relative z-10">
-        <div className="text-center mb-8">
-          <h3 className="text-xl font-serif font-bold text-foreground mb-2">Order Book Visualization</h3>
-          <p className="text-sm text-muted-foreground">Buyers list prices they're willing to pay • Sellers list prices they want</p>
+      <div className="glass rounded-2xl p-6 relative z-10 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Fragma Marketplace</p>
+            <h3 className="text-xl font-serif font-bold text-foreground">Live Order Book</h3>
+          </div>
+          <div className="flex items-center gap-2">
+            <motion.div
+              className="w-2 h-2 rounded-full bg-green-500"
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            />
+            <span className="text-sm text-green-500 font-medium">Live</span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-8">
-          {/* Buyers Side */}
+        {/* Metrics Row */}
+        <div className="grid grid-cols-3 gap-4 mb-6 p-4 rounded-xl bg-background/50 border border-border/30">
+          <div className="text-center">
+            <p className="text-xs text-muted-foreground mb-1">Last Price</p>
+            <motion.p 
+              key={lastPrice}
+              initial={{ scale: 1.1, color: "hsl(var(--primary))" }}
+              animate={{ scale: 1, color: "hsl(var(--foreground))" }}
+              className="text-2xl font-bold"
+            >
+              €{lastPrice.toFixed(2)}
+            </motion.p>
+          </div>
+          <div className="text-center">
+            <p className="text-xs text-muted-foreground mb-1">24h Change</p>
+            <motion.p 
+              key={change24h}
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              className={`text-2xl font-bold ${change24h >= 0 ? 'text-green-500' : 'text-red-500'}`}
+            >
+              {change24h >= 0 ? '+' : ''}{change24h.toFixed(2)}%
+            </motion.p>
+          </div>
+          <div className="text-center">
+            <p className="text-xs text-muted-foreground mb-1">Spread</p>
+            <p className="text-2xl font-bold text-primary">{spread.toFixed(2)}%</p>
+          </div>
+        </div>
+
+        {/* Order Book Grid */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Bids Side */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <ArrowUp className="w-5 h-5 text-green-400" />
-              <span className="font-medium text-green-400">Buy Orders (Bids)</span>
+            <div className="grid grid-cols-3 gap-2 mb-3 text-xs text-muted-foreground px-3">
+              <span>Price</span>
+              <span className="text-center">Size</span>
+              <span className="text-right">Total</span>
             </div>
-            <div className="space-y-3">
-              {buyers.map((buyer, i) => (
+            <div className="space-y-1">
+              {bids.map((bid, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.2 }}
+                  transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.02, x: 5 }}
-                  className="flex items-center justify-between p-4 rounded-xl bg-green-500/10 border border-green-500/20 cursor-pointer"
+                  className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden ${
+                    highlightedRow?.side === 'bid' && highlightedRow?.index === i
+                      ? 'bg-green-500/30'
+                      : 'bg-green-500/10 hover:bg-green-500/20'
+                  }`}
                 >
-                  <span className="text-foreground">{buyer.label}</span>
-                  <span className="text-green-400 font-bold">€{buyer.price}</span>
+                  {/* Depth bar */}
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 bg-green-500/20"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(bid.total / 5) * 100}%` }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  <span className="text-green-400 font-semibold relative z-10">€{bid.price.toFixed(2)}</span>
+                  <motion.span 
+                    key={bid.size}
+                    initial={{ opacity: 0.5 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center text-foreground relative z-10"
+                  >
+                    {formatNumber(bid.size)}
+                  </motion.span>
+                  <span className="text-right text-muted-foreground relative z-10">€{bid.total.toFixed(2)}M</span>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Sellers Side */}
+          {/* Asks Side */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <ArrowDown className="w-5 h-5 text-red-400" />
-              <span className="font-medium text-red-400">Sell Orders (Asks)</span>
+            <div className="grid grid-cols-3 gap-2 mb-3 text-xs text-muted-foreground px-3">
+              <span>Price</span>
+              <span className="text-center">Size</span>
+              <span className="text-right">Total</span>
             </div>
-            <div className="space-y-3">
-              {sellers.map((seller, i) => (
+            <div className="space-y-1">
+              {asks.map((ask, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.2 }}
+                  transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.02, x: -5 }}
-                  className="flex items-center justify-between p-4 rounded-xl bg-red-500/10 border border-red-500/20 cursor-pointer"
+                  className={`grid grid-cols-3 gap-2 p-3 rounded-lg cursor-pointer transition-all relative overflow-hidden ${
+                    highlightedRow?.side === 'ask' && highlightedRow?.index === i
+                      ? 'bg-red-500/30'
+                      : 'bg-red-500/10 hover:bg-red-500/20'
+                  }`}
                 >
-                  <span className="text-foreground">{seller.label}</span>
-                  <span className="text-red-400 font-bold">€{seller.price}</span>
+                  {/* Depth bar */}
+                  <motion.div
+                    className="absolute right-0 top-0 bottom-0 bg-red-500/20"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(ask.total / 5) * 100}%` }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  <span className="text-red-400 font-semibold relative z-10">€{ask.price.toFixed(2)}</span>
+                  <motion.span 
+                    key={ask.size}
+                    initial={{ opacity: 0.5 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center text-foreground relative z-10"
+                  >
+                    {formatNumber(ask.size)}
+                  </motion.span>
+                  <span className="text-right text-muted-foreground relative z-10">€{ask.total.toFixed(2)}M</span>
                 </motion.div>
               ))}
             </div>
@@ -87,10 +235,10 @@ const AnimatedOrderBook = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.8 }}
-          className="mt-8 p-4 rounded-xl bg-primary/10 border border-primary/20 text-center"
+          className="mt-6 p-4 rounded-xl bg-primary/10 border border-primary/20 text-center"
         >
-          <Zap className="w-6 h-6 text-primary mx-auto mb-2" />
-          <p className="text-foreground font-medium">When prices match — trade executes instantly on-chain</p>
+          <Zap className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-foreground text-sm font-medium">When prices match — trade executes instantly on-chain</p>
         </motion.div>
       </div>
     </div>
@@ -108,8 +256,6 @@ export const OrderBookExplainer = () => {
 
   return (
     <section className="py-24 bg-background relative overflow-hidden">
-      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[200px]" />
-      
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
