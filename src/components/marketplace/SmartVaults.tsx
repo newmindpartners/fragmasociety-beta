@@ -114,7 +114,7 @@ const VaultAnimation = () => {
             </motion.div>
           ))}
 
-          {/* Step label floating above */}
+          {/* Step label floating above - centered */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeStep}
@@ -122,10 +122,10 @@ const VaultAnimation = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="absolute -top-2 left-1/2 -translate-x-1/2"
+              className="absolute top-0 inset-x-0 flex justify-center"
             >
-              <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-sm">
-                <span className="text-sm font-medium text-primary">{steps[activeStep].description}</span>
+              <div className="px-6 py-3 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-md">
+                <span className="text-base font-semibold text-primary whitespace-nowrap">{steps[activeStep].description}</span>
               </div>
             </motion.div>
           </AnimatePresence>
