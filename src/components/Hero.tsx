@@ -36,7 +36,7 @@ export const Hero = () => {
             Fractional, liquid, Compliant.
           </p>
           <h1 className="text-5xl lg:text-7xl font-serif font-bold text-foreground leading-tight mb-6">
-            Buy and sell real world assets.
+            Buy and sell <span className="text-gradient">real world assets.</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
             Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
