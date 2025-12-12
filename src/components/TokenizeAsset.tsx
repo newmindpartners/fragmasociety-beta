@@ -140,14 +140,14 @@ const AssetTransformAnimation = () => {
       return;
     }
 
-    // Animation cycle duration: 9 seconds total per asset (slower)
-    const cycleDuration = 9000;
+    // Animation cycle duration: 15 seconds total per asset (much slower)
+    const cycleDuration = 15000;
     
     const runCycle = () => {
       setStage(1); // Show asset
       
-      const timer2 = setTimeout(() => setStage(2), 2500); // Tokenize (longer)
-      const timer3 = setTimeout(() => setStage(3), 5500); // Marketplace (longer)
+      const timer2 = setTimeout(() => setStage(2), 4500); // Tokenize after 4.5s
+      const timer3 = setTimeout(() => setStage(3), 9500); // Marketplace after 9.5s
       const timer4 = setTimeout(() => {
         // Reset and move to next asset
         setStage(0);
