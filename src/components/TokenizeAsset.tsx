@@ -28,12 +28,12 @@ import { Link } from "react-router-dom";
 // Asset icons for the transformation animation
 const assetIcons = [
   { icon: Building2, label: "Real Estate", color: "from-emerald-500 to-teal-500" },
+  { icon: Landmark, label: "Fund", color: "from-cyan-500 to-sky-500" },
   { icon: Gem, label: "Luxury Goods", color: "from-violet-500 to-purple-500" },
-  { icon: Film, label: "Film Rights", color: "from-amber-500 to-orange-500" },
-  { icon: Landmark, label: "Credit", color: "from-cyan-500 to-sky-500" },
-  { icon: Palette, label: "Art", color: "from-rose-500 to-pink-500" },
-  { icon: Wine, label: "Wine", color: "from-red-500 to-rose-500" },
-  { icon: Trophy, label: "Sports Memorabilia", color: "from-yellow-500 to-amber-500" },
+  { icon: FileText, label: "SME Note", color: "from-amber-500 to-orange-500" },
+  { icon: Sparkles, label: "IP & Patent", color: "from-rose-500 to-pink-500" },
+  { icon: Film, label: "Music/Film Rights", color: "from-indigo-500 to-violet-500" },
+  { icon: Palette, label: "Art", color: "from-fuchsia-500 to-pink-500" },
 ];
 
 const steps = [
