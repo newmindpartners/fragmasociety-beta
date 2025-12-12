@@ -57,7 +57,7 @@ const TIERS = {
       { icon: Users, label: "Community Access (discussions, live Q&A)" },
       { icon: Calendar, label: "Events Lobby" },
       { icon: Eye, label: "Watchlist on 1 Asset" },
-      { icon: Rocket, label: "Invest in 1 Deal (if eligible)" },
+      { icon: Rocket, label: "1 Deal Investment per Year (up to $3,000, if eligible)" },
     ],
   },
   premium: {
