@@ -161,7 +161,7 @@ export const SmartVaults = () => {
             
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
               Fragma uses Smart Vaults, an advanced Cardano-based mechanism 
-              inspired by Genius Yield's architecture.
+              powered by Genius Yield's architecture.
             </p>
 
             <div className="glass rounded-xl p-6 mb-8">
