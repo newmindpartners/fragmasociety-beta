@@ -428,23 +428,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                 transition={{ delay: 0.3, duration: 0.7 }}
                 className="block"
               >
-                A Smarter Way
-              </motion.span>
-              <motion.span 
-                className="block"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.7 }}
-              >
-                to <span className="text-gradient">Earn</span> and
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.7 }}
-                className="text-gradient block"
-              >
-                Grow.
+                Fragma <span className="text-gradient">One</span>
               </motion.span>
             </h1>
             
@@ -452,12 +436,9 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
               className="text-lg text-muted-foreground mb-10 max-w-md"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.8 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
             >
-              {isAuthenticated 
-                ? "Dual-engine strategy combining stable yield with growth potential."
-                : "Income-focused strategy with regular distributions. Combining real-world and digital infrastructure assets in a Luxembourg securitisation structure."
-              }
+              One fund. Broad exposure to real-world yield & digital infrastructure. Powered by the Fragma ecosystem.
             </motion.p>
             
             <motion.div 
