@@ -6,6 +6,7 @@ import { OrderBookExplainer } from "@/components/marketplace/OrderBookExplainer"
 import { SmartVaults } from "@/components/marketplace/SmartVaults";
 import { TwoWayOrders } from "@/components/marketplace/TwoWayOrders";
 import { OptionsTrading } from "@/components/marketplace/OptionsTrading";
+import { CardanoEUTXO } from "@/components/marketplace/CardanoEUTXO";
 import { NonCustodialTrading } from "@/components/marketplace/NonCustodialTrading";
 import { TradingSteps } from "@/components/marketplace/TradingSteps";
 import { MarketplaceCTA } from "@/components/marketplace/MarketplaceCTA";
@@ -20,6 +21,7 @@ const Marketplace = () => {
       <SmartVaults />
       <TwoWayOrders />
       <OptionsTrading />
+      <CardanoEUTXO />
       <NonCustodialTrading />
       <TradingSteps />
       <MarketplaceCTA />
