@@ -25,6 +25,12 @@ import {
   Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -466,12 +472,12 @@ const Membership = () => {
             ))}
           </div>
 
-          {/* FAQ or Trust Indicators */}
+          {/* Trust Indicators */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mt-20 text-center"
+            className="mt-16 text-center"
           >
             <div className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -487,6 +493,143 @@ const Membership = () => {
                 24/7 Support
               </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 bg-muted/30">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
+              <HelpCircle size={16} />
+              FAQ
+            </div>
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to know about our membership plans
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="max-w-3xl mx-auto"
+          >
+            <Accordion type="single" collapsible className="space-y-4">
+              {/* Billing Questions */}
+              <AccordionItem value="billing-1" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">How does billing work?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  Your membership is billed monthly on the same date you subscribed. All payments are processed securely through Stripe. You'll receive an email receipt for each payment, and you can view your billing history in the customer portal.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="billing-2" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">What payment methods do you accept?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  We accept all major credit and debit cards including Visa, Mastercard, American Express, and Discover. We also support Apple Pay, Google Pay, and bank transfers in select regions. All payments are processed through Stripe's secure payment infrastructure.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="billing-3" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">Will I be charged automatically?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  Yes, your subscription will automatically renew each month until you cancel. You'll receive an email reminder 3 days before each renewal. You can manage your subscription or update your payment method at any time through the customer portal.
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Upgrade Questions */}
+              <AccordionItem value="upgrade-1" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">How do I upgrade my membership?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  You can upgrade your membership at any time from this page or through the customer portal. When you upgrade, you'll be charged the prorated difference for the remainder of your current billing period. Your new benefits will be available immediately.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="upgrade-2" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">Can I switch between plans?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  Absolutely! You can upgrade or downgrade your plan at any time. When upgrading, you get immediate access to new features with prorated billing. When downgrading, your current plan remains active until the end of the billing period, then switches to the new plan.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="upgrade-3" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">Is there a free trial for Premium or Elite?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  We don't currently offer free trials, but our Explorer tier is completely free forever and gives you access to essential features. This allows you to experience the platform before committing to a paid membership. You can upgrade anytime when you're ready.
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Cancellation Questions */}
+              <AccordionItem value="cancel-1" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">How do I cancel my subscription?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  You can cancel your subscription at any time through the "Manage Subscription" button on this page. Once canceled, you'll retain access to your paid features until the end of your current billing period. No refunds are provided for partial months.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="cancel-2" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">What happens when I cancel?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  When you cancel, your membership will remain active until the end of your current billing period. After that, you'll be automatically moved to the free Explorer tier. Your account data, watchlists, and history will be preserved, but you'll lose access to premium features.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="cancel-3" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">Can I get a refund?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  We don't offer refunds for partial billing periods. However, if you're experiencing issues with your membership or believe you were charged in error, please contact our support team and we'll be happy to help resolve the situation.
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* General Questions */}
+              <AccordionItem value="general-1" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">Do I need a membership to invest?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  No, you can invest through the Fragma marketplace with any membership tier, including the free Explorer plan. Paid memberships provide enhanced research tools, earlier access to deals, and exclusive educational content to help you make more informed investment decisions.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="general-2" className="bg-background/60 border border-white/[0.08] rounded-2xl px-6 data-[state=open]:border-primary/30">
+                <AccordionTrigger className="text-left hover:no-underline py-6">
+                  <span className="font-semibold text-foreground">How do I contact support?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6">
+                  Explorer and Premium members can reach support via email at support@fragma.io. Elite members enjoy VIP support through a dedicated WhatsApp group with priority response times. All members can also access our community forums for peer assistance.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </motion.div>
         </div>
       </section>
