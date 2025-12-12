@@ -1,21 +1,160 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, ChevronDown, Zap, ShoppingCart, HelpCircle, Crown, Briefcase, Rocket, Coins, Users, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
-const navLinks = [
-  { href: "/#features", label: "How it works" },
-  { href: "/#marketplace", label: "Marketplace" },
-  { href: "/strategy", label: "Invest with us", isRoute: true },
-  { href: "/#work-with-us", label: "Launch your Deal" },
-  { href: "/#partners", label: "Partners" },
+interface MenuItem {
+  label: string;
+  href: string;
+  description?: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  isRoute?: boolean;
+  badge?: string;
+}
+
+interface NavSection {
+  label: string;
+  items: MenuItem[];
+}
+
+const navSections: NavSection[] = [
+  {
+    label: "Investors",
+    items: [
+      { label: "Live Deals", href: "/#marketplace", description: "Browse current investment opportunities", icon: Zap, badge: "Hot" },
+      { label: "Buy & Sell", href: "/#marketplace", description: "Secondary marketplace for trading", icon: ShoppingCart },
+      { label: "How It Works", href: "/#features", description: "Understand the investment process", icon: HelpCircle },
+      { label: "Investor Membership", href: "/auth", description: "Exclusive benefits for members", icon: Crown, isRoute: true },
+      { label: "Fragma One", href: "/strategy", description: "Invest with us", icon: Briefcase, isRoute: true, badge: "New" },
+    ],
+  },
+  {
+    label: "Businesses",
+    items: [
+      { label: "Launch Your Signature Deal", href: "/#work-with-us", description: "Create and launch your investment opportunity", icon: Rocket },
+      { label: "Tokenize & List Your Asset", href: "/#work-with-us", description: "Transform assets into tradeable tokens", icon: Coins },
+    ],
+  },
+  {
+    label: "Learn",
+    items: [
+      { label: "Community Center", href: "/#partners", description: "Connect with fellow investors", icon: Users },
+      { label: "Documentation", href: "/#features", description: "Guides, FAQs and resources", icon: FileText },
+    ],
+  },
 ];
+
+const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpen: boolean; onClose: () => void }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 8, scale: 0.98 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50"
+          onMouseLeave={onClose}
+        >
+          <div className="bg-background/95 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/20 overflow-hidden min-w-[320px]">
+            {/* Subtle gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+            
+            <div className="relative p-2">
+              {section.items.map((item, index) => {
+                const Icon = item.icon;
+                const content = (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.03 }}
+                    className="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.05] transition-all duration-300 cursor-pointer"
+                  >
+                    {Icon && (
+                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                        <Icon className="w-5 h-5 text-primary" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                          {item.label}
+                        </span>
+                        {item.badge && (
+                          <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full ${
+                            item.badge === "Hot" 
+                              ? "bg-orange-500/20 text-orange-400" 
+                              : "bg-primary/20 text-primary"
+                          }`}>
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                      {item.description && (
+                        <p className="text-xs text-muted-foreground mt-0.5 group-hover:text-muted-foreground/80 transition-colors">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground/40 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 mt-1" />
+                  </motion.div>
+                );
+
+                return item.isRoute ? (
+                  <Link key={item.label} to={item.href} onClick={onClose}>
+                    {content}
+                  </Link>
+                ) : (
+                  <a key={item.label} href={item.href} onClick={onClose}>
+                    {content}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const NavDropdown = ({ section }: { section: NavSection }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => setIsOpen(false), 150);
+  };
+
+  return (
+    <div 
+      className="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 group">
+        <span>{section.label}</span>
+        <ChevronDown 
+          className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
+        />
+        <span className={`absolute bottom-1 left-4 right-4 h-px bg-primary transition-transform duration-300 origin-left ${isOpen ? "scale-x-100" : "scale-x-0"}`} />
+      </button>
+      <DropdownMenu section={section} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </div>
+  );
+};
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const { user, signOut } = useAuth();
 
   useEffect(() => {
@@ -47,27 +186,9 @@ export const Navbar = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              link.isRoute ? (
-                <Link 
-                  key={link.href}
-                  to={link.href} 
-                  className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 group"
-                >
-                  {link.label}
-                  <span className="absolute bottom-1 left-4 right-4 h-px bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </Link>
-              ) : (
-                <a 
-                  key={link.href}
-                  href={link.href} 
-                  className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 group"
-                >
-                  {link.label}
-                  <span className="absolute bottom-1 left-4 right-4 h-px bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </a>
-              )
+          <div className="hidden lg:flex items-center">
+            {navSections.map((section) => (
+              <NavDropdown key={section.label} section={section} />
             ))}
           </div>
 
@@ -165,36 +286,74 @@ export const Navbar = () => {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="lg:hidden bg-background/95 backdrop-blur-2xl overflow-hidden border-b border-white/[0.08]"
           >
-            <div className="p-6 flex flex-col gap-1">
-              {navLinks.map((link, index) => (
+            <div className="p-6 max-h-[80vh] overflow-y-auto">
+              {navSections.map((section, sectionIndex) => (
                 <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  key={section.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: sectionIndex * 0.05 }}
+                  className="mb-4"
                 >
-                  {link.isRoute ? (
-                    <Link 
-                      to={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className="block py-3 text-foreground hover:text-primary transition-colors font-medium"
-                    >
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <a 
-                      href={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className="block py-3 text-foreground hover:text-primary transition-colors font-medium"
-                    >
-                      {link.label}
-                    </a>
-                  )}
+                  <button
+                    onClick={() => setExpandedSection(expandedSection === section.label ? null : section.label)}
+                    className="flex items-center justify-between w-full py-3 text-sm font-semibold text-foreground uppercase tracking-wider"
+                  >
+                    {section.label}
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-300 ${
+                        expandedSection === section.label ? "rotate-180" : ""
+                      }`} 
+                    />
+                  </button>
+                  
+                  <AnimatePresence>
+                    {expandedSection === section.label && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pl-2 border-l border-white/[0.08]">
+                          {section.items.map((item) => {
+                            const Icon = item.icon;
+                            const content = (
+                              <div className="flex items-center gap-3 py-3 pl-4 text-muted-foreground hover:text-foreground transition-colors">
+                                {Icon && <Icon className="w-4 h-4 text-primary/70" />}
+                                <span className="text-sm">{item.label}</span>
+                                {item.badge && (
+                                  <span className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
+                                    item.badge === "Hot" 
+                                      ? "bg-orange-500/20 text-orange-400" 
+                                      : "bg-primary/20 text-primary"
+                                  }`}>
+                                    {item.badge}
+                                  </span>
+                                )}
+                              </div>
+                            );
+
+                            return item.isRoute ? (
+                              <Link key={item.label} to={item.href} onClick={() => setIsOpen(false)}>
+                                {content}
+                              </Link>
+                            ) : (
+                              <a key={item.label} href={item.href} onClick={() => setIsOpen(false)}>
+                                {content}
+                              </a>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))}
               
               <motion.div 
-                className="flex flex-col gap-3 mt-4 pt-4 border-t border-white/[0.08]"
+                className="flex flex-col gap-3 mt-6 pt-6 border-t border-white/[0.08]"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
