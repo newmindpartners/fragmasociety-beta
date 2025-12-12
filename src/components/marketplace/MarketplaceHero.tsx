@@ -50,7 +50,7 @@ const FeatureShowcase = () => {
     if (isHovered) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % features.length);
-    }, 2500);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isHovered]);
 
@@ -137,9 +137,9 @@ const FeatureShowcase = () => {
               }}
               transition={{ 
                 delay: 0.5 + i * 0.1,
-                duration: 0.4,
+                duration: 0.6,
                 type: "spring",
-                stiffness: 200
+                stiffness: 120
               }}
               onClick={() => setActiveIndex(i)}
             >
@@ -172,22 +172,6 @@ const FeatureShowcase = () => {
                   }}
                 />
               </motion.div>
-
-              {/* Label */}
-              <AnimatePresence>
-                {isActive && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.8 }}
-                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap"
-                  >
-                    <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full border border-primary/20">
-                      {feature.title}
-                    </span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           );
         })}
