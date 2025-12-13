@@ -67,7 +67,7 @@ export const StrategyCTA = () => {
             height: orb.size,
             left: orb.x,
             top: orb.y,
-            background: `radial-gradient(circle, hsl(var(--primary) / 0.15), transparent 70%)`,
+            background: `radial-gradient(circle, hsl(0 0% 100% / 0.15), transparent 70%)`,
           }}
           animate={{
             scale: [1, 1.2, 1],
@@ -96,7 +96,7 @@ export const StrategyCTA = () => {
           ease: "linear",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-conic from-primary/20 via-transparent to-primary/10 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 bg-gradient-conic from-white/20 via-transparent to-white/10 rounded-full blur-[100px]" />
       </motion.div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -111,20 +111,20 @@ export const StrategyCTA = () => {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="w-20 h-20 rounded-full border border-primary/30"
+              className="w-20 h-20 rounded-full border border-white/30"
             />
             <motion.div
               animate={{ rotate: -360 }}
               transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-2 rounded-full border border-primary/50"
+              className="absolute inset-2 rounded-full border border-white/50"
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-white to-white/80 flex items-center justify-center"
               >
-                <Coins className="w-5 h-5 text-primary-foreground" />
+                <Coins className="w-5 h-5 text-background" />
               </motion.div>
             </div>
           </div>
@@ -142,22 +142,22 @@ export const StrategyCTA = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 border border-white/30 backdrop-blur-sm"
           >
             <motion.div
               animate={{ rotate: [0, 360] }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             >
-              <Sparkles className="w-4 h-4 text-primary" />
+              <Sparkles className="w-4 h-4 text-white" />
             </motion.div>
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary">
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-white">
               Exclusive Investment Vehicle
             </span>
             <motion.div
               animate={{ rotate: [0, -360] }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             >
-              <Sparkles className="w-4 h-4 text-primary" />
+              <Sparkles className="w-4 h-4 text-white" />
             </motion.div>
           </motion.div>
           
