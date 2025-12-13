@@ -110,7 +110,7 @@ const benefits = [
 // Floating particle component
 const FloatingParticle = ({ delay, size, x, y }: { delay: number; size: number; x: string; y: string }) => (
   <motion.div
-    className="absolute rounded-full bg-primary/30"
+    className="absolute rounded-full bg-white/30"
     style={{ width: size, height: size, left: x, top: y }}
     animate={{
       y: [0, -20, 0],
@@ -176,7 +176,7 @@ const AssetTransformAnimation = () => {
     <div ref={containerRef} className="relative h-[550px] flex items-center justify-center">
       {/* Background glow */}
       <motion.div
-        className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-[120px]"
+        className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-br from-white/20 to-white/10 blur-[120px]"
         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 4, repeat: Infinity }}
       />
@@ -207,14 +207,14 @@ const AssetTransformAnimation = () => {
             >
               {/* Glowing ring */}
               <motion.div
-                className="absolute w-48 h-48 rounded-full border-2 border-primary/30"
+                className="absolute w-48 h-48 rounded-full border-2 border-white/30"
                 animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
               
-              <div className={`w-40 h-40 rounded-3xl bg-gradient-to-br ${assetIcons[activeAsset].color} p-1.5 shadow-2xl shadow-primary/20`}>
+              <div className={`w-40 h-40 rounded-3xl bg-gradient-to-br ${assetIcons[activeAsset].color} p-1.5 shadow-2xl shadow-white/20`}>
                 <div className="w-full h-full rounded-2xl bg-background/95 flex items-center justify-center backdrop-blur-sm">
-                  <ActiveIcon className="w-20 h-20 text-primary" strokeWidth={1.5} />
+                  <ActiveIcon className="w-20 h-20 text-white" strokeWidth={1.5} />
                 </div>
               </div>
               
@@ -246,7 +246,7 @@ const AssetTransformAnimation = () => {
               <div className="relative w-56 h-56 flex items-center justify-center">
                 {/* Central glow */}
                 <motion.div
-                  className="absolute w-32 h-32 rounded-full bg-primary/30 blur-xl"
+                  className="absolute w-32 h-32 rounded-full bg-white/30 blur-xl"
                   animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
@@ -276,9 +276,9 @@ const AssetTransformAnimation = () => {
                         stiffness: 150,
                         rotate: { delay: i * 0.1 + 0.8, duration: 2, repeat: Infinity }
                       }}
-                      className="absolute w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30"
+                      className="absolute w-14 h-14 rounded-xl bg-gradient-to-br from-white to-white/80 flex items-center justify-center shadow-lg shadow-white/30"
                     >
-                      <Coins className="w-7 h-7 text-primary-foreground" />
+                      <Coins className="w-7 h-7 text-background" />
                     </motion.div>
                   );
                 })}
@@ -288,9 +288,9 @@ const AssetTransformAnimation = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-                  className="relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary via-accent to-primary flex items-center justify-center shadow-xl shadow-primary/40"
+                  className="relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br from-white via-white/90 to-white flex items-center justify-center shadow-xl shadow-white/40"
                 >
-                  <Coins className="w-8 h-8 text-primary-foreground" />
+                  <Coins className="w-8 h-8 text-background" />
                 </motion.div>
               </div>
               
@@ -300,7 +300,7 @@ const AssetTransformAnimation = () => {
                 transition={{ delay: 0.6 }}
                 className="mt-6 text-center"
               >
-                <p className="text-xl font-semibold text-primary mb-1">
+                <p className="text-xl font-semibold text-white mb-1">
                   Tokenizing Asset
                 </p>
                 <p className="text-sm text-muted-foreground">Fractionalizing into digital tokens</p>
@@ -317,7 +317,7 @@ const AssetTransformAnimation = () => {
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 2.5, ease: "easeInOut" }}
-                  className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
+                  className="h-full bg-gradient-to-r from-white to-white/80 rounded-full"
                 />
               </motion.div>
             </motion.div>
@@ -332,11 +332,11 @@ const AssetTransformAnimation = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center w-full max-w-[340px]"
             >
-              <div className="card-premium p-5 w-full shadow-2xl shadow-primary/10">
+              <div className="card-premium p-5 w-full shadow-2xl shadow-white/10">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                      <ArrowLeftRight className="w-4 h-4 text-primary" />
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                      <ArrowLeftRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-sm font-semibold text-foreground">ORDER BOOK</span>
                   </div>
@@ -367,7 +367,7 @@ const AssetTransformAnimation = () => {
                       className={`flex justify-between items-center text-sm py-2 px-3 rounded-lg ${
                         order.type === "sell" ? "bg-rose-500/10 text-rose-400" :
                         order.type === "buy" ? "bg-emerald-500/10 text-emerald-400" :
-                        "bg-primary/20 text-primary font-semibold"
+                        "bg-white/20 text-white font-semibold"
                       }`}
                     >
                       <span className="font-medium">{order.price}</span>
@@ -409,9 +409,9 @@ const AssetTransformAnimation = () => {
               key={item.label}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-500 ${
                 isActive 
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
+                  ? "bg-white text-background shadow-lg shadow-white/30" 
                   : isComplete 
-                    ? "bg-primary/20 text-primary" 
+                    ? "bg-white/20 text-white" 
                     : "bg-muted/30 text-muted-foreground"
               }`}
               animate={{ 
@@ -426,9 +426,9 @@ const AssetTransformAnimation = () => {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-4 h-4 rounded-full bg-primary flex items-center justify-center"
+                  className="w-4 h-4 rounded-full bg-white flex items-center justify-center"
                 >
-                  <span className="text-[10px] text-primary-foreground">✓</span>
+                  <span className="text-[10px] text-background">✓</span>
                 </motion.div>
               )}
             </motion.div>
@@ -456,7 +456,7 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
     >
       {/* Hover glow effect */}
       <motion.div
-        className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/30 to-accent/20 blur-xl"
+        className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-white/30 to-white/20 blur-xl"
         animate={{ opacity: isHovered ? 0.8 : 0 }}
         transition={{ duration: 0.3 }}
       />
@@ -571,12 +571,12 @@ export const TokenizeAsset = () => {
       
       {/* Floating orbs */}
       <motion.div
-        className="absolute top-20 left-10 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[150px] pointer-events-none"
+        className="absolute top-20 left-10 w-[400px] h-[400px] rounded-full bg-white/5 blur-[150px] pointer-events-none"
         animate={{ scale: [1, 1.3, 1], x: [0, 50, 0] }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-20 right-10 w-[300px] h-[300px] rounded-full bg-accent/5 blur-[120px] pointer-events-none"
+        className="absolute bottom-20 right-10 w-[300px] h-[300px] rounded-full bg-white/5 blur-[120px] pointer-events-none"
         animate={{ scale: [1.2, 1, 1.2], y: [0, -30, 0] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
@@ -593,10 +593,10 @@ export const TokenizeAsset = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6"
           >
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">For Asset Owners</span>
+            <Sparkles className="w-4 h-4 text-white" />
+            <span className="text-sm font-medium text-white">For Asset Owners</span>
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6">
@@ -665,7 +665,7 @@ export const TokenizeAsset = () => {
           <div className="card-premium p-10 max-w-2xl mx-auto relative overflow-hidden">
             {/* Background glow */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5"
+              className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"
               animate={{ opacity: [0.5, 0.8, 0.5] }}
               transition={{ duration: 4, repeat: Infinity }}
             />
@@ -674,9 +674,9 @@ export const TokenizeAsset = () => {
               <motion.div
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="w-16 h-16 rounded-full border border-primary/30 mx-auto mb-6 flex items-center justify-center"
+                className="w-16 h-16 rounded-full border border-white/30 mx-auto mb-6 flex items-center justify-center"
               >
-                <Rocket className="w-7 h-7 text-primary" />
+                <Rocket className="w-7 h-7 text-white" />
               </motion.div>
 
               <h3 className="text-2xl md:text-3xl font-serif font-bold mb-3">
@@ -687,15 +687,15 @@ export const TokenizeAsset = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" className="group btn-glow px-8">
+                <Button size="lg" variant="outline" className="group border-white text-white hover:bg-white hover:text-background px-8">
                   <span className="flex items-center gap-2">
-                    Start Listing
+                    Start Tokenizing
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Button>
-                <Button variant="outline" size="lg" className="group border-primary/30 hover:border-primary/60">
+                <Button variant="outline" size="lg" className="group border-white/30 text-white hover:border-white/60 hover:bg-white/10">
                   <Phone className="w-4 h-4 mr-2" />
-                  Book a Strategy Call
+                  Book a Call
                 </Button>
               </div>
             </div>
