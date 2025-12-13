@@ -74,20 +74,20 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
                     className="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.05] transition-all duration-300 cursor-pointer"
                   >
                     {Icon && (
-                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                        <Icon className="w-5 h-5 text-primary" />
+                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
+                        <Icon className="w-5 h-5 text-white" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                        <span className="text-sm font-semibold text-foreground group-hover:text-white transition-colors duration-300">
                           {item.label}
                         </span>
                         {item.badge && (
                           <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full ${
                             item.badge === "Hot" 
                               ? "bg-orange-500/20 text-orange-400" 
-                              : "bg-primary/20 text-primary"
+                              : "bg-white/20 text-white"
                           }`}>
                             {item.badge}
                           </span>
@@ -145,7 +145,7 @@ const NavDropdown = ({ section }: { section: NavSection }) => {
         <ChevronDown 
           className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
         />
-        <span className={`absolute bottom-1 left-4 right-4 h-px bg-primary transition-transform duration-300 origin-left ${isOpen ? "scale-x-100" : "scale-x-0"}`} />
+        <span className={`absolute bottom-1 left-4 right-4 h-px bg-white transition-transform duration-300 origin-left ${isOpen ? "scale-x-100" : "scale-x-0"}`} />
       </button>
       <DropdownMenu section={section} isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
@@ -322,13 +322,13 @@ export const Navbar = () => {
                             const Icon = item.icon;
                             const content = (
                               <div className="flex items-center gap-3 py-3 pl-4 text-muted-foreground hover:text-foreground transition-colors">
-                                {Icon && <Icon className="w-4 h-4 text-primary/70" />}
+                                {Icon && <Icon className="w-4 h-4 text-white/70" />}
                                 <span className="text-sm">{item.label}</span>
                                 {item.badge && (
                                   <span className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
                                     item.badge === "Hot" 
                                       ? "bg-orange-500/20 text-orange-400" 
-                                      : "bg-primary/20 text-primary"
+                                      : "bg-white/20 text-white"
                                   }`}>
                                     {item.badge}
                                   </span>
