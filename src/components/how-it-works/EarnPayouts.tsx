@@ -190,69 +190,78 @@ export const EarnPayouts = () => {
             </div>
           </motion.div>
 
-          {/* Payout dashboard preview */}
+          {/* Payout dashboard preview - Dashboard style */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="max-w-2xl mx-auto"
           >
-            <div className="p-6 bg-card/80 border border-border/50 rounded-3xl">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-primary" />
-                  <span className="font-semibold">Payout Dashboard</span>
+            <div className="bg-[hsl(222,47%,8%)] border border-[hsl(180,60%,40%)]/20 rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
+              {/* Header */}
+              <div className="flex items-center justify-between p-5 border-b border-white/5">
+                <div className="flex items-center gap-3">
+                  <BarChart3 className="w-5 h-5 text-[hsl(180,60%,50%)]" />
+                  <span className="font-semibold text-white text-lg">Payout Dashboard</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-[hsl(180,60%,50%)] cursor-pointer hover:text-[hsl(180,60%,60%)] transition-colors">
                   <Download className="w-4 h-4" />
-                  <span>Export</span>
+                  <span className="text-sm font-medium">Export</span>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                {payoutHistory.map((payout, index) => (
+              {/* Payout rows */}
+              <div className="p-4 space-y-3">
+                {payoutHistory.filter(p => p.status === "paid").map((payout, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
-                    className={`flex items-center justify-between p-4 rounded-xl ${
-                      payout.status === "upcoming" 
-                        ? "bg-primary/5 border border-primary/20" 
-                        : "bg-muted/30"
-                    }`}
+                    className="flex items-center justify-between p-4 bg-[hsl(222,40%,12%)] rounded-xl hover:bg-[hsl(222,40%,14%)] transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      {payout.status === "upcoming" ? (
-                        <Clock className="w-5 h-5 text-primary" />
-                      ) : (
-                        <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-green-500" />
-                        </div>
-                      )}
-                      <span className="text-muted-foreground">{payout.date}</span>
+                      <div className="w-3 h-3 rounded-full bg-[hsl(140,70%,45%)] shadow-[0_0_8px_hsl(140,70%,45%)]" />
+                      <span className="text-white/90 font-medium">{payout.date}</span>
+                    </div>
+                    <span className="font-bold text-[hsl(180,60%,50%)] text-lg">
+                      {payout.amount}
+                    </span>
+                  </motion.div>
+                ))}
+
+                {/* Upcoming payout - special styling */}
+                {payoutHistory.filter(p => p.status === "upcoming").map((payout, index) => (
+                  <motion.div
+                    key={`upcoming-${index}`}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.3, delay: 1 }}
+                    className="flex items-center justify-between p-4 bg-[hsl(180,40%,8%)] border border-[hsl(180,60%,40%)]/30 rounded-xl"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-5 h-5 text-[hsl(180,60%,50%)]" />
+                      <span className="text-white/90 font-medium">{payout.date}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className={`font-bold ${payout.status === "upcoming" ? "text-primary" : "text-green-500"}`}>
+                      <span className="font-bold text-[hsl(180,60%,50%)] text-lg">
                         {payout.amount}
                       </span>
-                      {payout.status === "upcoming" && (
-                        <span className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary">
-                          Upcoming
-                        </span>
-                      )}
+                      <span className="text-xs px-3 py-1.5 rounded-full bg-[hsl(180,60%,40%)]/20 text-[hsl(180,60%,50%)] font-medium border border-[hsl(180,60%,40%)]/30">
+                        Upcoming
+                      </span>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Summary row */}
-              <div className="mt-6 pt-6 border-t border-border/50 flex items-center justify-between">
+              {/* Summary footer */}
+              <div className="mx-4 mb-4 pt-4 border-t border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Tax summaries available</span>
+                  <FileText className="w-4 h-4 text-white/40" />
+                  <span className="text-sm text-white/40">Tax summaries available</span>
                 </div>
-                <span className="text-lg font-bold text-green-500">+€245 earned</span>
+                <span className="text-lg font-bold text-[hsl(180,60%,50%)]">+€245 earned</span>
               </div>
             </div>
           </motion.div>
