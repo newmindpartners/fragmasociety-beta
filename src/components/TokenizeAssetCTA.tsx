@@ -11,7 +11,7 @@ export const TokenizeAssetCTA = () => {
       
       {/* Animated glow */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/15 rounded-full blur-[150px]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-white/15 rounded-full blur-[150px]"
         animate={{
           scale: [1, 1.15, 1],
           opacity: [0.2, 0.4, 0.2],
@@ -41,8 +41,8 @@ export const TokenizeAssetCTA = () => {
                   transition={{ delay: i * 0.15, type: "spring", stiffness: 200 }}
                   className="flex flex-col items-center gap-2"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 border border-primary/20 flex items-center justify-center backdrop-blur-sm">
-                    <item.icon className="w-7 h-7 text-primary" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <item.icon className="w-7 h-7 text-white" />
                   </div>
                   <span className="text-xs text-muted-foreground font-medium">{item.label}</span>
                 </motion.div>
@@ -52,7 +52,7 @@ export const TokenizeAssetCTA = () => {
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.15 + 0.1, duration: 0.4 }}
-                    className="w-12 h-0.5 bg-gradient-to-r from-primary/50 to-primary/20 mb-6"
+                    className="w-12 h-0.5 bg-gradient-to-r from-white/50 to-white/20 mb-6"
                   />
                 )}
               </div>
