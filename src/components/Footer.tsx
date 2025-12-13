@@ -22,8 +22,11 @@ export const Footer = () => (
       <div className="grid md:grid-cols-4 gap-12 mb-16">
         <div className="col-span-1">
           <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8 mb-4" />
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm mb-2">
             Buy and sell real world assets.
+          </p>
+          <p className="text-muted-foreground text-xs">
+            Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
           </p>
         </div>
         <div>
