@@ -14,6 +14,7 @@ import Tokenize from "./pages/Tokenize";
 import SignatureDeal from "./pages/SignatureDeal";
 import LiveDeals from "./pages/LiveDeals";
 import FAQ from "./pages/FAQ";
+import HowItWorks from "./pages/HowItWorks";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/signature-deal" element={<SignatureDeal />} />
             <Route path="/live-deals" element={<LiveDeals />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/fund" element={<Strategy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
