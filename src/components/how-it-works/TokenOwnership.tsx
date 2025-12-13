@@ -21,9 +21,9 @@ export const TokenOwnership = () => {
   ];
 
   const claimStats = [
-    { label: "Earned this week", value: "23", unit: "ADA", divider: true },
-    { label: "Available to claim", value: "$112.45", unit: "≈ 58.23 ADA", divider: true },
-    { label: "Last claimed", value: "$85.10", unit: "Apr 13, 2025", divider: true },
+    { label: "Earned this month", value: "$423", unit: "This period", divider: true },
+    { label: "Available to claim", value: "$1,245", unit: "Ready now", divider: true },
+    { label: "Last claimed", value: "$892", unit: "Apr 13, 2025", divider: true },
     { label: "Next claim", value: "6 Days", unit: "Apr 16, 2025", divider: false },
   ];
 
