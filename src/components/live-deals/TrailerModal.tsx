@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Target, Clock, Euro, ArrowRight } from "lucide-react";
+import { X, Target, Clock, Euro, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface TrailerModalProps {
   isOpen: boolean;
@@ -20,10 +20,13 @@ interface TrailerModalProps {
 }
 
 export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setIsPlaying(false); // Reset playing state when modal opens
     } else {
       document.body.style.overflow = "unset";
     }
@@ -88,22 +91,40 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
             <div className="grid md:grid-cols-2 gap-0">
               {/* Video/Image side */}
               <div className="relative aspect-video md:aspect-auto md:h-full min-h-[300px]">
-                {deal.videoUrl ? (
+                {deal.videoUrl && isPlaying ? (
                   <video
                     src={deal.videoUrl}
                     autoPlay
-                    muted
-                    loop
+                    controls
                     playsInline
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div 
-                    className="w-full h-full bg-cover bg-center"
-                    style={{ backgroundImage: `url(${deal.image})` }}
-                  />
+                  <>
+                    <div 
+                      className="w-full h-full bg-cover bg-center"
+                      style={{ backgroundImage: `url(${deal.image})` }}
+                    />
+                    {/* Play button overlay */}
+                    <motion.button
+                      onClick={() => setIsPlaying(true)}
+                      className="absolute inset-0 flex items-center justify-center group cursor-pointer"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <motion.div
+                        className="w-20 h-20 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-primary/30 group-hover:bg-primary transition-colors"
+                        animate={{ 
+                          scale: [1, 1.05, 1],
+                        }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
+                      </motion.div>
+                    </motion.button>
+                  </>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-card/50 via-transparent to-transparent md:bg-gradient-to-t md:from-card/30 md:via-transparent md:to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-card/50 via-transparent to-transparent md:bg-gradient-to-t md:from-card/30 md:via-transparent md:to-transparent pointer-events-none" />
               </div>
 
               {/* Content side */}
