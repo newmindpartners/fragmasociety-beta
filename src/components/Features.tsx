@@ -37,8 +37,8 @@ export const Features = () => (
       <div className="space-y-8">
         {features.map((item, i) => (
           <div key={i} className="flex gap-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 backdrop-blur-sm flex items-center justify-center shrink-0 border border-primary/20">
-              <item.icon className="text-primary" size={24} />
+            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center shrink-0 border border-white/20">
+              <item.icon className="text-white" size={24} />
             </div>
             <div>
               <h4 className="text-foreground font-bold text-lg mb-2">{item.title}</h4>
