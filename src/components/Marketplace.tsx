@@ -760,7 +760,7 @@ export const Marketplace = () => {
                       onClick={() => { setActiveCategory(cat.id); setIsHovered(true); }}
                       className={`relative px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded-lg whitespace-nowrap transition-all duration-300
                         ${activeCategory === cat.id 
-                          ? 'text-primary-foreground' 
+                          ? 'text-background' 
                           : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -768,7 +768,7 @@ export const Marketplace = () => {
                       {activeCategory === cat.id && (
                         <motion.div
                           layoutId="activeCategoryPill"
-                          className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-cyan-500 rounded-lg"
+                          className="absolute inset-0 bg-white rounded-lg"
                           transition={{ type: "spring", duration: 0.4, bounce: 0.15 }}
                         />
                       )}
@@ -781,10 +781,10 @@ export const Marketplace = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <motion.div
-                      className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-500/10 flex items-center justify-center border border-white/10"
+                      className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center border border-white/10"
                       whileHover={{ scale: 1.05 }}
                     >
-                      <TrendingUp className="w-5 h-5 text-primary" />
+                      <TrendingUp className="w-5 h-5 text-white" />
                     </motion.div>
                     
                     <div>
