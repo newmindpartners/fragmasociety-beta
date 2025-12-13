@@ -52,6 +52,14 @@ export const Footer = () => (
           </ul>
         </div>
       </div>
+      {/* Risk Disclaimer */}
+      <div className="border-t border-foreground/10 pt-8 mb-8">
+        <h5 className="text-foreground font-bold mb-3">Risk Disclaimer</h5>
+        <p className="text-muted-foreground text-xs leading-relaxed max-w-4xl">
+          Investing in tokenized assets involves risks, including credit, liquidity, currency, interest rate, volatility, capital repayment, and market risks. These factors may affect the value and performance of your investment. Please consult with a financial advisor and review our full risk disclosure before investing.
+        </p>
+      </div>
+
       <div className="border-t border-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground">
         <p>© 2025 Fragma Society. Powered by Fragma Finance.</p>
         <div className="flex gap-6 mt-4 md:mt-0">
