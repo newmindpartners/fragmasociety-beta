@@ -197,14 +197,14 @@ export const EarnPayouts = () => {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="max-w-2xl mx-auto"
           >
-            <div className="bg-white border border-[hsl(220,30%,90%)] rounded-2xl overflow-hidden shadow-xl shadow-[hsl(220,40%,20%)]/10">
+            <div className="bg-[hsl(230,25%,95%)] border border-[hsl(230,20%,88%)] rounded-2xl overflow-hidden shadow-lg">
               {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b border-[hsl(220,30%,92%)]">
+              <div className="flex items-center justify-between p-5 border-b border-[hsl(230,20%,88%)]">
                 <div className="flex items-center gap-3">
-                  <BarChart3 className="w-5 h-5 text-[hsl(220,50%,20%)]" />
-                  <span className="font-semibold text-[hsl(220,50%,15%)] text-lg">Payout Dashboard</span>
+                  <BarChart3 className="w-5 h-5 text-[hsl(235,50%,25%)]" />
+                  <span className="font-bold text-[hsl(235,50%,25%)] text-lg">Payout Dashboard</span>
                 </div>
-                <div className="flex items-center gap-2 text-[hsl(220,50%,20%)] cursor-pointer hover:text-[hsl(220,50%,10%)] transition-colors">
+                <div className="flex items-center gap-2 text-[hsl(230,20%,55%)] cursor-pointer hover:text-[hsl(235,50%,25%)] transition-colors">
                   <Download className="w-4 h-4" />
                   <span className="text-sm font-medium">Export</span>
                 </div>
@@ -218,13 +218,13 @@ export const EarnPayouts = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
-                    className="flex items-center justify-between p-4 bg-[hsl(220,30%,97%)] rounded-xl hover:bg-[hsl(220,30%,95%)] transition-colors"
+                    className="flex items-center justify-between p-4 bg-white/60 rounded-xl hover:bg-white/80 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-[hsl(140,70%,45%)] shadow-[0_0_8px_hsl(140,70%,45%)]" />
-                      <span className="text-[hsl(220,50%,15%)] font-medium">{payout.date}</span>
+                      <div className="w-3 h-3 rounded-full bg-[hsl(140,60%,45%)]" />
+                      <span className="text-[hsl(230,20%,50%)] font-medium">{payout.date}</span>
                     </div>
-                    <span className="font-bold text-[hsl(160,70%,35%)] text-lg">
+                    <span className="font-bold text-[hsl(235,50%,25%)] text-xl">
                       {payout.amount}
                     </span>
                   </motion.div>
@@ -237,17 +237,17 @@ export const EarnPayouts = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.3, delay: 1 }}
-                    className="flex items-center justify-between p-4 bg-[hsl(160,40%,95%)] border border-[hsl(160,50%,70%)]/50 rounded-xl"
+                    className="flex items-center justify-between p-4 bg-white/60 border border-[hsl(230,20%,85%)] rounded-xl"
                   >
                     <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-[hsl(160,60%,35%)]" />
-                      <span className="text-[hsl(220,50%,15%)] font-medium">{payout.date}</span>
+                      <Clock className="w-5 h-5 text-[hsl(230,20%,55%)]" />
+                      <span className="text-[hsl(230,20%,50%)] font-medium">{payout.date}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="font-bold text-[hsl(160,70%,35%)] text-lg">
+                      <span className="font-bold text-[hsl(235,50%,25%)] text-xl">
                         {payout.amount}
                       </span>
-                      <span className="text-xs px-3 py-1.5 rounded-full bg-[hsl(160,50%,85%)] text-[hsl(160,60%,30%)] font-medium border border-[hsl(160,50%,70%)]/50">
+                      <span className="text-xs px-3 py-1.5 rounded-full bg-[hsl(230,25%,90%)] text-[hsl(230,20%,50%)] font-medium">
                         Upcoming
                       </span>
                     </div>
@@ -256,12 +256,12 @@ export const EarnPayouts = () => {
               </div>
 
               {/* Summary footer */}
-              <div className="mx-4 mb-4 pt-4 border-t border-[hsl(220,30%,90%)] flex items-center justify-between">
+              <div className="mx-4 mb-4 pt-4 border-t border-[hsl(230,20%,88%)] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[hsl(220,40%,40%)]" />
-                  <span className="text-sm text-[hsl(220,40%,35%)]">Tax summaries available</span>
+                  <FileText className="w-4 h-4 text-[hsl(230,20%,55%)]" />
+                  <span className="text-sm text-[hsl(230,20%,55%)]">Tax summaries available</span>
                 </div>
-                <span className="text-lg font-bold text-[hsl(160,70%,35%)]">+€245 earned</span>
+                <span className="text-xl font-bold text-[hsl(235,50%,25%)]">+€245 earned</span>
               </div>
             </div>
           </motion.div>
