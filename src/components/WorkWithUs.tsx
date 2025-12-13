@@ -8,8 +8,8 @@ export const WorkWithUs = () => (
   <section id="work-with-us" className="relative w-full py-24 lg:py-32 bg-gradient-to-b from-background via-card to-background overflow-hidden">
     {/* Background decorative elements */}
     <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
     </div>
 
     <div className="container mx-auto px-6 relative z-10">
@@ -26,7 +26,7 @@ export const WorkWithUs = () => (
             <Badge>For Industry Leaders</Badge>
             <h2 className="text-4xl lg:text-5xl font-serif font-bold text-foreground mt-4 leading-tight">
               Your legacy deserves a{" "}
-              <span className="text-primary">signature deal.</span>
+              <span className="text-gradient">signature deal.</span>
             </h2>
             <p className="text-lg text-muted-foreground mt-6 leading-relaxed">
               Join an exclusive network of visionaries who are reshaping how premium assets 
@@ -38,7 +38,7 @@ export const WorkWithUs = () => (
           {/* Feature highlights */}
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <div className="p-2 rounded-lg bg-white/10 text-white">
                 <Star className="w-5 h-5" />
               </div>
               <div>
@@ -49,7 +49,7 @@ export const WorkWithUs = () => (
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <div className="p-2 rounded-lg bg-white/10 text-white">
                 <TrendingUp className="w-5 h-5" />
               </div>
               <div>
@@ -60,7 +60,7 @@ export const WorkWithUs = () => (
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <div className="p-2 rounded-lg bg-white/10 text-white">
                 <Shield className="w-5 h-5" />
               </div>
               <div>
@@ -72,7 +72,7 @@ export const WorkWithUs = () => (
             </div>
           </div>
 
-          <Button size="lg" className="group">
+          <Button size="lg" variant="outline" className="group border-white text-white hover:bg-white hover:text-background">
             Launch Your Signature Deal
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
@@ -87,7 +87,7 @@ export const WorkWithUs = () => (
           className="relative"
         >
           {/* Main image container */}
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-white/10">
             <img
               src={workWithUsHero}
               alt="Industry leader with horses"
@@ -105,8 +105,8 @@ export const WorkWithUs = () => (
               className="absolute bottom-6 left-6 right-6 p-6 bg-card/95 backdrop-blur-sm rounded-xl border border-border/50"
             >
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-bold text-lg">BB</span>
+                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">BB</span>
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">Bryan Balsiger</h4>
