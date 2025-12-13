@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Coins, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import howItWorksHeroBg from "@/assets/how-it-works-hero-bg.jpg";
 
 const floatingIcons = [
   { Icon: Shield, delay: 0, x: -120, y: -80 },
@@ -12,15 +13,14 @@ const floatingIcons = [
 export const HowItWorksHero = () => {
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-24 pb-16">
-      {/* Animated gradient background */}
+      {/* Background image */}
       <div className="absolute inset-0">
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/10"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        <img 
+          src={howItWorksHeroBg} 
+          alt="" 
+          className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-background/60" />
       </div>
       
       {/* Animated orbs */}
@@ -69,19 +69,18 @@ export const HowItWorksHero = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Animated badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-8"
           >
             <motion.div
-              className="w-2 h-2 rounded-full bg-primary"
+              className="w-2 h-2 rounded-full bg-white"
               animate={{ scale: [1, 1.3, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             />
-            <span className="text-sm font-medium text-primary">Simple. Secure. Transparent.</span>
+            <span className="text-sm font-medium text-white">Simple. Secure. Transparent.</span>
           </motion.div>
 
           <motion.h1
@@ -119,13 +118,13 @@ export const HowItWorksHero = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button asChild size="lg" className="group text-base px-8 h-14">
+            <Button asChild size="lg" className="group text-base px-8 h-14 bg-white text-background hover:bg-white/90">
               <Link to="/auth">
                 Start investing
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-base px-8 h-14 border-border/50 hover:border-primary/50">
+            <Button asChild variant="outline" size="lg" className="text-base px-8 h-14 border-white/50 text-white hover:bg-white/10 hover:border-white">
               <Link to="/live-deals">
                 Browse deals
               </Link>
