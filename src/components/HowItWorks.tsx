@@ -203,7 +203,7 @@ export const HowItWorks = () => {
         >
           <Badge>How It Works</Badge>
           <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-4">
-            Four steps to fractional ownership
+            Four steps to fractional <span className="text-gradient">ownership</span>
           </h2>
           <p className="text-muted-foreground mb-16 max-w-lg mx-auto">
             From discovery to earnings in minutes
