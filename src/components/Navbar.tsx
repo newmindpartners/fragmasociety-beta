@@ -33,8 +33,8 @@ const navSections: NavSection[] = [
   {
     label: "Businesses",
     items: [
-      { label: "Launch Your Signature Deal", href: "/#work-with-us", description: "Create and launch your investment opportunity", icon: Rocket },
-      { label: "Tokenize & List Your Asset", href: "/#work-with-us", description: "Transform assets into tradeable tokens", icon: Coins },
+      { label: "Launch Your Signature Deal", href: "/signature-deal", description: "Create and launch your investment opportunity", icon: Rocket, isRoute: true },
+      { label: "Tokenize & List Your Asset", href: "/tokenize", description: "Transform assets into tradeable tokens", icon: Coins, isRoute: true },
     ],
   },
   {

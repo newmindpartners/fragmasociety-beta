@@ -32,18 +32,20 @@ export const Footer = () => (
         <div>
           <h5 className="text-foreground font-bold mb-4">Platform</h5>
           <ul className="space-y-2 text-muted-foreground text-sm">
-            <li className="hover:text-primary cursor-pointer transition-colors">Marketplace</li>
-            <li className="hover:text-primary cursor-pointer transition-colors">How it Works</li>
-            <li><a href="/#work-with-us" className="hover:text-primary transition-colors">Launch your Signature Deal</a></li>
-            <li><Link to="/strategy" className="hover:text-primary transition-colors">Invest with us</Link></li>
+            <li><Link to="/marketplace" className="hover:text-primary transition-colors">Marketplace</Link></li>
+            <li><a href="/#features" className="hover:text-primary transition-colors">How it Works</a></li>
+            <li><Link to="/signature-deal" className="hover:text-primary transition-colors">Launch your Signature Deal</Link></li>
+            <li><Link to="/tokenize" className="hover:text-primary transition-colors">Tokenize & List Your Asset</Link></li>
+            <li><Link to="/strategy" className="hover:text-primary transition-colors">Fragma One</Link></li>
+            <li><Link to="/membership" className="hover:text-primary transition-colors">Investor Membership</Link></li>
           </ul>
         </div>
         <div>
-          <h5 className="text-foreground font-bold mb-4">Company</h5>
+          <h5 className="text-foreground font-bold mb-4">Learn</h5>
           <ul className="space-y-2 text-muted-foreground text-sm">
-            <li className="hover:text-primary cursor-pointer transition-colors">About</li>
-            <li className="hover:text-primary cursor-pointer transition-colors">Careers</li>
-            <li className="hover:text-primary cursor-pointer transition-colors">Partners</li>
+            <li><Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+            <li><a href="/#partners" className="hover:text-primary transition-colors">Partners</a></li>
+            <li className="hover:text-primary cursor-pointer transition-colors">Documentation</li>
           </ul>
         </div>
         <div>
