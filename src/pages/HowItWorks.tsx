@@ -6,6 +6,7 @@ import { SignatureDealsSection } from "@/components/how-it-works/SignatureDealsS
 import { AssetShowcase } from "@/components/how-it-works/AssetShowcase";
 import { TokenOwnership } from "@/components/how-it-works/TokenOwnership";
 import { FeatureCards } from "@/components/how-it-works/FeatureCards";
+import { SafetyTrustSection } from "@/components/how-it-works/SafetyTrustSection";
 import { AnimatedCTA } from "@/components/how-it-works/AnimatedCTA";
 
 const HowItWorks = () => {
@@ -17,7 +18,7 @@ const HowItWorks = () => {
       <SignatureDealsSection />
       <AssetShowcase />
       <TokenOwnership />
-      <FeatureCards />
+      <SafetyTrustSection />
       <AnimatedCTA />
       <Footer />
     </div>
