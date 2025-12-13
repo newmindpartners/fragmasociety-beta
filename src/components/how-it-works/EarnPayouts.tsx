@@ -6,21 +6,19 @@ import {
   Film, 
   Building, 
   BarChart3,
-  ArrowDown,
+  ArrowRight,
   Wallet,
   FileText,
   Clock,
   Download,
-  DollarSign,
-  Coins,
-  Lock
+  Zap
 } from "lucide-react";
 
 const earnTypes = [
-  { icon: Calendar, label: "Regular yield", desc: "Monthly / Quarterly" },
-  { icon: Film, label: "Revenue share", desc: "Film, rent, fees" },
-  { icon: Building, label: "Profit participation", desc: "Sales & refinancing" },
-  { icon: TrendingUp, label: "Capital gains", desc: "Sell higher" },
+  { icon: Calendar, label: "Regular yield", desc: "Monthly / Quarterly", color: "from-green-500 to-emerald-500" },
+  { icon: Film, label: "Revenue share", desc: "Film, rent, fees", color: "from-purple-500 to-pink-500" },
+  { icon: Building, label: "Profit participation", desc: "Sales & refinancing", color: "from-blue-500 to-cyan-500" },
+  { icon: TrendingUp, label: "Capital gains", desc: "Sell higher", color: "from-orange-500 to-amber-500" },
 ];
 
 const payoutHistory = [
@@ -33,10 +31,51 @@ const payoutHistory = [
 export const EarnPayouts = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [selectedStorage, setSelectedStorage] = useState<'wallet' | 'vault'>('vault');
+  const [activeFlow, setActiveFlow] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    const interval = setInterval(() => {
+      setActiveFlow((prev) => (prev + 1) % 3);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [isInView]);
+
+  const flowSteps = [
+    { icon: Building, label: "Asset earns" },
+    { icon: Zap, label: "Auto-calculated" },
+    { icon: Wallet, label: "You receive" },
+  ];
 
   return (
-    <section ref={ref} className="py-24 relative overflow-hidden bg-[hsl(220,30%,96%)]">
+    <section ref={ref} className="py-24 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-card/30 via-background to-background" />
+      
+      {/* Floating coins animation */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-2xl"
+          style={{
+            left: `${15 + Math.random() * 70}%`,
+            top: `${20 + Math.random() * 60}%`,
+          }}
+          animate={{
+            y: [0, -20, 0],
+            opacity: [0.3, 0.6, 0.3],
+            rotate: [0, 10, 0],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 2,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+          }}
+        >
+          💰
+        </motion.div>
+      ))}
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
@@ -46,13 +85,18 @@ export const EarnPayouts = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[hsl(220,40%,20%)]">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
+              <TrendingUp className="w-4 h-4 text-white" />
+              <span className="text-sm font-medium text-white">Automated Earnings</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Earn when the asset{" "}
-              <span className="text-primary">
+              <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
                 performs
               </span>
             </h2>
-            <p className="text-lg text-[hsl(220,20%,50%)]">
+            <p className="text-lg text-muted-foreground">
               Payouts flow directly to you. Automatically.
             </p>
           </motion.div>
@@ -70,122 +114,96 @@ export const EarnPayouts = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="p-5 bg-white rounded-2xl border border-[hsl(220,20%,90%)] shadow-sm text-center"
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="relative group cursor-pointer"
               >
-                <div className="w-12 h-12 mx-auto rounded-xl bg-primary flex items-center justify-center mb-3">
-                  <type.icon className="w-6 h-6 text-white" />
+                <motion.div
+                  className={`absolute inset-0 bg-gradient-to-br ${type.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity`}
+                />
+                <div className="relative p-5 bg-card/80 border border-border/50 rounded-2xl hover:border-primary/30 transition-colors text-center">
+                  <motion.div
+                    className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-3`}
+                    whileHover={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <type.icon className="w-6 h-6 text-white" />
+                  </motion.div>
+                  <h3 className="font-semibold text-sm mb-1">{type.label}</h3>
+                  <p className="text-xs text-muted-foreground">{type.desc}</p>
                 </div>
-                <h3 className="font-semibold text-sm mb-1 text-[hsl(220,40%,20%)]">{type.label}</h3>
-                <p className="text-xs text-[hsl(220,20%,50%)]">{type.desc}</p>
               </motion.div>
             ))}
           </motion.div>
 
-          {/* Investment flow dashboard */}
+          {/* Automated flow visualization */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="max-w-md mx-auto space-y-4"
+            className="mb-16"
           >
-            {/* You invest card */}
-            <div className="p-5 bg-white rounded-2xl border border-[hsl(220,20%,90%)] shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center">
-                  <DollarSign className="w-7 h-7 text-white" />
+            <h3 className="text-center text-lg font-semibold text-muted-foreground mb-8">
+              How payouts work
+            </h3>
+            
+            <div className="flex items-center justify-center gap-4 md:gap-8">
+              {flowSteps.map((step, index) => (
+                <div key={index} className="flex items-center gap-4 md:gap-8">
+                  <motion.div
+                    className={`relative flex flex-col items-center`}
+                    animate={activeFlow >= index ? { scale: [1, 1.1, 1] } : {}}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {/* Glow */}
+                    <motion.div
+                      className="absolute inset-0 bg-primary rounded-2xl blur-xl"
+                      animate={{ opacity: activeFlow === index ? 0.4 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    
+                    <div className={`relative w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all ${
+                      activeFlow >= index 
+                        ? "bg-gradient-to-br from-primary to-accent" 
+                        : "bg-card border border-border/50"
+                    }`}>
+                      <step.icon className={`w-8 h-8 md:w-10 md:h-10 ${activeFlow >= index ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`mt-3 text-xs md:text-sm font-medium ${activeFlow >= index ? "text-primary" : "text-muted-foreground"}`}>
+                      {step.label}
+                    </span>
+                  </motion.div>
+                  
+                  {index < flowSteps.length - 1 && (
+                    <motion.div
+                      className="flex-shrink-0"
+                      animate={{ 
+                        opacity: activeFlow > index ? 1 : 0.3,
+                        x: activeFlow > index ? [0, 5, 0] : 0 
+                      }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <ArrowRight className={`w-6 h-6 ${activeFlow > index ? "text-primary" : "text-muted-foreground/30"}`} />
+                    </motion.div>
+                  )}
                 </div>
-                <div>
-                  <p className="text-sm text-[hsl(220,20%,50%)]">You invest</p>
-                  <p className="text-2xl font-bold text-[hsl(220,40%,20%)]">$1,000</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Arrow down */}
-            <div className="flex justify-center">
-              <div className="w-10 h-10 rounded-full bg-[hsl(220,20%,92%)] flex items-center justify-center">
-                <ArrowDown className="w-5 h-5 text-[hsl(220,20%,50%)]" />
-              </div>
-            </div>
-
-            {/* You receive card */}
-            <div className="p-5 bg-white rounded-2xl border border-primary/30 shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center">
-                  <Coins className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-[hsl(220,20%,50%)]">You receive</p>
-                  <p className="text-2xl font-bold text-primary">100 Tokens</p>
-                  <p className="text-sm text-[hsl(220,20%,50%)]">= Your ownership share</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Storage options */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setSelectedStorage('wallet')}
-                className={`p-4 rounded-2xl border transition-all ${
-                  selectedStorage === 'wallet'
-                    ? 'bg-white border-primary shadow-sm'
-                    : 'bg-white border-[hsl(220,20%,90%)]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    selectedStorage === 'wallet' ? 'bg-primary' : 'bg-[hsl(220,20%,92%)]'
-                  }`}>
-                    <Wallet className={`w-5 h-5 ${selectedStorage === 'wallet' ? 'text-white' : 'text-[hsl(220,20%,50%)]'}`} />
-                  </div>
-                  <div className="text-left">
-                    <p className="font-semibold text-sm text-[hsl(220,40%,20%)]">Your Wallet</p>
-                    <p className="text-xs text-[hsl(220,20%,50%)]">Direct control</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setSelectedStorage('vault')}
-                className={`p-4 rounded-2xl border transition-all relative ${
-                  selectedStorage === 'vault'
-                    ? 'bg-white border-primary shadow-sm'
-                    : 'bg-white border-[hsl(220,20%,90%)]'
-                }`}
-              >
-                {selectedStorage === 'vault' && (
-                  <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-primary" />
-                )}
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    selectedStorage === 'vault' ? 'bg-primary' : 'bg-[hsl(220,20%,92%)]'
-                  }`}>
-                    <Lock className={`w-5 h-5 ${selectedStorage === 'vault' ? 'text-white' : 'text-[hsl(220,20%,50%)]'}`} />
-                  </div>
-                  <div className="text-left">
-                    <p className="font-semibold text-sm text-[hsl(220,40%,20%)]">Smart Vault</p>
-                    <p className="text-xs text-[hsl(220,20%,50%)]">Automated & secure</p>
-                  </div>
-                </div>
-              </button>
+              ))}
             </div>
           </motion.div>
 
-          {/* Payout history */}
+          {/* Payout dashboard preview */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="max-w-2xl mx-auto mt-12"
+            className="max-w-2xl mx-auto"
           >
-            <div className="p-6 bg-white rounded-3xl border border-[hsl(220,20%,90%)] shadow-sm">
+            <div className="p-6 bg-card/80 border border-border/50 rounded-3xl">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-primary" />
-                  <span className="font-semibold text-[hsl(220,40%,20%)]">Payout Dashboard</span>
+                  <span className="font-semibold">Payout Dashboard</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-[hsl(220,20%,50%)]">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Download className="w-4 h-4" />
                   <span>Export</span>
                 </div>
@@ -201,7 +219,7 @@ export const EarnPayouts = () => {
                     className={`flex items-center justify-between p-4 rounded-xl ${
                       payout.status === "upcoming" 
                         ? "bg-primary/5 border border-primary/20" 
-                        : "bg-[hsl(220,30%,97%)]"
+                        : "bg-muted/30"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -212,7 +230,7 @@ export const EarnPayouts = () => {
                           <div className="w-2 h-2 rounded-full bg-green-500" />
                         </div>
                       )}
-                      <span className="text-[hsl(220,20%,50%)]">{payout.date}</span>
+                      <span className="text-muted-foreground">{payout.date}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className={`font-bold ${payout.status === "upcoming" ? "text-primary" : "text-green-500"}`}>
@@ -229,10 +247,10 @@ export const EarnPayouts = () => {
               </div>
 
               {/* Summary row */}
-              <div className="mt-6 pt-6 border-t border-[hsl(220,20%,90%)] flex items-center justify-between">
+              <div className="mt-6 pt-6 border-t border-border/50 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[hsl(220,20%,50%)]" />
-                  <span className="text-sm text-[hsl(220,20%,50%)]">Tax summaries available</span>
+                  <FileText className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Tax summaries available</span>
                 </div>
                 <span className="text-lg font-bold text-green-500">+€245 earned</span>
               </div>
