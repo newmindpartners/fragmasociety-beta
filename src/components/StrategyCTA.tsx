@@ -209,13 +209,13 @@ export const StrategyCTA = () => {
                     whileHover={{ rotate: [0, -10, 10, 0] }}
                     transition={{ duration: 0.5 }}
                   >
-                    <div className="absolute inset-0 bg-primary/30 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-white/30 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="icon-premium w-12 h-12">
-                      <feature.icon className="w-5 h-5 text-primary" />
+                      <feature.icon className="w-5 h-5 text-white" />
                     </div>
                   </motion.div>
                   
-                  <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                  <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-white transition-colors">
                     {feature.label}
                   </h3>
                   <p className="text-xs text-muted-foreground">
@@ -234,7 +234,7 @@ export const StrategyCTA = () => {
             transition={{ delay: 0.8 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           >
-            <Button asChild size="lg" className="group relative overflow-hidden btn-glow px-8 py-6 text-base">
+            <Button asChild size="lg" className="group relative overflow-hidden bg-white text-background hover:bg-white/90 px-8 py-6 text-base">
               <Link to="/auth" className="flex items-center gap-3">
                 <Lock className="w-4 h-4" />
                 <span>Register to view strategy details</span>
@@ -247,8 +247,8 @@ export const StrategyCTA = () => {
               </Link>
             </Button>
             
-            <Button variant="outline" size="lg" className="group px-8 py-6 text-base border-primary/30 hover:border-primary/60 hover:bg-primary/5">
-              <Phone className="w-4 h-4 text-primary mr-3" />
+            <Button variant="outline" size="lg" className="group px-8 py-6 text-base border-white/30 hover:border-white/60 hover:bg-white/5 text-white">
+              <Phone className="w-4 h-4 text-white mr-3" />
               <span>Book a Call</span>
             </Button>
           </motion.div>
@@ -262,15 +262,15 @@ export const StrategyCTA = () => {
             className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground"
           >
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>Luxembourg Securitisation</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>Professional Governance</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>Tokenized Notes</span>
             </div>
           </motion.div>
