@@ -5,7 +5,7 @@ import { VisualSteps } from "@/components/how-it-works/VisualSteps";
 import { SignatureDealsSection } from "@/components/how-it-works/SignatureDealsSection";
 import { AssetShowcase } from "@/components/how-it-works/AssetShowcase";
 import { TokenOwnership } from "@/components/how-it-works/TokenOwnership";
-import { FeatureCards } from "@/components/how-it-works/FeatureCards";
+import { EarnPayouts } from "@/components/how-it-works/EarnPayouts";
 import { SafetyTrustSection } from "@/components/how-it-works/SafetyTrustSection";
 import { AnimatedCTA } from "@/components/how-it-works/AnimatedCTA";
 
@@ -18,6 +18,7 @@ const HowItWorks = () => {
       <SignatureDealsSection />
       <AssetShowcase />
       <TokenOwnership />
+      <EarnPayouts />
       <SafetyTrustSection />
       <AnimatedCTA />
       <Footer />
