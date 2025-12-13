@@ -144,21 +144,21 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
                     <Target className="w-5 h-5 text-white" />
                     <div>
                       <p className="text-xs text-muted-foreground">Target</p>
-                      <p className="font-semibold text-foreground">{deal.targetReturn}</p>
+                      <p className="font-semibold text-foreground blur-sm select-none">{deal.targetReturn}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5 text-white" />
                     <div>
                       <p className="text-xs text-muted-foreground">Term</p>
-                      <p className="font-semibold text-foreground">{deal.term}</p>
+                      <p className="font-semibold text-foreground blur-sm select-none">{deal.term}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Euro className="w-5 h-5 text-white" />
                     <div>
                       <p className="text-xs text-muted-foreground">From</p>
-                      <p className="font-semibold text-foreground">{deal.minTicket}</p>
+                      <p className="font-semibold text-foreground blur-sm select-none">{deal.minTicket}</p>
                     </div>
                   </div>
                 </div>
@@ -167,21 +167,15 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button 
                     size="lg" 
-                    className="flex-1 group"
+                    variant="outline"
+                    className="flex-1 group border-white text-white hover:bg-white hover:text-background"
                     onClick={() => {
                       onClose();
                       onSeeDeal();
                     }}
                   >
-                    See full deal
+                    Unlock deal
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    onClick={onClose}
-                  >
-                    Close
                   </Button>
                 </div>
               </div>
