@@ -23,7 +23,7 @@ const navSections: NavSection[] = [
   {
     label: "Investors",
     items: [
-      { label: "Live Deals", href: "/marketplace", description: "Browse current investment opportunities", icon: Zap, isRoute: true, badge: "Hot" },
+      { label: "Live Deals", href: "/live-deals", description: "Browse current investment opportunities", icon: Zap, isRoute: true, badge: "Hot" },
       { label: "Buy & Sell", href: "/marketplace", description: "Secondary marketplace for trading", icon: ShoppingCart, isRoute: true },
       { label: "How It Works", href: "/#features", description: "Understand the investment process", icon: HelpCircle },
       { label: "Investor Membership", href: "/membership", description: "Exclusive benefits for members", icon: Crown, isRoute: true },
