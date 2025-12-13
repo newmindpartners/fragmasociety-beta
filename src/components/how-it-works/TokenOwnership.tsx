@@ -69,7 +69,7 @@ export const TokenOwnership = () => {
                   </div>
                   <div>
                     <p className="text-sm text-[hsl(230,20%,55%)]">You invest</p>
-                    <p className="text-xl font-bold text-[hsl(230,60%,30%)]">€1,000</p>
+                    <p className="text-xl font-bold text-[hsl(230,60%,30%)]">$1,000</p>
                   </div>
                 </div>
               </div>
