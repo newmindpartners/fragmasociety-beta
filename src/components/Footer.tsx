@@ -36,7 +36,7 @@ export const Footer = () => (
             <li><a href="/#features" className="hover:text-primary transition-colors">How it Works</a></li>
             <li><Link to="/signature-deal" className="hover:text-primary transition-colors">Launch your Signature Deal</Link></li>
             <li><Link to="/tokenize" className="hover:text-primary transition-colors">Tokenize & List Your Asset</Link></li>
-            <li><Link to="/strategy" className="hover:text-primary transition-colors">Fragma One</Link></li>
+            <li><Link to="/strategy" className="hover:text-primary transition-colors">Fragma One - Invest with us</Link></li>
             <li><Link to="/membership" className="hover:text-primary transition-colors">Investor Membership</Link></li>
           </ul>
         </div>
