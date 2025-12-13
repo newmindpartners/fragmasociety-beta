@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Wallet, Lock, BarChart3, Coins, ArrowDown, TrendingUp, Clock, CircleDollarSign } from "lucide-react";
+import { Wallet, Lock, Coins, ArrowDown, CircleDollarSign, Info } from "lucide-react";
 
 export const TokenOwnership = () => {
   const ref = useRef(null);
@@ -18,6 +18,13 @@ export const TokenOwnership = () => {
   const vaults = [
     { icon: Wallet, title: "Your Wallet", desc: "Direct control" },
     { icon: Lock, title: "Smart Vault", desc: "Automated & secure" },
+  ];
+
+  const claimStats = [
+    { label: "Earned this week", value: "23", unit: "ADA", divider: true },
+    { label: "Available to claim", value: "$112.45", unit: "≈ 58.23 ADA", divider: true },
+    { label: "Last claimed", value: "$85.10", unit: "Apr 13, 2025", divider: true },
+    { label: "Next claim", value: "6 Days", unit: "Apr 16, 2025", divider: false },
   ];
 
   return (
@@ -58,7 +65,7 @@ export const TokenOwnership = () => {
               <div className="p-5 bg-card border border-border rounded-xl">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
-                    <CircleDollarSign className="w-6 h-6 text-white" />
+                    <CircleDollarSign className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">You invest</p>
@@ -82,7 +89,7 @@ export const TokenOwnership = () => {
               <div className="p-5 bg-card border border-primary/30 rounded-xl">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
-                    <Coins className="w-6 h-6 text-white" />
+                    <Coins className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">You receive</p>
@@ -111,7 +118,7 @@ export const TokenOwnership = () => {
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                           isActive ? "bg-primary" : "bg-muted"
                         }`}>
-                          <vault.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-muted-foreground"}`} />
+                          <vault.icon className={`w-5 h-5 ${isActive ? "text-primary-foreground" : "text-muted-foreground"}`} />
                         </div>
                         <div>
                           <h3 className="font-semibold text-sm">{vault.title}</h3>
@@ -131,100 +138,48 @@ export const TokenOwnership = () => {
               </div>
             </motion.div>
 
-            {/* Right Column - Dashboard Preview */}
+            {/* Right Column - Claim Income Dashboard */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-card border border-border rounded-xl overflow-hidden"
+              className="bg-[hsl(230,30%,97%)] rounded-2xl p-6 shadow-sm"
             >
-              {/* Dashboard Header */}
-              <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-primary" />
-                  <span className="font-semibold text-sm">Your Portfolio</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-red-500/60" />
-                  <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
-                  <div className="w-2 h-2 rounded-full bg-green-500/60" />
+              {/* Header */}
+              <div className="flex items-center gap-2 mb-6">
+                <h3 className="text-xl font-semibold text-[hsl(230,30%,20%)]">Claim Income</h3>
+                <div className="w-6 h-6 rounded-full bg-[hsl(230,20%,92%)] flex items-center justify-center">
+                  <Info className="w-3.5 h-3.5 text-[hsl(230,20%,60%)]" />
                 </div>
               </div>
 
-              {/* Dashboard Content */}
-              <div className="p-5 space-y-4">
-                {/* Stats Row */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-muted/30 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Total Value</p>
-                    <p className="text-lg font-bold">€1,120</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <TrendingUp className="w-3 h-3 text-green-500" />
-                      <span className="text-xs text-green-500">+12%</span>
+              {/* Stats Grid */}
+              <div className="flex items-start justify-between mb-8">
+                {claimStats.map((stat, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="pr-4">
+                      <p className="text-sm text-[hsl(230,20%,55%)] mb-2 leading-tight">
+                        {stat.label.split(' ').slice(0, 2).join(' ')}<br />
+                        {stat.label.split(' ').slice(2).join(' ')}
+                      </p>
+                      <p className="text-xl font-bold text-[hsl(230,60%,30%)]">{stat.value}</p>
+                      <p className="text-xs text-[hsl(230,20%,55%)] mt-0.5">{stat.unit}</p>
                     </div>
+                    {stat.divider && (
+                      <div className="w-px h-16 bg-[hsl(230,20%,85%)] mr-4" />
+                    )}
                   </div>
-                  <div className="p-3 bg-muted/30 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Tokens Held</p>
-                    <p className="text-lg font-bold">100</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <Coins className="w-3 h-3 text-primary" />
-                      <span className="text-xs text-muted-foreground">units</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Holdings List */}
-                <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Holdings</p>
-                  
-                  <div className="p-3 bg-background border border-border rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-sm">
-                          🏠
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">Malibu Villa</p>
-                          <p className="text-xs text-muted-foreground">Real Estate</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-sm">€1,120</p>
-                        <p className="text-xs text-green-500">+€120</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Recent Activity */}
-                <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Recent</p>
-                  
-                  <div className="space-y-2">
-                    {[
-                      { action: "Purchased", tokens: "100 tokens", time: "2 days ago" },
-                      { action: "Yield received", tokens: "€12.50", time: "1 week ago" },
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/20 transition-colors"
-                      >
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-3 h-3 text-muted-foreground" />
-                          <span className="text-sm">{item.action}</span>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-sm font-medium">{item.tokens}</span>
-                          <p className="text-xs text-muted-foreground">{item.time}</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
+
+              {/* Claim Button */}
+              <motion.button
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className="w-full py-4 bg-[hsl(230,70%,35%)] hover:bg-[hsl(230,70%,30%)] text-white font-semibold rounded-full text-lg transition-colors"
+              >
+                Claim Income
+              </motion.button>
             </motion.div>
           </div>
         </div>
