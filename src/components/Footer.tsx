@@ -68,7 +68,6 @@ export const Footer = () => (
       <div className="border-t border-foreground/10 pt-8 mb-8">
         <h5 className="text-foreground font-bold mb-4">Legal</h5>
         <ul className="flex flex-wrap gap-x-8 gap-y-2 text-muted-foreground text-sm mb-6">
-          <li><span className="hover:text-white cursor-pointer transition-colors">Risk Disclosure</span></li>
           <li><span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span></li>
           <li><span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span></li>
         </ul>
