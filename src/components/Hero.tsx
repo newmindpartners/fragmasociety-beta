@@ -178,12 +178,12 @@ export const Hero = () => {
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {/* Icon ring */}
-                    <div className="absolute inset-0 rounded-full border border-primary/20 group-hover:border-primary/40 transition-colors duration-500" />
+                  {/* Icon ring */}
+                    <div className="absolute inset-0 rounded-full border border-white/20 group-hover:border-white/40 transition-colors duration-500" />
                     
                     {/* Rotating ring on hover */}
                     <motion.div
-                      className="absolute inset-[-2px] rounded-full border border-transparent border-t-primary/50"
+                      className="absolute inset-[-2px] rounded-full border border-transparent border-t-white/50"
                       animate={{ rotate: 360 }}
                       transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                       style={{ opacity: 0 }}
@@ -191,7 +191,7 @@ export const Hero = () => {
                     />
                     
                     <item.Icon 
-                      className="text-primary/70 group-hover:text-primary transition-colors duration-500" 
+                      className="text-white/70 group-hover:text-white transition-colors duration-500" 
                       size={22} 
                       strokeWidth={1.5}
                     />
