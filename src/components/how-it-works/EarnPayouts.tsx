@@ -201,10 +201,10 @@ export const EarnPayouts = () => {
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b border-[hsl(220,30%,92%)]">
                 <div className="flex items-center gap-3">
-                  <BarChart3 className="w-5 h-5 text-[hsl(220,60%,30%)]" />
-                  <span className="font-semibold text-[hsl(220,60%,15%)] text-lg">Payout Dashboard</span>
+                  <BarChart3 className="w-5 h-5 text-[hsl(220,50%,20%)]" />
+                  <span className="font-semibold text-[hsl(220,50%,15%)] text-lg">Payout Dashboard</span>
                 </div>
-                <div className="flex items-center gap-2 text-[hsl(220,60%,30%)] cursor-pointer hover:text-[hsl(220,60%,20%)] transition-colors">
+                <div className="flex items-center gap-2 text-[hsl(220,50%,20%)] cursor-pointer hover:text-[hsl(220,50%,10%)] transition-colors">
                   <Download className="w-4 h-4" />
                   <span className="text-sm font-medium">Export</span>
                 </div>
@@ -222,7 +222,7 @@ export const EarnPayouts = () => {
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-3 h-3 rounded-full bg-[hsl(140,70%,45%)] shadow-[0_0_8px_hsl(140,70%,45%)]" />
-                      <span className="text-[hsl(220,60%,20%)] font-medium">{payout.date}</span>
+                      <span className="text-[hsl(220,50%,15%)] font-medium">{payout.date}</span>
                     </div>
                     <span className="font-bold text-[hsl(160,70%,35%)] text-lg">
                       {payout.amount}
@@ -241,7 +241,7 @@ export const EarnPayouts = () => {
                   >
                     <div className="flex items-center gap-3">
                       <Clock className="w-5 h-5 text-[hsl(160,60%,35%)]" />
-                      <span className="text-[hsl(220,60%,20%)] font-medium">{payout.date}</span>
+                      <span className="text-[hsl(220,50%,15%)] font-medium">{payout.date}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-bold text-[hsl(160,70%,35%)] text-lg">
@@ -258,8 +258,8 @@ export const EarnPayouts = () => {
               {/* Summary footer */}
               <div className="mx-4 mb-4 pt-4 border-t border-[hsl(220,30%,90%)] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[hsl(220,30%,60%)]" />
-                  <span className="text-sm text-[hsl(220,30%,50%)]">Tax summaries available</span>
+                  <FileText className="w-4 h-4 text-[hsl(220,40%,40%)]" />
+                  <span className="text-sm text-[hsl(220,40%,35%)]">Tax summaries available</span>
                 </div>
                 <span className="text-lg font-bold text-[hsl(160,70%,35%)]">+€245 earned</span>
               </div>
