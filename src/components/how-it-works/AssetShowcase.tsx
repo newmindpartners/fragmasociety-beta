@@ -1,6 +1,14 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Building, Film, Trophy, Gem, Briefcase, Leaf } from "lucide-react";
+
+// Import background images
+import rwaVilla from "@/assets/rwa-villa.jpg";
+import rwaFilm from "@/assets/rwa-film.jpg";
+import rwaLuxury from "@/assets/rwa-luxury.jpg";
+import rwaCommercial from "@/assets/rwa-commercial.jpg";
+
+const backgroundImages = [rwaVilla, rwaFilm, rwaLuxury, rwaCommercial];
 
 const assets = [
   { icon: Building, label: "Real Estate", color: "from-blue-500 to-cyan-500" },
@@ -16,6 +24,7 @@ export const AssetShowcase = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [bgIndex, setBgIndex] = useState(0);
 
   useEffect(() => {
     if (!isInView) return;
@@ -25,16 +34,37 @@ export const AssetShowcase = () => {
     return () => clearInterval(interval);
   }, [isInView]);
 
+  // Background image slider
+  useEffect(() => {
+    const bgInterval = setInterval(() => {
+      setBgIndex((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000);
+    return () => clearInterval(bgInterval);
+  }, []);
+
   return (
     <section ref={ref} className="py-24 relative overflow-hidden">
-      {/* Animated background */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5"
-        animate={{
-          backgroundPosition: ["0% 0%", "100% 100%"],
-        }}
-        transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-      />
+      {/* Background image slider */}
+      <div className="absolute inset-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={bgIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0"
+          >
+            <img
+              src={backgroundImages[bgIndex]}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        </AnimatePresence>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-background/80" />
+      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
