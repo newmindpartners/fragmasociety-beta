@@ -119,15 +119,15 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="flex justify-center gap-4 mb-20"
+            className="flex flex-col items-center gap-4 mb-16"
           >
-            <Button variant="hero" size="lg" className="group">
-              Browse Deals
+            <Button variant="outline" size="lg" className="group border-white text-white hover:bg-white hover:text-background">
+              Register your early access
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10">
-              Learn More
-            </Button>
+            <p className="text-white/50 text-xs text-center max-w-md">
+              Limited spots available! Register now to secure your place in our exclusive early access program and unlock special launch benefits.
+            </p>
           </motion.div>
 
           {/* Progress indicator for dynamic words */}
@@ -142,7 +142,7 @@ export const Hero = () => {
                 key={index}
                 className={`h-1 rounded-full transition-all duration-500 ${
                   index === currentWordIndex 
-                    ? "w-8 bg-primary" 
+                    ? "w-8 bg-white" 
                     : "w-2 bg-white/20"
                 }`}
               />
