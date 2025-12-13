@@ -59,17 +59,17 @@ export const TokenOwnership = () => {
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-4"
+              className="bg-[hsl(230,30%,97%)] rounded-2xl p-6 shadow-sm space-y-4"
             >
               {/* Investment input card */}
-              <div className="p-5 bg-card border border-border rounded-xl">
+              <div className="p-5 bg-white border border-[hsl(230,20%,90%)] rounded-xl">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
-                    <CircleDollarSign className="w-6 h-6 text-primary-foreground" />
+                  <div className="w-12 h-12 rounded-lg bg-[hsl(230,70%,35%)] flex items-center justify-center">
+                    <CircleDollarSign className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">You invest</p>
-                    <p className="text-xl font-bold">€1,000</p>
+                    <p className="text-sm text-[hsl(230,20%,55%)]">You invest</p>
+                    <p className="text-xl font-bold text-[hsl(230,60%,30%)]">€1,000</p>
                   </div>
                 </div>
               </div>
@@ -79,28 +79,28 @@ export const TokenOwnership = () => {
                 <motion.div
                   animate={{ y: [0, 4, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
-                  className="w-10 h-10 rounded-full bg-muted flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-[hsl(230,20%,92%)] flex items-center justify-center"
                 >
-                  <ArrowDown className="w-5 h-5 text-muted-foreground" />
+                  <ArrowDown className="w-5 h-5 text-[hsl(230,20%,55%)]" />
                 </motion.div>
               </div>
 
               {/* Token output card */}
-              <div className="p-5 bg-card border border-primary/30 rounded-xl">
+              <div className="p-5 bg-white border border-[hsl(230,70%,80%)] rounded-xl">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
-                    <Coins className="w-6 h-6 text-primary-foreground" />
+                  <div className="w-12 h-12 rounded-lg bg-[hsl(230,70%,35%)] flex items-center justify-center">
+                    <Coins className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">You receive</p>
-                    <p className="text-xl font-bold text-primary">100 Tokens</p>
-                    <p className="text-xs text-muted-foreground">= Your ownership share</p>
+                    <p className="text-sm text-[hsl(230,20%,55%)]">You receive</p>
+                    <p className="text-xl font-bold text-[hsl(230,70%,35%)]">100 Tokens</p>
+                    <p className="text-xs text-[hsl(230,20%,55%)]">= Your ownership share</p>
                   </div>
                 </div>
               </div>
 
               {/* Vault options */}
-              <div className="grid grid-cols-2 gap-3 mt-6">
+              <div className="grid grid-cols-2 gap-3 mt-2">
                 {vaults.map((vault, index) => {
                   const isActive = activeVault === index;
                   return (
@@ -109,27 +109,27 @@ export const TokenOwnership = () => {
                       onClick={() => setActiveVault(index)}
                       className={`relative p-4 rounded-xl border cursor-pointer transition-all ${
                         isActive 
-                          ? "bg-card border-primary" 
-                          : "bg-card/50 border-border hover:border-muted-foreground"
+                          ? "bg-white border-[hsl(230,70%,35%)]" 
+                          : "bg-white border-[hsl(230,20%,90%)] hover:border-[hsl(230,20%,70%)]"
                       }`}
                       whileHover={{ y: -2 }}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          isActive ? "bg-primary" : "bg-muted"
+                          isActive ? "bg-[hsl(230,70%,35%)]" : "bg-[hsl(230,20%,92%)]"
                         }`}>
-                          <vault.icon className={`w-5 h-5 ${isActive ? "text-primary-foreground" : "text-muted-foreground"}`} />
+                          <vault.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-[hsl(230,20%,55%)]"}`} />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-sm">{vault.title}</h3>
-                          <p className="text-xs text-muted-foreground">{vault.desc}</p>
+                          <h3 className="font-semibold text-sm text-[hsl(230,60%,30%)]">{vault.title}</h3>
+                          <p className="text-xs text-[hsl(230,20%,55%)]">{vault.desc}</p>
                         </div>
                       </div>
                       {isActive && (
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="absolute top-3 right-3 w-2 h-2 rounded-full bg-primary"
+                          className="absolute top-3 right-3 w-2 h-2 rounded-full bg-[hsl(230,70%,35%)]"
                         />
                       )}
                     </motion.div>
