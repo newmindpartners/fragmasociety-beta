@@ -8,7 +8,7 @@ import {
   Wallet, 
   TrendingUp,
   ArrowRight,
-  Circle
+  Check
 } from "lucide-react";
 
 const steps = [
@@ -122,7 +122,9 @@ export const VisualSteps = () => {
                       transition={{ duration: 2, repeat: isActive ? Infinity : 0 }}
                     >
                       {isPast ? (
-                        <Circle className="w-10 h-10 text-primary fill-primary" />
+                        <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center">
+                          <Check className="w-8 h-8 text-white" />
+                        </div>
                       ) : (
                         <step.icon className={`w-10 h-10 ${isActive ? "text-white" : "text-muted-foreground group-hover:text-white transition-colors"}`} />
                       )}
