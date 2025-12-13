@@ -23,7 +23,7 @@ export const Footer = () => (
         <div className="col-span-1">
           <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8 mb-4" />
           <p className="text-muted-foreground text-sm">
-            Making real-world assets simple to own, earn from and trade.
+            Buy and sell real world assets.
           </p>
         </div>
         <div>
