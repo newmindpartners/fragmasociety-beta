@@ -78,12 +78,12 @@ export const TokenizeAssetCTA = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/tokenize">
-                <Button size="lg" className="group w-full sm:w-auto">
+                <Button size="lg" className="group w-full sm:w-auto bg-white text-background hover:bg-white/90">
                   Start Tokenizing
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="group">
+              <Button size="lg" variant="outline" className="group border-white text-white hover:bg-white hover:text-background">
                 <Phone className="mr-2 w-4 h-4" />
                 Book a Call
               </Button>
