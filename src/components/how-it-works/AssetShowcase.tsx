@@ -73,18 +73,19 @@ export const AssetShowcase = () => {
       {/* Horizontal scrolling marquee */}
       <div className="relative w-full overflow-hidden">
         <motion.div
-          className="flex gap-6"
+          className="flex gap-6 pl-6"
           animate={{
-            x: [0, -50 * assets.length + "%"],
+            x: ["0%", "-50%"],
           }}
           transition={{
             x: {
-              duration: 40,
+              duration: 80,
               repeat: Infinity,
               ease: "linear",
+              repeatType: "loop",
             },
           }}
-          style={{ width: "fit-content" }}
+          style={{ width: "max-content" }}
         >
           {duplicatedAssets.map((asset, index) => (
             <motion.div
