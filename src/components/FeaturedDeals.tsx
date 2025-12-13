@@ -145,7 +145,7 @@ export const FeaturedDeals = () => {
         <div className="text-center mb-4">
           <h2 className="text-3xl lg:text-5xl font-serif font-bold">
             <span className="text-foreground">Invest With </span>
-            <span className="text-white">Industry Leaders</span>
+            <span className="text-gradient">Industry Leaders</span>
           </h2>
         </div>
         
