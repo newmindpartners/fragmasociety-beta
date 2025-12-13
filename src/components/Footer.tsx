@@ -19,19 +19,20 @@ export const Footer = () => (
     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
     
     <div className="container mx-auto px-6 relative z-10">
-      {/* Logo and description */}
-      <div className="mb-12">
-        <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8 mb-4" />
-        <p className="text-muted-foreground text-sm mb-2 max-w-md">
-          Buy and sell real world assets.
-        </p>
-        <p className="text-muted-foreground text-xs max-w-md">
-          Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
-        </p>
-      </div>
+      {/* 4 Column Navigation */}
+      <div className="grid md:grid-cols-4 gap-12 mb-12">
+        {/* Logo Column */}
+        <div>
+          <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8 mb-4" />
+          <p className="text-muted-foreground text-sm mb-2">
+            Buy and sell real world assets.
+          </p>
+          <p className="text-muted-foreground text-xs">
+            Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
+          </p>
+        </div>
 
-      {/* 3 Column Navigation */}
-      <div className="grid md:grid-cols-3 gap-12 mb-12">
+        {/* Investors Column */}
         <div>
           <h5 className="text-foreground font-bold mb-4">Investors</h5>
           <ul className="space-y-2 text-muted-foreground text-sm">
@@ -42,6 +43,8 @@ export const Footer = () => (
             <li><Link to="/strategy" className="hover:text-white transition-colors">Fragma One - Invest with us</Link></li>
           </ul>
         </div>
+
+        {/* Businesses Column */}
         <div>
           <h5 className="text-foreground font-bold mb-4">Businesses</h5>
           <ul className="space-y-2 text-muted-foreground text-sm">
@@ -49,6 +52,8 @@ export const Footer = () => (
             <li><Link to="/tokenize" className="hover:text-white transition-colors">Tokenize & List your asset</Link></li>
           </ul>
         </div>
+
+        {/* Learn Column */}
         <div>
           <h5 className="text-foreground font-bold mb-4">Learn</h5>
           <ul className="space-y-2 text-muted-foreground text-sm">
@@ -59,7 +64,7 @@ export const Footer = () => (
         </div>
       </div>
 
-      {/* Legal Section */}
+      {/* Legal Section - Full Width */}
       <div className="border-t border-foreground/10 pt-8 mb-8">
         <h5 className="text-foreground font-bold mb-4">Legal</h5>
         <ul className="flex flex-wrap gap-x-8 gap-y-2 text-muted-foreground text-sm mb-6">
@@ -67,7 +72,7 @@ export const Footer = () => (
           <li><span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span></li>
           <li><span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span></li>
         </ul>
-        <p className="text-muted-foreground text-xs leading-relaxed max-w-4xl">
+        <p className="text-muted-foreground text-xs leading-relaxed">
           Investing in tokenized assets involves risks, including credit, liquidity, currency, interest rate, volatility, capital repayment, and market risks. These factors may affect the value and performance of your investment. Please consult with a financial advisor and review our full risk disclosure before investing.
         </p>
       </div>
