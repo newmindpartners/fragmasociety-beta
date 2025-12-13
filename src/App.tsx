@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { ClerkAuthProvider } from "@/contexts/ClerkAuthContext";
 import { DisclaimerModal } from "@/components/DisclaimerModal";
 import Index from "./pages/Index";
 import Strategy from "./pages/Strategy";
@@ -19,7 +19,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
+    <ClerkAuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -40,7 +40,7 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </AuthProvider>
+    </ClerkAuthProvider>
   </QueryClientProvider>
 );
 
