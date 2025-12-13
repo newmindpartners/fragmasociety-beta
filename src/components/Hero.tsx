@@ -27,6 +27,7 @@ const dynamicWords = [
   "Real Estate",
   "Film & Entertainment",
   "Luxury Assets",
+  "Music Rights",
   "Sports",
   "Credit",
   "ESG & Impact"
