@@ -343,11 +343,14 @@ export const HowItWorks = () => {
           className="mt-12 pt-8 border-t border-white/5"
         >
           <p className="text-foreground font-medium mb-4">Ready to own your first slice?</p>
-          <div className="flex justify-center">
-            <Button variant="default" size="lg" className="group">
-              Create account
+          <div className="flex flex-col items-center gap-4">
+            <Button variant="outline" size="lg" className="group border-white text-white hover:bg-white hover:text-background">
+              Register your early access
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
+            <p className="text-white/50 text-xs text-center max-w-md">
+              Limited spots available! Register now to secure your place in our exclusive early access program and unlock special launch benefits.
+            </p>
           </div>
         </motion.div>
       </div>
