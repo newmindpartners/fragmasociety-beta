@@ -32,6 +32,7 @@ export const Footer = () => (
         <div>
           <h5 className="text-foreground font-bold mb-4">Platform</h5>
           <ul className="space-y-2 text-muted-foreground text-sm">
+            <li><Link to="/live-deals" className="hover:text-primary transition-colors">Live Deals</Link></li>
             <li><Link to="/marketplace" className="hover:text-primary transition-colors">Marketplace</Link></li>
             <li><a href="/#features" className="hover:text-primary transition-colors">How it Works</a></li>
             <li><Link to="/signature-deal" className="hover:text-primary transition-colors">Launch your Signature Deal</Link></li>
