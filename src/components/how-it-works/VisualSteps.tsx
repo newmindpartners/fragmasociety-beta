@@ -122,7 +122,7 @@ export const VisualSteps = () => {
                       transition={{ duration: 2, repeat: isActive ? Infinity : 0 }}
                     >
                       {isPast ? (
-                        <Circle className="w-10 h-10 text-white fill-white" />
+                        <Circle className="w-10 h-10 text-primary fill-primary" />
                       ) : (
                         <step.icon className={`w-10 h-10 ${isActive ? "text-white" : "text-muted-foreground group-hover:text-white transition-colors"}`} />
                       )}
