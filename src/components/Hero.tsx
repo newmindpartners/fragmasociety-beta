@@ -44,23 +44,20 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Video Background - Replace src with your video URL */}
+      {/* Video Background */}
       <div className="absolute inset-0 z-0">
-        {/* Placeholder gradient that simulates cinematic video backdrop */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(220,30%,8%)] via-[hsl(230,25%,12%)] to-[hsl(240,20%,6%)]" />
-        
-        {/* Uncomment and add your video URL here:
         <video
           autoPlay
           muted
           loop
           playsInline
           className="w-full h-full object-cover"
-          poster="/video-poster.jpg"
         >
-          <source src="YOUR_VIDEO_URL.mp4" type="video/mp4" />
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
-        */}
+        
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/50" />
         
         {/* Animated cinematic elements as placeholder */}
         <motion.div
