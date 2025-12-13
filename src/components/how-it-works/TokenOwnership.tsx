@@ -38,9 +38,9 @@ export const TokenOwnership = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border mb-4">
-              <Coins className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium">Digital Ownership</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-4">
+              <Coins className="w-4 h-4 text-white" />
+              <span className="text-sm font-medium text-white">Digital Ownership</span>
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold mb-3">

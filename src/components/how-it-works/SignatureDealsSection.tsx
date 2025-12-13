@@ -33,10 +33,10 @@ export const SignatureDealsSection = () => {
               initial={{ scale: 0 }}
               animate={isInView ? { scale: 1 } : {}}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6"
             >
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Signature Deals Only</span>
+              <Sparkles className="w-4 h-4 text-white" />
+              <span className="text-sm font-medium text-white">Signature Deals Only</span>
             </motion.div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-4">

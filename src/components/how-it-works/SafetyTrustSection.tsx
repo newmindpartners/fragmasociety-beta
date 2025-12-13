@@ -67,9 +67,9 @@ export const SafetyTrustSection = () => {
               initial={{ scale: 0 }}
               animate={isInView ? { scale: 1 } : {}}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 mb-6"
+              className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/10 border border-white/20 mb-6"
             >
-              <Lock className="w-10 h-10 text-primary" />
+              <Lock className="w-10 h-10 text-white" />
             </motion.div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -110,7 +110,7 @@ export const SafetyTrustSection = () => {
                     animate={isInView ? { scale: 1 } : {}}
                     transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
                   >
-                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                    <CheckCircle2 className="w-5 h-5 text-white" />
                   </motion.div>
 
                   <motion.div
@@ -138,21 +138,21 @@ export const SafetyTrustSection = () => {
               transition={{ duration: 0.5, delay: 0.6 }}
               className="relative md:col-span-2 lg:col-span-1"
             >
-              <div className="h-full p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-accent/10 border border-primary/20 rounded-3xl flex flex-col items-center justify-center text-center">
+              <div className="h-full p-6 bg-white/5 border border-white/20 rounded-3xl flex flex-col items-center justify-center text-center">
                 <motion.div
                   animate={{ 
                     boxShadow: [
-                      "0 0 20px rgba(var(--primary), 0.2)",
-                      "0 0 40px rgba(var(--primary), 0.4)",
-                      "0 0 20px rgba(var(--primary), 0.2)",
+                      "0 0 20px rgba(255, 255, 255, 0.1)",
+                      "0 0 40px rgba(255, 255, 255, 0.2)",
+                      "0 0 20px rgba(255, 255, 255, 0.1)",
                     ]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4"
+                  className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-4"
                 >
-                  <Shield className="w-8 h-8 text-primary" />
+                  <Shield className="w-8 h-8 text-white" />
                 </motion.div>
-                <h3 className="text-lg font-bold text-primary mb-1">Trusted Platform</h3>
+                <h3 className="text-lg font-bold text-white mb-1">Trusted Platform</h3>
                 <p className="text-sm text-muted-foreground">Institutional-grade security</p>
               </div>
             </motion.div>
