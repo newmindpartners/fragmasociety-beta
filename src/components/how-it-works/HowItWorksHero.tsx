@@ -1,86 +1,153 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield, Coins, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+
+const floatingIcons = [
+  { Icon: Shield, delay: 0, x: -120, y: -80 },
+  { Icon: Coins, delay: 0.5, x: 140, y: -60 },
+  { Icon: TrendingUp, delay: 1, x: -100, y: 100 },
+];
 
 export const HowItWorksHero = () => {
   return (
-    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-24 pb-16">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
+    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-24 pb-16">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0">
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/10"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
       
       {/* Animated orbs */}
       <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[100px]"
         animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
+          scale: [1, 1.3, 1],
+          x: [0, 50, 0],
+          y: [0, -30, 0],
         }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
+        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[100px]"
         animate={{
           scale: [1.2, 1, 1.2],
-          opacity: [0.4, 0.2, 0.4],
+          x: [0, -40, 0],
+          y: [0, 40, 0],
         }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
+
+      {/* Floating icons */}
+      {floatingIcons.map(({ Icon, delay, x, y }, index) => (
+        <motion.div
+          key={index}
+          className="absolute top-1/2 left-1/2 w-16 h-16 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ 
+            opacity: [0.4, 0.8, 0.4],
+            scale: 1,
+            x: x,
+            y: y,
+          }}
+          transition={{ 
+            delay,
+            duration: 4,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          }}
+        >
+          <Icon className="w-7 h-7 text-primary" />
+        </motion.div>
+      ))}
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.h1
+          {/* Animated badge */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8"
           >
-            How Fragma Society works{" "}
-            <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-              for investors
+            <motion.div
+              className="w-2 h-2 rounded-full bg-primary"
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            <span className="text-sm font-medium text-primary">Simple. Secure. Transparent.</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1]"
+          >
+            Invest in{" "}
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+                real assets
+              </span>
+              <motion.span
+                className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent rounded-full"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              />
             </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
           >
-            Invest in curated Signature Deals backed by real assets and industry leaders. 
-            Every opportunity is KYC-verified, compliant, and matched to your investor profile. 
-            Elite members also access private off-market deals.
+            From €50. Curated deals. Full ownership. Secondary liquidity.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-6"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button asChild size="lg" className="group">
+            <Button asChild size="lg" className="group text-base px-8 h-14">
               <Link to="/auth">
-                Create your account
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                Start investing
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button asChild variant="outline" size="lg" className="text-base px-8 h-14 border-border/50 hover:border-primary/50">
               <Link to="/live-deals">
-                Browse Signature Deals
+                Browse deals
               </Link>
             </Button>
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-sm text-muted-foreground"
-          >
-            Start from €50 • Regulated structures • Capital at risk
-          </motion.p>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
+          <motion.div
+            className="w-1.5 h-3 rounded-full bg-primary"
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </div>
+      </motion.div>
     </section>
   );
 };
