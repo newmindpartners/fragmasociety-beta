@@ -85,9 +85,9 @@ export const EarnPayouts = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-6">
-              <TrendingUp className="w-4 h-4 text-green-500" />
-              <span className="text-sm font-medium text-green-500">Automated Earnings</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
+              <TrendingUp className="w-4 h-4 text-white" />
+              <span className="text-sm font-medium text-white">Automated Earnings</span>
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-4">

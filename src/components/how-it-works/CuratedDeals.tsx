@@ -64,8 +64,8 @@ export const CuratedDeals = () => {
                 transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                 className="flex items-start gap-4 p-5 bg-card/50 border border-border/50 rounded-xl hover:border-primary/30 transition-colors"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <feature.icon className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <feature.icon className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
@@ -79,7 +79,7 @@ export const CuratedDeals = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="p-6 bg-primary/5 border border-primary/20 rounded-xl text-center"
+            className="p-6 bg-white/5 border border-white/20 rounded-xl text-center"
           >
             <p className="text-muted-foreground mb-2">
               You're not scrolling through hundreds of unknown offers.
