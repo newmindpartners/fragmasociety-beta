@@ -56,45 +56,11 @@ export const Hero = () => {
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
         
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Light overlay for text readability */}
+        <div className="absolute inset-0 bg-black/30" />
         
-        {/* Animated cinematic elements as placeholder */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px]"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[150px]"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            x: [0, -80, 0],
-            y: [0, 60, 0],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-[hsl(45,80%,50%)]/5 rounded-full blur-[120px]"
-          animate={{
-            scale: [1, 1.4, 1],
-            rotate: [0, 180, 360],
-            opacity: [0.1, 0.3, 0.1],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-        />
-        
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-background/40" />
-        
-        {/* Vignette effect */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_100%)] opacity-60" />
+        {/* Subtle vignette effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background)/0.5)_100%)]" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10 pt-32 pb-20">
