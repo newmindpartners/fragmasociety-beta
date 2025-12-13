@@ -6,7 +6,7 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Marketplace } from "@/components/Marketplace";
 import { AssetClasses } from "@/components/AssetClasses";
 import { WorkWithUs } from "@/components/WorkWithUs";
-import { TokenizeAsset } from "@/components/TokenizeAsset";
+import { TokenizeAssetCTA } from "@/components/TokenizeAssetCTA";
 import { StrategyCTA } from "@/components/StrategyCTA";
 import { Footer } from "@/components/Footer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
@@ -26,7 +26,7 @@ const Index = () => {
         <HowItWorks />
         <Marketplace />
         <WorkWithUs />
-        <TokenizeAsset />
+        <TokenizeAssetCTA />
         <StrategyCTA />
         <Footer />
       </div>
