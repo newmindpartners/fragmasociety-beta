@@ -1,6 +1,6 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ClipboardCheck, Building, Coins, Repeat } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState, MouseEvent } from "react";
 
 const steps = [
   {
@@ -107,14 +107,61 @@ const ConnectionLine = ({ index, isVisible }: { index: number; isVisible: boolea
   );
 };
 
-// Individual step component with enhanced animations
+// Individual step component with 3D tilt effect
 const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index: number; isVisible: boolean }) => {
   const Icon = step.icon;
+  const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+
+  // Motion values for tilt
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth spring animation for tilt
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), {
+    stiffness: 300,
+    damping: 30,
+  });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), {
+    stiffness: 300,
+    damping: 30,
+  });
+
+  // Glare effect position
+  const glareX = useSpring(useTransform(mouseX, [-0.5, 0.5], [0, 100]), {
+    stiffness: 300,
+    damping: 30,
+  });
+  const glareY = useSpring(useTransform(mouseY, [-0.5, 0.5], [0, 100]), {
+    stiffness: 300,
+    damping: 30,
+  });
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Calculate normalized position (-0.5 to 0.5)
+    const normalizedX = (e.clientX - centerX) / rect.width;
+    const normalizedY = (e.clientY - centerY) / rect.height;
+    
+    mouseX.set(normalizedX);
+    mouseY.set(normalizedY);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    mouseX.set(0);
+    mouseY.set(0);
+  };
 
   return (
     <motion.div
-      className="relative flex flex-col items-center"
+      ref={cardRef}
+      className="relative flex flex-col items-center cursor-pointer"
       initial={{ opacity: 0, y: 40 }}
       animate={isVisible ? { opacity: 1, y: 0 } : {}}
       transition={{ 
@@ -123,120 +170,168 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
         ease: [0.22, 1, 0.36, 1]
       }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        perspective: 1000,
+      }}
     >
-      {/* Outer glow ring */}
-      <div className="relative mb-8">
-        {/* Pulsing outer ring */}
+      {/* 3D Tilt Card Container */}
+      <motion.div
+        className="relative"
+        style={{
+          rotateX: isHovered ? rotateX : 0,
+          rotateY: isHovered ? rotateY : 0,
+          transformStyle: "preserve-3d",
+        }}
+      >
+        {/* Glare overlay */}
         <motion.div
-          className="absolute inset-0 rounded-full bg-primary/20"
-          initial={{ scale: 1, opacity: 0 }}
-          animate={isVisible ? {
-            scale: [1, 1.4, 1.4],
-            opacity: [0, 0.3, 0],
-          } : {}}
-          transition={{
-            duration: 2.5,
-            delay: 0.5 + index * 0.2,
-            repeat: Infinity,
-            repeatDelay: 1,
-            ease: "easeOut"
+          className="absolute inset-0 rounded-full pointer-events-none z-20 opacity-0"
+          style={{
+            background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+            opacity: isHovered ? 0.8 : 0,
           }}
-          style={{ width: 120, height: 120, left: -10, top: -10 }}
         />
 
-        {/* Second pulse ring */}
-        <motion.div
-          className="absolute inset-0 rounded-full bg-primary/15"
-          initial={{ scale: 1, opacity: 0 }}
-          animate={isVisible ? {
-            scale: [1, 1.6, 1.6],
-            opacity: [0, 0.2, 0],
-          } : {}}
-          transition={{
-            duration: 2.5,
-            delay: 0.8 + index * 0.2,
-            repeat: Infinity,
-            repeatDelay: 1,
-            ease: "easeOut"
-          }}
-          style={{ width: 120, height: 120, left: -10, top: -10 }}
-        />
-
-        {/* Main circle container */}
-        <motion.div
-          className="relative w-[100px] h-[100px]"
-          animate={isHovered ? { scale: 1.08 } : { scale: 1 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          {/* Rotating gradient border */}
+        {/* Outer glow ring */}
+        <div className="relative mb-8">
+          {/* Pulsing outer ring */}
           <motion.div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background: `conic-gradient(from 0deg, hsl(var(--primary)) 0%, transparent 60%, hsl(var(--primary)) 100%)`,
-              padding: 2,
+            className="absolute inset-0 rounded-full bg-primary/20"
+            initial={{ scale: 1, opacity: 0 }}
+            animate={isVisible ? {
+              scale: [1, 1.4, 1.4],
+              opacity: [0, 0.3, 0],
+            } : {}}
+            transition={{
+              duration: 2.5,
+              delay: 0.5 + index * 0.2,
+              repeat: Infinity,
+              repeatDelay: 1,
+              ease: "easeOut"
             }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-          >
-            <div className="w-full h-full rounded-full bg-background" />
-          </motion.div>
-
-          {/* Static border ring */}
-          <div 
-            className="absolute inset-0 rounded-full border-2 border-primary/40"
-            style={{ boxShadow: '0 0 20px hsl(var(--primary) / 0.3), inset 0 0 20px hsl(var(--primary) / 0.1)' }}
+            style={{ width: 120, height: 120, left: -10, top: -10 }}
           />
 
-          {/* Icon container */}
-          <motion.div 
-            className="absolute inset-0 flex items-center justify-center"
-            animate={isHovered ? { scale: 1.1 } : { scale: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Icon className="w-10 h-10 text-primary" strokeWidth={1.5} />
-          </motion.div>
-
-          {/* Step number badge */}
+          {/* Second pulse ring */}
           <motion.div
-            className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg"
-            initial={{ scale: 0, rotate: -180 }}
-            animate={isVisible ? { scale: 1, rotate: 0 } : {}}
-            transition={{ 
-              duration: 0.6, 
-              delay: 0.4 + index * 0.2,
-              type: "spring",
-              stiffness: 200
+            className="absolute inset-0 rounded-full bg-primary/15"
+            initial={{ scale: 1, opacity: 0 }}
+            animate={isVisible ? {
+              scale: [1, 1.6, 1.6],
+              opacity: [0, 0.2, 0],
+            } : {}}
+            transition={{
+              duration: 2.5,
+              delay: 0.8 + index * 0.2,
+              repeat: Infinity,
+              repeatDelay: 1,
+              ease: "easeOut"
             }}
-            style={{ boxShadow: '0 0 15px hsl(var(--primary) / 0.5)' }}
-          >
-            <span className="text-primary-foreground font-bold text-sm">{step.number}</span>
-          </motion.div>
-        </motion.div>
-      </div>
+            style={{ width: 120, height: 120, left: -10, top: -10 }}
+          />
 
-      {/* Content */}
-      <motion.div 
-        className="text-center max-w-[220px]"
-        animate={isHovered ? { y: -5 } : { y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <motion.h3 
-          className="text-lg font-bold text-foreground mb-3"
-          initial={{ opacity: 0 }}
-          animate={isVisible ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.3 + index * 0.2 }}
+          {/* Main circle container */}
+          <motion.div
+            className="relative w-[100px] h-[100px]"
+            animate={isHovered ? { scale: 1.1, z: 30 } : { scale: 1, z: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            {/* Rotating gradient border */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: `conic-gradient(from 0deg, hsl(var(--primary)) 0%, transparent 60%, hsl(var(--primary)) 100%)`,
+                padding: 2,
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            >
+              <div className="w-full h-full rounded-full bg-background" />
+            </motion.div>
+
+            {/* Static border ring */}
+            <motion.div 
+              className="absolute inset-0 rounded-full border-2 border-primary/40"
+              style={{ 
+                boxShadow: isHovered 
+                  ? '0 0 40px hsl(var(--primary) / 0.5), inset 0 0 30px hsl(var(--primary) / 0.2)' 
+                  : '0 0 20px hsl(var(--primary) / 0.3), inset 0 0 20px hsl(var(--primary) / 0.1)',
+                transition: 'box-shadow 0.3s ease'
+              }}
+            />
+
+            {/* Icon container with 3D lift */}
+            <motion.div 
+              className="absolute inset-0 flex items-center justify-center"
+              animate={isHovered ? { z: 20 } : { z: 0 }}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              <motion.div
+                animate={isHovered ? { scale: 1.15 } : { scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Icon className="w-10 h-10 text-primary" strokeWidth={1.5} />
+              </motion.div>
+            </motion.div>
+
+            {/* Step number badge with 3D pop */}
+            <motion.div
+              className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={isVisible ? { 
+                scale: isHovered ? 1.2 : 1, 
+                rotate: 0,
+                z: isHovered ? 40 : 0,
+              } : {}}
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.4 + index * 0.2,
+                type: "spring",
+                stiffness: 200
+              }}
+              style={{ 
+                boxShadow: isHovered 
+                  ? '0 10px 30px hsl(var(--primary) / 0.6)' 
+                  : '0 0 15px hsl(var(--primary) / 0.5)',
+                transformStyle: "preserve-3d"
+              }}
+            >
+              <span className="text-primary-foreground font-bold text-sm">{step.number}</span>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Content with 3D depth */}
+        <motion.div 
+          className="text-center max-w-[220px]"
+          animate={isHovered ? { y: -8, z: 15 } : { y: 0, z: 0 }}
+          transition={{ duration: 0.3 }}
+          style={{ transformStyle: "preserve-3d" }}
         >
-          {step.title}
-        </motion.h3>
-        <motion.p 
-          className="text-sm text-muted-foreground leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={isVisible ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 + index * 0.2 }}
-        >
-          {step.description}
-        </motion.p>
+          <motion.h3 
+            className="text-lg font-bold text-foreground mb-3"
+            initial={{ opacity: 0 }}
+            animate={isVisible ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 + index * 0.2 }}
+            style={{
+              textShadow: isHovered ? '0 4px 12px rgba(0,0,0,0.3)' : 'none',
+              transition: 'text-shadow 0.3s ease'
+            }}
+          >
+            {step.title}
+          </motion.h3>
+          <motion.p 
+            className="text-sm text-muted-foreground leading-relaxed"
+            initial={{ opacity: 0 }}
+            animate={isVisible ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 + index * 0.2 }}
+          >
+            {step.description}
+          </motion.p>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
