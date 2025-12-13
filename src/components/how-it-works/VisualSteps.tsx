@@ -115,8 +115,8 @@ export const VisualSteps = () => {
                         isActive 
                           ? "bg-gradient-to-br " + step.color + " shadow-2xl shadow-primary/30" 
                           : isPast 
-                            ? "bg-primary/20 border border-primary/30" 
-                            : "bg-card/80 border border-border/50 group-hover:border-primary/30"
+                            ? "bg-white/10 border border-white/20" 
+                            : "bg-card/80 border border-border/50 group-hover:border-white/30"
                       }`}
                       animate={isActive ? { scale: [1, 1.05, 1] } : {}}
                       transition={{ duration: 2, repeat: isActive ? Infinity : 0 }}
