@@ -35,8 +35,8 @@ export const TokenOwnership = () => {
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Zap className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Step 5</span>
+              <Coins className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Digital Ownership</span>
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
