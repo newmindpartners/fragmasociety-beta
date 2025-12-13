@@ -650,10 +650,10 @@ export const Marketplace = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 15 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-cyan-500/10 border border-primary/20 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-white/10 to-white/5 border border-white/20 mb-8"
             >
-              <Activity className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
+              <Activity className="w-4 h-4 text-white" />
+              <span className="text-sm font-medium text-white">
                 Secondary Marketplace
               </span>
             </motion.div>
@@ -689,10 +689,10 @@ export const Marketplace = () => {
                   className="flex items-start gap-4 group"
                 >
                   <div className="relative">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all duration-300">
-                      <feature.icon className="w-5 h-5 text-primary" />
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center border border-white/20 group-hover:border-white/40 transition-all duration-300">
+                      <feature.icon className="w-5 h-5 text-white" />
                     </div>
-                    <div className="absolute inset-0 rounded-xl bg-primary/20 blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
+                    <div className="absolute inset-0 rounded-xl bg-white/20 blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-0.5">{feature.title}</h3>
@@ -711,7 +711,7 @@ export const Marketplace = () => {
                 size="lg" 
                 variant="outline"
                 disabled
-                className="relative overflow-hidden border-2 border-primary bg-primary/10 text-primary font-semibold cursor-not-allowed px-8 gap-2"
+                className="relative overflow-hidden border-2 border-white bg-white/10 text-white font-semibold cursor-not-allowed px-8 gap-2"
               >
                 <span>Coming Soon</span>
               </Button>
