@@ -62,7 +62,7 @@ const StepNode = ({
       >
         {/* Ripple effect on hover */}
         <motion.div
-          className="absolute inset-0 rounded-full border border-primary/30"
+          className="absolute inset-0 rounded-full border border-white/30"
           initial={{ scale: 1, opacity: 0 }}
           whileHover={{ scale: 1.5, opacity: [0, 0.5, 0] }}
           transition={{ duration: 0.6 }}
@@ -71,7 +71,7 @@ const StepNode = ({
         {/* Rotating ring for active state */}
         {isActive && (
           <motion.div
-            className="absolute inset-[-4px] rounded-full border-2 border-transparent border-t-primary/60"
+            className="absolute inset-[-4px] rounded-full border-2 border-transparent border-t-white/60"
             animate={{ rotate: 360 }}
             transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
           />
@@ -83,10 +83,10 @@ const StepNode = ({
             relative w-16 h-16 rounded-full flex items-center justify-center z-10
             transition-all duration-500
             ${isActive 
-              ? "bg-primary text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary))]" 
+              ? "bg-white text-background shadow-[0_0_30px_-5px_rgba(255,255,255,0.6)]" 
               : isPast 
-                ? "bg-primary/20 text-primary border-2 border-primary/50"
-                : "bg-card/60 backdrop-blur-sm border border-white/10 text-muted-foreground group-hover:border-primary/40 group-hover:text-primary"
+                ? "bg-white/20 text-white border-2 border-white/50"
+                : "bg-card/60 backdrop-blur-sm border border-white/10 text-muted-foreground group-hover:border-white/40 group-hover:text-white"
             }
           `}
           animate={isActive ? { scale: [1, 1.05, 1] } : {}}
@@ -99,14 +99,14 @@ const StepNode = ({
       {/* Title with underline animation */}
       <div className="relative">
         <motion.h4 
-          className={`font-semibold transition-colors duration-300 ${isActive ? "text-primary" : "text-foreground"}`}
+          className={`font-semibold transition-colors duration-300 ${isActive ? "text-white" : "text-foreground"}`}
           animate={isActive ? { y: -2 } : { y: 0 }}
           transition={{ duration: 0.2 }}
         >
           {step.title}
         </motion.h4>
         <motion.div
-          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent"
+          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: isActive ? 1 : 0 }}
           transition={{ duration: 0.3 }}
@@ -132,12 +132,12 @@ const ContentPanel = ({ step }: { step: typeof steps[0] }) => {
     >
       <div className="relative p-8 rounded-2xl bg-gradient-to-b from-card/60 to-card/30 backdrop-blur-xl border border-white/10">
         {/* Glow effect */}
-        <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-50" />
+        <div className="absolute inset-0 rounded-2xl bg-white/5 opacity-50" />
         
         <div className="relative flex flex-col md:flex-row gap-6 items-start">
           {/* Icon/Mock area */}
-          <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Icon className="text-primary" size={28} strokeWidth={1.5} />
+          <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center">
+            <Icon className="text-white" size={28} strokeWidth={1.5} />
           </div>
           
           {/* Content */}
@@ -152,7 +152,7 @@ const ContentPanel = ({ step }: { step: typeof steps[0] }) => {
                   transition={{ delay: 0.1 + i * 0.1 }}
                   className="text-sm text-muted-foreground flex items-start gap-2"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 flex-shrink-0" />
                   {bullet}
                 </motion.li>
               ))}
@@ -217,11 +217,11 @@ export const HowItWorks = () => {
           
           {/* Animated progress fill */}
           <motion.div 
-            className="absolute top-8 left-[15%] h-0.5 bg-gradient-to-r from-primary via-primary to-primary/50"
+            className="absolute top-8 left-[15%] h-0.5 bg-gradient-to-r from-white via-white to-white/50"
             style={{ 
               width: "70%",
               transformOrigin: "left",
-              boxShadow: "0 0 20px hsl(var(--primary)/0.5)"
+              boxShadow: "0 0 20px rgba(255,255,255,0.5)"
             }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: progressWidth / 100 }}
@@ -230,9 +230,9 @@ export const HowItWorks = () => {
           
           {/* Glowing front */}
           <motion.div
-            className="absolute top-[30px] h-2 w-2 rounded-full bg-primary"
+            className="absolute top-[30px] h-2 w-2 rounded-full bg-white"
             style={{ 
-              boxShadow: "0 0 15px 5px hsl(var(--primary)/0.6)",
+              boxShadow: "0 0 15px 5px rgba(255,255,255,0.6)",
               left: "15%"
             }}
             animate={{ 
@@ -263,7 +263,7 @@ export const HowItWorks = () => {
           
           {/* Progress fill */}
           <motion.div 
-            className="absolute left-8 top-8 w-0.5 bg-gradient-to-b from-primary to-primary/50"
+            className="absolute left-8 top-8 w-0.5 bg-gradient-to-b from-white to-white/50"
             style={{ transformOrigin: "top" }}
             animate={{ height: `${progressWidth}%` }}
             transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
@@ -279,7 +279,7 @@ export const HowItWorks = () => {
                     absolute -left-[52px] top-0 w-10 h-10 rounded-full flex items-center justify-center z-10
                     transition-all duration-500
                     ${activeStep >= i 
-                      ? "bg-primary text-primary-foreground shadow-[0_0_20px_-5px_hsl(var(--primary))]" 
+                      ? "bg-white text-background shadow-[0_0_20px_-5px_rgba(255,255,255,0.6)]" 
                       : "bg-card/60 border border-white/10 text-muted-foreground"
                     }
                   `}
@@ -293,7 +293,7 @@ export const HowItWorks = () => {
                   onClick={() => handleStepClick(i)}
                   className="text-left w-full focus:outline-none"
                 >
-                  <h4 className={`font-semibold mb-1 ${activeStep === i ? "text-primary" : "text-foreground"}`}>
+                  <h4 className={`font-semibold mb-1 ${activeStep === i ? "text-white" : "text-foreground"}`}>
                     {step.title}
                   </h4>
                   <p className="text-muted-foreground text-sm mb-2">{step.desc}</p>
@@ -313,7 +313,7 @@ export const HowItWorks = () => {
                           <ul className="space-y-1">
                             {step.bullets.map((bullet, j) => (
                               <li key={j} className="text-xs text-muted-foreground flex items-start gap-2">
-                                <span className="w-1 h-1 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                                <span className="w-1 h-1 rounded-full bg-white mt-1.5 flex-shrink-0" />
                                 {bullet}
                               </li>
                             ))}
