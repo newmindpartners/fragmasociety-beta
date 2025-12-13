@@ -68,7 +68,7 @@ export const TokenizeAssetCTA = () => {
             className="text-center"
           >
             <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-              Tokenize & List Your Asset
+              Tokenize & <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">List Your Asset</span>
             </h2>
             
             <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
