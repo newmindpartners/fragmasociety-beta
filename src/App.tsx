@@ -10,6 +10,7 @@ import Strategy from "./pages/Strategy";
 import Auth from "./pages/Auth";
 import Membership from "./pages/Membership";
 import Marketplace from "./pages/Marketplace";
+import Tokenize from "./pages/Tokenize";
 import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/membership" element={<Membership />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/tokenize" element={<Tokenize />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/fund" element={<Strategy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
