@@ -75,7 +75,7 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
           >
             {/* Signature Deal badge */}
             <div className="absolute top-4 left-4 z-20">
-              <span className="px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-primary/90 text-primary-foreground rounded-full">
+              <span className="px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/90 text-background rounded-full">
                 Signature Deal
               </span>
             </div>
@@ -113,13 +113,13 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
                       whileTap={{ scale: 0.98 }}
                     >
                       <motion.div
-                        className="w-20 h-20 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-primary/30 group-hover:bg-primary transition-colors"
+                        className="w-20 h-20 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-white/30 group-hover:bg-white transition-colors"
                         animate={{ 
                           scale: [1, 1.05, 1],
                         }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       >
-                        <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
+                        <Play className="w-8 h-8 text-background ml-1" fill="currentColor" />
                       </motion.div>
                     </motion.button>
                   </>
@@ -132,7 +132,7 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
                 <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                   {deal.leaderName}
                 </h2>
-                <h3 className="text-lg text-primary mb-4">{deal.title}</h3>
+                <h3 className="text-lg text-white mb-4">{deal.title}</h3>
                 
                 <p className="text-muted-foreground mb-8 leading-relaxed">
                   {deal.description}
@@ -141,21 +141,21 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 mb-8">
                   <div className="flex items-center gap-2">
-                    <Target className="w-5 h-5 text-primary" />
+                    <Target className="w-5 h-5 text-white" />
                     <div>
                       <p className="text-xs text-muted-foreground">Target</p>
                       <p className="font-semibold text-foreground">{deal.targetReturn}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-primary" />
+                    <Clock className="w-5 h-5 text-white" />
                     <div>
                       <p className="text-xs text-muted-foreground">Term</p>
                       <p className="font-semibold text-foreground">{deal.term}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Euro className="w-5 h-5 text-primary" />
+                    <Euro className="w-5 h-5 text-white" />
                     <div>
                       <p className="text-xs text-muted-foreground">From</p>
                       <p className="font-semibold text-foreground">{deal.minTicket}</p>
