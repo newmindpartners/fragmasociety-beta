@@ -1,14 +1,8 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Coins, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import howItWorksHeroBg from "@/assets/how-it-works-hero-bg.jpg";
-
-const floatingIcons = [
-  { Icon: Shield, delay: 0, x: -120, y: -80 },
-  { Icon: Coins, delay: 0.5, x: 140, y: -60 },
-  { Icon: TrendingUp, delay: 1, x: -100, y: 100 },
-];
 
 export const HowItWorksHero = () => {
   return (
@@ -43,29 +37,6 @@ export const HowItWorksHero = () => {
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Floating icons */}
-      {floatingIcons.map(({ Icon, delay, x, y }, index) => (
-        <motion.div
-          key={index}
-          className="absolute top-1/2 left-1/2 w-16 h-16 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ 
-            opacity: [0.4, 0.8, 0.4],
-            scale: 1,
-            x: x,
-            y: y,
-          }}
-          transition={{ 
-            delay,
-            duration: 4,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut"
-          }}
-        >
-          <Icon className="w-7 h-7 text-primary" />
-        </motion.div>
-      ))}
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
