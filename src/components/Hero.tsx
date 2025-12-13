@@ -120,11 +120,11 @@ export const Hero = () => {
           
           {/* Main headline with dynamic word */}
           <h1 className="text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-white leading-tight mb-4">
-            Invest in
+            Buy and sell
           </h1>
           
           {/* Animated dynamic word */}
-          <div className="h-[80px] lg:h-[100px] xl:h-[120px] overflow-hidden relative mb-6">
+          <div className="h-[80px] lg:h-[100px] xl:h-[120px] overflow-hidden relative mb-8">
             <AnimatePresence mode="wait">
               <motion.span
                 key={currentWordIndex}
@@ -141,16 +141,6 @@ export const Hero = () => {
               </motion.span>
             </AnimatePresence>
           </div>
-          
-          {/* Static ending */}
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-white/80 mb-8"
-          >
-            and reward.
-          </motion.h2>
           
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
