@@ -122,14 +122,14 @@ export const VisualSteps = () => {
                       transition={{ duration: 2, repeat: isActive ? Infinity : 0 }}
                     >
                       {isPast ? (
-                        <Check className="w-10 h-10 text-primary" />
+                        <Check className="w-10 h-10 text-white" />
                       ) : (
-                        <step.icon className={`w-10 h-10 ${isActive ? "text-white" : "text-muted-foreground group-hover:text-primary transition-colors"}`} />
+                        <step.icon className={`w-10 h-10 ${isActive ? "text-white" : "text-muted-foreground group-hover:text-white transition-colors"}`} />
                       )}
                       
                       {/* Step number */}
                       <div className={`absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                        isActive || isPast ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                        isActive || isPast ? "bg-white text-background" : "bg-muted text-muted-foreground"
                       }`}>
                         {index + 1}
                       </div>
