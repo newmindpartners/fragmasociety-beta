@@ -98,7 +98,7 @@ export const FeaturedDeals = () => (
     <div className="container mx-auto px-6">
       {/* Handwriting title */}
       <div className="text-center mb-4">
-        <span className="font-handwriting text-primary text-3xl lg:text-4xl">
+        <span className="font-handwriting text-white text-3xl lg:text-4xl">
           Signature Deals
         </span>
       </div>
