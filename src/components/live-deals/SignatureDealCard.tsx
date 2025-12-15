@@ -187,26 +187,18 @@ export const SignatureDealCard = ({
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="flex-1 text-xs group/btn"
-            onClick={onWatchTrailer}
-          >
-            <Play className="w-3 h-3 mr-1.5 group-hover/btn:scale-110 transition-transform" />
-            Trailer
-          </Button>
-          <Button 
-            size="sm"
-            className="flex-1 text-xs group/btn"
-            onClick={onSeeDeal}
-          >
-            See deal
-            <ArrowRight className="w-3 h-3 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
-          </Button>
-        </div>
+      </div>
+
+      {/* See deal button - outside card for clickability during video */}
+      <div className="p-4 pt-0">
+        <Button 
+          size="sm"
+          className="w-full text-xs group/btn"
+          onClick={onSeeDeal}
+        >
+          See deal
+          <ArrowRight className="w-3 h-3 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
+        </Button>
       </div>
     </motion.div>
   );
