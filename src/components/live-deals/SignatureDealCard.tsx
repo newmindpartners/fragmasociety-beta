@@ -114,9 +114,9 @@ export const SignatureDealCard = ({
         )}
       </AnimatePresence>
 
-      {/* Image/Video Thumbnail */}
+      {/* Image/Video Thumbnail - 1:1 aspect ratio */}
       <div 
-        className="relative h-64 overflow-hidden cursor-pointer"
+        className="relative aspect-square overflow-hidden cursor-pointer"
         onClick={onWatchTrailer}
       >
         <motion.div
