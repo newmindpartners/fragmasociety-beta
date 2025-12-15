@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Play, ArrowRight, Clock, Target, Euro, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface SignatureDealCardProps {
   id: string;
@@ -12,6 +12,7 @@ interface SignatureDealCardProps {
   title: string;
   description: string;
   image: string;
+  videoUrl?: string;
   minTicket: string;
   targetReturn: string;
   term: string;
@@ -28,6 +29,7 @@ export const SignatureDealCard = ({
   title,
   description,
   image,
+  videoUrl,
   minTicket,
   targetReturn,
   term,
@@ -36,12 +38,25 @@ export const SignatureDealCard = ({
   onSeeDeal,
 }: SignatureDealCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const riskColor = {
     Low: "text-green-400",
     Medium: "text-yellow-400",
     High: "text-red-400",
   };
+
+  // Handle video play/pause on hover
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isHovered && videoUrl) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isHovered, videoUrl]);
 
   return (
     <motion.div
@@ -56,6 +71,49 @@ export const SignatureDealCard = ({
         boxShadow: isHovered ? "0 0 40px -10px hsl(var(--primary) / 0.3)" : "none",
       }}
     >
+      {/* Video overlay on hover - covers entire card */}
+      <AnimatePresence>
+        {isHovered && videoUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 z-20 bg-black"
+          >
+            <video
+              ref={videoRef}
+              src={videoUrl}
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover"
+            />
+            {/* Subtle gradient at bottom */}
+            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+            {/* Playing indicator */}
+            <motion.div 
+              className="absolute bottom-4 left-4 flex items-center gap-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div className="flex gap-0.5">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    className="w-1 bg-white rounded-full"
+                    animate={{ height: [8, 16, 8] }}
+                    transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
+                  />
+                ))}
+              </div>
+              <span className="text-xs text-white/80">Preview</span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Image/Video Thumbnail */}
       <div 
         className="relative h-64 overflow-hidden cursor-pointer"
@@ -83,30 +141,14 @@ export const SignatureDealCard = ({
         <motion.div
           className="absolute inset-0 flex items-center justify-center"
           initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
+          animate={{ opacity: isHovered ? 0 : 0.7 }}
           transition={{ duration: 0.3 }}
         >
           <motion.div
             className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm"
-            animate={{ 
-              scale: isHovered ? [1, 1.1, 1] : 1,
-            }}
-            transition={{ duration: 1.5, repeat: Infinity }}
           >
             <Play className="w-6 h-6 text-primary-foreground ml-1" fill="currentColor" />
           </motion.div>
-        </motion.div>
-
-        {/* Hover hint */}
-        <motion.div
-          className="absolute bottom-20 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-          transition={{ duration: 0.3 }}
-        >
-          <span className="text-sm text-foreground/80 bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full">
-            See the vision in 60 seconds
-          </span>
         </motion.div>
 
         {/* Leader info */}

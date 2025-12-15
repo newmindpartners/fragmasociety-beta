@@ -8,6 +8,14 @@ import philippeImage from "@/assets/philippe-naouri.png";
 import timImage from "@/assets/tim-levy.png";
 import andreImage from "@/assets/andre-messika.png";
 
+// Placeholder video URLs for hover preview
+const placeholderVideos = [
+  "https://videos.pexels.com/video-files/4625518/4625518-uhd_2560_1440_30fps.mp4", // horse riding
+  "https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4", // luxury architecture
+  "https://videos.pexels.com/video-files/5377684/5377684-uhd_2560_1440_25fps.mp4", // cinema/film
+  "https://videos.pexels.com/video-files/4812203/4812203-uhd_2560_1440_25fps.mp4", // luxury/diamonds
+];
+
 const signatureDeals = [
   {
     id: "balsiger-horse-portfolio",
@@ -18,6 +26,7 @@ const signatureDeals = [
     title: "Champion Horse Portfolio",
     description: "Own a slice of a curated portfolio of competition horses with a European champion rider. Real prize money, real resale value, real upside.",
     image: bryanImage,
+    videoUrl: placeholderVideos[0],
     minTicket: "€250",
     targetReturn: "8–12% p.a.",
     term: "24–36 months",
@@ -32,6 +41,7 @@ const signatureDeals = [
     title: "Malibu Modern Villa",
     description: "Invest in a design-led California villa project with a renowned architect and builder. Premium location, premium returns.",
     image: philippeImage,
+    videoUrl: placeholderVideos[1],
     minTicket: "€500",
     targetReturn: "10–15% p.a.",
     term: "18–24 months",
@@ -46,6 +56,7 @@ const signatureDeals = [
     title: "Hollywood Film Financing Slate",
     description: "Get exposure to a portfolio of blockbuster-backed film deals with structured recoupment. Studio-level deals, investor-level access.",
     image: timImage,
+    videoUrl: placeholderVideos[2],
     minTicket: "€1,000",
     targetReturn: "12–18% p.a.",
     term: "36–48 months",
@@ -60,6 +71,7 @@ const signatureDeals = [
     title: "Rare Diamond Fund",
     description: "Co-own a curated vault of rare diamonds sourced by a world-class maison. Tangible luxury, tokenized access.",
     image: andreImage,
+    videoUrl: placeholderVideos[3],
     minTicket: "€2,500",
     targetReturn: "6–10% p.a.",
     term: "48–60 months",
