@@ -71,7 +71,7 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="relative z-10 w-full max-w-6xl bg-card/95 backdrop-blur-md rounded-2xl overflow-hidden border border-border/30 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="relative z-10 w-full max-w-5xl bg-card/95 backdrop-blur-md rounded-2xl overflow-hidden border border-border/30 shadow-2xl"
           >
             {/* Close button */}
             <button
@@ -81,8 +81,8 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
               <X className="w-5 h-5 text-white" />
             </button>
 
-            {/* Full-width cinematic video/image */}
-            <div className="relative w-full aspect-video">
+            {/* Full-width cinematic video/image - reduced height */}
+            <div className="relative w-full aspect-[21/9]">
               {/* Signature Deal badge */}
               <div className="absolute top-4 left-4 z-20">
                 <span className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-white text-background rounded-full">
@@ -129,64 +129,48 @@ export const TrailerModal = ({ isOpen, onClose, deal, onSeeDeal }: TrailerModalP
             </div>
 
             {/* Content below video */}
-            <div className="px-6 md:px-10 py-8 -mt-16 relative z-10">
-              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div className="px-6 md:px-8 py-5 -mt-10 relative z-10">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 {/* Left: Info */}
                 <div className="flex-1">
-                  <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-2">
+                  <h2 className="text-2xl md:text-3xl font-serif font-bold text-foreground mb-1">
                     {deal.leaderName}
                   </h2>
-                  <h3 className="text-lg md:text-xl text-white/90 mb-4">{deal.title}</h3>
+                  <h3 className="text-base md:text-lg text-white/90 mb-3">{deal.title}</h3>
                   
-                  <p className="text-muted-foreground leading-relaxed max-w-2xl mb-6">
-                    {deal.description}
-                  </p>
-
-                  {/* Stats row */}
-                  <div className="flex flex-wrap items-center gap-8">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center">
-                        <Target className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Target</p>
-                        <p className="font-semibold text-foreground blur-sm select-none">{deal.targetReturn}</p>
-                      </div>
+                  {/* Stats row inline */}
+                  <div className="flex flex-wrap items-center gap-6">
+                    <div className="flex items-center gap-2">
+                      <Target className="w-4 h-4 text-white/70" />
+                      <span className="text-xs text-muted-foreground">Target</span>
+                      <span className="font-semibold text-foreground text-sm blur-sm select-none">{deal.targetReturn}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center">
-                        <Clock className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Term</p>
-                        <p className="font-semibold text-foreground blur-sm select-none">{deal.term}</p>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-white/70" />
+                      <span className="text-xs text-muted-foreground">Term</span>
+                      <span className="font-semibold text-foreground text-sm blur-sm select-none">{deal.term}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center">
-                        <Euro className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide">From</p>
-                        <p className="font-semibold text-foreground blur-sm select-none">{deal.minTicket}</p>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Euro className="w-4 h-4 text-white/70" />
+                      <span className="text-xs text-muted-foreground">From</span>
+                      <span className="font-semibold text-foreground text-sm blur-sm select-none">{deal.minTicket}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Right: CTA */}
-                <div className="lg:w-auto w-full">
+                <div className="lg:w-auto w-full lg:flex-shrink-0">
                   <Button 
-                    size="lg" 
+                    size="default" 
                     variant="outline"
-                    className="w-full lg:w-auto px-10 py-6 text-base group border-white text-white hover:bg-white hover:text-background rounded-xl"
+                    className="w-full lg:w-auto px-8 py-5 text-sm group border-white text-white hover:bg-white hover:text-background rounded-lg"
                     onClick={() => {
                       onClose();
                       onSeeDeal();
                     }}
                   >
                     Unlock deal
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
               </div>
