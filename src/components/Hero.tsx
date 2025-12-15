@@ -119,7 +119,7 @@ export const Hero = () => {
           
           {/* Main headline with dynamic word */}
           <h1 className="text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-white leading-tight mb-4">
-            Buy and sell
+            Buy and sell Alternative asset
           </h1>
           
           {/* Animated dynamic word */}
