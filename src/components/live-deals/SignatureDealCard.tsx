@@ -194,7 +194,8 @@ export const SignatureDealCard = ({
       <div className="p-4 pt-0">
         <Button 
           size="sm"
-          className="w-full text-xs group/btn bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white"
+          variant="outline"
+          className="w-full text-xs group/btn border-white text-white hover:bg-white hover:text-background"
           onClick={onSeeDeal}
         >
           See deal

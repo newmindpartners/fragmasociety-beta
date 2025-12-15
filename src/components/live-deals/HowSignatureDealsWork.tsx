@@ -107,7 +107,7 @@ export const HowSignatureDealsWork = () => {
           <p className="text-muted-foreground mb-6">
             Have a vision? Let's create your Signature Deal together.
           </p>
-          <Button asChild size="lg" className="group bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white">
+          <Button asChild size="lg" variant="outline" className="group border-white text-white hover:bg-white hover:text-background">
             <Link to="/signature-deal">
               Launch your Signature Deal
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
