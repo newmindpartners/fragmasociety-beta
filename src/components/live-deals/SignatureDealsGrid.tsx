@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { SignatureDealCard } from "./SignatureDealCard";
 import { TrailerModal } from "./TrailerModal";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,8 @@ const placeholderVideos = [
   "https://videos.pexels.com/video-files/4812203/4812203-uhd_2560_1440_25fps.mp4", // luxury/diamonds
 ];
 
+const categories = ["All", "Sports", "Real Estate", "Film", "Luxury"];
+
 const signatureDeals = [
   {
     id: "balsiger-horse-portfolio",
@@ -31,6 +34,7 @@ const signatureDeals = [
     targetReturn: "8–12% p.a.",
     term: "24–36 months",
     risk: "Medium" as const,
+    comingSoon: false,
   },
   {
     id: "naouri-malibu-villa",
@@ -46,6 +50,7 @@ const signatureDeals = [
     targetReturn: "10–15% p.a.",
     term: "18–24 months",
     risk: "Medium" as const,
+    comingSoon: true,
   },
   {
     id: "levy-film-slate",
@@ -61,6 +66,7 @@ const signatureDeals = [
     targetReturn: "12–18% p.a.",
     term: "36–48 months",
     risk: "High" as const,
+    comingSoon: true,
   },
   {
     id: "messika-diamond-fund",
@@ -76,6 +82,7 @@ const signatureDeals = [
     targetReturn: "6–10% p.a.",
     term: "48–60 months",
     risk: "Low" as const,
+    comingSoon: true,
   },
 ];
 
@@ -94,11 +101,36 @@ export const SignatureDealsGrid = () => {
     navigate(`/deals/${dealId}`);
   };
 
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredDeals = activeCategory === "All" 
+    ? signatureDeals 
+    : signatureDeals.filter(deal => deal.category === activeCategory);
+
   return (
     <section className="py-20 relative">
       <div className="container">
+        {/* Category filters */}
+        <div className="flex flex-wrap justify-center gap-2 mb-12">
+          {categories.map((category) => (
+            <motion.button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                activeCategory === category
+                  ? "bg-white text-background"
+                  : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10"
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {category}
+            </motion.button>
+          ))}
+        </div>
+
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {signatureDeals.map((deal) => (
+          {filteredDeals.map((deal) => (
             <SignatureDealCard
               key={deal.id}
               {...deal}

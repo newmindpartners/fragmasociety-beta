@@ -17,6 +17,7 @@ interface SignatureDealCardProps {
   targetReturn: string;
   term: string;
   risk: "Low" | "Medium" | "High";
+  comingSoon?: boolean;
   onWatchTrailer: () => void;
   onSeeDeal: () => void;
 }
@@ -34,6 +35,7 @@ export const SignatureDealCard = ({
   targetReturn,
   term,
   risk,
+  comingSoon = false,
   onWatchTrailer,
   onSeeDeal,
 }: SignatureDealCardProps) => {
@@ -130,10 +132,12 @@ export const SignatureDealCard = ({
         
         {/* Category chips */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-          <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-full">
-            Signature Deal
-          </span>
-          <span className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-white/5 backdrop-blur-md text-white/90 rounded-full border border-white/10">
+          {comingSoon && (
+            <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-amber-500/90 backdrop-blur-md text-white rounded-full">
+              Coming Soon
+            </span>
+          )}
+          <span className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-white/10 backdrop-blur-md text-white/90 rounded-full border border-white/10">
             {category} • {subcategory}
           </span>
         </div>
