@@ -97,7 +97,7 @@ export const SignatureDealsGrid = () => {
   return (
     <section className="py-20 relative">
       <div className="container">
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
           {signatureDeals.map((deal) => (
             <SignatureDealCard
               key={deal.id}
