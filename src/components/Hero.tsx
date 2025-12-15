@@ -35,6 +35,7 @@ const dynamicWords = [
 
 export const Hero = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,12 +48,46 @@ export const Hero = () => {
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
+        {/* Loading skeleton */}
+        <AnimatePresence>
+          {!videoLoaded && (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0 bg-background z-10"
+            >
+              {/* Animated gradient skeleton */}
+              <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background animate-pulse" />
+              
+              {/* Shimmer effect */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12"
+                  animate={{ x: ["-100%", "200%"] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                />
+              </div>
+              
+              {/* Center loading indicator */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  className="w-16 h-16 rounded-full border-2 border-primary/30 border-t-primary"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="w-full h-full object-cover"
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-700 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         >
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
