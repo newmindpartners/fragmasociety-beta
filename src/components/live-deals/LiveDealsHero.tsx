@@ -31,10 +31,10 @@ export const LiveDealsHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 mb-8"
         >
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-primary">Exclusive Opportunities</span>
+          <Sparkles className="w-4 h-4 text-white" />
+          <span className="text-sm font-medium text-white">Exclusive Opportunities</span>
         </motion.div>
 
         <motion.h1
@@ -72,11 +72,11 @@ export const LiveDealsHero = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Button size="lg" className="group">
+          <Button size="lg" className="group bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white">
             <Play className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
             Watch the vision
           </Button>
-          <Button size="lg" variant="outline">
+          <Button size="lg" variant="outline" className="border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white">
             See all signature deals
           </Button>
         </motion.div>
