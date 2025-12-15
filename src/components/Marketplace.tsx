@@ -710,7 +710,7 @@ export const Marketplace = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                className="relative overflow-hidden border-2 border-white bg-white/10 text-white font-semibold hover:bg-white/20 px-8 gap-2"
+                className="relative overflow-hidden border-2 border-white bg-transparent text-white font-semibold hover:bg-white hover:text-background transition-all duration-300 px-8 gap-2"
                 onClick={() => window.location.href = '/marketplace'}
               >
                 <span>Learn more</span>
