@@ -1,4 +1,11 @@
 import { Link } from "react-router-dom";
+import { Instagram } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Custom X (Twitter) icon since Lucide doesn't have the new X logo
 const XIcon = ({ className }: { className?: string }) => (
@@ -21,12 +28,18 @@ const DiscordIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-import { Instagram } from "lucide-react";
+// Custom Circle community icon
+const CircleIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
+  </svg>
+);
 
 const socialLinks = [
   { name: "Telegram", href: "https://t.me/+BGJB5RBN2wAwODY0", Icon: TelegramIcon },
   { name: "Instagram", href: "https://www.instagram.com/fragmasociety/", Icon: Instagram },
   { name: "X", href: "https://x.com/FragmaSociety", Icon: XIcon },
+  { name: "Circle", href: "#", Icon: CircleIcon, comingSoon: true },
   { name: "Discord", href: "https://discord.gg/5AGfST93u3", Icon: DiscordIcon },
 ];
 
@@ -61,21 +74,34 @@ export const Footer = () => (
             Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
           </p>
           
-          {/* Social Media Icons */}
-          <div className="flex items-center gap-4">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-muted-foreground hover:text-white hover:border-white hover:bg-white/10 transition-all duration-300"
-                aria-label={social.name}
-              >
-                <social.Icon className="w-4 h-4" />
-              </a>
-            ))}
-          </div>
+          {/* Social Media Icons with Tooltips */}
+          <TooltipProvider delayDuration={100}>
+            <div className="flex items-center gap-3">
+              {socialLinks.map((social) => (
+                <Tooltip key={social.name}>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={social.comingSoon ? undefined : social.href}
+                      target={social.comingSoon ? undefined : "_blank"}
+                      rel={social.comingSoon ? undefined : "noopener noreferrer"}
+                      className={`w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-muted-foreground transition-all duration-300 ${
+                        social.comingSoon 
+                          ? "opacity-50 cursor-not-allowed" 
+                          : "hover:text-white hover:border-white hover:bg-white/10 cursor-pointer"
+                      }`}
+                      aria-label={social.name}
+                      onClick={social.comingSoon ? (e) => e.preventDefault() : undefined}
+                    >
+                      <social.Icon className="w-4 h-4" />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="bg-card border-white/20">
+                    <p>{social.comingSoon ? `${social.name} - Coming Soon` : social.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          </TooltipProvider>
         </div>
 
         {/* Investors Column */}
