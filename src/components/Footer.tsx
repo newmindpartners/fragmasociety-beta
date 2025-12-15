@@ -148,8 +148,11 @@ export const Footer = () => (
         </p>
       </div>
 
-      <div className="border-t border-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground">
-        <p>© 2025 Fragma Society. Powered by Fragma Finance.</p>
+      <div className="border-t border-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs text-muted-foreground">
+        <p>© 2025 Fragma Society.</p>
+        <p className="text-right">
+          Gyeld Sàrl, 26 Rue Goethe, L-1637 Luxembourg, Grand-Duché de Luxembourg · RCS B293857
+        </p>
       </div>
     </div>
   </footer>
