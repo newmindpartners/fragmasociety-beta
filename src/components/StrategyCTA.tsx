@@ -247,8 +247,8 @@ export const StrategyCTA = () => {
               </Link>
             </Button>
             
-            <Button variant="outline" size="lg" className="group px-8 py-6 text-base border-white/30 hover:border-white/60 hover:bg-white/5 text-white">
-              <Phone className="w-4 h-4 text-white mr-3" />
+            <Button variant="outline" size="lg" className="group px-8 py-6 text-base border-white text-white hover:bg-white hover:text-background transition-all duration-300">
+              <Phone className="w-4 h-4 mr-3" />
               <span>Book a Call</span>
             </Button>
           </motion.div>

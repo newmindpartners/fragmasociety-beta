@@ -284,7 +284,7 @@ export const AssetClasses = () => {
                   <div className="lg:w-64">
                     <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Example deals</p>
                     <p className="text-sm text-foreground/80 mb-6">{assets[activeIndex].examples}</p>
-                    <Button variant="outline" size="sm" className="group border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground">
+                    <Button variant="outline" size="sm" className="group border-white text-white hover:bg-white hover:text-background transition-all duration-300">
                       View deals in this class
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
