@@ -89,7 +89,7 @@ export const Hero = () => {
           onLoadedData={() => setVideoLoaded(true)}
           className={`w-full h-full object-cover transition-opacity duration-700 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         >
-          <source src="/videos/hero-bg.mp4?v=2" type="video/mp4" />
+          <source src="/videos/hero-bg.mp4?v=3" type="video/mp4" />
         </video>
         
         {/* Light overlay for text readability */}
