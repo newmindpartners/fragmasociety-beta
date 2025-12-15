@@ -710,10 +710,11 @@ export const Marketplace = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                disabled
-                className="relative overflow-hidden border-2 border-white bg-white/10 text-white font-semibold cursor-not-allowed px-8 gap-2"
+                className="relative overflow-hidden border-2 border-white bg-white/10 text-white font-semibold hover:bg-white/20 px-8 gap-2"
+                onClick={() => window.location.href = '/marketplace'}
               >
-                <span>Coming Soon</span>
+                <span>Learn more</span>
+                <ArrowUpRight className="w-4 h-4" />
               </Button>
             </motion.div>
           </motion.div>
