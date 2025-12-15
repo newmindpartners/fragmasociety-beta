@@ -72,11 +72,11 @@ export const LiveDealsHero = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Button size="lg" className="group bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white">
+          <Button size="lg" variant="outline" className="group border-white text-white hover:bg-white hover:text-background">
             <Play className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
             Watch the vision
           </Button>
-          <Button size="lg" variant="outline" className="border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white">
+          <Button size="lg" variant="outline" className="group border-white text-white hover:bg-white hover:text-background">
             See all signature deals
           </Button>
         </motion.div>
