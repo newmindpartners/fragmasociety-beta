@@ -124,8 +124,8 @@ const VaultAnimation = () => {
               transition={{ duration: 0.3 }}
               className="absolute top-0 inset-x-0 flex justify-center"
             >
-              <div className="px-6 py-3 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-md">
-                <span className="text-base font-semibold text-primary whitespace-nowrap">{steps[activeStep].description}</span>
+              <div className="px-6 py-3 rounded-full bg-white/5 border border-white/20 backdrop-blur-md">
+                <span className="text-base font-semibold text-white whitespace-nowrap">{steps[activeStep].description}</span>
               </div>
             </motion.div>
           </AnimatePresence>
