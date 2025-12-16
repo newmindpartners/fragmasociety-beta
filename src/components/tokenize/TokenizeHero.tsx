@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import signatureDealBg from "@/assets/signature-deal-experts-panel.jpg";
+import rwaCommercialBg from "@/assets/rwa-commercial.jpg";
 
 export const TokenizeHero = () => {
   return (
@@ -9,7 +9,7 @@ export const TokenizeHero = () => {
       {/* Background Image - Blurred */}
       <div className="absolute inset-0">
         <img 
-          src={signatureDealBg} 
+          src={rwaCommercialBg} 
           alt="" 
           className="w-full h-full object-cover blur-sm scale-105"
         />
@@ -56,7 +56,7 @@ export const TokenizeHero = () => {
         >
           <span className="text-foreground">Real-World Tokenization</span>
           <br />
-          <span className="text-white">
+          <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
             Use Cases
           </span>
         </motion.h1>
