@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Rocket, Sparkles } from "lucide-react";
+import { ArrowRight, Rocket } from "lucide-react";
+import expertsPanelImg from "@/assets/signature-deal-experts-panel.jpg";
 
 export const SignatureDealHero = () => {
   return (
@@ -110,19 +111,61 @@ export const SignatureDealHero = () => {
             </Button>
           </motion.div>
 
-          {/* Distinction statement */}
+          {/* Expert Panel Image */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="relative"
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="relative mt-8 mb-8"
           >
-            <div className="inline-block px-8 py-4 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50">
-              <p className="text-muted-foreground text-sm mb-1">This is not crowdfunding.</p>
-              <p className="text-foreground font-semibold text-lg">
-                This is <span className="text-primary">co-ownership</span> — elevated.
-              </p>
+            {/* Image container with premium styling */}
+            <div className="relative rounded-3xl overflow-hidden 
+              shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]
+              border border-white/10"
+            >
+              {/* Top gradient overlay for fade effect */}
+              <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[hsl(220,30%,5%)] to-transparent z-10 pointer-events-none" />
+              
+              {/* Bottom gradient overlay */}
+              <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
+              
+              {/* Side gradients */}
+              <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[hsl(220,30%,5%)/80] to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[hsl(220,30%,5%)/80] to-transparent z-10 pointer-events-none" />
+              
+              {/* Turquoise glow accent */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-cyan-500/10 rounded-full blur-[100px] z-10 pointer-events-none" />
+              
+              {/* The image */}
+              <img 
+                src={expertsPanelImg} 
+                alt="Panel of industry experts"
+                className="w-full h-auto object-cover grayscale contrast-110"
+                style={{ 
+                  maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
+                }}
+              />
             </div>
+
+            {/* Floating badge on image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
+            >
+              <div className="px-8 py-4 rounded-2xl 
+                bg-white/[0.08] backdrop-blur-2xl 
+                border border-white/[0.15]
+                shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)]"
+              >
+                <p className="text-white/50 text-sm mb-1">This is not crowdfunding.</p>
+                <p className="text-white font-semibold text-lg">
+                  This is <span className="bg-gradient-to-r from-cyan-400 to-teal-300 bg-clip-text text-transparent">co-ownership</span> — elevated.
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
