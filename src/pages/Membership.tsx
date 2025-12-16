@@ -439,8 +439,8 @@ const Membership = () => {
               Investor Membership
             </div>
             
-            <h1 className="text-4xl lg:text-5xl font-serif font-bold text-foreground leading-tight mb-6">
-              Choose Your Membership
+            <h1 className="text-4xl lg:text-5xl font-serif font-bold leading-tight mb-6">
+              Choose Your <span className="text-gradient">Membership</span>
             </h1>
             
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
