@@ -104,8 +104,25 @@ export const StrategyPillars = () => {
               transition={{ type: "spring", stiffness: 300 }}
               className="relative rounded-2xl overflow-hidden group"
             >
+              {/* Animated Border Glow */}
+              <motion.div 
+                className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                animate={{
+                  backgroundPosition: ['200% 0', '-200% 0'],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                style={{ backgroundSize: '200% 100%' }}
+              />
+              
+              {/* Static Border Glow on Hover */}
+              <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
               {/* Background Image with Blur */}
-              <div className="absolute inset-0">
+              <div className="absolute inset-0 rounded-2xl overflow-hidden">
                 <img 
                   src={pillar.bgImage} 
                   alt="" 
@@ -115,7 +132,7 @@ export const StrategyPillars = () => {
               </div>
               
               {/* Glass Content Layer */}
-              <div className="relative z-10 p-8 backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl h-full">
+              <div className="relative z-10 p-8 backdrop-blur-sm bg-white/5 border border-white/10 group-hover:border-white/20 rounded-2xl h-full transition-colors duration-500">
                 <div className="flex items-start gap-6">
                   <motion.div 
                     className={`icon-premium w-16 h-16 shrink-0 bg-gradient-to-br ${pillar.color}`}
