@@ -136,18 +136,18 @@ export const OptionsTrading = () => {
                   onClick={() => setActiveOption(key)}
                   className={`w-full text-left p-5 rounded-xl border transition-all ${
                     isActive 
-                      ? "bg-primary/10 border-primary/40 scale-[1.02]" 
-                      : "bg-background/50 border-border/50 hover:border-primary/20"
+                      ? "bg-white/5 border-white/30 scale-[1.02]" 
+                      : "bg-background/50 border-border/50 hover:border-white/20"
                   }`}
                 >
                   <div className="flex items-start gap-4">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      isActive ? "bg-primary/20" : "bg-muted"
+                      isActive ? "bg-white/10" : "bg-muted"
                     }`}>
-                      <Icon className={`w-6 h-6 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
+                      <Icon className={`w-6 h-6 ${isActive ? "text-white" : "text-muted-foreground"}`} />
                     </div>
                     <div className="flex-1">
-                      <h3 className={`font-medium mb-1 ${isActive ? "text-primary" : "text-foreground"}`}>
+                      <h3 className={`font-medium mb-1 ${isActive ? "text-white" : "text-foreground"}`}>
                         {option.title}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">{option.description}</p>
@@ -156,9 +156,9 @@ export const OptionsTrading = () => {
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="w-6 h-6 rounded-full bg-primary flex items-center justify-center"
+                        className="w-6 h-6 rounded-full bg-white flex items-center justify-center"
                       >
-                        <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
+                        <CheckCircle2 className="w-4 h-4 text-background" />
                       </motion.div>
                     )}
                   </div>
@@ -174,11 +174,11 @@ export const OptionsTrading = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="glass rounded-2xl p-8 border border-primary/20"
+              className="glass rounded-2xl p-8 border border-white/20"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center">
-                  <IconComponent className="w-7 h-7 text-primary" />
+                <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
+                  <IconComponent className="w-7 h-7 text-white" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-serif font-bold text-foreground">{currentOption.title}</h3>
@@ -188,8 +188,8 @@ export const OptionsTrading = () => {
 
               <p className="text-muted-foreground mb-6">{currentOption.description}</p>
 
-              <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 mb-6">
-                <div className="flex items-center gap-2 text-primary mb-2">
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
+                <div className="flex items-center gap-2 text-white mb-2">
                   <CheckCircle2 className="w-5 h-5" />
                   <span className="font-medium">Key Benefit</span>
                 </div>
@@ -214,7 +214,7 @@ export const OptionsTrading = () => {
                     transition={{ delay: i * 0.1 }}
                     className="flex items-center gap-2 p-2 rounded-lg bg-muted/50"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-primary" />
+                    <CheckCircle2 className="w-4 h-4 text-white" />
                     <span className="text-sm text-foreground">{feature}</span>
                   </motion.div>
                 ))}
@@ -226,9 +226,9 @@ export const OptionsTrading = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
-              className="mt-4 flex items-start gap-2 p-4 rounded-xl bg-primary/5 border border-primary/10"
+              className="mt-4 flex items-start gap-2 p-4 rounded-xl bg-white/5 border border-white/10"
             >
-              <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
               <p className="text-sm text-muted-foreground">
                 No complex DeFi mechanics — just clean, intuitive tools designed for everyone.
               </p>
