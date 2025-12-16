@@ -466,7 +466,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                       <ArrowRight size={18} className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
                     </span>
                   </Button>
-                  <Button variant="outline" size="lg" className="group">
+                  <Button variant="outline" size="lg" className="group border-white text-white hover:bg-white hover:text-background">
                     <Phone size={18} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
                     Book Call
                   </Button>
@@ -481,7 +481,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                       </span>
                     </Link>
                   </Button>
-                  <Button variant="outline" size="lg" className="group">
+                  <Button variant="outline" size="lg" className="group border-white text-white hover:bg-white hover:text-background">
                     <Phone size={18} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
                     Book Call
                   </Button>
