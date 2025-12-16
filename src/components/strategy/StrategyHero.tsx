@@ -573,7 +573,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                     whileHover={{ scale: 1.05, borderColor: 'hsl(var(--primary) / 0.3)' }}
                   >
                     <motion.p 
-                      className="text-2xl font-bold text-gradient"
+                      className="text-4xl font-bold text-white"
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 1.8 + i * 0.1, type: "spring" }}
