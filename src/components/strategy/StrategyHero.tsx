@@ -460,7 +460,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
             >
               {isAuthenticated ? (
                 <>
-                  <Button size="lg" className="group btn-glow relative overflow-hidden">
+                  <Button size="lg" className="group bg-white text-background hover:bg-white/90 hover:shadow-[0_12px_40px_-10px_rgba(255,255,255,0.4)] hover:scale-[1.03] active:scale-[0.98]">
                     <span className="relative z-10 flex items-center">
                       Request PPM
                       <ArrowRight size={18} className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
@@ -473,7 +473,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                 </>
               ) : (
                 <>
-                  <Button asChild size="lg" className="group btn-glow relative overflow-hidden">
+                  <Button asChild size="lg" className="group bg-white text-background hover:bg-white/90 hover:shadow-[0_12px_40px_-10px_rgba(255,255,255,0.4)] hover:scale-[1.03] active:scale-[0.98]">
                     <Link to="/auth">
                       <span className="relative z-10 flex items-center">
                         Register to view strategy details
