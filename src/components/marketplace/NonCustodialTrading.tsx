@@ -1,192 +1,224 @@
-import { motion } from "framer-motion";
-import { Wallet, FileCode, Ban, Shield, ArrowRight } from "lucide-react";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { Wallet, FileCode, Ban, Shield, ArrowRight, Check } from "lucide-react";
+import { useEffect, useState } from "react";
 
-const FloatingCard = ({ 
+const FlowStep = ({ 
   icon: Icon, 
   title, 
-  description, 
-  delay,
-  gradient 
+  subtitle,
+  isActive,
+  delay 
 }: { 
   icon: any; 
   title: string; 
-  description: string; 
+  subtitle: string;
+  isActive: boolean;
   delay: number;
-  gradient: string;
 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30, rotateX: -15 }}
-    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    transition={{ delay, duration: 0.6 }}
-    whileHover={{ y: -8, scale: 1.02 }}
-    className="relative group"
+    transition={{ delay, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+    className="flex flex-col items-center text-center"
   >
-    <div className={`absolute inset-0 ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity`} />
-    <div className="glass rounded-2xl p-6 relative z-10 border border-border/50 group-hover:border-white/30 transition-colors">
-      <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-white/10 transition-colors">
-        <Icon className="w-7 h-7 text-white" />
+    <motion.div
+      animate={isActive ? {
+        scale: [1, 1.05, 1],
+        boxShadow: [
+          "0 0 0 0 rgba(255,255,255,0.1)",
+          "0 0 60px 10px rgba(255,255,255,0.15)",
+          "0 0 0 0 rgba(255,255,255,0.1)"
+        ]
+      } : {}}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      className={`
+        w-20 h-20 rounded-2xl flex items-center justify-center mb-4
+        backdrop-blur-xl border transition-all duration-500
+        ${isActive 
+          ? 'bg-white/10 border-white/30' 
+          : 'bg-white/5 border-white/10'
+        }
+      `}
+    >
+      <Icon className={`w-9 h-9 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/70'}`} />
+    </motion.div>
+    <h3 className={`font-medium text-lg mb-1 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/80'}`}>
+      {title}
+    </h3>
+    <p className="text-sm text-muted-foreground">{subtitle}</p>
+  </motion.div>
+);
+
+const AnimatedArrow = ({ delay, isAnimating }: { delay: number; isAnimating: boolean }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8 }}
+    whileInView={{ opacity: 1, scale: 1 }}
+    viewport={{ once: true }}
+    transition={{ delay, duration: 0.4 }}
+    className="hidden lg:flex items-center justify-center px-4"
+  >
+    <motion.div
+      animate={isAnimating ? { x: [0, 8, 0] } : {}}
+      transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <ArrowRight className="w-5 h-5 text-white/40" />
+    </motion.div>
+  </motion.div>
+);
+
+const BenefitCard = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  index 
+}: { 
+  icon: any; 
+  title: string; 
+  description: string;
+  index: number;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: 0.1 * index, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+    whileHover={{ y: -4 }}
+    className="group relative"
+  >
+    {/* Subtle glow on hover */}
+    <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+    
+    <div className="relative rounded-2xl p-6 backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] group-hover:border-white/20 transition-all duration-500">
+      {/* Icon */}
+      <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:bg-white/[0.08] transition-colors duration-500">
+        <Icon className="w-6 h-6 text-white/80 group-hover:text-white transition-colors duration-500" />
       </div>
-      <h3 className="text-xl font-serif font-bold text-foreground mb-2">{title}</h3>
-      <p className="text-muted-foreground">{description}</p>
+      
+      {/* Content */}
+      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-white transition-colors">
+        {title}
+      </h3>
+      <p className="text-sm text-white/50 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+        {description}
+      </p>
     </div>
   </motion.div>
 );
 
 export const NonCustodialTrading = () => {
-  const highlights = [
+  const [activeStep, setActiveStep] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 3);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const flowSteps = [
+    { icon: Wallet, title: "Your Wallet", subtitle: "Full control, always" },
+    { icon: FileCode, title: "Smart Contract", subtitle: "Trustless execution" },
+    { icon: Shield, title: "On-Chain Settlement", subtitle: "Instant & verifiable" }
+  ];
+
+  const benefits = [
     {
       icon: Wallet,
       title: "In your wallet",
-      description: "Assets remain in your personal wallet at all times",
-      gradient: "bg-primary/20"
+      description: "Assets remain in your personal wallet at all times"
     },
     {
       icon: FileCode,
       title: "Smart contracts only",
-      description: "All trades executed by immutable code, not humans",
-      gradient: "bg-accent/20"
+      description: "All trades executed by immutable code, not humans"
     },
     {
       icon: Ban,
       title: "No custody risk",
-      description: "Eliminate the biggest risk in finance: centralized custody failure",
-      gradient: "bg-green-500/20"
+      description: "Eliminate the biggest risk in finance: centralized custody failure"
     }
   ];
 
   return (
-    <section className="py-24 section-gradient-bottom-glow relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[200px]" />
+    <section className="py-32 relative overflow-hidden">
+      {/* Minimal ambient gradient */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-radial from-white/[0.03] to-transparent rounded-full blur-3xl pointer-events-none" />
       
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <span className="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider uppercase rounded-full bg-white/5 text-white border border-white/20">
+            <span className="inline-block px-4 py-1.5 mb-6 text-xs font-medium tracking-widest uppercase rounded-full bg-white/[0.05] text-white/70 border border-white/[0.08]">
               Non-Custodial
             </span>
-            <h2 className="text-3xl lg:text-5xl font-serif font-bold text-foreground mb-6">
+            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-white mb-6 tracking-tight">
               End-to-end{" "}
-              <span className="text-gradient">non-custodial trading.</span>
+              <span className="text-gradient">non-custodial</span>
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-white/50 leading-relaxed">
               Fragma never touches your funds. We never hold your tokens. We never store your cash.
             </p>
           </motion.div>
         </div>
 
-        {/* Main Visual */}
+        {/* Flow Visualization */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative max-w-4xl mx-auto mb-16"
+          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative max-w-3xl mx-auto mb-12"
         >
-          <div className="glass rounded-3xl p-8 lg:p-12 border border-white/10">
-            <div className="grid lg:grid-cols-3 gap-8 items-center">
-              {/* Your Wallet */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <motion.div
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 0px rgba(var(--primary), 0)",
-                      "0 0 40px rgba(var(--primary), 0.4)",
-                      "0 0 0px rgba(var(--primary), 0)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="w-20 h-20 rounded-2xl bg-white/5 border border-white/20 flex items-center justify-center mx-auto mb-4"
-                >
-                  <Wallet className="w-10 h-10 text-white" />
-                </motion.div>
-                <h3 className="text-lg font-medium text-foreground mb-1">Your Wallet</h3>
-                <p className="text-sm text-muted-foreground">Full control, always</p>
-              </motion.div>
+          <div className="rounded-3xl p-10 lg:p-14 backdrop-blur-xl bg-white/[0.02] border border-white/[0.06]">
+            {/* Flow Steps */}
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0">
+              <FlowStep {...flowSteps[0]} isActive={activeStep === 0} delay={0.1} />
+              <AnimatedArrow delay={0.2} isAnimating={activeStep === 0} />
+              <FlowStep {...flowSteps[1]} isActive={activeStep === 1} delay={0.2} />
+              <AnimatedArrow delay={0.3} isAnimating={activeStep === 1} />
+              <FlowStep {...flowSteps[2]} isActive={activeStep === 2} delay={0.3} />
+            </div>
 
-              {/* Arrow + Smart Contract */}
-              <div className="flex flex-col items-center">
+            {/* Progress Indicator */}
+            <div className="flex justify-center gap-2 mt-10">
+              {[0, 1, 2].map((i) => (
                 <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                  className="hidden lg:flex items-center gap-4"
-                >
-                  <motion.div
-                    animate={{ x: [0, 10, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-6 h-6 text-white" />
-                  </motion.div>
-                  <div className="w-16 h-16 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center">
-                    <FileCode className="w-8 h-8 text-white" />
-                  </div>
-                  <motion.div
-                    animate={{ x: [0, 10, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-6 h-6 text-white" />
-                  </motion.div>
-                </motion.div>
-                <p className="text-sm text-muted-foreground mt-2">Smart Contract</p>
-              </div>
-
-              {/* Settlement */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <motion.div
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 0px rgba(var(--accent), 0)",
-                      "0 0 40px rgba(var(--accent), 0.4)",
-                      "0 0 0px rgba(var(--accent), 0)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-                  className="w-20 h-20 rounded-2xl bg-white/5 border border-white/20 flex items-center justify-center mx-auto mb-4"
-                >
-                  <Shield className="w-10 h-10 text-white" />
-                </motion.div>
-                <h3 className="text-lg font-medium text-foreground mb-1">On-Chain Settlement</h3>
-                <p className="text-sm text-muted-foreground">Instant & verifiable</p>
-              </motion.div>
+                  key={i}
+                  className={`h-1 rounded-full transition-all duration-500 ${
+                    activeStep === i ? 'w-8 bg-white/60' : 'w-2 bg-white/20'
+                  }`}
+                />
+              ))}
             </div>
 
             {/* Central Message */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 text-center"
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="mt-10 text-center"
             >
-              <div className="inline-block px-6 py-3 rounded-full bg-white/5 border border-white/20">
-                <p className="text-foreground font-medium">
-                  Everything happens <span className="text-white">directly in your wallet</span>, on your terms
+              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/[0.03] border border-white/[0.08]">
+                <Check className="w-4 h-4 text-emerald-400" />
+                <p className="text-white/80 text-sm font-medium">
+                  Everything happens directly in your wallet, on your terms
                 </p>
               </div>
             </motion.div>
           </div>
         </motion.div>
 
-        {/* Highlight Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {highlights.map((item, i) => (
-            <FloatingCard key={i} {...item} delay={i * 0.15} />
+        {/* Benefit Cards */}
+        <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          {benefits.map((benefit, i) => (
+            <BenefitCard key={i} {...benefit} index={i} />
           ))}
         </div>
       </div>
