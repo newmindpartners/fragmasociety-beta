@@ -10,9 +10,9 @@ export const SignatureDealCTA = () => {
 
   return (
     <section className="py-32 relative overflow-hidden" ref={containerRef}>
-      {/* Background image */}
+      {/* Background image - B&W */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat grayscale"
         style={{ backgroundImage: `url(${ctaBg})` }}
       />
       
