@@ -56,7 +56,7 @@ export const HowItWorksCTA = () => {
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="group border-white/30 text-white hover:bg-white/10 hover:text-white px-8">
+            <Button asChild variant="outline" size="lg" className="group border-white text-white hover:bg-white hover:text-background px-8">
               <Link to="/membership">
                 <Crown className="mr-2 w-4 h-4" />
                 Apply for Elite Member access

@@ -105,7 +105,7 @@ export const SignatureDealHero = () => {
               Start Your Deal
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 py-6 border-white/30 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/50">
+            <Button size="lg" variant="outline" className="text-base px-8 py-6 border-white text-white hover:bg-white hover:text-background">
               Book a Strategy Call
             </Button>
           </motion.div>

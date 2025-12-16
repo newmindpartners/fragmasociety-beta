@@ -56,7 +56,7 @@ export const AnimatedCTA = () => {
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-base px-8 h-14 border-white/30 text-white hover:bg-white/10 hover:text-white">
+                <Button asChild variant="outline" size="lg" className="text-base px-8 h-14 border-white text-white hover:bg-white hover:text-background">
                   <Link to="/membership">
                     <Crown className="mr-2 w-5 h-5" />
                     Elite access
