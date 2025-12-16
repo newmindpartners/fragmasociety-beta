@@ -23,9 +23,9 @@ const FloatingCard = ({
     className="relative group"
   >
     <div className={`absolute inset-0 ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity`} />
-    <div className="glass rounded-2xl p-6 relative z-10 border border-border/50 group-hover:border-primary/30 transition-colors">
-      <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-        <Icon className="w-7 h-7 text-primary" />
+    <div className="glass rounded-2xl p-6 relative z-10 border border-border/50 group-hover:border-white/30 transition-colors">
+      <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-white/10 transition-colors">
+        <Icon className="w-7 h-7 text-white" />
       </div>
       <h3 className="text-xl font-serif font-bold text-foreground mb-2">{title}</h3>
       <p className="text-muted-foreground">{description}</p>
@@ -87,7 +87,7 @@ export const NonCustodialTrading = () => {
           viewport={{ once: true }}
           className="relative max-w-4xl mx-auto mb-16"
         >
-          <div className="glass rounded-3xl p-8 lg:p-12 border border-primary/20">
+          <div className="glass rounded-3xl p-8 lg:p-12 border border-white/10">
             <div className="grid lg:grid-cols-3 gap-8 items-center">
               {/* Your Wallet */}
               <motion.div
@@ -105,9 +105,9 @@ export const NonCustodialTrading = () => {
                     ]
                   }}
                   transition={{ duration: 3, repeat: Infinity }}
-                  className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center mx-auto mb-4"
+                  className="w-20 h-20 rounded-2xl bg-white/5 border border-white/20 flex items-center justify-center mx-auto mb-4"
                 >
-                  <Wallet className="w-10 h-10 text-primary" />
+                  <Wallet className="w-10 h-10 text-white" />
                 </motion.div>
                 <h3 className="text-lg font-medium text-foreground mb-1">Your Wallet</h3>
                 <p className="text-sm text-muted-foreground">Full control, always</p>
@@ -126,16 +126,16 @@ export const NonCustodialTrading = () => {
                     animate={{ x: [0, 10, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    <ArrowRight className="w-6 h-6 text-primary" />
+                    <ArrowRight className="w-6 h-6 text-white" />
                   </motion.div>
-                  <div className="w-16 h-16 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center">
-                    <FileCode className="w-8 h-8 text-accent" />
+                  <div className="w-16 h-16 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center">
+                    <FileCode className="w-8 h-8 text-white" />
                   </div>
                   <motion.div
                     animate={{ x: [0, 10, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    <ArrowRight className="w-6 h-6 text-primary" />
+                    <ArrowRight className="w-6 h-6 text-white" />
                   </motion.div>
                 </motion.div>
                 <p className="text-sm text-muted-foreground mt-2">Smart Contract</p>
@@ -157,9 +157,9 @@ export const NonCustodialTrading = () => {
                     ]
                   }}
                   transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-                  className="w-20 h-20 rounded-2xl bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-4"
+                  className="w-20 h-20 rounded-2xl bg-white/5 border border-white/20 flex items-center justify-center mx-auto mb-4"
                 >
-                  <Shield className="w-10 h-10 text-green-400" />
+                  <Shield className="w-10 h-10 text-white" />
                 </motion.div>
                 <h3 className="text-lg font-medium text-foreground mb-1">On-Chain Settlement</h3>
                 <p className="text-sm text-muted-foreground">Instant & verifiable</p>
@@ -174,9 +174,9 @@ export const NonCustodialTrading = () => {
               transition={{ delay: 0.5 }}
               className="mt-8 text-center"
             >
-              <div className="inline-block px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
+              <div className="inline-block px-6 py-3 rounded-full bg-white/5 border border-white/20">
                 <p className="text-foreground font-medium">
-                  Everything happens <span className="text-primary">directly in your wallet</span>, on your terms
+                  Everything happens <span className="text-white">directly in your wallet</span>, on your terms
                 </p>
               </div>
             </motion.div>
