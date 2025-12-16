@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { 
   Building2, 
   Briefcase, 
@@ -8,10 +8,12 @@ import {
   Users, 
   Gift,
   Check,
-  ArrowRight
+  Sparkles,
+  TrendingUp,
+  Shield,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 // Import category background images
 import categoryRealEstate from "@/assets/category-realestate.jpg";
@@ -43,7 +45,8 @@ const useCases = {
         "Share in property appreciation",
         "Automated profit distribution",
         "24/7 token tradability"
-      ]
+      ],
+      stats: { yield: "6-8%", term: "5-10Y", investors: "250+" }
     },
     {
       title: "Residential Development",
@@ -55,7 +58,8 @@ const useCases = {
         "Automated distributions as units sell",
         "Lower minimum investment amounts",
         "Transparent project milestones"
-      ]
+      ],
+      stats: { yield: "8-12%", term: "2-3Y", investors: "180+" }
     }
   ],
   "corporate-finance": [
@@ -69,7 +73,8 @@ const useCases = {
         "Lower issuance costs vs traditional bonds",
         "Automated interest distributions",
         "Secondary market liquidity"
-      ]
+      ],
+      stats: { yield: "7-10%", term: "3-5Y", investors: "320+" }
     },
     {
       title: "Invoice Financing",
@@ -81,7 +86,8 @@ const useCases = {
         "Short-duration investments",
         "Diversified invoice portfolios",
         "Transparent payment tracking"
-      ]
+      ],
+      stats: { yield: "4-6%", term: "30-90D", investors: "150+" }
     }
   ],
   "alternative-assets": [
@@ -95,7 +101,8 @@ const useCases = {
         "Professional curation & storage",
         "Share in appreciation gains",
         "Diversified collection exposure"
-      ]
+      ],
+      stats: { yield: "10-15%", term: "5-7Y", investors: "400+" }
     },
     {
       title: "Luxury Goods",
@@ -107,7 +114,8 @@ const useCases = {
         "Professional storage & insurance",
         "Expert portfolio management",
         "Fractional luxury access"
-      ]
+      ],
+      stats: { yield: "8-12%", term: "3-5Y", investors: "280+" }
     }
   ],
   "impact-esg": [
@@ -122,7 +130,8 @@ const useCases = {
         "Long-term stable cash flows",
         "ESG portfolio alignment",
         "Carbon offset tracking"
-      ]
+      ],
+      stats: { yield: "5-8%", term: "10-20Y", investors: "500+" }
     },
     {
       title: "Sustainable Agriculture",
@@ -134,7 +143,8 @@ const useCases = {
         "Seasonal return distributions",
         "Transparent supply chain",
         "Impact certification"
-      ]
+      ],
+      stats: { yield: "6-9%", term: "1-3Y", investors: "120+" }
     }
   ],
   "team-rewards": [
@@ -148,7 +158,8 @@ const useCases = {
         "Transparent vesting schedules",
         "Secondary trading options",
         "Simplified cap table management"
-      ]
+      ],
+      stats: { yield: "Variable", term: "4Y vest", investors: "50+" }
     },
     {
       title: "Performance Bonuses",
@@ -160,7 +171,8 @@ const useCases = {
         "Automated milestone tracking",
         "Flexible redemption options",
         "Real-time performance visibility"
-      ]
+      ],
+      stats: { yield: "Variable", term: "1Y", investors: "30+" }
     }
   ],
   "loyalty-rewards": [
@@ -174,7 +186,8 @@ const useCases = {
         "Tradeable reward value",
         "Cross-brand partnerships",
         "Real-time reward tracking"
-      ]
+      ],
+      stats: { yield: "N/A", term: "Ongoing", investors: "10K+" }
     },
     {
       title: "Fan & Community Tokens",
@@ -186,9 +199,303 @@ const useCases = {
         "Exclusive access & perks",
         "Community governance",
         "Secondary market value"
-      ]
+      ],
+      stats: { yield: "N/A", term: "Ongoing", investors: "5K+" }
     }
   ]
+};
+
+// Premium 3D Card Component
+const PremiumCard = ({ 
+  useCase, 
+  index, 
+  bgImage, 
+  activeModel, 
+  toggleModel 
+}: { 
+  useCase: any; 
+  index: number; 
+  bgImage: string;
+  activeModel: Record<number, string>;
+  toggleModel: (index: number, model: string) => void;
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Mouse position for 3D tilt
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  
+  // Spring physics for smooth motion
+  const springConfig = { damping: 25, stiffness: 300 };
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [8, -8]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-8, 8]), springConfig);
+  
+  // Glare position
+  const glareX = useSpring(useTransform(mouseX, [0, 1], [0, 100]), springConfig);
+  const glareY = useSpring(useTransform(mouseY, [0, 1], [0, 100]), springConfig);
+  
+  // Border gradient position
+  const borderX = useSpring(useTransform(mouseX, [0, 1], [0, 100]), springConfig);
+  const borderY = useSpring(useTransform(mouseY, [0, 1], [0, 100]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    mouseX.set(x);
+    mouseY.set(y);
+  }, [mouseX, mouseY]);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  }, [mouseX, mouseY]);
+
+  const currentModel = activeModel[index] || useCase.models[0];
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        delay: index * 0.15, 
+        duration: 0.6,
+        type: "spring",
+        stiffness: 100
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX: isHovered ? rotateX : 0,
+        rotateY: isHovered ? rotateY : 0,
+        transformStyle: "preserve-3d",
+        perspective: 1000,
+      }}
+      className="relative h-full"
+    >
+      {/* Outer glow effect */}
+      <motion.div 
+        className="absolute -inset-1 rounded-3xl opacity-0 blur-xl transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.3), transparent 60%)`,
+          opacity: isHovered ? 0.6 : 0,
+        }}
+      />
+
+      {/* Animated border gradient */}
+      <motion.div 
+        className="absolute -inset-[1px] rounded-3xl overflow-hidden"
+        style={{
+          background: isHovered 
+            ? `conic-gradient(from 0deg at ${borderX}% ${borderY}%, 
+                rgba(255,255,255,0.5) 0deg, 
+                rgba(255,255,255,0.1) 90deg, 
+                rgba(255,255,255,0.5) 180deg, 
+                rgba(255,255,255,0.1) 270deg, 
+                rgba(255,255,255,0.5) 360deg)`
+            : 'transparent',
+        }}
+      >
+        <div className="absolute inset-[1px] rounded-3xl bg-background" />
+      </motion.div>
+
+      {/* Main card */}
+      <div className="relative h-full rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02]">
+        {/* Background image with Ken Burns effect */}
+        <motion.div 
+          className="absolute inset-0"
+          animate={isHovered ? { scale: 1.1 } : { scale: 1.05 }}
+          transition={{ duration: 8, ease: "easeInOut" }}
+        >
+          <img 
+            src={bgImage} 
+            alt="" 
+            className="w-full h-full object-cover"
+          />
+          {/* Dark overlay with gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/70" />
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-background/20 to-background/60" />
+        </motion.div>
+
+        {/* Glare/shine sweep effect */}
+        <motion.div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
+            opacity: isHovered ? 1 : 0,
+          }}
+        />
+
+        {/* Floating particles */}
+        {isHovered && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-white/30 rounded-full"
+                initial={{ 
+                  x: Math.random() * 100 + "%", 
+                  y: "100%",
+                  opacity: 0 
+                }}
+                animate={{ 
+                  y: "-20%",
+                  opacity: [0, 0.8, 0],
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: i * 0.3,
+                  ease: "easeOut"
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="relative h-full p-8 flex flex-col" style={{ transform: "translateZ(40px)" }}>
+          {/* Top row: Stats badges */}
+          <div className="flex gap-2 mb-6 flex-wrap">
+            <motion.div 
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.15)" }}
+            >
+              <TrendingUp className="w-3.5 h-3.5 text-white" />
+              <span className="text-xs font-medium text-white">{useCase.stats?.yield || "Variable"}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.15)" }}
+            >
+              <Shield className="w-3.5 h-3.5 text-white" />
+              <span className="text-xs font-medium text-white">{useCase.stats?.term || "Flexible"}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.15)" }}
+            >
+              <Users className="w-3.5 h-3.5 text-white" />
+              <span className="text-xs font-medium text-white">{useCase.stats?.investors || "100+"}</span>
+            </motion.div>
+          </div>
+
+          {/* Header */}
+          <div className="mb-6">
+            <motion.h3 
+              className="text-2xl md:text-3xl font-bold text-foreground mb-2"
+              style={{ transform: "translateZ(20px)" }}
+            >
+              {useCase.title}
+            </motion.h3>
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5" />
+              {useCase.example}
+            </p>
+          </div>
+
+          {/* Model Toggle - Premium pill design */}
+          <div className="mb-6">
+            {useCase.models.length > 1 ? (
+              <div className="inline-flex p-1 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
+                {useCase.models.map((model: string) => (
+                  <motion.button
+                    key={model}
+                    onClick={() => toggleModel(index, model)}
+                    className={`relative px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                      currentModel === model
+                        ? "text-background"
+                        : "text-white/70 hover:text-white"
+                    }`}
+                    whileHover={{ scale: currentModel === model ? 1 : 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {currentModel === model && (
+                      <motion.div
+                        layoutId={`model-bg-${index}`}
+                        className="absolute inset-0 bg-white rounded-full"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{model}</span>
+                  </motion.button>
+                ))}
+              </div>
+            ) : (
+              <motion.div 
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-background font-semibold text-sm"
+                whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(255,255,255,0.3)" }}
+              >
+                <Zap className="w-4 h-4" />
+                {useCase.models[0]}
+              </motion.div>
+            )}
+          </div>
+
+          {/* Model Description with animated underline */}
+          <div className="mb-6 flex-1">
+            <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <div className="w-8 h-[2px] bg-gradient-to-r from-white to-transparent" />
+              {currentModel} Model
+            </h4>
+            <AnimatePresence mode="wait">
+              <motion.p 
+                key={currentModel}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-muted-foreground text-sm leading-relaxed"
+              >
+                {currentModel === "BUY" 
+                  ? useCase.buyDescription 
+                  : useCase.lendDescription}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          {/* Benefits with staggered animation */}
+          <div>
+            <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+              <div className="w-8 h-[2px] bg-gradient-to-r from-white to-transparent" />
+              Key Benefits
+            </h4>
+            <ul className="grid grid-cols-1 gap-2.5">
+              {useCase.benefits.map((benefit: string, i: number) => (
+                <motion.li 
+                  key={i} 
+                  className="flex items-start gap-3 text-sm text-muted-foreground group/item"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                >
+                  <motion.div 
+                    className="flex-shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center mt-0.5 group-hover/item:bg-white/20 transition-colors"
+                    whileHover={{ scale: 1.2 }}
+                  >
+                    <Check className="w-3 h-3 text-white" />
+                  </motion.div>
+                  <span className="group-hover/item:text-foreground transition-colors">{benefit}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Bottom accent line */}
+          <motion.div 
+            className="absolute bottom-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: isHovered ? 1 : 0.3 }}
+            transition={{ duration: 0.4 }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
 };
 
 export const TokenizeUseCases = () => {
@@ -203,9 +510,15 @@ export const TokenizeUseCases = () => {
   };
 
   return (
-    <section className="py-24 relative">
-      <div className="container mx-auto px-6">
-        {/* Category Tabs */}
+    <section className="py-24 relative overflow-hidden">
+      {/* Background ambient effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/[0.02] rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/[0.02] rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-6 relative">
+        {/* Category Tabs - Premium pill design */}
         <div className="flex flex-wrap justify-center gap-3 mb-16">
           {categories.map((category) => {
             const Icon = category.icon;
@@ -217,16 +530,25 @@ export const TokenizeUseCases = () => {
                   setActiveCategory(category.id);
                   setActiveModel({});
                 }}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full border transition-all duration-300 ${
+                className={`relative flex items-center gap-2.5 px-6 py-3.5 rounded-full border transition-all duration-300 overflow-hidden ${
                   isActive
-                    ? "bg-white text-background border-white"
-                    : "bg-white/5 backdrop-blur-sm text-muted-foreground border-white/20 hover:border-white/40 hover:text-foreground"
+                    ? "bg-white text-background border-white shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                    : "bg-white/5 backdrop-blur-sm text-muted-foreground border-white/20 hover:border-white/40 hover:text-foreground hover:bg-white/10"
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Icon className="w-4 h-4" />
-                <span className="text-sm font-medium">{category.label}</span>
+                {/* Shine effect on active */}
+                {isActive && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    initial={{ x: "-100%" }}
+                    animate={{ x: "100%" }}
+                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                )}
+                <Icon className="w-4 h-4 relative z-10" />
+                <span className="text-sm font-medium relative z-10">{category.label}</span>
               </motion.button>
             );
           })}
@@ -236,108 +558,21 @@ export const TokenizeUseCases = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="grid md:grid-cols-2 gap-8"
           >
             {currentUseCases.map((useCase, index) => (
-              <motion.div
+              <PremiumCard
                 key={useCase.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="group relative rounded-2xl overflow-hidden"
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  <img 
-                    src={currentCategoryData?.bgImage} 
-                    alt="" 
-                    className="w-full h-full object-cover blur-[2px] scale-105 group-hover:scale-110 group-hover:blur-[1px] transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-background/85 group-hover:bg-background/80 transition-colors duration-300" />
-                </div>
-
-                {/* Animated border glow */}
-                <motion.div 
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05), rgba(255,255,255,0.2))',
-                    backgroundSize: '200% 200%',
-                  }}
-                  animate={{
-                    backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                />
-                
-                {/* Glow effect on hover */}
-                <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-white/15 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
-                
-                {/* Glass content layer */}
-                <div className="relative h-full backdrop-blur-sm bg-white/5 border border-white/10 group-hover:border-white/25 rounded-2xl p-8 transition-all duration-300">
-                  {/* Header */}
-                  <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">{useCase.title}</h3>
-                    <p className="text-muted-foreground text-sm">{useCase.example}</p>
-                  </div>
-
-                  {/* Model Toggle */}
-                  {useCase.models.length > 1 && (
-                    <div className="flex gap-2 mb-6">
-                      {useCase.models.map((model) => (
-                        <Button
-                          key={model}
-                          variant={activeModel[index] === model || (!activeModel[index] && model === useCase.models[0]) ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => toggleModel(index, model)}
-                          className={`rounded-full ${
-                            activeModel[index] === model || (!activeModel[index] && model === useCase.models[0])
-                              ? "bg-white text-background hover:bg-white/90"
-                              : "border-white/30 text-white hover:bg-white hover:text-background"
-                          }`}
-                        >
-                          {model}
-                        </Button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Model Badge for single model */}
-                  {useCase.models.length === 1 && (
-                    <div className="inline-flex px-4 py-2 rounded-full bg-white text-background text-sm font-medium mb-6">
-                      {useCase.models[0]}
-                    </div>
-                  )}
-
-                  {/* Model Description */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-white mb-2">
-                      {(activeModel[index] || useCase.models[0])} Model
-                    </h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {(activeModel[index] || useCase.models[0]) === "BUY" 
-                        ? useCase.buyDescription 
-                        : useCase.lendDescription}
-                    </p>
-                  </div>
-
-                  {/* Benefits */}
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-3">Key Benefits</h4>
-                    <ul className="space-y-2">
-                      {useCase.benefits.map((benefit, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Check className="w-4 h-4 text-white flex-shrink-0" />
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
+                useCase={useCase}
+                index={index}
+                bgImage={currentCategoryData?.bgImage || ""}
+                activeModel={activeModel}
+                toggleModel={toggleModel}
+              />
             ))}
           </motion.div>
         </AnimatePresence>
