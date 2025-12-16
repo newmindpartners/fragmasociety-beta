@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Target, Users, Shield, AlertTriangle, Globe } from "lucide-react";
+import strategyRiskBg from "@/assets/strategy-risk-bg.jpg";
 
 export const StrategyAtGlance = () => {
   const cards = [
@@ -119,23 +120,36 @@ export const StrategyAtGlance = () => {
           ))}
         </motion.div>
 
-        {/* Access Restriction Notice */}
+        {/* Access Restriction Notice with Premium Background */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="mt-12 p-6 rounded-xl bg-card/50 border border-border/50 max-w-3xl mx-auto text-center"
+          className="mt-12 relative rounded-2xl overflow-hidden max-w-3xl mx-auto"
         >
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Globe className="w-5 h-5 text-primary" />
-            <span className="font-medium text-foreground">Access Restrictions Apply</span>
+          {/* Background Image with Blur */}
+          <div className="absolute inset-0">
+            <img 
+              src={strategyRiskBg} 
+              alt="" 
+              className="w-full h-full object-cover scale-110"
+            />
+            <div className="absolute inset-0 bg-background/60 backdrop-blur-xl" />
           </div>
-          <p className="text-sm text-muted-foreground">
-            Certain opportunities are only available to professional or qualified investors. 
-            Availability depends on your country of residence and investor profile. 
-            Detailed terms and specific investment parameters are available to verified investors only.
-          </p>
+          
+          {/* Glass Content Layer */}
+          <div className="relative z-10 p-8 backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Globe className="w-5 h-5 text-white" />
+              <span className="font-semibold text-white">Access Restrictions Apply</span>
+            </div>
+            <p className="text-sm text-white/80 text-center leading-relaxed">
+              Certain opportunities are only available to professional or qualified investors. 
+              Availability depends on your country of residence and investor profile. 
+              Detailed terms and specific investment parameters are available to verified investors only.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
