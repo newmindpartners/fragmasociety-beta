@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
+import advantageBg from "@/assets/signature-deal-advantage-bg.jpg";
 
 const reasons = [
   {
@@ -322,12 +323,13 @@ export const SignatureDealWhy = () => {
 
   return (
     <section className="py-32 relative overflow-hidden" ref={containerRef}>
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-white/[0.01]" />
-      
-      {/* Turquoise ambient glow */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-cyan-500/[0.03] rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-teal-500/[0.02] rounded-full blur-[120px] pointer-events-none" />
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${advantageBg})` }}
+      />
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-background/60" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
