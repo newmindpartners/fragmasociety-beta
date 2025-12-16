@@ -85,13 +85,13 @@ export const SignatureDealProcess = () => {
           transition={{ duration: 0.7 }}
           className="text-center mb-20"
         >
-          <span className="text-primary font-semibold text-sm tracking-wider uppercase mb-4 block">
+          <span className="text-white/50 font-medium text-sm tracking-wider uppercase mb-4 block">
             Simple + Powerful
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6">
             How it works
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-white/60 max-w-2xl mx-auto">
             You focus on your project. We handle the infrastructure.
           </p>
         </motion.div>

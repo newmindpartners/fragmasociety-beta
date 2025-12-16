@@ -66,11 +66,11 @@ export const SignatureDealHero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8 leading-[1.1]"
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold mb-8 leading-[1.1]"
           >
-            <span className="text-foreground">Launch Your</span>
+            <span className="text-white">Launch Your</span>
             <br />
-            <span className="bg-gradient-to-r from-primary via-cyan-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="text-gradient">
               Signature Deal
             </span>
           </motion.h1>
@@ -80,7 +80,7 @@ export const SignatureDealHero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-6 leading-relaxed"
+            className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-6 leading-relaxed"
           >
             Turn your vision, asset, or expertise into an investment loved by your audience.
           </motion.p>
@@ -89,7 +89,7 @@ export const SignatureDealHero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-12"
+            className="text-base md:text-lg text-white/50 max-w-2xl mx-auto mb-12"
           >
             We help industry leaders design, structure, and launch iconic investment deals that attract capital, unlock new revenue, and deepen community loyalty — all powered by regulated, tokenized infrastructure.
           </motion.p>
@@ -101,11 +101,11 @@ export const SignatureDealHero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <Button size="lg" className="group text-base px-8 py-6 bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90">
+            <Button size="lg" variant="outline" className="group text-base px-8 py-6 border-white text-white hover:bg-white hover:text-background">
               Start Your Deal
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 py-6 border-primary/30 hover:bg-primary/10">
+            <Button size="lg" variant="outline" className="text-base px-8 py-6 border-white/30 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/50">
               Book a Strategy Call
             </Button>
           </motion.div>

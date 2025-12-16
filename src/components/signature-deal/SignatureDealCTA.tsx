@@ -60,11 +60,11 @@ export const SignatureDealCTA = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6"
+                className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6"
               >
                 Ready to launch your
                 <br />
-                <span className="bg-gradient-to-r from-primary via-cyan-400 to-amber-400 bg-clip-text text-transparent">
+                <span className="text-gradient">
                   Signature Deal?
                 </span>
               </motion.h2>
@@ -74,7 +74,7 @@ export const SignatureDealCTA = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10"
+                className="text-lg text-white/60 max-w-2xl mx-auto mb-10"
               >
                 Let's design a premium investment product around your vision —
                 and open it to investors worldwide.
@@ -89,7 +89,8 @@ export const SignatureDealCTA = () => {
               >
                 <Button 
                   size="lg" 
-                  className="group text-base px-8 py-6 bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 shadow-[0_0_30px_-5px_hsl(var(--primary)/0.5)]"
+                  variant="outline"
+                  className="group text-base px-8 py-6 border-white text-white hover:bg-white hover:text-background"
                 >
                   Start Your Deal
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -97,7 +98,7 @@ export const SignatureDealCTA = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="text-base px-8 py-6 border-primary/30 hover:bg-primary/10"
+                  className="text-base px-8 py-6 border-white/30 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/50"
                 >
                   <Phone className="mr-2 w-4 h-4" />
                   Book a Strategy Call
