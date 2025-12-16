@@ -305,8 +305,8 @@ const PremiumCard = ({
       </motion.div>
 
       {/* Main card */}
-      <div className="relative h-full rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02]">
-        {/* Background image with Ken Burns effect */}
+      <div className="relative h-full rounded-3xl overflow-hidden border border-white/10">
+        {/* Background image with Ken Burns effect - visible in top portion */}
         <motion.div 
           className="absolute inset-0"
           animate={isHovered ? { scale: 1.1 } : { scale: 1.05 }}
@@ -317,10 +317,12 @@ const PremiumCard = ({
             alt="" 
             className="w-full h-full object-cover"
           />
-          {/* Dark overlay with gradient - lighter to show more image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-background/30" />
+          {/* Gradient fade to glass section */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         </motion.div>
+
+        {/* Glass blur panel covering bottom 75% */}
+        <div className="absolute inset-x-0 top-[20%] bottom-0 backdrop-blur-xl bg-white/[0.03] border-t border-white/10" />
 
         {/* Glare/shine sweep effect */}
         <motion.div 
