@@ -147,7 +147,7 @@ export const OptionsTrading = () => {
                       <Icon className={`w-6 h-6 ${isActive ? "text-white" : "text-muted-foreground"}`} />
                     </div>
                     <div className="flex-1">
-                      <h3 className={`font-medium mb-1 ${isActive ? "text-white" : "text-foreground"}`}>
+                      <h3 className={`font-medium mb-1 ${isActive ? "text-gradient" : "text-foreground"}`}>
                         {option.title}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">{option.description}</p>
