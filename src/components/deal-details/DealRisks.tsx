@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { DealData } from "@/pages/DealDetails";
+import type { DealData } from "@/types/deal";
 
 interface DealRisksProps {
   deal: DealData;

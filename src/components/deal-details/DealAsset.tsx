@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Play, Volume2, VolumeX, ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { useState, useRef } from "react";
-import type { DealData } from "@/pages/DealDetails";
+import type { DealData } from "@/types/deal";
 
 interface DealAssetProps {
   deal: DealData;

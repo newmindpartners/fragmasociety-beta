@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Play, Volume2, VolumeX } from "lucide-react";
 import { useState, useRef } from "react";
-import type { DealData } from "@/pages/DealDetails";
+import type { DealData } from "@/types/deal";
 
 interface DealOpportunityProps {
   deal: DealData;
@@ -66,7 +66,7 @@ export const DealOpportunity = ({ deal }: DealOpportunityProps) => {
             <video
               ref={videoRef}
               src={deal.pitchVideoUrl}
-              poster={deal.image}
+              poster={deal.leaderImage}
               loop
               muted={isMuted}
               playsInline

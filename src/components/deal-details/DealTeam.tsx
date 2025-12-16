@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Play, Volume2, VolumeX, Award, Briefcase, CheckCircle } from "lucide-react";
 import { useState, useRef } from "react";
-import type { DealData } from "@/pages/DealDetails";
+import type { DealData } from "@/types/deal";
 
 interface DealTeamProps {
   deal: DealData;
@@ -66,7 +66,7 @@ export const DealTeam = ({ deal }: DealTeamProps) => {
               <video
                 ref={videoRef}
                 src={deal.teamVideoUrl}
-                poster={deal.image}
+                poster={deal.team[0]?.image || deal.leaderImage}
                 loop
                 muted={isMuted}
                 playsInline
@@ -127,22 +127,21 @@ export const DealTeam = ({ deal }: DealTeamProps) => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            {/* Profile Card */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 mb-6">
               <div className="flex items-center gap-4 mb-6">
                 <img 
-                  src={deal.image} 
-                  alt={deal.leaderName}
+                  src={deal.team[0]?.image || deal.leaderImage} 
+                  alt={deal.team[0]?.name || deal.leaderName}
                   className="w-20 h-20 rounded-xl object-cover border border-white/20"
                 />
                 <div>
-                  <h3 className="text-xl font-bold text-foreground">{deal.leaderName}</h3>
-                  <p className="text-sm text-muted-foreground">{deal.leaderRole}</p>
+                  <h3 className="text-xl font-bold text-foreground">{deal.team[0]?.name || deal.leaderName}</h3>
+                  <p className="text-sm text-muted-foreground">{deal.team[0]?.role || deal.leaderRole}</p>
                 </div>
               </div>
               
               <p className="text-muted-foreground leading-relaxed mb-6">
-                {deal.teamBio}
+                {deal.team[0]?.bio || ''}
               </p>
 
               {/* Credentials */}
@@ -151,7 +150,7 @@ export const DealTeam = ({ deal }: DealTeamProps) => {
                   <Award className="w-4 h-4 text-primary" />
                   Key Credentials
                 </h4>
-                {deal.teamCredentials.map((credential, index) => (
+                {(deal.team[0]?.credentials || []).map((credential, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -10 }}
