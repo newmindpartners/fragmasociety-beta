@@ -60,28 +60,129 @@ const PayoffChart = ({ type }: { type: OptionType }) => {
     }
   };
 
+  const getGradientId = () => `gradient-${type}`;
+  const getAreaPath = () => {
+    switch (type) {
+      case "covered-call":
+        return "M 20 80 L 100 80 L 100 40 L 180 40 L 180 100 L 20 100 Z";
+      case "put":
+        return "M 20 40 L 80 40 L 100 80 L 180 80 L 180 100 L 20 100 Z";
+      case "call":
+        return "M 20 80 L 100 80 L 180 20 L 180 100 L 20 100 Z";
+      case "sell-put":
+        return "M 20 80 L 80 80 L 100 40 L 180 40 L 180 100 L 20 100 Z";
+    }
+  };
+
   return (
-    <div className="relative h-32 w-full">
-      <svg className="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
-        {/* Grid lines */}
-        <line x1="20" y1="80" x2="180" y2="80" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-        <line x1="100" y1="20" x2="100" y2="80" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+    <div className="relative h-40 w-full">
+      {/* Animated grid background */}
+      <motion.div
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '20px 20px'
+        }}
+        animate={{ opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+      
+      <svg className="w-full h-full relative z-10" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id={getGradientId()} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Axis lines */}
+        <motion.line 
+          x1="20" y1="80" x2="180" y2="80" 
+          stroke="rgba(255,255,255,0.15)" 
+          strokeWidth="1"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+        <motion.line 
+          x1="100" y1="20" x2="100" y2="80" 
+          stroke="rgba(255,255,255,0.1)" 
+          strokeWidth="1" 
+          strokeDasharray="4 4"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        />
         
-        {/* Payoff curve */}
+        {/* Area fill */}
+        <motion.path
+          d={getAreaPath()}
+          fill={`url(#${getGradientId()})`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        />
+        
+        {/* Main payoff curve with glow */}
         <motion.path
           d={getPath()}
           fill="none"
           stroke="hsl(var(--primary))"
           strokeWidth="3"
           strokeLinecap="round"
+          filter="url(#glow)"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
         />
 
-        {/* Labels */}
-        <text x="95" y="95" fill="rgba(255,255,255,0.5)" fontSize="8">Price</text>
-        <text x="5" y="50" fill="rgba(255,255,255,0.5)" fontSize="8" transform="rotate(-90, 15, 50)">P/L</text>
+        {/* Animated point on the curve */}
+        <motion.circle
+          r="4"
+          fill="hsl(var(--primary))"
+          filter="url(#glow)"
+          initial={{ cx: 20, cy: 80 }}
+          animate={{ 
+            cx: [20, 100, 180],
+            cy: type === "call" ? [80, 80, 20] : type === "put" ? [40, 40, 80] : [80, 40, 40]
+          }}
+          transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+        />
+
+        {/* Labels with fade in */}
+        <motion.text 
+          x="100" y="98" 
+          fill="rgba(255,255,255,0.5)" 
+          fontSize="8" 
+          textAnchor="middle"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          Price
+        </motion.text>
+        <motion.text 
+          x="8" y="50" 
+          fill="rgba(255,255,255,0.5)" 
+          fontSize="8" 
+          textAnchor="middle"
+          transform="rotate(-90, 8, 50)"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          P/L
+        </motion.text>
       </svg>
     </div>
   );
@@ -167,71 +268,178 @@ export const OptionsTrading = () => {
             })}
           </div>
 
-          {/* Right - Detail View */}
+          {/* Right - Detail View - Premium Design */}
           <div className="lg:sticky lg:top-24">
             <motion.div
               key={activeOption}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="glass rounded-2xl p-8 border border-white/20"
+              initial={{ opacity: 0, y: 30, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+              className="relative group"
             >
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-                  <IconComponent className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-serif font-bold text-gradient">{currentOption.title}</h3>
-                  <p className="text-sm text-muted-foreground">{currentOption.payoffDescription}</p>
-                </div>
-              </div>
+              {/* Ambient glow effect */}
+              <motion.div
+                animate={{ 
+                  opacity: [0.3, 0.5, 0.3],
+                  scale: [1, 1.02, 1]
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-3xl blur-2xl"
+              />
+              
+              {/* Main card with gradient border */}
+              <div className="relative rounded-3xl p-[1px] bg-gradient-to-br from-white/20 via-white/5 to-white/10 overflow-hidden">
+                <div className="glass rounded-3xl p-8 backdrop-blur-xl bg-background/80">
+                  
+                  {/* Header with floating icon */}
+                  <div className="flex items-start gap-5 mb-8">
+                    <motion.div 
+                      className="relative"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      {/* Icon glow ring */}
+                      <motion.div
+                        animate={{ 
+                          boxShadow: [
+                            "0 0 20px hsl(var(--primary) / 0.3)",
+                            "0 0 40px hsl(var(--primary) / 0.5)",
+                            "0 0 20px hsl(var(--primary) / 0.3)"
+                          ]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 rounded-2xl"
+                      />
+                      <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 border border-primary/30 flex items-center justify-center backdrop-blur-sm">
+                        <motion.div
+                          animate={{ rotate: [0, 5, -5, 0] }}
+                          transition={{ duration: 4, repeat: Infinity }}
+                        >
+                          <IconComponent className="w-8 h-8 text-primary" />
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                    
+                    <div className="flex-1 pt-1">
+                      <motion.h3 
+                        className="text-3xl font-serif font-bold text-gradient mb-1"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 }}
+                      >
+                        {currentOption.title}
+                      </motion.h3>
+                      <motion.p 
+                        className="text-sm text-muted-foreground font-medium tracking-wide"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {currentOption.payoffDescription}
+                      </motion.p>
+                    </div>
+                  </div>
 
-              <p className="text-muted-foreground mb-6">{currentOption.description}</p>
-
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
-                <div className="flex items-center gap-2 text-white mb-2">
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span className="font-medium">Key Benefit</span>
-                </div>
-                <p className="text-foreground">{currentOption.benefit}</p>
-              </div>
-
-              {/* Payoff Chart */}
-              <div className="mb-6">
-                <p className="text-sm text-muted-foreground mb-3">Payoff Diagram</p>
-                <div className="glass rounded-xl p-4">
-                  <PayoffChart type={activeOption} />
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="grid grid-cols-2 gap-3">
-                {["Transparent", "On-chain", "Easy to understand", "Fully collateralised"].map((feature, i) => (
-                  <motion.div
-                    key={feature}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex items-center gap-2 p-2 rounded-lg bg-muted/50"
+                  {/* Description with elegant styling */}
+                  <motion.p 
+                    className="text-lg text-muted-foreground leading-relaxed mb-8 pl-4 border-l-2 border-primary/30"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.15 }}
                   >
-                    <CheckCircle2 className="w-4 h-4 text-white" />
-                    <span className="text-sm text-foreground">{feature}</span>
+                    {currentOption.description}
+                  </motion.p>
+
+                  {/* Key Benefit - Premium floating card */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    className="relative mb-8 group/benefit"
+                  >
+                    {/* Shine effect on hover */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/benefit:translate-x-full transition-transform duration-1000" />
+                    
+                    <div className="relative p-5 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 overflow-hidden">
+                      <div className="flex items-center gap-3 mb-3">
+                        <motion.div
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-primary" />
+                        </motion.div>
+                        <span className="text-sm font-bold uppercase tracking-wider text-primary">Key Benefit</span>
+                      </div>
+                      <p className="text-lg text-foreground font-medium">{currentOption.benefit}</p>
+                    </div>
                   </motion.div>
-                ))}
+
+                  {/* Payoff Chart - Enhanced container */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.25 }}
+                    className="mb-8"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Payoff Diagram</p>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                        <span className="text-xs text-primary font-medium">Live</span>
+                      </div>
+                    </div>
+                    <div className="relative rounded-2xl p-6 bg-gradient-to-br from-white/5 to-transparent border border-white/10 overflow-hidden">
+                      {/* Corner accents */}
+                      <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-primary/30 rounded-tl-xl" />
+                      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-primary/30 rounded-br-xl" />
+                      
+                      <PayoffChart type={activeOption} />
+                    </div>
+                  </motion.div>
+
+                  {/* Features - Premium pills with stagger animation */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { text: "Transparent", icon: "◇" },
+                      { text: "On-chain", icon: "⬡" },
+                      { text: "Easy to understand", icon: "○" },
+                      { text: "Fully collateralised", icon: "◈" }
+                    ].map((feature, i) => (
+                      <motion.div
+                        key={feature.text}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 + i * 0.08 }}
+                        whileHover={{ scale: 1.03, x: 4 }}
+                        className="group/feature flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 cursor-default"
+                      >
+                        <span className="text-primary/60 group-hover/feature:text-primary transition-colors text-sm">{feature.icon}</span>
+                        <span className="text-sm font-medium text-foreground">{feature.text}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </motion.div>
 
+            {/* Info badge - floating below */}
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="mt-4 flex items-start gap-2 p-4 rounded-xl bg-white/5 border border-white/10"
+              transition={{ delay: 0.6 }}
+              className="mt-6 relative"
             >
-              <Info className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-muted-foreground">
-                No complex DeFi mechanics — just clean, intuitive tools designed for everyone.
-              </p>
+              <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-white/5 to-transparent border border-white/10 backdrop-blur-sm">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Info className="w-5 h-5 text-primary" />
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  No complex DeFi mechanics — just clean, intuitive tools designed for everyone.
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
