@@ -9,7 +9,6 @@ import { OptionsTrading } from "@/components/marketplace/OptionsTrading";
 import { CardanoEUTXO } from "@/components/marketplace/CardanoEUTXO";
 import { NonCustodialTrading } from "@/components/marketplace/NonCustodialTrading";
 import { TradingSteps } from "@/components/marketplace/TradingSteps";
-import { TokenizeAsset } from "@/components/TokenizeAsset";
 import { MarketplaceCTA } from "@/components/marketplace/MarketplaceCTA";
 
 const Marketplace = () => {
@@ -25,7 +24,6 @@ const Marketplace = () => {
       <CardanoEUTXO />
       <NonCustodialTrading />
       <TradingSteps />
-      <TokenizeAsset />
       <MarketplaceCTA />
       <Footer />
     </div>
