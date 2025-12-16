@@ -1,22 +1,22 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import rwaCommercial from "@/assets/rwa-commercial.jpg";
 
 export const TokenizeCTA = () => {
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background" />
-      
-      {/* Animated glow */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/20 rounded-full blur-[150px]"
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <section className="py-32 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img 
+          src={rwaCommercial} 
+          alt="" 
+          className="w-full h-full object-cover"
+        />
+        {/* Dark overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/70" />
+        <div className="absolute inset-0 bg-background/60" />
+      </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -26,25 +26,34 @@ export const TokenizeCTA = () => {
           transition={{ duration: 0.6 }}
           className="max-w-3xl mx-auto text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">Start Tokenizing Today</span>
-          </div>
+          {/* Badge - WHITE */}
+          <motion.div 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8"
+            whileHover={{ scale: 1.02 }}
+          >
+            <Sparkles className="w-4 h-4 text-white" />
+            <span className="text-sm text-white font-medium">Start Tokenizing Today</span>
+          </motion.div>
 
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-            Ready to Tokenize Your Assets?
+          {/* Title with turquoise gradient on "Tokenize Your Assets" */}
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <span className="text-foreground">Ready to </span>
+            <span className="bg-gradient-to-r from-primary via-[hsl(175,70%,50%)] to-primary bg-clip-text text-transparent">
+              Tokenize Your Assets
+            </span>
+            <span className="text-foreground">?</span>
           </h2>
           
-          <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
             Join hundreds of businesses transforming traditional assets into liquid, accessible digital tokens. Start building the future today.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="group bg-white text-background hover:bg-white/90">
+            <Button size="lg" className="group bg-white text-background hover:bg-white/90 px-8">
               Get Started Free
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-background">
+            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white hover:text-background px-8">
               Schedule Consultation
             </Button>
           </div>
