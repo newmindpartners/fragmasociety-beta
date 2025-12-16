@@ -38,9 +38,11 @@ const strategies = [
     subtitle: "Private Lending",
     description: "Secured lending to established SMEs with stable cash flows",
     icon: Landmark,
-    color: "from-emerald-500/20 to-teal-500/20",
+    bgGradient: "radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.4) 0%, rgba(6, 78, 59, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    iconBg: "from-emerald-600/80 to-emerald-900/80",
     focus: "Income Focus",
-    category: "Income"
+    category: "Income",
+    accentColor: "emerald"
   },
   {
     id: 2,
@@ -48,9 +50,11 @@ const strategies = [
     subtitle: "Digital Infrastructure",
     description: "Institutional-grade Bitcoin mining operations",
     icon: Bitcoin,
-    color: "from-amber-500/20 to-orange-500/20",
+    bgGradient: "radial-gradient(ellipse at 70% 30%, rgba(245, 158, 11, 0.4) 0%, rgba(146, 64, 14, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    iconBg: "from-amber-600/80 to-amber-900/80",
     focus: "Variable Returns",
-    category: "Income"
+    category: "Income",
+    accentColor: "amber"
   },
   {
     id: 3,
@@ -58,9 +62,11 @@ const strategies = [
     subtitle: "Compute Power",
     description: "High-performance computing for AI workloads",
     icon: Cpu,
-    color: "from-violet-500/20 to-purple-500/20",
+    bgGradient: "radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.4) 0%, rgba(76, 29, 149, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    iconBg: "from-violet-600/80 to-violet-900/80",
     focus: "Growth Potential",
-    category: "Growth"
+    category: "Growth",
+    accentColor: "violet"
   },
   {
     id: 4,
@@ -68,88 +74,212 @@ const strategies = [
     subtitle: "Strategic Positions",
     description: "Equity stakes in digital infrastructure companies",
     icon: Building2,
-    color: "from-primary/20 to-accent/20",
+    bgGradient: "radial-gradient(ellipse at 20% 80%, rgba(6, 182, 212, 0.4) 0%, rgba(14, 116, 144, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    iconBg: "from-cyan-600/80 to-cyan-900/80",
     focus: "Capital Appreciation",
-    category: "Growth"
+    category: "Growth",
+    accentColor: "cyan"
   }
 ];
 
-const StrategyCard = ({ strategy, isActive, onClick }: { strategy: typeof strategies[0]; isActive: boolean; onClick: () => void }) => {
+// Premium Strategy Card with glassmorphism
+const StrategyCard = ({ 
+  strategy, 
+  isActive, 
+  onClick,
+  index 
+}: { 
+  strategy: typeof strategies[0]; 
+  isActive: boolean; 
+  onClick: () => void;
+  index: number;
+}) => {
   const Icon = strategy.icon;
+  const [isHovered, setIsHovered] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    setMousePosition({ x, y });
+  };
+  
+  const rotateX = isHovered ? (mousePosition.y - 0.5) * -10 : 0;
+  const rotateY = isHovered ? (mousePosition.x - 0.5) * 10 : 0;
+  
+  const categoryColors = {
+    Income: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    Growth: "bg-violet-500/20 text-violet-400 border-violet-500/30"
+  };
   
   return (
     <motion.div
       onClick={onClick}
-      className={`relative cursor-pointer rounded-2xl p-5 transition-all duration-500 ${
-        isActive 
-          ? 'glass border border-primary/30 shadow-lg shadow-primary/10' 
-          : 'bg-card/30 border border-border/20 hover:border-border/40'
-      }`}
-      whileHover={{ scale: 1.02, y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      layout
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative cursor-pointer"
+      style={{ 
+        perspective: "1000px",
+        transformStyle: "preserve-3d"
+      }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8 + index * 0.15, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      {isActive && (
-        <motion.div
-          layoutId="strategyActiveGlow"
-          className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+      <motion.div
+        className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
+          isActive ? 'z-10' : 'z-0'
+        }`}
+        animate={{
+          rotateX,
+          rotateY,
+          scale: isActive ? 1.02 : isHovered ? 1.01 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* Background with gradient - simulates blurred image */}
+        <div 
+          className="absolute inset-0 opacity-60"
+          style={{ background: strategy.bgGradient }}
         />
-      )}
-      
-      <div className="relative z-10 flex items-start gap-4">
-        <motion.div 
-          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${strategy.color} flex items-center justify-center flex-shrink-0`}
-          animate={{ rotate: isActive ? [0, 5, -5, 0] : 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Icon className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-muted-foreground'} transition-colors duration-300`} />
-        </motion.div>
         
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-1">
-            <h3 className={`font-semibold ${isActive ? 'text-foreground' : 'text-muted-foreground'} transition-colors duration-300`}>
-              {strategy.title}
-            </h3>
-            <span className={`text-xs px-2 py-0.5 rounded-full ${
-              strategy.category === 'Income' 
-                ? 'bg-emerald-500/10 text-emerald-400' 
-                : 'bg-violet-500/10 text-violet-400'
-            }`}>
-              {strategy.category}
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground/70">{strategy.subtitle}</p>
-          
-          <AnimatePresence>
-            {isActive && (
+        {/* Noise texture overlay */}
+        <div className="absolute inset-0 opacity-20 mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          }}
+        />
+        
+        {/* Glass layer */}
+        <div className={`absolute inset-0 backdrop-blur-xl transition-all duration-500 ${
+          isActive ? 'bg-white/[0.08]' : 'bg-white/[0.03]'
+        }`} />
+        
+        {/* Animated border gradient */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl"
+          style={{
+            background: isActive 
+              ? `linear-gradient(${90 + mousePosition.x * 180}deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.3) 100%)`
+              : 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
+            padding: '1px',
+            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            maskComposite: 'xor',
+            WebkitMaskComposite: 'xor',
+          }}
+          animate={{ opacity: isActive ? 1 : 0.5 }}
+        />
+        
+        {/* Glare/shine sweep effect */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 55%, transparent 60%)`,
+            transform: `translateX(${isHovered ? '100%' : '-100%'})`,
+            transition: 'transform 0.6s ease-out',
+          }}
+        />
+        
+        {/* Content */}
+        <div className={`relative z-10 p-5 transition-all duration-500 ${isActive ? 'py-6' : ''}`}>
+          <div className="flex items-start gap-4">
+            {/* Icon with glow */}
+            <motion.div 
+              className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${strategy.iconBg} flex items-center justify-center flex-shrink-0 shadow-lg`}
+              animate={{ 
+                scale: isActive ? 1.05 : 1,
+                boxShadow: isActive 
+                  ? '0 8px 32px -4px rgba(0,0,0,0.4), 0 0 20px -5px rgba(255,255,255,0.1)' 
+                  : '0 4px 16px -4px rgba(0,0,0,0.3)'
+              }}
+              transition={{ duration: 0.3 }}
+            >
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-                  {strategy.description}
-                </p>
-                <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/20">
-                  <div>
-                    <span className="text-xs text-muted-foreground/60">Strategy Focus</span>
-                    <p className="text-sm font-medium text-primary">{strategy.focus}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                className="absolute inset-0 rounded-xl opacity-0"
+                style={{ 
+                  background: 'radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%)'
+                }}
+                animate={{ opacity: isActive ? 0.5 : 0 }}
+              />
+              <Icon className="w-7 h-7 text-white relative z-10" />
+            </motion.div>
+            
+            {/* Text content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-1">
+                <motion.h3 
+                  className="font-semibold text-white text-lg"
+                  animate={{ opacity: isActive ? 1 : 0.8 }}
+                >
+                  {strategy.title}
+                </motion.h3>
+                <motion.span 
+                  className={`text-xs px-2.5 py-1 rounded-full border ${categoryColors[strategy.category as keyof typeof categoryColors]}`}
+                  animate={{ 
+                    scale: isActive ? 1.05 : 1,
+                    opacity: isActive ? 1 : 0.7
+                  }}
+                >
+                  {strategy.category}
+                </motion.span>
+              </div>
+              <p className="text-sm text-white/50">{strategy.subtitle}</p>
+              
+              {/* Expanded content when active */}
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="overflow-hidden"
+                  >
+                    <p className="text-sm text-white/70 mt-4 leading-relaxed">
+                      {strategy.description}
+                    </p>
+                    <div className="flex items-center gap-4 mt-4 pt-4 border-t border-white/10">
+                      <div>
+                        <span className="text-xs text-white/40 block mb-1">Strategy Focus</span>
+                        <p className="text-sm font-medium text-white">{strategy.focus}</p>
+                      </div>
+                      <motion.div
+                        className="ml-auto"
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        <ArrowRight className="w-5 h-5 text-white/50" />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
-      </div>
+        
+        {/* Bottom glow for active card */}
+        {isActive && (
+          <motion.div
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1 rounded-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)`,
+            }}
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            exit={{ opacity: 0, scaleX: 0 }}
+          />
+        )}
+      </motion.div>
     </motion.div>
   );
 };
 
+// Premium Strategies Showcase
 const StrategiesShowcase = () => {
   const [activeStrategy, setActiveStrategy] = useState(0);
   
@@ -161,35 +291,70 @@ const StrategiesShowcase = () => {
   }, []);
   
   return (
-    <div className="space-y-3">
-      {strategies.map((strategy, index) => (
-        <motion.div
-          key={strategy.id}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 + index * 0.15, duration: 0.5 }}
-        >
+    <div className="relative">
+      {/* Floating ambient particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-white/20"
+            style={{
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 25}%`,
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.2, 0.5, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + i * 0.5,
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Cards */}
+      <div className="space-y-3">
+        {strategies.map((strategy, index) => (
           <StrategyCard
+            key={strategy.id}
             strategy={strategy}
             isActive={activeStrategy === index}
             onClick={() => setActiveStrategy(index)}
+            index={index}
           />
-        </motion.div>
-      ))}
+        ))}
+      </div>
       
-      <div className="flex justify-center gap-2 pt-4">
+      {/* Progress indicators */}
+      <div className="flex justify-center gap-3 pt-6">
         {strategies.map((_, index) => (
           <motion.button
             key={index}
             onClick={() => setActiveStrategy(index)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              activeStrategy === index 
-                ? 'w-8 bg-primary' 
-                : 'w-2 bg-border hover:bg-muted-foreground/50'
-            }`}
+            className="relative h-1.5 rounded-full overflow-hidden bg-white/10"
+            style={{ width: activeStrategy === index ? 32 : 8 }}
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
-          />
+            animate={{ width: activeStrategy === index ? 32 : 8 }}
+            transition={{ duration: 0.3 }}
+          >
+            {activeStrategy === index && (
+              <motion.div
+                className="absolute inset-0 bg-white rounded-full"
+                initial={{ scaleX: 0, originX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 4, ease: "linear" }}
+              />
+            )}
+            {activeStrategy !== index && (
+              <div className="absolute inset-0 bg-white/30 rounded-full" />
+            )}
+          </motion.button>
         ))}
       </div>
     </div>
