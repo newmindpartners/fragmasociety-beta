@@ -16,10 +16,10 @@ import {
 import earnPayoutsBg from "@/assets/earn-payouts-bg.jpg";
 
 const earnTypes = [
-  { icon: Calendar, label: "Regular yield", desc: "Monthly / Quarterly", color: "from-green-500 to-emerald-500" },
-  { icon: Film, label: "Revenue share", desc: "Film, rent, fees", color: "from-purple-500 to-pink-500" },
-  { icon: Building, label: "Profit participation", desc: "Sales & refinancing", color: "from-blue-500 to-cyan-500" },
-  { icon: TrendingUp, label: "Capital gains", desc: "Sell higher", color: "from-orange-500 to-amber-500" },
+  { icon: Calendar, label: "Regular yield", desc: "Monthly / Quarterly" },
+  { icon: Film, label: "Revenue share", desc: "Film, rent, fees" },
+  { icon: Building, label: "Profit participation", desc: "Sales & refinancing" },
+  { icon: TrendingUp, label: "Capital gains", desc: "Sell higher" },
 ];
 
 const payoutHistory = [
@@ -72,9 +72,9 @@ export const EarnPayouts = () => {
               <span className="text-sm font-medium text-white">Automated Earnings</span>
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">
               Earn when the asset{" "}
-              <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+              <span className="text-gradient">
                 performs
               </span>
             </h2>
@@ -96,22 +96,19 @@ export const EarnPayouts = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                whileHover={{ y: -5, scale: 1.02 }}
+                whileHover={{ y: -5 }}
                 className="relative group cursor-pointer"
               >
-                <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${type.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity`}
-                />
-                <div className="relative p-5 bg-card/80 border border-border/50 rounded-2xl hover:border-primary/30 transition-colors text-center">
+                <div className="relative p-5 bg-white/[0.03] border border-white/[0.08] rounded-2xl hover:border-white/20 transition-colors text-center">
                   <motion.div
-                    className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-3`}
-                    whileHover={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 0.5 }}
+                    className="w-12 h-12 mx-auto rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center mb-3 group-hover:bg-white/10 group-hover:border-white/20 transition-all"
+                    whileHover={{ rotate: [0, -5, 5, 0] }}
+                    transition={{ duration: 0.4 }}
                   >
                     <type.icon className="w-6 h-6 text-white" />
                   </motion.div>
-                  <h3 className="font-semibold text-sm mb-1">{type.label}</h3>
-                  <p className="text-xs text-muted-foreground">{type.desc}</p>
+                  <h3 className="font-semibold text-sm mb-1 text-white">{type.label}</h3>
+                  <p className="text-xs text-white/50">{type.desc}</p>
                 </div>
               </motion.div>
             ))}
