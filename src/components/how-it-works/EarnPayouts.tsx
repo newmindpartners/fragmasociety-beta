@@ -13,6 +13,7 @@ import {
   Download,
   Zap
 } from "lucide-react";
+import earnPayoutsBg from "@/assets/earn-payouts-bg.jpg";
 
 const earnTypes = [
   { icon: Calendar, label: "Regular yield", desc: "Monthly / Quarterly", color: "from-green-500 to-emerald-500" },
@@ -49,32 +50,13 @@ export const EarnPayouts = () => {
 
   return (
     <section ref={ref} className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-card/30 via-background to-background" />
-      
-      {/* Floating coins animation */}
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-2xl"
-          style={{
-            left: `${15 + Math.random() * 70}%`,
-            top: `${20 + Math.random() * 60}%`,
-          }}
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.6, 0.3],
-            rotate: [0, 10, 0],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 2,
-            repeat: Infinity,
-            delay: Math.random() * 2,
-          }}
-        >
-          💰
-        </motion.div>
-      ))}
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${earnPayoutsBg})` }}
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-background/80" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
