@@ -584,20 +584,20 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-card/80 border border-primary/30 backdrop-blur-sm mb-8"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-card/80 border border-white/30 backdrop-blur-sm mb-8"
             >
               <motion.div
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               >
-                <Sparkles className="w-4 h-4 text-primary" />
+                <Sparkles className="w-4 h-4 text-white" />
               </motion.div>
-              <span className="text-sm font-bold tracking-[0.15em] text-primary uppercase">Exclusive Investment Vehicle</span>
+              <span className="text-sm font-bold tracking-[0.15em] text-white uppercase">Exclusive Investment Vehicle</span>
               <motion.div
                 animate={{ rotate: [0, -360] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               >
-                <Sparkles className="w-4 h-4 text-primary" />
+                <Sparkles className="w-4 h-4 text-white" />
               </motion.div>
             </motion.div>
             
