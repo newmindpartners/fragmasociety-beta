@@ -85,7 +85,7 @@ const VaultAnimation = () => {
                     transition={{ duration: 2, repeat: Infinity }}
                     className="rounded-full p-2"
                   >
-                    <ActiveIcon className="w-14 h-14 text-primary" />
+                    <ActiveIcon className="w-14 h-14 text-white" />
                   </motion.div>
                 </motion.div>
               </AnimatePresence>
@@ -109,7 +109,7 @@ const VaultAnimation = () => {
                 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary/15 border border-primary/40 flex items-center justify-center backdrop-blur-sm"
                 whileHover={{ scale: 1.3 }}
               >
-                <Icon className="w-5 h-5 text-primary" />
+                <Icon className="w-5 h-5 text-white" />
               </motion.div>
             </motion.div>
           ))}
