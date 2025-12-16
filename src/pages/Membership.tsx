@@ -138,7 +138,7 @@ const TierCard = ({
           <div className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide ${
             isElite 
               ? "bg-amber-500 text-black" 
-              : "bg-primary text-primary-foreground"
+              : "bg-white text-background"
           }`}>
             {tier.badge}
           </div>
@@ -148,7 +148,7 @@ const TierCard = ({
       {/* Card */}
       <div className={`flex flex-col h-full rounded-2xl border p-8 ${
         isPremium 
-          ? "border-primary bg-primary/[0.03]" 
+          ? "border-white/30 bg-white/[0.03]" 
           : isElite
             ? "border-amber-500/30 bg-amber-500/[0.02]"
             : "border-border bg-card"
@@ -156,9 +156,9 @@ const TierCard = ({
         {/* Current plan indicator */}
         {isCurrentPlan && (
           <div className="absolute top-4 right-4">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-              <span className="text-xs font-medium text-primary">Active</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-white" />
+              <span className="text-xs font-medium text-white">Active</span>
             </div>
           </div>
         )}
@@ -166,7 +166,7 @@ const TierCard = ({
         {/* Icon */}
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${
           isPremium 
-            ? "bg-primary text-primary-foreground" 
+            ? "bg-white text-background" 
             : isElite
               ? "bg-amber-500 text-black"
               : "bg-muted text-muted-foreground"
@@ -180,7 +180,7 @@ const TierCard = ({
           <div className="flex items-baseline gap-1">
             <span className={`text-4xl font-bold ${
               isPremium 
-                ? "text-primary" 
+                ? "text-white" 
                 : isElite
                   ? "text-amber-500"
                   : "text-foreground"
@@ -210,7 +210,7 @@ const TierCard = ({
               <Button 
                 className={`w-full h-11 rounded-lg font-medium ${
                   isPremium 
-                    ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
+                    ? "bg-white hover:bg-white/90 text-background" 
                     : isElite
                       ? "bg-amber-500 hover:bg-amber-600 text-black"
                       : "bg-muted hover:bg-muted/80 text-foreground"
@@ -224,7 +224,7 @@ const TierCard = ({
             <Button 
               className={`w-full h-11 rounded-lg font-medium ${
                 isPremium 
-                  ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
+                  ? "bg-white hover:bg-white/90 text-background" 
                   : "bg-amber-500 hover:bg-amber-600 text-black"
               }`}
               onClick={() => onSubscribe(tier.priceId!)}
@@ -267,13 +267,13 @@ const TierCard = ({
                 <div
                   key={featureIndex}
                   className={`flex items-start gap-3 ${
-                    isHighlight ? "text-primary" : "text-muted-foreground"
+                    isHighlight ? "text-white" : "text-muted-foreground"
                   }`}
                 >
                   <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center mt-0.5 ${
-                    isHighlight ? "bg-primary/10" : "bg-muted"
+                    isHighlight ? "bg-white/10" : "bg-muted"
                   }`}>
-                    <FeatureIcon size={12} className={isHighlight ? "text-primary" : "text-muted-foreground"} />
+                    <FeatureIcon size={12} className={isHighlight ? "text-white" : "text-muted-foreground"} />
                   </div>
                   <span className={`text-sm leading-relaxed flex-1 ${isHighlight ? "font-medium" : ""}`}>
                     {feature.label}
@@ -442,7 +442,7 @@ const Membership = () => {
         <div className="container mx-auto px-6">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-6">
               <Crown size={14} />
               Investor Membership
             </div>
@@ -459,7 +459,7 @@ const Membership = () => {
           {/* Subscription Status */}
           {isAuthenticated && currentProductId && (
             <div className="max-w-md mx-auto mb-12">
-              <div className="p-5 rounded-xl bg-primary/5 border border-primary/20">
+              <div className="p-5 rounded-xl bg-white/5 border border-white/20">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Active Membership</p>
@@ -477,7 +477,7 @@ const Membership = () => {
                     size="sm"
                     onClick={handleManageSubscription}
                     disabled={isLoading}
-                    className="rounded-lg"
+                    className="rounded-lg border-white/30 text-white hover:bg-white/10"
                   >
                     <RefreshCw size={14} className="mr-2" />
                     Manage
@@ -522,7 +522,7 @@ const Membership = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-4">
               <HelpCircle size={14} />
               FAQ
             </div>
