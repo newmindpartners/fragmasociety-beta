@@ -97,8 +97,8 @@ export const SignatureDealsGrid = () => {
   };
 
   const handleSeeDeal = (dealId: string) => {
-    // Navigate to deal detail page (to be created)
-    navigate(`/deals/${dealId}`);
+    // Navigate to deal detail page
+    navigate(`/deal/${dealId}`);
   };
 
   const [activeCategory, setActiveCategory] = useState("All");
