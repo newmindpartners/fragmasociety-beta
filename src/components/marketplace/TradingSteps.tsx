@@ -261,13 +261,13 @@ export const TradingSteps = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-5 py-2 mb-6 text-xs font-medium tracking-widest uppercase rounded-full bg-primary/10 text-primary border border-primary/20"
+              className="inline-flex items-center gap-2 px-5 py-2 mb-6 text-xs font-medium tracking-widest uppercase rounded-full bg-white/5 text-white border border-white/20"
             >
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 text-white" />
               </motion.div>
               How To Trade
             </motion.span>
