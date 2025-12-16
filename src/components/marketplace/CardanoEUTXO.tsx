@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Shield, Zap, Eye, Bot, Cpu, Lock } from "lucide-react";
+import cardanoBg from "@/assets/cardano-bg.jpg";
 
 export const CardanoEUTXO = () => {
   const benefits = [
@@ -10,9 +11,15 @@ export const CardanoEUTXO = () => {
   ];
 
   return (
-    <section className="py-24 section-gradient-horizontal relative overflow-hidden">
-      <div className="absolute inset-0 section-dots opacity-20" />
-      <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[200px] -translate-x-1/2 -translate-y-1/2" />
+    <section className="py-24 relative overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${cardanoBg})` }}
+      />
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-background/80" />
+      <div className="absolute inset-0 section-dots opacity-10" />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
