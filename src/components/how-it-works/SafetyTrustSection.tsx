@@ -14,7 +14,18 @@ export const SafetyTrustSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-24 relative overflow-hidden">
+    <section ref={ref} className="py-24 relative overflow-hidden bg-background">
+      {/* Turquoise spotlight effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Top center spotlight */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-turquoise-500/20 rounded-full blur-[150px] opacity-60" />
+        {/* Left spotlight */}
+        <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-turquoise-400/15 rounded-full blur-[120px] opacity-50" />
+        {/* Right spotlight */}
+        <div className="absolute top-1/4 -right-20 w-[400px] h-[400px] bg-turquoise-400/15 rounded-full blur-[120px] opacity-50" />
+        {/* Bottom glow */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-turquoise-600/10 rounded-full blur-[100px] opacity-40" />
+      </div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
