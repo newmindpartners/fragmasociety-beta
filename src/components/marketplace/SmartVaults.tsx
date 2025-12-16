@@ -174,9 +174,9 @@ const VaultAnimation = () => {
                     transition={{ duration: 1.5, repeat: isActive ? Infinity : 0 }}
                     className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${
                       isActive 
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
+                        ? "bg-white text-background shadow-lg shadow-white/30" 
                         : isPast 
-                          ? "bg-primary/80 text-primary-foreground" 
+                          ? "bg-white/80 text-background" 
                           : "bg-muted/80 text-muted-foreground border border-border"
                     }`}
                   >
@@ -208,7 +208,7 @@ const VaultAnimation = () => {
                   {/* Label */}
                   <motion.span 
                     className={`text-xs mt-3 text-center max-w-[90px] transition-colors duration-300 ${
-                      isActive ? "text-primary font-medium" : isPast ? "text-foreground" : "text-muted-foreground"
+                      isActive ? "text-white font-medium" : isPast ? "text-foreground" : "text-muted-foreground"
                     }`}
                   >
                     {step.label}
@@ -222,7 +222,7 @@ const VaultAnimation = () => {
                       animate={isActive ? { x: [0, 5, 0] } : {}}
                       transition={{ duration: 1, repeat: Infinity }}
                     >
-                      <ArrowRight className={`w-4 h-4 ${isPast ? "text-primary" : "text-muted-foreground/30"}`} />
+                      <ArrowRight className={`w-4 h-4 ${isPast ? "text-white" : "text-muted-foreground/30"}`} />
                     </motion.div>
                   )}
                 </motion.div>
@@ -240,7 +240,7 @@ const VaultAnimation = () => {
           transition={{ duration: 0.3 }}
         >
           <p className="text-sm text-muted-foreground">
-            Step <span className="text-primary font-bold">{activeStep + 1}</span> of {steps.length}
+            Step <span className="text-white font-bold">{activeStep + 1}</span> of {steps.length}
           </p>
         </motion.div>
       </div>
