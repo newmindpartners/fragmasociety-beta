@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { BookOpen, Shield, TrendingUp, Repeat, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import signatureDealBg from "@/assets/signature-deal-experts-panel.jpg";
 
 const pillars = [
   {
@@ -33,17 +34,32 @@ export const HowSignatureDealsWork = () => {
 
   return (
     <section ref={ref} className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
+      {/* Background Image - Blurred */}
+      <div className="absolute inset-0">
+        <img 
+          src={signatureDealBg} 
+          alt="" 
+          className="w-full h-full object-cover blur-sm scale-105"
+        />
+        <div className="absolute inset-0 bg-background/85" />
+      </div>
       
-      {/* Ambient glow */}
+      {/* Ambient glows */}
       <motion.div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl"
         animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
+          scale: [1, 1.2, 1],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl"
+        animate={{ 
+          scale: [1.2, 1, 1.2],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="container relative z-10">
@@ -86,13 +102,34 @@ export const HowSignatureDealsWork = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-              className="group p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300"
+              className="group relative p-6 rounded-2xl overflow-hidden"
             >
-              <div className="w-14 h-14 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:bg-white/15 transition-colors">
-                <pillar.icon className="w-7 h-7 text-white" />
+              {/* Animated border glow */}
+              <motion.div 
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05), rgba(255,255,255,0.15))',
+                  backgroundSize: '200% 200%',
+                }}
+                animate={{
+                  backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              />
+              
+              {/* Glow effect */}
+              <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+              
+              {/* Glass card */}
+              <div className="relative h-full bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 group-hover:border-white/25 group-hover:bg-white/10 transition-all duration-500 p-6">
+                {/* Icon with glow */}
+                <div className="relative w-14 h-14 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:bg-white/20 transition-all duration-300">
+                  <div className="absolute inset-0 rounded-xl bg-white/20 blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                  <pillar.icon className="w-7 h-7 text-white relative z-10" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{pillar.title}</h3>
+                <p className="text-sm text-muted-foreground">{pillar.description}</p>
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">{pillar.title}</h3>
-              <p className="text-sm text-muted-foreground">{pillar.description}</p>
             </motion.div>
           ))}
         </div>
