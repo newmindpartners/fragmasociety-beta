@@ -121,7 +121,7 @@ export const DisclaimerModal = () => {
         <div className="pt-4">
           <Button 
             onClick={handleAccept} 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3"
+            className="w-full bg-white hover:bg-white/90 text-background font-semibold py-3"
           >
             I UNDERSTAND
           </Button>
