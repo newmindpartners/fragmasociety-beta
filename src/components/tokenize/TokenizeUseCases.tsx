@@ -13,13 +13,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+// Import category background images
+import categoryRealEstate from "@/assets/category-realestate.jpg";
+import categoryCredit from "@/assets/category-credit.jpg";
+import categoryLuxury from "@/assets/category-luxury.jpg";
+import categoryEsg from "@/assets/category-esg.jpg";
+import categorySports from "@/assets/category-sports.jpg";
+import categoryFilm from "@/assets/category-film.jpg";
+
 const categories = [
-  { id: "real-estate", label: "Real Estate", icon: Building2 },
-  { id: "corporate-finance", label: "Corporate Finance", icon: Briefcase },
-  { id: "alternative-assets", label: "Alternative Assets", icon: Gem },
-  { id: "impact-esg", label: "Impact & ESG", icon: Leaf },
-  { id: "team-rewards", label: "Team Rewards", icon: Users },
-  { id: "loyalty-rewards", label: "Loyalty Rewards+", icon: Gift },
+  { id: "real-estate", label: "Real Estate", icon: Building2, bgImage: categoryRealEstate },
+  { id: "corporate-finance", label: "Corporate Finance", icon: Briefcase, bgImage: categoryCredit },
+  { id: "alternative-assets", label: "Alternative Assets", icon: Gem, bgImage: categoryLuxury },
+  { id: "impact-esg", label: "Impact & ESG", icon: Leaf, bgImage: categoryEsg },
+  { id: "team-rewards", label: "Team Rewards", icon: Users, bgImage: categorySports },
+  { id: "loyalty-rewards", label: "Loyalty Rewards+", icon: Gift, bgImage: categoryFilm },
 ];
 
 const useCases = {
@@ -188,6 +196,7 @@ export const TokenizeUseCases = () => {
   const [activeModel, setActiveModel] = useState<Record<number, string>>({});
 
   const currentUseCases = useCases[activeCategory as keyof typeof useCases] || [];
+  const currentCategoryData = categories.find(c => c.id === activeCategory);
 
   const toggleModel = (index: number, model: string) => {
     setActiveModel(prev => ({ ...prev, [index]: model }));
@@ -239,12 +248,36 @@ export const TokenizeUseCases = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/25 hover:bg-white/10 transition-all duration-300"
+                className="group relative rounded-2xl overflow-hidden"
               >
-                {/* Glow effect on hover */}
-                <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <img 
+                    src={currentCategoryData?.bgImage} 
+                    alt="" 
+                    className="w-full h-full object-cover blur-[2px] scale-105 group-hover:scale-110 group-hover:blur-[1px] transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-background/85 group-hover:bg-background/80 transition-colors duration-300" />
+                </div>
+
+                {/* Animated border glow */}
+                <motion.div 
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05), rgba(255,255,255,0.2))',
+                    backgroundSize: '200% 200%',
+                  }}
+                  animate={{
+                    backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                />
                 
-                <div className="relative z-10">
+                {/* Glow effect on hover */}
+                <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-white/15 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+                
+                {/* Glass content layer */}
+                <div className="relative h-full backdrop-blur-sm bg-white/5 border border-white/10 group-hover:border-white/25 rounded-2xl p-8 transition-all duration-300">
                   {/* Header */}
                   <div className="mb-6">
                     <h3 className="text-2xl font-bold text-foreground mb-2">{useCase.title}</h3>
