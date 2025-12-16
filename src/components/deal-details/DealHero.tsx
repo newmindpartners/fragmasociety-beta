@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Play, Euro, Target, Clock, AlertTriangle, Users, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
-import type { DealData } from "@/pages/DealDetails";
+import type { DealData } from "@/types/deal";
 
 interface DealHeroProps {
   deal: DealData;
@@ -41,7 +41,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
         <video
           ref={videoRef}
           src={deal.heroVideoUrl}
-          poster={deal.image}
+          poster={deal.leaderImage}
           loop
           muted
           playsInline
@@ -76,7 +76,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
             {/* Leader */}
             <div className="flex items-center gap-4 mb-6">
               <img 
-                src={deal.image} 
+                src={deal.leaderImage} 
                 alt={deal.leaderName}
                 className="w-14 h-14 rounded-full object-cover border-2 border-white/20"
               />

@@ -9,7 +9,7 @@ import {
   FileText,
   Percent
 } from "lucide-react";
-import type { DealData } from "@/pages/DealDetails";
+import type { DealData } from "@/types/deal";
 
 interface DealKeyTermsProps {
   deal: DealData;
