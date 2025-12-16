@@ -38,15 +38,15 @@ export const MarketplaceCTA = () => {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto text-center"
         >
-          {/* Sparkle icon */}
+          {/* Badge */}
           <motion.div
-            animate={{ rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="inline-block mb-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/20 mb-6"
           >
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center mx-auto">
-              <Sparkles className="w-8 h-8 text-primary" />
-            </div>
+            <Sparkles className="w-4 h-4 text-white" />
+            <span className="text-sm text-white font-semibold">Start Trading</span>
           </motion.div>
 
           <h2 className="text-4xl lg:text-6xl font-serif font-bold text-foreground mb-6">
@@ -65,7 +65,7 @@ export const MarketplaceCTA = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Button size="lg" className="btn-glow group text-lg px-8 py-6">
+              <Button size="lg" className="group text-lg px-8 py-6 bg-white text-background hover:bg-white/90">
                 Explore Marketplace
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
