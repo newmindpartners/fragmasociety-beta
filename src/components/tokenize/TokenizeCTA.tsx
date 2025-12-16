@@ -40,11 +40,11 @@ export const TokenizeCTA = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="group">
+            <Button size="lg" className="group bg-white text-background hover:bg-white/90">
               Get Started Free
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-background">
               Schedule Consultation
             </Button>
           </div>

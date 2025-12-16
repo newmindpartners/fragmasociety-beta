@@ -147,11 +147,7 @@ export const SignatureDealCTA = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="text-base px-8 py-6 
-                    border-white/30 text-white/80 
-                    hover:bg-white/10 hover:text-white hover:border-white/50
-                    backdrop-blur-xl
-                    transition-all duration-300"
+                  className="text-base px-8 py-6 border-white text-white hover:bg-white hover:text-background transition-all duration-300"
                 >
                   <Phone className="mr-2 w-4 h-4" />
                   Book a Strategy Call
