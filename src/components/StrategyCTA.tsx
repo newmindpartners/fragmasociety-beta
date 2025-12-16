@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import strategyCtaBg from "@/assets/strategy-cta-bg.jpg";
 
 const features = [
   { 
@@ -46,8 +47,23 @@ const floatingOrbs = [
 export const StrategyCTA = () => {
   return (
     <section className="py-32 relative overflow-hidden">
-      {/* Premium gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-card/50 to-background" />
+      {/* Photo-realistic Background with Blur */}
+      <div className="absolute inset-0">
+        <motion.div
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 20, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
+          <img 
+            src={strategyCtaBg} 
+            alt="" 
+            className="w-full h-full object-cover scale-110 blur-[3px]"
+          />
+        </motion.div>
+        {/* Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background/90" />
+      </div>
       
       {/* Animated grid pattern */}
       <div className="absolute inset-0 opacity-[0.02]" 
