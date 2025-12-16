@@ -14,6 +14,8 @@ export const TokenizeHero = () => {
           className="w-full h-full object-cover blur-sm scale-105"
         />
         <div className="absolute inset-0 bg-background/80" />
+        {/* Smooth gradient fade to solid background at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent" />
       </div>
       
       {/* Animated ambient glows */}
