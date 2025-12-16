@@ -307,9 +307,9 @@ export const TokenizeUseCases = () => {
 
                   {/* Model Badge for single model */}
                   {useCase.models.length === 1 && (
-                    <Badge className="mb-6 bg-white/10 text-white border-white/20">
+                    <div className="inline-flex px-4 py-2 rounded-full bg-white text-background text-sm font-medium mb-6">
                       {useCase.models[0]}
-                    </Badge>
+                    </div>
                   )}
 
                   {/* Model Description */}
