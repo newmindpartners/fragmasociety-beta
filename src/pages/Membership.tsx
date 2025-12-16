@@ -135,11 +135,7 @@ const TierCard = ({
       {/* Badge */}
       {tier.badge && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <div className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide ${
-            isElite 
-              ? "bg-amber-500 text-black" 
-              : "bg-white text-background"
-          }`}>
+          <div className="px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide bg-white text-background">
             {tier.badge}
           </div>
         </div>
@@ -147,11 +143,9 @@ const TierCard = ({
 
       {/* Card */}
       <div className={`flex flex-col h-full rounded-2xl border p-8 ${
-        isPremium 
+        isPremium || isElite
           ? "border-white/30 bg-white/[0.03]" 
-          : isElite
-            ? "border-amber-500/30 bg-amber-500/[0.02]"
-            : "border-border bg-card"
+          : "border-border bg-card"
       }`}>
         {/* Current plan indicator */}
         {isCurrentPlan && (
@@ -165,11 +159,9 @@ const TierCard = ({
 
         {/* Icon */}
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${
-          isPremium 
+          isPremium || isElite
             ? "bg-white text-background" 
-            : isElite
-              ? "bg-amber-500 text-black"
-              : "bg-muted text-muted-foreground"
+            : "bg-muted text-muted-foreground"
         }`}>
           <Icon className="w-6 h-6" strokeWidth={1.5} />
         </div>
@@ -179,11 +171,9 @@ const TierCard = ({
           <h3 className="text-xl font-semibold text-foreground mb-2">{tier.name}</h3>
           <div className="flex items-baseline gap-1">
             <span className={`text-4xl font-bold ${
-              isPremium 
+              isPremium || isElite
                 ? "text-white" 
-                : isElite
-                  ? "text-amber-500"
-                  : "text-foreground"
+                : "text-foreground"
             }`}>
               {tier.price}
             </span>
@@ -209,11 +199,9 @@ const TierCard = ({
             <Link to="/auth" className="block">
               <Button 
                 className={`w-full h-11 rounded-lg font-medium ${
-                  isPremium 
+                  isPremium || isElite
                     ? "bg-white hover:bg-white/90 text-background" 
-                    : isElite
-                      ? "bg-amber-500 hover:bg-amber-600 text-black"
-                      : "bg-muted hover:bg-muted/80 text-foreground"
+                    : "bg-muted hover:bg-muted/80 text-foreground"
                 }`}
               >
                 {isPaid ? "Sign Up to Subscribe" : "Get Started Free"}
@@ -222,11 +210,7 @@ const TierCard = ({
             </Link>
           ) : isPaid ? (
             <Button 
-              className={`w-full h-11 rounded-lg font-medium ${
-                isPremium 
-                  ? "bg-white hover:bg-white/90 text-background" 
-                  : "bg-amber-500 hover:bg-amber-600 text-black"
-              }`}
+              className="w-full h-11 rounded-lg font-medium bg-white hover:bg-white/90 text-background"
               onClick={() => onSubscribe(tier.priceId!)}
               disabled={isLoading}
             >
