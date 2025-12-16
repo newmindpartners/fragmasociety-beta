@@ -210,8 +210,8 @@ export const TokenizeUseCases = () => {
                 }}
                 className={`flex items-center gap-2 px-5 py-3 rounded-full border transition-all duration-300 ${
                   isActive
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-card/50 text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
+                    ? "bg-white text-background border-white"
+                    : "bg-white/5 backdrop-blur-sm text-muted-foreground border-white/20 hover:border-white/40 hover:text-foreground"
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -239,61 +239,70 @@ export const TokenizeUseCases = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-8 hover:border-primary/30 transition-all duration-300"
+                className="group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/25 hover:bg-white/10 transition-all duration-300"
               >
-                {/* Header */}
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{useCase.title}</h3>
-                  <p className="text-muted-foreground text-sm">{useCase.example}</p>
-                </div>
-
-                {/* Model Toggle */}
-                {useCase.models.length > 1 && (
-                  <div className="flex gap-2 mb-6">
-                    {useCase.models.map((model) => (
-                      <Button
-                        key={model}
-                        variant={activeModel[index] === model || (!activeModel[index] && model === useCase.models[0]) ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => toggleModel(index, model)}
-                        className="rounded-full"
-                      >
-                        {model}
-                      </Button>
-                    ))}
+                {/* Glow effect on hover */}
+                <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+                
+                <div className="relative z-10">
+                  {/* Header */}
+                  <div className="mb-6">
+                    <h3 className="text-2xl font-bold text-foreground mb-2">{useCase.title}</h3>
+                    <p className="text-muted-foreground text-sm">{useCase.example}</p>
                   </div>
-                )}
 
-                {/* Model Badge for single model */}
-                {useCase.models.length === 1 && (
-                  <Badge variant="secondary" className="mb-6">
-                    {useCase.models[0]}
-                  </Badge>
-                )}
+                  {/* Model Toggle */}
+                  {useCase.models.length > 1 && (
+                    <div className="flex gap-2 mb-6">
+                      {useCase.models.map((model) => (
+                        <Button
+                          key={model}
+                          variant={activeModel[index] === model || (!activeModel[index] && model === useCase.models[0]) ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => toggleModel(index, model)}
+                          className={`rounded-full ${
+                            activeModel[index] === model || (!activeModel[index] && model === useCase.models[0])
+                              ? "bg-white text-background hover:bg-white/90"
+                              : "border-white/30 text-white hover:bg-white hover:text-background"
+                          }`}
+                        >
+                          {model}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
 
-                {/* Model Description */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-primary mb-2">
-                    {(activeModel[index] || useCase.models[0])} Model
-                  </h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {(activeModel[index] || useCase.models[0]) === "BUY" 
-                      ? useCase.buyDescription 
-                      : useCase.lendDescription}
-                  </p>
-                </div>
+                  {/* Model Badge for single model */}
+                  {useCase.models.length === 1 && (
+                    <Badge className="mb-6 bg-white/10 text-white border-white/20">
+                      {useCase.models[0]}
+                    </Badge>
+                  )}
 
-                {/* Benefits */}
-                <div>
-                  <h4 className="text-sm font-semibold text-foreground mb-3">Key Benefits</h4>
-                  <ul className="space-y-2">
-                    {useCase.benefits.map((benefit, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                        {benefit}
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Model Description */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold text-white mb-2">
+                      {(activeModel[index] || useCase.models[0])} Model
+                    </h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {(activeModel[index] || useCase.models[0]) === "BUY" 
+                        ? useCase.buyDescription 
+                        : useCase.lendDescription}
+                    </p>
+                  </div>
+
+                  {/* Benefits */}
+                  <div>
+                    <h4 className="text-sm font-semibold text-foreground mb-3">Key Benefits</h4>
+                    <ul className="space-y-2">
+                      {useCase.benefits.map((benefit, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Check className="w-4 h-4 text-white flex-shrink-0" />
+                          {benefit}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </motion.div>
             ))}
