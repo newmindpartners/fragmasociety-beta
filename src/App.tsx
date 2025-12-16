@@ -13,6 +13,7 @@ import Marketplace from "./pages/Marketplace";
 import Tokenize from "./pages/Tokenize";
 import SignatureDeal from "./pages/SignatureDeal";
 import LiveDeals from "./pages/LiveDeals";
+import DealDetails from "./pages/DealDetails";
 import FAQ from "./pages/FAQ";
 import HowItWorks from "./pages/HowItWorks";
 import NotFound from "./pages/NotFound";
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/tokenize" element={<Tokenize />} />
             <Route path="/signature-deal" element={<SignatureDeal />} />
             <Route path="/live-deals" element={<LiveDeals />} />
+            <Route path="/deal/:id" element={<DealDetails />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/fund" element={<Strategy />} />
