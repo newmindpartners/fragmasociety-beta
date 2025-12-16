@@ -320,9 +320,9 @@ export const SmartVaults = () => {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10"
+                  className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10"
                 >
-                  <benefit.icon className="w-5 h-5 text-primary flex-shrink-0" />
+                  <benefit.icon className="w-5 h-5 text-white flex-shrink-0" />
                   <span className="text-sm text-foreground">{benefit.title}</span>
                 </motion.div>
               ))}
@@ -333,7 +333,7 @@ export const SmartVaults = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
-              className="mt-8 text-primary font-medium"
+              className="mt-8 text-white font-medium"
             >
               This is true ownership, not just a pretty interface.
             </motion.p>
