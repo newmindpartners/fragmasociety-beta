@@ -181,7 +181,7 @@ export const OptionsTrading = () => {
                   <IconComponent className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-serif font-bold text-foreground">{currentOption.title}</h3>
+                  <h3 className="text-2xl font-serif font-bold text-gradient">{currentOption.title}</h3>
                   <p className="text-sm text-muted-foreground">{currentOption.payoffDescription}</p>
                 </div>
               </div>
