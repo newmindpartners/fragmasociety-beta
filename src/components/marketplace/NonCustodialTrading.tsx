@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Wallet, FileCode, Ban, Shield, ArrowRight, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Wallet, FileCode, Ban, Shield, ArrowRight, Check, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const FlowStep = ({ 
@@ -7,64 +7,94 @@ const FlowStep = ({
   title, 
   subtitle,
   isActive,
-  delay 
+  index
 }: { 
   icon: any; 
   title: string; 
   subtitle: string;
   isActive: boolean;
-  delay: number;
+  index: number;
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    transition={{ delay, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-    className="flex flex-col items-center text-center"
+    transition={{ delay: index * 0.1, duration: 0.5 }}
+    className="flex flex-col items-center text-center relative"
   >
+    {/* Turquoise glow ring when active */}
+    <AnimatePresence>
+      {isActive && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-24 rounded-2xl bg-primary/20 blur-2xl"
+        />
+      )}
+    </AnimatePresence>
+    
     <motion.div
       animate={isActive ? {
-        scale: [1, 1.05, 1],
-        boxShadow: [
-          "0 0 0 0 rgba(255,255,255,0.1)",
-          "0 0 60px 10px rgba(255,255,255,0.15)",
-          "0 0 0 0 rgba(255,255,255,0.1)"
-        ]
-      } : {}}
-      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        scale: [1, 1.02, 1],
+      } : { scale: 1 }}
+      transition={{ duration: 1.5, repeat: isActive ? Infinity : 0, ease: "easeInOut" }}
       className={`
-        w-20 h-20 rounded-2xl flex items-center justify-center mb-4
-        backdrop-blur-xl border transition-all duration-500
+        relative w-20 h-20 rounded-2xl flex items-center justify-center mb-4
+        backdrop-blur-xl border-2 transition-all duration-700
         ${isActive 
-          ? 'bg-white/10 border-white/30' 
+          ? 'bg-primary/10 border-primary/50 shadow-[0_0_40px_rgba(45,212,191,0.3)]' 
           : 'bg-white/5 border-white/10'
         }
       `}
     >
-      <Icon className={`w-9 h-9 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/70'}`} />
+      {/* Inner glow */}
+      {isActive && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent"
+        />
+      )}
+      <Icon className={`w-9 h-9 relative z-10 transition-colors duration-500 ${isActive ? 'text-primary' : 'text-white/60'}`} />
     </motion.div>
-    <h3 className={`font-medium text-lg mb-1 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/80'}`}>
+    
+    <h3 className={`font-semibold text-lg mb-1 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/70'}`}>
       {title}
     </h3>
-    <p className="text-sm text-muted-foreground">{subtitle}</p>
+    <p className={`text-sm transition-colors duration-500 ${isActive ? 'text-primary/80' : 'text-white/40'}`}>
+      {subtitle}
+    </p>
   </motion.div>
 );
 
-const AnimatedArrow = ({ delay, isAnimating }: { delay: number; isAnimating: boolean }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    viewport={{ once: true }}
-    transition={{ delay, duration: 0.4 }}
-    className="hidden lg:flex items-center justify-center px-4"
-  >
+const AnimatedConnector = ({ isAnimating, delay }: { isAnimating: boolean; delay: number }) => (
+  <div className="hidden lg:flex items-center justify-center w-24 relative">
+    {/* Static line */}
+    <div className="absolute inset-y-1/2 left-0 right-0 h-px bg-white/10" />
+    
+    {/* Animated pulse traveling */}
+    <AnimatePresence>
+      {isAnimating && (
+        <motion.div
+          initial={{ left: 0, opacity: 0 }}
+          animate={{ left: "100%", opacity: [0, 1, 1, 0] }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute w-8 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+        />
+      )}
+    </AnimatePresence>
+    
+    {/* Arrow */}
     <motion.div
-      animate={isAnimating ? { x: [0, 8, 0] } : {}}
-      transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+      animate={isAnimating ? { x: [0, 4, 0], opacity: [0.4, 1, 0.4] } : { opacity: 0.3 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      <ArrowRight className="w-5 h-5 text-white/40" />
+      <ArrowRight className={`w-5 h-5 transition-colors duration-500 ${isAnimating ? 'text-primary' : 'text-white/30'}`} />
     </motion.div>
-  </motion.div>
+  </div>
 );
 
 const BenefitCard = ({ 
@@ -77,34 +107,66 @@ const BenefitCard = ({
   title: string; 
   description: string;
   index: number;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay: 0.1 * index, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-    whileHover={{ y: -4 }}
-    className="group relative"
-  >
-    {/* Subtle glow on hover */}
-    <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
-    
-    <div className="relative rounded-2xl p-6 backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] group-hover:border-white/20 transition-all duration-500">
-      {/* Icon */}
-      <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:bg-white/[0.08] transition-colors duration-500">
-        <Icon className="w-6 h-6 text-white/80 group-hover:text-white transition-colors duration-500" />
-      </div>
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.15 * index, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative"
+    >
+      {/* Turquoise border glow on hover */}
+      <motion.div 
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+        className="absolute -inset-px rounded-2xl bg-gradient-to-b from-primary/40 via-primary/20 to-transparent blur-sm" 
+      />
       
-      {/* Content */}
-      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-white transition-colors">
-        {title}
-      </h3>
-      <p className="text-sm text-white/50 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
-        {description}
-      </p>
-    </div>
-  </motion.div>
-);
+      {/* Card */}
+      <div className="relative h-full rounded-2xl p-7 backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] group-hover:border-primary/30 transition-all duration-500 overflow-hidden">
+        {/* Subtle gradient overlay on hover */}
+        <motion.div
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+          className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent"
+        />
+        
+        {/* Icon with turquoise accent */}
+        <div className="relative z-10">
+          <motion.div 
+            animate={{ scale: isHovered ? 1.05 : 1 }}
+            transition={{ duration: 0.3 }}
+            className="w-14 h-14 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center mb-5 group-hover:border-primary/30 group-hover:bg-primary/10 transition-all duration-500"
+          >
+            <Icon className="w-7 h-7 text-white/70 group-hover:text-primary transition-colors duration-500" />
+          </motion.div>
+          
+          {/* Content */}
+          <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-white transition-colors">
+            {title}
+          </h3>
+          <p className="text-white/45 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+            {description}
+          </p>
+        </div>
+        
+        {/* Corner accent */}
+        <motion.div
+          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8 }}
+          transition={{ duration: 0.4 }}
+          className="absolute top-4 right-4"
+        >
+          <Sparkles className="w-4 h-4 text-primary/60" />
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
 
 export const NonCustodialTrading = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -112,7 +174,7 @@ export const NonCustodialTrading = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % 3);
-    }, 2000);
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 
@@ -142,8 +204,8 @@ export const NonCustodialTrading = () => {
 
   return (
     <section className="py-32 relative overflow-hidden">
-      {/* Minimal ambient gradient */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-radial from-white/[0.03] to-transparent rounded-full blur-3xl pointer-events-none" />
+      {/* Ambient turquoise glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
       
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
@@ -152,9 +214,10 @@ export const NonCustodialTrading = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 0.6 }}
           >
-            <span className="inline-block px-4 py-1.5 mb-6 text-xs font-medium tracking-widest uppercase rounded-full bg-white/[0.05] text-white/70 border border-white/[0.08]">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 text-xs font-medium tracking-widest uppercase rounded-full bg-primary/10 text-primary border border-primary/20">
+              <Shield className="w-3.5 h-3.5" />
               Non-Custodial
             </span>
             <h2 className="text-4xl lg:text-5xl font-serif font-bold text-white mb-6 tracking-tight">
@@ -169,29 +232,33 @@ export const NonCustodialTrading = () => {
 
         {/* Flow Visualization */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative max-w-3xl mx-auto mb-12"
+          transition={{ duration: 0.8 }}
+          className="relative max-w-3xl mx-auto mb-16"
         >
-          <div className="rounded-3xl p-10 lg:p-14 backdrop-blur-xl bg-white/[0.02] border border-white/[0.06]">
+          {/* Outer glow border */}
+          <div className="absolute -inset-px rounded-3xl bg-gradient-to-b from-primary/20 via-white/5 to-transparent opacity-60" />
+          
+          <div className="relative rounded-3xl p-10 lg:p-14 backdrop-blur-xl bg-white/[0.02] border border-white/[0.06]">
             {/* Flow Steps */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0">
-              <FlowStep {...flowSteps[0]} isActive={activeStep === 0} delay={0.1} />
-              <AnimatedArrow delay={0.2} isAnimating={activeStep === 0} />
-              <FlowStep {...flowSteps[1]} isActive={activeStep === 1} delay={0.2} />
-              <AnimatedArrow delay={0.3} isAnimating={activeStep === 1} />
-              <FlowStep {...flowSteps[2]} isActive={activeStep === 2} delay={0.3} />
+              <FlowStep {...flowSteps[0]} isActive={activeStep === 0} index={0} />
+              <AnimatedConnector isAnimating={activeStep === 0} delay={0} />
+              <FlowStep {...flowSteps[1]} isActive={activeStep === 1} index={1} />
+              <AnimatedConnector isAnimating={activeStep === 1} delay={0} />
+              <FlowStep {...flowSteps[2]} isActive={activeStep === 2} index={2} />
             </div>
 
             {/* Progress Indicator */}
             <div className="flex justify-center gap-2 mt-10">
               {[0, 1, 2].map((i) => (
-                <motion.div
+                <motion.button
                   key={i}
-                  className={`h-1 rounded-full transition-all duration-500 ${
-                    activeStep === i ? 'w-8 bg-white/60' : 'w-2 bg-white/20'
+                  onClick={() => setActiveStep(i)}
+                  className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                    activeStep === i ? 'w-10 bg-primary' : 'w-2 bg-white/20 hover:bg-white/30'
                   }`}
                 />
               ))}
@@ -205,9 +272,14 @@ export const NonCustodialTrading = () => {
               transition={{ delay: 0.4, duration: 0.5 }}
               className="mt-10 text-center"
             >
-              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/[0.03] border border-white/[0.08]">
-                <Check className="w-4 h-4 text-emerald-400" />
-                <p className="text-white/80 text-sm font-medium">
+              <div className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-primary/5 border border-primary/20">
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Check className="w-4 h-4 text-primary" />
+                </motion.div>
+                <p className="text-white/90 text-sm font-medium">
                   Everything happens directly in your wallet, on your terms
                 </p>
               </div>
@@ -216,7 +288,7 @@ export const NonCustodialTrading = () => {
         </motion.div>
 
         {/* Benefit Cards */}
-        <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {benefits.map((benefit, i) => (
             <BenefitCard key={i} {...benefit} index={i} />
           ))}
