@@ -36,9 +36,9 @@ const ConnectionLine = ({ index, isVisible }: { index: number; isVisible: boolea
       <svg className="w-full h-8 overflow-visible" preserveAspectRatio="none">
         <defs>
           <linearGradient id={`lineGradient-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
-            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+            <stop offset="0%" stopColor="rgba(255,255,255,0.8)" />
+            <stop offset="50%" stopColor="rgba(255,255,255,1)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0.8)" />
           </linearGradient>
           <filter id={`glow-${index}`}>
             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -55,8 +55,7 @@ const ConnectionLine = ({ index, isVisible }: { index: number; isVisible: boolea
           y1="4"
           x2="calc(100% - 60px)"
           y2="4"
-          stroke="hsl(var(--primary))"
-          strokeOpacity="0.15"
+          stroke="rgba(255,255,255,0.15)"
           strokeWidth="2"
           strokeLinecap="round"
         />
@@ -86,7 +85,7 @@ const ConnectionLine = ({ index, isVisible }: { index: number; isVisible: boolea
         {/* Traveling particle */}
         <motion.circle
           r="4"
-          fill="hsl(var(--primary))"
+          fill="white"
           filter={`url(#glow-${index})`}
           initial={{ opacity: 0 }}
           animate={isVisible ? {
@@ -196,9 +195,9 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
 
         {/* Outer glow ring */}
         <div className="relative mb-8">
-          {/* Pulsing outer ring */}
+          {/* Pulsing outer ring - WHITE */}
           <motion.div
-            className="absolute inset-0 rounded-full bg-primary/20"
+            className="absolute inset-0 rounded-full bg-white/20"
             initial={{ scale: 1, opacity: 0 }}
             animate={isVisible ? {
               scale: [1, 1.4, 1.4],
@@ -214,9 +213,9 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
             style={{ width: 120, height: 120, left: -10, top: -10 }}
           />
 
-          {/* Second pulse ring */}
+          {/* Second pulse ring - WHITE */}
           <motion.div
-            className="absolute inset-0 rounded-full bg-primary/15"
+            className="absolute inset-0 rounded-full bg-white/15"
             initial={{ scale: 1, opacity: 0 }}
             animate={isVisible ? {
               scale: [1, 1.6, 1.6],
@@ -239,11 +238,11 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
             transition={{ duration: 0.3, ease: "easeOut" }}
             style={{ transformStyle: "preserve-3d" }}
           >
-            {/* Rotating gradient border */}
+            {/* Rotating gradient border - WHITE */}
             <motion.div
               className="absolute inset-0 rounded-full"
               style={{
-                background: `conic-gradient(from 0deg, hsl(var(--primary)) 0%, transparent 60%, hsl(var(--primary)) 100%)`,
+                background: `conic-gradient(from 0deg, rgba(255,255,255,0.8) 0%, transparent 60%, rgba(255,255,255,0.8) 100%)`,
                 padding: 2,
               }}
               animate={{ rotate: 360 }}
@@ -252,18 +251,18 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
               <div className="w-full h-full rounded-full bg-background" />
             </motion.div>
 
-            {/* Static border ring */}
+            {/* Static border ring - WHITE */}
             <motion.div 
-              className="absolute inset-0 rounded-full border-2 border-primary/40"
+              className="absolute inset-0 rounded-full border-2 border-white/40"
               style={{ 
                 boxShadow: isHovered 
-                  ? '0 0 40px hsl(var(--primary) / 0.5), inset 0 0 30px hsl(var(--primary) / 0.2)' 
-                  : '0 0 20px hsl(var(--primary) / 0.3), inset 0 0 20px hsl(var(--primary) / 0.1)',
+                  ? '0 0 40px rgba(255,255,255,0.5), inset 0 0 30px rgba(255,255,255,0.2)' 
+                  : '0 0 20px rgba(255,255,255,0.3), inset 0 0 20px rgba(255,255,255,0.1)',
                 transition: 'box-shadow 0.3s ease'
               }}
             />
 
-            {/* Icon container with 3D lift */}
+            {/* Icon container with 3D lift - WHITE */}
             <motion.div 
               className="absolute inset-0 flex items-center justify-center"
               animate={isHovered ? { z: 20 } : { z: 0 }}
@@ -273,13 +272,13 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
                 animate={isHovered ? { scale: 1.15 } : { scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <Icon className="w-10 h-10 text-primary" strokeWidth={1.5} />
+                <Icon className="w-10 h-10 text-white" strokeWidth={1.5} />
               </motion.div>
             </motion.div>
 
-            {/* Step number badge with 3D pop */}
+            {/* Step number badge - WHITE */}
             <motion.div
-              className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg"
+              className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg"
               initial={{ scale: 0, rotate: -180 }}
               animate={isVisible ? { 
                 scale: isHovered ? 1.2 : 1, 
@@ -294,12 +293,12 @@ const ProcessStep = ({ step, index, isVisible }: { step: typeof steps[0]; index:
               }}
               style={{ 
                 boxShadow: isHovered 
-                  ? '0 10px 30px hsl(var(--primary) / 0.6)' 
-                  : '0 0 15px hsl(var(--primary) / 0.5)',
+                  ? '0 10px 30px rgba(255,255,255,0.6)' 
+                  : '0 0 15px rgba(255,255,255,0.5)',
                 transformStyle: "preserve-3d"
               }}
             >
-              <span className="text-primary-foreground font-bold text-sm">{step.number}</span>
+              <span className="text-background font-bold text-sm">{step.number}</span>
             </motion.div>
           </motion.div>
         </div>
@@ -343,24 +342,64 @@ export const TokenizeProcess = () => {
 
   return (
     <section className="py-32 relative overflow-hidden" ref={containerRef}>
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-[hsl(220,30%,6%)] to-background" />
+      {/* Background with turquoise studio spotlight */}
+      <div className="absolute inset-0 bg-background" />
       
-      {/* Ambient glow */}
+      {/* Top turquoise spotlight */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[150px]"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px]"
+        style={{
+          background: 'radial-gradient(ellipse at center top, hsl(var(--primary) / 0.15) 0%, hsl(var(--primary) / 0.08) 30%, transparent 70%)',
+        }}
         animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.8, 1, 0.8],
+        }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Secondary turquoise glow spots */}
+      <motion.div
+        className="absolute top-20 left-1/4 w-[400px] h-[400px] rounded-full"
+        style={{
+          background: 'radial-gradient(circle, hsl(var(--primary) / 0.12) 0%, transparent 60%)',
+        }}
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.5, 0.8, 0.5],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
+      
+      <motion.div
+        className="absolute top-20 right-1/4 w-[400px] h-[400px] rounded-full"
+        style={{
+          background: 'radial-gradient(circle, hsl(var(--primary) / 0.12) 0%, transparent 60%)',
+        }}
+        animate={{
+          scale: [1.2, 1, 1.2],
+          opacity: [0.8, 0.5, 0.8],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
 
-      {/* Floating particles */}
+      {/* Center ambient glow - turquoise */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] rounded-full blur-[150px]"
+        style={{
+          background: 'hsl(var(--primary) / 0.1)',
+        }}
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.4, 0.6, 0.4],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Floating particles - white */}
       {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 rounded-full bg-primary/40"
+          className="absolute w-1 h-1 rounded-full bg-white/40"
           style={{
             left: `${10 + Math.random() * 80}%`,
             top: `${10 + Math.random() * 80}%`,
@@ -388,10 +427,14 @@ export const TokenizeProcess = () => {
           className="text-center mb-20"
         >
           <motion.h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
             style={{ fontFamily: "'Inter', sans-serif", letterSpacing: "-0.02em" }}
           >
-            How Tokenization Works
+            <span className="text-foreground">How </span>
+            <span className="bg-gradient-to-r from-primary via-[hsl(175,70%,50%)] to-primary bg-clip-text text-transparent">
+              Tokenization
+            </span>
+            <span className="text-foreground"> Works</span>
           </motion.h2>
           <motion.p 
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
