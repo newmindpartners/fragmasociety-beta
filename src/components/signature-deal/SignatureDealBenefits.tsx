@@ -48,13 +48,13 @@ export const SignatureDealBenefits = () => {
           transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <span className="text-primary font-semibold text-sm tracking-wider uppercase mb-4 block">
+          <span className="text-white/50 font-medium text-sm tracking-wider uppercase mb-4 block">
             Unlock Your Potential
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6">
             What you unlock with a
             <br />
-            <span className="bg-gradient-to-r from-primary via-cyan-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="text-gradient">
               Signature Deal
             </span>
           </h2>

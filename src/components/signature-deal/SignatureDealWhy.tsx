@@ -343,10 +343,10 @@ export const SignatureDealWhy = () => {
           <span className="text-white/50 font-medium text-sm tracking-wider uppercase mb-4 block">
             The Fragma Advantage
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6">
             Why launch your signature deal
             <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="text-gradient">
               with Fragma?
             </span>
           </h2>

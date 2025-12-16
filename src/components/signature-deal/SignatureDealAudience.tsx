@@ -64,14 +64,14 @@ export const SignatureDealAudience = () => {
           transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">Perfect For</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+            <Sparkles className="w-4 h-4 text-white/70" />
+            <span className="text-sm text-white/70 font-medium">Perfect For</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6">
             Who Should Launch a
             <br />
-            <span className="text-primary">Signature Deal?</span>
+            <span className="text-gradient">Signature Deal?</span>
           </h2>
         </motion.div>
 
@@ -106,12 +106,12 @@ export const SignatureDealAudience = () => {
           transition={{ duration: 0.7, delay: 0.5 }}
           className="text-center mt-16"
         >
-          <div className="inline-block px-8 py-6 rounded-2xl bg-gradient-to-r from-card/50 to-card/30 backdrop-blur-sm border border-border">
-            <p className="text-muted-foreground text-lg mb-2">
+          <div className="inline-block px-8 py-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/10">
+            <p className="text-white/50 text-lg mb-2">
               If you have a valuable asset or a strong brand —
             </p>
-            <p className="text-foreground text-xl font-semibold">
-              your community <span className="text-primary">wants to invest</span> in your success.
+            <p className="text-white text-xl font-semibold">
+              your community <span className="text-gradient">wants to invest</span> in your success.
             </p>
           </div>
         </motion.div>
