@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Globe } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import strategyRiskBg from "@/assets/strategy-risk-bg.jpg";
 
 export const StrategyRisk = () => {
   const risks = [
@@ -32,8 +33,17 @@ export const StrategyRisk = () => {
   ];
 
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-6">
+    <section className="relative py-24 overflow-hidden">
+      {/* Background Image with Blur */}
+      <div className="absolute inset-0">
+        <img 
+          src={strategyRiskBg} 
+          alt="" 
+          className="w-full h-full object-cover scale-110 blur-sm"
+        />
+        <div className="absolute inset-0 bg-background/70" />
+      </div>
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
