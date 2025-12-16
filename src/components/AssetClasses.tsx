@@ -182,7 +182,7 @@ export const AssetClasses = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative w-full py-20 lg:py-28 overflow-hidden"
+      className="relative w-full py-12 lg:py-16 overflow-hidden"
     >
       {/* Background - transparent to blend with page */}
       <div className="absolute inset-0 bg-transparent" />
@@ -231,7 +231,7 @@ export const AssetClasses = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
-          className="text-center text-muted-foreground text-sm max-w-xl mx-auto mb-12"
+          className="text-center text-muted-foreground text-sm max-w-xl mx-auto mb-8"
         >
           Diversify across real estate, entertainment, credit, ESG and institutional-grade products in a few clicks.
         </motion.p>
