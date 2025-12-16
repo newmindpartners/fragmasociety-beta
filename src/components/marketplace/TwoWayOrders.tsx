@@ -34,9 +34,9 @@ const TwoWayOrderDemo = () => {
           <motion.div
             animate={{ rotate: phase === 2 ? [0, 180, 360] : 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 border border-primary/30 mb-4"
+            className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 border border-white/20 mb-4"
           >
-            <ArrowLeftRight className="w-7 h-7 text-primary" />
+            <ArrowLeftRight className="w-7 h-7 text-white" />
           </motion.div>
           <h3 className="text-2xl font-serif font-bold text-foreground">Two-Way Order Demo</h3>
         </div>
@@ -56,9 +56,9 @@ const TwoWayOrderDemo = () => {
                 ]
               } : {}}
               transition={{ duration: 1, repeat: phase === 3 ? Infinity : 0 }}
-              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 flex items-center justify-center backdrop-blur-sm"
+              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 flex items-center justify-center backdrop-blur-sm"
             >
-              <span className="text-xl font-bold text-primary">RWA</span>
+              <span className="text-xl font-bold text-white">RWA</span>
             </motion.div>
           </div>
 
@@ -250,9 +250,9 @@ const TwoWayOrderDemo = () => {
                 exit={{ opacity: 0, y: -20 }}
                 className="absolute bottom-4 left-1/2 -translate-x-1/2"
               >
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-primary/15 border border-primary/40 backdrop-blur-md">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-medium text-primary whitespace-nowrap">Smart contract executes automatically</span>
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 border border-white/30 backdrop-blur-md">
+                  <Sparkles className="w-4 h-4 text-white" />
+                  <span className="text-sm font-medium text-white whitespace-nowrap">Smart contract executes automatically</span>
                 </div>
               </motion.div>
             )}
@@ -288,7 +288,7 @@ const TwoWayOrderDemo = () => {
                         ? "bg-green-500 text-white" 
                         : i === 1 
                           ? "bg-red-500 text-white"
-                          : "bg-primary text-primary-foreground"
+                          : "bg-white text-background"
                       : "bg-muted text-muted-foreground"
                   }`}
                 >
@@ -384,9 +384,9 @@ export const TwoWayOrders = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-primary/10 border border-primary/20"
+                className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10"
               >
-                <ArrowLeftRight className="w-6 h-6 text-primary flex-shrink-0" />
+                <ArrowLeftRight className="w-6 h-6 text-white flex-shrink-0" />
                 <span className="text-foreground">Keep both active at the same time</span>
               </motion.div>
 
@@ -395,9 +395,9 @@ export const TwoWayOrders = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-accent/10 border border-accent/20"
+                className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10"
               >
-                <Zap className="w-6 h-6 text-accent flex-shrink-0" />
+                <Zap className="w-6 h-6 text-white flex-shrink-0" />
                 <span className="text-foreground">Auto-match when market conditions are right</span>
               </motion.div>
             </div>
