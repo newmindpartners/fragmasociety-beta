@@ -1,31 +1,41 @@
 import { motion } from "framer-motion";
 import { Factory, Cpu, Server, Network } from "lucide-react";
 
+// Import strategy background images (same as hero section)
+import smeCreditBg from "@/assets/strategy-sme-credit.jpg";
+import btcMiningBg from "@/assets/strategy-btc-mining.jpg";
+import aiInfraBg from "@/assets/strategy-ai-infrastructure.jpg";
+import ecosystemBg from "@/assets/strategy-ecosystem.jpg";
+
 export const StrategyPillars = () => {
   const pillars = [
     {
       icon: Factory,
       title: "SME Private Credit & Bonds",
       description: "Growth and transition SMEs financing expansion, acquisitions and capex via senior-secured loans, revenue-linked notes and selected mezzanine structures.",
-      color: "from-emerald-500/20 to-primary/20"
+      color: "from-emerald-500/20 to-primary/20",
+      bgImage: smeCreditBg
     },
     {
       icon: Cpu,
       title: "BTC Mining Revenue Strategies",
       description: "Structured exposure to professional mining operators through hashrate contracts and revenue-share notes, with emphasis on low-cost power and modern fleets.",
-      color: "from-amber-500/20 to-orange-500/20"
+      color: "from-amber-500/20 to-orange-500/20",
+      bgImage: btcMiningBg
     },
     {
       icon: Server,
       title: "AI / HPC Datacenter Infrastructure",
       description: "GPU clusters and high-density datacenter capacity contracted to AI/ML and enterprise clients under long-term leases and compute-as-a-service agreements.",
-      color: "from-violet-500/20 to-purple-500/20"
+      color: "from-violet-500/20 to-purple-500/20",
+      bgImage: aiInfraBg
     },
     {
       icon: Network,
       title: "Fragma Ecosystem Equity",
       description: "Equity and equity-linked positions in digital infrastructure, tokenisation, fintech and AI/data companies within the Fragma network.",
-      color: "from-primary/20 to-accent/20"
+      color: "from-primary/20 to-accent/20",
+      bgImage: ecosystemBg
     }
   ];
 
@@ -92,26 +102,39 @@ export const StrategyPillars = () => {
               variants={cardVariants}
               whileHover={{ y: -6, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="card-premium p-8 group shine"
+              className="relative rounded-2xl overflow-hidden group"
             >
-              <div className="flex items-start gap-6">
-                <motion.div 
-                  className={`icon-premium w-16 h-16 shrink-0 bg-gradient-to-br ${pillar.color}`}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <pillar.icon className="w-8 h-8 text-primary" />
-                </motion.div>
-                <div>
-                  <h3 className="text-xl font-serif font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">{pillar.description}</p>
-                </div>
+              {/* Background Image with Blur */}
+              <div className="absolute inset-0">
+                <img 
+                  src={pillar.bgImage} 
+                  alt="" 
+                  className="w-full h-full object-cover scale-110 blur-[2px] group-hover:scale-115 group-hover:blur-[1px] transition-all duration-700"
+                />
+                <div className="absolute inset-0 bg-background/80 group-hover:bg-background/75 transition-colors duration-500" />
               </div>
               
-              <div className="absolute top-6 right-6 text-6xl font-serif font-bold text-border/30 select-none">
-                {String(index + 1).padStart(2, '0')}
+              {/* Glass Content Layer */}
+              <div className="relative z-10 p-8 backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl h-full">
+                <div className="flex items-start gap-6">
+                  <motion.div 
+                    className={`icon-premium w-16 h-16 shrink-0 bg-gradient-to-br ${pillar.color}`}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <pillar.icon className="w-8 h-8 text-primary" />
+                  </motion.div>
+                  <div>
+                    <h3 className="text-xl font-serif font-bold text-foreground mb-3 group-hover:text-white transition-colors duration-300">
+                      {pillar.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed group-hover:text-white/80 transition-colors duration-300">{pillar.description}</p>
+                  </div>
+                </div>
+                
+                <div className="absolute top-6 right-6 text-6xl font-serif font-bold text-white/10 select-none">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
               </div>
             </motion.div>
           ))}
