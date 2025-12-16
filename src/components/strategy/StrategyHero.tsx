@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// Import strategy background images
+import btcMiningBg from "@/assets/strategy-btc-mining.jpg";
+import aiInfraBg from "@/assets/strategy-ai-infrastructure.jpg";
+import smeCreditBg from "@/assets/strategy-sme-credit.jpg";
+import ecosystemBg from "@/assets/strategy-ecosystem.jpg";
+
 const StrategyAnimatedBackground = () => (
   <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
     <div className="absolute inset-0 bg-gradient-to-br from-background via-card to-background" />
@@ -38,7 +44,7 @@ const strategies = [
     subtitle: "Private Lending",
     description: "Secured lending to established SMEs with stable cash flows",
     icon: Landmark,
-    bgGradient: "radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.4) 0%, rgba(6, 78, 59, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    bgImage: smeCreditBg,
     iconBg: "from-emerald-600/80 to-emerald-900/80",
     focus: "Income Focus",
     category: "Income",
@@ -50,7 +56,7 @@ const strategies = [
     subtitle: "Digital Infrastructure",
     description: "Institutional-grade Bitcoin mining operations",
     icon: Bitcoin,
-    bgGradient: "radial-gradient(ellipse at 70% 30%, rgba(245, 158, 11, 0.4) 0%, rgba(146, 64, 14, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    bgImage: btcMiningBg,
     iconBg: "from-amber-600/80 to-amber-900/80",
     focus: "Variable Returns",
     category: "Income",
@@ -62,7 +68,7 @@ const strategies = [
     subtitle: "Compute Power",
     description: "High-performance computing for AI workloads",
     icon: Cpu,
-    bgGradient: "radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.4) 0%, rgba(76, 29, 149, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    bgImage: aiInfraBg,
     iconBg: "from-violet-600/80 to-violet-900/80",
     focus: "Growth Potential",
     category: "Growth",
@@ -74,7 +80,7 @@ const strategies = [
     subtitle: "Strategic Positions",
     description: "Equity stakes in digital infrastructure companies",
     icon: Building2,
-    bgGradient: "radial-gradient(ellipse at 20% 80%, rgba(6, 182, 212, 0.4) 0%, rgba(14, 116, 144, 0.3) 40%, rgba(0, 0, 0, 0.8) 100%)",
+    bgImage: ecosystemBg,
     iconBg: "from-cyan-600/80 to-cyan-900/80",
     focus: "Capital Appreciation",
     category: "Growth",
@@ -140,22 +146,31 @@ const StrategyCard = ({
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        {/* Background with gradient - simulates blurred image */}
+        {/* Real background image - blurred */}
         <div 
-          className="absolute inset-0 opacity-60"
-          style={{ background: strategy.bgGradient }}
+          className="absolute inset-0 bg-cover bg-center transition-all duration-700"
+          style={{ 
+            backgroundImage: `url(${strategy.bgImage})`,
+            filter: isActive ? 'blur(8px)' : 'blur(12px)',
+            transform: isActive ? 'scale(1.1)' : 'scale(1.05)',
+          }}
         />
         
+        {/* Dark overlay for better readability */}
+        <div className={`absolute inset-0 transition-all duration-500 ${
+          isActive ? 'bg-black/50' : 'bg-black/60'
+        }`} />
+        
         {/* Noise texture overlay */}
-        <div className="absolute inset-0 opacity-20 mix-blend-overlay"
+        <div className="absolute inset-0 opacity-15 mix-blend-overlay"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           }}
         />
         
         {/* Glass layer */}
-        <div className={`absolute inset-0 backdrop-blur-xl transition-all duration-500 ${
-          isActive ? 'bg-white/[0.08]' : 'bg-white/[0.03]'
+        <div className={`absolute inset-0 backdrop-blur-sm transition-all duration-500 ${
+          isActive ? 'bg-white/[0.06]' : 'bg-white/[0.02]'
         }`} />
         
         {/* Animated border gradient */}
