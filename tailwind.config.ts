@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        elite: {
+          DEFAULT: "hsl(var(--elite))",
+          foreground: "hsl(var(--elite-foreground))",
+        },
         navy: {
           deep: "hsl(var(--navy-deep))",
           DEFAULT: "hsl(var(--navy))",

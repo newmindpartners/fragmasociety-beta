@@ -135,7 +135,11 @@ const TierCard = ({
       {/* Badge */}
       {tier.badge && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <div className="px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide bg-white text-background">
+          <div
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide ${
+              isElite ? "bg-elite text-elite-foreground" : "bg-foreground text-background"
+            }`}
+          >
             {tier.badge}
           </div>
         </div>
@@ -158,11 +162,15 @@ const TierCard = ({
         )}
 
         {/* Icon */}
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${
-          isPremium || isElite
-            ? "bg-white text-background" 
-            : "bg-muted text-muted-foreground"
-        }`}>
+        <div
+          className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${
+            isElite
+              ? "bg-elite text-elite-foreground"
+              : isPremium
+                ? "bg-foreground text-background"
+                : "bg-muted text-muted-foreground"
+          }`}
+        >
           <Icon className="w-6 h-6" strokeWidth={1.5} />
         </div>
 
