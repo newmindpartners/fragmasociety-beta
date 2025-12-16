@@ -16,11 +16,11 @@ export const SignatureDealCTA = () => {
         style={{ backgroundImage: `url(${ctaBg})` }}
       />
       
-      {/* Dark navy overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220,50%,3%)/92] via-[hsl(220,45%,5%)/88] to-[hsl(220,50%,3%)/92]" />
+      {/* Dark navy overlay - deeper */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220,50%,2%)/96] via-[hsl(220,45%,3%)/94] to-[hsl(220,50%,2%)/96]" />
       
       {/* Additional depth gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(220,50%,2%)/60_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(220,50%,1%)_100%)]" />
       
       {/* White ambient glows */}
       <motion.div
