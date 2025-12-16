@@ -104,7 +104,7 @@ export const OptionsTrading = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider uppercase rounded-full bg-primary/10 text-primary border border-primary/20">
+            <span className="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider uppercase rounded-full bg-white/5 text-white border border-white/20">
               Options Trading
             </span>
             <h2 className="text-3xl lg:text-5xl font-serif font-bold text-foreground mb-6">

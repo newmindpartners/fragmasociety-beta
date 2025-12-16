@@ -298,10 +298,10 @@ const FeaturePill = ({ icon: Icon, text, delay }: { icon: any; text: string; del
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
     whileHover={{ scale: 1.05, y: -2 }}
-    className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm cursor-default"
+    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/20 backdrop-blur-sm cursor-default"
   >
-    <Icon className="w-4 h-4 text-primary" />
-    <span className="text-sm text-foreground">{text}</span>
+    <Icon className="w-4 h-4 text-white" />
+    <span className="text-sm text-white">{text}</span>
   </motion.div>
 );
 
@@ -343,7 +343,7 @@ export const MarketplaceHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-block px-4 py-2 mb-6 text-xs font-bold tracking-wider uppercase rounded-full bg-primary/10 text-primary border border-primary/20">
+              <span className="inline-block px-4 py-2 mb-6 text-xs font-bold tracking-wider uppercase rounded-full bg-white/5 text-white border border-white/20">
                 Secondary Marketplace
               </span>
               
@@ -375,11 +375,11 @@ export const MarketplaceHero = () => {
               transition={{ delay: 1.3 }}
               className="flex flex-wrap gap-4"
             >
-              <Button size="lg" className="btn-glow group">
+              <Button size="lg" className="group bg-white text-background hover:bg-white/90">
                 Explore Marketplace
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="border-primary/30 hover:bg-primary/10">
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
                 Learn How It Works
               </Button>
             </motion.div>
