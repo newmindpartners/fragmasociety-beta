@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Wallet, Search, Edit3, Lock, Zap, RefreshCcw, ChevronRight, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import tradingStepsBg from "@/assets/trading-steps-bg.jpg";
+import tradingCtaBg from "@/assets/trading-cta-bg.jpg";
 
 const steps = [
   {
@@ -156,12 +157,12 @@ const StepCard = ({
               w-14 h-14 rounded-xl flex items-center justify-center
               transition-all duration-500 border
               ${isActive 
-                ? 'bg-primary/20 border-primary/40' 
-                : 'bg-white/[0.05] border-white/[0.1] group-hover:bg-primary/10 group-hover:border-primary/30'
+                ? 'bg-white/10 border-white/30' 
+                : 'bg-white/[0.05] border-white/[0.1] group-hover:bg-white/10 group-hover:border-white/20'
               }
             `}
           >
-            <Icon className={`w-7 h-7 transition-colors duration-500 ${isActive ? 'text-primary' : 'text-white/70 group-hover:text-primary'}`} />
+            <Icon className="w-7 h-7 text-white transition-colors duration-500" />
           </motion.div>
           
           {/* Step number */}
@@ -333,16 +334,24 @@ export const TradingSteps = () => {
         >
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="relative inline-block"
+            className="relative inline-block max-w-2xl overflow-hidden rounded-3xl"
           >
-            {/* Glow */}
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary/30 via-primary/20 to-primary/30 blur-xl opacity-60" />
+            {/* Background image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${tradingCtaBg})` }}
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-background/60" />
             
-            <div className="relative rounded-2xl p-8 lg:p-10 backdrop-blur-xl bg-white/[0.03] border border-primary/20 max-w-2xl">
+            {/* Border glow */}
+            <div className="absolute -inset-px rounded-3xl bg-gradient-to-b from-primary/30 via-white/10 to-transparent opacity-60" />
+            
+            <div className="relative rounded-3xl p-10 lg:p-12 border border-white/10">
               <h3 className="text-2xl lg:text-3xl font-serif font-bold text-white mb-4">
-                Built for beginners. Secure for professionals.
+                Built for <span className="text-gradient">beginners</span>. Secure for <span className="text-gradient">professionals</span>.
               </h3>
-              <p className="text-white/50 mb-8 leading-relaxed">
+              <p className="text-white/60 mb-8 leading-relaxed">
                 Whether you're new to RWA or an experienced trader, the marketplace gives you 
                 full ownership, clear pricing, and smart-contract safety.
               </p>
@@ -356,8 +365,8 @@ export const TradingSteps = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 + i * 0.05 }}
-                    whileHover={{ scale: 1.05, borderColor: "rgba(45,212,191,0.5)" }}
-                    className="px-4 py-2 text-sm rounded-full bg-white/[0.03] text-white/80 border border-white/10 hover:text-primary transition-colors cursor-default"
+                    whileHover={{ scale: 1.05, borderColor: "rgba(255,255,255,0.3)" }}
+                    className="px-4 py-2 text-sm rounded-full bg-white/[0.05] text-white/80 border border-white/10 hover:text-white transition-colors cursor-default"
                   >
                     {tag}
                   </motion.span>
