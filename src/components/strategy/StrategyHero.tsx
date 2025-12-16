@@ -584,7 +584,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-card/80 border border-white/30 backdrop-blur-sm mb-8"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-card/80 border border-white/30 backdrop-blur-sm mb-8 shadow-[0_0_20px_rgba(255,255,255,0.15),0_0_40px_rgba(255,255,255,0.1)]"
             >
               <motion.div
                 animate={{ rotate: [0, 360] }}
