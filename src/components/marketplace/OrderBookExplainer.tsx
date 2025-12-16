@@ -390,8 +390,8 @@ export const OrderBookExplainer = () => {
                 whileHover={{ x: 10, scale: 1.02 }}
                 className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all cursor-default"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <benefit.icon className="w-6 h-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+                  <benefit.icon className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground mb-1">{benefit.title}</h3>
@@ -405,7 +405,7 @@ export const OrderBookExplainer = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
-              className="text-primary font-medium mt-6 pl-4 border-l-2 border-primary"
+              className="text-white font-medium mt-6 pl-4 border-l-2 border-white/50"
             >
               This gives you freedom, transparency, and control.
             </motion.p>
