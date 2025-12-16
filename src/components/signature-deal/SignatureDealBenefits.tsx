@@ -11,7 +11,7 @@ import {
   Megaphone,
   Users
 } from "lucide-react";
-import signatureDealBg from "@/assets/signature-deal-advantage-bg.jpg";
+import signatureDealBg from "@/assets/signature-deal-benefits-bg.jpg";
 
 const benefits = [
   { icon: TrendingUp, label: "A new revenue stream" },
