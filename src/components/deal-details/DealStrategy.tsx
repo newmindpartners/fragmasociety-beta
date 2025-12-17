@@ -2,6 +2,13 @@ import { motion } from "framer-motion";
 import { Target, Pickaxe, DollarSign, Lightbulb, LogOut } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
+// Import background images
+import propertyMalibu from "@/assets/property-malibu.jpg";
+import propertyNimes from "@/assets/property-nimes-road.jpg";
+import propertyDeerhead from "@/assets/property-deerhead-ranch.jpg";
+import propertyPalisades from "@/assets/property-palisades-site.jpg";
+import rwaVilla from "@/assets/rwa-villa.jpg";
+
 interface DealStrategyProps {
   deal: DealData;
 }
@@ -12,6 +19,14 @@ const strategyIcons: React.ElementType[] = [
   DollarSign,  // Development Phase
   Lightbulb,   // Value Enhancement
   LogOut,      // Strategic Exit
+];
+
+const strategyBackgrounds = [
+  propertyMalibu,      // Acquire - landscape
+  propertyPalisades,   // Permit & Construction
+  propertyNimes,       // Development Phase
+  rwaVilla,            // Value Enhancement
+  propertyDeerhead,    // Strategic Exit
 ];
 
 export const DealStrategy = ({ deal }: DealStrategyProps) => {
@@ -94,6 +109,7 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-6">
             {deal.strategies.map((strategy, index) => {
               const Icon = strategyIcons[index] || Lightbulb;
+              const bgImage = strategyBackgrounds[index] || propertyMalibu;
               return (
                 <motion.div
                   key={index}
@@ -108,31 +124,37 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
                     transition={{ duration: 0.4, ease: "easeOut" }}
                     className="relative h-full"
                   >
-                    {/* Card with white gradient background */}
-                    <div className="relative h-full rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-500">
-                      {/* White gradient background - top to bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-gray-100" />
+                    {/* Card with photo background */}
+                    <div className="relative h-full rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.15)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] transition-all duration-500">
+                      {/* Background image - blurred */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        style={{ backgroundImage: `url(${bgImage})` }}
+                      />
                       
-                      {/* Subtle shine overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-transparent to-transparent opacity-60" />
+                      {/* Blur overlay */}
+                      <div className="absolute inset-0 backdrop-blur-[2px]" />
+                      
+                      {/* Dark gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
                       
                       {/* Left accent stripe */}
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 group-hover:from-gray-800 group-hover:via-gray-600 group-hover:to-gray-400 transition-all duration-500" />
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-white/60 via-white/30 to-white/10" />
                       
                       {/* Content */}
                       <div className="relative h-full p-6 flex flex-col">
                         {/* Icon - highlighted */}
-                        <div className="w-14 h-14 rounded-xl bg-gray-900 flex items-center justify-center mb-auto group-hover:bg-gray-800 transition-all duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+                        <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center mb-auto group-hover:bg-white/25 group-hover:border-white/40 transition-all duration-500 shadow-[0_4px_20px_rgba(255,255,255,0.1)]">
                           <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
                         </div>
                         
                         {/* Title */}
-                        <h3 className="text-xl font-serif font-medium text-gray-900 mb-3 tracking-tight leading-tight">
+                        <h3 className="text-xl font-serif font-medium text-white mb-3 tracking-tight leading-tight">
                           {strategy.title}
                         </h3>
                         
                         {/* Description */}
-                        <p className="text-sm text-gray-600 leading-relaxed">
+                        <p className="text-sm text-white/70 leading-relaxed">
                           {strategy.description}
                         </p>
                       </div>
