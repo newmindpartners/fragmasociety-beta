@@ -47,9 +47,29 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
             {/* Connecting line - main */}
             <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-white/15 hidden lg:block" />
             
-            {/* Dashed overlay for elegance */}
-            <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] hidden lg:block overflow-hidden">
-              <div className="w-full h-full border-t border-dashed border-white/10" />
+            {/* Animated glowing dots along the line */}
+            <div className="absolute top-1/2 left-[10%] right-[10%] hidden lg:flex justify-between items-center -translate-y-1/2 px-[8%]">
+              {[...Array(16)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="w-1 h-1 rounded-full bg-white/40"
+                  animate={{
+                    opacity: [0.2, 0.8, 0.2],
+                    scale: [0.8, 1.2, 0.8],
+                    boxShadow: [
+                      "0 0 0px rgba(255,255,255,0)",
+                      "0 0 8px rgba(255,255,255,0.5)",
+                      "0 0 0px rgba(255,255,255,0)"
+                    ]
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    delay: i * 0.15,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
             </div>
             
             <div className="flex justify-between px-4 lg:px-8">
