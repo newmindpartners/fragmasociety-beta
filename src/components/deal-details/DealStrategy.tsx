@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Target, Pickaxe, DollarSign, Lightbulb, LogOut } from "lucide-react";
+import { Target, Pickaxe, DollarSign, Lightbulb, LogOut, ArrowRight } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
 interface DealStrategyProps {
@@ -14,14 +14,28 @@ const strategyIcons: React.ElementType[] = [
   LogOut,
 ];
 
+const stepColors = [
+  { bg: "bg-blue-50", border: "border-blue-100", icon: "text-blue-600", accent: "bg-blue-500" },
+  { bg: "bg-amber-50", border: "border-amber-100", icon: "text-amber-600", accent: "bg-amber-500" },
+  { bg: "bg-emerald-50", border: "border-emerald-100", icon: "text-emerald-600", accent: "bg-emerald-500" },
+  { bg: "bg-purple-50", border: "border-purple-100", icon: "text-purple-600", accent: "bg-purple-500" },
+  { bg: "bg-rose-50", border: "border-rose-100", icon: "text-rose-600", accent: "bg-rose-500" },
+];
+
 export const DealStrategy = ({ deal }: DealStrategyProps) => {
   if (!deal.strategies || deal.strategies.length === 0) return null;
 
   return (
-    <section className="py-32 bg-white">
-      <div className="container mx-auto px-6 lg:px-12">
+    <section className="py-32 bg-neutral-50 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-gradient-to-r from-blue-50 to-transparent rounded-full blur-3xl opacity-60" />
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gradient-to-l from-amber-50 to-transparent rounded-full blur-3xl opacity-60" />
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 relative">
         {/* Header - Editorial Style */}
-        <div className="max-w-4xl mb-24">
+        <div className="max-w-4xl mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -43,115 +57,59 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
           >
             A methodical approach
             <br />
-            <span className="italic font-normal">to exceptional returns</span>
+            <span className="italic text-amber-700">to exceptional returns</span>
           </motion.h2>
         </div>
 
-        {/* Strategy Steps - Luxury Editorial Layout */}
-        <div className="space-y-0">
+        {/* Strategy Steps - Visual Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {deal.strategies.map((strategy, index) => {
             const Icon = strategyIcons[index] || Lightbulb;
-            const isLast = index === deal.strategies.length - 1;
+            const colors = stepColors[index % stepColors.length];
 
             return (
               <motion.article
                 key={index}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.8, delay: index * 0.05 }}
-                className="group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative"
               >
-                <div 
-                  className={`grid grid-cols-12 gap-6 lg:gap-12 py-16 lg:py-20 ${
-                    !isLast ? 'border-b border-neutral-100' : ''
-                  }`}
-                >
-                  {/* Step Number - Large & Prominent */}
-                  <div className="col-span-3 md:col-span-2 lg:col-span-1">
-                    <div className="sticky top-32">
-                      <motion.span 
-                        className="block text-[5rem] md:text-[6rem] lg:text-[7rem] font-extralight leading-none text-neutral-100 group-hover:text-neutral-200 transition-colors duration-700 select-none"
-                        style={{ fontFeatureSettings: "'tnum'" }}
-                      >
-                        {String(index + 1).padStart(2, '0')}
-                      </motion.span>
-                    </div>
+                {/* Card */}
+                <div className={`bg-white rounded-2xl border border-neutral-100 p-6 h-full hover:shadow-xl hover:-translate-y-2 transition-all duration-500 relative overflow-hidden`}>
+                  {/* Top accent line */}
+                  <div className={`absolute top-0 left-0 right-0 h-1 ${colors.accent}`} />
+                  
+                  {/* Step number - Large */}
+                  <div className="absolute top-4 right-4">
+                    <span className="text-6xl font-extralight text-neutral-100 group-hover:text-neutral-200 transition-colors">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
                   </div>
-
+                  
+                  {/* Icon */}
+                  <div className={`w-14 h-14 rounded-xl ${colors.bg} ${colors.border} border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className={`w-6 h-6 ${colors.icon}`} strokeWidth={1.5} />
+                  </div>
+                  
                   {/* Content */}
-                  <div className="col-span-9 md:col-span-10 lg:col-span-8">
-                    <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-16">
-                      {/* Icon - Minimal Circle */}
-                      <motion.div 
-                        className="flex-shrink-0"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full border border-neutral-200 flex items-center justify-center group-hover:border-neutral-400 group-hover:bg-neutral-50 transition-all duration-500">
-                          <Icon className="w-6 h-6 lg:w-7 lg:h-7 text-neutral-400 group-hover:text-neutral-600 transition-colors duration-500" strokeWidth={1.5} />
-                        </div>
-                      </motion.div>
-
-                      {/* Text Content */}
-                      <div className="flex-1 max-w-2xl">
-                        <motion.h3 
-                          className="text-2xl lg:text-3xl font-medium text-neutral-900 mb-4 leading-tight group-hover:text-neutral-700 transition-colors duration-300"
-                        >
-                          {strategy.title}
-                        </motion.h3>
-                        
-                        <p className="text-lg text-neutral-500 leading-relaxed">
-                          {strategy.description}
-                        </p>
-                        
-                        {/* Subtle animated indicator */}
-                        <motion.div 
-                          className="mt-8 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                        >
-                          <motion.div
-                            className="w-8 h-px bg-neutral-300"
-                            initial={{ scaleX: 0 }}
-                            whileInView={{ scaleX: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.3 }}
-                          />
-                          <span className="text-xs tracking-[0.2em] uppercase text-neutral-400">
-                            Phase {index + 1}
-                          </span>
-                        </motion.div>
+                  <h3 className="text-lg font-medium text-neutral-900 mb-3 leading-tight">
+                    {strategy.title}
+                  </h3>
+                  
+                  <p className="text-sm text-neutral-500 leading-relaxed">
+                    {strategy.description}
+                  </p>
+                  
+                  {/* Arrow connector - Hidden on last item */}
+                  {index < deal.strategies.length - 1 && (
+                    <div className="hidden xl:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                      <div className="w-6 h-6 rounded-full bg-white border border-neutral-200 flex items-center justify-center">
+                        <ArrowRight className="w-3 h-3 text-neutral-400" />
                       </div>
                     </div>
-                  </div>
-
-                  {/* Right Decorative Element - Desktop Only */}
-                  <div className="hidden lg:flex col-span-3 items-center justify-end">
-                    <motion.div
-                      className="relative"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      {/* Minimal line with dot */}
-                      <div className="flex items-center gap-3">
-                        <motion.div
-                          className="w-24 h-px bg-neutral-100 origin-right"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                        />
-                        <motion.div
-                          className="w-2 h-2 rounded-full bg-neutral-200 group-hover:bg-neutral-400 transition-colors duration-500"
-                          initial={{ scale: 0 }}
-                          whileInView={{ scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.3, delay: 1 + index * 0.1 }}
-                        />
-                      </div>
-                    </motion.div>
-                  </div>
+                  )}
                 </div>
               </motion.article>
             );
@@ -164,11 +122,11 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="mt-24 pt-12 border-t border-neutral-100"
+          className="mt-16 pt-8 border-t border-neutral-200"
         >
           <div className="flex items-center gap-4">
-            <div className="w-1 h-1 rounded-full bg-neutral-300" />
-            <p className="text-sm text-neutral-400 tracking-wide">
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            <p className="text-sm text-neutral-500 tracking-wide">
               Each phase executed with precision to maximize value creation
             </p>
           </div>

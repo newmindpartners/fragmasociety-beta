@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, Users, Clock } from "lucide-react";
+import { ArrowRight, Shield, Users, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import type { DealData } from "@/types/deal";
@@ -18,8 +18,14 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
   const remaining = total - raised;
 
   return (
-    <section className="py-32 bg-neutral-900">
-      <div className="container mx-auto px-6 lg:px-12">
+    <section className="py-32 bg-gradient-to-b from-amber-50/50 via-white to-white relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-100/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-emerald-100/30 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 relative">
         <div className="max-w-5xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* Left - Content */}
@@ -30,35 +36,43 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
               transition={{ duration: 0.6 }}
             >
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs tracking-[0.3em] uppercase text-emerald-400 font-medium">
+                <motion.div 
+                  className="w-2 h-2 rounded-full bg-emerald-500"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <span className="text-xs tracking-[0.3em] uppercase text-emerald-600 font-medium">
                   Accepting Investments
                 </span>
               </div>
 
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] mb-6">
-                Ready to <span className="italic">participate?</span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-neutral-900 leading-[1.1] mb-6">
+                Ready to <span className="italic text-amber-700">participate?</span>
               </h2>
               
-              <p className="text-lg text-neutral-400 mb-10 leading-relaxed">
+              <p className="text-lg text-neutral-500 mb-10 leading-relaxed">
                 Join {deal.investorCount} investors who have already committed to this opportunity. 
                 Express your interest today to secure your allocation.
               </p>
 
               {/* Progress - Elegant */}
-              <div className="mb-10">
-                <div className="flex justify-between text-sm mb-3">
+              <div className="mb-10 bg-white rounded-2xl p-6 border border-neutral-100 shadow-sm">
+                <div className="flex justify-between text-sm mb-4">
                   <span className="text-neutral-500">{Math.round(progress)}% funded</span>
-                  <span className="text-white font-medium">€{remaining.toLocaleString()} remaining</span>
+                  <span className="text-amber-700 font-medium">€{remaining.toLocaleString()} remaining</span>
                 </div>
-                <div className="h-2 bg-neutral-800 rounded-full overflow-hidden">
+                <div className="h-3 bg-neutral-100 rounded-full overflow-hidden">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-amber-500 to-amber-400"
+                    className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full"
                     initial={{ width: 0 }}
                     whileInView={{ width: `${progress}%` }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.3 }}
                   />
+                </div>
+                <div className="flex justify-between mt-4 text-xs text-neutral-400">
+                  <span>Raised: {deal.currentRaised}</span>
+                  <span>Target: {deal.totalRaise}</span>
                 </div>
               </div>
 
@@ -67,7 +81,7 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
                 <Button
                   size="lg"
                   onClick={() => navigate("/auth")}
-                  className="bg-white text-neutral-900 hover:bg-neutral-100 rounded-full px-8 h-14 text-base font-medium"
+                  className="bg-neutral-900 text-white hover:bg-neutral-800 rounded-full px-8 h-14 text-base font-medium shadow-lg shadow-neutral-900/20"
                 >
                   Express Interest
                   <motion.span
@@ -81,7 +95,7 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
                 <Button
                   size="lg"
                   variant="ghost"
-                  className="text-white hover:bg-white/10 rounded-full px-8 h-14 text-base font-medium border border-neutral-700"
+                  className="text-neutral-700 hover:bg-neutral-100 rounded-full px-8 h-14 text-base font-medium border border-neutral-200"
                 >
                   Schedule a Call
                 </Button>
@@ -96,33 +110,39 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-4"
             >
-              <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl p-6 flex items-center gap-5">
-                <div className="w-14 h-14 rounded-xl bg-neutral-700/50 flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-neutral-300" />
+              {/* Featured card */}
+              <div className="bg-gradient-to-br from-amber-50 to-white border border-amber-100 rounded-2xl p-8 relative overflow-hidden">
+                <div className="absolute top-4 right-4">
+                  <Sparkles className="w-5 h-5 text-amber-400" />
                 </div>
-                <div>
-                  <p className="text-lg font-medium text-white">Regulated Structure</p>
-                  <p className="text-sm text-neutral-400">Luxembourg securitization vehicle</p>
-                </div>
-              </div>
-
-              <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl p-6 flex items-center gap-5">
-                <div className="w-14 h-14 rounded-xl bg-neutral-700/50 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-neutral-300" />
-                </div>
-                <div>
-                  <p className="text-lg font-medium text-white">{deal.investorCount} Investors</p>
-                  <p className="text-sm text-neutral-400">Have already committed</p>
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-amber-700" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-medium text-neutral-900">Regulated Structure</p>
+                    <p className="text-sm text-neutral-500">Luxembourg securitization vehicle</p>
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl p-6 flex items-center gap-5">
-                <div className="w-14 h-14 rounded-xl bg-neutral-700/50 flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-neutral-300" />
+              <div className="bg-white border border-neutral-100 rounded-2xl p-6 flex items-center gap-5 hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-lg font-medium text-white">Limited Availability</p>
-                  <p className="text-sm text-neutral-400">Closing soon — don't miss out</p>
+                  <p className="text-lg font-medium text-neutral-900">{deal.investorCount} Investors</p>
+                  <p className="text-sm text-neutral-500">Have already committed</p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-neutral-100 rounded-2xl p-6 flex items-center gap-5 hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 rounded-xl bg-rose-50 flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-rose-600" />
+                </div>
+                <div>
+                  <p className="text-lg font-medium text-neutral-900">Limited Availability</p>
+                  <p className="text-sm text-neutral-500">Closing soon — don't miss out</p>
                 </div>
               </div>
             </motion.div>
@@ -134,9 +154,9 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 pt-10 border-t border-neutral-800"
+            className="mt-16 pt-10 border-t border-neutral-100"
           >
-            <p className="text-xs text-neutral-500 max-w-3xl leading-relaxed">
+            <p className="text-xs text-neutral-400 max-w-3xl leading-relaxed">
               This is not investment advice. Expressing interest does not commit you to invest. 
               Full documentation will be provided before any investment decision. 
               Capital at risk. Not suitable for all investors. Please read all risk disclosures carefully.
