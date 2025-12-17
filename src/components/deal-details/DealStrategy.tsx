@@ -112,6 +112,15 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
               const bgImage = strategyBackgrounds[index] || propertyMalibu;
               const isEven = index % 2 === 0;
               
+              // Unique accent colors for each card
+              const accentColors = [
+                'from-emerald-400 to-teal-500',
+                'from-amber-400 to-orange-500', 
+                'from-blue-400 to-indigo-500',
+                'from-violet-400 to-purple-500',
+                'from-rose-400 to-pink-500'
+              ];
+              
               return (
                 <motion.div
                   key={index}
@@ -120,72 +129,112 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.15 }}
                   className="relative group"
-                  style={{ 
-                    marginTop: isEven ? '0' : '40px',
-                    perspective: '1000px'
-                  }}
+                  style={{ marginTop: isEven ? '0' : '32px' }}
                 >
-                  {/* Blurred photo backdrop layer */}
-                  <div 
-                    className="absolute -inset-4 rounded-2xl bg-cover bg-center blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500 -z-10"
-                    style={{ backgroundImage: `url(${bgImage})` }}
-                  />
-                  
                   <motion.div
-                    whileHover={{ 
-                      y: -12, 
-                      rotateX: 5,
-                      scale: 1.02
-                    }}
+                    whileHover={{ y: -10, scale: 1.02 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="relative h-[340px]"
-                    style={{ transformStyle: 'preserve-3d' }}
+                    className="relative h-[360px]"
                   >
-                    {/* Main dark card */}
-                    <div className="relative h-full rounded-2xl overflow-hidden bg-background/95 backdrop-blur-sm border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.3)] group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] group-hover:border-white/20 transition-all duration-500">
+                    {/* Main light card */}
+                    <div className="relative h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition-all duration-500">
                       
-                      {/* Subtle gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
+                      {/* Animated background graphic */}
+                      <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden">
+                        {/* Animated circles */}
+                        <motion.div
+                          className={`absolute -top-8 -right-8 w-24 h-24 rounded-full bg-gradient-to-br ${accentColors[index]} opacity-10`}
+                          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+                          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                        <motion.div
+                          className={`absolute top-4 right-4 w-16 h-16 rounded-full bg-gradient-to-br ${accentColors[index]} opacity-5`}
+                          animate={{ scale: [1.2, 1, 1.2], rotate: [90, 0, 90] }}
+                          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                        />
+                      </div>
+                      
+                      {/* Animated line pattern */}
+                      <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden opacity-[0.03]">
+                        {[...Array(6)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className="absolute h-[1px] bg-gray-900"
+                            style={{ 
+                              bottom: `${i * 16}px`, 
+                              left: 0, 
+                              right: 0 
+                            }}
+                            animate={{ 
+                              x: ['-100%', '100%'],
+                              opacity: [0, 1, 0]
+                            }}
+                            transition={{ 
+                              duration: 4, 
+                              repeat: Infinity, 
+                              delay: i * 0.3,
+                              ease: "linear"
+                            }}
+                          />
+                        ))}
+                      </div>
                       
                       {/* Content */}
                       <div className="relative h-full p-6 flex flex-col">
-                        {/* Step number */}
-                        <span className="absolute top-4 right-4 text-5xl font-bold text-white/5 font-mono">
+                        {/* Step number watermark */}
+                        <span className="absolute top-3 right-4 text-6xl font-bold text-gray-100 font-mono select-none">
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         
-                        {/* Icon in accent circle */}
-                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border border-primary/30 flex items-center justify-center mb-6 group-hover:from-primary/40 group-hover:to-primary/20 group-hover:border-primary/50 transition-all duration-500 shadow-[0_0_20px_rgba(var(--primary),0.2)]">
-                          <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
+                        {/* Icon with animated ring */}
+                        <div className="relative w-14 h-14 mb-6">
+                          <motion.div
+                            className={`absolute inset-0 rounded-xl bg-gradient-to-br ${accentColors[index]} opacity-20`}
+                            animate={{ scale: [1, 1.15, 1] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                          />
+                          <div className={`relative w-full h-full rounded-xl bg-gradient-to-br ${accentColors[index]} flex items-center justify-center shadow-lg`}>
+                            <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
+                          </div>
                         </div>
                         
                         {/* Title */}
-                        <h3 className="text-xl font-semibold text-white mb-3 leading-tight">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
                           {strategy.title}
                         </h3>
                         
                         {/* Description */}
-                        <p className="text-sm text-white/60 leading-relaxed flex-1">
+                        <p className="text-sm text-gray-500 leading-relaxed flex-1">
                           {strategy.description}
                         </p>
                         
-                        {/* Bottom accent line */}
-                        <div className="mt-4 h-[2px] w-12 bg-gradient-to-r from-primary/60 to-transparent rounded-full group-hover:w-20 transition-all duration-500" />
+                        {/* Bottom photo peek with gradient */}
+                        <div className="mt-4 h-16 rounded-lg overflow-hidden relative">
+                          <div 
+                            className="absolute inset-0 bg-cover bg-center"
+                            style={{ backgroundImage: `url(${bgImage})` }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
+                        </div>
                       </div>
                     </div>
                   </motion.div>
                   
-                  {/* Connecting line to next card */}
+                  {/* Connecting dots */}
                   {index < deal.strategies.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-[2px]">
-                      <motion.div 
-                        className="h-full bg-gradient-to-r from-white/20 to-white/5 rounded-full"
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.3 + index * 0.15 }}
-                        style={{ transformOrigin: 'left' }}
-                      />
+                    <div className="hidden lg:flex absolute top-1/2 -right-4 w-8 items-center justify-center gap-1">
+                      {[...Array(3)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-1.5 h-1.5 rounded-full bg-gray-300"
+                          animate={{ opacity: [0.3, 1, 0.3] }}
+                          transition={{ 
+                            duration: 1.5, 
+                            repeat: Infinity, 
+                            delay: i * 0.2 
+                          }}
+                        />
+                      ))}
                     </div>
                   )}
                 </motion.div>
