@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { TrendingUp, Calendar, Coins, Shield, ArrowUpRight, Clock, Wallet, Target, AlertTriangle } from "lucide-react";
 import type { DealData } from "@/types/deal";
+import { useState } from "react";
 
 interface DealKeyTermsProps {
   deal: DealData;
@@ -18,6 +19,8 @@ const termIcons = [
 ];
 
 export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const terms = [
     { label: "Instrument", value: deal.instrumentType },
     { label: "Currency", value: deal.currency },
@@ -57,10 +60,13 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
           </motion.h2>
         </div>
 
-        {/* Terms Grid - Clean & Minimal */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-neutral-200">
+        {/* Terms Grid - Premium Interactive */}
+        <div className="grid grid-cols-2 md:grid-cols-4">
           {terms.map((term, index) => {
             const Icon = termIcons[index];
+            const isHovered = hoveredIndex === index;
+            const isHighlight = term.highlight;
+            const isFirstRow = index < 4;
             
             return (
               <motion.div
@@ -69,21 +75,87 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className={`p-8 bg-white hover:bg-neutral-50 transition-colors ${
-                  term.highlight ? 'bg-[#F8F7F5]' : ''
-                }`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={`relative p-8 md:p-10 cursor-pointer transition-all duration-500 group
+                  ${isFirstRow ? 'bg-white' : 'bg-[#FAFAF8]'}
+                  ${index % 4 !== 0 ? 'border-l border-neutral-200' : ''}
+                  ${!isFirstRow ? 'border-t border-neutral-200' : ''}
+                `}
               >
-                <div className="w-10 h-10 border border-neutral-200 flex items-center justify-center mb-5">
-                  <Icon className="w-4 h-4 text-neutral-400" />
+                {/* Hover gradient overlay */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-navy to-navy-surface opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  initial={false}
+                />
+                
+                {/* Shine effect on hover */}
+                <motion.div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 overflow-hidden"
+                  initial={false}
+                >
+                  <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-white/10 via-transparent to-transparent rotate-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                </motion.div>
+
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <motion.div 
+                    className={`w-12 h-12 border flex items-center justify-center mb-6 transition-all duration-500
+                      ${isHovered 
+                        ? 'border-white/20 bg-white/10' 
+                        : 'border-neutral-200 bg-transparent'
+                      }
+                    `}
+                    animate={{ 
+                      scale: isHovered ? 1.1 : 1,
+                      rotate: isHovered ? 3 : 0 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Icon className={`w-5 h-5 transition-colors duration-500 ${isHovered ? 'text-white' : 'text-neutral-400'}`} />
+                  </motion.div>
+                  
+                  {/* Label */}
+                  <p className={`text-[10px] tracking-[0.25em] uppercase mb-3 transition-colors duration-500 ${
+                    isHovered ? 'text-primary' : isHighlight ? 'text-primary/70' : 'text-neutral-400'
+                  }`}>
+                    {term.label}
+                  </p>
+                  
+                  {/* Value */}
+                  <motion.p 
+                    className={`text-2xl md:text-3xl font-light transition-colors duration-500 ${
+                      isHovered ? 'text-white' : 'text-neutral-900'
+                    }`}
+                    animate={{ 
+                      y: isHovered ? -4 : 0 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {term.value}
+                  </motion.p>
+
+                  {/* Hover indicator dot */}
+                  <motion.div 
+                    className="absolute bottom-6 right-6 w-2 h-2 rounded-full bg-primary"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ 
+                      scale: isHovered ? 1 : 0,
+                      opacity: isHovered ? 1 : 0 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </div>
-                <p className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">
-                  {term.label}
-                </p>
-                <p className={`text-2xl md:text-3xl font-light ${
-                  term.highlight ? 'text-neutral-800' : 'text-neutral-900'
-                }`}>
-                  {term.value}
-                </p>
+
+                {/* Bottom border accent on hover */}
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary to-accent"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: isHovered ? 1 : 0 }}
+                  transition={{ duration: 0.4 }}
+                  style={{ transformOrigin: 'left' }}
+                />
               </motion.div>
             );
           })}
@@ -95,11 +167,11 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="mt-12 flex items-start gap-4 p-6 border border-neutral-200 bg-[#F8F7F5]"
+          className="mt-12 flex items-start gap-4 p-6 border border-neutral-200 bg-[#FAFAF8] group hover:bg-navy hover:border-navy transition-all duration-500"
         >
-          <AlertTriangle className="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-neutral-600 leading-relaxed">
-            <strong className="text-neutral-800">*Important:</strong> Target returns are projections only and not guaranteed. 
+          <AlertTriangle className="w-5 h-5 text-neutral-400 group-hover:text-primary flex-shrink-0 mt-0.5 transition-colors duration-500" />
+          <p className="text-sm text-neutral-600 leading-relaxed group-hover:text-white/70 transition-colors duration-500">
+            <strong className="text-neutral-800 group-hover:text-white transition-colors duration-500">*Important:</strong> Target returns are projections only and not guaranteed. 
             Capital at risk. Past performance is not indicative of future results. This investment is illiquid.
           </p>
         </motion.div>
