@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Building2, MapPin, TrendingUp, Hammer, CheckCircle, Clock } from "lucide-react";
+import { MapPin, Hammer, CheckCircle, TrendingUp, Clock } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
 // Property images
@@ -19,142 +19,138 @@ const propertyImages: Record<string, string> = {
   "22222 Malibu Road": propertyMalibu,
 };
 
+const getPropertyImage = (address: string, index: number) => {
+  if (propertyImages[address]) return propertyImages[address];
+  const fallbackImages = [propertyDeerhead, propertyNimes, propertyPalisades, propertyMalibu];
+  return fallbackImages[index % fallbackImages.length];
+};
+
+const getStatusInfo = (status?: string) => {
+  switch (status) {
+    case "construction":
+      return { icon: Hammer, label: "Construction", color: "text-amber-600 bg-amber-50" };
+    case "completed":
+      return { icon: CheckCircle, label: "Completed", color: "text-emerald-600 bg-emerald-50" };
+    case "listed":
+      return { icon: TrendingUp, label: "Listed", color: "text-blue-600 bg-blue-50" };
+    default:
+      return { icon: Clock, label: "Acquisition", color: "text-neutral-600 bg-neutral-100" };
+  }
+};
+
 export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
   if (!deal.currentProperties || deal.currentProperties.length === 0) return null;
 
-  const getStatusBadge = (status?: string) => {
-    switch (status) {
-      case "construction":
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-300">
-            <Hammer className="w-3 h-3" /> Under Construction
-          </span>
-        );
-      case "completed":
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] text-green-300">
-            <CheckCircle className="w-3 h-3" /> Completed
-          </span>
-        );
-      case "listed":
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] text-blue-300">
-            <TrendingUp className="w-3 h-3" /> Listed
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] text-white/70">
-            <Clock className="w-3 h-3" /> Acquisition
-          </span>
-        );
-    }
-  };
-
-  const getPropertyImage = (address: string, index: number) => {
-    // Check exact match first
-    if (propertyImages[address]) return propertyImages[address];
-    
-    // Fallback to index-based
-    const fallbackImages = [propertyDeerhead, propertyNimes, propertyPalisades, propertyMalibu];
-    return fallbackImages[index % fallbackImages.length];
-  };
-
   return (
-    <section className="py-24 relative overflow-hidden bg-white/[0.02]">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
-            <Building2 className="w-4 h-4 text-white" />
-            <span className="text-sm text-white font-medium">Current Pipeline</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="text-foreground">Portfolio </span>
-            <span className="bg-gradient-to-r from-primary via-[hsl(175,70%,50%)] to-primary bg-clip-text text-transparent">
-              Properties
+    <section className="py-32 bg-neutral-50">
+      <div className="container mx-auto px-6 lg:px-12">
+        {/* Header */}
+        <div className="max-w-3xl mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-6"
+          >
+            <div className="w-12 h-px bg-neutral-300" />
+            <span className="text-xs tracking-[0.4em] uppercase text-neutral-400 font-medium">
+              Current Pipeline
             </span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Properties currently in acquisition or development
-          </p>
-        </motion.div>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-neutral-900 leading-[1.1]"
+          >
+            Portfolio <span className="italic">Properties</span>
+          </motion.h2>
+        </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {deal.currentProperties.map((property, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -4 }}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all"
-            >
-              {/* Property Image */}
-              <div className="h-48 relative overflow-hidden">
-                <img 
-                  src={getPropertyImage(property.address, index)} 
-                  alt={property.address}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  {getStatusBadge(property.status)}
-                </div>
-              </div>
-
-              <div className="p-6">
-                {/* Address */}
-                <div className="flex items-start gap-2 mb-4">
-                  <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <h3 className="text-lg font-semibold text-foreground">{property.address}</h3>
-                </div>
-
-                {/* Specs */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {property.size && (
-                    <span className="px-2 py-1 rounded-md bg-white/5 text-xs text-muted-foreground">
-                      {property.size}
+        {/* Portfolio Grid - Large cards with photos */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {deal.currentProperties.map((property, index) => {
+            const statusInfo = getStatusInfo(property.status);
+            const StatusIcon = statusInfo.icon;
+            
+            return (
+              <motion.article
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
+              >
+                {/* Large Image */}
+                <div className="relative h-72 overflow-hidden">
+                  <img 
+                    src={getPropertyImage(property.address, index)} 
+                    alt={property.address}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  
+                  {/* Status Badge */}
+                  <div className="absolute top-6 left-6">
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                      <StatusIcon className="w-3.5 h-3.5" />
+                      {statusInfo.label}
                     </span>
-                  )}
-                  {property.specs && (
-                    <span className="px-2 py-1 rounded-md bg-white/5 text-xs text-muted-foreground">
-                      {property.specs}
-                    </span>
-                  )}
+                  </div>
                 </div>
 
-                {/* Financial Grid */}
-                <div className="grid grid-cols-3 gap-3">
-                  {property.acquisitionPrice && (
-                    <div className="bg-white/5 rounded-lg p-3 text-center">
-                      <p className="text-[10px] text-muted-foreground uppercase mb-1">Acquisition</p>
-                      <p className="text-sm font-bold text-foreground">{property.acquisitionPrice}</p>
+                {/* Content */}
+                <div className="p-8">
+                  {/* Address */}
+                  <div className="flex items-start gap-3 mb-6">
+                    <MapPin className="w-5 h-5 text-neutral-400 mt-0.5 flex-shrink-0" />
+                    <h3 className="text-xl font-medium text-neutral-900">{property.address}</h3>
+                  </div>
+
+                  {/* Specs */}
+                  {(property.size || property.specs) && (
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {property.size && (
+                        <span className="px-3 py-1.5 rounded-full bg-neutral-100 text-sm text-neutral-600">
+                          {property.size}
+                        </span>
+                      )}
+                      {property.specs && (
+                        <span className="px-3 py-1.5 rounded-full bg-neutral-100 text-sm text-neutral-600">
+                          {property.specs}
+                        </span>
+                      )}
                     </div>
                   )}
-                  {property.constructionCost && (
-                    <div className="bg-white/5 rounded-lg p-3 text-center">
-                      <p className="text-[10px] text-muted-foreground uppercase mb-1">Construction</p>
-                      <p className="text-sm font-bold text-foreground">{property.constructionCost}</p>
-                    </div>
-                  )}
-                  {property.projectedExitPrice && (
-                    <div className="bg-primary/10 rounded-lg p-3 text-center">
-                      <p className="text-[10px] text-primary uppercase mb-1">Exit Price</p>
-                      <p className="text-sm font-bold text-primary">{property.projectedExitPrice}</p>
-                    </div>
-                  )}
+
+                  {/* Financial Grid - Clean */}
+                  <div className="grid grid-cols-3 gap-6 pt-6 border-t border-neutral-100">
+                    {property.acquisitionPrice && (
+                      <div>
+                        <p className="text-xs tracking-[0.15em] uppercase text-neutral-400 mb-1">Acquisition</p>
+                        <p className="text-lg font-medium text-neutral-900">{property.acquisitionPrice}</p>
+                      </div>
+                    )}
+                    {property.constructionCost && (
+                      <div>
+                        <p className="text-xs tracking-[0.15em] uppercase text-neutral-400 mb-1">Build Cost</p>
+                        <p className="text-lg font-medium text-neutral-900">{property.constructionCost}</p>
+                      </div>
+                    )}
+                    {property.projectedExitPrice && (
+                      <div>
+                        <p className="text-xs tracking-[0.15em] uppercase text-amber-600 mb-1">Exit Target</p>
+                        <p className="text-lg font-semibold text-amber-700">{property.projectedExitPrice}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

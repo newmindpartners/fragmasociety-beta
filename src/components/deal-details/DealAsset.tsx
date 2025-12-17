@@ -41,65 +41,76 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
   };
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
-            <span className="text-sm text-white font-medium">Video 2 of 4</span>
+    <section className="py-32 bg-neutral-50">
+      <div className="container mx-auto px-6 lg:px-12">
+        {/* Header */}
+        <div className="grid lg:grid-cols-2 gap-16 items-end mb-16">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex items-center gap-4 mb-6"
+            >
+              <div className="w-12 h-px bg-neutral-300" />
+              <span className="text-xs tracking-[0.4em] uppercase text-neutral-400 font-medium">
+                Visual Tour
+              </span>
+            </motion.div>
+            
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-light text-neutral-900 leading-[1.1]"
+            >
+              The <span className="italic">Asset</span>
+            </motion.h2>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="text-foreground">The </span>
-            <span className="bg-gradient-to-r from-primary via-[hsl(175,70%,50%)] to-primary bg-clip-text text-transparent">
-              Asset
-            </span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore the underlying asset through video walkthrough and gallery
-          </p>
-        </motion.div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center gap-2 mb-8">
-          <button
-            onClick={() => setActiveTab('video')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
-              activeTab === 'video'
-                ? 'bg-white text-background'
-                : 'bg-white/10 text-white/70 hover:bg-white/20'
-            }`}
+          {/* Tab Navigation - Minimal */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="flex gap-2 lg:justify-end"
           >
-            <Play className="w-4 h-4" />
-            Video Tour
-          </button>
-          <button
-            onClick={() => setActiveTab('gallery')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
-              activeTab === 'gallery'
-                ? 'bg-white text-background'
-                : 'bg-white/10 text-white/70 hover:bg-white/20'
-            }`}
-          >
-            <ImageIcon className="w-4 h-4" />
-            Photo Gallery
-          </button>
+            <button
+              onClick={() => setActiveTab('video')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                activeTab === 'video'
+                  ? 'bg-neutral-900 text-white'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+              }`}
+            >
+              <Play className="w-4 h-4" />
+              Video Tour
+            </button>
+            <button
+              onClick={() => setActiveTab('gallery')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                activeTab === 'gallery'
+                  ? 'bg-neutral-900 text-white'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+              }`}
+            >
+              <ImageIcon className="w-4 h-4" />
+              Gallery
+            </button>
+          </motion.div>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-5xl mx-auto"
+          transition={{ duration: 0.6 }}
         >
           {/* Video Tab */}
           {activeTab === 'video' && (
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black/50 border border-white/10">
+            <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-200">
               <video
                 ref={videoRef}
                 src={deal.assetVideoUrl}
@@ -117,40 +128,40 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer"
+                  className="absolute inset-0 flex items-center justify-center bg-black/20 cursor-pointer"
                   onClick={handlePlayClick}
                 >
                   <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-2xl"
                   >
-                    <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
+                    <Play className="w-8 h-8 text-neutral-900 ml-1" fill="currentColor" />
                   </motion.div>
                 </motion.div>
               )}
 
               {/* Controls */}
-              <div className="absolute bottom-4 right-4 flex items-center gap-3">
+              <div className="absolute bottom-6 right-6 flex items-center gap-3">
                 {isPlaying && (
                   <button
                     onClick={handlePlayClick}
-                    className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                    className="w-12 h-12 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors"
                   >
                     <div className="flex gap-1">
-                      <div className="w-1 h-4 bg-white rounded-full" />
-                      <div className="w-1 h-4 bg-white rounded-full" />
+                      <div className="w-1 h-4 bg-neutral-900 rounded-full" />
+                      <div className="w-1 h-4 bg-neutral-900 rounded-full" />
                     </div>
                   </button>
                 )}
                 <button
                   onClick={toggleMute}
-                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="w-12 h-12 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors"
                 >
                   {isMuted ? (
-                    <VolumeX className="w-4 h-4 text-white" />
+                    <VolumeX className="w-5 h-5 text-neutral-900" />
                   ) : (
-                    <Volume2 className="w-4 h-4 text-white" />
+                    <Volume2 className="w-5 h-5 text-neutral-900" />
                   )}
                 </button>
               </div>
@@ -161,7 +172,7 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
           {activeTab === 'gallery' && (
             <div className="relative">
               {/* Main Image */}
-              <div className="relative aspect-video rounded-2xl overflow-hidden bg-black/50 border border-white/10">
+              <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-200">
                 <motion.img
                   key={currentImageIndex}
                   src={deal.assetImages[currentImageIndex]}
@@ -175,35 +186,35 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                 {/* Navigation Arrows */}
                 <button
                   onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
                 >
-                  <ChevronLeft className="w-6 h-6 text-white" />
+                  <ChevronLeft className="w-6 h-6 text-neutral-900" />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
                 >
-                  <ChevronRight className="w-6 h-6 text-white" />
+                  <ChevronRight className="w-6 h-6 text-neutral-900" />
                 </button>
 
                 {/* Image Counter */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/20">
-                  <span className="text-sm text-white">
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-white/90 backdrop-blur">
+                  <span className="text-sm font-medium text-neutral-900">
                     {currentImageIndex + 1} / {deal.assetImages.length}
                   </span>
                 </div>
               </div>
 
               {/* Thumbnails */}
-              <div className="flex gap-3 mt-4 justify-center">
+              <div className="flex gap-3 mt-6 justify-center">
                 {deal.assetImages.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-20 h-14 rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`w-24 h-16 rounded-lg overflow-hidden transition-all ${
                       index === currentImageIndex
-                        ? 'border-white scale-105'
-                        : 'border-white/20 opacity-60 hover:opacity-100'
+                        ? 'ring-2 ring-neutral-900 ring-offset-2'
+                        : 'opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
