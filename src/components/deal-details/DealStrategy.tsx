@@ -124,37 +124,34 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
                     transition={{ duration: 0.4, ease: "easeOut" }}
                     className="relative h-full"
                   >
-                    {/* Card with photo background */}
-                    <div className="relative h-full rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.15)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] transition-all duration-500">
-                      {/* Background image - blurred */}
+                    {/* Card with white to photo transition */}
+                    <div className="relative h-full rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-500 bg-white">
+                      {/* Background image - positioned at bottom with transparency */}
                       <div 
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                         style={{ backgroundImage: `url(${bgImage})` }}
                       />
                       
-                      {/* Blur overlay */}
-                      <div className="absolute inset-0 backdrop-blur-[2px]" />
-                      
-                      {/* Dark gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
+                      {/* White to transparent gradient overlay - top to bottom */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 via-40% to-white/20" />
                       
                       {/* Left accent stripe */}
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-white/60 via-white/30 to-white/10" />
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary/60 via-primary/30 to-transparent" />
                       
                       {/* Content */}
                       <div className="relative h-full p-6 flex flex-col">
-                        {/* Icon - highlighted */}
-                        <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center mb-auto group-hover:bg-white/25 group-hover:border-white/40 transition-all duration-500 shadow-[0_4px_20px_rgba(255,255,255,0.1)]">
-                          <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
+                        {/* Icon - dark style */}
+                        <div className="w-14 h-14 rounded-xl bg-background/90 backdrop-blur-sm border border-border/30 flex items-center justify-center mb-auto group-hover:bg-background group-hover:border-border/50 transition-all duration-500 shadow-sm">
+                          <Icon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
                         </div>
                         
                         {/* Title */}
-                        <h3 className="text-xl font-serif font-medium text-white mb-3 tracking-tight leading-tight">
+                        <h3 className="text-xl font-serif font-medium text-foreground mb-3 tracking-tight leading-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
                           {strategy.title}
                         </h3>
                         
                         {/* Description */}
-                        <p className="text-sm text-white/70 leading-relaxed">
+                        <p className="text-sm text-foreground/80 leading-relaxed drop-shadow-[0_1px_2px_rgba(255,255,255,0.6)]">
                           {strategy.description}
                         </p>
                       </div>
