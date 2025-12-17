@@ -45,7 +45,7 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A proven 5-step approach to real estate value creation
+            Acquire prime land opportunities in Malibu, Beverly Hills & Pacific Palisades
           </p>
         </motion.div>
 
