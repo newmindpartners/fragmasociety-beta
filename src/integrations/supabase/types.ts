@@ -14,7 +14,132 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      deals: {
+        Row: {
+          asset_images: Json | null
+          asset_video_url: string | null
+          case_studies: Json | null
+          category: string
+          created_at: string
+          currency: string
+          current_properties: Json | null
+          current_raised: string | null
+          description: string
+          distribution_frequency: string | null
+          financials: Json | null
+          hero_video_url: string | null
+          id: string
+          instrument_type: string
+          investor_count: number | null
+          leader_image: string | null
+          leader_name: string
+          leader_role: string
+          market_data: Json | null
+          market_highlights: Json | null
+          max_ticket: string | null
+          min_ticket: string
+          pitch_video_url: string | null
+          risk: string
+          risks: Json | null
+          special_opportunity: Json | null
+          strategies: Json | null
+          subcategory: string
+          tagline: string
+          target_return: string
+          team: Json | null
+          team_video_url: string | null
+          term: string
+          timeline: Json | null
+          title: string
+          total_past_profit: string | null
+          total_raise: string
+          track_record: Json | null
+          updated_at: string
+        }
+        Insert: {
+          asset_images?: Json | null
+          asset_video_url?: string | null
+          case_studies?: Json | null
+          category: string
+          created_at?: string
+          currency?: string
+          current_properties?: Json | null
+          current_raised?: string | null
+          description: string
+          distribution_frequency?: string | null
+          financials?: Json | null
+          hero_video_url?: string | null
+          id: string
+          instrument_type: string
+          investor_count?: number | null
+          leader_image?: string | null
+          leader_name: string
+          leader_role: string
+          market_data?: Json | null
+          market_highlights?: Json | null
+          max_ticket?: string | null
+          min_ticket: string
+          pitch_video_url?: string | null
+          risk: string
+          risks?: Json | null
+          special_opportunity?: Json | null
+          strategies?: Json | null
+          subcategory: string
+          tagline: string
+          target_return: string
+          team?: Json | null
+          team_video_url?: string | null
+          term: string
+          timeline?: Json | null
+          title: string
+          total_past_profit?: string | null
+          total_raise: string
+          track_record?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          asset_images?: Json | null
+          asset_video_url?: string | null
+          case_studies?: Json | null
+          category?: string
+          created_at?: string
+          currency?: string
+          current_properties?: Json | null
+          current_raised?: string | null
+          description?: string
+          distribution_frequency?: string | null
+          financials?: Json | null
+          hero_video_url?: string | null
+          id?: string
+          instrument_type?: string
+          investor_count?: number | null
+          leader_image?: string | null
+          leader_name?: string
+          leader_role?: string
+          market_data?: Json | null
+          market_highlights?: Json | null
+          max_ticket?: string | null
+          min_ticket?: string
+          pitch_video_url?: string | null
+          risk?: string
+          risks?: Json | null
+          special_opportunity?: Json | null
+          strategies?: Json | null
+          subcategory?: string
+          tagline?: string
+          target_return?: string
+          team?: Json | null
+          team_video_url?: string | null
+          term?: string
+          timeline?: Json | null
+          title?: string
+          total_past_profit?: string | null
+          total_raise?: string
+          track_record?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
