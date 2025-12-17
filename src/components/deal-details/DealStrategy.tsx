@@ -8,8 +8,8 @@ interface DealStrategyProps {
 
 const strategyIcons: React.ElementType[] = [
   Target,      // Acquire
-  Pickaxe,     // Off-Plan Sales
-  DollarSign,  // Rental Income
+  Pickaxe,     // Permit & Construction
+  DollarSign,  // Development Phase
   Lightbulb,   // Value Enhancement
   LogOut,      // Strategic Exit
 ];
