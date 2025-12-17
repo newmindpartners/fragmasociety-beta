@@ -76,11 +76,9 @@ export const DealSpecialOpportunity = ({ deal }: DealSpecialOpportunityProps) =>
 
             {/* Title */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight">
-              {deal.specialOpportunity.title.split(' ').map((word, i) => (
-                <span key={i} className={i === 0 ? 'text-violet-300' : ''}>
-                  {word}{' '}
-                </span>
-              ))}
+              <span className="text-violet-300">Let's</span>{' '}
+              <span>Rebuild</span>{' '}
+              <span>Pacific Palisades</span>
             </h2>
 
             {/* Decorative line */}
