@@ -141,7 +141,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               <div className="grid lg:grid-cols-2 gap-8">
                 {/* Image Section */}
                 <div className="relative">
-                  <div className="aspect-[3/4] sm:aspect-[4/3] lg:aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl relative">
+                  <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl relative">
                     <img 
                       src={getCaseImage(currentCase.address, activeCase)} 
                       alt={currentCase.address}
