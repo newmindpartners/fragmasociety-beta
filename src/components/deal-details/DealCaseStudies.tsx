@@ -1,11 +1,20 @@
 import { motion } from "framer-motion";
-import { Building2, MapPin, DollarSign, Award, ChevronRight } from "lucide-react";
+import { MapPin, Award, ChevronRight } from "lucide-react";
 import type { DealData } from "@/types/deal";
 import { useState } from "react";
+
+// Case study images
+import caseFilaree from "@/assets/casestudy-filaree.jpg";
+import caseEckhardt from "@/assets/casestudy-eckhardt.jpg";
 
 interface DealCaseStudiesProps {
   deal: DealData;
 }
+
+const caseStudyImages: Record<string, string> = {
+  "1501 Filaree Road, Malibu": caseFilaree,
+  "6914 Eckhardt House, Hollywood Hills": caseEckhardt,
+};
 
 export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
   const [activeCase, setActiveCase] = useState(0);
@@ -13,6 +22,12 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
   if (!deal.caseStudies || deal.caseStudies.length === 0) return null;
 
   const currentCase = deal.caseStudies[activeCase];
+
+  const getCaseImage = (address: string, index: number) => {
+    if (caseStudyImages[address]) return caseStudyImages[address];
+    const fallbackImages = [caseFilaree, caseEckhardt];
+    return fallbackImages[index % fallbackImages.length];
+  };
 
   return (
     <section className="py-24 relative overflow-hidden">
@@ -83,11 +98,14 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               transition={{ duration: 0.4 }}
               className="lg:col-span-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden"
             >
-              {/* Header Image Placeholder */}
-              <div className="h-48 bg-gradient-to-br from-primary/20 to-white/5 relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Building2 className="w-20 h-20 text-white/20" />
-                </div>
+              {/* Header Image */}
+              <div className="h-56 relative overflow-hidden">
+                <img 
+                  src={getCaseImage(currentCase.address, activeCase)} 
+                  alt={currentCase.address}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-primary" />

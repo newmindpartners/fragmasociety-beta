@@ -2,9 +2,22 @@ import { motion } from "framer-motion";
 import { Building2, MapPin, TrendingUp, Hammer, CheckCircle, Clock } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
+// Property images
+import propertyDeerhead from "@/assets/property-deerhead-ranch.jpg";
+import propertyNimes from "@/assets/property-nimes-road.jpg";
+import propertyPalisades from "@/assets/property-palisades-site.jpg";
+import propertyMalibu from "@/assets/property-malibu.jpg";
+
 interface DealPortfolioProps {
   deal: DealData;
 }
+
+const propertyImages: Record<string, string> = {
+  "Deerhead Ranch, Malibu": propertyDeerhead,
+  "600 Nimes Road, Beverly Hills": propertyNimes,
+  "Pacific Palisades Site": propertyPalisades,
+  "22222 Malibu Road": propertyMalibu,
+};
 
 export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
   if (!deal.currentProperties || deal.currentProperties.length === 0) return null;
@@ -36,6 +49,15 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
           </span>
         );
     }
+  };
+
+  const getPropertyImage = (address: string, index: number) => {
+    // Check exact match first
+    if (propertyImages[address]) return propertyImages[address];
+    
+    // Fallback to index-based
+    const fallbackImages = [propertyDeerhead, propertyNimes, propertyPalisades, propertyMalibu];
+    return fallbackImages[index % fallbackImages.length];
   };
 
   return (
@@ -75,11 +97,14 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
               whileHover={{ y: -4 }}
               className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all"
             >
-              {/* Property Image Placeholder */}
-              <div className="h-48 bg-gradient-to-br from-white/10 to-white/5 relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Building2 className="w-16 h-16 text-white/20" />
-                </div>
+              {/* Property Image */}
+              <div className="h-48 relative overflow-hidden">
+                <img 
+                  src={getPropertyImage(property.address, index)} 
+                  alt={property.address}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
                 <div className="absolute top-4 left-4">
                   {getStatusBadge(property.status)}
                 </div>
