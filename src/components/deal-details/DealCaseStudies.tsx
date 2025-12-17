@@ -141,13 +141,13 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               <div className="grid lg:grid-cols-5 gap-8">
                 {/* Image Section */}
                 <div className="lg:col-span-3 relative">
-                  <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+                  <div className="aspect-[3/4] sm:aspect-[4/3] lg:aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl relative">
                     <img 
                       src={getCaseImage(currentCase.address, activeCase)} 
                       alt={currentCase.address}
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-8">
                       <div className="flex items-center gap-3 mb-3">
                         <MapPin className="w-4 h-4 text-white/70" />
