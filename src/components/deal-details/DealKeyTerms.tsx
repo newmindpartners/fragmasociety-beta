@@ -70,10 +70,10 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
             backgroundImage: `url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop')`,
           }}
         />
-        {/* Dark overlay with gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/85 to-black/90" />
+        {/* Dark overlay with gradient - stronger contrast */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/92 to-black/95" />
         {/* Subtle gold tint overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/20 via-transparent to-amber-800/10" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/15 via-transparent to-amber-800/10" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -84,7 +84,7 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 text-sm font-medium mb-5">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-5">
             Investment Parameters
           </span>
           <h2 className="text-4xl md:text-5xl font-bold">
