@@ -1,28 +1,21 @@
 import { motion } from "framer-motion";
-import { Target, Hammer, DollarSign, Lightbulb } from "lucide-react";
+import { Target, Pickaxe, DollarSign, Lightbulb, LogOut } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
 interface DealStrategyProps {
   deal: DealData;
 }
 
-const strategyIcons: Record<string, React.ElementType> = {
-  acquire: Target,
-  develop: Hammer,
-  exit: DollarSign,
-  default: Lightbulb,
-};
+const strategyIcons: React.ElementType[] = [
+  Target,      // Acquire
+  Pickaxe,     // Off-Plan Sales
+  DollarSign,  // Rental Income
+  Lightbulb,   // Value Enhancement
+  LogOut,      // Strategic Exit
+];
 
 export const DealStrategy = ({ deal }: DealStrategyProps) => {
   if (!deal.strategies || deal.strategies.length === 0) return null;
-
-  const getIcon = (index: number) => {
-    const iconKeys = ["acquire", "develop", "exit"];
-    const key = iconKeys[index] || "default";
-    return strategyIcons[key];
-  };
-
-  const gridCols = deal.strategies.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-5";
 
   return (
     <section className="py-24 relative overflow-hidden">
@@ -39,8 +32,8 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
             <span className="text-sm text-white font-medium">Value Creation</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="text-foreground">Investment </span>
-            <span className="bg-gradient-to-r from-primary via-[hsl(175,70%,50%)] to-primary bg-clip-text text-transparent">
+            <span className="text-foreground italic">Investment </span>
+            <span className="bg-gradient-to-r from-primary via-[hsl(175,70%,50%)] to-primary bg-clip-text text-transparent italic">
               Strategy
             </span>
           </h2>
@@ -50,48 +43,54 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
         </motion.div>
 
         {/* Strategy Steps */}
-        <div className="max-w-5xl mx-auto">
-          <div className="relative">
-            {/* Connection Line */}
-            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary to-primary/20 -translate-y-1/2" />
+        <div className="max-w-6xl mx-auto">
+          {/* Step Numbers Row */}
+          <div className="flex justify-between mb-6 px-4">
+            {deal.strategies.map((_, index) => (
+              <motion.div
+                key={`number-${index}`}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="flex items-center justify-center"
+              >
+                <div className="w-14 h-14 rounded-full bg-primary text-background font-bold text-xl flex items-center justify-center">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+              </motion.div>
+            ))}
+          </div>
 
-            <div className={`grid ${gridCols} gap-6`}>
-              {deal.strategies.map((strategy, index) => {
-                const Icon = getIcon(index);
-                return (
+          {/* Cards Row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {deal.strategies.map((strategy, index) => {
+              const Icon = strategyIcons[index] || Lightbulb;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="relative"
+                >
+                  {/* Glowing line at top */}
+                  <div className="absolute top-0 left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+                  
                   <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative"
+                    whileHover={{ y: -4 }}
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-primary/30 transition-all h-full pt-8"
                   >
-                    {/* Step Number */}
-                    <div className="lg:absolute lg:-top-12 lg:left-1/2 lg:-translate-x-1/2 flex items-center justify-center mb-4 lg:mb-0">
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        className="w-12 h-12 rounded-full bg-primary text-background font-bold text-lg flex items-center justify-center relative z-10"
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </motion.div>
+                    <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center mb-4">
+                      <Icon className="w-5 h-5 text-white/70" />
                     </div>
-
-                    {/* Card */}
-                    <motion.div
-                      whileHover={{ y: -4 }}
-                      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-primary/30 transition-all h-full lg:mt-8"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center mb-4">
-                        <Icon className="w-5 h-5 text-white/70" />
-                      </div>
-                      <h3 className="text-sm font-semibold text-foreground mb-2">{strategy.title}</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{strategy.description}</p>
-                    </motion.div>
+                    <h3 className="text-base font-semibold text-foreground mb-3">{strategy.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{strategy.description}</p>
                   </motion.div>
-                );
-              })}
-            </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
