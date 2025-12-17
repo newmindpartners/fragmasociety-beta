@@ -47,25 +47,25 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
             {/* Connecting line - main */}
             <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-white/15 hidden lg:block" />
             
-            {/* Animated glowing dots along the line */}
+            {/* Animated glowing dots - traveling wave left to right */}
             <div className="absolute top-1/2 left-[10%] right-[10%] hidden lg:flex justify-between items-center -translate-y-1/2 px-[8%]">
               {[...Array(16)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="w-1 h-1 rounded-full bg-white/40"
+                  className="w-1.5 h-1.5 rounded-full bg-white"
                   animate={{
-                    opacity: [0.2, 0.8, 0.2],
-                    scale: [0.8, 1.2, 0.8],
+                    opacity: [0.1, 1, 0.1],
+                    scale: [0.6, 1.3, 0.6],
                     boxShadow: [
                       "0 0 0px rgba(255,255,255,0)",
-                      "0 0 8px rgba(255,255,255,0.5)",
+                      "0 0 12px rgba(255,255,255,0.8)",
                       "0 0 0px rgba(255,255,255,0)"
                     ]
                   }}
                   transition={{
-                    duration: 2.5,
+                    duration: 3,
                     repeat: Infinity,
-                    delay: i * 0.15,
+                    delay: i * 0.2,
                     ease: "easeInOut"
                   }}
                 />
