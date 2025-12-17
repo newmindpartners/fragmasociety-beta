@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Euro, Target, Clock, AlertTriangle, Users, TrendingUp } from "lucide-react";
+import { Play, Euro, Target, Clock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import type { DealData } from "@/types/deal";
@@ -28,11 +28,6 @@ export const DealHero = ({ deal }: DealHeroProps) => {
     Medium: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
     High: "text-red-400 bg-red-400/10 border-red-400/20",
   };
-
-  // Calculate progress percentage
-  const raised = parseFloat(deal.currentRaised.replace(/[€,]/g, ''));
-  const total = parseFloat(deal.totalRaise.replace(/[€,]/g, ''));
-  const progress = (raised / total) * 100;
 
   return (
     <section className="relative min-h-screen pt-20 overflow-hidden">
@@ -91,31 +86,6 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               {deal.description}
             </p>
 
-            {/* Progress Bar */}
-            <div className="mb-8">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-muted-foreground">Raised</span>
-                <span className="text-foreground font-semibold">{deal.currentRaised} / {deal.totalRaise}</span>
-              </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-primary to-[hsl(175,70%,50%)]"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                />
-              </div>
-              <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4" />
-                  {deal.investorCount} investors
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <TrendingUp className="w-4 h-4" />
-                  {Math.round(progress)}% funded
-                </span>
-              </div>
-            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
