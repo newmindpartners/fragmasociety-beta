@@ -3,6 +3,9 @@ import { TrendingUp, Calendar, Coins, Shield, ArrowUpRight, Clock, Wallet, Targe
 import type { DealData } from "@/types/deal";
 import { useState } from "react";
 
+// Background
+import keyTermsBg from "@/assets/rwa-luxury.jpg";
+
 interface DealKeyTermsProps {
   deal: DealData;
 }
@@ -33,8 +36,18 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
   ];
 
   return (
-    <section className="py-32 bg-white relative overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-12 relative">
+    <section className="py-32 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img 
+          src={keyTermsBg} 
+          alt="" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/97 via-white/95 to-white/97" />
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
         <div className="max-w-3xl mb-20">
           <motion.div
@@ -43,7 +56,7 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
             viewport={{ once: true }}
             className="flex items-center gap-4 mb-6"
           >
-            <div className="w-12 h-px bg-neutral-300" />
+            <div className="w-12 h-px bg-neutral-400" />
             <span className="text-xs tracking-[0.4em] uppercase text-neutral-500 font-medium">
               Investment Parameters
             </span>
@@ -60,13 +73,11 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
           </motion.h2>
         </div>
 
-        {/* Terms Grid - Premium Interactive */}
-        <div className="grid grid-cols-2 md:grid-cols-4">
+        {/* Terms Grid - Glassmorphism */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {terms.map((term, index) => {
             const Icon = termIcons[index];
             const isHovered = hoveredIndex === index;
-            const isHighlight = term.highlight;
-            const isFirstRow = index < 4;
             
             return (
               <motion.div
@@ -77,48 +88,57 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`relative p-8 md:p-10 cursor-pointer transition-all duration-500 group
-                  ${isFirstRow ? 'bg-white' : 'bg-[#FAFAF8]'}
-                  ${index % 4 !== 0 ? 'border-l border-neutral-200' : ''}
-                  ${!isFirstRow ? 'border-t border-neutral-200' : ''}
-                `}
+                className="cursor-pointer"
               >
-                {/* Hover gradient overlay */}
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-br from-navy to-navy-surface opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  initial={false}
-                />
-                
-                {/* Shine effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 overflow-hidden"
-                  initial={false}
+                <motion.div
+                  className="relative p-8 h-full overflow-hidden"
+                  style={{
+                    background: isHovered 
+                      ? 'linear-gradient(135deg, rgba(20,35,60,0.95) 0%, rgba(30,50,80,0.9) 100%)'
+                      : term.highlight 
+                        ? 'rgba(248, 247, 245, 0.8)' 
+                        : 'rgba(255, 255, 255, 0.7)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: isHovered 
+                      ? '1px solid rgba(0, 200, 180, 0.3)' 
+                      : '1px solid rgba(0, 0, 0, 0.06)',
+                    boxShadow: isHovered 
+                      ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                      : '0 4px 20px -5px rgba(0, 0, 0, 0.06)',
+                  }}
+                  animate={{ 
+                    y: isHovered ? -8 : 0,
+                    scale: isHovered ? 1.03 : 1
+                  }}
+                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                 >
-                  <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-white/10 via-transparent to-transparent rotate-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                </motion.div>
+                  {/* Shine sweep effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-primary/10 via-transparent to-transparent rotate-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  </div>
 
-                {/* Content */}
-                <div className="relative z-10">
                   {/* Icon */}
                   <motion.div 
-                    className={`w-12 h-12 border flex items-center justify-center mb-6 transition-all duration-500
-                      ${isHovered 
-                        ? 'border-white/20 bg-white/10' 
-                        : 'border-neutral-200 bg-transparent'
-                      }
-                    `}
+                    className={`w-12 h-12 border flex items-center justify-center mb-6 transition-all duration-500 ${
+                      isHovered 
+                        ? 'border-primary/40 bg-primary/10' 
+                        : 'border-neutral-200/80 bg-white/50'
+                    }`}
                     animate={{ 
-                      scale: isHovered ? 1.1 : 1,
-                      rotate: isHovered ? 3 : 0 
+                      rotate: isHovered ? 6 : 0,
+                      scale: isHovered ? 1.1 : 1
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Icon className={`w-5 h-5 transition-colors duration-500 ${isHovered ? 'text-white' : 'text-neutral-400'}`} />
+                    <Icon className={`w-5 h-5 transition-colors duration-500 ${
+                      isHovered ? 'text-primary' : 'text-neutral-400'
+                    }`} />
                   </motion.div>
                   
                   {/* Label */}
                   <p className={`text-[10px] tracking-[0.25em] uppercase mb-3 transition-colors duration-500 ${
-                    isHovered ? 'text-primary' : isHighlight ? 'text-primary/70' : 'text-neutral-400'
+                    isHovered ? 'text-primary' : 'text-neutral-400'
                   }`}>
                     {term.label}
                   </p>
@@ -128,13 +148,19 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                     className={`text-2xl md:text-3xl font-light transition-colors duration-500 ${
                       isHovered ? 'text-white' : 'text-neutral-900'
                     }`}
-                    animate={{ 
-                      y: isHovered ? -4 : 0 
-                    }}
+                    animate={{ y: isHovered ? -4 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
                     {term.value}
                   </motion.p>
+
+                  {/* Bottom accent */}
+                  <motion.div 
+                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-accent"
+                    initial={{ width: 0 }}
+                    animate={{ width: isHovered ? '100%' : 0 }}
+                    transition={{ duration: 0.4 }}
+                  />
 
                   {/* Hover indicator dot */}
                   <motion.div 
@@ -146,32 +172,28 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                     }}
                     transition={{ duration: 0.3 }}
                   />
-                </div>
-
-                {/* Bottom border accent on hover */}
-                <motion.div 
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary to-accent"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: isHovered ? 1 : 0 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ transformOrigin: 'left' }}
-                />
+                </motion.div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Risk Warning - Elegant */}
+        {/* Risk Warning - Glassmorphism */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="mt-12 flex items-start gap-4 p-6 border border-neutral-200 bg-[#FAFAF8] group hover:bg-navy hover:border-navy transition-all duration-500"
+          className="mt-12 flex items-start gap-4 p-6 group cursor-pointer"
+          style={{
+            background: 'rgba(248, 247, 245, 0.8)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(0, 0, 0, 0.06)',
+          }}
         >
-          <AlertTriangle className="w-5 h-5 text-neutral-400 group-hover:text-primary flex-shrink-0 mt-0.5 transition-colors duration-500" />
-          <p className="text-sm text-neutral-600 leading-relaxed group-hover:text-white/70 transition-colors duration-500">
-            <strong className="text-neutral-800 group-hover:text-white transition-colors duration-500">*Important:</strong> Target returns are projections only and not guaranteed. 
+          <AlertTriangle className="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-neutral-600 leading-relaxed">
+            <strong className="text-neutral-800">*Important:</strong> Target returns are projections only and not guaranteed. 
             Capital at risk. Past performance is not indicative of future results. This investment is illiquid.
           </p>
         </motion.div>
