@@ -4,7 +4,7 @@ import type { DealData } from "@/types/deal";
 import { useState, useEffect } from "react";
 
 // Background image
-import strategyBg from "@/assets/strategy-hero-bg.jpg";
+import strategyBg from "@/assets/malibu-sea-view.jpg";
 
 interface DealStrategyProps {
   deal: DealData;
