@@ -137,7 +137,7 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                   
                   {/* Content */}
                   <div className="min-w-0">
-                    <p className="text-[10px] text-white/40 uppercase tracking-wider font-medium truncate">
+                    <p className="text-[10px] text-white/70 uppercase tracking-wider font-medium truncate">
                       {term.label}
                     </p>
                     <p className={`text-base font-bold truncate ${
