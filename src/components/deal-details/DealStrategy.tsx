@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Target, Building2, Home, Hammer, DollarSign, Lightbulb } from "lucide-react";
+import { Target, Hammer, DollarSign, Lightbulb } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
 interface DealStrategyProps {
@@ -7,11 +7,9 @@ interface DealStrategyProps {
 }
 
 const strategyIcons: Record<string, React.ElementType> = {
-  acquisition: Target,
-  offplan: Building2,
-  rental: Home,
-  building: Hammer,
-  sale: DollarSign,
+  acquire: Target,
+  develop: Hammer,
+  exit: DollarSign,
   default: Lightbulb,
 };
 
@@ -19,10 +17,12 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
   if (!deal.strategies || deal.strategies.length === 0) return null;
 
   const getIcon = (index: number) => {
-    const iconKeys = ["acquisition", "offplan", "rental", "building", "sale"];
+    const iconKeys = ["acquire", "develop", "exit"];
     const key = iconKeys[index] || "default";
     return strategyIcons[key];
   };
+
+  const gridCols = deal.strategies.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-5";
 
   return (
     <section className="py-24 relative overflow-hidden">
@@ -55,7 +55,7 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
             {/* Connection Line */}
             <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary to-primary/20 -translate-y-1/2" />
 
-            <div className="grid lg:grid-cols-5 gap-6">
+            <div className={`grid ${gridCols} gap-6`}>
               {deal.strategies.map((strategy, index) => {
                 const Icon = getIcon(index);
                 return (
