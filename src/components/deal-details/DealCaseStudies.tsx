@@ -124,9 +124,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               >
                 <div className="absolute inset-0 bg-violet-600/20 rounded-2xl blur-xl group-hover:bg-violet-600/30 transition-colors" />
                 <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-center">
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-5xl font-light text-white">${totalProfit.toFixed(1)}M</span>
-                  </div>
+                  <p className="text-5xl font-light text-white">${totalProfit.toFixed(1)}M</p>
                   <p className="text-[10px] text-violet-300/80 uppercase tracking-[0.2em]">Total Profit</p>
                 </div>
               </motion.div>
