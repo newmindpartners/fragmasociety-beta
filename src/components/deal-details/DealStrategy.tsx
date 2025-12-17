@@ -125,33 +125,30 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
                     className="relative h-full"
                   >
                     {/* Card with white to photo transition */}
-                    <div className="relative h-full rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-500 bg-white">
-                      {/* Background image - positioned at bottom with transparency */}
+                    <div className="relative h-full rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-500">
+                      {/* Background image - positioned at bottom */}
                       <div 
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                         style={{ backgroundImage: `url(${bgImage})` }}
                       />
                       
-                      {/* White to transparent gradient overlay - top to bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 via-40% to-white/20" />
-                      
-                      {/* Left accent stripe */}
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary/60 via-primary/30 to-transparent" />
+                      {/* White to transparent gradient overlay - stronger for readability */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-white from-0% via-white via-55% to-white/10" />
                       
                       {/* Content */}
-                      <div className="relative h-full p-6 flex flex-col">
-                        {/* Icon - dark style */}
-                        <div className="w-14 h-14 rounded-xl bg-background/90 backdrop-blur-sm border border-border/30 flex items-center justify-center mb-auto group-hover:bg-background group-hover:border-border/50 transition-all duration-500 shadow-sm">
-                          <Icon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
+                      <div className="relative h-full p-5 flex flex-col">
+                        {/* Icon - refined dark rounded square */}
+                        <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center mb-4 shadow-md">
+                          <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
                         </div>
                         
-                        {/* Title */}
-                        <h3 className="text-xl font-serif font-medium text-foreground mb-3 tracking-tight leading-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
+                        {/* Title - positioned in white area */}
+                        <h3 className="text-lg font-semibold text-foreground mb-2 leading-tight">
                           {strategy.title}
                         </h3>
                         
-                        {/* Description */}
-                        <p className="text-sm text-foreground/80 leading-relaxed drop-shadow-[0_1px_2px_rgba(255,255,255,0.6)]">
+                        {/* Description - in white area for readability */}
+                        <p className="text-sm text-muted-foreground leading-relaxed flex-1">
                           {strategy.description}
                         </p>
                       </div>
