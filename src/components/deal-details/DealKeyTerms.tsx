@@ -70,8 +70,8 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
             backgroundImage: `url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop')`,
           }}
         />
-        {/* Dark overlay with gradient - stronger contrast */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/92 to-black/95" />
+        {/* Dark overlay with gradient */}
+        <div className="absolute inset-0 bg-black/70" />
         {/* Subtle gold tint overlay */}
         <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/15 via-transparent to-amber-800/10" />
       </div>
