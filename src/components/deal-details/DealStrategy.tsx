@@ -2,246 +2,177 @@ import { motion } from "framer-motion";
 import { Target, Pickaxe, DollarSign, Lightbulb, LogOut } from "lucide-react";
 import type { DealData } from "@/types/deal";
 
-// Import background images
-import propertyMalibu from "@/assets/property-malibu.jpg";
-import propertyNimes from "@/assets/property-nimes-road.jpg";
-import propertyDeerhead from "@/assets/property-deerhead-ranch.jpg";
-import propertyPalisades from "@/assets/property-palisades-site.jpg";
-import rwaVilla from "@/assets/rwa-villa.jpg";
-
 interface DealStrategyProps {
   deal: DealData;
 }
 
 const strategyIcons: React.ElementType[] = [
-  Target,      // Acquire
-  Pickaxe,     // Permit & Construction
-  DollarSign,  // Development Phase
-  Lightbulb,   // Value Enhancement
-  LogOut,      // Strategic Exit
-];
-
-const strategyBackgrounds = [
-  propertyMalibu,      // Acquire - landscape
-  propertyPalisades,   // Permit & Construction
-  propertyNimes,       // Development Phase
-  rwaVilla,            // Value Enhancement
-  propertyDeerhead,    // Strategic Exit
+  Target,
+  Pickaxe,
+  DollarSign,
+  Lightbulb,
+  LogOut,
 ];
 
 export const DealStrategy = ({ deal }: DealStrategyProps) => {
   if (!deal.strategies || deal.strategies.length === 0) return null;
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
-            <Target className="w-4 h-4 text-white" />
-            <span className="text-sm text-white font-medium">Value Creation</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="text-foreground italic">Investment </span>
-            <span className="text-white italic">Strategy</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A methodical approach to creating exceptional value in premium real estate
-          </p>
-        </motion.div>
+    <section className="py-32 bg-white">
+      <div className="container mx-auto px-6 lg:px-12">
+        {/* Header - Editorial Style */}
+        <div className="max-w-4xl mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-12 h-px bg-neutral-300" />
+            <span className="text-xs tracking-[0.4em] uppercase text-neutral-400 font-medium">
+              Strategy
+            </span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-[3.5rem] font-light text-neutral-900 leading-[1.15] tracking-tight"
+          >
+            A methodical approach
+            <br />
+            <span className="italic font-normal">to exceptional returns</span>
+          </motion.h2>
+        </div>
 
-        {/* Strategy Steps */}
-        <div className="max-w-7xl mx-auto">
-          {/* Step Numbers Row with connecting line */}
-          <div className="relative mb-8">
-            {/* Connecting line - main */}
-            <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-white/15 hidden lg:block" />
-            
-            {/* Animated glowing dots - traveling wave left to right */}
-            <div className="absolute top-1/2 left-[10%] right-[10%] hidden lg:flex justify-between items-center -translate-y-1/2 px-[8%]">
-              {[...Array(16)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-white"
-                  animate={{
-                    opacity: [0.1, 1, 0.1],
-                    scale: [0.6, 1.3, 0.6],
-                    boxShadow: [
-                      "0 0 0px rgba(255,255,255,0)",
-                      "0 0 12px rgba(255,255,255,0.8)",
-                      "0 0 0px rgba(255,255,255,0)"
-                    ]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: i * 0.2,
-                    ease: "easeInOut"
-                  }}
-                />
-              ))}
-            </div>
-            
-            <div className="flex justify-between px-4 lg:px-8">
-              {deal.strategies.map((_, index) => (
-                <motion.div
-                  key={`number-${index}`}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative z-10 flex items-center justify-center"
+        {/* Strategy Steps - Luxury Editorial Layout */}
+        <div className="space-y-0">
+          {deal.strategies.map((strategy, index) => {
+            const Icon = strategyIcons[index] || Lightbulb;
+            const isLast = index === deal.strategies.length - 1;
+
+            return (
+              <motion.article
+                key={index}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8, delay: index * 0.05 }}
+                className="group"
+              >
+                <div 
+                  className={`grid grid-cols-12 gap-6 lg:gap-12 py-16 lg:py-20 ${
+                    !isLast ? 'border-b border-neutral-100' : ''
+                  }`}
                 >
-                  <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white text-background font-bold text-xl flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-                    {String(index + 1).padStart(2, "0")}
+                  {/* Step Number - Large & Prominent */}
+                  <div className="col-span-3 md:col-span-2 lg:col-span-1">
+                    <div className="sticky top-32">
+                      <motion.span 
+                        className="block text-[5rem] md:text-[6rem] lg:text-[7rem] font-extralight leading-none text-neutral-100 group-hover:text-neutral-200 transition-colors duration-700 select-none"
+                        style={{ fontFeatureSettings: "'tnum'" }}
+                      >
+                        {String(index + 1).padStart(2, '0')}
+                      </motion.span>
+                    </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
 
-          {/* Cards Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
-            {deal.strategies.map((strategy, index) => {
-              const Icon = strategyIcons[index] || Lightbulb;
-              const bgImage = strategyBackgrounds[index] || propertyMalibu;
-              const isEven = index % 2 === 0;
-              
-              // Unique accent colors for each card
-              const accentColors = [
-                'from-emerald-400 to-teal-500',
-                'from-amber-400 to-orange-500', 
-                'from-blue-400 to-indigo-500',
-                'from-violet-400 to-purple-500',
-                'from-rose-400 to-pink-500'
-              ];
-              
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.15 }}
-                  className="relative group"
-                  style={{ marginTop: isEven ? '0' : '32px' }}
-                >
-                  <motion.div
-                    whileHover={{ y: -10, scale: 1.02 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="relative h-[360px]"
-                  >
-                    {/* Main light card */}
-                    <div className="relative h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition-all duration-500">
-                      
-                      {/* Animated background graphic */}
-                      <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden">
-                        {/* Animated circles */}
-                        <motion.div
-                          className={`absolute -top-8 -right-8 w-24 h-24 rounded-full bg-gradient-to-br ${accentColors[index]} opacity-10`}
-                          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-                          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <motion.div
-                          className={`absolute top-4 right-4 w-16 h-16 rounded-full bg-gradient-to-br ${accentColors[index]} opacity-5`}
-                          animate={{ scale: [1.2, 1, 1.2], rotate: [90, 0, 90] }}
-                          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                        />
-                      </div>
-                      
-                      {/* Animated line pattern */}
-                      <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden opacity-[0.03]">
-                        {[...Array(6)].map((_, i) => (
-                          <motion.div
-                            key={i}
-                            className="absolute h-[1px] bg-gray-900"
-                            style={{ 
-                              bottom: `${i * 16}px`, 
-                              left: 0, 
-                              right: 0 
-                            }}
-                            animate={{ 
-                              x: ['-100%', '100%'],
-                              opacity: [0, 1, 0]
-                            }}
-                            transition={{ 
-                              duration: 4, 
-                              repeat: Infinity, 
-                              delay: i * 0.3,
-                              ease: "linear"
-                            }}
-                          />
-                        ))}
-                      </div>
-                      
-                      {/* Content */}
-                      <div className="relative h-full p-6 flex flex-col">
-                        {/* Step number watermark */}
-                        <span className="absolute top-3 right-4 text-6xl font-bold text-gray-100 font-mono select-none">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        
-                        {/* Icon with animated ring */}
-                        <div className="relative w-14 h-14 mb-6">
-                          <motion.div
-                            className={`absolute inset-0 rounded-xl bg-gradient-to-br ${accentColors[index]} opacity-20`}
-                            animate={{ scale: [1, 1.15, 1] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                          />
-                          <div className={`relative w-full h-full rounded-xl bg-gradient-to-br ${accentColors[index]} flex items-center justify-center shadow-lg`}>
-                            <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
-                          </div>
+                  {/* Content */}
+                  <div className="col-span-9 md:col-span-10 lg:col-span-8">
+                    <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-16">
+                      {/* Icon - Minimal Circle */}
+                      <motion.div 
+                        className="flex-shrink-0"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full border border-neutral-200 flex items-center justify-center group-hover:border-neutral-400 group-hover:bg-neutral-50 transition-all duration-500">
+                          <Icon className="w-6 h-6 lg:w-7 lg:h-7 text-neutral-400 group-hover:text-neutral-600 transition-colors duration-500" strokeWidth={1.5} />
                         </div>
-                        
-                        {/* Title */}
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
+                      </motion.div>
+
+                      {/* Text Content */}
+                      <div className="flex-1 max-w-2xl">
+                        <motion.h3 
+                          className="text-2xl lg:text-3xl font-medium text-neutral-900 mb-4 leading-tight group-hover:text-neutral-700 transition-colors duration-300"
+                        >
                           {strategy.title}
-                        </h3>
+                        </motion.h3>
                         
-                        {/* Description */}
-                        <p className="text-sm text-gray-500 leading-relaxed flex-1">
+                        <p className="text-lg text-neutral-500 leading-relaxed">
                           {strategy.description}
                         </p>
                         
-                        {/* Bottom photo peek with gradient */}
-                        <div className="mt-4 h-16 rounded-lg overflow-hidden relative">
-                          <div 
-                            className="absolute inset-0 bg-cover bg-center"
-                            style={{ backgroundImage: `url(${bgImage})` }}
+                        {/* Subtle animated indicator */}
+                        <motion.div 
+                          className="mt-8 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        >
+                          <motion.div
+                            className="w-8 h-px bg-neutral-300"
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
-                        </div>
+                          <span className="text-xs tracking-[0.2em] uppercase text-neutral-400">
+                            Phase {index + 1}
+                          </span>
+                        </motion.div>
                       </div>
                     </div>
-                  </motion.div>
-                  
-                  {/* Connecting dots */}
-                  {index < deal.strategies.length - 1 && (
-                    <div className="hidden lg:flex absolute top-1/2 -right-4 w-8 items-center justify-center gap-1">
-                      {[...Array(3)].map((_, i) => (
+                  </div>
+
+                  {/* Right Decorative Element - Desktop Only */}
+                  <div className="hidden lg:flex col-span-3 items-center justify-end">
+                    <motion.div
+                      className="relative"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      {/* Minimal line with dot */}
+                      <div className="flex items-center gap-3">
                         <motion.div
-                          key={i}
-                          className="w-1.5 h-1.5 rounded-full bg-gray-300"
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ 
-                            duration: 1.5, 
-                            repeat: Infinity, 
-                            delay: i * 0.2 
-                          }}
+                          className="w-24 h-px bg-neutral-100 origin-right"
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
                         />
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
+                        <motion.div
+                          className="w-2 h-2 rounded-full bg-neutral-200 group-hover:bg-neutral-400 transition-colors duration-500"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.3, delay: 1 + index * 0.1 }}
+                        />
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
+
+        {/* Footer Note */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-24 pt-12 border-t border-neutral-100"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-1 h-1 rounded-full bg-neutral-300" />
+            <p className="text-sm text-neutral-400 tracking-wide">
+              Each phase executed with precision to maximize value creation
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
