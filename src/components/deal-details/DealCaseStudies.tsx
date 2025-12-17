@@ -215,30 +215,6 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                 </div>
               </div>
 
-              {/* Features - Bottom Strip */}
-              {currentCase.features && currentCase.features.length > 0 && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="mt-8 bg-white rounded-2xl p-6 shadow-lg border border-slate-200"
-                >
-                  <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] mb-4">Key Features</p>
-                  <div className="flex flex-wrap gap-2">
-                    {currentCase.features.map((feature, idx) => (
-                      <motion.span 
-                        key={idx}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.4 + idx * 0.05 }}
-                        className="px-4 py-2 bg-slate-900 rounded-lg text-xs text-white hover:bg-slate-800 transition-colors cursor-default"
-                      >
-                        {feature}
-                      </motion.span>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
             </motion.div>
           </AnimatePresence>
         </div>
