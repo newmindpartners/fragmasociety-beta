@@ -44,8 +44,13 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
         <div className="max-w-7xl mx-auto">
           {/* Step Numbers Row with connecting line */}
           <div className="relative mb-8">
-            {/* Connecting line */}
-            <div className="absolute top-1/2 left-[7%] right-[7%] h-px bg-gradient-to-r from-white/0 via-white/20 to-white/0 hidden lg:block" />
+            {/* Connecting line - main */}
+            <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-white/15 hidden lg:block" />
+            
+            {/* Dashed overlay for elegance */}
+            <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] hidden lg:block overflow-hidden">
+              <div className="w-full h-full border-t border-dashed border-white/10" />
+            </div>
             
             <div className="flex justify-between px-4 lg:px-8">
               {deal.strategies.map((_, index) => (
