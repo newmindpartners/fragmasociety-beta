@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Volume2, VolumeX, ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
+import { Play, Volume2, VolumeX, ChevronLeft, ChevronRight, Image as ImageIcon, Video, Camera } from "lucide-react";
 import { useState, useRef } from "react";
 import type { DealData } from "@/types/deal";
 
@@ -41,8 +41,13 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
   };
 
   return (
-    <section className="py-32 bg-neutral-50">
-      <div className="container mx-auto px-6 lg:px-12">
+    <section className="py-32 bg-white relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/3 w-[600px] h-[600px] bg-gradient-to-b from-purple-50/30 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 relative">
         {/* Header */}
         <div className="grid lg:grid-cols-2 gap-16 items-end mb-16">
           <div>
@@ -52,8 +57,8 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
               viewport={{ once: true }}
               className="flex items-center gap-4 mb-6"
             >
-              <div className="w-12 h-px bg-neutral-300" />
-              <span className="text-xs tracking-[0.4em] uppercase text-neutral-400 font-medium">
+              <div className="w-12 h-px bg-purple-300" />
+              <span className="text-xs tracking-[0.4em] uppercase text-purple-600 font-medium">
                 Visual Tour
               </span>
             </motion.div>
@@ -65,7 +70,7 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
               transition={{ delay: 0.1 }}
               className="text-4xl md:text-5xl lg:text-6xl font-light text-neutral-900 leading-[1.1]"
             >
-              The <span className="italic">Asset</span>
+              The <span className="italic text-purple-600">Asset</span>
             </motion.h2>
           </div>
 
@@ -75,28 +80,28 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="flex gap-2 lg:justify-end"
+            className="flex gap-3 lg:justify-end"
           >
             <button
               onClick={() => setActiveTab('video')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-medium transition-all ${
                 activeTab === 'video'
-                  ? 'bg-neutral-900 text-white'
-                  : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-neutral-200'
               }`}
             >
-              <Play className="w-4 h-4" />
+              <Video className="w-4 h-4" />
               Video Tour
             </button>
             <button
               onClick={() => setActiveTab('gallery')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-medium transition-all ${
                 activeTab === 'gallery'
-                  ? 'bg-neutral-900 text-white'
-                  : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-neutral-200'
               }`}
             >
-              <ImageIcon className="w-4 h-4" />
+              <Camera className="w-4 h-4" />
               Gallery
             </button>
           </motion.div>
@@ -110,7 +115,7 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
         >
           {/* Video Tab */}
           {activeTab === 'video' && (
-            <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-200">
+            <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-100 shadow-2xl">
               <video
                 ref={videoRef}
                 src={deal.assetVideoUrl}
@@ -128,7 +133,7 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="absolute inset-0 flex items-center justify-center bg-black/20 cursor-pointer"
+                  className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/40 via-black/20 to-transparent cursor-pointer"
                   onClick={handlePlayClick}
                 >
                   <motion.div
@@ -165,6 +170,14 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                   )}
                 </button>
               </div>
+
+              {/* Info overlay */}
+              <div className="absolute bottom-6 left-6">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-sm font-medium text-neutral-900">
+                  <Video className="w-4 h-4 text-purple-600" />
+                  Property Walkthrough
+                </span>
+              </div>
             </div>
           )}
 
@@ -172,15 +185,15 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
           {activeTab === 'gallery' && (
             <div className="relative">
               {/* Main Image */}
-              <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-200">
+              <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-100 shadow-2xl">
                 <motion.img
                   key={currentImageIndex}
                   src={deal.assetImages[currentImageIndex]}
                   alt={`Asset image ${currentImageIndex + 1}`}
                   className="w-full h-full object-cover"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
                 />
 
                 {/* Navigation Arrows */}
@@ -198,7 +211,7 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                 </button>
 
                 {/* Image Counter */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-white/90 backdrop-blur">
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-white/90 backdrop-blur shadow-lg">
                   <span className="text-sm font-medium text-neutral-900">
                     {currentImageIndex + 1} / {deal.assetImages.length}
                   </span>
@@ -211,13 +224,16 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-24 h-16 rounded-lg overflow-hidden transition-all ${
+                    className={`relative w-28 h-20 rounded-xl overflow-hidden transition-all ${
                       index === currentImageIndex
-                        ? 'ring-2 ring-neutral-900 ring-offset-2'
+                        ? 'ring-2 ring-purple-500 ring-offset-4 shadow-lg'
                         : 'opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
+                    {index === currentImageIndex && (
+                      <div className="absolute inset-0 bg-purple-500/10" />
+                    )}
                   </button>
                 ))}
               </div>

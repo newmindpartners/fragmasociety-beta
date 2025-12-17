@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FileText, Lock, Download, Eye, CheckCircle, AlertCircle } from "lucide-react";
+import { FileText, Lock, Download, Eye, CheckCircle, AlertCircle, Shield, FolderOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,36 +10,42 @@ const documents = [
     description: "Key terms and conditions of the investment",
     type: "PDF",
     size: "245 KB",
+    color: { bg: "bg-blue-50", icon: "text-blue-600" },
   },
   {
     name: "Subscription Agreement",
     description: "Legal agreement for investment subscription",
     type: "PDF",
     size: "1.2 MB",
+    color: { bg: "bg-purple-50", icon: "text-purple-600" },
   },
   {
     name: "Risk Disclosure",
     description: "Comprehensive risk factors and disclaimers",
     type: "PDF",
     size: "380 KB",
+    color: { bg: "bg-rose-50", icon: "text-rose-600" },
   },
   {
     name: "Private Placement Memorandum",
     description: "Detailed offering documentation",
     type: "PDF",
     size: "4.8 MB",
+    color: { bg: "bg-amber-50", icon: "text-amber-600" },
   },
   {
     name: "Financial Projections",
     description: "Projected financial performance (not guaranteed)",
     type: "PDF",
     size: "890 KB",
+    color: { bg: "bg-emerald-50", icon: "text-emerald-600" },
   },
   {
     name: "Legal Structure Overview",
     description: "SPV and tokenization structure details",
     type: "PDF",
     size: "520 KB",
+    color: { bg: "bg-indigo-50", icon: "text-indigo-600" },
   },
 ];
 
@@ -50,8 +56,13 @@ export const DealDocuments = () => {
   const isAuthenticated = !!user;
 
   return (
-    <section className="py-32 bg-white">
-      <div className="container mx-auto px-6 lg:px-12">
+    <section className="py-32 bg-neutral-50 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-t from-blue-50/30 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 relative">
         {/* Header */}
         <div className="max-w-3xl mb-16">
           <motion.div
@@ -73,7 +84,7 @@ export const DealDocuments = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-light text-neutral-900 leading-[1.1]"
           >
-            Investor <span className="italic">Documents</span>
+            Investor <span className="italic text-amber-700">Documents</span>
           </motion.h2>
         </div>
 
@@ -85,30 +96,36 @@ export const DealDocuments = () => {
             viewport={{ once: true }}
             className="max-w-2xl mb-16"
           >
-            <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-10 text-center">
-              <div className="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-6">
-                <Lock className="w-7 h-7 text-neutral-400" />
-              </div>
-              <h3 className="text-2xl font-light text-neutral-900 mb-3">
-                Sign in to access documents
-              </h3>
-              <p className="text-neutral-500 mb-8 max-w-md mx-auto">
-                For regulatory compliance, you must be signed in and verified to access full deal documentation.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button
-                  onClick={() => navigate("/auth")}
-                  className="bg-neutral-900 text-white hover:bg-neutral-800 rounded-full px-8 h-12"
-                >
-                  Sign In
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate("/auth")}
-                  className="border-neutral-300 text-neutral-700 hover:bg-neutral-100 rounded-full px-8 h-12"
-                >
-                  Create Account
-                </Button>
+            <div className="bg-white border border-neutral-200 rounded-2xl p-10 text-center relative overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-50 rounded-full blur-2xl" />
+              
+              <div className="relative">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-50 border border-neutral-200 flex items-center justify-center mx-auto mb-6">
+                  <Lock className="w-8 h-8 text-neutral-400" />
+                </div>
+                <h3 className="text-2xl font-light text-neutral-900 mb-3">
+                  Sign in to access documents
+                </h3>
+                <p className="text-neutral-500 mb-8 max-w-md mx-auto">
+                  For regulatory compliance, you must be signed in and verified to access full deal documentation.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button
+                    onClick={() => navigate("/auth")}
+                    className="bg-neutral-900 text-white hover:bg-neutral-800 rounded-full px-8 h-12 shadow-lg shadow-neutral-900/20"
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/auth")}
+                    className="border-neutral-300 text-neutral-700 hover:bg-neutral-100 rounded-full px-8 h-12"
+                  >
+                    Create Account
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -123,13 +140,13 @@ export const DealDocuments = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
-              className={`bg-neutral-50 border border-neutral-200 rounded-xl p-6 transition-all ${
-                isAuthenticated ? 'hover:border-neutral-300 hover:bg-white cursor-pointer' : 'opacity-60'
+              className={`bg-white border border-neutral-100 rounded-xl p-6 transition-all ${
+                isAuthenticated ? 'hover:shadow-lg hover:-translate-y-1 cursor-pointer' : 'opacity-60'
               }`}
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-white border border-neutral-200 flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-5 h-5 text-neutral-500" />
+                <div className={`w-12 h-12 rounded-xl ${doc.color.bg} flex items-center justify-center flex-shrink-0`}>
+                  <FileText className={`w-5 h-5 ${doc.color.icon}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
@@ -142,17 +159,16 @@ export const DealDocuments = () => {
                   </div>
                   <p className="text-sm text-neutral-500 mb-2">{doc.description}</p>
                   <div className="flex items-center gap-3 text-xs text-neutral-400">
-                    <span>{doc.type}</span>
-                    <span>•</span>
+                    <span className="px-2 py-0.5 bg-neutral-100 rounded">{doc.type}</span>
                     <span>{doc.size}</span>
                   </div>
                 </div>
                 {isAuthenticated && (
                   <div className="flex gap-2">
-                    <button className="w-10 h-10 rounded-lg bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-50 transition-colors">
+                    <button className="w-10 h-10 rounded-lg bg-neutral-50 border border-neutral-100 flex items-center justify-center hover:bg-neutral-100 transition-colors">
                       <Eye className="w-4 h-4 text-neutral-500" />
                     </button>
-                    <button className="w-10 h-10 rounded-lg bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-50 transition-colors">
+                    <button className="w-10 h-10 rounded-lg bg-neutral-50 border border-neutral-100 flex items-center justify-center hover:bg-neutral-100 transition-colors">
                       <Download className="w-4 h-4 text-neutral-500" />
                     </button>
                   </div>
@@ -170,9 +186,9 @@ export const DealDocuments = () => {
           transition={{ delay: 0.3 }}
           className="max-w-4xl mt-12"
         >
-          <div className="flex items-start gap-3 text-sm text-neutral-400">
-            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-            <p className="leading-relaxed">
+          <div className="flex items-start gap-3 bg-white border border-neutral-100 rounded-xl p-4">
+            <Shield className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-neutral-500 leading-relaxed">
               Documents are provided for informational purposes as part of private placement under applicable exemptions. 
               Distribution is restricted to eligible investors in permitted jurisdictions.
             </p>
