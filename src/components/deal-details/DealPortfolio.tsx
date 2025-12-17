@@ -9,9 +9,6 @@ import propertyNimes from "@/assets/property-nimes-road.jpg";
 import propertyPalisades from "@/assets/property-palisades-site.jpg";
 import propertyMalibu from "@/assets/property-malibu.jpg";
 
-// Background
-import portfolioBg from "@/assets/rwa-commercial.jpg";
-
 interface DealPortfolioProps {
   deal: DealData;
 }
@@ -42,6 +39,42 @@ const getStatusInfo = (status?: string) => {
   }
 };
 
+// Unique graphics for each property card
+const PropertyGraphic = ({ index, isHovered }: { index: number; isHovered: boolean }) => {
+  const graphics = [
+    // Property 1 - House/Building
+    <svg viewBox="0 0 64 64" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
+      <path d="M32 8 L8 28 L8 56 L56 56 L56 28 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <rect x="24" y="36" width="16" height="20" stroke="currentColor" strokeWidth="1" fill="none" />
+      <rect x="14" y="32" width="8" height="8" stroke="currentColor" strokeWidth="1" fill="none" />
+      <rect x="42" y="32" width="8" height="8" stroke="currentColor" strokeWidth="1" fill="none" />
+    </svg>,
+    // Property 2 - Location/Map
+    <svg viewBox="0 0 64 64" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
+      <circle cx="32" cy="24" r="10" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <path d="M32 34 L32 56" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M22 56 L42 56" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="32" cy="24" r="4" fill="currentColor" />
+    </svg>,
+    // Property 3 - Blueprint/Plan
+    <svg viewBox="0 0 64 64" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
+      <rect x="8" y="12" width="48" height="40" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <path d="M8 32 L56 32 M32 12 L32 52" stroke="currentColor" strokeWidth="0.75" />
+      <rect x="12" y="16" width="16" height="12" stroke="currentColor" strokeWidth="1" fill="none" />
+      <rect x="36" y="36" width="16" height="12" stroke="currentColor" strokeWidth="1" fill="none" />
+    </svg>,
+    // Property 4 - Luxury Villa
+    <svg viewBox="0 0 64 64" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
+      <rect x="12" y="28" width="40" height="28" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <path d="M8 28 L32 12 L56 28" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <rect x="26" y="40" width="12" height="16" stroke="currentColor" strokeWidth="1" fill="none" />
+      <circle cx="32" cy="22" r="4" stroke="currentColor" strokeWidth="1" fill="none" />
+    </svg>,
+  ];
+  
+  return graphics[index % graphics.length];
+};
+
 export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -49,14 +82,10 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
 
   return (
     <section className="py-32 relative overflow-hidden min-h-screen">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <img 
-          src={portfolioBg} 
-          alt="" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/97 via-white/95 to-white/97" />
+      {/* Solid Grey Background with Studio Spotlights */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-white/70 via-slate-100/40 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 w-[500px] h-[500px] bg-gradient-radial from-slate-50/60 via-slate-200/30 to-transparent rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
@@ -69,8 +98,8 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
               viewport={{ once: true }}
               className="flex items-center gap-4 mb-6"
             >
-              <div className="w-12 h-px bg-neutral-400" />
-              <span className="text-xs tracking-[0.4em] uppercase text-neutral-500 font-medium">
+              <div className="w-12 h-px bg-slate-400" />
+              <span className="text-xs tracking-[0.4em] uppercase text-slate-500 font-medium">
                 Current Pipeline
               </span>
             </motion.div>
@@ -80,13 +109,13 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-light text-neutral-900 leading-[1.1]"
+              className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.1]"
             >
-              Portfolio <span className="italic text-neutral-600">Properties</span>
+              Portfolio <span className="italic text-slate-500 font-serif">Properties</span>
             </motion.h2>
           </div>
 
-          {/* Stats - Glassmorphism */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -94,22 +123,17 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
             transition={{ delay: 0.2 }}
           >
             <motion.div 
-              className="px-8 py-5 text-center cursor-pointer"
-              style={{
-                background: 'linear-gradient(135deg, rgba(20,35,60,0.95) 0%, rgba(30,50,80,0.9) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-              }}
+              className="px-8 py-5 text-center cursor-pointer bg-slate-800"
               whileHover={{ scale: 1.05, y: -4 }}
             >
-              <Building className="w-5 h-5 text-primary mx-auto mb-2" />
+              <Building className="w-5 h-5 text-slate-400 mx-auto mb-2" />
               <p className="text-2xl font-light text-white">{deal.currentProperties.length}</p>
-              <p className="text-xs text-white/50">Properties</p>
+              <p className="text-xs text-slate-500">Properties</p>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Portfolio Grid - Glassmorphism Cards */}
+        {/* Portfolio Grid */}
         <div className="grid md:grid-cols-2 gap-8">
           {deal.currentProperties.map((property, index) => {
             const statusInfo = getStatusInfo(property.status);
@@ -125,13 +149,7 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="cursor-pointer overflow-hidden"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.7)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(0, 0, 0, 0.06)',
-                }}
+                className="cursor-pointer overflow-hidden bg-white border border-slate-200/50"
               >
                 {/* Large Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
@@ -150,12 +168,11 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
                     animate={{ y: isHovered ? 0 : 0, opacity: 1 }}
                   >
                     <span 
-                      className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium transition-all duration-500"
-                      style={{
-                        background: isHovered ? 'hsl(172, 83%, 50%)' : 'rgba(255,255,255,0.9)',
-                        color: isHovered ? 'hsl(225, 65%, 8%)' : 'rgb(64, 64, 64)',
-                        backdropFilter: 'blur(10px)',
-                      }}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium transition-all duration-500 ${
+                        isHovered 
+                          ? 'bg-slate-800 text-white' 
+                          : 'bg-white/90 text-slate-700'
+                      }`}
                     >
                       <StatusIcon className="w-3.5 h-3.5" />
                       {statusInfo.label}
@@ -172,45 +189,43 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <button 
-                      className="w-14 h-14 flex items-center justify-center transition-colors"
-                      style={{ background: 'hsl(172, 83%, 50%)' }}
-                    >
-                      <Eye className="w-5 h-5 text-navy" />
+                    <button className="w-14 h-14 flex items-center justify-center bg-white hover:bg-slate-800 hover:text-white transition-colors group">
+                      <Eye className="w-5 h-5 text-slate-800 group-hover:text-white transition-colors" />
                     </button>
                   </motion.div>
                 </div>
 
                 {/* Content */}
                 <motion.div 
-                  className="p-8 relative"
-                  style={{
-                    background: isHovered 
-                      ? 'linear-gradient(135deg, rgba(20,35,60,0.95) 0%, rgba(30,50,80,0.9) 100%)'
-                      : 'transparent',
-                  }}
-                  transition={{ duration: 0.5 }}
+                  className={`p-8 relative transition-all duration-500 ${
+                    isHovered ? 'bg-slate-800' : 'bg-white'
+                  }`}
                 >
+                  {/* Decorative graphic */}
+                  <div className={`absolute top-6 right-6 w-16 h-16 transition-opacity duration-500 ${isHovered ? 'opacity-10' : 'opacity-[0.04]'}`}>
+                    <PropertyGraphic index={index} isHovered={isHovered} />
+                  </div>
+
                   {/* Address */}
                   <div className="flex items-start gap-3 mb-6">
                     <motion.div 
                       className={`w-10 h-10 border flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
-                        isHovered ? 'border-primary/40 bg-primary/10' : 'border-neutral-200/80 bg-white/50'
+                        isHovered ? 'border-slate-600 bg-slate-700' : 'border-slate-200 bg-slate-50'
                       }`}
-                      animate={{ rotate: isHovered ? 6 : 0 }}
+                      animate={{ rotate: isHovered ? 6 : 0, scale: isHovered ? 1.1 : 1 }}
                       transition={{ duration: 0.3 }}
                     >
                       <MapPin className={`w-4 h-4 transition-colors duration-500 ${
-                        isHovered ? 'text-primary' : 'text-neutral-400'
+                        isHovered ? 'text-white' : 'text-slate-500'
                       }`} />
                     </motion.div>
                     <div>
                       <h3 className={`text-xl font-medium transition-colors duration-500 ${
-                        isHovered ? 'text-white' : 'text-neutral-900'
+                        isHovered ? 'text-white' : 'text-slate-900'
                       }`}>{property.address}</h3>
                       {(property.size || property.specs) && (
                         <p className={`text-sm mt-1 transition-colors duration-500 ${
-                          isHovered ? 'text-white/50' : 'text-neutral-500'
+                          isHovered ? 'text-slate-400' : 'text-slate-500'
                         }`}>
                           {[property.size, property.specs].filter(Boolean).join(' • ')}
                         </p>
@@ -220,36 +235,36 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
 
                   {/* Financial Grid */}
                   <div className={`grid grid-cols-3 gap-4 pt-6 border-t transition-colors duration-500 ${
-                    isHovered ? 'border-white/10' : 'border-neutral-200/50'
+                    isHovered ? 'border-slate-700' : 'border-slate-200'
                   }`}>
                     {property.acquisitionPrice && (
                       <div>
                         <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
-                          isHovered ? 'text-white/40' : 'text-neutral-400'
+                          isHovered ? 'text-slate-500' : 'text-slate-400'
                         }`}>Acquisition</p>
                         <p className={`text-lg font-medium transition-colors duration-500 ${
-                          isHovered ? 'text-white' : 'text-neutral-900'
+                          isHovered ? 'text-white' : 'text-slate-900'
                         }`}>{property.acquisitionPrice}</p>
                       </div>
                     )}
                     {property.constructionCost && (
                       <div>
                         <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
-                          isHovered ? 'text-white/40' : 'text-neutral-400'
+                          isHovered ? 'text-slate-500' : 'text-slate-400'
                         }`}>Build Cost</p>
                         <p className={`text-lg font-medium transition-colors duration-500 ${
-                          isHovered ? 'text-white' : 'text-neutral-900'
+                          isHovered ? 'text-white' : 'text-slate-900'
                         }`}>{property.constructionCost}</p>
                       </div>
                     )}
                     {property.projectedExitPrice && (
                       <div>
                         <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
-                          isHovered ? 'text-primary' : 'text-neutral-500'
+                          isHovered ? 'text-slate-400' : 'text-slate-500'
                         }`}>Exit Target</p>
                         <motion.p 
-                          className={`text-lg font-medium transition-colors duration-500 ${
-                            isHovered ? 'text-primary' : 'text-neutral-800'
+                          className={`text-lg font-semibold transition-colors duration-500 ${
+                            isHovered ? 'text-white' : 'text-slate-800'
                           }`}
                           animate={{ scale: isHovered ? 1.05 : 1 }}
                           transition={{ duration: 0.3 }}
@@ -262,7 +277,7 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
 
                   {/* Bottom accent */}
                   <motion.div 
-                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-accent"
+                    className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-slate-600 via-slate-400 to-slate-600"
                     initial={{ width: 0 }}
                     animate={{ width: isHovered ? '100%' : 0 }}
                     transition={{ duration: 0.4 }}
