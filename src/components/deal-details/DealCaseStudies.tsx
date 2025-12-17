@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MapPin, Award, ChevronRight } from "lucide-react";
+import { MapPin, ChevronRight } from "lucide-react";
 import type { DealData } from "@/types/deal";
 import { useState } from "react";
 
@@ -30,8 +30,8 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
   };
 
   return (
-    <section className="py-32 relative overflow-hidden bg-navy">
-      <div className="container mx-auto px-6">
+    <section className="py-32 relative overflow-hidden bg-slate-900">
+      <div className="container mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -39,13 +39,16 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
           transition={{ duration: 0.6 }}
           className="mb-20"
         >
-          <span className="text-xs font-medium tracking-[0.3em] text-foreground/40 uppercase mb-4 block">
-            Success Stories
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-foreground mb-6">
-            Case Studies
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-px bg-slate-600" />
+            <span className="text-xs tracking-[0.4em] uppercase text-slate-500 font-medium">
+              Success Stories
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] mb-6">
+            Case <span className="italic text-slate-400 font-serif">Studies</span>
           </h2>
-          <p className="text-lg text-foreground/50 max-w-xl font-light">
+          <p className="text-lg text-slate-400 max-w-xl font-light">
             Detailed look at our most successful projects
           </p>
         </motion.div>
@@ -67,19 +70,19 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                   whileHover={{ x: 4 }}
                   className={`w-full text-left p-6 border transition-all duration-300 ${
                     activeCase === index
-                      ? "bg-foreground/5 border-foreground/20"
-                      : "border-foreground/10 hover:border-foreground/20"
+                      ? "bg-slate-800 border-slate-600"
+                      : "border-slate-700 hover:border-slate-600"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-foreground mb-2 truncate">
+                      <p className="text-sm font-medium text-white mb-2 truncate">
                         {caseStudy.address}
                       </p>
-                      <p className="text-xs text-foreground/50">{caseStudy.profit} profit</p>
+                      <p className="text-xs text-slate-400">{caseStudy.profit} profit</p>
                     </div>
                     <ChevronRight className={`w-4 h-4 transition-all duration-300 ${
-                      activeCase === index ? "text-foreground rotate-90" : "text-foreground/30"
+                      activeCase === index ? "text-white rotate-90" : "text-slate-600"
                     }`} />
                   </div>
                 </motion.button>
@@ -92,7 +95,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="lg:col-span-2 border border-foreground/10 overflow-hidden"
+              className="lg:col-span-2 border border-slate-700 overflow-hidden"
             >
               {/* Header Image */}
               <div className="aspect-[16/9] relative overflow-hidden">
@@ -101,14 +104,14 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                   alt={currentCase.address}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                   <div className="flex items-center gap-3">
-                    <MapPin className="w-4 h-4 text-foreground/60" />
-                    <span className="text-sm font-medium text-foreground">{currentCase.address}</span>
+                    <MapPin className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm font-medium text-white">{currentCase.address}</span>
                   </div>
                   {currentCase.architect && (
-                    <span className="px-3 py-1.5 border border-foreground/20 text-xs text-foreground/60 bg-navy/50 backdrop-blur-sm">
+                    <span className="px-3 py-1.5 border border-slate-600 text-xs text-slate-300 bg-slate-900/50 backdrop-blur-sm">
                       {currentCase.architect}
                     </span>
                   )}
@@ -117,36 +120,36 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
 
               <div className="p-8">
                 {/* Financial Summary */}
-                <div className="grid grid-cols-4 gap-px bg-foreground/10 mb-8">
-                  <div className="bg-navy p-4 text-center">
-                    <p className="text-[10px] text-foreground/40 uppercase tracking-wider mb-1">Acquisition</p>
-                    <p className="text-sm font-medium text-foreground">{currentCase.acquisitionPrice}</p>
+                <div className="grid grid-cols-4 gap-px bg-slate-700/50 mb-8">
+                  <div className="bg-slate-900 p-4 text-center">
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Acquisition</p>
+                    <p className="text-sm font-medium text-white">{currentCase.acquisitionPrice}</p>
                   </div>
-                  <div className="bg-navy p-4 text-center">
-                    <p className="text-[10px] text-foreground/40 uppercase tracking-wider mb-1">Construction</p>
-                    <p className="text-sm font-medium text-foreground">{currentCase.constructionCost}</p>
+                  <div className="bg-slate-900 p-4 text-center">
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Construction</p>
+                    <p className="text-sm font-medium text-white">{currentCase.constructionCost}</p>
                   </div>
-                  <div className="bg-navy p-4 text-center">
-                    <p className="text-[10px] text-foreground/40 uppercase tracking-wider mb-1">Exit Price</p>
-                    <p className="text-sm font-medium text-foreground">{currentCase.exitPrice}</p>
+                  <div className="bg-slate-900 p-4 text-center">
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Exit Price</p>
+                    <p className="text-sm font-medium text-white">{currentCase.exitPrice}</p>
                   </div>
-                  <div className="bg-navy-surface p-4 text-center">
-                    <p className="text-[10px] text-foreground/50 uppercase tracking-wider mb-1">Profit</p>
-                    <p className="text-sm font-medium text-foreground">{currentCase.profit}</p>
+                  <div className="bg-slate-800 p-4 text-center">
+                    <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Profit</p>
+                    <p className="text-sm font-medium text-white">{currentCase.profit}</p>
                   </div>
                 </div>
 
                 {/* Property Details */}
                 <div className="mb-8">
                   <div className="flex flex-wrap gap-3 mb-6">
-                    <span className="px-4 py-2 border border-foreground/10 text-xs text-foreground/60">
+                    <span className="px-4 py-2 border border-slate-700 text-xs text-slate-300">
                       {currentCase.size}
                     </span>
-                    <span className="px-4 py-2 border border-foreground/10 text-xs text-foreground/60">
+                    <span className="px-4 py-2 border border-slate-700 text-xs text-slate-300">
                       {currentCase.specs}
                     </span>
                     {currentCase.yearBuilt && (
-                      <span className="px-4 py-2 border border-foreground/10 text-xs text-foreground/60">
+                      <span className="px-4 py-2 border border-slate-700 text-xs text-slate-300">
                         Built {currentCase.yearBuilt}
                       </span>
                     )}
@@ -154,17 +157,17 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-foreground/50 font-light leading-relaxed mb-8">
+                <p className="text-sm text-slate-400 font-light leading-relaxed mb-8">
                   {currentCase.description}
                 </p>
 
                 {/* Features */}
                 {currentCase.features && currentCase.features.length > 0 && (
                   <div>
-                    <p className="text-[10px] text-foreground/40 uppercase tracking-[0.2em] mb-4">Key Features</p>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mb-4">Key Features</p>
                     <div className="flex flex-wrap gap-2">
                       {currentCase.features.map((feature, idx) => (
-                        <span key={idx} className="px-3 py-1.5 bg-foreground/5 border border-foreground/10 text-xs text-foreground/60">
+                        <span key={idx} className="px-3 py-1.5 bg-slate-800 border border-slate-700 text-xs text-slate-300">
                           {feature}
                         </span>
                       ))}
