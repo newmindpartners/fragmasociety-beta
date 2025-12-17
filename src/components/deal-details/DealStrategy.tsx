@@ -91,7 +91,7 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
           </div>
 
           {/* Cards Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-6">
             {deal.strategies.map((strategy, index) => {
               const Icon = strategyIcons[index] || Lightbulb;
               return (
@@ -104,38 +104,32 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
                   className="relative group"
                 >
                   <motion.div
-                    whileHover={{ y: -6, scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                    className="relative h-full overflow-hidden rounded-2xl"
+                    whileHover={{ y: -8 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="relative h-full"
                   >
-                    {/* Card background with gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1f] via-[#16161a] to-[#0f0f12]" />
-                    
-                    {/* Subtle inner glow */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent" />
-                    
-                    {/* Border */}
-                    <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/20 transition-colors duration-300" />
-                    
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-white/[0.02] to-transparent" />
-                    
-                    {/* Content */}
-                    <div className="relative p-6 h-full flex flex-col">
-                      {/* Icon container */}
-                      <div className="w-12 h-12 rounded-xl bg-white/[0.08] border border-white/10 flex items-center justify-center mb-5 group-hover:bg-white/[0.12] transition-colors duration-300">
-                        <Icon className="w-5 h-5 text-white/70" strokeWidth={1.5} />
+                    {/* White card with left accent stripe */}
+                    <div className="relative bg-white rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-shadow duration-500">
+                      {/* Left accent stripe */}
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-white/80 via-gray-200 to-gray-300 group-hover:from-gray-800 group-hover:via-gray-600 group-hover:to-gray-400 transition-all duration-500" />
+                      
+                      {/* Content */}
+                      <div className="p-7 pl-8">
+                        {/* Icon */}
+                        <div className="w-11 h-11 rounded-lg bg-gray-100 flex items-center justify-center mb-6 group-hover:bg-gray-900 transition-colors duration-500">
+                          <Icon className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors duration-500" strokeWidth={1.5} />
+                        </div>
+                        
+                        {/* Title - Elegant serif */}
+                        <h3 className="text-xl font-serif font-medium text-gray-900 mb-4 tracking-tight leading-tight">
+                          {strategy.title}
+                        </h3>
+                        
+                        {/* Description */}
+                        <p className="text-sm text-gray-500 leading-relaxed">
+                          {strategy.description}
+                        </p>
                       </div>
-                      
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">
-                        {strategy.title}
-                      </h3>
-                      
-                      {/* Description */}
-                      <p className="text-sm text-white/50 leading-relaxed flex-grow">
-                        {strategy.description}
-                      </p>
                     </div>
                   </motion.div>
                 </motion.div>
