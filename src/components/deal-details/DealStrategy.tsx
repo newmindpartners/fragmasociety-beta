@@ -49,7 +49,7 @@ export const DealStrategy = ({ deal }: DealStrategyProps) => {
           alt="" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-slate-100/70" />
+        <div className="absolute inset-0 bg-slate-100/80" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
