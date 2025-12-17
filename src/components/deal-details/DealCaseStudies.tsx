@@ -138,9 +138,9 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               transition={{ duration: 0.5 }}
               className="max-w-6xl mx-auto"
             >
-              <div className="grid lg:grid-cols-5 gap-8">
+              <div className="grid lg:grid-cols-2 gap-8">
                 {/* Image Section */}
-                <div className="lg:col-span-3 relative">
+                <div className="relative">
                   <div className="aspect-[3/4] sm:aspect-[4/3] lg:aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl relative">
                     <img 
                       src={getCaseImage(currentCase.address, activeCase)} 
@@ -166,7 +166,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                 </div>
 
                 {/* Details Section */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="space-y-6">
                   {/* Financial Cards */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="bg-white rounded-2xl p-5 shadow-lg border border-slate-200 group hover:shadow-xl transition-shadow">
