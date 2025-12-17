@@ -82,8 +82,8 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
         </div>
       </div>
 
-      {/* Case Study Selector - Dark Contrast */}
-      <div className="bg-slate-950 py-6 border-y border-slate-800">
+      {/* Case Study Selector - Subtle Dark */}
+      <div className="bg-slate-900 py-6 border-y border-slate-800">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex flex-wrap gap-3">
             {deal.caseStudies.map((caseStudy, index) => (
@@ -94,26 +94,28 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                 whileTap={{ scale: 0.98 }}
                 className={`group relative px-6 py-4 rounded-xl transition-all duration-300 ${
                   activeCase === index
-                    ? "bg-white text-slate-900 shadow-2xl"
-                    : "bg-slate-900 border border-slate-800 text-white hover:border-slate-600"
+                    ? "bg-slate-800 border-2 border-slate-500 shadow-lg shadow-slate-900/50"
+                    : "bg-slate-800/50 border border-slate-700/50 hover:bg-slate-800 hover:border-slate-600"
                 }`}
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                    activeCase === index ? "bg-slate-900" : "bg-slate-800"
+                    activeCase === index ? "bg-slate-700" : "bg-slate-700/50"
                   }`}>
                     <Building2 className={`w-5 h-5 ${activeCase === index ? "text-white" : "text-slate-400"}`} />
                   </div>
                   <div className="text-left">
-                    <p className="text-sm font-medium truncate max-w-[180px]">
+                    <p className={`text-sm font-medium truncate max-w-[180px] ${
+                      activeCase === index ? "text-white" : "text-slate-300"
+                    }`}>
                       {caseStudy.address.split(',')[0]}
                     </p>
-                    <p className={`text-xs ${activeCase === index ? "text-slate-500" : "text-slate-500"}`}>
+                    <p className={`text-xs ${activeCase === index ? "text-slate-400" : "text-slate-500"}`}>
                       {caseStudy.profit} profit
                     </p>
                   </div>
                   {activeCase === index && (
-                    <CheckCircle2 className="w-5 h-5 text-slate-900 ml-2" />
+                    <div className="w-2 h-2 rounded-full bg-white ml-2" />
                   )}
                 </div>
               </motion.button>
