@@ -47,12 +47,12 @@ export const SignatureDealsBanner = () => {
 
   return (
     <section 
-      className="relative h-[280px] md:h-[340px] overflow-hidden"
+      className="relative h-[320px] md:h-[380px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ background: '#f8f7f5' }}
+      style={{ background: '#1a1a1a' }}
     >
-      {/* Background - Industry image with elegant transparency */}
+      {/* Background - Industry image */}
       <div className="absolute inset-0 overflow-hidden">
         <AnimatePresence mode="sync">
           <motion.div
@@ -60,46 +60,62 @@ export const SignatureDealsBanner = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute inset-0"
           >
             <motion.img
               src={current.industryImage}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
-              initial={{ scale: 1.05 }}
+              initial={{ scale: 1.1 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 10, ease: "linear" }}
+              transition={{ duration: 12, ease: "linear" }}
               style={{ 
-                opacity: 0.15,
-                filter: 'grayscale(40%)'
-              }}
-            />
-            {/* Gradient overlay for elegance */}
-            <div 
-              className="absolute inset-0"
-              style={{
-                background: 'linear-gradient(90deg, rgba(248,247,245,0.92) 0%, rgba(248,247,245,0.6) 30%, rgba(248,247,245,0.4) 50%, rgba(248,247,245,0.6) 70%, rgba(248,247,245,0.92) 100%)'
+                opacity: 0.35,
+                filter: 'grayscale(60%) brightness(0.7)'
               }}
             />
           </motion.div>
         </AnimatePresence>
+        
+        {/* Studio Harcourt spotlight effect - dramatic vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 60% 80% at 50% 100%, transparent 0%, rgba(15,15,15,0.3) 50%, rgba(15,15,15,0.85) 100%),
+              radial-gradient(ellipse 80% 50% at 50% 50%, transparent 0%, rgba(15,15,15,0.6) 100%)
+            `
+          }}
+        />
+        
+        {/* Top spotlight glow */}
+        <div 
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px]"
+          style={{
+            background: 'radial-gradient(ellipse at center top, rgba(255,250,240,0.08) 0%, transparent 70%)'
+          }}
+        />
       </div>
 
       {/* Content container - 3 columns */}
       <div className="container relative z-10 h-full">
-        <div className="grid grid-cols-3 items-center h-full">
+        <div className="grid grid-cols-3 items-center h-full gap-4">
           
           {/* LEFT - INVEST WITH */}
-          <div className="flex flex-col justify-center items-start">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="flex flex-col justify-center items-start pl-4">
+            <div className="flex items-center gap-4 mb-4">
               <motion.div 
-                className="h-px bg-stone-400"
+                className="h-px"
+                style={{ background: 'rgba(255,255,255,0.3)' }}
                 initial={{ width: 0 }}
-                animate={{ width: 24 }}
+                animate={{ width: 28 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               />
-              <span className="text-stone-500 text-[10px] tracking-[0.2em] uppercase font-medium">
+              <span 
+                className="text-[10px] tracking-[0.25em] uppercase font-light"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+              >
                 Signature Deals
               </span>
             </div>
@@ -108,13 +124,18 @@ export const SignatureDealsBanner = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-2xl md:text-4xl font-serif text-stone-800 tracking-tight"
+              className="text-3xl md:text-5xl font-serif tracking-tight"
+              style={{ 
+                color: 'rgba(255,255,255,0.9)',
+                fontStyle: 'italic',
+                fontWeight: 300
+              }}
             >
               Invest with
             </motion.h3>
 
             {/* Progress dots */}
-            <div className="flex items-center gap-2.5 mt-6">
+            <div className="flex items-center gap-3 mt-8">
               {leaders.map((_, idx) => (
                 <button
                   key={idx}
@@ -123,31 +144,23 @@ export const SignatureDealsBanner = () => {
                   aria-label={`View ${leaders[idx].name}`}
                 >
                   <motion.div
-                    className="w-1.5 h-1.5 rounded-full transition-colors"
-                    animate={{
-                      backgroundColor: idx === currentIndex ? '#3b82f6' : '#d1d5db'
+                    className="w-2 h-2 rounded-full transition-all duration-300"
+                    style={{
+                      backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
+                      boxShadow: idx === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
                     }}
                   />
-                  {idx === currentIndex && (
-                    <motion.div
-                      className="absolute -inset-1 rounded-full border border-blue-400"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
                   {idx === currentIndex && !isHovered && (
-                    <svg className="absolute -inset-1.5 w-4 h-4 -rotate-90">
+                    <svg className="absolute -inset-1.5 w-5 h-5 -rotate-90">
                       <motion.circle
-                        cx="8"
-                        cy="8"
-                        r="6"
+                        cx="10"
+                        cy="10"
+                        r="8"
                         fill="none"
-                        stroke="#3b82f6"
+                        stroke="rgba(255,255,255,0.4)"
                         strokeWidth="1"
-                        strokeDasharray="37.7"
-                        initial={{ strokeDashoffset: 37.7 }}
+                        strokeDasharray="50.27"
+                        initial={{ strokeDashoffset: 50.27 }}
                         animate={{ strokeDashoffset: 0 }}
                         transition={{ duration: 5, ease: "linear" }}
                       />
@@ -158,47 +171,64 @@ export const SignatureDealsBanner = () => {
             </div>
           </div>
 
-          {/* MIDDLE - Leader portrait */}
-          <div className="relative h-full flex items-end justify-center overflow-visible">
+          {/* MIDDLE - Leader portrait with spotlight */}
+          <div className="relative h-full flex items-end justify-center">
+            {/* Spotlight on leader */}
+            <div 
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[400px]"
+              style={{
+                background: 'radial-gradient(ellipse 100% 100% at 50% 100%, rgba(255,250,240,0.06) 0%, transparent 60%)'
+              }}
+            />
+            
             <AnimatePresence mode="wait">
               <motion.div
                 key={`portrait-${currentIndex}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ 
-                  duration: 0.7,
+                  duration: 0.8,
                   ease: [0.22, 1, 0.36, 1]
                 }}
-                className="absolute bottom-0 h-[120%] flex items-end"
+                className="relative h-[85%] flex items-end"
               >
                 <img
                   src={current.image}
                   alt={current.name}
-                  className="h-full w-auto object-contain object-bottom"
+                  className="h-full w-auto object-contain object-bottom max-w-[280px] md:max-w-[320px]"
                   style={{ 
-                    filter: 'grayscale(100%) contrast(1.1)',
-                    mixBlendMode: 'multiply'
+                    filter: 'grayscale(100%) contrast(1.15) brightness(1.1)',
+                    mixBlendMode: 'luminosity'
                   }}
+                />
+                {/* Subtle glow under portrait */}
+                <div 
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-2xl"
+                  style={{ background: 'rgba(255,255,255,0.1)' }}
                 />
               </motion.div>
             </AnimatePresence>
           </div>
 
           {/* RIGHT - Name and position */}
-          <div className="flex flex-col justify-center items-end text-right">
-            <div className="relative overflow-hidden mb-1">
+          <div className="flex flex-col justify-center items-end text-right pr-4">
+            <div className="relative overflow-hidden mb-2">
               <AnimatePresence mode="wait">
                 <motion.h2
                   key={`name-${currentIndex}`}
-                  initial={{ y: 50, opacity: 0 }}
+                  initial={{ y: 60, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -50, opacity: 0 }}
+                  exit={{ y: -60, opacity: 0 }}
                   transition={{ 
-                    duration: 0.6, 
+                    duration: 0.7, 
                     ease: [0.22, 1, 0.36, 1]
                   }}
-                  className="text-2xl md:text-[38px] font-serif text-stone-800 tracking-tight leading-none"
+                  className="text-2xl md:text-[42px] font-serif tracking-tight leading-none"
+                  style={{ 
+                    color: 'rgba(255,255,255,0.95)',
+                    fontWeight: 400
+                  }}
                 >
                   {current.name}
                 </motion.h2>
@@ -209,15 +239,20 @@ export const SignatureDealsBanner = () => {
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`title-${currentIndex}`}
-                  initial={{ y: 30, opacity: 0 }}
+                  initial={{ y: 40, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -30, opacity: 0 }}
+                  exit={{ y: -40, opacity: 0 }}
                   transition={{ 
-                    duration: 0.6, 
-                    delay: 0.08,
+                    duration: 0.7, 
+                    delay: 0.1,
                     ease: [0.22, 1, 0.36, 1]
                   }}
-                  className="text-sm md:text-base font-serif italic text-stone-500"
+                  className="text-sm md:text-base font-serif"
+                  style={{ 
+                    color: 'rgba(255,255,255,0.5)',
+                    fontStyle: 'italic',
+                    fontWeight: 300
+                  }}
                 >
                   {current.title}
                 </motion.p>
@@ -227,8 +262,13 @@ export const SignatureDealsBanner = () => {
         </div>
       </div>
 
-      {/* Decorative bottom line */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stone-200 to-transparent" />
+      {/* Decorative bottom line - subtle golden accent */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-px"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255,250,240,0.15) 50%, transparent 100%)'
+        }}
+      />
     </section>
   );
 };
