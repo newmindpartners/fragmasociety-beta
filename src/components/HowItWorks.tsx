@@ -149,7 +149,7 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
           animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
           transition={{ delay: 0.4 }}
         >
-          €5,000
+          €1,500
         </motion.text>
       </svg>
     ),
@@ -225,76 +225,83 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
     ),
     4: (
       <svg viewBox="0 0 200 160" className="w-full h-full">
-        {/* Exit/Trade illustration */}
-        <defs>
-          <linearGradient id="tradeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6366f1" />
-            <stop offset="100%" stopColor="#8b5cf6" />
-          </linearGradient>
-        </defs>
+        {/* Exit/Trade illustration - RWA Assets */}
         
-        {/* Two user avatars */}
+        {/* Left asset card - Real Estate */}
         <motion.g
-          initial={{ opacity: 0, x: -30 }}
-          animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0 }}
+          initial={{ opacity: 0, x: -20, rotate: -8 }}
+          animate={isActive ? { opacity: 1, x: 0, rotate: -8 } : { opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <circle cx="50" cy="70" r="25" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="2" />
-          <circle cx="50" cy="62" r="10" fill="#94a3b8" />
-          <path d="M30 95 Q30 80 50 80 Q70 80 70 95" fill="#94a3b8" />
+          <rect x="15" y="45" width="55" height="70" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
+          {/* Building icon */}
+          <rect x="30" y="60" width="25" height="30" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
+          <rect x="34" y="65" width="6" height="6" fill="#94a3b8" />
+          <rect x="44" y="65" width="6" height="6" fill="#94a3b8" />
+          <rect x="34" y="75" width="6" height="6" fill="#94a3b8" />
+          <rect x="44" y="75" width="6" height="6" fill="#94a3b8" />
+          <rect x="39" y="82" width="7" height="8" fill="#6366f1" />
+          <text x="42" y="105" textAnchor="middle" fill="#64748b" className="text-[8px]">Real Estate</text>
         </motion.g>
         
-        <motion.g
-          initial={{ opacity: 0, x: 30 }}
-          animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <circle cx="150" cy="70" r="25" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="2" />
-          <circle cx="150" cy="62" r="10" fill="#6366f1" />
-          <path d="M130 95 Q130 80 150 80 Q170 80 170 95" fill="#6366f1" />
-        </motion.g>
-        
-        {/* Exchange arrows */}
+        {/* Center exchange arrows */}
         <motion.g>
           <motion.path
-            d="M80 55 L120 55"
-            stroke="url(#tradeGrad)" strokeWidth="3" strokeLinecap="round"
+            d="M78 65 L122 65"
+            stroke="#6366f1" strokeWidth="2" strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
             transition={{ duration: 0.4, delay: 0.5 }}
           />
           <motion.path
-            d="M112 48 L120 55 L112 62"
-            stroke="#8b5cf6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"
+            d="M115 60 L122 65 L115 70"
+            stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
             initial={{ opacity: 0 }}
             animate={isActive ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.7 }}
           />
           
           <motion.path
-            d="M120 85 L80 85"
-            stroke="url(#tradeGrad)" strokeWidth="3" strokeLinecap="round"
+            d="M122 85 L78 85"
+            stroke="#6366f1" strokeWidth="2" strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
             transition={{ duration: 0.4, delay: 0.6 }}
           />
           <motion.path
-            d="M88 78 L80 85 L88 92"
-            stroke="#6366f1" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"
+            d="M85 80 L78 85 L85 90"
+            stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
             initial={{ opacity: 0 }}
             animate={isActive ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.8 }}
           />
         </motion.g>
         
-        {/* Token badge */}
+        {/* Right asset card - Film/Entertainment */}
+        <motion.g
+          initial={{ opacity: 0, x: 20, rotate: 8 }}
+          animate={isActive ? { opacity: 1, x: 0, rotate: 8 } : { opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <rect x="130" y="45" width="55" height="70" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
+          {/* Film reel icon */}
+          <circle cx="157" cy="75" r="18" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="157" cy="75" r="5" fill="#6366f1" />
+          <circle cx="157" cy="61" r="3" fill="#94a3b8" />
+          <circle cx="157" cy="89" r="3" fill="#94a3b8" />
+          <circle cx="143" cy="75" r="3" fill="#94a3b8" />
+          <circle cx="171" cy="75" r="3" fill="#94a3b8" />
+          <text x="157" y="105" textAnchor="middle" fill="#64748b" className="text-[8px]">Film</text>
+        </motion.g>
+        
+        {/* Secondary market badge */}
         <motion.g
           initial={{ scale: 0, opacity: 0 }}
           animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
           transition={{ type: "spring", delay: 0.9 }}
         >
-          <circle cx="100" cy="70" r="18" fill="white" stroke="#6366f1" strokeWidth="2" />
-          <text x="100" y="75" textAnchor="middle" fill="#6366f1" className="text-xs font-bold">TKN</text>
+          <rect x="70" y="120" width="60" height="22" rx="11" fill="#1e293b" />
+          <text x="100" y="135" textAnchor="middle" fill="white" className="text-[9px] font-medium">Trade 24/7</text>
         </motion.g>
       </svg>
     ),
@@ -330,7 +337,7 @@ export const HowItWorks = () => {
   const currentStep = steps[activeStep];
 
   return (
-    <section ref={sectionRef} className="relative py-32 lg:py-44 overflow-hidden">
+    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
       {/* Luxury Magazine Background */}
       <div className="absolute inset-0 bg-[#fafafa]" />
       
