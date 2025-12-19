@@ -102,7 +102,7 @@ export const SignatureDealsBanner = () => {
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{ 
-                opacity: 0.55,
+                opacity: 0.40,
                 filter: 'grayscale(30%) brightness(0.85)'
               }}
             />
