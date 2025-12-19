@@ -39,126 +39,94 @@ export const SignatureDealsBanner = () => {
   }, []);
 
   return (
-    <section className="relative bg-foreground overflow-hidden">
-      {/* Clean white background with subtle grain */}
-      <div className="absolute inset-0 opacity-[0.02]" 
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` 
-        }} 
-      />
+    <section className="relative h-[200px] md:h-[220px] bg-foreground overflow-hidden">
+      {/* Background industry image with gradient overlay */}
+      <div className="absolute inset-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`bg-${currentIndex}`}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="absolute inset-0"
+          >
+            <img
+              src={leaders[currentIndex].industryImage}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            {/* Multi-layer gradient for depth */}
+            <div className="absolute inset-0 bg-gradient-to-r from-foreground via-foreground/95 to-foreground/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-transparent to-foreground/40" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
       
-      <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 items-end min-h-[300px] md:min-h-[350px] gap-0 lg:gap-8">
-          {/* Left side - Leader Image */}
-          <div className="relative flex justify-center lg:justify-start order-2 lg:order-1 self-end">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, x: -40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 40 }}
-                transition={{ 
-                  duration: 0.7, 
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                className="relative"
-              >
-                <motion.img
-                  src={leaders[currentIndex].image}
-                  alt={leaders[currentIndex].name}
-                  className="h-[220px] md:h-[280px] lg:h-[320px] w-auto object-contain object-bottom grayscale"
-                  initial={{ scale: 1.02 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Right side - Text content and Industry Image */}
-          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-1 lg:order-2 py-8 lg:py-0 lg:pb-12">
+      <div className="container relative z-10 h-full">
+        <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_280px] items-end h-full gap-4 lg:gap-12">
+          {/* Left side - Text content */}
+          <div className="flex flex-col justify-center py-6 lg:py-8">
             {/* Signature Deals label */}
             <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-background/50 text-xs md:text-sm tracking-[0.3em] uppercase mb-4 font-sans"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-background/40 text-[10px] md:text-xs tracking-[0.4em] uppercase mb-3 font-sans"
             >
               Signature Deals
             </motion.span>
 
-            {/* "Invest with :" static text */}
-            <span className="text-background/60 text-xl md:text-2xl lg:text-3xl font-serif mb-2">
-              Invest with :
-            </span>
+            {/* "Invest with" and dynamic content */}
+            <div className="flex flex-col gap-0">
+              <span className="text-background/50 text-sm md:text-base font-serif italic">
+                Invest with
+              </span>
 
-            {/* Dynamic name */}
-            <div className="relative h-[50px] md:h-[70px] lg:h-[80px] w-full overflow-hidden mb-2">
-              <AnimatePresence mode="wait">
-                <motion.h2
-                  key={`name-${currentIndex}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -30 }}
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: [0.25, 0.46, 0.45, 0.94]
-                  }}
-                  className="absolute inset-0 flex items-center justify-center lg:justify-start text-2xl md:text-4xl lg:text-5xl font-serif text-background tracking-tight"
-                >
-                  {leaders[currentIndex].name}
-                </motion.h2>
-              </AnimatePresence>
-            </div>
+              {/* Dynamic name */}
+              <div className="relative h-[32px] md:h-[42px] overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.h2
+                    key={`name-${currentIndex}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="text-xl md:text-3xl font-serif text-background tracking-tight"
+                  >
+                    {leaders[currentIndex].name}
+                  </motion.h2>
+                </AnimatePresence>
+              </div>
 
-            {/* Dynamic title */}
-            <div className="relative h-[28px] md:h-[36px] w-full overflow-hidden mb-6">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={`title-${currentIndex}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ 
-                    duration: 0.5, 
-                    delay: 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94]
-                  }}
-                  className="absolute inset-0 flex items-center justify-center lg:justify-start text-base md:text-xl lg:text-2xl font-serif text-background/70 tracking-wide"
-                >
-                  {leaders[currentIndex].title}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-
-            {/* Industry Image */}
-            <div className="relative w-full max-w-[300px] h-[120px] md:h-[150px] overflow-hidden rounded-lg mb-6">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={`industry-${currentIndex}`}
-                  src={leaders[currentIndex].industryImage}
-                  alt={`${leaders[currentIndex].title} industry`}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="w-full h-full object-cover"
-                />
-              </AnimatePresence>
+              {/* Dynamic title */}
+              <div className="relative h-[20px] md:h-[24px] overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={`title-${currentIndex}`}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.5, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="text-xs md:text-sm font-serif text-background/60 tracking-wide"
+                  >
+                    {leaders[currentIndex].title}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Progress indicators */}
-            <div className="flex gap-3">
+            <div className="flex gap-2 mt-4">
               {leaders.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentIndex(idx)}
-                  className="relative h-1 rounded-full overflow-hidden bg-background/20 transition-all duration-300"
-                  style={{ width: idx === currentIndex ? '40px' : '12px' }}
+                  className="relative h-[2px] rounded-full overflow-hidden bg-background/15 transition-all duration-500"
+                  style={{ width: idx === currentIndex ? '32px' : '8px' }}
                 >
                   {idx === currentIndex && (
                     <motion.div
-                      className="absolute inset-0 bg-background/60 origin-left"
+                      className="absolute inset-0 bg-background/50 origin-left"
                       initial={{ scaleX: 0 }}
                       animate={{ scaleX: 1 }}
                       transition={{ duration: 4, ease: "linear" }}
@@ -168,11 +136,33 @@ export const SignatureDealsBanner = () => {
               ))}
             </div>
           </div>
+
+          {/* Right side - Leader Image */}
+          <div className="relative self-end">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <motion.img
+                  src={leaders[currentIndex].image}
+                  alt={leaders[currentIndex].name}
+                  className="h-[160px] md:h-[200px] w-auto object-contain object-bottom drop-shadow-2xl"
+                  style={{ filter: 'grayscale(100%) contrast(1.1)' }}
+                  initial={{ scale: 1.03 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                />
+                {/* Subtle gradient fade at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-foreground/50 to-transparent" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-
-      {/* Bottom border */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-background/10" />
     </section>
   );
 };
