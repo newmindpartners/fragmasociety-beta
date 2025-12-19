@@ -5,7 +5,7 @@ import philippeImage from "@/assets/philippe-banner.png";
 import timImage from "@/assets/tim-banner.png";
 import bryanIndustry from "@/assets/bryan-horse-jumping.png";
 import realEstateIndustry from "@/assets/malibu-sea-view.jpg";
-import filmIndustry from "@/assets/category-film.jpg";
+import timIndustry from "@/assets/tim-film-posters.png";
 
 const leaders = [
   {
@@ -26,7 +26,7 @@ const leaders = [
     name: "Tim Levy",
     title: "Hollywood Blockbuster Film Financier",
     image: timImage,
-    industryImage: filmIndustry,
+    industryImage: timIndustry,
     accentColor: "#9a8b7d",
   },
 ];
