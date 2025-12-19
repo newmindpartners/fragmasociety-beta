@@ -155,7 +155,7 @@ export const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-[10px] text-white/40 max-w-lg"
+              className="text-sm text-white/50 max-w-lg"
             >
               Limited spots available. Register now to secure your place in our exclusive early access program.
             </motion.p>
