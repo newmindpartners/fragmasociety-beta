@@ -1,177 +1,226 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Badge } from "@/components/Badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Search, CreditCard, TrendingUp, ArrowLeftRight } from "lucide-react";
+import { ArrowRight, Search, CreditCard, TrendingUp, ArrowLeftRight, ChevronRight } from "lucide-react";
 
 const steps = [
   {
     step: 1,
     title: "Browse",
-    desc: "Explore curated deals",
+    subtitle: "Explore curated deals",
     icon: Search,
     content: "Scroll curated deals across real estate, entertainment, private credit and more. Each deal comes with clear terms and risk factors.",
-    bullets: ["Filter by asset class, yield, or duration", "View detailed risk & return profiles"]
+    bullets: ["Filter by asset class, yield, or duration", "View detailed risk & return profiles"],
+    accent: "from-slate-600 to-slate-800",
   },
   {
     step: 2,
     title: "Invest",
-    desc: "Choose your slice & pay securely",
+    subtitle: "Choose your slice & pay securely",
     icon: CreditCard,
     content: "Choose your slice, pay via bank/card or wallet, and sign once. Your ownership is recorded as tokens linked to the real asset.",
-    bullets: ["Flexible amounts from €50", "Secure payment & instant confirmation"]
+    bullets: ["Flexible amounts from €50", "Secure payment & instant confirmation"],
+    accent: "from-indigo-600 to-violet-700",
   },
   {
     step: 3,
     title: "Earn",
-    desc: "Receive automated distributions",
+    subtitle: "Receive automated distributions",
     icon: TrendingUp,
     content: "When the asset pays out, your share is automatically distributed to your account or wallet and tracked in your dashboard.",
-    bullets: ["Real-time yield tracking", "Reinvest or withdraw anytime"]
+    bullets: ["Real-time yield tracking", "Reinvest or withdraw anytime"],
+    accent: "from-violet-600 to-purple-700",
   },
   {
     step: 4,
     title: "Exit",
-    desc: "Trade on secondary market",
+    subtitle: "Trade on secondary market",
     icon: ArrowLeftRight,
     content: "Sell your position anytime on our secondary marketplace. Find buyers, set your price, and exit on your own terms.",
-    bullets: ["24/7 secondary market access", "Transparent pricing & instant settlement"]
+    bullets: ["24/7 secondary market access", "Transparent pricing & instant settlement"],
+    accent: "from-slate-700 to-indigo-800",
   }
 ];
 
-const StepNode = ({ 
-  step, 
-  isActive, 
-  isPast, 
-  onClick 
-}: { 
-  step: typeof steps[0]; 
-  isActive: boolean; 
-  isPast: boolean;
-  onClick: () => void;
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      className="group flex flex-col items-center gap-3 focus:outline-none"
-    >
-      <motion.div
-        className="relative"
-        whileHover={{ scale: 1.08 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
-        {/* Ripple effect on hover */}
-        <motion.div
-          className="absolute inset-0 rounded-full border border-white/30"
-          initial={{ scale: 1, opacity: 0 }}
-          whileHover={{ scale: 1.5, opacity: [0, 0.5, 0] }}
-          transition={{ duration: 0.6 }}
+// Step graphic illustrations
+const StepGraphic = ({ index, isActive }: { index: number; isActive: boolean }) => {
+  const graphics = [
+    // Browse - magnifying glass with grid
+    <svg viewBox="0 0 64 64" className="w-full h-full">
+      <motion.rect 
+        x="8" y="8" width="18" height="18" rx="2" 
+        className={`transition-all duration-500 ${isActive ? 'fill-white/20 stroke-white' : 'fill-slate-100 stroke-slate-300'}`}
+        strokeWidth="1.5"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1 }}
+      />
+      <motion.rect 
+        x="30" y="8" width="18" height="18" rx="2"
+        className={`transition-all duration-500 ${isActive ? 'fill-white/10 stroke-white/70' : 'fill-slate-50 stroke-slate-200'}`}
+        strokeWidth="1.5"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2 }}
+      />
+      <motion.rect 
+        x="8" y="30" width="18" height="18" rx="2"
+        className={`transition-all duration-500 ${isActive ? 'fill-white/10 stroke-white/70' : 'fill-slate-50 stroke-slate-200'}`}
+        strokeWidth="1.5"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.3 }}
+      />
+      <motion.circle 
+        cx="44" cy="44" r="12"
+        className={`transition-all duration-500 ${isActive ? 'fill-none stroke-white' : 'fill-none stroke-slate-400'}`}
+        strokeWidth="2"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      />
+      <motion.line 
+        x1="52" y1="52" x2="60" y2="60"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white' : 'stroke-slate-400'}`}
+        strokeWidth="2.5" strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.3, delay: 0.5 }}
+      />
+    </svg>,
+    // Invest - credit card with checkmark
+    <svg viewBox="0 0 64 64" className="w-full h-full">
+      <motion.rect 
+        x="6" y="14" width="42" height="28" rx="4"
+        className={`transition-all duration-500 ${isActive ? 'fill-white/15 stroke-white' : 'fill-slate-100 stroke-slate-300'}`}
+        strokeWidth="1.5"
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      />
+      <motion.line 
+        x1="6" y1="24" x2="48" y2="24"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white/60' : 'stroke-slate-300'}`}
+        strokeWidth="3"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      />
+      <motion.rect 
+        x="12" y="32" width="14" height="4" rx="1"
+        className={`transition-all duration-500 ${isActive ? 'fill-white/40' : 'fill-slate-300'}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      />
+      <motion.circle 
+        cx="50" cy="42" r="12"
+        className={`transition-all duration-500 ${isActive ? 'fill-violet-500/40 stroke-white' : 'fill-indigo-100 stroke-indigo-400'}`}
+        strokeWidth="2"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", delay: 0.3 }}
+      />
+      <motion.path 
+        d="M44 42 L48 46 L56 38"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white' : 'stroke-indigo-500'}`}
+        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.4, delay: 0.5 }}
+      />
+    </svg>,
+    // Earn - chart going up
+    <svg viewBox="0 0 64 64" className="w-full h-full">
+      <motion.path 
+        d="M8 52 L8 12 M8 52 L56 52"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white/50' : 'stroke-slate-300'}`}
+        strokeWidth="1.5" strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.4 }}
+      />
+      <motion.path 
+        d="M12 44 L22 34 L32 38 L44 22 L56 14"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white' : 'stroke-violet-500'}`}
+        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      />
+      <motion.circle 
+        cx="56" cy="14" r="5"
+        className={`transition-all duration-500 ${isActive ? 'fill-white stroke-white' : 'fill-violet-500 stroke-violet-500'}`}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", delay: 0.8 }}
+      />
+      {[12, 22, 32, 44].map((x, i) => (
+        <motion.circle 
+          key={x}
+          cx={x} cy={[44, 34, 38, 22][i]} r="3"
+          className={`transition-all duration-500 ${isActive ? 'fill-white/60' : 'fill-violet-400'}`}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.3 + i * 0.1 }}
         />
-        
-        {/* Rotating ring for active state */}
-        {isActive && (
-          <motion.div
-            className="absolute inset-[-4px] rounded-full border-2 border-transparent border-t-white/60"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-          />
-        )}
-        
-        {/* Main circle */}
-        <motion.div 
-          className={`
-            relative w-16 h-16 rounded-full flex items-center justify-center z-10
-            transition-all duration-500
-            ${isActive 
-              ? "bg-white text-background shadow-[0_0_30px_-5px_rgba(255,255,255,0.6)]" 
-              : isPast 
-                ? "bg-white/20 text-white border-2 border-white/50"
-                : "bg-card/60 backdrop-blur-sm border border-white/10 text-muted-foreground group-hover:border-white/40 group-hover:text-white"
-            }
-          `}
-          animate={isActive ? { scale: [1, 1.05, 1] } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          <step.icon size={24} strokeWidth={1.5} />
-        </motion.div>
-      </motion.div>
-      
-      {/* Title with underline animation */}
-      <div className="relative">
-        <motion.h4 
-          className={`font-semibold transition-colors duration-300 ${isActive ? "text-white" : "text-foreground"}`}
-          animate={isActive ? { y: -2 } : { y: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {step.title}
-        </motion.h4>
-        <motion.div
-          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: isActive ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-        />
-      </div>
-      
-      <p className="text-muted-foreground text-sm">{step.desc}</p>
-    </button>
-  );
-};
-
-const ContentPanel = ({ step }: { step: typeof steps[0] }) => {
-  const Icon = step.icon;
-  
-  return (
-    <motion.div
-      key={step.step}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
-      className="mt-12 max-w-2xl mx-auto"
-    >
-      <div className="relative p-8 rounded-2xl bg-gradient-to-b from-card/60 to-card/30 backdrop-blur-xl border border-white/10">
-        {/* Glow effect */}
-        <div className="absolute inset-0 rounded-2xl bg-white/5 opacity-50" />
-        
-        <div className="relative flex flex-col md:flex-row gap-6 items-start">
-          {/* Icon/Mock area */}
-          <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center">
-            <Icon className="text-white" size={28} strokeWidth={1.5} />
-          </div>
-          
-          {/* Content */}
-          <div className="flex-1 text-left">
-            <p className="text-foreground mb-4">{step.content}</p>
-            <ul className="space-y-2">
-              {step.bullets.map((bullet, i) => (
-                <motion.li 
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + i * 0.1 }}
-                  className="text-sm text-muted-foreground flex items-start gap-2"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 flex-shrink-0" />
-                  {bullet}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+      ))}
+    </svg>,
+    // Exit - arrows exchanging
+    <svg viewBox="0 0 64 64" className="w-full h-full">
+      <motion.path 
+        d="M12 24 L52 24"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white' : 'stroke-slate-400'}`}
+        strokeWidth="2" strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.4 }}
+      />
+      <motion.path 
+        d="M44 18 L52 24 L44 30"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white' : 'stroke-slate-400'}`}
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        initial={{ opacity: 0, x: -5 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3 }}
+      />
+      <motion.path 
+        d="M52 40 L12 40"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white/70' : 'stroke-indigo-400'}`}
+        strokeWidth="2" strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      />
+      <motion.path 
+        d="M20 34 L12 40 L20 46"
+        className={`transition-all duration-500 ${isActive ? 'stroke-white/70' : 'stroke-indigo-400'}`}
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        initial={{ opacity: 0, x: 5 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.5 }}
+      />
+      <motion.circle 
+        cx="32" cy="32" r="8"
+        className={`transition-all duration-500 ${isActive ? 'fill-white/10 stroke-white/50' : 'fill-slate-100 stroke-slate-300'}`}
+        strokeWidth="1.5"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", delay: 0.4 }}
+      />
+    </svg>,
+  ];
+  return graphics[index % graphics.length];
 };
 
 export const HowItWorks = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const [hasAnimated, setHasAnimated] = useState(false);
 
-  // Auto-play logic - loops continuously
+  // Auto-play logic
   useEffect(() => {
     if (!isInView || isPaused) return;
     
@@ -187,171 +236,307 @@ export const HowItWorks = () => {
     setActiveStep(index);
   };
 
-  // Calculate progress line width (4 steps: 0%, 33%, 66%, 100%)
-  const progressWidth = (activeStep / 3) * 100;
-
   return (
-    <section ref={sectionRef} className="relative w-full py-20 lg:py-28">
-      {/* Glassmorphism container */}
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-2xl border-y border-white/5" />
-      
-      <div className="container mx-auto px-6 text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <Badge>How It Works</Badge>
-          <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-4">
-            Four steps to fractional <span className="text-gradient">ownership</span>
-          </h2>
-          <p className="text-muted-foreground mb-16 max-w-lg mx-auto">
-            From discovery to earnings in minutes
-          </p>
-        </motion.div>
-        
-        {/* Desktop Progress Rail */}
-        <div className="hidden md:block relative max-w-2xl mx-auto mb-4">
-          {/* Background rail */}
-          <div className="absolute top-8 left-[15%] right-[15%] h-0.5 bg-white/10" />
-          
-          {/* Animated progress fill */}
-          <motion.div 
-            className="absolute top-8 left-[15%] h-0.5 bg-gradient-to-r from-white via-white to-white/50"
-            style={{ 
-              width: "70%",
-              transformOrigin: "left",
-              boxShadow: "0 0 20px rgba(255,255,255,0.5)"
-            }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: progressWidth / 100 }}
-            transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
-          />
-          
-          {/* Glowing front */}
+    <section ref={sectionRef} className="relative py-32 lg:py-40 overflow-hidden">
+      {/* Premium Light Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
+        {/* Subtle spotlight effects */}
+        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-indigo-50/30 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-violet-50/20 via-transparent to-transparent rounded-full blur-2xl" />
+      </div>
+
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
+
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+        {/* Header Section */}
+        <div className="max-w-4xl mx-auto text-center mb-20">
           <motion.div
-            className="absolute top-[30px] h-2 w-2 rounded-full bg-white"
-            style={{ 
-              boxShadow: "0 0 15px 5px rgba(255,255,255,0.6)",
-              left: "15%"
-            }}
-            animate={{ 
-              left: `calc(15% + ${progressWidth * 0.7}%)`,
-              opacity: progressWidth > 0 ? 1 : 0
-            }}
-            transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
-          />
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="flex items-center justify-center gap-4 mb-8"
+          >
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-slate-400 to-transparent" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+              How It Works
+            </span>
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-slate-400 to-transparent" />
+          </motion.div>
           
-          {/* Step nodes */}
-          <div className="flex justify-between relative z-10">
-            {steps.map((step, i) => (
-              <StepNode
-                key={step.step}
-                step={step}
-                isActive={activeStep === i}
-                isPast={activeStep > i}
-                onClick={() => handleStepClick(i)}
-              />
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-6"
+          >
+            Four steps to
+            <br />
+            <span className="italic text-slate-500 font-serif">fractional ownership</span>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-xl mx-auto"
+          >
+            From discovery to earnings in minutes
+          </motion.p>
+        </div>
+
+        {/* Progress Bar */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="max-w-3xl mx-auto mb-16"
+        >
+          <div className="relative h-1 bg-slate-200 rounded-full overflow-hidden">
+            <motion.div 
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-slate-600 via-indigo-600 to-violet-600 rounded-full"
+              initial={{ width: "0%" }}
+              animate={{ width: `${((activeStep + 1) / 4) * 100}%` }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            />
+            {/* Glowing dot at the end */}
+            <motion.div 
+              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-violet-600 rounded-full shadow-lg shadow-violet-500/50"
+              animate={{ left: `calc(${((activeStep + 1) / 4) * 100}% - 6px)` }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            />
+          </div>
+          
+          {/* Step indicators */}
+          <div className="flex justify-between mt-4">
+            {steps.map((step, index) => (
+              <button
+                key={index}
+                onClick={() => handleStepClick(index)}
+                className="group flex flex-col items-center gap-2"
+              >
+                <motion.div 
+                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${
+                    activeStep >= index 
+                      ? 'bg-gradient-to-br from-slate-800 to-indigo-900 text-white shadow-lg shadow-slate-900/20' 
+                      : 'bg-slate-100 text-slate-400 border border-slate-200'
+                  }`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span className="text-sm font-medium">{index + 1}</span>
+                </motion.div>
+                <span className={`text-xs font-medium transition-colors duration-300 ${
+                  activeStep === index ? 'text-slate-900' : 'text-slate-400'
+                }`}>
+                  {step.title}
+                </span>
+              </button>
             ))}
           </div>
-        </div>
-        
-        {/* Mobile Vertical Rail */}
-        <div className="md:hidden relative">
-          {/* Vertical rail */}
-          <div className="absolute left-8 top-8 bottom-8 w-0.5 bg-white/10" />
-          
-          {/* Progress fill */}
-          <motion.div 
-            className="absolute left-8 top-8 w-0.5 bg-gradient-to-b from-white to-white/50"
-            style={{ transformOrigin: "top" }}
-            animate={{ height: `${progressWidth}%` }}
-            transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
-          />
-          
-          {/* Steps */}
-          <div className="flex flex-col gap-8 pl-20">
-            {steps.map((step, i) => (
-              <div key={step.step} className="relative">
-                {/* Circle on rail */}
-                <motion.div 
-                  className={`
-                    absolute -left-[52px] top-0 w-10 h-10 rounded-full flex items-center justify-center z-10
-                    transition-all duration-500
-                    ${activeStep >= i 
-                      ? "bg-white text-background shadow-[0_0_20px_-5px_rgba(255,255,255,0.6)]" 
-                      : "bg-card/60 border border-white/10 text-muted-foreground"
-                    }
-                  `}
-                  animate={activeStep === i ? { scale: [1, 1.1, 1] } : {}}
-                  transition={{ duration: 0.5 }}
+        </motion.div>
+
+        {/* Steps Cards Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {steps.map((step, index) => {
+            const isActive = activeStep === index;
+            const isHovered = hoveredStep === index;
+            
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
+                onMouseEnter={() => { setHoveredStep(index); setIsPaused(true); }}
+                onMouseLeave={() => { setHoveredStep(null); }}
+                onClick={() => handleStepClick(index)}
+                className="cursor-pointer"
+              >
+                <motion.div
+                  className={`relative p-8 h-full overflow-hidden transition-all duration-500 ${
+                    isActive || isHovered
+                      ? 'bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-950'
+                      : 'bg-white border border-slate-200/60'
+                  }`}
+                  animate={{ 
+                    y: isActive || isHovered ? -12 : 0,
+                    scale: isActive || isHovered ? 1.02 : 1 
+                  }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    boxShadow: isActive || isHovered 
+                      ? '0 30px 60px -15px rgba(15, 23, 42, 0.4), 0 0 40px -10px rgba(79, 70, 229, 0.15)'
+                      : '0 4px 30px -10px rgba(0, 0, 0, 0.06)',
+                  }}
                 >
-                  <step.icon size={18} strokeWidth={1.5} />
-                </motion.div>
-                
-                <button
-                  onClick={() => handleStepClick(i)}
-                  className="text-left w-full focus:outline-none"
-                >
-                  <h4 className={`font-semibold mb-1 ${activeStep === i ? "text-white" : "text-foreground"}`}>
-                    {step.title}
-                  </h4>
-                  <p className="text-muted-foreground text-sm mb-2">{step.desc}</p>
+                  {/* Step number watermark */}
+                  <motion.span 
+                    className={`absolute top-4 right-4 text-[80px] font-extralight leading-none transition-all duration-500 font-serif ${
+                      isActive || isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.03]'
+                    }`}
+                    animate={{ 
+                      x: isActive || isHovered ? 10 : 0,
+                      y: isActive || isHovered ? -10 : 0 
+                    }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    0{step.step}
+                  </motion.span>
+
+                  {/* Graphic illustration */}
+                  <motion.div 
+                    className={`w-16 h-16 mb-8 transition-all duration-500`}
+                    animate={{ 
+                      scale: isActive || isHovered ? 1.1 : 1,
+                      rotate: isActive || isHovered ? 3 : 0
+                    }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <StepGraphic index={index} isActive={isActive || isHovered} />
+                  </motion.div>
+
+                  {/* Icon */}
+                  <motion.div 
+                    className={`w-12 h-12 flex items-center justify-center mb-6 transition-all duration-500 ${
+                      isActive || isHovered 
+                        ? 'bg-white/10 border border-white/20' 
+                        : 'bg-slate-50 border border-slate-200'
+                    }`}
+                    animate={{ 
+                      rotate: isActive || isHovered ? 6 : 0,
+                      scale: isActive || isHovered ? 1.05 : 1
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <step.icon className={`w-5 h-5 transition-colors duration-500 ${
+                      isActive || isHovered ? 'text-white' : 'text-slate-500'
+                    }`} strokeWidth={1.5} />
+                  </motion.div>
                   
-                  {/* Expandable content */}
+                  {/* Title */}
+                  <motion.h3 
+                    className={`text-xl font-medium mb-2 transition-colors duration-500 ${
+                      isActive || isHovered ? 'text-white' : 'text-slate-900'
+                    }`}
+                    animate={{ x: isActive || isHovered ? 4 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {step.title}
+                  </motion.h3>
+                  
+                  {/* Subtitle */}
+                  <p className={`text-sm mb-4 transition-colors duration-500 ${
+                    isActive || isHovered ? 'text-slate-300' : 'text-slate-500'
+                  }`}>
+                    {step.subtitle}
+                  </p>
+
+                  {/* Expanded content */}
                   <AnimatePresence>
-                    {activeStep === i && (
+                    {(isActive || isHovered) && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <div className="pt-3 pb-2">
-                          <p className="text-sm text-foreground/80 mb-2">{step.content}</p>
-                          <ul className="space-y-1">
-                            {step.bullets.map((bullet, j) => (
-                              <li key={j} className="text-xs text-muted-foreground flex items-start gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white mt-1.5 flex-shrink-0" />
-                                {bullet}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                        <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+                          {step.content}
+                        </p>
+                        <ul className="space-y-2">
+                          {step.bullets.map((bullet, i) => (
+                            <motion.li 
+                              key={i}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.1 + i * 0.1 }}
+                              className="text-xs text-slate-500 flex items-start gap-2"
+                            >
+                              <span className="w-1 h-1 rounded-full bg-violet-400 mt-1.5 flex-shrink-0" />
+                              {bullet}
+                            </motion.li>
+                          ))}
+                        </ul>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </button>
-              </div>
-            ))}
-          </div>
+
+                  {/* Bottom accent line */}
+                  <motion.div 
+                    className={`absolute bottom-0 left-0 h-[3px] bg-gradient-to-r ${step.accent}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: isActive || isHovered ? '100%' : 0 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  />
+
+                  {/* Corner accent */}
+                  <motion.div 
+                    className="absolute top-0 left-0 w-16 h-16"
+                    style={{
+                      background: isActive || isHovered
+                        ? 'linear-gradient(135deg, rgba(99,102,241,0.15) 0%, transparent 50%)' 
+                        : 'linear-gradient(135deg, rgba(148,163,184,0.08) 0%, transparent 50%)'
+                    }}
+                    animate={{ 
+                      opacity: isActive || isHovered ? 1 : 0.5,
+                      scale: isActive || isHovered ? 1.5 : 1
+                    }}
+                    transition={{ duration: 0.4 }}
+                  />
+                </motion.div>
+              </motion.div>
+            );
+          })}
         </div>
-        
-        {/* Desktop Content Panel */}
-        <div className="hidden md:block">
-          <AnimatePresence mode="wait">
-            <ContentPanel step={steps[activeStep]} />
-          </AnimatePresence>
-        </div>
-        
-        {/* CTA Strip */}
+
+        {/* CTA Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-12 pt-8 border-t border-white/5"
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="mt-20 text-center"
         >
-          <p className="text-foreground font-medium mb-4">Ready to own your first slice?</p>
-          <div className="flex flex-col items-center gap-4">
-            <Button variant="outline" size="lg" className="group border-white text-white hover:bg-white hover:text-background">
-              Register your early access
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <div className="inline-flex flex-col items-center gap-6 p-8 bg-gradient-to-br from-slate-50 to-white border border-slate-200/50 rounded-2xl shadow-xl shadow-slate-200/50">
+            <div className="flex items-center gap-3">
+              <motion.div 
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500"
+                animate={{ scale: [1, 1.3, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <span className="text-slate-900 font-medium">Ready to own your first slice?</span>
+            </div>
+            
+            <Button 
+              size="lg" 
+              className="group bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 hover:from-slate-800 hover:via-indigo-900 hover:to-slate-800 text-white border-0 shadow-lg shadow-slate-900/20 px-8"
+            >
+              Register for Early Access
+              <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <p className="text-white/50 text-xs text-center max-w-md">
-              Limited spots available! Register now to secure your place in our exclusive early access program and unlock special launch benefits.
+            
+            <p className="text-slate-400 text-xs max-w-sm">
+              Limited spots available. Secure your place in our exclusive early access program.
             </p>
           </div>
+        </motion.div>
+
+        {/* Bottom decorative element */}
+        <motion.div 
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="mt-16 flex justify-center"
+        >
+          <div className="h-px w-48 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
         </motion.div>
       </div>
     </section>
