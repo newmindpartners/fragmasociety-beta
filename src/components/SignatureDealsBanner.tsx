@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import bryanImage from "@/assets/bryan-banner.png";
 import philippeImage from "@/assets/philippe-banner.png";
 import timImage from "@/assets/tim-banner.png";
@@ -13,35 +14,66 @@ const leaders = [
     title: "European Champion Jumping",
     image: bryanImage,
     industryImage: bryanIndustry,
-    accentColor: "#8b9a7d",
   },
   {
     name: "Philippe Naouri",
     title: "Malibu Mid-Century Villa Designer",
     image: philippeImage,
     industryImage: realEstateIndustry,
-    accentColor: "#7a9eb5",
   },
   {
     name: "Tim Levy",
     title: "Hollywood Blockbuster Film Financier",
     image: timImage,
     industryImage: timIndustry,
-    accentColor: "#9a8b7d",
   },
 ];
+
+const SLIDE_DURATION = 5000;
 
 export const SignatureDealsBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % leaders.length);
+  }, []);
+
+  const goToPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + leaders.length) % leaders.length);
+  }, []);
+
+  const startAutoplay = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(goToNext, SLIDE_DURATION);
+  }, [goToNext]);
+
+  const stopAutoplay = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
-    if (isHovered) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % leaders.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isHovered, currentIndex]);
+    if (!isHovered) {
+      startAutoplay();
+    } else {
+      stopAutoplay();
+    }
+    return () => stopAutoplay();
+  }, [isHovered, startAutoplay, stopAutoplay]);
+
+  const handleManualNavigation = (index: number) => {
+    setCurrentIndex(index);
+    // Reset the autoplay timer when manually navigating
+    if (!isHovered) {
+      startAutoplay();
+    }
+  };
 
   const current = leaders[currentIndex];
 
@@ -60,16 +92,13 @@ export const SignatureDealsBanner = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            transition={{ duration: 1, ease: "easeInOut" }}
             className="absolute inset-0"
           >
-            <motion.img
+            <img
               src={current.industryImage}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
-              initial={{ scale: 1.1 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 12, ease: "linear" }}
               style={{ 
                 opacity: 0.55,
                 filter: 'grayscale(40%) brightness(0.8)'
@@ -78,7 +107,7 @@ export const SignatureDealsBanner = () => {
           </motion.div>
         </AnimatePresence>
         
-        {/* Studio Harcourt spotlight effect - dramatic vignette */}
+        {/* Studio Harcourt spotlight effect */}
         <div 
           className="absolute inset-0"
           style={{
@@ -98,6 +127,25 @@ export const SignatureDealsBanner = () => {
         />
       </div>
 
+      {/* Navigation Arrows */}
+      <button
+        onClick={() => { goToPrev(); handleManualNavigation((currentIndex - 1 + leaders.length) % leaders.length); }}
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full transition-all duration-300 hover:bg-white/10"
+        style={{ color: 'rgba(255,255,255,0.6)' }}
+        aria-label="Previous slide"
+      >
+        <ChevronLeft size={28} strokeWidth={1.5} />
+      </button>
+      
+      <button
+        onClick={() => { goToNext(); handleManualNavigation((currentIndex + 1) % leaders.length); }}
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full transition-all duration-300 hover:bg-white/10"
+        style={{ color: 'rgba(255,255,255,0.6)' }}
+        aria-label="Next slide"
+      >
+        <ChevronRight size={28} strokeWidth={1.5} />
+      </button>
+
       {/* Content container - 3 columns */}
       <div className="container relative z-10 h-full">
         <div className="grid grid-cols-3 items-center h-full gap-4">
@@ -105,12 +153,9 @@ export const SignatureDealsBanner = () => {
           {/* LEFT - INVEST WITH */}
           <div className="flex flex-col justify-center items-start pl-4">
             <div className="flex items-center gap-4 mb-4">
-              <motion.div 
-                className="h-px"
+              <div 
+                className="h-px w-7"
                 style={{ background: 'rgba(255,255,255,0.3)' }}
-                initial={{ width: 0 }}
-                animate={{ width: 28 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
               />
               <span 
                 className="text-[10px] tracking-[0.25em] uppercase font-light"
@@ -120,10 +165,7 @@ export const SignatureDealsBanner = () => {
               </span>
             </div>
             
-            <motion.h3
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+            <h3
               className="text-3xl md:text-5xl font-serif tracking-tight"
               style={{ 
                 color: 'rgba(255,255,255,0.9)',
@@ -132,48 +174,31 @@ export const SignatureDealsBanner = () => {
               }}
             >
               Invest with
-            </motion.h3>
+            </h3>
 
             {/* Progress dots */}
             <div className="flex items-center gap-3 mt-8">
               {leaders.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setCurrentIndex(idx)}
+                  onClick={() => handleManualNavigation(idx)}
                   className="group relative"
                   aria-label={`View ${leaders[idx].name}`}
                 >
-                  <motion.div
+                  <div
                     className="w-2 h-2 rounded-full transition-all duration-300"
                     style={{
                       backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
                       boxShadow: idx === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
                     }}
                   />
-                  {idx === currentIndex && !isHovered && (
-                    <svg className="absolute -inset-1.5 w-5 h-5 -rotate-90">
-                      <motion.circle
-                        cx="10"
-                        cy="10"
-                        r="8"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.4)"
-                        strokeWidth="1"
-                        strokeDasharray="50.27"
-                        initial={{ strokeDashoffset: 50.27 }}
-                        animate={{ strokeDashoffset: 0 }}
-                        transition={{ duration: 5, ease: "linear" }}
-                      />
-                    </svg>
-                  )}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* MIDDLE - Leader portrait with spotlight */}
+          {/* MIDDLE - Leader portrait */}
           <div className="relative h-full flex items-end justify-center">
-            {/* Spotlight on leader */}
             <div 
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[400px]"
               style={{
@@ -184,13 +209,10 @@ export const SignatureDealsBanner = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={`portrait-${currentIndex}`}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ 
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1]
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
                 className="relative h-[85%] flex items-end"
               >
                 <img
@@ -202,7 +224,6 @@ export const SignatureDealsBanner = () => {
                     mixBlendMode: 'luminosity'
                   }}
                 />
-                {/* Subtle glow under portrait */}
                 <div 
                   className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-2xl"
                   style={{ background: 'rgba(255,255,255,0.1)' }}
@@ -211,7 +232,7 @@ export const SignatureDealsBanner = () => {
             </AnimatePresence>
           </div>
 
-          {/* RIGHT - Name and position - fixed height containers */}
+          {/* RIGHT - Name and position */}
           <div className="flex flex-col justify-center items-end text-right pr-4">
             <div className="h-[50px] md:h-[52px] flex items-center justify-end mb-2">
               <AnimatePresence mode="wait">
@@ -255,7 +276,7 @@ export const SignatureDealsBanner = () => {
         </div>
       </div>
 
-      {/* Decorative bottom line - subtle golden accent */}
+      {/* Decorative bottom line */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-px"
         style={{
