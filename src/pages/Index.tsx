@@ -5,7 +5,6 @@ import { Features } from "@/components/Features";
 
 import { HowItWorks } from "@/components/HowItWorks";
 import { Marketplace } from "@/components/Marketplace";
-import { AssetClasses } from "@/components/AssetClasses";
 import { WorkWithUs } from "@/components/WorkWithUs";
 import { TokenizeAssetCTA } from "@/components/TokenizeAssetCTA";
 import { StrategyCTA } from "@/components/StrategyCTA";
@@ -22,7 +21,6 @@ const Index = () => {
         <Navbar />
         <Hero />
         <SignatureDealsBanner />
-        <AssetClasses />
         <Features />
         <HowItWorks />
         <Marketplace />
