@@ -17,25 +17,30 @@ interface AssetItem {
   name: string;
   price: number;
   type: "buy" | "sell";
+  badgePosition: { top?: string; bottom?: string; left?: string; right?: string };
+  floatDelay: number;
+  floatDuration: number;
 }
 
 const assets: AssetItem[] = [
-  { id: "1", image: propertyMalibu, name: "Malibu Estate", price: 524.50, type: "buy" },
-  { id: "2", image: rwaFilm, name: "Film Rights", price: 156.80, type: "sell" },
-  { id: "3", image: rwaVilla, name: "Tuscan Villa", price: 892.25, type: "buy" },
-  { id: "4", image: rwaCommercial, name: "Paris Office", price: 1025.00, type: "sell" },
-  { id: "5", image: rwaLuxury, name: "Luxury Asset", price: 445.00, type: "buy" },
-  { id: "6", image: propertyNimes, name: "Nimes Road", price: 678.50, type: "sell" },
+  { id: "1", image: propertyMalibu, name: "Malibu Estate", price: 524, type: "buy", badgePosition: { top: "12%", left: "8%" }, floatDelay: 0, floatDuration: 4 },
+  { id: "2", image: rwaFilm, name: "Film Rights", price: 156, type: "sell", badgePosition: { bottom: "18%", right: "12%" }, floatDelay: 0.5, floatDuration: 4.5 },
+  { id: "3", image: rwaVilla, name: "Tuscan Villa", price: 892, type: "buy", badgePosition: { top: "20%", right: "10%" }, floatDelay: 1, floatDuration: 5 },
+  { id: "4", image: rwaCommercial, name: "Paris Office", price: 1025, type: "sell", badgePosition: { bottom: "25%", left: "15%" }, floatDelay: 0.3, floatDuration: 4.2 },
+  { id: "5", image: rwaLuxury, name: "Luxury Asset", price: 445, type: "buy", badgePosition: { bottom: "15%", right: "8%" }, floatDelay: 0.8, floatDuration: 4.8 },
+  { id: "6", image: propertyNimes, name: "Nimes Road", price: 678, type: "sell", badgePosition: { top: "15%", left: "12%" }, floatDelay: 0.2, floatDuration: 4.3 },
 ];
 
 // Animated Badge Component
 const TradeBadge = ({ 
   type, 
-  price, 
+  price,
+  position,
   delay 
 }: { 
   type: "buy" | "sell"; 
   price: number;
+  position: { top?: string; bottom?: string; left?: string; right?: string };
   delay: number;
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,8 +50,8 @@ const TradeBadge = ({
     
     const interval = setInterval(() => {
       setIsVisible(false);
-      setTimeout(() => setIsVisible(true), 300);
-    }, 4000 + delay);
+      setTimeout(() => setIsVisible(true), 400);
+    }, 3500 + delay);
     
     return () => {
       clearTimeout(showTimer);
@@ -61,30 +66,25 @@ const TradeBadge = ({
         scale: isVisible ? 1 : 0, 
         opacity: isVisible ? 1 : 0 
       }}
-      transition={{ type: "spring", damping: 15, stiffness: 300 }}
-      className={`absolute px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2 ${
+      transition={{ type: "spring", damping: 12, stiffness: 200 }}
+      className={`absolute z-10 px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2 ${
         type === "buy" 
           ? "bg-emerald-500/90 text-white" 
           : "bg-violet-600/90 text-white"
       }`}
-      style={{
-        top: type === "buy" ? "15%" : "auto",
-        bottom: type === "sell" ? "15%" : "auto",
-        left: type === "buy" ? "10%" : "auto",
-        right: type === "sell" ? "10%" : "auto",
-      }}
+      style={position}
     >
       <span className="text-[10px] font-bold uppercase tracking-wider">
         {type === "buy" ? "Buy" : "Sell"}
       </span>
       <span className="text-sm font-mono font-bold">
-        €{price.toFixed(0)}
+        €{price}
       </span>
     </motion.div>
   );
 };
 
-// Photo Card Component
+// Photo Card Component with floating animation
 const PhotoCard = ({ 
   asset, 
   index, 
@@ -103,36 +103,58 @@ const PhotoCard = ({
     "col-span-1 row-span-1",
   ];
 
+  // Different float patterns for variety
+  const floatPatterns = [
+    { y: [0, -8, 0], rotate: [0, 1, 0] },
+    { y: [0, -6, 0], rotate: [0, -1, 0] },
+    { y: [0, -10, 0], rotate: [0, 0.5, 0] },
+    { y: [0, -7, 0], rotate: [0, -0.5, 0] },
+    { y: [0, -5, 0], rotate: [0, 1.5, 0] },
+    { y: [0, -9, 0], rotate: [0, -1.5, 0] },
+  ];
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      initial={{ opacity: 0, y: 40, scale: 0.9 }}
       animate={{ 
         opacity: isInView ? 1 : 0, 
-        y: isInView ? 0 : 30,
-        scale: isInView ? 1 : 0.95
+        y: isInView ? 0 : 40,
+        scale: isInView ? 1 : 0.9
       }}
       transition={{ 
-        duration: 0.6, 
-        delay: 0.1 + index * 0.1,
+        duration: 0.7, 
+        delay: 0.15 + index * 0.12,
         ease: [0.22, 1, 0.36, 1]
       }}
-      className={`relative rounded-2xl overflow-hidden group ${sizes[index]}`}
+      className={`relative ${sizes[index]}`}
     >
-      <img 
-        src={asset.image} 
-        alt={asset.name}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      
-      {/* Subtle overlay on hover */}
-      <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300" />
-      
-      {/* Animated Trade Badge */}
-      <TradeBadge 
-        type={asset.type} 
-        price={asset.price} 
-        delay={index * 500}
-      />
+      <motion.div
+        animate={isInView ? floatPatterns[index] : {}}
+        transition={{
+          duration: asset.floatDuration,
+          delay: asset.floatDelay,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="relative w-full h-full rounded-2xl overflow-hidden group shadow-lg shadow-slate-200/50"
+      >
+        <img 
+          src={asset.image} 
+          alt={asset.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        {/* Animated Trade Badge */}
+        <TradeBadge 
+          type={asset.type} 
+          price={asset.price}
+          position={asset.badgePosition}
+          delay={800 + index * 400}
+        />
+      </motion.div>
     </motion.div>
   );
 };
