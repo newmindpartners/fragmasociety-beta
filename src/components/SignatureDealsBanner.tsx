@@ -3,28 +3,28 @@ import { useState, useEffect } from "react";
 import bryanImage from "@/assets/bryan-banner.png";
 import philippeImage from "@/assets/philippe-banner.png";
 import timImage from "@/assets/tim-banner.png";
-import andreImage from "@/assets/andre-messika.png";
+import sportsIndustry from "@/assets/category-sports.jpg";
+import realEstateIndustry from "@/assets/malibu-sea-view.jpg";
+import filmIndustry from "@/assets/category-film.jpg";
 
 const leaders = [
   {
     name: "Bryan Balsiger",
     title: "European Champion Jumping",
     image: bryanImage,
+    industryImage: sportsIndustry,
   },
   {
     name: "Philippe Naouri",
-    title: "Private Credit Pioneer",
+    title: "Malibu Mid-Century Villa Designer",
     image: philippeImage,
-  },
-  {
-    name: "André Messika",
-    title: "Luxury Jewelry Empire",
-    image: andreImage,
+    industryImage: realEstateIndustry,
   },
   {
     name: "Tim Levy",
-    title: "Real Estate Developer",
+    title: "Hollywood Blockbuster Film Financier",
     image: timImage,
+    industryImage: filmIndustry,
   },
 ];
 
@@ -48,9 +48,9 @@ export const SignatureDealsBanner = () => {
       />
       
       <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 items-center min-h-[300px] md:min-h-[350px] gap-8 lg:gap-0">
-          {/* Left side - Image */}
-          <div className="relative flex justify-center lg:justify-start order-2 lg:order-1">
+        <div className="grid lg:grid-cols-2 items-end min-h-[300px] md:min-h-[350px] gap-0 lg:gap-8">
+          {/* Left side - Leader Image */}
+          <div className="relative flex justify-center lg:justify-start order-2 lg:order-1 self-end">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -66,7 +66,7 @@ export const SignatureDealsBanner = () => {
                 <motion.img
                   src={leaders[currentIndex].image}
                   alt={leaders[currentIndex].name}
-                  className="h-[220px] md:h-[280px] lg:h-[320px] w-auto object-contain grayscale"
+                  className="h-[220px] md:h-[280px] lg:h-[320px] w-auto object-contain object-bottom grayscale"
                   initial={{ scale: 1.02 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
@@ -75,8 +75,8 @@ export const SignatureDealsBanner = () => {
             </AnimatePresence>
           </div>
 
-          {/* Right side - Text content */}
-          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-1 lg:order-2 py-8 lg:py-0">
+          {/* Right side - Text content and Industry Image */}
+          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-1 lg:order-2 py-8 lg:py-0 lg:pb-12">
             {/* Signature Deals label */}
             <motion.span
               initial={{ opacity: 0, y: 10 }}
@@ -87,8 +87,13 @@ export const SignatureDealsBanner = () => {
               Signature Deals
             </motion.span>
 
+            {/* "Invest with :" static text */}
+            <span className="text-background/60 text-xl md:text-2xl lg:text-3xl font-serif mb-2">
+              Invest with :
+            </span>
+
             {/* Dynamic name */}
-            <div className="relative h-[60px] md:h-[80px] lg:h-[90px] w-full overflow-hidden mb-2">
+            <div className="relative h-[50px] md:h-[70px] lg:h-[80px] w-full overflow-hidden mb-2">
               <AnimatePresence mode="wait">
                 <motion.h2
                   key={`name-${currentIndex}`}
@@ -99,7 +104,7 @@ export const SignatureDealsBanner = () => {
                     duration: 0.5, 
                     ease: [0.25, 0.46, 0.45, 0.94]
                   }}
-                  className="absolute inset-0 flex items-center justify-center lg:justify-start text-3xl md:text-5xl lg:text-6xl font-serif text-background tracking-tight"
+                  className="absolute inset-0 flex items-center justify-center lg:justify-start text-2xl md:text-4xl lg:text-5xl font-serif text-background tracking-tight"
                 >
                   {leaders[currentIndex].name}
                 </motion.h2>
@@ -107,7 +112,7 @@ export const SignatureDealsBanner = () => {
             </div>
 
             {/* Dynamic title */}
-            <div className="relative h-[32px] md:h-[40px] w-full overflow-hidden">
+            <div className="relative h-[28px] md:h-[36px] w-full overflow-hidden mb-6">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`title-${currentIndex}`}
@@ -119,15 +124,31 @@ export const SignatureDealsBanner = () => {
                     delay: 0.1,
                     ease: [0.25, 0.46, 0.45, 0.94]
                   }}
-                  className="absolute inset-0 flex items-center justify-center lg:justify-start text-lg md:text-2xl lg:text-3xl font-serif text-background/70 tracking-wide"
+                  className="absolute inset-0 flex items-center justify-center lg:justify-start text-base md:text-xl lg:text-2xl font-serif text-background/70 tracking-wide"
                 >
                   {leaders[currentIndex].title}
                 </motion.p>
               </AnimatePresence>
             </div>
 
+            {/* Industry Image */}
+            <div className="relative w-full max-w-[300px] h-[120px] md:h-[150px] overflow-hidden rounded-lg mb-6">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={`industry-${currentIndex}`}
+                  src={leaders[currentIndex].industryImage}
+                  alt={`${leaders[currentIndex].title} industry`}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="w-full h-full object-cover"
+                />
+              </AnimatePresence>
+            </div>
+
             {/* Progress indicators */}
-            <div className="flex gap-3 mt-8">
+            <div className="flex gap-3">
               {leaders.map((_, idx) => (
                 <button
                   key={idx}
