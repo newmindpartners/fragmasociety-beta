@@ -211,19 +211,16 @@ export const SignatureDealsBanner = () => {
             </AnimatePresence>
           </div>
 
-          {/* RIGHT - Name and position */}
+          {/* RIGHT - Name and position - fixed height containers */}
           <div className="flex flex-col justify-center items-end text-right pr-4">
-            <div className="relative overflow-hidden mb-2">
+            <div className="h-[50px] md:h-[52px] flex items-center justify-end mb-2">
               <AnimatePresence mode="wait">
                 <motion.h2
                   key={`name-${currentIndex}`}
-                  initial={{ y: 60, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -60, opacity: 0 }}
-                  transition={{ 
-                    duration: 0.7, 
-                    ease: [0.22, 1, 0.36, 1]
-                  }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
                   className="text-2xl md:text-[42px] font-serif tracking-tight leading-none"
                   style={{ 
                     color: 'rgba(255,255,255,0.95)',
@@ -235,18 +232,14 @@ export const SignatureDealsBanner = () => {
               </AnimatePresence>
             </div>
 
-            <div className="relative overflow-hidden">
+            <div className="h-[24px] flex items-center justify-end">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`title-${currentIndex}`}
-                  initial={{ y: 40, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -40, opacity: 0 }}
-                  transition={{ 
-                    duration: 0.7, 
-                    delay: 0.1,
-                    ease: [0.22, 1, 0.36, 1]
-                  }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
                   className="text-sm md:text-base font-serif"
                   style={{ 
                     color: 'rgba(255,255,255,0.5)',
