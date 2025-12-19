@@ -71,8 +71,8 @@ export const SignatureDealsBanner = () => {
               animate={{ scale: 1 }}
               transition={{ duration: 12, ease: "linear" }}
               style={{ 
-                opacity: 0.35,
-                filter: 'grayscale(60%) brightness(0.7)'
+                opacity: 0.55,
+                filter: 'grayscale(40%) brightness(0.8)'
               }}
             />
           </motion.div>
