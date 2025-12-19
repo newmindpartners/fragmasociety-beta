@@ -82,9 +82,11 @@ export const SignatureDealsBanner = () => {
       className="relative h-[320px] md:h-[380px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ background: '#1a1a1a' }}
     >
-      {/* Background - Industry image */}
+      {/* Deep Slate/Navy Background - matching legal footer */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
+      
+      {/* Background - Industry image with deep overlay */}
       <div className="absolute inset-0 overflow-hidden">
         <AnimatePresence mode="sync">
           <motion.div
@@ -100,32 +102,39 @@ export const SignatureDealsBanner = () => {
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{ 
-                opacity: 0.55,
-                filter: 'grayscale(40%) brightness(0.8)'
+                opacity: 0.25,
+                filter: 'grayscale(60%) brightness(0.6)'
               }}
             />
           </motion.div>
         </AnimatePresence>
         
-        {/* Studio Harcourt spotlight effect */}
+        {/* Deep navy gradient overlay */}
         <div 
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse 60% 80% at 50% 100%, transparent 0%, rgba(15,15,15,0.3) 50%, rgba(15,15,15,0.85) 100%),
-              radial-gradient(ellipse 80% 50% at 50% 50%, transparent 0%, rgba(15,15,15,0.6) 100%)
+              radial-gradient(ellipse 60% 80% at 50% 100%, transparent 0%, rgba(15,23,42,0.4) 50%, rgba(15,23,42,0.9) 100%),
+              radial-gradient(ellipse 80% 50% at 50% 50%, transparent 0%, rgba(15,23,42,0.7) 100%)
             `
           }}
         />
+        
+        {/* Subtle violet glow accents */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[250px] bg-violet-900/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[200px] bg-slate-700/20 rounded-full blur-3xl" />
         
         {/* Top spotlight glow */}
         <div 
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px]"
           style={{
-            background: 'radial-gradient(ellipse at center top, rgba(255,250,240,0.08) 0%, transparent 70%)'
+            background: 'radial-gradient(ellipse at center top, rgba(148,130,180,0.08) 0%, transparent 70%)'
           }}
         />
       </div>
+      
+      {/* Top Border Accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
 
       {/* Navigation Arrows */}
       <button
@@ -293,11 +302,11 @@ export const SignatureDealsBanner = () => {
         </div>
       </div>
 
-      {/* Decorative bottom line */}
+      {/* Decorative bottom line - violet accent */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-px"
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(255,250,240,0.15) 50%, transparent 100%)'
+          background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.3) 50%, transparent 100%)'
         }}
       />
     </section>
