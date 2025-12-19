@@ -347,7 +347,7 @@ export const HowItWorks = () => {
   const currentStep = steps[activeStep];
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative py-16 lg:py-24 overflow-hidden">
       {/* Luxury Magazine Background */}
       <div className="absolute inset-0 bg-[#fafafa]" />
       
