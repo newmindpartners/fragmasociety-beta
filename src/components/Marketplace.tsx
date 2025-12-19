@@ -1,6 +1,6 @@
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect, useCallback } from "react";
-import { ArrowUpRight, Shield, Zap, Lock, TrendingUp, Activity } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { ArrowUpRight, ArrowDownLeft, TrendingUp, Clock, Users, Building, Film, Briefcase } from "lucide-react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -11,890 +11,540 @@ import ledgityLogo from "@/assets/partners/ledgity.png";
 import realizLogo from "@/assets/partners/realiz.png";
 import swissquoteLogo from "@/assets/partners/swissquote.png";
 import woudLawLogo from "@/assets/partners/woud-law.jpeg";
-const assetCategories = [
-  { id: "all", label: "All" },
-  { id: "realestate", label: "Real Estate" },
-  { id: "film", label: "Film" },
-  { id: "credit", label: "Credit" },
-  { id: "fund", label: "Fund" },
-];
 
-interface OrderBookData {
-  asks: { price: number; size: number; depth: number }[];
-  bids: { price: number; size: number; depth: number }[];
-  midPrice: number;
-  spread: string;
-  change: string;
+// Asset images
+import rwaVilla from "@/assets/rwa-villa.jpg";
+import rwaFilm from "@/assets/rwa-film.jpg";
+import rwaCommercial from "@/assets/rwa-commercial.jpg";
+import propertyMalibu from "@/assets/property-malibu.jpg";
+
+interface TradableAsset {
+  id: string;
+  name: string;
+  category: string;
+  categoryIcon: typeof Building;
+  image: string;
+  tokenPrice: number;
+  priceChange: number;
+  totalValue: string;
+  availableTokens: number;
+  holders: number;
+  orders: {
+    buy: { price: number; quantity: number }[];
+    sell: { price: number; quantity: number }[];
+  };
 }
 
-const assetData: Record<string, { 
-  ticker: string; 
-  change: number; 
-  volume: string; 
-  gradient: string;
-  orderBook: OrderBookData;
-}> = {
-  all: { 
-    ticker: "FRG-VILLA-01", 
-    change: 4.2, 
-    volume: "€485k", 
-    gradient: "from-primary via-cyan-500 to-emerald-500",
-    orderBook: {
-      asks: [
-        { price: 524.50, size: 1.82, depth: 85 },
-        { price: 522.25, size: 0.94, depth: 60 },
-        { price: 520.00, size: 1.45, depth: 75 },
-        { price: 518.75, size: 0.68, depth: 40 },
-        { price: 516.50, size: 2.10, depth: 95 },
+const tradableAssets: TradableAsset[] = [
+  {
+    id: "malibu-estate",
+    name: "Malibu Ocean View",
+    category: "Real Estate",
+    categoryIcon: Building,
+    image: propertyMalibu,
+    tokenPrice: 524.50,
+    priceChange: 2.4,
+    totalValue: "€4.2M",
+    availableTokens: 1250,
+    holders: 89,
+    orders: {
+      buy: [
+        { price: 522.00, quantity: 45 },
+        { price: 520.50, quantity: 78 },
+        { price: 518.25, quantity: 120 },
       ],
-      bids: [
-        { price: 514.25, size: 1.56, depth: 80 },
-        { price: 512.00, size: 0.89, depth: 50 },
-        { price: 510.50, size: 2.34, depth: 100 },
-        { price: 508.25, size: 1.12, depth: 65 },
-        { price: 506.00, size: 0.77, depth: 45 },
+      sell: [
+        { price: 526.00, quantity: 32 },
+        { price: 528.50, quantity: 65 },
+        { price: 530.00, quantity: 88 },
       ],
-      midPrice: 515.38,
-      spread: "0.22",
-      change: "+0.42"
-    }
+    },
   },
-  realestate: { 
-    ticker: "FRG-ESTATE-02", 
-    change: 2.8, 
-    volume: "€312k", 
-    gradient: "from-emerald-400 via-teal-500 to-cyan-500",
-    orderBook: {
-      asks: [
-        { price: 892.00, size: 0.45, depth: 70 },
-        { price: 888.50, size: 1.20, depth: 90 },
-        { price: 885.25, size: 0.78, depth: 55 },
-        { price: 882.00, size: 1.95, depth: 100 },
-        { price: 879.75, size: 0.62, depth: 45 },
+  {
+    id: "villa-tuscany",
+    name: "Tuscan Villa Estate",
+    category: "Real Estate",
+    categoryIcon: Building,
+    image: rwaVilla,
+    tokenPrice: 892.25,
+    priceChange: 1.8,
+    totalValue: "€6.8M",
+    availableTokens: 890,
+    holders: 124,
+    orders: {
+      buy: [
+        { price: 890.00, quantity: 28 },
+        { price: 888.50, quantity: 52 },
+        { price: 885.00, quantity: 95 },
       ],
-      bids: [
-        { price: 876.50, size: 1.34, depth: 85 },
-        { price: 873.25, size: 0.91, depth: 60 },
-        { price: 870.00, size: 2.15, depth: 95 },
-        { price: 867.50, size: 0.56, depth: 40 },
-        { price: 864.25, size: 1.78, depth: 75 },
+      sell: [
+        { price: 895.00, quantity: 22 },
+        { price: 898.50, quantity: 48 },
+        { price: 902.00, quantity: 71 },
       ],
-      midPrice: 878.13,
-      spread: "0.18",
-      change: "+1.25"
-    }
+    },
   },
-  film: { 
-    ticker: "FRG-FILM-01", 
-    change: 5.1, 
-    volume: "€567k", 
-    gradient: "from-violet-400 via-purple-500 to-fuchsia-500",
-    orderBook: {
-      asks: [
-        { price: 156.80, size: 3.45, depth: 95 },
-        { price: 154.50, size: 2.10, depth: 75 },
-        { price: 152.25, size: 1.88, depth: 60 },
-        { price: 150.00, size: 4.20, depth: 100 },
-        { price: 148.75, size: 1.55, depth: 50 },
+  {
+    id: "film-project",
+    name: "Horizon Film Rights",
+    category: "Film & Entertainment",
+    categoryIcon: Film,
+    image: rwaFilm,
+    tokenPrice: 156.80,
+    priceChange: 5.2,
+    totalValue: "€2.1M",
+    availableTokens: 2400,
+    holders: 312,
+    orders: {
+      buy: [
+        { price: 155.00, quantity: 180 },
+        { price: 153.50, quantity: 245 },
+        { price: 150.00, quantity: 420 },
       ],
-      bids: [
-        { price: 146.50, size: 2.78, depth: 85 },
-        { price: 144.25, size: 1.92, depth: 65 },
-        { price: 142.00, size: 3.45, depth: 90 },
-        { price: 140.50, size: 1.25, depth: 45 },
-        { price: 138.25, size: 2.10, depth: 70 },
+      sell: [
+        { price: 158.50, quantity: 95 },
+        { price: 160.00, quantity: 165 },
+        { price: 162.50, quantity: 280 },
       ],
-      midPrice: 147.63,
-      spread: "0.34",
-      change: "+2.15"
-    }
+    },
   },
-  credit: { 
-    ticker: "FRG-CREDIT-02", 
-    change: 1.9, 
-    volume: "€234k", 
-    gradient: "from-amber-400 via-orange-500 to-rose-500",
-    orderBook: {
-      asks: [
-        { price: 1025.00, size: 0.28, depth: 65 },
-        { price: 1022.50, size: 0.52, depth: 80 },
-        { price: 1020.00, size: 0.35, depth: 50 },
-        { price: 1017.75, size: 0.88, depth: 95 },
-        { price: 1015.25, size: 0.42, depth: 55 },
+  {
+    id: "commercial-paris",
+    name: "Paris Commercial",
+    category: "Commercial",
+    categoryIcon: Briefcase,
+    image: rwaCommercial,
+    tokenPrice: 1025.00,
+    priceChange: 0.9,
+    totalValue: "€8.5M",
+    availableTokens: 650,
+    holders: 78,
+    orders: {
+      buy: [
+        { price: 1022.50, quantity: 15 },
+        { price: 1020.00, quantity: 32 },
+        { price: 1015.00, quantity: 58 },
       ],
-      bids: [
-        { price: 1012.50, size: 0.65, depth: 75 },
-        { price: 1010.00, size: 0.38, depth: 45 },
-        { price: 1007.75, size: 0.95, depth: 100 },
-        { price: 1005.25, size: 0.48, depth: 60 },
-        { price: 1002.50, size: 0.72, depth: 85 },
+      sell: [
+        { price: 1028.00, quantity: 12 },
+        { price: 1032.50, quantity: 28 },
+        { price: 1040.00, quantity: 45 },
       ],
-      midPrice: 1013.88,
-      spread: "0.12",
-      change: "+0.18"
-    }
+    },
   },
-  fund: { 
-    ticker: "FRG-FUND-01", 
-    change: 3.1, 
-    volume: "€324k", 
-    gradient: "from-primary via-blue-500 to-indigo-500",
-    orderBook: {
-      asks: [
-        { price: 102.45, size: 12.50, depth: 90 },
-        { price: 101.80, size: 8.75, depth: 70 },
-        { price: 101.25, size: 15.20, depth: 100 },
-        { price: 100.90, size: 6.40, depth: 55 },
-        { price: 100.50, size: 10.80, depth: 80 },
-      ],
-      bids: [
-        { price: 100.10, size: 9.25, depth: 75 },
-        { price: 99.75, size: 14.50, depth: 95 },
-        { price: 99.40, size: 7.80, depth: 60 },
-        { price: 99.00, size: 11.20, depth: 85 },
-        { price: 98.65, size: 5.90, depth: 50 },
-      ],
-      midPrice: 100.30,
-      spread: "0.20",
-      change: "+0.85"
-    }
-  },
-};
+];
 
-// Generate smooth curve data with deterministic seed
-const generatePriceData = (seed: number) => {
-  const points: { x: number; y: number }[] = [];
-  const basePrice = [500, 878, 147, 1013, 100][seed] || 500;
-  let price = basePrice;
-  // Use seed for pseudo-random but consistent data
-  const random = (i: number) => {
-    const x = Math.sin(seed * 1000 + i * 9999) * 10000;
-    return x - Math.floor(x);
-  };
-  for (let i = 0; i < 50; i++) {
-    price += (random(i) - 0.48) * (basePrice * 0.006);
-    price = Math.max(basePrice * 0.95, Math.min(basePrice * 1.08, price));
-    points.push({ x: i, y: price });
-  }
-  return points;
-};
-
-// Smooth SVG Area Chart with animated trading cursor
-const PremiumChart = ({ 
-  data, 
-  isVisible, 
+// Asset Card Component with Order Book
+const AssetCard = ({ 
+  asset, 
+  isActive, 
+  onSelect,
+  index,
+  isInView 
 }: { 
-  data: { x: number; y: number }[];
-  isVisible: boolean;
+  asset: TradableAsset; 
+  isActive: boolean;
+  onSelect: () => void;
+  index: number;
+  isInView: boolean;
 }) => {
-  const [cursorProgress, setCursorProgress] = useState(0);
+  const Icon = asset.categoryIcon;
   
-  // Animate cursor along the line
-  useEffect(() => {
-    if (!isVisible) return;
-    
-    const startDelay = setTimeout(() => {
-      const animate = () => {
-        setCursorProgress(prev => {
-          const next = prev + 0.003;
-          return next >= 1 ? 0 : next;
-        });
-      };
-      
-      const interval = setInterval(animate, 50);
-      return () => clearInterval(interval);
-    }, 2000);
-    
-    return () => clearTimeout(startDelay);
-  }, [isVisible]);
-
-  const width = 380;
-  const height = 220;
-  const padding = { top: 20, right: 10, bottom: 20, left: 10 };
-  
-  const chartW = width - padding.left - padding.right;
-  const chartH = height - padding.top - padding.bottom;
-  
-  const minY = Math.min(...data.map(d => d.y)) - 10;
-  const maxY = Math.max(...data.map(d => d.y)) + 10;
-  
-  const xScale = (x: number) => padding.left + (x / (data.length - 1)) * chartW;
-  const yScale = (y: number) => padding.top + chartH - ((y - minY) / (maxY - minY)) * chartH;
-  
-  // Get point at progress along the curve
-  const getPointAtProgress = (progress: number) => {
-    const index = Math.floor(progress * (data.length - 1));
-    const nextIndex = Math.min(index + 1, data.length - 1);
-    const t = (progress * (data.length - 1)) - index;
-    
-    const x = data[index].x + (data[nextIndex].x - data[index].x) * t;
-    const y = data[index].y + (data[nextIndex].y - data[index].y) * t;
-    
-    return { x: xScale(x), y: yScale(y), price: y };
-  };
-  
-  const cursorPoint = getPointAtProgress(cursorProgress);
-  
-  // Catmull-Rom to Bezier conversion for smooth curves
-  const catmullRomToBezier = (points: { x: number; y: number }[]) => {
-    const result: string[] = [];
-    for (let i = 0; i < points.length - 1; i++) {
-      const p0 = points[Math.max(i - 1, 0)];
-      const p1 = points[i];
-      const p2 = points[i + 1];
-      const p3 = points[Math.min(i + 2, points.length - 1)];
-      
-      const cp1x = p1.x + (p2.x - p0.x) / 6;
-      const cp1y = p1.y + (p2.y - p0.y) / 6;
-      const cp2x = p2.x - (p3.x - p1.x) / 6;
-      const cp2y = p2.y - (p3.y - p1.y) / 6;
-      
-      result.push(`C ${xScale(cp1x)} ${yScale(cp1y)} ${xScale(cp2x)} ${yScale(cp2y)} ${xScale(p2.x)} ${yScale(p2.y)}`);
-    }
-    return result.join(' ');
-  };
-  
-  const scaledPoints = data.map((p, i) => ({ x: i, y: p.y }));
-  const linePath = `M ${xScale(0)} ${yScale(data[0].y)} ${catmullRomToBezier(scaledPoints)}`;
-  const areaPath = `${linePath} L ${xScale(data.length - 1)} ${height - padding.bottom} L ${padding.left} ${height - padding.bottom} Z`;
-  
-  const lastPoint = data[data.length - 1];
-
   return (
-    <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
-      <defs>
-        <linearGradient id="chartAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
-          <stop offset="40%" stopColor="hsl(var(--primary))" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-        </linearGradient>
-        
-        <linearGradient id="chartLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-          <stop offset="50%" stopColor="hsl(180 70% 55%)" />
-          <stop offset="100%" stopColor="hsl(160 70% 50%)" />
-        </linearGradient>
-        
-        <filter id="chartGlow">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-        
-        <filter id="dotGlow">
-          <feGaussianBlur stdDeviation="6" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-        
-        <filter id="cursorGlow">
-          <feGaussianBlur stdDeviation="8" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      
-      {/* Subtle grid */}
-      {[0, 1, 2, 3].map((i) => (
-        <motion.line
-          key={i}
-          x1={padding.left}
-          y1={padding.top + (i * chartH) / 3}
-          x2={width - padding.right}
-          y2={padding.top + (i * chartH) / 3}
-          stroke="hsl(var(--muted-foreground))"
-          strokeOpacity={0.08}
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: isVisible ? 1 : 0 }}
-          transition={{ duration: 0.6, delay: i * 0.08 }}
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }}
+      transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+      onClick={onSelect}
+      className={`group relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 ${
+        isActive 
+          ? 'ring-2 ring-slate-900 shadow-2xl shadow-slate-900/20' 
+          : 'hover:shadow-xl hover:shadow-slate-200'
+      }`}
+    >
+      {/* Image */}
+      <div className="relative h-48 overflow-hidden">
+        <img 
+          src={asset.image} 
+          alt={asset.name}
+          className={`w-full h-full object-cover transition-transform duration-700 ${
+            isActive ? 'scale-105' : 'group-hover:scale-105'
+          }`}
         />
-      ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+        
+        {/* Category Badge */}
+        <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full">
+          <Icon className="w-3.5 h-3.5 text-slate-700" />
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-700">
+            {asset.category}
+          </span>
+        </div>
+        
+        {/* Price Change Badge */}
+        <div className={`absolute top-4 right-4 px-2.5 py-1 rounded-full flex items-center gap-1 ${
+          asset.priceChange >= 0 ? 'bg-emerald-500/90' : 'bg-rose-500/90'
+        }`}>
+          <TrendingUp className={`w-3 h-3 text-white ${asset.priceChange < 0 ? 'rotate-180' : ''}`} />
+          <span className="text-[10px] font-bold text-white">
+            {asset.priceChange >= 0 ? '+' : ''}{asset.priceChange}%
+          </span>
+        </div>
+        
+        {/* Asset Name */}
+        <div className="absolute bottom-4 left-4 right-4">
+          <h3 className="text-lg font-semibold text-white mb-1">{asset.name}</h3>
+          <div className="flex items-center gap-3 text-white/70 text-xs">
+            <span className="flex items-center gap-1">
+              <Users className="w-3 h-3" />
+              {asset.holders} holders
+            </span>
+            <span>{asset.totalValue}</span>
+          </div>
+        </div>
+      </div>
       
-      {/* Area fill */}
-      <motion.path
-        d={areaPath}
-        fill="url(#chartAreaGradient)"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={{ duration: 1, delay: 0.3 }}
-      />
+      {/* Trading Info */}
+      <div className="p-5 bg-white">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider">Token Price</span>
+            <div className="text-2xl font-bold text-slate-900">€{asset.tokenPrice.toFixed(2)}</div>
+          </div>
+          <div className="text-right">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider">Available</span>
+            <div className="text-lg font-semibold text-slate-700">{asset.availableTokens.toLocaleString()}</div>
+          </div>
+        </div>
+        
+        {/* Mini Order Book Preview */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Buy Orders */}
+          <div className="bg-slate-50 rounded-xl p-3">
+            <div className="flex items-center gap-1.5 mb-2">
+              <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700">Buy Orders</span>
+            </div>
+            <div className="space-y-1.5">
+              {asset.orders.buy.slice(0, 2).map((order, i) => (
+                <div key={i} className="flex justify-between text-xs">
+                  <span className="font-mono text-emerald-600">€{order.price.toFixed(2)}</span>
+                  <span className="text-slate-500">{order.quantity}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Sell Orders */}
+          <div className="bg-slate-50 rounded-xl p-3">
+            <div className="flex items-center gap-1.5 mb-2">
+              <ArrowDownLeft className="w-3.5 h-3.5 text-violet-600" />
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-violet-700">Sell Orders</span>
+            </div>
+            <div className="space-y-1.5">
+              {asset.orders.sell.slice(0, 2).map((order, i) => (
+                <div key={i} className="flex justify-between text-xs">
+                  <span className="font-mono text-violet-600">€{order.price.toFixed(2)}</span>
+                  <span className="text-slate-500">{order.quantity}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
       
-      {/* Main line */}
-      <motion.path
-        d={linePath}
-        fill="none"
-        stroke="url(#chartLineGradient)"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        filter="url(#chartGlow)"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: isVisible ? 1 : 0 }}
-        transition={{ duration: 1.8, ease: [0.22, 0.61, 0.36, 1] }}
-      />
-      
-      {/* Animated trading cursor following the line */}
-      {isVisible && cursorProgress > 0 && (
-        <g>
-          {/* Vertical line from cursor to bottom */}
-          <motion.line
-            x1={cursorPoint.x}
-            y1={cursorPoint.y}
-            x2={cursorPoint.x}
-            y2={height - padding.bottom}
-            stroke="hsl(var(--primary))"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            strokeOpacity={0.4}
-          />
-          
-          {/* Horizontal line to left edge */}
-          <motion.line
-            x1={padding.left}
-            y1={cursorPoint.y}
-            x2={cursorPoint.x}
-            y2={cursorPoint.y}
-            stroke="hsl(var(--primary))"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            strokeOpacity={0.4}
-          />
-          
-          {/* Cursor outer glow */}
-          <circle
-            cx={cursorPoint.x}
-            cy={cursorPoint.y}
-            r="12"
-            fill="hsl(var(--primary))"
-            opacity={0.15}
-            filter="url(#cursorGlow)"
-          />
-          
-          {/* Cursor ring */}
-          <circle
-            cx={cursorPoint.x}
-            cy={cursorPoint.y}
-            r="8"
-            fill="transparent"
-            stroke="hsl(180 70% 55%)"
-            strokeWidth="1.5"
-            opacity={0.6}
-          />
-          
-          {/* Cursor dot */}
-          <circle
-            cx={cursorPoint.x}
-            cy={cursorPoint.y}
-            r="4"
-            fill="hsl(160 70% 50%)"
-            filter="url(#dotGlow)"
-          />
-          
-          {/* Price tooltip - large and prominent */}
-          <g transform={`translate(${cursorPoint.x + 14}, ${cursorPoint.y - 24})`}>
-            {/* Background shadow */}
-            <rect
-              x="0"
-              y="-18"
-              width="95"
-              height="42"
-              rx="8"
-              fill="hsl(var(--background))"
-              opacity={0.95}
-            />
-            {/* Main background */}
-            <rect
-              x="0"
-              y="-18"
-              width="95"
-              height="42"
-              rx="8"
-              fill="hsl(var(--card))"
-              stroke="hsl(var(--primary))"
-              strokeWidth="1.5"
-              strokeOpacity={0.6}
-            />
-            {/* Gradient overlay */}
-            <rect
-              x="0"
-              y="-18"
-              width="95"
-              height="42"
-              rx="8"
-              fill="url(#chartLineGradient)"
-              opacity={0.15}
-            />
-            <text
-              x="12"
-              y="10"
-              className="text-[18px] font-mono font-bold fill-primary"
-            >
-              €{cursorPoint.price.toFixed(2)}
-            </text>
-          </g>
-        </g>
+      {/* Active indicator */}
+      {isActive && (
+        <motion.div 
+          layoutId="activeAssetIndicator"
+          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-800 via-indigo-600 to-violet-600"
+        />
       )}
-      
-      {/* Animated endpoint */}
-      <motion.circle
-        cx={xScale(lastPoint.x)}
-        cy={yScale(lastPoint.y)}
-        r="5"
-        fill="hsl(160 70% 50%)"
-        filter="url(#dotGlow)"
-        initial={{ scale: 0 }}
-        animate={{ scale: isVisible ? 1 : 0 }}
-        transition={{ duration: 0.4, delay: 1.5 }}
-      />
-      
-      {/* Pulsing ring at endpoint */}
-      <motion.circle
-        cx={xScale(lastPoint.x)}
-        cy={yScale(lastPoint.y)}
-        r="8"
-        fill="transparent"
-        stroke="hsl(160 70% 50%)"
-        strokeWidth="1.5"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ 
-          scale: isVisible ? [1, 1.8, 1] : 0.8, 
-          opacity: isVisible ? [0.6, 0, 0.6] : 0 
-        }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
-      />
-    </svg>
+    </motion.div>
   );
 };
 
-// Premium Order Book with depth visualization
-const OrderBook = ({ isVisible, orderBookData }: { isVisible: boolean; orderBookData: OrderBookData }) => {
+// Detailed Order Book Panel
+const OrderBookPanel = ({ asset, isInView }: { asset: TradableAsset; isInView: boolean }) => {
   return (
-    <div className="h-full flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 30 }}
+      transition={{ duration: 0.6, delay: 0.4 }}
+      className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xl shadow-slate-200/50"
+    >
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-white/5">
-        <span className="text-[10px] uppercase tracking-widest text-muted-foreground/70 font-medium">Order Book</span>
-        <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[9px] text-muted-foreground">Live</span>
-        </div>
-      </div>
-      
-      {/* Column headers */}
-      <div className="grid grid-cols-2 gap-4 px-3 py-1.5 text-[9px] uppercase tracking-wider text-muted-foreground/50 border-b border-white/5">
-        <span>Price</span>
-        <span className="text-right">Size</span>
-      </div>
-      
-      {/* Asks (sells) */}
-      <div className="flex-1 flex flex-col justify-end py-1">
-        <AnimatePresence mode="wait">
-          {orderBookData.asks.map((order, i) => (
-            <motion.div
-              key={`ask-${order.price}`}
-              className="relative group cursor-pointer"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ delay: 0.8 + i * 0.06, duration: 0.4 }}
-            >
-              {/* Depth bar */}
-              <motion.div
-                className="absolute inset-y-0 right-0 bg-gradient-to-l from-rose-500/15 to-transparent"
-                initial={{ width: 0 }}
-                animate={{ width: isVisible ? `${order.depth}%` : 0 }}
-                transition={{ delay: 1 + i * 0.06, duration: 0.5 }}
-              />
-              
-              <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
-                <span className="font-mono text-rose-400/90">€{order.price.toFixed(2)}</span>
-                <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
-              </div>
-              
-              {/* Hover effect */}
-              <div className="absolute inset-0 bg-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-      
-      {/* Spread indicator */}
-      <motion.div
-        className="px-3 py-2.5 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-y border-primary/20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={{ delay: 1.2, duration: 0.4 }}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AnimatePresence mode="wait">
-              <motion.span 
-                key={orderBookData.midPrice}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                className="text-lg font-mono font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent"
-              >
-                €{orderBookData.midPrice.toFixed(2)}
-              </motion.span>
-            </AnimatePresence>
-            <motion.span
-              className="text-xs text-emerald-400"
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              {orderBookData.change}%
-            </motion.span>
+      <div className="p-6 border-b border-slate-100">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl overflow-hidden">
+              <img src={asset.image} alt={asset.name} className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900">{asset.name}</h3>
+              <span className="text-sm text-slate-500">{asset.category}</span>
+            </div>
           </div>
-          <span className="text-[10px] text-muted-foreground/60">{orderBookData.spread}% spread</span>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs text-slate-500">Live</span>
+          </div>
         </div>
-      </motion.div>
-      
-      {/* Bids (buys) */}
-      <div className="flex-1 py-1">
-        <AnimatePresence mode="wait">
-          {orderBookData.bids.map((order, i) => (
-            <motion.div
-              key={`bid-${order.price}`}
-              className="relative group cursor-pointer"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 20 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ delay: 1.0 + i * 0.06, duration: 0.4 }}
-            >
-              {/* Depth bar */}
-              <motion.div
-                className="absolute inset-y-0 right-0 bg-gradient-to-l from-emerald-500/15 to-transparent"
-                initial={{ width: 0 }}
-                animate={{ width: isVisible ? `${order.depth}%` : 0 }}
-                transition={{ delay: 1.2 + i * 0.06, duration: 0.5 }}
-              />
-              
-              <div className="relative grid grid-cols-2 gap-4 px-3 py-1.5 text-xs">
-                <span className="font-mono text-emerald-400/90">€{order.price.toFixed(2)}</span>
-                <span className="font-mono text-right text-foreground/70">{order.size.toFixed(2)}</span>
-              </div>
-              
-              {/* Hover effect */}
-              <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        
+        {/* Stats Row */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center p-3 bg-slate-50 rounded-xl">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-1">Token Price</span>
+            <span className="text-lg font-bold text-slate-900">€{asset.tokenPrice.toFixed(2)}</span>
+          </div>
+          <div className="text-center p-3 bg-slate-50 rounded-xl">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-1">24h Change</span>
+            <span className={`text-lg font-bold ${asset.priceChange >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+              {asset.priceChange >= 0 ? '+' : ''}{asset.priceChange}%
+            </span>
+          </div>
+          <div className="text-center p-3 bg-slate-50 rounded-xl">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-1">Total Value</span>
+            <span className="text-lg font-bold text-slate-900">{asset.totalValue}</span>
+          </div>
+        </div>
       </div>
-    </div>
+      
+      {/* Order Book */}
+      <div className="grid grid-cols-2 divide-x divide-slate-100">
+        {/* Buy Side */}
+        <div className="p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+              <ArrowUpRight className="w-4 h-4 text-emerald-600" />
+            </div>
+            <div>
+              <span className="text-sm font-semibold text-slate-900 block">Buy Orders</span>
+              <span className="text-[10px] text-slate-400">Bids</span>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            {asset.orders.buy.map((order, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 + i * 0.1 }}
+                className="relative overflow-hidden rounded-lg"
+              >
+                <div 
+                  className="absolute inset-y-0 left-0 bg-emerald-100/50"
+                  style={{ width: `${(order.quantity / 150) * 100}%` }}
+                />
+                <div className="relative flex justify-between p-2.5 text-sm">
+                  <span className="font-mono font-medium text-emerald-700">€{order.price.toFixed(2)}</span>
+                  <span className="text-slate-600">{order.quantity} tokens</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Sell Side */}
+        <div className="p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
+              <ArrowDownLeft className="w-4 h-4 text-violet-600" />
+            </div>
+            <div>
+              <span className="text-sm font-semibold text-slate-900 block">Sell Orders</span>
+              <span className="text-[10px] text-slate-400">Asks</span>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            {asset.orders.sell.map((order, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 + i * 0.1 }}
+                className="relative overflow-hidden rounded-lg"
+              >
+                <div 
+                  className="absolute inset-y-0 right-0 bg-violet-100/50"
+                  style={{ width: `${(order.quantity / 150) * 100}%` }}
+                />
+                <div className="relative flex justify-between p-2.5 text-sm">
+                  <span className="font-mono font-medium text-violet-700">€{order.price.toFixed(2)}</span>
+                  <span className="text-slate-600">{order.quantity} tokens</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Trading Actions */}
+      <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+        <div className="grid grid-cols-2 gap-3">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl py-6 font-semibold">
+            <ArrowUpRight className="w-4 h-4 mr-2" />
+            Buy Tokens
+          </Button>
+          <Button variant="outline" className="border-violet-200 text-violet-700 hover:bg-violet-50 rounded-xl py-6 font-semibold">
+            <ArrowDownLeft className="w-4 h-4 mr-2" />
+            Sell Tokens
+          </Button>
+        </div>
+        
+        <div className="flex items-center justify-center gap-2 mt-4 text-xs text-slate-400">
+          <Clock className="w-3.5 h-3.5" />
+          <span>Settlement: T+0 • 24/7 Trading</span>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
 export const Marketplace = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [priceData, setPriceData] = useState(() => generatePriceData(0));
-  const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  
-  // Auto-rotate categories
-  useEffect(() => {
-    if (!isInView || isHovered) return;
-    
-    const categories = Object.keys(assetData);
-    const interval = setInterval(() => {
-      setActiveCategory(prev => {
-        const idx = categories.indexOf(prev);
-        return categories[(idx + 1) % categories.length];
-      });
-    }, 7000);
-    
-    return () => clearInterval(interval);
-  }, [isInView, isHovered]);
-  
-  // Update data on category change
-  useEffect(() => {
-    const seed = Object.keys(assetData).indexOf(activeCategory);
-    setPriceData(generatePriceData(seed));
-  }, [activeCategory]);
-  
-  const currentAsset = assetData[activeCategory];
-  
-  // Mouse parallax for depth effect
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-    const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-    setMousePos({ x: x * 4, y: y * 4 });
-  }, []);
+  const [selectedAsset, setSelectedAsset] = useState(0);
 
   const features = [
-    { icon: Shield, title: "Non-custodial ownership", desc: "Your assets stay in your wallet" },
-    { icon: Zap, title: "Set your own price", desc: "Place limit orders at any level" },
-    { icon: Lock, title: "On-chain settlement", desc: "Instant, verifiable execution" },
-    { icon: TrendingUp, title: "Options trading", desc: "Hedge or speculate with derivatives" },
+    { icon: Clock, title: "24/7 Trading", desc: "Trade anytime, anywhere" },
+    { icon: Users, title: "Peer-to-Peer", desc: "Direct investor matching" },
+    { icon: TrendingUp, title: "Real-Time", desc: "Live price discovery" },
   ];
 
   return (
-    <section ref={sectionRef} className="py-28 lg:py-36 relative overflow-hidden">
-      {/* Ambient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card/30" />
-      <div className="absolute top-1/4 left-0 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[200px] -translate-x-1/2" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-cyan-500/3 rounded-full blur-[180px] translate-x-1/3" />
+    <section 
+      ref={sectionRef}
+      className="relative py-24 lg:py-32 overflow-hidden bg-[#fafafa]"
+    >
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-violet-100/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-slate-200/40 rounded-full blur-3xl" />
+      </div>
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
-          {/* Left - Content */}
+      {/* Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(90deg, #1e293b 1px, transparent 1px), linear-gradient(180deg, #1e293b 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
+
+      <div className="container mx-auto px-6 lg:px-16 relative z-10">
+        {/* Editorial Header */}
+        <div className="mb-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }}
-            transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="flex items-center gap-6 mb-8"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 15 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-white/10 to-white/5 border border-white/20 mb-8"
-            >
-              <Activity className="w-4 h-4 text-white" />
-              <span className="text-sm font-medium text-white">
-                Secondary Marketplace
-              </span>
-            </motion.div>
-            
-            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-foreground mb-8 leading-[1.1]">
-              Your assets,{" "}
-              <span className="relative">
-                <span className="bg-gradient-to-r from-primary via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                  your price,
-                </span>
-                <motion.div
-                  className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-cyan-400 to-emerald-400 rounded-full"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: isInView ? 1 : 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                />
-              </span>{" "}
-              your pace.
-            </h2>
-            
-            <p className="text-lg text-muted-foreground mb-12 leading-relaxed max-w-lg">
-              The Fragma Society marketplace lets you trade tokenised assets peer-to-peer. 
-              Place limit orders, see depth in the order book, and manage your portfolio 24/7.
-            </p>
-            
-            <div className="space-y-5 mb-12">
-              {features.map((feature, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -20 }}
-                  transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                  className="flex items-start gap-4 group"
-                >
-                  <div className="relative">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center border border-white/20 group-hover:border-white/40 transition-all duration-300">
-                      <feature.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="absolute inset-0 rounded-xl bg-white/20 blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-0.5">{feature.title}</h3>
-                    <p className="text-sm text-muted-foreground">{feature.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 15 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="relative overflow-hidden border-2 border-white bg-transparent text-white font-semibold hover:bg-white hover:text-background transition-all duration-300 px-8 gap-2"
-                onClick={() => window.location.href = '/marketplace'}
-              >
-                <span>Learn more</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </Button>
-            </motion.div>
+            <span className="text-[11px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+              Secondary Market
+            </span>
+            <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent" />
           </motion.div>
           
-          {/* Right - Trading Terminal */}
-          <motion.div
-            ref={cardRef}
-            initial={{ opacity: 0, y: 50, rotateX: 8 }}
-            animate={{ 
-              opacity: isInView ? 1 : 0, 
-              y: isInView ? 0 : 50, 
-              rotateX: isInView ? 0 : 8 
-            }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.22, 0.61, 0.36, 1] }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
-            onMouseMove={handleMouseMove}
-            style={{ 
-              transform: `perspective(1200px) translate(${mousePos.x}px, ${mousePos.y}px)`,
-              transformStyle: "preserve-3d"
-            }}
-            className="relative lg:ml-8"
-          >
-            {/* Multi-layer glow effect */}
-            <div className="absolute -inset-8 bg-gradient-conic from-primary/20 via-cyan-500/10 via-emerald-500/10 to-primary/20 rounded-3xl blur-3xl opacity-40 animate-spin-slow" style={{ animationDuration: '20s' }} />
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary/15 to-cyan-500/15 rounded-2xl blur-2xl opacity-60" />
+          <div className="grid lg:grid-cols-2 gap-8 items-end">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1, duration: 0.8 }}
+            >
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-slate-900 leading-[0.95] tracking-tight mb-4">
+                Trade Real
+                <span className="block font-serif italic text-slate-500">World Assets</span>
+              </h2>
+              <p className="text-slate-500 text-lg leading-relaxed max-w-lg font-light">
+                Buy and sell tokenized assets directly with other investors. 
+                Real-time order matching, instant settlement.
+              </p>
+            </motion.div>
             
-            {/* Main card */}
-            <div className="relative bg-gradient-to-br from-card/95 via-card to-card/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl shadow-primary/5 overflow-hidden">
-              {/* Animated gradient orb */}
-              <motion.div
-                className={`absolute -top-32 -right-32 w-64 h-64 bg-gradient-to-br ${currentAsset.gradient} rounded-full blur-3xl opacity-20`}
-                animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              />
-              
-              {/* Header with tabs */}
-              <div className="relative border-b border-white/5 p-4 pb-3">
-                {/* Category pills */}
-                <div className="flex items-center gap-1.5 mb-4 overflow-x-auto scrollbar-hide">
-                  {assetCategories.map((cat) => (
-                    <motion.button
-                      key={cat.id}
-                      onClick={() => { setActiveCategory(cat.id); setIsHovered(true); }}
-                      className={`relative px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded-lg whitespace-nowrap transition-all duration-300
-                        ${activeCategory === cat.id 
-                          ? 'text-background' 
-                          : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {activeCategory === cat.id && (
-                        <motion.div
-                          layoutId="activeCategoryPill"
-                          className="absolute inset-0 bg-white rounded-lg"
-                          transition={{ type: "spring", duration: 0.4, bounce: 0.15 }}
-                        />
-                      )}
-                      <span className="relative z-10">{cat.label}</span>
-                    </motion.button>
-                  ))}
-                </div>
-                
-                {/* Ticker info row */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <motion.div
-                      className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center border border-white/10"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <TrendingUp className="w-5 h-5 text-white" />
-                    </motion.div>
-                    
-                    <div>
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={currentAsset.ticker}
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -8 }}
-                          transition={{ duration: 0.3 }}
-                          className="font-mono font-bold text-base text-foreground"
-                        >
-                          {currentAsset.ticker}
-                        </motion.div>
-                      </AnimatePresence>
-                      <div className="flex items-center gap-2">
-                        <motion.span
-                          key={currentAsset.change}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="text-xs font-mono text-emerald-400"
-                        >
-                          +{currentAsset.change.toFixed(1)}%
-                        </motion.span>
-                        <span className="text-[10px] text-muted-foreground/60">24h</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="text-right">
-                    <div className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-0.5">24h Volume</div>
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentAsset.volume}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="font-mono font-semibold text-foreground"
-                      >
-                        {currentAsset.volume}
-                      </motion.div>
-                    </AnimatePresence>
+            {/* Feature Pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="flex flex-wrap gap-3 lg:justify-end"
+            >
+              {features.map((feature, i) => (
+                <div 
+                  key={i}
+                  className="flex items-center gap-3 px-4 py-2.5 bg-white rounded-full border border-slate-200 shadow-sm"
+                >
+                  <feature.icon className="w-4 h-4 text-slate-600" />
+                  <div>
+                    <span className="text-sm font-medium text-slate-900">{feature.title}</span>
+                    <span className="text-xs text-slate-400 ml-2">{feature.desc}</span>
                   </div>
                 </div>
-              </div>
-              
-              {/* Main content area */}
-              <div className="grid grid-cols-5 min-h-[340px]">
-                {/* Chart section */}
-                <div className="col-span-3 p-4 border-r border-white/5 relative">
-                  <PremiumChart 
-                    data={priceData} 
-                    isVisible={isInView} 
-                  />
-                  
-                  {/* Chart label */}
-                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-cyan-500" />
-                    <span className="text-[10px] text-muted-foreground/60">Price (EUR)</span>
-                  </div>
-                </div>
-                
-                {/* Order book */}
-                <div className="col-span-2">
-                  <OrderBook isVisible={isInView} orderBookData={currentAsset.orderBook} />
-                </div>
-              </div>
-              
-              {/* Footer */}
-              <div className="relative border-t border-white/5 px-4 py-3 flex items-center justify-center bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent">
-                <div className="flex items-center gap-3">
-                  <motion.div
-                    className="flex items-center gap-2"
-                    animate={{ opacity: [0.7, 1, 0.7] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 shadow-lg shadow-emerald-500/30" />
-                    <span className="text-[11px] text-muted-foreground">Real-time</span>
-                  </motion.div>
-                  <div className="h-3 w-px bg-white/10" />
-                  <span className="text-[11px] text-muted-foreground/60">Powered by Fragma</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-3 gap-6 mb-16">
+          {/* Asset Cards Grid */}
+          <div className="lg:col-span-2 grid sm:grid-cols-2 gap-5">
+            {tradableAssets.map((asset, index) => (
+              <AssetCard
+                key={asset.id}
+                asset={asset}
+                isActive={selectedAsset === index}
+                onSelect={() => setSelectedAsset(index)}
+                index={index}
+                isInView={isInView}
+              />
+            ))}
+          </div>
+          
+          {/* Order Book Panel */}
+          <div className="lg:col-span-1">
+            <OrderBookPanel 
+              asset={tradableAssets[selectedAsset]} 
+              isInView={isInView}
+            />
+          </div>
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-center"
+        >
+          <Button 
+            size="lg" 
+            className="bg-slate-900 hover:bg-slate-800 text-white px-10 py-7 text-base rounded-full shadow-xl shadow-slate-900/20"
+            onClick={() => window.location.href = '/marketplace'}
+          >
+            Explore Marketplace
+            <ArrowUpRight className="ml-2 w-5 h-5" />
+          </Button>
+        </motion.div>
         
         {/* Partners Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 20 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-24 pt-16 border-t border-border/30"
+          className="mt-24 pt-16 border-t border-slate-200"
         >
-          <p className="text-center text-sm text-muted-foreground/60 uppercase tracking-widest mb-12">
+          <p className="text-center text-sm text-slate-400 uppercase tracking-widest mb-12">
             Trusted Partners & Infrastructure
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-5 md:gap-6 lg:gap-8">
             {[
               { name: "Woud Law Firm", logo: woudLawLogo },
-              { name: "House of Web3", logo: houseOfWeb3Logo, logoClassName: "invert" },
+              { name: "House of Web3", logo: houseOfWeb3Logo, logoClassName: "invert opacity-50 group-hover:opacity-80" },
               { name: "Swissquote", logo: swissquoteLogo },
               { name: "Bank Frick", logo: bankFrickLogo },
               { name: "Realiz", logo: realizLogo },
@@ -911,14 +561,14 @@ export const Marketplace = () => {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="cursor-pointer">
-                      <div className="flex items-center justify-center rounded-xl bg-card/40 border border-border/30 hover:border-primary/30 hover:bg-card/60 backdrop-blur-sm transition-all duration-300 px-6 py-4">
+                      <div className="flex items-center justify-center rounded-xl bg-white border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-300 px-6 py-4">
                         <div className="h-10 md:h-12 lg:h-14 flex items-center justify-center">
                           <img
                             src={partner.logo}
                             alt={`${partner.name} logo`}
                             loading="lazy"
                             decoding="async"
-                            className={`h-full w-auto object-contain max-w-[170px] opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 ${partner.logoClassName ?? ""}`}
+                            className={`h-full w-auto object-contain max-w-[170px] opacity-50 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 ${partner.logoClassName ?? ""}`}
                           />
                         </div>
                       </div>
@@ -926,9 +576,9 @@ export const Marketplace = () => {
                   </TooltipTrigger>
                   <TooltipContent
                     side="bottom"
-                    className="bg-popover/95 backdrop-blur-md border border-border/30 px-3 py-2"
+                    className="bg-slate-900 border-slate-700 px-3 py-2"
                   >
-                    <span className="text-xs font-medium text-foreground">{partner.name}</span>
+                    <span className="text-xs font-medium text-white">{partner.name}</span>
                   </TooltipContent>
                 </Tooltip>
               </motion.div>
