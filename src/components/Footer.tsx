@@ -43,40 +43,59 @@ const socialLinks = [
   { name: "Discord", href: "https://discord.gg/5AGfST93u3", Icon: DiscordIcon },
 ];
 
+const footerNav = {
+  investors: [
+    { label: "Live Deals", href: "/live-deals" },
+    { label: "Buy & Sell - Marketplace", href: "/marketplace" },
+    { label: "How it works?", href: "/how-it-works" },
+    { label: "Investor Membership", href: "/membership" },
+    { label: "Fragma One - Invest with us", href: "/strategy" },
+  ],
+  businesses: [
+    { label: "Launch your Signature Deal", href: "/signature-deal" },
+    { label: "Tokenize & List your asset", href: "/tokenize" },
+  ],
+  learn: [
+    { label: "Community Center", href: "#" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Documentations", href: "#" },
+  ],
+};
+
 export const Footer = () => (
-  <footer className="relative pt-20 pb-10 overflow-hidden">
-    {/* Dark Navy Base */}
-    <div className="absolute inset-0 bg-[hsl(220,30%,8%)]" />
-    
-    {/* Studio Spotlight Effects */}
+  <footer className="relative pt-24 pb-12 overflow-hidden bg-[#fafafa]">
+    {/* Subtle Background Elements */}
     <div className="absolute inset-0">
-      {/* Top-left white glow */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
-      {/* Center-right subtle white */}
-      <div className="absolute top-1/2 -right-20 w-80 h-80 bg-white/8 rounded-full blur-[100px]" />
-      {/* Bottom center soft glow */}
-      <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[600px] h-64 bg-white/5 rounded-full blur-[140px]" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-slate-100/50 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-slate-200/30 rounded-full blur-3xl" />
     </div>
     
-    {/* Top border accent */}
-    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+    {/* Top Divider Line */}
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
     
-    <div className="container mx-auto px-6 relative z-10">
-      {/* 4 Column Navigation */}
-      <div className="grid md:grid-cols-4 gap-12 mb-12">
-        {/* Logo Column */}
-        <div>
-          <img src="/fragma-society-logo.png" alt="Fragma Society" className="h-8 mb-4" />
-          <p className="text-muted-foreground text-sm mb-2">
+    <div className="container mx-auto px-6 lg:px-16 relative z-10">
+      {/* Main Footer Grid */}
+      <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+        
+        {/* Brand Column - Larger */}
+        <div className="lg:col-span-4">
+          <img 
+            src="/fragma-society-logo.png" 
+            alt="Fragma Society" 
+            className="h-7 mb-6 brightness-0"
+          />
+          
+          <p className="text-slate-600 text-sm leading-relaxed mb-3 max-w-xs">
             Buy and sell real world assets.
           </p>
-          <p className="text-muted-foreground text-xs mb-6">
+          
+          <p className="text-slate-400 text-xs leading-relaxed mb-8 max-w-sm">
             Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
           </p>
           
-          {/* Social Media Icons with Tooltips */}
+          {/* Social Media Icons */}
           <TooltipProvider delayDuration={100}>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {socialLinks.map((social) => (
                 <Tooltip key={social.name}>
                   <TooltipTrigger asChild>
@@ -84,10 +103,10 @@ export const Footer = () => (
                       href={social.comingSoon ? undefined : social.href}
                       target={social.comingSoon ? undefined : "_blank"}
                       rel={social.comingSoon ? undefined : "noopener noreferrer"}
-                      className={`w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-muted-foreground transition-all duration-300 ${
+                      className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
                         social.comingSoon 
-                          ? "opacity-50 cursor-not-allowed" 
-                          : "hover:text-white hover:border-white hover:bg-white/10 cursor-pointer"
+                          ? "opacity-40 cursor-not-allowed border-slate-200 text-slate-300" 
+                          : "border-slate-200 text-slate-400 hover:text-slate-800 hover:border-slate-400 hover:bg-slate-50"
                       }`}
                       aria-label={social.name}
                       onClick={social.comingSoon ? (e) => e.preventDefault() : undefined}
@@ -95,7 +114,7 @@ export const Footer = () => (
                       <social.Icon className="w-4 h-4" />
                     </a>
                   </TooltipTrigger>
-                  <TooltipContent side="top" className="bg-card border-white/20">
+                  <TooltipContent side="top" className="bg-slate-900 text-white border-0 text-xs">
                     <p>{social.comingSoon ? `${social.name} - Coming Soon` : social.name}</p>
                   </TooltipContent>
                 </Tooltip>
@@ -104,51 +123,100 @@ export const Footer = () => (
           </TooltipProvider>
         </div>
 
-        {/* Investors Column */}
-        <div>
-          <h5 className="text-foreground font-bold mb-4">Investors</h5>
-          <ul className="space-y-2 text-muted-foreground text-sm">
-            <li><Link to="/live-deals" className="hover:text-white transition-colors">Live Deals</Link></li>
-            <li><Link to="/marketplace" className="hover:text-white transition-colors">Buy & Sell - Marketplace</Link></li>
-            <li><Link to="/how-it-works" className="hover:text-white transition-colors">How it works?</Link></li>
-            <li><Link to="/membership" className="hover:text-white transition-colors">Investor Membership</Link></li>
-            <li><Link to="/strategy" className="hover:text-white transition-colors">Fragma One - Invest with us</Link></li>
-          </ul>
-        </div>
+        {/* Navigation Columns */}
+        <div className="lg:col-span-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12">
+            {/* Investors */}
+            <div>
+              <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-5">
+                Investors
+              </h5>
+              <ul className="space-y-3">
+                {footerNav.investors.map((item) => (
+                  <li key={item.label}>
+                    <Link 
+                      to={item.href} 
+                      className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        {/* Businesses Column */}
-        <div>
-          <h5 className="text-foreground font-bold mb-4">Businesses</h5>
-          <ul className="space-y-2 text-muted-foreground text-sm">
-            <li><Link to="/signature-deal" className="hover:text-white transition-colors">Launch your Signature Deal</Link></li>
-            <li><Link to="/tokenize" className="hover:text-white transition-colors">Tokenize & List your asset</Link></li>
-          </ul>
-        </div>
+            {/* Businesses */}
+            <div>
+              <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-5">
+                Businesses
+              </h5>
+              <ul className="space-y-3">
+                {footerNav.businesses.map((item) => (
+                  <li key={item.label}>
+                    <Link 
+                      to={item.href} 
+                      className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        {/* Learn Column */}
-        <div>
-          <h5 className="text-foreground font-bold mb-4">Learn</h5>
-          <ul className="space-y-2 text-muted-foreground text-sm">
-            <li><span className="hover:text-white cursor-pointer transition-colors">Community Center</span></li>
-            <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
-            <li><span className="hover:text-white cursor-pointer transition-colors">Documentations</span></li>
-          </ul>
+            {/* Learn */}
+            <div>
+              <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-5">
+                Learn
+              </h5>
+              <ul className="space-y-3">
+                {footerNav.learn.map((item) => (
+                  <li key={item.label}>
+                    {item.href === "#" ? (
+                      <span className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200 cursor-pointer">
+                        {item.label}
+                      </span>
+                    ) : (
+                      <Link 
+                        to={item.href} 
+                        className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200"
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Legal Section - Full Width */}
-      <div className="border-t border-foreground/10 pt-8 mb-8">
-        <h5 className="text-foreground font-bold mb-4">Legal</h5>
-        <ul className="flex flex-wrap gap-x-8 gap-y-2 text-muted-foreground text-sm mb-6">
-          <li><span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span></li>
-          <li><span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span></li>
-        </ul>
-        <p className="text-muted-foreground text-xs leading-relaxed">
-          Investing in tokenized assets involves risks, including credit, liquidity, currency, interest rate, volatility, capital repayment, and market risks. These factors may affect the value and performance of your investment. Please consult with a financial advisor and review our full risk disclosure before investing.
-        </p>
+      {/* Legal Section */}
+      <div className="border-t border-slate-200/80 pt-10 mb-10">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+          <div>
+            <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-4">
+              Legal
+            </h5>
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              <span className="text-slate-500 text-sm hover:text-slate-800 cursor-pointer transition-colors duration-200">
+                Privacy Policy
+              </span>
+              <span className="text-slate-500 text-sm hover:text-slate-800 cursor-pointer transition-colors duration-200">
+                Terms of Service
+              </span>
+            </div>
+          </div>
+          
+          <p className="text-slate-400 text-xs leading-relaxed max-w-2xl lg:text-right">
+            Investing in tokenized assets involves risks, including credit, liquidity, currency, interest rate, volatility, capital repayment, and market risks. These factors may affect the value and performance of your investment.
+          </p>
+        </div>
       </div>
 
-      <div className="border-t border-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs text-muted-foreground">
+      {/* Bottom Bar */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs text-slate-400">
         <p>© 2025 Fragma Society.</p>
         <p className="text-right">
           Gyeld Sàrl, 26 Rue Goethe, L-1637 Luxembourg, Grand-Duché de Luxembourg · RCS B293857
