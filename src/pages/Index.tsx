@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { SignatureDealsBanner } from "@/components/SignatureDealsBanner";
 import { Features } from "@/components/Features";
 import { FeaturedDeals } from "@/components/FeaturedDeals";
 import { HowItWorks } from "@/components/HowItWorks";
@@ -20,6 +21,7 @@ const Index = () => {
       <div className="relative z-10">
         <Navbar />
         <Hero />
+        <SignatureDealsBanner />
         <FeaturedDeals />
         <AssetClasses />
         <Features />
