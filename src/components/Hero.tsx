@@ -18,7 +18,7 @@ const highlights = [{
 }];
 
 // Dynamic words that cycle through
-const dynamicWords = ["Real Estate", "Film & Entertainment", "Luxury Assets", "Music Rights", "Sports", "Credit", "ESG & Impact"];
+const dynamicWords = ["Real Estate", "Film & Entertainment", "Luxury Assets", "Music Rights", "Sports", "Infrastructure Technology", "Hospitality"];
 export const Hero = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -99,7 +99,7 @@ export const Hero = () => {
         }} transition={{
           delay: 0.2,
           duration: 0.6
-        }} className="text-lg md:text-xl text-gradient font-medium tracking-wide mb-6">
+        }} className="text-lg md:text-xl text-white font-medium tracking-wide mb-6">
             Fractional, liquid, Compliant.
           </motion.p>
           
@@ -124,7 +124,7 @@ export const Hero = () => {
             }} transition={{
               duration: 0.6,
               ease: [0.16, 1, 0.3, 1]
-            }} className="block text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-gradient">
+            }} className="block text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-white">
                 {dynamicWords[currentWordIndex]}
               </motion.span>
             </AnimatePresence>
