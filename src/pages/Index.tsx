@@ -5,7 +5,6 @@ import { Features } from "@/components/Features";
 import { ScrollSection } from "@/components/ScrollSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Marketplace } from "@/components/Marketplace";
-import { WorkWithUs } from "@/components/WorkWithUs";
 import { TokenizeAssetCTA } from "@/components/TokenizeAssetCTA";
 import { StrategyCTA } from "@/components/StrategyCTA";
 import { Footer } from "@/components/Footer";
@@ -31,9 +30,6 @@ const Index = () => {
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <Marketplace />
-        </ScrollSection>
-        <ScrollSection delay={0.1}>
-          <WorkWithUs />
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <TokenizeAssetCTA />
