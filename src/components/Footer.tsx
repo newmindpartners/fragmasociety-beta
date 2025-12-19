@@ -63,15 +63,24 @@ const footerNav = {
 };
 
 export const Footer = () => (
-  <footer className="relative pt-24 pb-12 overflow-hidden bg-[#fafafa]">
-    {/* Subtle Background Elements */}
+  <footer className="relative pt-24 pb-12 overflow-hidden">
+    {/* Premium Light Gradient Background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-[#f8f9fc] via-[#f4f5f9] to-[#eef0f5]" />
+    
+    {/* Layered Atmospheric Effects */}
     <div className="absolute inset-0">
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-slate-100/50 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-slate-200/30 rounded-full blur-3xl" />
+      {/* Warm highlight top-left */}
+      <div className="absolute -top-20 -left-20 w-[600px] h-[400px] bg-gradient-to-br from-slate-50/80 via-white/40 to-transparent rounded-full blur-3xl" />
+      {/* Cool accent top-right */}
+      <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-gradient-to-bl from-slate-100/60 via-slate-50/30 to-transparent blur-3xl" />
+      {/* Subtle violet tint center */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-violet-50/20 via-transparent to-slate-100/30 blur-3xl" />
+      {/* Bottom fade to slightly darker */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-slate-100/50 to-transparent" />
     </div>
     
-    {/* Top Divider Line */}
-    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+    {/* Elegant Top Border */}
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
     
     <div className="container mx-auto px-6 lg:px-16 relative z-10">
       {/* Main Footer Grid */}
