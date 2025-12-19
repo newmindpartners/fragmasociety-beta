@@ -225,36 +225,52 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
     ),
     4: (
       <svg viewBox="0 0 200 160" className="w-full h-full">
-        {/* Exit/Trade illustration - RWA Assets */}
+        {/* Exit/Trade illustration - P2P RWA Trading */}
         
-        {/* Left asset card - Real Estate */}
+        {/* Left person avatar */}
         <motion.g
-          initial={{ opacity: 0, x: -20, rotate: -8 }}
-          animate={isActive ? { opacity: 1, x: 0, rotate: -8 } : { opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
         >
-          <rect x="15" y="45" width="55" height="70" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
+          <circle cx="42" cy="18" r="10" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1.5" />
+          <circle cx="42" cy="15" r="4" fill="#94a3b8" />
+          <path d="M34 28 Q34 22 42 22 Q50 22 50 28" fill="#94a3b8" />
+        </motion.g>
+        
+        {/* Left asset card - Real Estate with hover */}
+        <motion.g
+          initial={{ opacity: 0, x: -20, rotate: -5 }}
+          animate={isActive ? { opacity: 1, x: 0, rotate: -5 } : { opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: 1.05, rotate: 0, y: -3 }}
+          style={{ cursor: 'pointer' }}
+        >
+          <rect x="15" y="38" width="55" height="65" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
+          <motion.rect x="15" y="38" width="55" height="65" rx="6" fill="transparent" stroke="#6366f1" strokeWidth="0"
+            whileHover={{ strokeWidth: 2 }}
+          />
           {/* Building icon */}
-          <rect x="30" y="60" width="25" height="30" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
-          <rect x="34" y="65" width="6" height="6" fill="#94a3b8" />
-          <rect x="44" y="65" width="6" height="6" fill="#94a3b8" />
-          <rect x="34" y="75" width="6" height="6" fill="#94a3b8" />
-          <rect x="44" y="75" width="6" height="6" fill="#94a3b8" />
-          <rect x="39" y="82" width="7" height="8" fill="#6366f1" />
-          <text x="42" y="105" textAnchor="middle" fill="#64748b" className="text-[8px]">Real Estate</text>
+          <rect x="28" y="48" width="28" height="28" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
+          <rect x="32" y="52" width="6" height="6" fill="#94a3b8" />
+          <rect x="42" y="52" width="6" height="6" fill="#94a3b8" />
+          <rect x="32" y="62" width="6" height="6" fill="#94a3b8" />
+          <rect x="42" y="62" width="6" height="6" fill="#94a3b8" />
+          <rect x="38" y="70" width="8" height="6" fill="#6366f1" />
+          <text x="42" y="93" textAnchor="middle" fill="#64748b" className="text-[7px]">Real Estate</text>
         </motion.g>
         
         {/* Center exchange arrows */}
         <motion.g>
           <motion.path
-            d="M78 65 L122 65"
+            d="M78 58 L122 58"
             stroke="#6366f1" strokeWidth="2" strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
             transition={{ duration: 0.4, delay: 0.5 }}
           />
           <motion.path
-            d="M115 60 L122 65 L115 70"
+            d="M115 53 L122 58 L115 63"
             stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
             initial={{ opacity: 0 }}
             animate={isActive ? { opacity: 1 } : { opacity: 0 }}
@@ -262,14 +278,14 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
           />
           
           <motion.path
-            d="M122 85 L78 85"
+            d="M122 78 L78 78"
             stroke="#6366f1" strokeWidth="2" strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
             transition={{ duration: 0.4, delay: 0.6 }}
           />
           <motion.path
-            d="M85 80 L78 85 L85 90"
+            d="M85 73 L78 78 L85 83"
             stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
             initial={{ opacity: 0 }}
             animate={isActive ? { opacity: 1 } : { opacity: 0 }}
@@ -277,31 +293,47 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
           />
         </motion.g>
         
-        {/* Right asset card - Film/Entertainment */}
+        {/* Right person avatar */}
         <motion.g
-          initial={{ opacity: 0, x: 20, rotate: 8 }}
-          animate={isActive ? { opacity: 1, x: 0, rotate: 8 } : { opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
         >
-          <rect x="130" y="45" width="55" height="70" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
-          {/* Film reel icon */}
-          <circle cx="157" cy="75" r="18" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
-          <circle cx="157" cy="75" r="5" fill="#6366f1" />
-          <circle cx="157" cy="61" r="3" fill="#94a3b8" />
-          <circle cx="157" cy="89" r="3" fill="#94a3b8" />
-          <circle cx="143" cy="75" r="3" fill="#94a3b8" />
-          <circle cx="171" cy="75" r="3" fill="#94a3b8" />
-          <text x="157" y="105" textAnchor="middle" fill="#64748b" className="text-[8px]">Film</text>
+          <circle cx="157" cy="18" r="10" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1.5" />
+          <circle cx="157" cy="15" r="4" fill="#6366f1" />
+          <path d="M149 28 Q149 22 157 22 Q165 22 165 28" fill="#6366f1" />
         </motion.g>
         
-        {/* Secondary market badge */}
+        {/* Right asset card - Film with hover */}
+        <motion.g
+          initial={{ opacity: 0, x: 20, rotate: 5 }}
+          animate={isActive ? { opacity: 1, x: 0, rotate: 5 } : { opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: 1.05, rotate: 0, y: -3 }}
+          style={{ cursor: 'pointer' }}
+        >
+          <rect x="130" y="38" width="55" height="65" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
+          <motion.rect x="130" y="38" width="55" height="65" rx="6" fill="transparent" stroke="#6366f1" strokeWidth="0"
+            whileHover={{ strokeWidth: 2 }}
+          />
+          {/* Film reel icon */}
+          <circle cx="157" cy="63" r="15" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="157" cy="63" r="4" fill="#6366f1" />
+          <circle cx="157" cy="51" r="2.5" fill="#94a3b8" />
+          <circle cx="157" cy="75" r="2.5" fill="#94a3b8" />
+          <circle cx="145" cy="63" r="2.5" fill="#94a3b8" />
+          <circle cx="169" cy="63" r="2.5" fill="#94a3b8" />
+          <text x="157" y="93" textAnchor="middle" fill="#64748b" className="text-[7px]">Film</text>
+        </motion.g>
+        
+        {/* P2P badge */}
         <motion.g
           initial={{ scale: 0, opacity: 0 }}
           animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
           transition={{ type: "spring", delay: 0.9 }}
         >
-          <rect x="70" y="120" width="60" height="22" rx="11" fill="#1e293b" />
-          <text x="100" y="135" textAnchor="middle" fill="white" className="text-[9px] font-medium">Trade 24/7</text>
+          <rect x="60" y="115" width="80" height="24" rx="12" fill="#1e293b" />
+          <text x="100" y="131" textAnchor="middle" fill="white" className="text-[9px] font-medium">Peer-to-Peer 24/7</text>
         </motion.g>
       </svg>
     ),
