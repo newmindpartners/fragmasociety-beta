@@ -89,10 +89,10 @@ export const SignatureDealsBanner = () => {
         <AnimatePresence mode="sync">
           <motion.div
             key={`bg-${currentIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            initial={{ opacity: 0, scale: 1.05, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0"
           >
             <img
@@ -208,10 +208,13 @@ export const SignatureDealsBanner = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={`portrait-${currentIndex}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6 }}
+                initial={{ opacity: 0, filter: 'blur(12px)', scale: 1.02 }}
+                animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
+                exit={{ opacity: 0, filter: 'blur(12px)', scale: 0.98 }}
+                transition={{ 
+                  duration: 0.8, 
+                  ease: [0.22, 1, 0.36, 1]
+                }}
                 className="relative h-[85%] flex items-end"
               >
                 <img
@@ -234,15 +237,18 @@ export const SignatureDealsBanner = () => {
           {/* RIGHT - Name and position */}
           <div className="flex flex-col justify-center items-end text-right pr-4">
             {/* Fixed height container for name */}
-            <div className="h-[50px] md:h-[60px] flex items-center justify-end mb-3">
+            <div className="h-[60px] md:h-[80px] flex items-center justify-end mb-3">
               <AnimatePresence mode="wait">
                 <motion.h2
                   key={`name-${currentIndex}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-3xl md:text-[56px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
+                  initial={{ opacity: 0, filter: 'blur(8px)', y: 10 }}
+                  animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                  exit={{ opacity: 0, filter: 'blur(8px)', y: -10 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
+                  className="text-4xl md:text-[72px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{ 
                     background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
@@ -264,10 +270,14 @@ export const SignatureDealsBanner = () => {
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`title-${currentIndex}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
+                  initial={{ opacity: 0, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, filter: 'blur(4px)' }}
+                  transition={{ 
+                    duration: 0.5, 
+                    delay: 0.15,
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
                   className="text-sm md:text-base font-serif whitespace-nowrap"
                   style={{ 
                     color: 'rgba(255,255,255,0.5)',
