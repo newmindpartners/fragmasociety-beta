@@ -168,7 +168,7 @@ export const SignatureDealsBanner = () => {
             <h3
               className="text-2xl md:text-4xl font-light tracking-wide uppercase"
               style={{ 
-                color: 'rgba(255,255,255,0.4)',
+                color: 'rgba(255,255,255,0.85)',
                 letterSpacing: '0.15em'
               }}
             >
@@ -243,12 +243,12 @@ export const SignatureDealsBanner = () => {
                   transition={{ duration: 0.5 }}
                   className="text-3xl md:text-[52px] font-bold tracking-tight leading-none uppercase"
                   style={{ 
-                    background: 'linear-gradient(135deg, #ffffff 0%, #d4af37 50%, #ffffff 100%)',
+                    background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
-                    textShadow: '0 0 60px rgba(212, 175, 55, 0.3)',
+                    textShadow: '0 0 60px rgba(180, 160, 200, 0.25)',
                     fontWeight: 700,
                     letterSpacing: '-0.02em'
                   }}
