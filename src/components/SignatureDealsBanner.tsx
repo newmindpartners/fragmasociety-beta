@@ -102,20 +102,20 @@ export const SignatureDealsBanner = () => {
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{ 
-                opacity: 0.25,
-                filter: 'grayscale(60%) brightness(0.6)'
+                opacity: 0.55,
+                filter: 'grayscale(30%) brightness(0.85)'
               }}
             />
           </motion.div>
         </AnimatePresence>
         
-        {/* Deep navy gradient overlay */}
+        {/* Softer navy gradient overlay for better image visibility */}
         <div 
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse 60% 80% at 50% 100%, transparent 0%, rgba(15,23,42,0.4) 50%, rgba(15,23,42,0.9) 100%),
-              radial-gradient(ellipse 80% 50% at 50% 50%, transparent 0%, rgba(15,23,42,0.7) 100%)
+              radial-gradient(ellipse 70% 90% at 50% 100%, transparent 0%, rgba(15,23,42,0.3) 50%, rgba(15,23,42,0.7) 100%),
+              radial-gradient(ellipse 100% 60% at 50% 50%, transparent 0%, rgba(15,23,42,0.4) 100%)
             `
           }}
         />
