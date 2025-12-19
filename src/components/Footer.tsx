@@ -228,35 +228,60 @@ export const Footer = () => (
         </div>
       </div>
 
-      {/* Legal Section */}
-      <div className="border-t border-slate-200/80 pt-10 mb-10">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+    </div>
+    
+    {/* Dark Luxury Legal Section */}
+    <div className="relative mt-16">
+      {/* Dark Background with Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
+      
+      {/* Subtle Glow Effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-[400px] h-[200px] bg-violet-900/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[150px] bg-slate-700/10 rounded-full blur-3xl" />
+      </div>
+      
+      {/* Top Border Accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
+      
+      <div className="container mx-auto px-6 lg:px-16 relative z-10 py-12">
+        {/* Legal Content */}
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-10">
           <div>
-            <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-4">
+            <h5 className="text-[11px] tracking-[0.3em] uppercase text-slate-500 font-medium mb-5">
               Legal
             </h5>
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              <span className="text-slate-500 text-sm hover:text-slate-800 cursor-pointer transition-colors duration-200">
-                Privacy Policy
+            <div className="flex flex-wrap gap-x-8 gap-y-3">
+              <span className="group inline-flex items-center gap-2 text-slate-400 text-sm cursor-pointer transition-all duration-300 hover:text-white">
+                <span className="relative">
+                  Privacy Policy
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-400 transition-all duration-300 group-hover:w-full" />
+                </span>
               </span>
-              <span className="text-slate-500 text-sm hover:text-slate-800 cursor-pointer transition-colors duration-200">
-                Terms of Service
+              <span className="group inline-flex items-center gap-2 text-slate-400 text-sm cursor-pointer transition-all duration-300 hover:text-white">
+                <span className="relative">
+                  Terms of Service
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-400 transition-all duration-300 group-hover:w-full" />
+                </span>
               </span>
             </div>
           </div>
           
-          <p className="text-slate-400 text-xs leading-relaxed max-w-2xl lg:text-right">
+          <p className="text-slate-500 text-xs leading-relaxed max-w-2xl lg:text-right">
             Investing in tokenized assets involves risks, including credit, liquidity, currency, interest rate, volatility, capital repayment, and market risks. These factors may affect the value and performance of your investment.
           </p>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs text-slate-400">
-        <p>© 2025 Fragma Society.</p>
-        <p className="text-right">
-          Gyeld Sàrl, 26 Rue Goethe, L-1637 Luxembourg, Grand-Duché de Luxembourg · RCS B293857
-        </p>
+        {/* Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent mb-8" />
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <p className="text-xs text-slate-500">© 2025 Fragma Society.</p>
+          <p className="text-xs text-slate-600 text-right">
+            Gyeld Sàrl, 26 Rue Goethe, L-1637 Luxembourg, Grand-Duché de Luxembourg · RCS B293857
+          </p>
+        </div>
       </div>
     </div>
   </footer>
