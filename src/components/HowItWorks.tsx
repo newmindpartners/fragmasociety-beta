@@ -370,12 +370,12 @@ export const HowItWorks = () => {
 
       <div className="container mx-auto px-6 lg:px-16 relative z-10">
         {/* Editorial Header */}
-        <div className="mb-20">
+        <div className="mb-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-6 mb-10"
+            className="flex items-center gap-6 mb-6"
           >
             <span className="text-[11px] tracking-[0.4em] uppercase text-slate-400 font-medium">
               The Process
@@ -414,7 +414,7 @@ export const HowItWorks = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="flex justify-start lg:justify-center mb-16 overflow-x-auto pb-4 -mx-6 px-6 lg:mx-0 lg:px-0"
+          className="flex justify-start lg:justify-center mb-10 overflow-x-auto pb-4 -mx-6 px-6 lg:mx-0 lg:px-0"
         >
           <div className="inline-flex items-center gap-1 p-1 bg-white border border-slate-200/80 rounded-full shadow-sm">
             {steps.map((step, index) => (
@@ -465,7 +465,7 @@ export const HowItWorks = () => {
 
             <div className="grid lg:grid-cols-2">
               {/* Content Side */}
-              <div className="p-10 lg:p-16 xl:p-20">
+              <div className="p-8 lg:p-12 xl:p-14">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeStep}
@@ -475,7 +475,7 @@ export const HowItWorks = () => {
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
                     {/* Step Label */}
-                    <div className="flex items-center gap-4 mb-10">
+                    <div className="flex items-center gap-4 mb-6">
                       <span className="text-[10px] tracking-[0.3em] uppercase text-violet-600 font-semibold">
                         Step {currentStep.step}
                       </span>
@@ -487,7 +487,7 @@ export const HowItWorks = () => {
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.1 }}
-                      className="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center mb-8 shadow-xl shadow-slate-900/30"
+                      className="w-14 h-14 rounded-xl bg-slate-900 flex items-center justify-center mb-5 shadow-xl shadow-slate-900/30"
                     >
                       <currentStep.icon className="w-7 h-7 text-white" strokeWidth={1.5} />
                     </motion.div>
@@ -497,7 +497,7 @@ export const HowItWorks = () => {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.15 }}
-                      className="text-3xl lg:text-4xl xl:text-5xl font-light text-slate-900 mb-3 tracking-tight"
+                      className="text-2xl lg:text-3xl xl:text-4xl font-light text-slate-900 mb-2 tracking-tight"
                     >
                       {currentStep.title}
                     </motion.h3>
@@ -507,7 +507,7 @@ export const HowItWorks = () => {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="text-xl text-slate-400 font-serif italic mb-8"
+                      className="text-lg text-slate-400 font-serif italic mb-5"
                     >
                       {currentStep.subtitle}
                     </motion.p>
@@ -517,13 +517,13 @@ export const HowItWorks = () => {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.25 }}
-                      className="text-slate-600 text-lg leading-relaxed mb-10 font-light"
+                      className="text-slate-600 text-base leading-relaxed mb-6 font-light"
                     >
                       {currentStep.content}
                     </motion.p>
 
                     {/* Features */}
-                    <motion.ul className="space-y-4">
+                    <motion.ul className="space-y-3">
                       {currentStep.features.map((feature, i) => (
                         <motion.li
                           key={i}
@@ -544,7 +544,7 @@ export const HowItWorks = () => {
               </div>
 
               {/* Illustration Side */}
-              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-10 lg:p-16 flex items-center justify-center min-h-[420px] border-l border-slate-100/80">
+              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-8 lg:p-12 flex items-center justify-center min-h-[320px] border-l border-slate-100/80">
                 {/* Large decorative number */}
                 <div className="absolute top-8 right-8 text-[160px] xl:text-[200px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
                   0{activeStep + 1}
