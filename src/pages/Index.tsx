@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { SignatureDealsBanner } from "@/components/SignatureDealsBanner";
 import { Features } from "@/components/Features";
-
+import { ScrollSection } from "@/components/ScrollSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Marketplace } from "@/components/Marketplace";
 import { WorkWithUs } from "@/components/WorkWithUs";
@@ -20,13 +20,27 @@ const Index = () => {
       <div className="relative z-10">
         <Navbar />
         <Hero />
-        <Features />
-        <SignatureDealsBanner />
-        <HowItWorks />
-        <Marketplace />
-        <WorkWithUs />
-        <TokenizeAssetCTA />
-        <StrategyCTA />
+        <ScrollSection>
+          <Features />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <SignatureDealsBanner />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <HowItWorks />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <Marketplace />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <WorkWithUs />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <TokenizeAssetCTA />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <StrategyCTA />
+        </ScrollSection>
         <Footer />
       </div>
     </div>
