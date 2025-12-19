@@ -101,15 +101,17 @@ export const Features = () => {
                 className="group cursor-pointer"
               >
                 <motion.div
-                  className="relative p-10 lg:p-12 h-full overflow-hidden rounded-sm"
+                  className="relative p-10 lg:p-12 h-full overflow-hidden rounded-sm transition-all duration-500"
                   style={{
-                    background: 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)',
+                    background: isHovered 
+                      ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
+                      : 'rgba(255, 255, 255, 0.9)',
                     border: isHovered 
                       ? '1px solid rgba(139, 92, 246, 0.25)' 
-                      : '1px solid rgba(71, 85, 105, 0.2)',
+                      : '1px solid rgba(226, 232, 240, 0.8)',
                     boxShadow: isHovered 
                       ? '0 30px 60px -15px rgba(15, 23, 42, 0.6), 0 0 50px -10px rgba(139, 92, 246, 0.15)'
-                      : '0 10px 40px -15px rgba(15, 23, 42, 0.4)',
+                      : '0 4px 30px -10px rgba(0, 0, 0, 0.08)',
                   }}
                   animate={{ 
                     y: isHovered ? -8 : 0,
@@ -127,12 +129,13 @@ export const Features = () => {
 
                   {/* Large decorative number */}
                   <motion.span 
-                    className="absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none text-white/[0.03]"
+                    className={`absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none transition-colors duration-500 ${
+                      isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.04]'
+                    }`}
                     style={{ fontFamily: 'serif' }}
                     animate={{ 
                       x: isHovered ? 10 : 0,
-                      y: isHovered ? -10 : 0,
-                      opacity: isHovered ? 0.06 : 0.03
+                      y: isHovered ? -10 : 0
                     }}
                     transition={{ duration: 0.5 }}
                   >
@@ -141,17 +144,21 @@ export const Features = () => {
 
                   {/* Icon container */}
                   <motion.div 
-                    className="w-16 h-16 mb-10 flex items-center justify-center relative border border-slate-600/30 bg-slate-800/40"
+                    className={`w-16 h-16 mb-10 flex items-center justify-center relative transition-all duration-500 ${
+                      isHovered 
+                        ? 'border-slate-600/30 bg-slate-800/40' 
+                        : 'border-slate-200 bg-slate-50'
+                    }`}
+                    style={{ borderWidth: '1px', borderStyle: 'solid' }}
                     animate={{ 
                       rotate: isHovered ? 6 : 0,
-                      scale: isHovered ? 1.1 : 1,
-                      borderColor: isHovered ? 'rgba(139, 92, 246, 0.3)' : 'rgba(71, 85, 105, 0.3)'
+                      scale: isHovered ? 1.1 : 1
                     }}
                     transition={{ duration: 0.4 }}
                   >
                     <feature.icon 
                       className={`w-7 h-7 transition-all duration-500 ${
-                        isHovered ? 'text-violet-300' : 'text-slate-400'
+                        isHovered ? 'text-violet-300' : 'text-slate-600'
                       }`} 
                       strokeWidth={1.5}
                     />
@@ -167,7 +174,9 @@ export const Features = () => {
                   
                   {/* Title */}
                   <motion.h3 
-                    className="text-xl lg:text-2xl font-medium mb-4 text-white/90"
+                    className={`text-xl lg:text-2xl font-medium mb-4 transition-colors duration-500 ${
+                      isHovered ? 'text-white/90' : 'text-slate-900'
+                    }`}
                     animate={{ x: isHovered ? 4 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -175,7 +184,9 @@ export const Features = () => {
                   </motion.h3>
                   
                   {/* Description */}
-                  <p className="text-base leading-relaxed text-slate-400">
+                  <p className={`text-base leading-relaxed transition-colors duration-500 ${
+                    isHovered ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
                     {feature.desc}
                   </p>
 
