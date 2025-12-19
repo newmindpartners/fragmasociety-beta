@@ -546,7 +546,7 @@ export const HowItWorks = () => {
               {/* Illustration Side */}
               <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-8 lg:p-12 flex items-center justify-center min-h-[320px] border-l border-slate-100/80">
                 {/* Large decorative number */}
-                <div className="absolute top-8 right-8 text-[160px] xl:text-[200px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
+                <div className="absolute top-6 right-6 text-[100px] xl:text-[120px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
                   0{activeStep + 1}
                 </div>
                 
