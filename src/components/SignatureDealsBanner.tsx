@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import bryanImage from "@/assets/bryan-banner.png";
 import philippeImage from "@/assets/philippe-banner.png";
 import timImage from "@/assets/tim-banner.png";
-import sportsIndustry from "@/assets/category-sports.jpg";
+import bryanIndustry from "@/assets/bryan-horse-jumping.png";
 import realEstateIndustry from "@/assets/malibu-sea-view.jpg";
 import filmIndustry from "@/assets/category-film.jpg";
 
@@ -12,7 +12,7 @@ const leaders = [
     name: "Bryan Balsiger",
     title: "European Champion Jumping",
     image: bryanImage,
-    industryImage: sportsIndustry,
+    industryImage: bryanIndustry,
     accentColor: "#8b9a7d",
   },
   {
