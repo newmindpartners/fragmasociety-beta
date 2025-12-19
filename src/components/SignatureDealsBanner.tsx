@@ -242,7 +242,7 @@ export const SignatureDealsBanner = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="text-2xl md:text-[42px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
+                  className="text-3xl md:text-[56px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{ 
                     background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
