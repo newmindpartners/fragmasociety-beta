@@ -25,13 +25,13 @@ const Index = () => {
           <SignatureDealsBanner />
         </ScrollSection>
         <ScrollSection delay={0.1}>
+          <StrategyCTA />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
           <HowItWorks />
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <Marketplace />
-        </ScrollSection>
-        <ScrollSection delay={0.1}>
-          <StrategyCTA />
         </ScrollSection>
         <Footer />
       </div>
