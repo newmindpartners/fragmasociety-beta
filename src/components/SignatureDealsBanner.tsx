@@ -47,7 +47,7 @@ export const SignatureDealsBanner = () => {
 
   return (
     <section 
-      className="relative h-[220px] md:h-[260px] overflow-hidden"
+      className="relative h-[280px] md:h-[340px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ background: '#f8f7f5' }}
@@ -71,15 +71,15 @@ export const SignatureDealsBanner = () => {
               animate={{ scale: 1 }}
               transition={{ duration: 10, ease: "linear" }}
               style={{ 
-                opacity: 0.18,
-                filter: 'grayscale(30%)'
+                opacity: 0.15,
+                filter: 'grayscale(40%)'
               }}
             />
             {/* Gradient overlay for elegance */}
             <div 
               className="absolute inset-0"
               style={{
-                background: 'linear-gradient(90deg, rgba(248,247,245,0.95) 0%, rgba(248,247,245,0.7) 35%, rgba(248,247,245,0.5) 50%, rgba(248,247,245,0.7) 65%, rgba(248,247,245,0.95) 100%)'
+                background: 'linear-gradient(90deg, rgba(248,247,245,0.92) 0%, rgba(248,247,245,0.6) 30%, rgba(248,247,245,0.4) 50%, rgba(248,247,245,0.6) 70%, rgba(248,247,245,0.92) 100%)'
               }}
             />
           </motion.div>
@@ -159,7 +159,7 @@ export const SignatureDealsBanner = () => {
           </div>
 
           {/* MIDDLE - Leader portrait */}
-          <div className="relative h-full flex items-end justify-center">
+          <div className="relative h-full flex items-end justify-center overflow-visible">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`portrait-${currentIndex}`}
@@ -170,7 +170,7 @@ export const SignatureDealsBanner = () => {
                   duration: 0.7,
                   ease: [0.22, 1, 0.36, 1]
                 }}
-                className="relative h-full"
+                className="absolute bottom-0 h-[120%] flex items-end"
               >
                 <img
                   src={current.image}
@@ -178,8 +178,7 @@ export const SignatureDealsBanner = () => {
                   className="h-full w-auto object-contain object-bottom"
                   style={{ 
                     filter: 'grayscale(100%) contrast(1.1)',
-                    mixBlendMode: 'multiply',
-                    maxHeight: '100%'
+                    mixBlendMode: 'multiply'
                   }}
                 />
               </motion.div>
