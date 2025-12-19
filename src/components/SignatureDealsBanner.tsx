@@ -248,7 +248,7 @@ export const SignatureDealsBanner = () => {
                     duration: 0.6, 
                     ease: [0.22, 1, 0.36, 1]
                   }}
-                  className="text-4xl md:text-[72px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
+                  className="text-3xl md:text-[58px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{ 
                     background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
