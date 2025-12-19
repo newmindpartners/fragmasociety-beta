@@ -148,9 +148,15 @@ export const Footer = () => (
                   <li key={item.label}>
                     <Link 
                       to={item.href} 
-                      className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200"
+                      className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900"
                     >
-                      {item.label}
+                      <span className="relative">
+                        {item.label}
+                        <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
+                      </span>
+                      <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                        →
+                      </span>
                     </Link>
                   </li>
                 ))}
@@ -167,9 +173,15 @@ export const Footer = () => (
                   <li key={item.label}>
                     <Link 
                       to={item.href} 
-                      className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200"
+                      className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900"
                     >
-                      {item.label}
+                      <span className="relative">
+                        {item.label}
+                        <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
+                      </span>
+                      <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                        →
+                      </span>
                     </Link>
                   </li>
                 ))}
@@ -185,15 +197,27 @@ export const Footer = () => (
                 {footerNav.learn.map((item) => (
                   <li key={item.label}>
                     {item.href === "#" ? (
-                      <span className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200 cursor-pointer">
-                        {item.label}
+                      <span className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900 cursor-pointer">
+                        <span className="relative">
+                          {item.label}
+                          <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
+                        </span>
+                        <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                          →
+                        </span>
                       </span>
                     ) : (
                       <Link 
                         to={item.href} 
-                        className="text-slate-600 text-sm hover:text-slate-900 transition-colors duration-200"
+                        className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900"
                       >
-                        {item.label}
+                        <span className="relative">
+                          {item.label}
+                          <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
+                        </span>
+                        <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                          →
+                        </span>
                       </Link>
                     )}
                   </li>
