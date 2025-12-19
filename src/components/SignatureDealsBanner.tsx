@@ -41,7 +41,7 @@ export const SignatureDealsBanner = () => {
       setCurrentIndex((prev) => (prev + 1) % leaders.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isHovered, currentIndex]);
 
   const current = leaders[currentIndex];
 
