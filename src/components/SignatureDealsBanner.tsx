@@ -166,11 +166,10 @@ export const SignatureDealsBanner = () => {
             </div>
             
             <h3
-              className="text-3xl md:text-5xl font-serif tracking-tight"
+              className="text-2xl md:text-4xl font-light tracking-wide uppercase"
               style={{ 
-                color: 'rgba(255,255,255,0.9)',
-                fontStyle: 'italic',
-                fontWeight: 300
+                color: 'rgba(255,255,255,0.4)',
+                letterSpacing: '0.15em'
               }}
             >
               Invest with
@@ -234,18 +233,24 @@ export const SignatureDealsBanner = () => {
 
           {/* RIGHT - Name and position */}
           <div className="flex flex-col justify-center items-end text-right pr-4">
-            <div className="h-[50px] md:h-[52px] flex items-center justify-end mb-2">
+            <div className="h-[60px] md:h-[70px] flex items-center justify-end mb-3">
               <AnimatePresence mode="wait">
                 <motion.h2
                   key={`name-${currentIndex}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.5 }}
-                  className="text-2xl md:text-[42px] font-serif tracking-tight leading-none"
+                  className="text-3xl md:text-[52px] font-bold tracking-tight leading-none uppercase"
                   style={{ 
-                    color: 'rgba(255,255,255,0.95)',
-                    fontWeight: 400
+                    background: 'linear-gradient(135deg, #ffffff 0%, #d4af37 50%, #ffffff 100%)',
+                    backgroundSize: '200% 200%',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    textShadow: '0 0 60px rgba(212, 175, 55, 0.3)',
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em'
                   }}
                 >
                   {current.name}
