@@ -32,7 +32,7 @@ export const Features = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
         {/* Subtle spotlight effects */}
         <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-violet-50/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
       </div>
 
@@ -104,15 +104,15 @@ export const Features = () => {
                   className="relative p-10 lg:p-12 h-full overflow-hidden"
                   style={{
                     background: isHovered 
-                      ? 'linear-gradient(145deg, rgba(30,41,59,0.98) 0%, rgba(51,65,85,0.96) 50%, rgba(67,56,89,0.94) 100%)'
+                      ? 'linear-gradient(145deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.97) 50%, rgba(51,65,85,0.95) 100%)'
                       : 'rgba(255, 255, 255, 0.85)',
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
                     border: isHovered 
-                      ? '1px solid rgba(139, 92, 246, 0.2)' 
+                      ? '1px solid rgba(71, 85, 105, 0.3)' 
                       : '1px solid rgba(148, 163, 184, 0.15)',
                     boxShadow: isHovered 
-                      ? '0 30px 60px -15px rgba(30, 41, 59, 0.35), 0 0 40px -10px rgba(139, 92, 246, 0.15)'
+                      ? '0 30px 60px -15px rgba(15, 23, 42, 0.5), 0 0 40px -10px rgba(51, 65, 85, 0.2)'
                       : '0 4px 30px -10px rgba(0, 0, 0, 0.06)',
                   }}
                   animate={{ 
@@ -140,7 +140,7 @@ export const Features = () => {
                   <motion.div 
                     className={`w-16 h-16 mb-10 flex items-center justify-center relative transition-all duration-500 ${
                       isHovered 
-                        ? 'border border-violet-400/30 bg-white/5' 
+                        ? 'border border-slate-400/30 bg-white/5' 
                         : 'border border-slate-200 bg-white/60'
                     }`}
                     animate={{ 
@@ -151,14 +151,14 @@ export const Features = () => {
                   >
                     <feature.icon 
                       className={`w-7 h-7 transition-all duration-500 ${
-                        isHovered ? 'text-violet-300' : 'text-slate-600'
+                        isHovered ? 'text-slate-300' : 'text-slate-600'
                       }`} 
                       strokeWidth={1.5}
                     />
                     
                     {/* Icon glow on hover */}
                     <motion.div 
-                      className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-slate-500/10 blur-xl"
+                      className="absolute inset-0 bg-gradient-to-br from-slate-400/20 to-slate-600/10 blur-xl"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isHovered ? 1 : 0 }}
                       transition={{ duration: 0.4 }}
@@ -185,7 +185,7 @@ export const Features = () => {
 
                   {/* Bottom accent line */}
                   <motion.div 
-                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500 via-slate-400 to-slate-600"
+                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-slate-500 via-slate-400 to-slate-600"
                     initial={{ width: 0 }}
                     animate={{ width: isHovered ? '100%' : 0 }}
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -196,7 +196,7 @@ export const Features = () => {
                     className="absolute top-0 left-0 w-12 h-12"
                     style={{
                       background: isHovered 
-                        ? 'linear-gradient(135deg, rgba(139,92,246,0.15) 0%, transparent 50%)' 
+                        ? 'linear-gradient(135deg, rgba(71,85,105,0.2) 0%, transparent 50%)' 
                         : 'linear-gradient(135deg, rgba(148,163,184,0.1) 0%, transparent 50%)'
                     }}
                     animate={{ 
@@ -208,7 +208,7 @@ export const Features = () => {
 
                   {/* Hover indicator dot */}
                   <motion.div 
-                    className="absolute bottom-8 right-8 w-2 h-2 rounded-full bg-gradient-to-r from-violet-400 to-slate-300"
+                    className="absolute bottom-8 right-8 w-2 h-2 rounded-full bg-gradient-to-r from-slate-400 to-slate-500"
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ 
                       scale: isHovered ? 1 : 0,
