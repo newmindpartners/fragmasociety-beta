@@ -1,18 +1,18 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { 
   ArrowRight, 
   Shield, 
   Landmark, 
   TrendingUp, 
   RefreshCw,
-  Sparkles,
   Lock,
-  Coins,
-  Phone
+  Phone,
+  Play,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import strategyCtaBg from "@/assets/strategy-cta-bg.jpg";
 
 const features = [
   { 
@@ -37,272 +37,270 @@ const features = [
   },
 ];
 
-const floatingOrbs = [
-  { size: 300, x: "10%", y: "20%", delay: 0 },
-  { size: 200, x: "85%", y: "60%", delay: 1 },
-  { size: 150, x: "70%", y: "15%", delay: 2 },
-  { size: 100, x: "15%", y: "75%", delay: 0.5 },
-];
-
 export const StrategyCTA = () => {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
   return (
-    <section className="py-32 relative overflow-hidden">
-      {/* Photo-realistic Background with Blur */}
+    <section className="relative overflow-hidden">
+      {/* Deep Slate/Navy Background - matching signature deals & footer */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
+      
+      {/* Atmospheric Effects */}
       <div className="absolute inset-0">
-        <motion.div
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 20, ease: "easeOut" }}
-          className="absolute inset-0"
-        >
-          <img 
-            src={strategyCtaBg} 
-            alt="" 
-            className="w-full h-full object-cover scale-110 blur-[3px]"
-          />
-        </motion.div>
-        {/* Dark Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background/90" />
+        {/* Violet glow top-left */}
+        <div className="absolute -top-32 -left-32 w-[600px] h-[400px] bg-violet-900/15 rounded-full blur-3xl" />
+        {/* Slate accent top-right */}
+        <div className="absolute -top-20 -right-20 w-[500px] h-[350px] bg-slate-700/20 rounded-full blur-3xl" />
+        {/* Central violet band */}
+        <div className="absolute top-1/2 left-0 right-0 h-[400px] -translate-y-1/2 bg-gradient-to-r from-violet-900/10 via-violet-800/15 to-violet-900/10 blur-3xl" />
+        {/* Bottom gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-60 bg-gradient-to-t from-slate-950/80 to-transparent" />
       </div>
       
-      {/* Animated grid pattern */}
-      <div className="absolute inset-0 opacity-[0.02]" 
+      {/* Top Border Accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
+      
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
         style={{
-          backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
+          backgroundImage: `linear-gradient(rgba(139,92,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.5) 1px, transparent 1px)`,
+          backgroundSize: '80px 80px'
         }}
       />
 
-      {/* Floating orbs */}
-      {floatingOrbs.map((orb, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: orb.size,
-            height: orb.size,
-            left: orb.x,
-            top: orb.y,
-            background: `radial-gradient(circle, hsl(0 0% 100% / 0.15), transparent 70%)`,
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 8,
-            delay: orb.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Central glow */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
-        animate={{
-          scale: [1, 1.1, 1],
-          rotate: [0, 180, 360],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-conic from-white/20 via-transparent to-white/10 rounded-full blur-[100px]" />
-      </motion.div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Top decorative element */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="flex justify-center mb-8"
-        >
-          <div className="relative">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="w-20 h-20 rounded-full border border-white/30"
-            />
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-2 rounded-full border border-white/50"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-10 h-10 rounded-full bg-gradient-to-br from-white to-white/80 flex items-center justify-center"
-              >
-                <Coins className="w-5 h-5 text-background" />
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-4xl mx-auto"
-        >
-          {/* Badge with shimmer */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 border border-white/30 backdrop-blur-sm"
-          >
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-            </motion.div>
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-white">
-              Exclusive Investment Vehicle
-            </span>
-            <motion.div
-              animate={{ rotate: [0, -360] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-            </motion.div>
-          </motion.div>
+      <div className="container mx-auto px-6 lg:px-16 relative z-10 py-24 lg:py-32">
+        {/* Two Column Layout */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           
-          {/* Main heading with gradient */}
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6"
-          >
-            <span className="text-foreground">Fragma</span>{" "}
-            <span className="text-gradient">One</span>
-          </motion.h2>
-          
-          {/* Subtitle with reveal animation */}
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto"
-          >
-            One fund. Broad exposure to real-world yield & digital infrastructure. Powered by the Fragma ecosystem.
-          </motion.p>
-
-          {/* Feature cards with staggered animation */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
-          >
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.label}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5, scale: 1.02 }}
-                className="group relative"
-              >
-                <div className="card-premium p-5 h-full flex flex-col items-center text-center shine">
-                  {/* Icon with glow effect */}
-                  <motion.div 
-                    className="relative mb-3"
-                    whileHover={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <div className="absolute inset-0 bg-white/30 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="icon-premium w-12 h-12">
-                      <feature.icon className="w-5 h-5 text-white" />
-                    </div>
-                  </motion.div>
-                  
-                  <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-white transition-colors">
-                    {feature.label}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* CTA Button with premium effects */}
+          {/* Left - Content */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+            transition={{ duration: 0.8 }}
           >
-            <Button asChild size="lg" className="group relative overflow-hidden bg-white text-background hover:bg-white/90 px-8 py-6 text-base">
-              <Link to="/auth" className="flex items-center gap-3">
-                <Lock className="w-4 h-4" />
-                <span>Register to view strategy details</span>
-                <motion.div
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  <ArrowRight className="w-5 h-5" />
-                </motion.div>
-              </Link>
-            </Button>
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-3 mb-8"
+            >
+              <div className="h-px w-8 bg-gradient-to-r from-violet-500/50 to-transparent" />
+              <span className="text-[11px] tracking-[0.3em] uppercase text-slate-400 font-medium">
+                Exclusive Investment Vehicle
+              </span>
+            </motion.div>
             
-            <Button variant="outline" size="lg" className="group px-8 py-6 text-base border-white text-white hover:bg-white hover:text-background transition-all duration-300">
-              <Phone className="w-4 h-4 mr-3" />
-              <span>Book a Call</span>
-            </Button>
-          </motion.div>
+            {/* Main heading */}
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]"
+            >
+              <span className="text-white">Fragma</span>{" "}
+              <span 
+                className="bg-gradient-to-r from-violet-300 via-slate-300 to-violet-400 bg-clip-text text-transparent"
+              >
+                One
+              </span>
+            </motion.h2>
+            
+            {/* Subtitle */}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-lg md:text-xl text-slate-400 mb-10 leading-relaxed max-w-lg"
+            >
+              One fund. Broad exposure to real-world yield & digital infrastructure. 
+              Powered by the Fragma ecosystem.
+            </motion.p>
 
-          {/* Trust indicators */}
+            {/* Feature Grid */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="grid grid-cols-2 gap-4 mb-10"
+            >
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  className="group"
+                >
+                  <div 
+                    className="p-5 h-full border border-slate-700/50 bg-slate-800/30 backdrop-blur-sm transition-all duration-500 hover:border-violet-500/30 hover:bg-slate-800/50"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 flex items-center justify-center border border-slate-600/40 bg-slate-800/60 group-hover:border-violet-500/40 transition-colors duration-500">
+                        <feature.icon className="w-4 h-4 text-slate-400 group-hover:text-violet-300 transition-colors duration-500" strokeWidth={1.5} />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-white/90 mb-1">
+                          {feature.label}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <Button 
+                asChild 
+                size="lg" 
+                className="group bg-white text-slate-900 hover:bg-slate-100 px-8 py-6 text-base rounded-none transition-all duration-500"
+              >
+                <Link to="/auth" className="flex items-center gap-3">
+                  <Lock className="w-4 h-4" />
+                  <span>Register to view details</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="group px-8 py-6 text-base rounded-none border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-violet-500/50 hover:text-white transition-all duration-500"
+              >
+                <Phone className="w-4 h-4 mr-3" />
+                <span>Book a Call</span>
+              </Button>
+            </motion.div>
+
+            {/* Trust indicators */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8 }}
+              className="flex flex-wrap gap-6 mt-10 text-xs text-slate-500"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-violet-400/60" />
+                <span>Luxembourg Securitisation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-violet-400/60" />
+                <span>Professional Governance</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-violet-400/60" />
+                <span>Tokenized Notes</span>
+              </div>
+            </motion.div>
+          </motion.div>
+          
+          {/* Right - Video Player */}
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 1 }}
-            className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
           >
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span>Luxembourg Securitisation</span>
+            {/* Video Container */}
+            <div className="relative aspect-video overflow-hidden border border-slate-700/50 bg-slate-800/30">
+              {/* Video Thumbnail / Player */}
+              {!isVideoPlaying ? (
+                <>
+                  {/* Placeholder gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950" />
+                  
+                  {/* Decorative elements */}
+                  <div className="absolute inset-0">
+                    <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-violet-900/20 rounded-full blur-3xl" />
+                    <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-slate-700/20 rounded-full blur-3xl" />
+                  </div>
+                  
+                  {/* Play Button */}
+                  <motion.button
+                    onClick={() => setIsVideoPlaying(true)}
+                    className="absolute inset-0 flex items-center justify-center group cursor-pointer"
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="relative">
+                      {/* Outer ring */}
+                      <motion.div 
+                        className="absolute inset-0 border-2 border-white/20 rounded-full"
+                        style={{ width: 120, height: 120, margin: -20 }}
+                        animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      {/* Play button */}
+                      <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:bg-white/20 group-hover:border-violet-400/50 transition-all duration-500">
+                        <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
+                      </div>
+                    </div>
+                    
+                    {/* Watch video label */}
+                    <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs tracking-[0.2em] uppercase text-slate-400 group-hover:text-white transition-colors duration-300">
+                      Watch Video
+                    </span>
+                  </motion.button>
+                  
+                  {/* Corner accents */}
+                  <div className="absolute top-4 left-4 w-8 h-8 border-l border-t border-slate-600/50" />
+                  <div className="absolute top-4 right-4 w-8 h-8 border-r border-t border-slate-600/50" />
+                  <div className="absolute bottom-4 left-4 w-8 h-8 border-l border-b border-slate-600/50" />
+                  <div className="absolute bottom-4 right-4 w-8 h-8 border-r border-b border-slate-600/50" />
+                </>
+              ) : (
+                <div className="relative w-full h-full">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setIsVideoPlaying(false)}
+                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-900/80 border border-slate-700 flex items-center justify-center hover:bg-slate-800 transition-colors"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
+                  
+                  {/* Video iframe placeholder - replace with actual video */}
+                  <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
+                    <p className="text-slate-500 text-sm">Video Player</p>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span>Professional Governance</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span>Tokenized Notes</span>
-            </div>
+            
+            {/* Video caption */}
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="text-center text-xs text-slate-500 mt-4"
+            >
+              Capital at risk. For professional / qualified investors only.
+            </motion.p>
           </motion.div>
-
-          {/* Risk disclaimer */}
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 1.2 }}
-            className="text-xs text-muted-foreground/60 mt-8 max-w-lg mx-auto"
-          >
-            Capital at risk. Not suitable for everyone. For professional / qualified investors only.
-          </motion.p>
-        </motion.div>
+        </div>
       </div>
+      
+      {/* Bottom Border Accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
     </section>
   );
 };
