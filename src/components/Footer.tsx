@@ -65,22 +65,25 @@ const footerNav = {
 export const Footer = () => (
   <footer className="relative pt-24 pb-12 overflow-hidden">
     {/* Premium Light Gradient Background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-[#f8f9fc] via-[#f4f5f9] to-[#eef0f5]" />
+    {/* Dramatic Gradient Background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-[#f0f2f8] via-[#e8eaf3] to-[#dde1ed]" />
     
-    {/* Layered Atmospheric Effects */}
+    {/* Bold Atmospheric Effects */}
     <div className="absolute inset-0">
-      {/* Warm highlight top-left */}
-      <div className="absolute -top-20 -left-20 w-[600px] h-[400px] bg-gradient-to-br from-slate-50/80 via-white/40 to-transparent rounded-full blur-3xl" />
-      {/* Cool accent top-right */}
-      <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-gradient-to-bl from-slate-100/60 via-slate-50/30 to-transparent blur-3xl" />
-      {/* Subtle violet tint center */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-violet-50/20 via-transparent to-slate-100/30 blur-3xl" />
-      {/* Bottom fade to slightly darker */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-slate-100/50 to-transparent" />
+      {/* Large violet glow top-left */}
+      <div className="absolute -top-32 -left-32 w-[700px] h-[500px] bg-gradient-to-br from-violet-200/40 via-violet-100/30 to-transparent rounded-full blur-3xl" />
+      {/* Slate accent top-right */}
+      <div className="absolute -top-20 -right-20 w-[600px] h-[400px] bg-gradient-to-bl from-slate-300/50 via-slate-200/40 to-transparent rounded-full blur-3xl" />
+      {/* Central violet band */}
+      <div className="absolute top-1/3 left-0 right-0 h-[300px] bg-gradient-to-r from-violet-100/30 via-violet-200/20 to-violet-100/30 blur-3xl" />
+      {/* Bottom deep gradient */}
+      <div className="absolute bottom-0 left-0 right-0 h-60 bg-gradient-to-t from-slate-200/70 via-slate-100/40 to-transparent" />
+      {/* Right side accent */}
+      <div className="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-gradient-to-l from-violet-200/30 via-slate-200/30 to-transparent rounded-full blur-3xl" />
     </div>
     
-    {/* Elegant Top Border */}
-    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+    {/* Bold Top Border */}
+    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-slate-200 via-violet-300/60 to-slate-200" />
     
     <div className="container mx-auto px-6 lg:px-16 relative z-10">
       {/* Main Footer Grid */}
