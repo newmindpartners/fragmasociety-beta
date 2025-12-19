@@ -330,70 +330,96 @@ export const HowItWorks = () => {
   const currentStep = steps[activeStep];
 
   return (
-    <section ref={sectionRef} className="relative py-28 lg:py-36 overflow-hidden">
-      {/* Clean Light Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50/50 to-white" />
+    <section ref={sectionRef} className="relative py-32 lg:py-44 overflow-hidden">
+      {/* Luxury Magazine Background */}
+      <div className="absolute inset-0 bg-[#fafafa]" />
       
-      {/* Subtle accent */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-radial from-indigo-50/40 via-transparent to-transparent rounded-full blur-3xl" />
+      {/* Elegant diagonal accent */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-1/2 -right-1/4 w-[120%] h-[200%] bg-gradient-to-br from-slate-100/80 via-slate-50/40 to-transparent rotate-12 origin-center" />
+      </div>
+      
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(90deg, #0f172a 1px, transparent 1px), linear-gradient(180deg, #0f172a 1px, transparent 1px)`,
+          backgroundSize: '80px 80px'
+        }}
+      />
+      
+      {/* Magazine accent line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
+      <div className="container mx-auto px-6 lg:px-16 relative z-10">
+        {/* Editorial Header */}
+        <div className="mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-3 mb-6"
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center gap-6 mb-10"
           >
-            <div className="w-8 h-px bg-slate-300" />
-            <span className="text-[11px] tracking-[0.3em] uppercase text-slate-400 font-medium">
-              How It Works
+            <span className="text-[11px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+              The Process
             </span>
-            <div className="w-8 h-px bg-slate-300" />
+            <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent" />
+            <span className="text-[11px] tracking-[0.2em] uppercase text-slate-300">
+              04 Steps
+            </span>
           </motion.div>
           
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-light text-slate-900 mb-4"
-          >
-            From discovery to earnings
-            <span className="block text-slate-400 italic font-serif">in minutes</span>
-          </motion.h2>
+          <div className="grid lg:grid-cols-2 gap-8 items-end">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight text-slate-900 leading-[0.95] tracking-tight"
+            >
+              From Discovery
+              <span className="block font-serif italic text-slate-500 mt-2">to Earnings</span>
+            </motion.h2>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="text-slate-500 text-lg lg:text-xl leading-relaxed max-w-md lg:ml-auto font-light"
+            >
+              A seamless journey designed for the modern investor. 
+              Four steps to transform how you build wealth.
+            </motion.p>
+          </div>
         </div>
 
-        {/* Step Navigation - Clean Pills */}
+        {/* Step Navigation - Minimal Editorial */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="flex justify-center mb-12"
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="flex justify-start lg:justify-center mb-16 overflow-x-auto pb-4 -mx-6 px-6 lg:mx-0 lg:px-0"
         >
-          <div className="inline-flex items-center p-1.5 bg-slate-100 rounded-full">
+          <div className="inline-flex items-center gap-1 p-1 bg-white border border-slate-200/80 rounded-full shadow-sm">
             {steps.map((step, index) => (
               <button
                 key={index}
                 onClick={() => handleStepClick(index)}
-                className={`relative px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`relative px-5 lg:px-8 py-3 rounded-full text-sm transition-all duration-500 ${
                   activeStep === index
                     ? 'text-white'
-                    : 'text-slate-500 hover:text-slate-700'
+                    : 'text-slate-500 hover:text-slate-800'
                 }`}
               >
                 {activeStep === index && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-slate-900 rounded-full"
-                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                    className="absolute inset-0 bg-gradient-to-r from-slate-800 via-slate-900 to-indigo-950 rounded-full"
+                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
                   />
                 )}
-                <span className="relative z-10 flex items-center gap-2">
-                  <span className={`w-5 h-5 flex items-center justify-center rounded-full text-xs ${
-                    activeStep === index ? 'bg-white/20' : 'bg-slate-200'
-                  }`}>
-                    {index + 1}
+                <span className="relative z-10 flex items-center gap-2 font-medium">
+                  <span className={`text-[10px] ${activeStep === index ? 'text-white/60' : 'text-slate-400'}`}>
+                    0{index + 1}
                   </span>
                   <span className="hidden sm:inline">{step.title}</span>
                 </span>
@@ -402,41 +428,41 @@ export const HowItWorks = () => {
           </div>
         </motion.div>
 
-        {/* Main Content Area */}
+        {/* Main Showcase Card */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="max-w-5xl mx-auto"
+          transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-6xl mx-auto"
         >
-          <div className="relative bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
-            {/* Progress bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-slate-100">
+          <div className="relative bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/60 border border-slate-100">
+            {/* Elegant progress line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-slate-100">
               <motion.div
-                className="h-full bg-gradient-to-r from-indigo-500 to-violet-500"
+                className="h-full bg-gradient-to-r from-slate-700 via-indigo-600 to-violet-600"
                 initial={{ width: "0%" }}
                 animate={{ width: `${((activeStep + 1) / 4) * 100}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               />
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-0">
-              {/* Left - Content */}
-              <div className="p-10 lg:p-14">
+            <div className="grid lg:grid-cols-2">
+              {/* Content Side */}
+              <div className="p-10 lg:p-16 xl:p-20">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeStep}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4 }}
+                    exit={{ opacity: 0, x: 30 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {/* Step indicator */}
-                    <div className="flex items-center gap-3 mb-6">
-                      <span className="text-xs tracking-widest uppercase text-indigo-600 font-semibold">
+                    {/* Step Label */}
+                    <div className="flex items-center gap-4 mb-10">
+                      <span className="text-[10px] tracking-[0.3em] uppercase text-violet-600 font-semibold">
                         Step {currentStep.step}
                       </span>
-                      <div className="flex-1 h-px bg-slate-200" />
+                      <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
                     </div>
 
                     {/* Icon */}
@@ -444,55 +470,55 @@ export const HowItWorks = () => {
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.1 }}
-                      className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-900 flex items-center justify-center mb-6 shadow-lg shadow-slate-900/20"
+                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-950 flex items-center justify-center mb-8 shadow-xl shadow-slate-900/30"
                     >
-                      <currentStep.icon className="w-6 h-6 text-white" strokeWidth={1.5} />
+                      <currentStep.icon className="w-7 h-7 text-white" strokeWidth={1.5} />
                     </motion.div>
 
                     {/* Title */}
                     <motion.h3
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.15 }}
-                      className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2"
+                      className="text-3xl lg:text-4xl xl:text-5xl font-light text-slate-900 mb-3 tracking-tight"
                     >
                       {currentStep.title}
                     </motion.h3>
 
                     {/* Subtitle */}
                     <motion.p
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="text-lg text-slate-500 mb-6"
+                      className="text-xl text-slate-400 font-serif italic mb-8"
                     >
                       {currentStep.subtitle}
                     </motion.p>
 
                     {/* Description */}
                     <motion.p
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.25 }}
-                      className="text-slate-600 leading-relaxed mb-8"
+                      className="text-slate-600 text-lg leading-relaxed mb-10 font-light"
                     >
                       {currentStep.content}
                     </motion.p>
 
                     {/* Features */}
-                    <motion.ul className="space-y-3">
+                    <motion.ul className="space-y-4">
                       {currentStep.features.map((feature, i) => (
                         <motion.li
                           key={i}
-                          initial={{ opacity: 0, x: -10 }}
+                          initial={{ opacity: 0, x: -15 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.3 + i * 0.08 }}
-                          className="flex items-center gap-3 text-sm text-slate-600"
+                          transition={{ delay: 0.3 + i * 0.1 }}
+                          className="flex items-center gap-4 text-slate-600"
                         >
-                          <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3 text-indigo-600" />
+                          <span className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-3 h-3 text-slate-600" />
                           </span>
-                          {feature}
+                          <span className="font-light">{feature}</span>
                         </motion.li>
                       ))}
                     </motion.ul>
@@ -500,21 +526,24 @@ export const HowItWorks = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Right - Illustration */}
-              <div className="relative bg-gradient-to-br from-slate-50 to-slate-100 p-10 lg:p-14 flex items-center justify-center min-h-[360px] border-l border-slate-100">
-                {/* Decorative elements */}
-                <div className="absolute top-6 right-6 text-[120px] font-extralight text-slate-200/50 leading-none font-serif select-none">
+              {/* Illustration Side */}
+              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-10 lg:p-16 flex items-center justify-center min-h-[420px] border-l border-slate-100/80">
+                {/* Large decorative number */}
+                <div className="absolute top-8 right-8 text-[160px] xl:text-[200px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
                   0{activeStep + 1}
                 </div>
                 
-                <div className="w-full max-w-[280px]">
+                {/* Subtle corner accent */}
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-violet-50/50 to-transparent" />
+                
+                <div className="w-full max-w-[300px] relative z-10">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeStep}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.4 }}
+                      initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, rotate: 2 }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     >
                       <StepIllustration step={activeStep + 1} isActive={true} />
                     </motion.div>
@@ -526,15 +555,15 @@ export const HowItWorks = () => {
         </motion.div>
 
         {/* Step dots for mobile */}
-        <div className="flex justify-center gap-2 mt-8 lg:hidden">
+        <div className="flex justify-center gap-3 mt-10 lg:hidden">
           {steps.map((_, index) => (
             <button
               key={index}
               onClick={() => handleStepClick(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              className={`h-1.5 rounded-full transition-all duration-500 ${
                 activeStep === index 
-                  ? 'w-6 bg-indigo-600' 
-                  : 'bg-slate-300 hover:bg-slate-400'
+                  ? 'w-8 bg-gradient-to-r from-slate-800 to-indigo-900' 
+                  : 'w-1.5 bg-slate-300 hover:bg-slate-400'
               }`}
             />
           ))}
@@ -542,23 +571,23 @@ export const HowItWorks = () => {
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="text-center mt-14"
+          transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mt-20"
         >
           <Button 
             size="lg" 
-            className="group bg-slate-900 hover:bg-slate-800 text-white px-8 shadow-lg shadow-slate-900/20"
+            className="group bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 hover:from-slate-800 hover:via-slate-700 hover:to-indigo-900 text-white px-12 py-7 text-base rounded-full shadow-xl shadow-slate-900/25 border border-slate-700/20"
           >
-            Start Your Journey
-            <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            Begin Your Journey
+            <ChevronRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
-          <p className="text-slate-400 text-sm mt-4">
-            Join 2,000+ investors already on the platform
-          </p>
         </motion.div>
       </div>
+      
+      {/* Bottom accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
     </section>
   );
 };
