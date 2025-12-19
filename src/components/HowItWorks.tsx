@@ -225,139 +225,93 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
     ),
     4: (
       <svg viewBox="0 0 200 160" className="w-full h-full">
-        {/* Exit/Trade illustration - P2P RWA Trading */}
+        {/* Exit/Trade illustration - Single asset P2P Trading */}
         
-        {/* Left person avatar */}
+        {/* Left person (seller) */}
         <motion.g
-          initial={{ opacity: 0, y: -10 }}
-          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          initial={{ opacity: 0, x: -15 }}
+          animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
-          <circle cx="42" cy="15" r="12" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1.5" />
-          <circle cx="42" cy="12" r="5" fill="#94a3b8" />
-          <path d="M32 27 Q32 20 42 20 Q52 20 52 27" fill="#94a3b8" />
+          <circle cx="35" cy="55" r="14" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1.5" />
+          <circle cx="35" cy="51" r="5" fill="#94a3b8" />
+          <path d="M24 68 Q24 60 35 60 Q46 60 46 68" fill="#94a3b8" />
         </motion.g>
         
-        {/* Left connecting line - animated pulse */}
-        <motion.line
-          x1="42" y1="28" x2="42" y2="42"
-          stroke="#94a3b8" strokeWidth="2" strokeDasharray="3 2"
-          initial={{ opacity: 0, pathLength: 0 }}
-          animate={isActive ? { opacity: 1, pathLength: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.3, delay: 0.4 }}
-        />
-        <motion.circle
-          cx="42" cy="42" r="3" fill="#94a3b8"
-          initial={{ scale: 0 }}
-          animate={isActive ? { scale: [0, 1.2, 1] } : { scale: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-        />
-        
-        {/* Left asset card - Real Estate */}
-        <motion.g
-          initial={{ opacity: 0, x: -15, rotate: -3 }}
-          animate={isActive ? { opacity: 1, x: 0, rotate: -3 } : { opacity: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          whileHover={{ scale: 1.05, rotate: 0, y: -2 }}
-          style={{ cursor: 'pointer' }}
-        >
-          <rect x="15" y="48" width="55" height="60" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
-          {/* Building icon */}
-          <rect x="28" y="56" width="28" height="26" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
-          <rect x="32" y="60" width="6" height="6" fill="#94a3b8" />
-          <rect x="42" y="60" width="6" height="6" fill="#94a3b8" />
-          <rect x="32" y="70" width="6" height="6" fill="#94a3b8" />
-          <rect x="42" y="70" width="6" height="6" fill="#94a3b8" />
-          <rect x="38" y="76" width="8" height="6" fill="#6366f1" />
-          <text x="42" y="98" textAnchor="middle" fill="#64748b" className="text-[7px]">Real Estate</text>
-        </motion.g>
-        
-        {/* Center exchange arrows with pulse */}
+        {/* Left arrow (selling) */}
         <motion.g>
           <motion.path
-            d="M78 68 L122 68"
-            stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round"
+            d="M52 50 L78 50"
+            stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-            transition={{ duration: 0.4, delay: 0.6 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
           />
           <motion.path
-            d="M114 62 L122 68 L114 74"
-            stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
+            d="M72 45 L78 50 L72 55"
+            stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+            initial={{ opacity: 0 }}
+            animate={isActive ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: 0.6 }}
+          />
+        </motion.g>
+        
+        {/* Center asset card - Real Estate */}
+        <motion.g
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.4, type: "spring" }}
+          whileHover={{ scale: 1.05, y: -3 }}
+          style={{ cursor: 'pointer' }}
+        >
+          <rect x="82" y="30" width="55" height="65" rx="8" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
+          {/* Building icon */}
+          <rect x="95" y="40" width="28" height="26" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
+          <rect x="99" y="44" width="6" height="6" fill="#94a3b8" />
+          <rect x="109" y="44" width="6" height="6" fill="#94a3b8" />
+          <rect x="99" y="54" width="6" height="6" fill="#94a3b8" />
+          <rect x="109" y="54" width="6" height="6" fill="#94a3b8" />
+          <rect x="105" y="60" width="8" height="6" fill="#6366f1" />
+          <text x="109" y="85" textAnchor="middle" fill="#64748b" className="text-[8px]">Real Estate</text>
+        </motion.g>
+        
+        {/* Right arrow (buying) */}
+        <motion.g>
+          <motion.path
+            d="M140 65 L166 65"
+            stroke="#6366f1" strokeWidth="2" strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+            transition={{ duration: 0.3, delay: 0.7 }}
+          />
+          <motion.path
+            d="M160 60 L166 65 L160 70"
+            stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
             initial={{ opacity: 0 }}
             animate={isActive ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.8 }}
           />
-          
-          <motion.path
-            d="M122 88 L78 88"
-            stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-            transition={{ duration: 0.4, delay: 0.7 }}
-          />
-          <motion.path
-            d="M86 82 L78 88 L86 94"
-            stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
-            initial={{ opacity: 0 }}
-            animate={isActive ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.9 }}
-          />
         </motion.g>
         
-        {/* Right person avatar */}
+        {/* Right person (buyer) */}
         <motion.g
-          initial={{ opacity: 0, y: -10 }}
-          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          initial={{ opacity: 0, x: 15 }}
+          animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}
         >
-          <circle cx="157" cy="15" r="12" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1.5" />
-          <circle cx="157" cy="12" r="5" fill="#6366f1" />
-          <path d="M147 27 Q147 20 157 20 Q167 20 167 27" fill="#6366f1" />
+          <circle cx="180" cy="55" r="14" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1.5" />
+          <circle cx="180" cy="51" r="5" fill="#6366f1" />
+          <path d="M169 68 Q169 60 180 60 Q191 60 191 68" fill="#6366f1" />
         </motion.g>
         
-        {/* Right connecting line - animated pulse */}
-        <motion.line
-          x1="157" y1="28" x2="157" y2="42"
-          stroke="#6366f1" strokeWidth="2" strokeDasharray="3 2"
-          initial={{ opacity: 0, pathLength: 0 }}
-          animate={isActive ? { opacity: 1, pathLength: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-        />
-        <motion.circle
-          cx="157" cy="42" r="3" fill="#6366f1"
-          initial={{ scale: 0 }}
-          animate={isActive ? { scale: [0, 1.2, 1] } : { scale: 0 }}
-          transition={{ duration: 0.3, delay: 0.6 }}
-        />
-        
-        {/* Right asset card - Film */}
-        <motion.g
-          initial={{ opacity: 0, x: 15, rotate: 3 }}
-          animate={isActive ? { opacity: 1, x: 0, rotate: 3 } : { opacity: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          whileHover={{ scale: 1.05, rotate: 0, y: -2 }}
-          style={{ cursor: 'pointer' }}
-        >
-          <rect x="130" y="48" width="55" height="60" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1.5" />
-          {/* Film reel icon */}
-          <circle cx="157" cy="70" r="14" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
-          <circle cx="157" cy="70" r="4" fill="#6366f1" />
-          <circle cx="157" cy="59" r="2.5" fill="#94a3b8" />
-          <circle cx="157" cy="81" r="2.5" fill="#94a3b8" />
-          <circle cx="146" cy="70" r="2.5" fill="#94a3b8" />
-          <circle cx="168" cy="70" r="2.5" fill="#94a3b8" />
-          <text x="157" y="98" textAnchor="middle" fill="#64748b" className="text-[7px]">Film</text>
-        </motion.g>
-        
-        {/* P2P badge */}
+        {/* Trade 24/7 badge */}
         <motion.g
           initial={{ scale: 0, opacity: 0 }}
           animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
           transition={{ type: "spring", delay: 1 }}
         >
-          <rect x="60" y="118" width="80" height="24" rx="12" fill="#1e293b" />
-          <text x="100" y="134" textAnchor="middle" fill="white" className="text-[9px] font-medium">Peer-to-Peer 24/7</text>
+          <rect x="70" y="115" width="70" height="24" rx="12" fill="#1e293b" />
+          <text x="105" y="131" textAnchor="middle" fill="white" className="text-[10px] font-medium">Trade 24/7</text>
         </motion.g>
       </svg>
     ),
