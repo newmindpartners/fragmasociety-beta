@@ -101,35 +101,38 @@ export const Features = () => {
                 className="group cursor-pointer"
               >
                 <motion.div
-                  className="relative p-10 lg:p-12 h-full overflow-hidden"
+                  className="relative p-10 lg:p-12 h-full overflow-hidden rounded-sm"
                   style={{
-                    background: isHovered 
-                      ? 'linear-gradient(145deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.97) 50%, rgba(51,65,85,0.95) 100%)'
-                      : 'rgba(255, 255, 255, 0.85)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
+                    background: 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)',
                     border: isHovered 
-                      ? '1px solid rgba(71, 85, 105, 0.3)' 
-                      : '1px solid rgba(148, 163, 184, 0.15)',
+                      ? '1px solid rgba(139, 92, 246, 0.25)' 
+                      : '1px solid rgba(71, 85, 105, 0.2)',
                     boxShadow: isHovered 
-                      ? '0 30px 60px -15px rgba(15, 23, 42, 0.5), 0 0 40px -10px rgba(51, 65, 85, 0.2)'
-                      : '0 4px 30px -10px rgba(0, 0, 0, 0.06)',
+                      ? '0 30px 60px -15px rgba(15, 23, 42, 0.6), 0 0 50px -10px rgba(139, 92, 246, 0.15)'
+                      : '0 10px 40px -15px rgba(15, 23, 42, 0.4)',
                   }}
                   animate={{ 
-                    y: isHovered ? -12 : 0,
+                    y: isHovered ? -8 : 0,
                     scale: isHovered ? 1.02 : 1
                   }}
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 >
+                  {/* Subtle violet glow on hover */}
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-br from-violet-900/10 via-transparent to-slate-800/20"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: isHovered ? 1 : 0 }}
+                    transition={{ duration: 0.4 }}
+                  />
+
                   {/* Large decorative number */}
                   <motion.span 
-                    className={`absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none transition-all duration-500 ${
-                      isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.03]'
-                    }`}
+                    className="absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none text-white/[0.03]"
                     style={{ fontFamily: 'serif' }}
                     animate={{ 
                       x: isHovered ? 10 : 0,
-                      y: isHovered ? -10 : 0 
+                      y: isHovered ? -10 : 0,
+                      opacity: isHovered ? 0.06 : 0.03
                     }}
                     transition={{ duration: 0.5 }}
                   >
@@ -138,27 +141,24 @@ export const Features = () => {
 
                   {/* Icon container */}
                   <motion.div 
-                    className={`w-16 h-16 mb-10 flex items-center justify-center relative transition-all duration-500 ${
-                      isHovered 
-                        ? 'border border-slate-400/30 bg-white/5' 
-                        : 'border border-slate-200 bg-white/60'
-                    }`}
+                    className="w-16 h-16 mb-10 flex items-center justify-center relative border border-slate-600/30 bg-slate-800/40"
                     animate={{ 
                       rotate: isHovered ? 6 : 0,
-                      scale: isHovered ? 1.1 : 1
+                      scale: isHovered ? 1.1 : 1,
+                      borderColor: isHovered ? 'rgba(139, 92, 246, 0.3)' : 'rgba(71, 85, 105, 0.3)'
                     }}
                     transition={{ duration: 0.4 }}
                   >
                     <feature.icon 
                       className={`w-7 h-7 transition-all duration-500 ${
-                        isHovered ? 'text-slate-300' : 'text-slate-600'
+                        isHovered ? 'text-violet-300' : 'text-slate-400'
                       }`} 
                       strokeWidth={1.5}
                     />
                     
                     {/* Icon glow on hover */}
                     <motion.div 
-                      className="absolute inset-0 bg-gradient-to-br from-slate-400/20 to-slate-600/10 blur-xl"
+                      className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-slate-600/10 blur-xl"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isHovered ? 1 : 0 }}
                       transition={{ duration: 0.4 }}
@@ -167,9 +167,7 @@ export const Features = () => {
                   
                   {/* Title */}
                   <motion.h3 
-                    className={`text-xl lg:text-2xl font-medium mb-4 transition-colors duration-500 ${
-                      isHovered ? 'text-white' : 'text-slate-900'
-                    }`}
+                    className="text-xl lg:text-2xl font-medium mb-4 text-white/90"
                     animate={{ x: isHovered ? 4 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -177,30 +175,29 @@ export const Features = () => {
                   </motion.h3>
                   
                   {/* Description */}
-                  <p className={`text-base leading-relaxed transition-colors duration-500 ${
-                    isHovered ? 'text-slate-300' : 'text-slate-500'
-                  }`}>
+                  <p className="text-base leading-relaxed text-slate-400">
                     {feature.desc}
                   </p>
 
-                  {/* Bottom accent line */}
+                  {/* Bottom accent line - violet */}
                   <motion.div 
-                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-slate-500 via-slate-400 to-slate-600"
+                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/50 via-violet-400/40 to-slate-600/30"
                     initial={{ width: 0 }}
                     animate={{ width: isHovered ? '100%' : 0 }}
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   />
 
+                  {/* Top accent line */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
+
                   {/* Corner accent */}
                   <motion.div 
                     className="absolute top-0 left-0 w-12 h-12"
                     style={{
-                      background: isHovered 
-                        ? 'linear-gradient(135deg, rgba(71,85,105,0.2) 0%, transparent 50%)' 
-                        : 'linear-gradient(135deg, rgba(148,163,184,0.1) 0%, transparent 50%)'
+                      background: 'linear-gradient(135deg, rgba(139,92,246,0.1) 0%, transparent 50%)'
                     }}
                     animate={{ 
-                      opacity: isHovered ? 1 : 0.5,
+                      opacity: isHovered ? 1 : 0.3,
                       scale: isHovered ? 1.5 : 1
                     }}
                     transition={{ duration: 0.4 }}
@@ -208,7 +205,7 @@ export const Features = () => {
 
                   {/* Hover indicator dot */}
                   <motion.div 
-                    className="absolute bottom-8 right-8 w-2 h-2 rounded-full bg-gradient-to-r from-slate-400 to-slate-500"
+                    className="absolute bottom-8 right-8 w-2 h-2 rounded-full bg-gradient-to-r from-violet-400/60 to-slate-500/40"
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ 
                       scale: isHovered ? 1 : 0,
