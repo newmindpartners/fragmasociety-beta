@@ -47,7 +47,7 @@ export const SignatureDealCard = ({
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
     >
-      <div className="relative h-full bg-white rounded-sm overflow-hidden border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-700">
+      <div className="relative h-full rounded-sm overflow-hidden border border-slate-700/30 shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/30 transition-all duration-700">
         
         {/* Editorial Image Section */}
         <div className="relative aspect-[4/5] overflow-hidden">
@@ -103,34 +103,34 @@ export const SignatureDealCard = ({
           </div>
         </div>
 
-        {/* Content Section */}
-        <div className="p-6 lg:p-8">
+        {/* Content Section - Dark Navy */}
+        <div className="p-6 lg:p-8 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950">
           {/* Title */}
-          <h4 className="text-lg font-medium text-slate-900 mb-3 leading-snug" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h4 className="text-lg font-medium text-white mb-3 leading-snug" style={{ fontFamily: "'Playfair Display', serif" }}>
             {title}
           </h4>
           
           {/* Description */}
-          <p className="text-sm text-slate-500 leading-relaxed mb-6 line-clamp-2">
+          <p className="text-sm text-slate-400 leading-relaxed mb-6 line-clamp-2">
             {description}
           </p>
 
           {/* Stats - refined grid */}
-          <div className="grid grid-cols-4 gap-3 mb-6 py-5 border-y border-slate-100">
+          <div className="grid grid-cols-4 gap-3 mb-6 py-5 border-y border-slate-700/50">
             <div>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Entry</p>
-              <p className="text-sm font-medium text-slate-900">{minTicket}</p>
+              <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Entry</p>
+              <p className="text-sm font-medium text-white">{minTicket}</p>
             </div>
             <div>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Target</p>
-              <p className="text-sm font-medium text-slate-900">{targetReturn}</p>
+              <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Target</p>
+              <p className="text-sm font-medium text-white">{targetReturn}</p>
             </div>
             <div>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Duration</p>
-              <p className="text-sm font-medium text-slate-900">{term}</p>
+              <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Duration</p>
+              <p className="text-sm font-medium text-white">{term}</p>
             </div>
             <div>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Risk</p>
+              <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Risk</p>
               <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-sm border ${riskStyles[risk]}`}>
                 {risk}
               </span>
@@ -140,7 +140,7 @@ export const SignatureDealCard = ({
           {/* CTA Button */}
           <Button 
             variant="outline"
-            className="w-full group/btn border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white rounded-sm h-12 text-sm font-medium tracking-wide transition-all duration-300"
+            className="w-full group/btn border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-sm h-12 text-sm font-medium tracking-wide transition-all duration-300"
             onClick={onSeeDeal}
           >
             Explore Opportunity
@@ -150,7 +150,7 @@ export const SignatureDealCard = ({
 
         {/* Subtle hover accent */}
         <motion.div 
-          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 origin-left"
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-violet-500 via-slate-400 to-violet-500 origin-left"
           initial={{ scaleX: 0 }}
           whileHover={{ scaleX: 1 }}
           transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
