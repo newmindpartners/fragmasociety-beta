@@ -6,6 +6,7 @@ import { ScrollSection } from "@/components/ScrollSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Marketplace } from "@/components/Marketplace";
 import { StrategyCTA } from "@/components/StrategyCTA";
+import { SocialProof } from "@/components/SocialProof";
 import { Footer } from "@/components/Footer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
@@ -26,6 +27,9 @@ const Index = () => {
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <StrategyCTA />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <SocialProof />
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <HowItWorks />
