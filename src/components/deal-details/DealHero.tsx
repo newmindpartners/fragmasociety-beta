@@ -87,7 +87,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
 
       
       {/* Grid Layout - Content Left, Profile Right */}
-      <div className="relative z-10 h-full container mx-auto px-6 lg:px-12">
+      <div className="relative z-30 h-full container mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 h-full items-end pt-16 pb-6">
           
           {/* Left Content */}
