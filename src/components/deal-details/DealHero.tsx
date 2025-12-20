@@ -12,6 +12,7 @@ import categoryCredit from "@/assets/category-credit.jpg";
 import categorySports from "@/assets/category-sports.jpg";
 import categoryEsg from "@/assets/category-esg.jpg";
 import naouriHeroBg from "@/assets/naouri-hero-bg.png";
+import philippeBanner from "@/assets/philippe-banner.png";
 
 const getCategoryBackground = (category: string): string => {
   const categoryMap: Record<string, string> = {
@@ -284,7 +285,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
             >
               {/* Profile image - grayscale/luminosity like SignatureDealsBanner */}
               <img
-                src={deal.bannerImage || deal.leaderImage}
+                src={deal.id === 'naouri-malibu-villa' ? philippeBanner : (deal.bannerImage || deal.leaderImage)}
                 alt={deal.leaderName}
                 className="absolute inset-0 w-full h-full object-contain object-bottom"
                 style={{ 
