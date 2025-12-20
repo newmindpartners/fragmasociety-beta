@@ -63,26 +63,18 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           }}
         />
         
-        {/* Dark navy gradient overlays */}
+        {/* Dark navy gradient overlay - full hero, bottom to top fade */}
         <div 
           className="absolute inset-0"
           style={{
-            background: `
-              radial-gradient(ellipse 70% 90% at 50% 100%, transparent 0%, rgba(15,23,42,0.4) 50%, rgba(15,23,42,0.8) 100%),
-              radial-gradient(ellipse 100% 60% at 50% 50%, transparent 0%, rgba(15,23,42,0.5) 100%)
-            `
-          }}
-        />
-        
-        {/* Subtle violet glow accents */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[250px] bg-violet-900/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[200px] bg-slate-700/20 rounded-full blur-3xl" />
-        
-        {/* Top spotlight glow for portrait area */}
-        <div 
-          className="absolute top-0 right-0 w-1/2 h-full"
-          style={{
-            background: 'radial-gradient(ellipse 80% 100% at 70% 80%, rgba(148,130,180,0.08) 0%, transparent 60%)'
+            background: `linear-gradient(
+              to top,
+              rgba(15,23,42,0.98) 0%,
+              rgba(15,23,42,0.85) 15%,
+              rgba(15,23,42,0.6) 35%,
+              rgba(15,23,42,0.3) 55%,
+              transparent 80%
+            )`
           }}
         />
       </div>
@@ -245,21 +237,6 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 style={{ 
                   filter: 'grayscale(100%) contrast(1.15) brightness(1.1)',
                   mixBlendMode: 'luminosity'
-                }}
-              />
-              
-              {/* Smooth vertical fade overlay - bottom to top, fades out at ~20% above portrait */}
-              <div 
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `linear-gradient(
-                    to top,
-                    rgba(15,23,42,0.95) 0%,
-                    rgba(15,23,42,0.8) 10%,
-                    rgba(15,23,42,0.5) 25%,
-                    rgba(15,23,42,0.2) 40%,
-                    transparent 60%
-                  )`
                 }}
               />
 
