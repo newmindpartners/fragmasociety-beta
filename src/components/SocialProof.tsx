@@ -13,11 +13,11 @@ import swissquoteLogo from "@/assets/partners/swissquote-new.png";
 import woudLawLogo from "@/assets/partners/woud-law-new.png";
 
 const partners = [
-  { name: "Bank Frick", logo: bankFrickLogo, className: "" },
-  { name: "DFNS", logo: dfnsLogo, className: "" },
-  { name: "House of Web3", logo: houseOfWeb3Logo, className: "" },
-  { name: "Swissquote", logo: swissquoteLogo, className: "scale-150" },
-  { name: "Woud Law Firm", logo: woudLawLogo, className: "" },
+  { name: "Bank Frick", logo: bankFrickLogo, className: "", url: "https://www.bankfrick.li" },
+  { name: "DFNS", logo: dfnsLogo, className: "", url: "https://www.dfns.co" },
+  { name: "House of Web3", logo: houseOfWeb3Logo, className: "", url: "https://www.houseofweb3.io" },
+  { name: "Swissquote", logo: swissquoteLogo, className: "scale-150", url: "https://www.swissquote.com" },
+  { name: "Woud Law Firm", logo: woudLawLogo, className: "", url: "https://www.woud.law" },
 ];
 
 
@@ -48,13 +48,18 @@ export const SocialProof = () => (
             {partners.map((partner, i) => (
               <Tooltip key={`${partner.name}-a-${i}`}>
                 <TooltipTrigger asChild>
-                  <div className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}>
+                  <a 
+                    href={partner.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
+                  >
                     <img 
                       src={partner.logo} 
                       alt={partner.name}
                       className="h-full w-auto object-contain max-w-[150px]"
                     />
-                  </div>
+                  </a>
                 </TooltipTrigger>
                 <TooltipContent 
                   side="bottom" 
@@ -64,7 +69,7 @@ export const SocialProof = () => (
                 </TooltipContent>
               </Tooltip>
             ))}
-            <div className="w-16 shrink-0" /> {/* Gap spacer */}
+            <div className="w-16 shrink-0" />
           </div>
           {/* Second strip (duplicate for seamless loop) */}
           <div
@@ -73,13 +78,18 @@ export const SocialProof = () => (
             {partners.map((partner, i) => (
               <Tooltip key={`${partner.name}-b-${i}`}>
                 <TooltipTrigger asChild>
-                  <div className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}>
+                  <a 
+                    href={partner.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
+                  >
                     <img 
                       src={partner.logo} 
                       alt={partner.name}
                       className="h-full w-auto object-contain max-w-[150px]"
                     />
-                  </div>
+                  </a>
                 </TooltipTrigger>
                 <TooltipContent 
                   side="bottom" 
@@ -89,7 +99,7 @@ export const SocialProof = () => (
                 </TooltipContent>
               </Tooltip>
             ))}
-            <div className="w-16 shrink-0" /> {/* Gap spacer */}
+            <div className="w-16 shrink-0" />
           </div>
         </div>
       </TooltipProvider>
