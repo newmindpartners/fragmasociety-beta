@@ -59,9 +59,10 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
           className="absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50"
           onMouseLeave={onClose}
         >
-          <div className="bg-background/95 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/20 overflow-hidden min-w-[320px]">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-950 backdrop-blur-2xl border border-slate-700/50 rounded-xl shadow-2xl shadow-black/40 overflow-hidden min-w-[320px]">
             {/* Subtle gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-800/20 to-transparent pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-600/50 to-transparent" />
             
             <div className="relative p-2">
               {section.items.map((item, index) => {
@@ -71,35 +72,35 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.03 }}
-                    className="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.05] transition-all duration-300 cursor-pointer"
+                    className="group flex items-start gap-4 p-4 rounded-lg hover:bg-slate-800/60 transition-all duration-300 cursor-pointer"
                   >
                     {Icon && (
-                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
-                        <Icon className="w-5 h-5 text-white" />
+                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-slate-800 border border-slate-700/50 flex items-center justify-center group-hover:bg-slate-700 group-hover:border-violet-500/30 group-hover:scale-110 transition-all duration-300">
+                        <Icon className="w-5 h-5 text-slate-400 group-hover:text-violet-400" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-foreground group-hover:text-white transition-colors duration-300">
+                        <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors duration-300">
                           {item.label}
                         </span>
                         {item.badge && (
                           <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full ${
                             item.badge === "Hot" 
-                              ? "bg-orange-500/20 text-orange-400" 
-                              : "bg-white/20 text-white"
+                              ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
+                              : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
                           }`}>
                             {item.badge}
                           </span>
                         )}
                       </div>
                       {item.description && (
-                        <p className="text-xs text-muted-foreground mt-0.5 group-hover:text-muted-foreground/80 transition-colors">
+                        <p className="text-xs text-slate-500 mt-0.5 group-hover:text-slate-400 transition-colors">
                           {item.description}
                         </p>
                       )}
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground/40 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 mt-1" />
+                    <ArrowRight className="w-4 h-4 text-slate-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-violet-400 transition-all duration-300 mt-1" />
                   </motion.div>
                 );
 
@@ -114,6 +115,9 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
                 );
               })}
             </div>
+            
+            {/* Bottom accent */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent" />
           </div>
         </motion.div>
       )}
@@ -140,12 +144,12 @@ const NavDropdown = ({ section }: { section: NavSection }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 group">
+      <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors duration-300 group">
         <span>{section.label}</span>
         <ChevronDown 
           className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
         />
-        <span className={`absolute bottom-1 left-4 right-4 h-px bg-white transition-transform duration-300 origin-left ${isOpen ? "scale-x-100" : "scale-x-0"}`} />
+        <span className={`absolute bottom-1 left-4 right-4 h-px bg-gradient-to-r from-violet-500/50 to-slate-400/50 transition-transform duration-300 origin-left ${isOpen ? "scale-x-100" : "scale-x-0"}`} />
       </button>
       <DropdownMenu section={section} isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
@@ -170,7 +174,7 @@ export const Navbar = () => {
     <nav 
       className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled 
-          ? "bg-background/80 backdrop-blur-2xl border-b border-white/[0.08] shadow-lg shadow-black/5" 
+          ? "bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-900/95 backdrop-blur-2xl border-b border-slate-700/50 shadow-lg shadow-black/20" 
           : "bg-transparent border-b border-transparent"
       }`}
     >
@@ -201,7 +205,7 @@ export const Navbar = () => {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    className="text-slate-400 hover:text-white hover:bg-slate-800/50"
                   >
                     Investor Portal
                   </Button>
@@ -210,7 +214,7 @@ export const Navbar = () => {
                   variant="outline" 
                   size="sm" 
                   onClick={() => signOut()}
-                  className="border-white/10 hover:border-white/20 hover:bg-white/5"
+                  className="border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50 hover:text-white"
                 >
                   Sign Out
                 </Button>
@@ -221,7 +225,7 @@ export const Navbar = () => {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="text-muted-foreground hover:text-foreground hover:bg-white/5 font-medium"
+                    className="text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium"
                   >
                     Login
                   </Button>
@@ -229,15 +233,12 @@ export const Navbar = () => {
                 <Link to="/auth">
                   <Button 
                     size="sm" 
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 group relative overflow-hidden"
+                    className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
                   >
                     <span className="relative z-10 flex items-center gap-1.5">
                       Get Started
                       <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
                     </span>
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    />
                   </Button>
                 </Link>
               </>
@@ -246,7 +247,7 @@ export const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <motion.button 
-            className="lg:hidden text-foreground p-2 -mr-2 hover:bg-white/5 rounded-lg transition-colors"
+            className="lg:hidden text-white p-2 -mr-2 hover:bg-slate-800/50 rounded-lg transition-colors"
             onClick={() => setIsOpen(!isOpen)}
             whileTap={{ scale: 0.95 }}
           >
@@ -285,7 +286,7 @@ export const Navbar = () => {
             animate={{ height: 'auto', opacity: 1 }} 
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-background/95 backdrop-blur-2xl overflow-hidden border-b border-white/[0.08]"
+            className="lg:hidden bg-gradient-to-b from-slate-900 to-slate-950 backdrop-blur-2xl overflow-hidden border-b border-slate-700/50"
           >
             <div className="p-6 max-h-[80vh] overflow-y-auto">
               {navSections.map((section, sectionIndex) => (
@@ -298,11 +299,11 @@ export const Navbar = () => {
                 >
                   <button
                     onClick={() => setExpandedSection(expandedSection === section.label ? null : section.label)}
-                    className="flex items-center justify-between w-full py-3 text-sm font-semibold text-foreground uppercase tracking-wider"
+                    className="flex items-center justify-between w-full py-3 text-sm font-semibold text-white uppercase tracking-wider"
                   >
                     {section.label}
                     <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-300 ${
+                      className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
                         expandedSection === section.label ? "rotate-180" : ""
                       }`} 
                     />
@@ -317,18 +318,18 @@ export const Navbar = () => {
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                       >
-                        <div className="pl-2 border-l border-white/[0.08]">
+                        <div className="pl-2 border-l border-slate-700/50">
                           {section.items.map((item) => {
                             const Icon = item.icon;
                             const content = (
-                              <div className="flex items-center gap-3 py-3 pl-4 text-muted-foreground hover:text-foreground transition-colors">
-                                {Icon && <Icon className="w-4 h-4 text-white/70" />}
+                              <div className="flex items-center gap-3 py-3 pl-4 text-slate-400 hover:text-white transition-colors">
+                                {Icon && <Icon className="w-4 h-4 text-slate-500" />}
                                 <span className="text-sm">{item.label}</span>
                                 {item.badge && (
                                   <span className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
                                     item.badge === "Hot" 
-                                      ? "bg-orange-500/20 text-orange-400" 
-                                      : "bg-white/20 text-white"
+                                      ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
+                                      : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
                                   }`}>
                                     {item.badge}
                                   </span>
@@ -354,7 +355,7 @@ export const Navbar = () => {
               ))}
               
               <motion.div 
-                className="flex flex-col gap-3 mt-6 pt-6 border-t border-white/[0.08]"
+                className="flex flex-col gap-3 mt-6 pt-6 border-t border-slate-700/50"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
@@ -362,23 +363,23 @@ export const Navbar = () => {
                 {user ? (
                   <>
                     <Link to="/strategy" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full border-white/10">
+                      <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50">
                         Investor Portal
                       </Button>
                     </Link>
-                    <Button onClick={() => { signOut(); setIsOpen(false); }} variant="ghost">
+                    <Button onClick={() => { signOut(); setIsOpen(false); }} variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-800/50">
                       Sign Out
                     </Button>
                   </>
                 ) : (
                   <>
                     <Link to="/auth" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full border-white/10 hover:border-white/20">
+                      <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50">
                         Login
                       </Button>
                     </Link>
                     <Link to="/auth" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full bg-primary hover:bg-primary/90 font-semibold group">
+                      <Button className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold group shadow-lg shadow-white/10">
                         <span className="flex items-center justify-center gap-2">
                           Get Started
                           <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
