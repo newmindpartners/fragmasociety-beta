@@ -88,7 +88,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
       
       {/* Grid Layout - Content Left, Profile Right */}
       <div className="relative z-10 h-full container mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 h-full items-center pt-20 pb-8">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 h-full items-end pt-16 pb-6">
           
           {/* Left Content */}
           <div className="order-2 lg:order-1 flex flex-col justify-center">
@@ -227,12 +227,12 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           </div>
 
           {/* Right - Profile Image/Video */}
-          <div className="order-1 lg:order-2 relative">
+          <div className="order-1 lg:order-2 relative flex flex-col justify-end">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-[4/5]"
+              className="relative aspect-[4/5] max-h-[65vh]"
             >
               {/* Profile image - grayscale/luminosity like SignatureDealsBanner */}
               <img
