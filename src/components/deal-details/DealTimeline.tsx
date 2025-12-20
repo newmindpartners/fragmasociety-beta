@@ -15,66 +15,65 @@ const PhaseIllustration = ({ phaseIndex, isActive }: { phaseIndex: number; isAct
   const accentColor = "#a855f7";
   
   const illustrations: Record<number, JSX.Element> = {
-    // ACQUISITION - Handshake with money
+    // ACQUISITION - Key handover with house
     0: (
       <svg viewBox="0 0 120 120" className="w-full h-full">
-        {/* Left hand */}
+        {/* House outline */}
         <motion.path
-          d="M20 70 L35 70 L45 60 L55 65 L65 60"
+          d="M25 55 L25 85 L55 85 L55 55"
+          fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          initial={{ pathLength: 0 }} 
+          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ duration: 0.5 }}
+        />
+        {/* Roof */}
+        <motion.path
+          d="M20 55 L40 35 L60 55"
           fill="none" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
           initial={{ pathLength: 0 }} 
           animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ delay: 0.2, duration: 0.4 }}
         />
-        {/* Left arm */}
-        <motion.path
-          d="M20 70 L20 85 L40 85"
-          fill="none" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
+        {/* Door */}
+        <motion.rect x="35" y="65" width="10" height="20" rx="1" fill="none" stroke={strokeColor} strokeWidth="1.5"
+          initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 0.4 }}
         />
-        {/* Right hand */}
-        <motion.path
-          d="M100 70 L85 70 L75 60 L65 65 L55 60"
-          fill="none" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-        />
-        {/* Right arm */}
-        <motion.path
-          d="M100 70 L100 85 L80 85"
-          fill="none" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ delay: 0.4, duration: 0.4 }}
-        />
-        {/* Connection clasp */}
-        <motion.circle cx="60" cy="62" r="6" fill="none" stroke={accentColor} strokeWidth="2"
-          initial={{ scale: 0, opacity: 0 }} 
-          animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-          transition={{ delay: 0.7, type: "spring", damping: 10 }}
-        />
-        {/* Dollar symbol above */}
+        {/* Large Key */}
         <motion.g
-          initial={{ opacity: 0, y: 10 }}
-          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
-          transition={{ delay: 0.9, duration: 0.4 }}
+          initial={{ opacity: 0, x: 20, rotate: 15 }}
+          animate={isActive ? { opacity: 1, x: 0, rotate: 0 } : { opacity: 0 }}
+          transition={{ delay: 0.6, duration: 0.6, type: "spring" }}
         >
-          <circle cx="60" cy="35" r="14" fill="none" stroke={accentColor} strokeWidth="2" />
-          <text x="60" y="40" textAnchor="middle" fill={accentColor} fontSize="14" fontWeight="bold">$</text>
+          {/* Key head (circle) */}
+          <circle cx="85" cy="40" r="12" fill="none" stroke={accentColor} strokeWidth="2.5" />
+          <circle cx="85" cy="40" r="6" fill="none" stroke={accentColor} strokeWidth="1.5" />
+          {/* Key shaft */}
+          <line x1="85" y1="52" x2="85" y2="85" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round" />
+          {/* Key teeth */}
+          <path d="M85 70 L92 70 M85 78 L95 78 M85 85 L90 85" fill="none" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round" />
         </motion.g>
-        {/* Sparkle dots */}
-        <motion.circle cx="35" cy="45" r="2" fill={accentColor}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={isActive ? { opacity: [0, 1, 0], scale: [0, 1, 0] } : { opacity: 0 }}
-          transition={{ delay: 1.1, duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+        {/* Hand receiving */}
+        <motion.path
+          d="M65 95 Q70 85 80 88 L95 88 Q100 88 100 93 L100 98"
+          fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          initial={{ pathLength: 0 }}
+          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
         />
-        <motion.circle cx="85" cy="40" r="1.5" fill={strokeColor}
+        {/* Transfer arrow */}
+        <motion.path
+          d="M55 50 L70 50 M65 45 L70 50 L65 55"
+          fill="none" stroke={accentColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          initial={{ opacity: 0, x: -10 }}
+          animate={isActive ? { opacity: [0, 1, 1], x: [- 10, 0, 5, 0] } : { opacity: 0 }}
+          transition={{ delay: 1.2, duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+        />
+        {/* Sparkle */}
+        <motion.circle cx="95" cy="30" r="2" fill={accentColor}
           initial={{ opacity: 0, scale: 0 }}
-          animate={isActive ? { opacity: [0, 1, 0], scale: [0, 1, 0] } : { opacity: 0 }}
-          transition={{ delay: 1.3, duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+          animate={isActive ? { opacity: [0, 1, 0], scale: [0, 1.2, 0] } : { opacity: 0 }}
+          transition={{ delay: 1.4, duration: 1, repeat: Infinity, repeatDelay: 1.5 }}
         />
       </svg>
     ),
@@ -136,149 +135,153 @@ const PhaseIllustration = ({ phaseIndex, isActive }: { phaseIndex: number; isAct
       </svg>
     ),
     
-    // CONSTRUCTION - Hard hat with gear
+    // CONSTRUCTION - Building with crane
     2: (
       <svg viewBox="0 0 120 120" className="w-full h-full">
-        {/* Hard hat dome */}
-        <motion.path
-          d="M30 65 Q30 35 60 30 Q90 35 90 65"
-          fill="none" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ duration: 0.6 }}
+        {/* Ground */}
+        <motion.line x1="10" y1="100" x2="110" y2="100" stroke={strokeColor} strokeWidth="2" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ duration: 0.4 }}
         />
-        {/* Hard hat brim */}
-        <motion.path
-          d="M25 65 L95 65"
-          fill="none" stroke={accentColor} strokeWidth="3" strokeLinecap="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ delay: 0.3, duration: 0.4 }}
-        />
-        {/* Hard hat band */}
-        <motion.path
-          d="M35 55 Q60 50 85 55"
-          fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ delay: 0.5, duration: 0.3 }}
-        />
-        {/* Gear - main circle */}
-        <motion.g
-          initial={{ opacity: 0, rotate: 0 }}
-          animate={isActive ? { opacity: 1, rotate: 360 } : { opacity: 0 }}
-          transition={{ delay: 0.7, duration: 8, repeat: Infinity, ease: "linear" }}
-          style={{ originX: "75px", originY: "90px" }}
-        >
-          <circle cx="75" cy="90" r="12" fill="none" stroke={strokeColor} strokeWidth="2" />
-          <circle cx="75" cy="90" r="5" fill="none" stroke={strokeColor} strokeWidth="1.5" />
-          {/* Gear teeth */}
-          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
-            <motion.rect
-              key={angle}
-              x="73" y="76" width="4" height="6" rx="1" fill={strokeColor}
-              style={{ 
-                transformOrigin: "75px 90px",
-                transform: `rotate(${angle}deg)`
-              }}
-            />
-          ))}
-        </motion.g>
-        {/* Small gear */}
-        <motion.g
-          initial={{ opacity: 0, rotate: 0 }}
-          animate={isActive ? { opacity: 1, rotate: -360 } : { opacity: 0 }}
-          transition={{ delay: 0.8, duration: 6, repeat: Infinity, ease: "linear" }}
-          style={{ originX: "45px", originY: "85px" }}
-        >
-          <circle cx="45" cy="85" r="8" fill="none" stroke={accentColor} strokeWidth="1.5" />
-          <circle cx="45" cy="85" r="3" fill="none" stroke={accentColor} strokeWidth="1" />
-          {[0, 60, 120, 180, 240, 300].map((angle) => (
-            <motion.rect
-              key={angle}
-              x="43.5" y="75" width="3" height="4" rx="0.5" fill={accentColor}
-              style={{ 
-                transformOrigin: "45px 85px",
-                transform: `rotate(${angle}deg)`
-              }}
-            />
-          ))}
-        </motion.g>
-        {/* Progress bar */}
-        <motion.g initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 1 }}>
-          <rect x="30" y="105" width="60" height="4" rx="2" fill="#334155" />
-          <motion.rect x="30" y="105" width="60" height="4" rx="2" fill={accentColor}
-            initial={{ scaleX: 0 }}
-            animate={isActive ? { scaleX: 1 } : { scaleX: 0 }}
-            style={{ originX: 0 }}
-            transition={{ delay: 1.2, duration: 1.5 }}
+        
+        {/* Building under construction */}
+        <motion.g>
+          {/* Floor 1 */}
+          <motion.rect x="55" y="75" width="40" height="25" fill="none" stroke={strokeColor} strokeWidth="2" rx="1"
+            initial={{ scaleY: 0 }} animate={isActive ? { scaleY: 1 } : { scaleY: 0 }}
+            style={{ originY: 1 }} transition={{ delay: 0.3, duration: 0.4 }}
           />
+          {/* Floor 2 */}
+          <motion.rect x="55" y="50" width="40" height="25" fill="none" stroke={strokeColor} strokeWidth="2" rx="1"
+            initial={{ scaleY: 0 }} animate={isActive ? { scaleY: 1 } : { scaleY: 0 }}
+            style={{ originY: 1 }} transition={{ delay: 0.5, duration: 0.4 }}
+          />
+          {/* Floor 3 */}
+          <motion.rect x="55" y="25" width="40" height="25" fill="none" stroke={accentColor} strokeWidth="2" rx="1"
+            initial={{ scaleY: 0 }} animate={isActive ? { scaleY: 1 } : { scaleY: 0 }}
+            style={{ originY: 1 }} transition={{ delay: 0.7, duration: 0.4 }}
+          />
+          {/* Windows */}
+          {[[60, 80], [80, 80], [60, 55], [80, 55], [60, 30], [80, 30]].map(([x, y], i) => (
+            <motion.rect key={i} x={x} y={y} width="10" height="12" fill="none" stroke={i >= 4 ? accentColor : strokeColor} strokeWidth="1"
+              initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ delay: 0.8 + i * 0.1 }}
+            />
+          ))}
+        </motion.g>
+        
+        {/* Crane tower */}
+        <motion.line x1="25" y1="100" x2="25" y2="15" stroke={strokeColor} strokeWidth="2.5"
+          initial={{ pathLength: 0 }} animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        />
+        {/* Crane arm */}
+        <motion.line x1="25" y1="18" x2="70" y2="18" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+        />
+        {/* Crane counter weight */}
+        <motion.rect x="12" y="15" width="13" height="8" rx="1" fill="none" stroke={accentColor} strokeWidth="2"
+          initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 0.7 }}
+        />
+        {/* Cable */}
+        <motion.line x1="60" y1="18" x2="60" y2="35" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="2,2"
+          initial={{ pathLength: 0 }} animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ delay: 0.8, duration: 0.3 }}
+        />
+        {/* Lifting block */}
+        <motion.rect x="52" y="35" width="16" height="10" rx="1" fill="none" stroke={accentColor} strokeWidth="2"
+          initial={{ opacity: 0, y: -15 }}
+          animate={isActive ? { opacity: 1, y: [0, 5, 0] } : { opacity: 0 }}
+          transition={{ delay: 1, duration: 2, repeat: Infinity, repeatDelay: 1 }}
+        />
+        
+        {/* Excavator/machine */}
+        <motion.g
+          initial={{ opacity: 0, x: -15 }}
+          animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0 }}
+          transition={{ delay: 1.2, duration: 0.5 }}
+        >
+          {/* Body */}
+          <rect x="100" y="90" width="15" height="10" rx="2" fill="none" stroke={strokeColor} strokeWidth="1.5" />
+          {/* Cabin */}
+          <rect x="103" y="85" width="8" height="5" rx="1" fill="none" stroke={accentColor} strokeWidth="1.5" />
+          {/* Wheels */}
+          <circle cx="103" cy="100" r="3" fill="none" stroke={strokeColor} strokeWidth="1.5" />
+          <circle cx="112" cy="100" r="3" fill="none" stroke={strokeColor} strokeWidth="1.5" />
         </motion.g>
       </svg>
     ),
     
-    // MARKETING - House with sale sign
+    // MARKETING - Prominent SOLD sign with spotlight
     3: (
       <svg viewBox="0 0 120 120" className="w-full h-full">
-        {/* House body */}
-        <motion.path
-          d="M35 60 L35 90 L85 90 L85 60"
-          fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ duration: 0.5 }}
-        />
-        {/* Roof */}
-        <motion.path
-          d="M30 60 L60 35 L90 60"
-          fill="none" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          initial={{ pathLength: 0 }} 
-          animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-        />
-        {/* Door */}
-        <motion.rect x="52" y="70" width="16" height="20" rx="1" fill="none" stroke={strokeColor} strokeWidth="1.5"
-          initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.5 }}
-        />
-        {/* Door handle */}
-        <motion.circle cx="64" cy="80" r="1.5" fill={strokeColor}
-          initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.6 }}
-        />
-        {/* Window */}
-        <motion.rect x="40" y="65" width="8" height="8" rx="1" fill="none" stroke={strokeColor} strokeWidth="1.5"
-          initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.55 }}
-        />
-        <motion.rect x="72" y="65" width="8" height="8" rx="1" fill="none" stroke={strokeColor} strokeWidth="1.5"
-          initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.55 }}
-        />
-        {/* FOR SALE sign */}
-        <motion.g
-          initial={{ opacity: 0, y: 10, rotate: -5 }}
-          animate={isActive ? { opacity: 1, y: 0, rotate: 0 } : { opacity: 0 }}
-          transition={{ delay: 0.7, duration: 0.5, type: "spring" }}
-        >
-          {/* Sign post */}
-          <line x1="100" y1="55" x2="100" y2="95" stroke={strokeColor} strokeWidth="2" />
-          {/* Sign board */}
-          <rect x="88" y="55" width="24" height="18" rx="2" fill="none" stroke={accentColor} strokeWidth="2" />
-          <text x="100" y="66" textAnchor="middle" fill={accentColor} fontSize="6" fontWeight="bold">FOR</text>
-          <text x="100" y="72" textAnchor="middle" fill={accentColor} fontSize="5">SALE</text>
-        </motion.g>
-        {/* Broadcast waves */}
-        {[0, 1, 2].map((i) => (
-          <motion.path
-            key={i}
-            d={`M${15 - i * 5} ${50 + i * 8} Q${10 - i * 3} ${60} ${15 - i * 5} ${70 - i * 8}`}
-            fill="none" stroke={accentColor} strokeWidth="1.5" strokeLinecap="round"
-            initial={{ opacity: 0, pathLength: 0 }}
-            animate={isActive ? { opacity: [0, 0.8, 0], pathLength: 1 } : { opacity: 0 }}
-            transition={{ delay: 1 + i * 0.2, duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
+        {/* Spotlight beams */}
+        <motion.g initial={{ opacity: 0 }} animate={isActive ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 0.8 }}>
+          <motion.path d="M60 45 L40 20 L35 25 L55 48" fill={accentColor} opacity="0.15"
+            animate={isActive ? { opacity: [0.1, 0.25, 0.1] } : { opacity: 0 }}
+            transition={{ duration: 2, repeat: Infinity }}
           />
+          <motion.path d="M60 45 L80 20 L85 25 L65 48" fill={accentColor} opacity="0.15"
+            animate={isActive ? { opacity: [0.1, 0.25, 0.1] } : { opacity: 0 }}
+            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+          />
+        </motion.g>
+        
+        {/* Sign post */}
+        <motion.line x1="60" y1="55" x2="60" y2="105" stroke={strokeColor} strokeWidth="3" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ duration: 0.4 }}
+        />
+        {/* Post base */}
+        <motion.path d="M50 105 L70 105" stroke={strokeColor} strokeWidth="3" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={isActive ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+        />
+        
+        {/* Main sign board */}
+        <motion.g
+          initial={{ opacity: 0, scale: 0.5, y: 10 }}
+          animate={isActive ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0 }}
+          transition={{ delay: 0.4, duration: 0.5, type: "spring", damping: 12 }}
+        >
+          <rect x="25" y="30" width="70" height="35" rx="3" fill="none" stroke={accentColor} strokeWidth="2.5" />
+          <rect x="28" y="33" width="64" height="29" rx="2" fill={accentColor} opacity="0.1" />
+          <text x="60" y="52" textAnchor="middle" fill={accentColor} fontSize="14" fontWeight="bold" letterSpacing="2">FOR SALE</text>
+        </motion.g>
+        
+        {/* SOLD overlay banner */}
+        <motion.g
+          initial={{ opacity: 0, scale: 0, rotate: -15 }}
+          animate={isActive ? { opacity: 1, scale: 1, rotate: -8 } : { opacity: 0 }}
+          transition={{ delay: 1, duration: 0.4, type: "spring", damping: 10 }}
+        >
+          <rect x="30" y="38" width="60" height="22" rx="2" fill="#22c55e" />
+          <text x="60" y="54" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold" letterSpacing="3">SOLD</text>
+        </motion.g>
+        
+        {/* Celebration sparkles */}
+        {[[25, 25], [95, 30], [20, 60], [100, 55], [45, 15], [75, 18]].map(([x, y], i) => (
+          <motion.g key={i}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={isActive ? { opacity: [0, 1, 0], scale: [0, 1, 0] } : { opacity: 0 }}
+            transition={{ delay: 1.3 + i * 0.15, duration: 1, repeat: Infinity, repeatDelay: 2 }}
+          >
+            <line x1={x - 4} y1={y} x2={x + 4} y2={y} stroke={accentColor} strokeWidth="2" strokeLinecap="round" />
+            <line x1={x} y1={y - 4} x2={x} y2={y + 4} stroke={accentColor} strokeWidth="2" strokeLinecap="round" />
+          </motion.g>
         ))}
+        
+        {/* Price tag */}
+        <motion.g
+          initial={{ opacity: 0, y: 10 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ delay: 0.7, duration: 0.4 }}
+        >
+          <rect x="70" y="70" width="35" height="16" rx="2" fill="none" stroke={strokeColor} strokeWidth="1.5" />
+          <text x="87" y="81" textAnchor="middle" fill={strokeColor} fontSize="8">$4.5M</text>
+        </motion.g>
       </svg>
     ),
     
