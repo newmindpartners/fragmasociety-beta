@@ -105,27 +105,6 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 </span>
               </motion.div>
 
-              {/* Leader Info */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-6"
-              >
-                <p className="text-xs text-slate-400 uppercase tracking-[0.2em] mb-2 font-light">
-                  {deal.leaderRole}
-                </p>
-                <h2
-                  className="text-3xl md:text-4xl font-light text-white leading-tight tracking-tight"
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    textShadow:
-                      "0 0 40px rgba(255,255,255,0.15), 0 0 80px rgba(139,92,246,0.1)",
-                  }}
-                >
-                  {deal.leaderName}
-                </h2>
-              </motion.div>
 
               {/* Title */}
               <motion.h1
@@ -341,7 +320,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               className="text-center mt-4 relative z-30"
             >
               <h3 
-                className="text-xl md:text-2xl font-light text-white tracking-wide"
+                className="text-2xl md:text-4xl font-light text-white tracking-wide"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {deal.leaderName}
