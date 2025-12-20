@@ -6,6 +6,7 @@ import { StrategyOverview } from "@/components/strategy/StrategyOverview";
 import { StrategyPillars } from "@/components/strategy/StrategyPillars";
 import { StrategyReturns } from "@/components/strategy/StrategyReturns";
 import { StrategyStructure } from "@/components/strategy/StrategyStructure";
+import { StrategyCompliance } from "@/components/strategy/StrategyCompliance";
 import { StrategySecondaryMarket } from "@/components/strategy/StrategySecondaryMarket";
 import { StrategyRisk } from "@/components/strategy/StrategyRisk";
 import { StrategyInvestors } from "@/components/strategy/StrategyInvestors";
@@ -41,10 +42,11 @@ const Strategy = () => {
           <StrategyOverview />
           <StrategyReturns />
           <StrategyStructure />
+          <StrategyProcess />
+          <StrategyCompliance />
           <StrategySecondaryMarket />
           <StrategyRisk />
           <StrategyInvestors />
-          <StrategyProcess />
           <StrategyPartners />
         </>
       ) : (
