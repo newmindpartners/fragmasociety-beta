@@ -167,10 +167,10 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="border-t border-white/10 bg-black/30 backdrop-blur-sm"
+          className="border-t border-slate-700/50 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-900/95 backdrop-blur-md"
         >
           <div className="container mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-3 divide-x divide-white/10">
+            <div className="grid grid-cols-3 divide-x divide-slate-700/50">
               {[
                 { label: "OWN", desc: "Fractional stakes from €50" },
                 { label: "EARN", desc: "Automated yield distributions" },
@@ -181,12 +181,12 @@ export const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                  className="py-6 px-4 md:px-8 text-center group cursor-pointer hover:bg-white/5 transition-colors"
+                  className="py-6 px-4 md:px-8 text-center group cursor-pointer hover:bg-slate-800/50 transition-colors"
                 >
-                  <p className="text-xs tracking-[0.2em] uppercase text-white/40 mb-1 group-hover:text-white/60 transition-colors">
+                  <p className="text-xs tracking-[0.2em] uppercase text-violet-400/70 mb-1 group-hover:text-violet-300 transition-colors">
                     {item.label}
                   </p>
-                  <p className="text-sm md:text-base text-white/70 group-hover:text-white transition-colors">
+                  <p className="text-sm md:text-base text-slate-300 group-hover:text-white transition-colors">
                     {item.desc}
                   </p>
                 </motion.div>
