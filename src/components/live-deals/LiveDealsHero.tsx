@@ -29,7 +29,7 @@ export const LiveDealsHero = () => {
 
         {/* Description */}
         <p className="text-lg md:text-xl text-slate-400 font-light max-w-2xl leading-relaxed mb-16">
-          Curated investment opportunities in real assets, tokenized for modern investors.
+          Curated investment opportunities in real assets, designed for modern investors.
         </p>
 
         {/* Stats cards - matching market analysis style */}
