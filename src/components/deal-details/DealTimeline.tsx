@@ -402,10 +402,24 @@ export const DealTimeline = ({ deal }: DealTimelineProps) => {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-16 lg:py-20 overflow-hidden bg-slate-900">
+    <section ref={sectionRef} className="relative py-16 lg:py-20 overflow-hidden">
+      {/* Dark Navy Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1a] via-[#0d1424] to-[#111827]" />
+      
+      {/* Atmospheric Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-900/10 rounded-full blur-[100px]" />
+        {/* Top violet glow */}
+        <div className="absolute -top-32 -right-32 w-[600px] h-[400px] bg-gradient-to-bl from-violet-900/20 via-violet-800/10 to-transparent rounded-full blur-3xl" />
+        {/* Left navy accent */}
+        <div className="absolute top-1/2 -left-20 w-[400px] h-[400px] bg-gradient-to-r from-slate-800/30 via-indigo-900/20 to-transparent rounded-full blur-3xl" />
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0f1a]/80 to-transparent" />
+        {/* Subtle center glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-violet-900/5 rounded-full blur-[100px]" />
       </div>
+      
+      {/* Top border line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
       
       <div className="container mx-auto px-6 lg:px-16 relative z-10">
         {/* Header - Consistent with other sections */}
