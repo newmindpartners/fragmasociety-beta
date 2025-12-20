@@ -186,8 +186,6 @@ export const DealTimeline = ({ deal }: DealTimelineProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
 
-  if (!deal.timeline) return null;
-
   const currentTimeline = activeScenario === "optimistic" ? optimisticTimeline : downsideTimeline;
 
   // Auto-progress
