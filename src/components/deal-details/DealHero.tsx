@@ -217,12 +217,12 @@ export const DealHero = ({ deal }: DealHeroProps) => {
 
           {/* Right - Profile Image/Video */}
           <div className="order-1 lg:order-2 relative flex flex-col justify-end z-30">
-            {/* Signature Deals label at top of portrait */}
+            {/* Signature Deals label - positioned above portrait, not overlaying */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="absolute top-20 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
+              className="flex flex-col items-center mb-4"
             >
               <div className="flex items-center gap-3 mb-2">
                 <div 
