@@ -170,7 +170,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
             </motion.p>
           </div>
 
-          {/* Right - Profile Image/Video */}
+          {/* Right - Profile Image/Video with Industry BG */}
           <div className="order-1 lg:order-2 relative">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -178,13 +178,27 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/5] rounded-sm overflow-hidden border border-slate-700/30"
             >
-              {/* Dark background */}
+              {/* Dark navy solid background */}
               <div className="absolute inset-0 bg-slate-900" />
               
-              {/* Image */}
+              {/* Industry/Category background image */}
+              {deal.assetImages && deal.assetImages.length > 0 && (
+                <div 
+                  className="absolute inset-0 bg-cover bg-center opacity-40"
+                  style={{ backgroundImage: `url(${deal.assetImages[0]})` }}
+                />
+              )}
+              
+              {/* Gradient overlay for depth */}
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-transparent to-slate-900/80" />
+              
+              {/* Profile image with transparency */}
               <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${deal.leaderImage})` }}
+                className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-90"
+                style={{ 
+                  backgroundImage: `url(${deal.leaderImage})`,
+                  mixBlendMode: 'normal'
+                }}
               />
 
               {/* Video overlay */}
@@ -254,20 +268,23 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               )}
               
               {/* Play button when paused */}
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-                animate={{ opacity: isPlaying ? 0 : 0.8 }}
-                transition={{ duration: 0.3 }}
-              >
-                {deal.heroVideoUrl && (
+              {deal.heroVideoUrl && (
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+                  animate={{ opacity: isPlaying ? 0 : 0.8 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
                     <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
                   </div>
-                )}
-              </motion.div>
+                </motion.div>
+              )}
 
-              {/* Bottom gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10 pointer-events-none" />
+              {/* Bottom gradient for depth */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent z-10 pointer-events-none" />
+              
+              {/* Subtle vignette effect */}
+              <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(15,23,42,0.5)] pointer-events-none" />
             </motion.div>
           </div>
         </div>
