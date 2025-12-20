@@ -6,20 +6,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import bankFrickLogo from "@/assets/partners/bank-frick.png";
-import dfnsLogo from "@/assets/partners/dfns.png";
+import bankFrickLogo from "@/assets/partners/bank-frick-new.png";
+import dfnsLogo from "@/assets/partners/dfns-new.png";
 import houseOfWeb3Logo from "@/assets/partners/house-of-web3.svg";
-import ledgityLogo from "@/assets/partners/ledgity.png";
-import realizLogo from "@/assets/partners/realiz.png";
-import swissquoteLogo from "@/assets/partners/swissquote.png";
-import woudLawLogo from "@/assets/partners/woud-law.jpeg";
+import swissquoteLogo from "@/assets/partners/swissquote-new.png";
+import woudLawLogo from "@/assets/partners/woud-law-new.png";
 
 const partners = [
   { name: "Bank Frick", logo: bankFrickLogo },
   { name: "DFNS", logo: dfnsLogo },
   { name: "House of Web3", logo: houseOfWeb3Logo },
-  { name: "Ledgity Yield", logo: ledgityLogo },
-  { name: "Realiz", logo: realizLogo },
   { name: "Swissquote", logo: swissquoteLogo },
   { name: "Woud Law Firm", logo: woudLawLogo },
 ];
