@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, ArrowDown, Volume2, VolumeX } from "lucide-react";
+import { Play, ArrowDown, Volume2, VolumeX, Clock, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import type { DealData } from "@/types/deal";
@@ -103,16 +103,33 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           {/* Left Content */}
           <div className="order-2 lg:order-1 flex flex-col justify-center">
             <div className="max-w-xl rounded-md border border-border/30 bg-background/70 backdrop-blur-md p-6 md:p-8 shadow-lg">
-              {/* Category Badge */}
+              {/* Top Badges Row */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="mb-6"
+                className="flex flex-wrap items-center gap-3 mb-6"
               >
+                {/* Category Badge */}
                 <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-white/95 text-slate-800 rounded-sm">
                   {deal.category}
                 </span>
+                
+                {/* Limited Availability Badge */}
+                <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-amber-500/90 text-white rounded-sm flex items-center gap-1.5">
+                  <Flame className="w-3 h-3" />
+                  Limited Availability
+                </span>
+                
+                {/* Days Left Badge */}
+                <motion.span 
+                  className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-rose-600/90 text-white rounded-sm flex items-center gap-1.5"
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Clock className="w-3 h-3" />
+                  14 Days Left
+                </motion.span>
               </motion.div>
 
 
