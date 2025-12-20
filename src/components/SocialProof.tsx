@@ -58,7 +58,7 @@ export const SocialProof = () => (
                 </TooltipTrigger>
                 <TooltipContent 
                   side="bottom" 
-                  className="bg-slate-900 border-slate-700 px-3 py-1.5"
+                  className="z-50 bg-slate-900 border-slate-700 px-3 py-1.5"
                 >
                   <p className="text-xs font-medium text-white">{partner.name}</p>
                 </TooltipContent>
@@ -83,7 +83,7 @@ export const SocialProof = () => (
                 </TooltipTrigger>
                 <TooltipContent 
                   side="bottom" 
-                  className="bg-slate-900 border-slate-700 px-3 py-1.5"
+                  className="z-50 bg-slate-900 border-slate-700 px-3 py-1.5"
                 >
                   <p className="text-xs font-medium text-white">{partner.name}</p>
                 </TooltipContent>
