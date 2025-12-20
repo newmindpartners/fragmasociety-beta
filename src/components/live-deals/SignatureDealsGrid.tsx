@@ -221,10 +221,10 @@ export const SignatureDealsGrid = () => {
           </div>
         </div>
 
-        {/* Carousel with blur edge on right only */}
+        {/* Carousel with dark blur edge on right only */}
         <div className="relative">
-          {/* Right blur fade only */}
-          <div className="absolute right-0 top-0 bottom-0 w-16 lg:w-32 bg-gradient-to-l from-slate-50 via-slate-50/90 to-transparent z-10 pointer-events-none" />
+          {/* Right dark blur fade */}
+          <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-40 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
 
           {/* Scrollable Cards */}
           <div 
