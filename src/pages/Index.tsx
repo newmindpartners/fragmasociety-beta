@@ -9,6 +9,7 @@ import { StrategyCTA } from "@/components/StrategyCTA";
 import { SocialProof } from "@/components/SocialProof";
 import { Footer } from "@/components/Footer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { StrategyCompliance } from "@/components/strategy/StrategyCompliance";
 
 const Index = () => {
   return (
@@ -33,6 +34,9 @@ const Index = () => {
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <HowItWorks />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <StrategyCompliance />
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <Marketplace />
