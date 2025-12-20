@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Scale, Shield, Eye, FileCheck, BadgeCheck } from "lucide-react";
+import { Scale, Shield, Eye, FileCheck } from "lucide-react";
 
 const complianceItems = [
   {
@@ -22,156 +22,105 @@ const complianceItems = [
 
 export const StrategyCompliance = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.22, 1, 0.36, 1] as const
-      }
-    }
-  };
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
     <section 
       ref={ref}
-      className="relative py-32 overflow-hidden"
-      style={{
-        background: `
-          radial-gradient(ellipse at 30% 20%, hsl(172 83% 50% / 0.03) 0%, transparent 50%),
-          radial-gradient(ellipse at 70% 80%, hsl(204 100% 60% / 0.02) 0%, transparent 50%),
-          linear-gradient(180deg, hsl(225 65% 6%) 0%, hsl(230 50% 3%) 50%, hsl(225 65% 6%) 100%)
-        `
-      }}
+      className="relative py-20 md:py-28 overflow-hidden bg-[#f8fafc]"
     >
-      {/* Subtle grid overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
-            linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px'
-        }}
-      />
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white/80" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="text-center"
-        >
-          {/* Top Icon Badge */}
+        <div className="text-center max-w-4xl mx-auto">
+          {/* Top Icon */}
           <motion.div 
-            variants={itemVariants}
-            className="flex justify-center mb-8"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
+            className="flex justify-center mb-6"
           >
-            <div className="relative">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center border border-primary/20">
-                <FileCheck className="w-8 h-8 text-primary" />
-              </div>
-              <div className="absolute -inset-1 rounded-2xl bg-primary/10 blur-xl -z-10" />
+            <div className="w-14 h-14 rounded-xl bg-[#1e40af]/5 border border-[#1e40af]/10 flex items-center justify-center">
+              <FileCheck className="w-7 h-7 text-[#1e40af]" strokeWidth={1.5} />
             </div>
           </motion.div>
 
           {/* Main Headline */}
           <motion.h2 
-            variants={itemVariants}
-            className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-foreground mb-6 tracking-tight"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] as const }}
+            className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium text-[#0f172a] mb-5 tracking-tight leading-tight"
           >
-            Regulations Integrated at{" "}
-            <span className="text-gradient">Architecture Level</span>
+            Regulations Integrated at Architecture Level
           </motion.h2>
 
           {/* Subheadline */}
           <motion.p 
-            variants={itemVariants}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-20 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
+            className="text-base md:text-lg text-[#64748b] max-w-xl mx-auto mb-14 leading-relaxed"
           >
             Built-in compliance frameworks ensuring your business meets all regulatory standards from day one
           </motion.p>
 
           {/* Compliance Cards */}
-          <motion.div 
-            variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto mb-16"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 mb-14">
             {complianceItems.map((item, index) => (
               <motion.div
                 key={item.title}
-                variants={itemVariants}
+                initial={{ opacity: 0, y: 40 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: 0.3 + index * 0.1, 
+                  ease: [0.22, 1, 0.36, 1] as const 
+                }}
+                whileHover={{ 
+                  y: -4,
+                  transition: { duration: 0.3, ease: "easeOut" }
+                }}
                 className="group relative"
               >
-                <div className="relative h-full p-8 lg:p-10 rounded-2xl bg-card/40 border border-border/40 backdrop-blur-sm transition-all duration-500 hover:border-primary/30 hover:bg-card/60">
-                  {/* Card glow on hover */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+                <div className="relative h-full p-7 lg:p-8 rounded-2xl bg-white border border-[#e2e8f0] shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-400 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-[#1e40af]/20">
                   {/* Icon */}
-                  <div className="relative mb-8">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/20 transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20">
-                      <item.icon className="w-7 h-7 text-primary transition-transform duration-500 group-hover:scale-105" />
+                  <motion.div 
+                    className="mb-5"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-[#1e40af]/5 border border-[#1e40af]/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#1e40af]/8 group-hover:border-[#1e40af]/20">
+                      <item.icon className="w-6 h-6 text-[#1e40af]" strokeWidth={1.5} />
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Title */}
-                  <h3 className="relative text-xl lg:text-2xl font-serif font-medium text-foreground mb-4 text-left">
+                  <h3 className="text-lg lg:text-xl font-semibold text-[#0f172a] mb-3 text-left font-sans">
                     {item.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="relative text-muted-foreground leading-relaxed text-left">
+                  <p className="text-[#64748b] leading-relaxed text-left text-sm lg:text-base">
                     {item.description}
                   </p>
-
-                  {/* Bottom accent line */}
-                  <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Bottom Statement */}
-          <motion.div 
-            variants={itemVariants}
-            className="relative max-w-3xl mx-auto"
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
+            className="text-sm md:text-base text-[#64748b] max-w-2xl mx-auto leading-relaxed italic"
           >
-            <div className="relative p-8 md:p-10 rounded-2xl border border-border/30 bg-card/20 backdrop-blur-sm">
-              {/* Decorative corner elements */}
-              <div className="absolute top-0 left-0 w-12 h-12 border-l border-t border-primary/30 rounded-tl-2xl" />
-              <div className="absolute bottom-0 right-0 w-12 h-12 border-r border-b border-primary/30 rounded-br-2xl" />
-              
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <BadgeCheck className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium text-primary tracking-wider uppercase">Platform Architecture</span>
-              </div>
-              
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed italic font-serif">
-                "Our platform architecture integrates regulatory compliance at every layer, ensuring seamless adherence to evolving financial regulations while maintaining operational efficiency."
-              </p>
-            </div>
-          </motion.div>
-        </motion.div>
+            Our platform architecture integrates regulatory compliance at every layer, ensuring seamless adherence to evolving financial regulations while maintaining operational efficiency.
+          </motion.p>
+        </div>
       </div>
-
-      {/* Bottom ambient glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-primary/5 blur-[100px] rounded-full" />
     </section>
   );
 };
