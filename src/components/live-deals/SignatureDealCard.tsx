@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 
@@ -37,6 +37,7 @@ export const SignatureDealCard = ({
   onSeeDeal,
 }: SignatureDealCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const riskStyles = {
@@ -104,13 +105,31 @@ export const SignatureDealCard = ({
                 <video
                   ref={videoRef}
                   src={videoUrl}
-                  muted
+                  muted={isMuted}
                   loop
                   playsInline
                   className="w-full h-full object-cover"
                 />
                 {/* Gradient overlay on video */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent pointer-events-none" />
+                
+                {/* Sound toggle button */}
+                <motion.button
+                  className="absolute top-5 right-5 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-slate-800/90 transition-colors"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMuted(!isMuted);
+                  }}
+                >
+                  {isMuted ? (
+                    <VolumeX className="w-4 h-4 text-white" />
+                  ) : (
+                    <Volume2 className="w-4 h-4 text-white" />
+                  )}
+                </motion.button>
                 
                 {/* Playing indicator */}
                 <motion.div 
@@ -129,7 +148,7 @@ export const SignatureDealCard = ({
                       />
                     ))}
                   </div>
-                  <span className="text-xs text-white/80 uppercase tracking-wider">Preview</span>
+                  <span className="text-xs text-white/80 uppercase tracking-wider">{isMuted ? "Preview" : "Playing"}</span>
                 </motion.div>
               </motion.div>
             )}
