@@ -107,21 +107,21 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex items-center gap-3 mb-4"
+              className="flex items-center gap-4 mb-5"
             >
               {/* Limited Availability Badge */}
-              <span className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] bg-slate-800/80 backdrop-blur-sm text-white/90 rounded-sm flex items-center gap-1.5 border border-slate-600/50">
-                <Flame className="w-3 h-3 text-slate-300" />
+              <span className="px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-slate-800/90 backdrop-blur-sm text-white rounded flex items-center gap-2 border border-slate-500/50 shadow-lg">
+                <Flame className="w-4 h-4 text-slate-200" />
                 Limited Availability
               </span>
               
               {/* Days Left Badge */}
               <motion.span 
-                className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] bg-white/10 backdrop-blur-sm text-white rounded-sm flex items-center gap-1.5 border border-white/20"
-                animate={{ opacity: [0.9, 1, 0.9] }}
+                className="px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-white/15 backdrop-blur-sm text-white rounded flex items-center gap-2 border border-white/30 shadow-lg"
+                animate={{ opacity: [0.85, 1, 0.85] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Clock className="w-3 h-3" />
+                <Clock className="w-4 h-4" />
                 14 Days Left to Invest
               </motion.span>
             </motion.div>
