@@ -86,6 +86,7 @@ const DealDetails = () => {
     { id: "market", label: "Market Analysis", available: !!deal?.marketData },
     { id: "financials", label: "Financials", available: !!deal?.financials },
     { id: "team", label: "Team", available: true },
+    { id: "howitworks", label: "How It Works", available: true },
     { id: "risks", label: "Risks & Docs", available: true },
   ];
 
@@ -188,6 +189,11 @@ const DealDetails = () => {
         return (
           <>
             <DealTeam deal={deal} />
+          </>
+        );
+      case "howitworks":
+        return (
+          <>
             <DealHowItWorks />
           </>
         );
