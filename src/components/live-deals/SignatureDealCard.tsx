@@ -1,7 +1,6 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, ArrowRight, Clock, Target, Euro, AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
 
 interface SignatureDealCardProps {
   id: string;
@@ -12,246 +11,139 @@ interface SignatureDealCardProps {
   title: string;
   description: string;
   image: string;
-  videoUrl?: string;
   minTicket: string;
   targetReturn: string;
   term: string;
   risk: "Low" | "Medium" | "High";
   comingSoon?: boolean;
-  onWatchTrailer: () => void;
   onSeeDeal: () => void;
 }
 
 export const SignatureDealCard = ({
   category,
-  subcategory,
   leaderName,
   leaderRole,
   title,
   description,
   image,
-  videoUrl,
   minTicket,
   targetReturn,
   term,
   risk,
   comingSoon = false,
-  onWatchTrailer,
   onSeeDeal,
 }: SignatureDealCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const riskColor = {
-    Low: "text-emerald-600",
-    Medium: "text-amber-600",
-    High: "text-rose-600",
+  const riskStyles = {
+    Low: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    Medium: "bg-amber-50 text-amber-700 border-amber-200",
+    High: "bg-rose-50 text-rose-700 border-rose-200",
   };
 
-  // Handle video play/pause on hover
-  useEffect(() => {
-    if (videoRef.current) {
-      if (isHovered && videoUrl) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play().catch(() => {});
-      } else {
-        videoRef.current.pause();
-      }
-    }
-  }, [isHovered, videoUrl]);
-
   return (
-    <motion.div
-      className="group relative overflow-hidden rounded-sm"
-      style={{
-        background: isHovered 
-          ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
-          : 'rgba(255, 255, 255, 0.9)',
-        border: isHovered 
-          ? '1px solid rgba(139, 92, 246, 0.25)' 
-          : '1px solid rgba(226, 232, 240, 0.8)',
-        boxShadow: isHovered 
-          ? '0 30px 60px -15px rgba(15, 23, 42, 0.6), 0 0 50px -10px rgba(139, 92, 246, 0.15)'
-          : '0 4px 30px -10px rgba(0, 0, 0, 0.08)',
-        transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
-      animate={{ 
-        y: isHovered ? -8 : 0,
-        scale: isHovered ? 1.015 : 1
-      }}
-      transition={{ 
-        duration: 0.7, 
-        ease: [0.32, 0.72, 0, 1]
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <motion.article
+      className="group relative h-full"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
     >
-      {/* Subtle violet glow on hover */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-br from-violet-900/10 via-transparent to-slate-800/20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-      />
-
-      {/* Image/Video Thumbnail - 1:1 aspect ratio */}
-      <div 
-        className="relative aspect-square overflow-hidden cursor-pointer"
-        onClick={onWatchTrailer}
-      >
-        {/* Static image background */}
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
-          animate={{ scale: isHovered ? 1.05 : 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
+      <div className="relative h-full bg-white rounded-sm overflow-hidden border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-700">
         
-        {/* Video overlay on hover - only covers image area */}
-        <AnimatePresence>
-          {isHovered && videoUrl && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 z-20 bg-slate-900"
-            >
-              <video
-                ref={videoRef}
-                src={videoUrl}
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              {/* Subtle gradient at bottom */}
-              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-900/80 to-transparent pointer-events-none" />
-              {/* Playing indicator */}
-              <motion.div 
-                className="absolute bottom-4 left-4 flex items-center gap-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <div className="flex gap-0.5">
-                  {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-1 bg-white rounded-full"
-                      animate={{ height: [8, 16, 8] }}
-                      transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs text-white/80">Preview</span>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        {/* Category chips */}
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-          {comingSoon && (
-            <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-violet-500/90 backdrop-blur-md text-white rounded-sm">
-              Coming Soon
-            </span>
-          )}
-          <span className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-slate-800/80 backdrop-blur-md text-slate-300 rounded-sm border border-slate-700/50">
-            {category} • {subcategory}
-          </span>
-        </div>
-
-        {/* Play button overlay */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 0 : 0.7 }}
-          transition={{ duration: 0.3 }}
-        >
+        {/* Editorial Image Section */}
+        <div className="relative aspect-[4/5] overflow-hidden">
+          {/* Image with Ken Burns effect */}
           <motion.div
-            className="w-12 h-12 rounded-full bg-slate-800/50 backdrop-blur-md border border-slate-600/30 flex items-center justify-center"
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${image})` }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
+          
+          {/* Refined gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          
+          {/* Top badges */}
+          <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
+            <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-white/95 text-slate-800 rounded-sm backdrop-blur-sm">
+              {category}
+            </span>
+            {comingSoon && (
+              <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-slate-900/90 text-white rounded-sm backdrop-blur-sm">
+                Coming Soon
+              </span>
+            )}
+          </div>
+
+          {/* Leader info - editorial style */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <p className="text-xs text-white/60 uppercase tracking-[0.2em] mb-2 font-light">
+                {leaderRole}
+              </p>
+              <h3 className="text-2xl md:text-3xl font-light text-white leading-tight tracking-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+                {leaderName}
+              </h3>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="p-6 lg:p-8">
+          {/* Title */}
+          <h4 className="text-lg font-medium text-slate-900 mb-3 leading-snug" style={{ fontFamily: "'Playfair Display', serif" }}>
+            {title}
+          </h4>
+          
+          {/* Description */}
+          <p className="text-sm text-slate-500 leading-relaxed mb-6 line-clamp-2">
+            {description}
+          </p>
+
+          {/* Stats - refined grid */}
+          <div className="grid grid-cols-4 gap-3 mb-6 py-5 border-y border-slate-100">
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Entry</p>
+              <p className="text-sm font-medium text-slate-900">{minTicket}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Target</p>
+              <p className="text-sm font-medium text-slate-900">{targetReturn}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Duration</p>
+              <p className="text-sm font-medium text-slate-900">{term}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Risk</p>
+              <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-sm border ${riskStyles[risk]}`}>
+                {risk}
+              </span>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <Button 
+            variant="outline"
+            className="w-full group/btn border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white rounded-sm h-12 text-sm font-medium tracking-wide transition-all duration-300"
+            onClick={onSeeDeal}
           >
-            <Play className="w-5 h-5 text-white ml-0.5" fill="currentColor" />
-          </motion.div>
-        </motion.div>
-
-        {/* Leader info */}
-        <div className="absolute bottom-3 left-3 right-3 z-10">
-          <h3 className="text-base font-bold text-white mb-0.5">{leaderName}</h3>
-          <p className="text-xs text-slate-400">{leaderRole}</p>
-        </div>
-      </div>
-
-      {/* Card content */}
-      <div className="p-5 relative z-10">
-        <h4 
-          className={`text-sm font-semibold mb-1.5 line-clamp-2 transition-colors duration-500 ${
-            isHovered ? 'text-white' : 'text-slate-900'
-          }`}
-        >
-          {title}
-        </h4>
-        <p 
-          className={`text-xs mb-4 line-clamp-2 transition-colors duration-500 ${
-            isHovered ? 'text-slate-400' : 'text-slate-500'
-          }`}
-        >
-          {description}
-        </p>
-
-        {/* Stats row */}
-        <div 
-          className={`grid grid-cols-4 gap-2 mb-4 py-3 border-y transition-colors duration-500 ${
-            isHovered ? 'border-slate-700/30' : 'border-slate-200/80'
-          }`}
-        >
-          <div className="text-center">
-            <Euro className={`w-3 h-3 mx-auto mb-0.5 transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`} />
-            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>From</p>
-            <p className={`text-xs font-semibold transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>{minTicket}</p>
-          </div>
-          <div className="text-center">
-            <Target className={`w-3 h-3 mx-auto mb-0.5 transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`} />
-            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>Target</p>
-            <p className={`text-xs font-semibold transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>{targetReturn}</p>
-          </div>
-          <div className="text-center">
-            <Clock className={`w-3 h-3 mx-auto mb-0.5 transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`} />
-            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>Term</p>
-            <p className={`text-xs font-semibold transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>{term}</p>
-          </div>
-          <div className="text-center">
-            <AlertTriangle className={`w-3 h-3 mx-auto mb-0.5 ${riskColor[risk]}`} />
-            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>Risk</p>
-            <p className={`text-xs font-semibold ${riskColor[risk]}`}>{risk}</p>
-          </div>
+            Explore Opportunity
+            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform duration-300" />
+          </Button>
         </div>
 
-        {/* See deal button */}
-        <Button 
-          size="sm"
-          variant="outline"
-          className={`w-full text-xs group/btn transition-all duration-300 ${
-            isHovered 
-              ? 'border-slate-600 text-white hover:bg-white hover:text-slate-900 hover:border-white' 
-              : 'border-slate-300 text-slate-900 hover:bg-slate-900 hover:text-white hover:border-slate-900'
-          }`}
-          onClick={onSeeDeal}
-        >
-          See deal
-          <ArrowRight className="w-3 h-3 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
-        </Button>
+        {/* Subtle hover accent */}
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 origin-left"
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        />
       </div>
-
-      {/* Bottom accent line - violet */}
-      <motion.div 
-        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/50 via-violet-400/40 to-slate-600/30"
-        initial={{ width: 0 }}
-        animate={{ width: isHovered ? '100%' : 0 }}
-        transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-      />
-    </motion.div>
+    </motion.article>
   );
 };

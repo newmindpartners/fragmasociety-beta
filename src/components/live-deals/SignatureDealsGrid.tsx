@@ -1,23 +1,14 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { SignatureDealCard } from "./SignatureDealCard";
-import { TrailerModal } from "./TrailerModal";
 import { useNavigate } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
 
 import bryanImage from "@/assets/bryan-balsinger.png";
 import philippeImage from "@/assets/philippe-naouri.png";
 import timImage from "@/assets/tim-levy.png";
 import andreImage from "@/assets/andre-messika.png";
-
-// Placeholder video URLs for hover preview
-const placeholderVideos = [
-  "https://videos.pexels.com/video-files/4625518/4625518-uhd_2560_1440_30fps.mp4", // horse riding
-  "https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4", // luxury architecture
-  "https://videos.pexels.com/video-files/5377684/5377684-uhd_2560_1440_25fps.mp4", // cinema/film
-  "https://videos.pexels.com/video-files/4812203/4812203-uhd_2560_1440_25fps.mp4", // luxury/diamonds
-];
-
-const categories = ["All", "Sports", "Real Estate", "Film", "Luxury"];
 
 const signatureDeals = [
   {
@@ -29,10 +20,9 @@ const signatureDeals = [
     title: "Champion Horse Portfolio",
     description: "Own a slice of a curated portfolio of competition horses with a European champion rider. Real prize money, real resale value, real upside.",
     image: bryanImage,
-    videoUrl: placeholderVideos[0],
     minTicket: "€250",
     targetReturn: "8–12% p.a.",
-    term: "24–36 months",
+    term: "24–36 mo",
     risk: "Medium" as const,
     comingSoon: false,
   },
@@ -45,10 +35,9 @@ const signatureDeals = [
     title: "Malibu Modern Villa",
     description: "Invest in a design-led California villa project with a renowned architect and builder. Premium location, premium returns.",
     image: philippeImage,
-    videoUrl: placeholderVideos[1],
     minTicket: "€500",
     targetReturn: "10–15% p.a.",
-    term: "18–24 months",
+    term: "18–24 mo",
     risk: "Medium" as const,
     comingSoon: true,
   },
@@ -61,10 +50,9 @@ const signatureDeals = [
     title: "Hollywood Film Financing Slate",
     description: "Get exposure to a portfolio of blockbuster-backed film deals with structured recoupment. Studio-level deals, investor-level access.",
     image: timImage,
-    videoUrl: placeholderVideos[2],
     minTicket: "€1,000",
     targetReturn: "12–18% p.a.",
-    term: "36–48 months",
+    term: "36–48 mo",
     risk: "High" as const,
     comingSoon: true,
   },
@@ -77,10 +65,9 @@ const signatureDeals = [
     title: "Rare Diamond Fund",
     description: "Co-own a curated vault of rare diamonds sourced by a world-class maison. Tangible luxury, tokenized access.",
     image: andreImage,
-    videoUrl: placeholderVideos[3],
     minTicket: "€2,500",
     targetReturn: "6–10% p.a.",
-    term: "48–60 months",
+    term: "48–60 mo",
     risk: "Low" as const,
     comingSoon: true,
   },
@@ -88,114 +75,164 @@ const signatureDeals = [
 
 export const SignatureDealsGrid = () => {
   const navigate = useNavigate();
-  const [selectedDeal, setSelectedDeal] = useState<typeof signatureDeals[0] | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true,
+    align: 'start',
+    slidesToScroll: 1,
+    containScroll: false,
+  });
+  
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const handleWatchTrailer = (deal: typeof signatureDeals[0]) => {
-    setSelectedDeal(deal);
-    setIsModalOpen(true);
-  };
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   const handleSeeDeal = (dealId: string) => {
-    // Navigate to deal detail page
     navigate(`/deal/${dealId}`);
   };
 
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const filteredDeals = activeCategory === "All" 
-    ? signatureDeals 
-    : signatureDeals.filter(deal => deal.category === activeCategory);
-
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden">
-      {/* Premium Light Background - matching Features section */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
-        {/* Subtle spotlight effects */}
+      {/* Premium Light Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50">
         <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
       </div>
 
-      {/* Subtle grid pattern */}
-      <div 
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }}
-      />
+      <div className="relative z-10">
+        {/* Header */}
+        <div className="container mx-auto px-6 lg:px-12 mb-16">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <div className="max-w-2xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-4 mb-6"
+              >
+                <div className="w-12 h-px bg-slate-300" />
+                <span className="text-[10px] tracking-[0.3em] uppercase text-slate-400 font-medium">
+                  Signature Deals
+                </span>
+              </motion.div>
+              
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05]"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Invest alongside
+                <br />
+                <span className="italic text-slate-500">industry leaders.</span>
+              </motion.h2>
+            </div>
 
-      <div className="container relative z-10">
-        {/* Section Header */}
-        <div className="max-w-4xl mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
-          >
-            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
-              Active Opportunities
-            </span>
-          </motion.div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
-          >
-            Curated deals
-            <br />
-            <span className="italic text-slate-500 font-serif">with proven leaders.</span>
-          </motion.h2>
+            {/* Navigation Arrows */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="flex items-center gap-3"
+            >
+              <button
+                onClick={scrollPrev}
+                className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                  canScrollPrev || true
+                    ? 'border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white'
+                    : 'border-slate-200 text-slate-300 cursor-not-allowed'
+                }`}
+                disabled={!canScrollPrev && false}
+              >
+                <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+              <button
+                onClick={scrollNext}
+                className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                  canScrollNext || true
+                    ? 'border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white'
+                    : 'border-slate-200 text-slate-300 cursor-not-allowed'
+                }`}
+                disabled={!canScrollNext && false}
+              >
+                <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+            </motion.div>
+          </div>
         </div>
 
-        {/* Category filters */}
+        {/* Carousel with blur edges */}
+        <div className="relative">
+          {/* Left blur fade */}
+          <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-48 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+          
+          {/* Right blur fade */}
+          <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-48 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+
+          {/* Carousel */}
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {signatureDeals.map((deal, index) => (
+                <div 
+                  key={deal.id} 
+                  className="flex-none w-[85%] sm:w-[45%] lg:w-[32%] pl-6 first:pl-12 lg:first:pl-24"
+                >
+                  <SignatureDealCard
+                    {...deal}
+                    onSeeDeal={() => handleSeeDeal(deal.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Progress indicator */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap gap-2 mb-12"
+          transition={{ delay: 0.3 }}
+          className="container mx-auto px-6 lg:px-12 mt-12"
         >
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-5 py-2.5 rounded-sm text-sm font-medium transition-all duration-300 ${
-                activeCategory === category
-                  ? "bg-slate-900 text-white"
-                  : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {filteredDeals.map((deal, index) => (
-            <motion.div
-              key={deal.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-            >
-              <SignatureDealCard
-                {...deal}
-                onWatchTrailer={() => handleWatchTrailer(deal)}
-                onSeeDeal={() => handleSeeDeal(deal.id)}
+          <div className="flex items-center justify-center gap-2">
+            {signatureDeals.map((_, index) => (
+              <motion.button
+                key={index}
+                onClick={() => emblaApi?.scrollTo(index)}
+                className={`h-1 rounded-full transition-all duration-500 ${
+                  index === selectedIndex 
+                    ? 'w-8 bg-slate-900' 
+                    : 'w-2 bg-slate-300 hover:bg-slate-400'
+                }`}
+                whileHover={{ scale: 1.2 }}
               />
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Bottom decorative element */}
         <motion.div 
@@ -208,13 +245,6 @@ export const SignatureDealsGrid = () => {
           <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
         </motion.div>
       </div>
-
-      <TrailerModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        deal={selectedDeal}
-        onSeeDeal={() => selectedDeal && handleSeeDeal(selectedDeal.id)}
-      />
     </section>
   );
 };
