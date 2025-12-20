@@ -297,18 +297,6 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 </AnimatePresence>
               )}
               
-              {/* Play button when paused */}
-              {deal.heroVideoUrl && (
-                <motion.div
-                  className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-                  animate={{ opacity: isPlaying ? 0 : 0.8 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
-                    <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
-                  </div>
-                </motion.div>
-              )}
 
             </motion.div>
             
