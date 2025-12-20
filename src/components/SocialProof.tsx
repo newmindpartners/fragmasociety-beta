@@ -15,7 +15,7 @@ import woudLawLogo from "@/assets/partners/woud-law-new.png";
 const partners = [
   { name: "Bank Frick", logo: bankFrickLogo, className: "", url: "https://www.bankfrick.li" },
   { name: "DFNS", logo: dfnsLogo, className: "", url: "https://www.dfns.co" },
-  { name: "House of Web3", logo: houseOfWeb3Logo, className: "", url: "https://www.houseofweb3.io" },
+  { name: "House of Web3", logo: houseOfWeb3Logo, className: "", url: "https://www.houseofweb3.lu/" },
   { name: "Swissquote", logo: swissquoteLogo, className: "scale-150", url: "https://www.swissquote.com" },
   { name: "Woud Law Firm", logo: woudLawLogo, className: "", url: "https://woudlaw.com/" },
 ];
