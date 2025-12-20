@@ -1,9 +1,8 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { SignatureDealCard } from "./SignatureDealCard";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import useEmblaCarousel from "embla-carousel-react";
 
 import bryanImage from "@/assets/bryan-balsinger.png";
 import philippeImage from "@/assets/philippe-naouri.png";
@@ -75,37 +74,29 @@ const signatureDeals = [
 
 export const SignatureDealsGrid = () => {
   const navigate = useNavigate();
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: true,
-    align: 'start',
-    slidesToScroll: 1,
-    containScroll: false,
-  });
-  
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollToIndex = useCallback((index: number) => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const cardWidth = container.scrollWidth / signatureDeals.length;
+    container.scrollTo({
+      left: cardWidth * index,
+      behavior: 'smooth'
+    });
+    setCurrentIndex(index);
+  }, []);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
+  const scrollPrev = useCallback(() => {
+    const newIndex = currentIndex === 0 ? signatureDeals.length - 1 : currentIndex - 1;
+    scrollToIndex(newIndex);
+  }, [currentIndex, scrollToIndex]);
 
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
-    return () => {
-      emblaApi.off('select', onSelect);
-      emblaApi.off('reInit', onSelect);
-    };
-  }, [emblaApi, onSelect]);
+  const scrollNext = useCallback(() => {
+    const newIndex = currentIndex === signatureDeals.length - 1 ? 0 : currentIndex + 1;
+    scrollToIndex(newIndex);
+  }, [currentIndex, scrollToIndex]);
 
   const handleSeeDeal = (dealId: string) => {
     navigate(`/deal/${dealId}`);
@@ -160,23 +151,13 @@ export const SignatureDealsGrid = () => {
             >
               <button
                 onClick={scrollPrev}
-                className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                  canScrollPrev || true
-                    ? 'border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white'
-                    : 'border-slate-200 text-slate-300 cursor-not-allowed'
-                }`}
-                disabled={!canScrollPrev && false}
+                className="w-14 h-14 rounded-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white flex items-center justify-center transition-all duration-300"
               >
                 <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
               </button>
               <button
                 onClick={scrollNext}
-                className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                  canScrollNext || true
-                    ? 'border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white'
-                    : 'border-slate-200 text-slate-300 cursor-not-allowed'
-                }`}
-                disabled={!canScrollNext && false}
+                className="w-14 h-14 rounded-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white flex items-center justify-center transition-all duration-300"
               >
                 <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
               </button>
@@ -187,26 +168,28 @@ export const SignatureDealsGrid = () => {
         {/* Carousel with blur edges */}
         <div className="relative">
           {/* Left blur fade */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-48 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-16 lg:w-32 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10 pointer-events-none" />
           
           {/* Right blur fade */}
-          <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-48 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 lg:w-32 bg-gradient-to-l from-slate-50 via-slate-50/90 to-transparent z-10 pointer-events-none" />
 
-          {/* Carousel */}
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">
-              {signatureDeals.map((deal, index) => (
-                <div 
-                  key={deal.id} 
-                  className="flex-none w-[85%] sm:w-[45%] lg:w-[32%] pl-6 first:pl-12 lg:first:pl-24"
-                >
-                  <SignatureDealCard
-                    {...deal}
-                    onSeeDeal={() => handleSeeDeal(deal.id)}
-                  />
-                </div>
-              ))}
-            </div>
+          {/* Scrollable Cards */}
+          <div 
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto scrollbar-hide px-6 lg:px-24 snap-x snap-mandatory"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {signatureDeals.map((deal) => (
+              <div 
+                key={deal.id} 
+                className="flex-none w-[85%] sm:w-[45%] lg:w-[32%] snap-start"
+              >
+                <SignatureDealCard
+                  {...deal}
+                  onSeeDeal={() => handleSeeDeal(deal.id)}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
@@ -222,9 +205,9 @@ export const SignatureDealsGrid = () => {
             {signatureDeals.map((_, index) => (
               <motion.button
                 key={index}
-                onClick={() => emblaApi?.scrollTo(index)}
+                onClick={() => scrollToIndex(index)}
                 className={`h-1 rounded-full transition-all duration-500 ${
-                  index === selectedIndex 
+                  index === currentIndex 
                     ? 'w-8 bg-slate-900' 
                     : 'w-2 bg-slate-300 hover:bg-slate-400'
                 }`}
