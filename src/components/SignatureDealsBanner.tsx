@@ -155,55 +155,61 @@ export const SignatureDealsBanner = () => {
         <ChevronRight size={28} strokeWidth={1.5} />
       </button>
 
-      {/* Content container - 3 columns with fixed positioning */}
+      {/* Content container */}
       <div className="container relative z-10 h-full">
-        <div className="grid grid-cols-3 items-center h-full gap-4" style={{ transform: 'translateZ(0)' }}>
-          
-          {/* LEFT - INVEST WITH - Fixed positioning, no animation */}
-          <div className="flex flex-col justify-center items-start pl-4 will-change-auto">
-            <div className="flex items-center gap-4 mb-4">
-              <div 
-                className="h-px w-7"
-                style={{ background: 'rgba(255,255,255,0.3)' }}
-              />
-              <span 
-                className="text-[10px] tracking-[0.25em] uppercase font-light"
-                style={{ color: 'rgba(255,255,255,0.5)' }}
-              >
-                Signature Deals
-              </span>
-            </div>
-            
-            <h3
-              className="text-2xl md:text-4xl font-light tracking-wide uppercase"
-              style={{ 
-                color: 'rgba(255,255,255,0.85)',
-                letterSpacing: '0.15em'
-              }}
+        {/* LEFT - INVEST WITH - Absolute positioning for consistent placement */}
+        <div 
+          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 flex flex-col justify-center items-start"
+          style={{ transform: 'translateY(-50%) translateZ(0)' }}
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div 
+              className="h-px w-7"
+              style={{ background: 'rgba(255,255,255,0.3)' }}
+            />
+            <span 
+              className="text-[10px] tracking-[0.25em] uppercase font-light"
+              style={{ color: 'rgba(255,255,255,0.5)' }}
             >
-              Invest with
-            </h3>
-
-            {/* Progress dots - no transform animations */}
-            <div className="flex items-center gap-3 mt-8">
-              {leaders.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleManualNavigation(idx)}
-                  className="group relative p-1"
-                  aria-label={`View ${leaders[idx].name}`}
-                >
-                  <div
-                    className="w-2 h-2 rounded-full transition-colors duration-300"
-                    style={{
-                      backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
-                      boxShadow: idx === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
-                    }}
-                  />
-                </button>
-              ))}
-            </div>
+              Signature Deals
+            </span>
           </div>
+          
+          <h3
+            className="text-2xl md:text-4xl font-light tracking-wide uppercase"
+            style={{ 
+              color: 'rgba(255,255,255,0.85)',
+              letterSpacing: '0.15em'
+            }}
+          >
+            Invest with
+          </h3>
+
+          {/* Progress dots */}
+          <div className="flex items-center gap-3 mt-8">
+            {leaders.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleManualNavigation(idx)}
+                className="group relative p-1"
+                aria-label={`View ${leaders[idx].name}`}
+              >
+                <div
+                  className="w-2 h-2 rounded-full transition-colors duration-300"
+                  style={{
+                    backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
+                    boxShadow: idx === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Grid for center portrait and right name */}
+        <div className="grid grid-cols-3 items-center h-full gap-4" style={{ transform: 'translateZ(0)' }}>
+          {/* Empty left column spacer */}
+          <div />
 
           {/* MIDDLE - Leader portrait */}
           <div className="relative h-full flex items-end justify-center">
