@@ -10,19 +10,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.5)] hover:scale-[1.02] active:scale-[0.98]",
+          "bg-primary text-primary-foreground hover:shadow-[0_8px_30px_-8px_rgba(255,255,255,0.3)] dark:hover:shadow-[0_8px_30px_-8px_rgba(255,255,255,0.25)] hover:scale-[1.02] active:scale-[0.98]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:scale-[1.02] active:scale-[0.98]",
         outline:
-          "border border-primary text-primary hover:bg-primary/10 hover:scale-[1.02] active:scale-[0.98]",
+          "border border-primary text-primary hover:bg-primary/10 hover:shadow-[0_4px_20px_-6px_rgba(100,100,100,0.3)] dark:hover:shadow-[0_4px_20px_-6px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-[1.02] active:scale-[0.98]",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-[0_4px_20px_-6px_rgba(100,100,100,0.25)] dark:hover:shadow-[0_4px_20px_-6px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98]",
         ghost: "text-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98]",
         link: "text-primary underline-offset-4 hover:underline",
         glass:
-          "bg-foreground/5 backdrop-blur-md border border-foreground/10 text-foreground hover:bg-foreground/10 hover:scale-[1.02] active:scale-[0.98]",
+          "bg-foreground/5 backdrop-blur-md border border-foreground/10 text-foreground hover:bg-foreground/10 hover:shadow-[0_4px_20px_-6px_rgba(100,100,100,0.2)] dark:hover:shadow-[0_4px_20px_-6px_rgba(255,255,255,0.1)] hover:scale-[1.02] active:scale-[0.98]",
         hero:
-          "bg-primary text-primary-foreground hover:shadow-[0_12px_40px_-10px_hsl(var(--primary)/0.6)] hover:scale-[1.03] active:scale-[0.98] font-semibold",
+          "bg-primary text-primary-foreground hover:shadow-[0_12px_40px_-10px_rgba(100,100,100,0.4)] dark:hover:shadow-[0_12px_40px_-10px_rgba(255,255,255,0.35)] hover:scale-[1.03] active:scale-[0.98] font-semibold",
         "hero-solid":
           "bg-white text-background hover:bg-white/95 hover:shadow-[0_12px_40px_-10px_rgba(255,255,255,0.4)] hover:scale-[1.03] active:scale-[0.98] font-semibold",
         "hero-outline":
