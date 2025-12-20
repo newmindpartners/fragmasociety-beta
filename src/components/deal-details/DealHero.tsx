@@ -62,11 +62,17 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
             backgroundImage: `url(${categoryBg})`,
-            opacity: 0.4,
-            filter: 'grayscale(30%) brightness(0.85)'
+            opacity: 0.55,
+            filter: 'grayscale(20%) brightness(0.75) saturate(0.8) contrast(1.1)'
           }}
         />
-        
+        {/* Subtle color tint overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, rgba(15,23,42,0.4) 0%, rgba(30,41,59,0.3) 50%, rgba(15,23,42,0.5) 100%)'
+          }}
+        />
       </div>
       
       {/* Dark navy gradient overlay - z-20 to be in front of portrait */}
