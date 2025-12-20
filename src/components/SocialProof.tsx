@@ -20,8 +20,6 @@ const partners = [
   { name: "Woud Law Firm", logo: woudLawLogo, className: "" },
 ];
 
-// Double the partners for seamless loop
-const doubledPartners = [...partners, ...partners];
 
 export const SocialProof = () => (
   <section className="relative w-full py-10 bg-white overflow-hidden">
@@ -35,38 +33,64 @@ export const SocialProof = () => (
     </div>
     
     {/* Scrolling logos container */}
-    <div className="relative">
+    <div className="relative overflow-hidden">
       {/* Fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
       
-      {/* Animated logos */}
+      {/* Animated logos - two identical strips for seamless loop */}
       <TooltipProvider delayDuration={100}>
-        <div
-          className="flex items-center gap-16 animate-[scroll_30s_linear_infinite]"
-          style={{
-            width: 'max-content',
-          }}
-        >
-          {doubledPartners.map((partner, i) => (
-            <Tooltip key={`${partner.name}-${i}`}>
-              <TooltipTrigger asChild>
-                <div className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}>
-                  <img 
-                    src={partner.logo} 
-                    alt={partner.name}
-                    className="h-full w-auto object-contain max-w-[150px]"
-                  />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent 
-                side="bottom" 
-                className="bg-slate-900 border-slate-700 px-3 py-1.5"
-              >
-                <p className="text-xs font-medium text-white">{partner.name}</p>
-              </TooltipContent>
-            </Tooltip>
-          ))}
+        <div className="flex">
+          {/* First strip */}
+          <div
+            className="flex items-center gap-16 shrink-0 animate-scroll-seamless"
+          >
+            {partners.map((partner, i) => (
+              <Tooltip key={`${partner.name}-a-${i}`}>
+                <TooltipTrigger asChild>
+                  <div className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}>
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="h-full w-auto object-contain max-w-[150px]"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent 
+                  side="bottom" 
+                  className="bg-slate-900 border-slate-700 px-3 py-1.5"
+                >
+                  <p className="text-xs font-medium text-white">{partner.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+            <div className="w-16 shrink-0" /> {/* Gap spacer */}
+          </div>
+          {/* Second strip (duplicate for seamless loop) */}
+          <div
+            className="flex items-center gap-16 shrink-0 animate-scroll-seamless"
+          >
+            {partners.map((partner, i) => (
+              <Tooltip key={`${partner.name}-b-${i}`}>
+                <TooltipTrigger asChild>
+                  <div className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}>
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="h-full w-auto object-contain max-w-[150px]"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent 
+                  side="bottom" 
+                  className="bg-slate-900 border-slate-700 px-3 py-1.5"
+                >
+                  <p className="text-xs font-medium text-white">{partner.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+            <div className="w-16 shrink-0" /> {/* Gap spacer */}
+          </div>
         </div>
       </TooltipProvider>
     </div>
@@ -75,13 +99,16 @@ export const SocialProof = () => (
     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
     
     <style>{`
-      @keyframes scroll {
+      @keyframes scroll-seamless {
         0% {
           transform: translateX(0);
         }
         100% {
-          transform: translateX(-50%);
+          transform: translateX(-100%);
         }
+      }
+      .animate-scroll-seamless {
+        animation: scroll-seamless 25s linear infinite;
       }
     `}</style>
   </section>
