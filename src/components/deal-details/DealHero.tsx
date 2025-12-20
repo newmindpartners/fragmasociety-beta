@@ -216,12 +216,12 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           </div>
 
           {/* Right - Profile Image/Video */}
-          <div className="order-1 lg:order-2 relative flex flex-col justify-end">
+          <div className="order-1 lg:order-2 relative flex flex-col justify-end z-30">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-[4/5] max-h-[65vh]"
+              className="relative aspect-[4/5] max-h-[65vh] z-30"
             >
               {/* Profile image - grayscale/luminosity like SignatureDealsBanner */}
               <img
