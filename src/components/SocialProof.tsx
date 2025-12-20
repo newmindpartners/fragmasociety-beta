@@ -17,7 +17,7 @@ const partners = [
   { name: "DFNS", logo: dfnsLogo, className: "", url: "https://www.dfns.co" },
   { name: "House of Web3", logo: houseOfWeb3Logo, className: "", url: "https://www.houseofweb3.io" },
   { name: "Swissquote", logo: swissquoteLogo, className: "scale-150", url: "https://www.swissquote.com" },
-  { name: "Woud Law Firm", logo: woudLawLogo, className: "", url: "https://www.woud.law" },
+  { name: "Woud Law Firm", logo: woudLawLogo, className: "", url: "https://woudlaw.com/" },
 ];
 
 
