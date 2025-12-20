@@ -64,9 +64,9 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${categoryBg})` }}
         />
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-transparent to-slate-900/90" />
+        {/* Lighter overlay - only on left side for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/70" />
       </div>
       
       {/* Grid Layout - Content Left, Profile Right */}
