@@ -3,17 +3,29 @@ import { MapPin, Award, TrendingUp, Building2, Sparkles, ArrowUpRight } from "lu
 import type { DealData } from "@/types/deal";
 import { useState } from "react";
 
-// Case study images
-import caseFilaree from "@/assets/casestudy-filaree.jpg";
-import caseEckhardt from "@/assets/casestudy-eckhardt.jpg";
+// Case study images - using track record images
+import filareeHeights from "@/assets/track-record/filaree-heights.jpg";
+import coolOakWay from "@/assets/track-record/cool-oak-way.jpg";
+import sunsetPlaza from "@/assets/track-record/sunset-plaza.jpg";
+import seaboardRd from "@/assets/track-record/seaboard-rd.jpg";
+import risingGlen from "@/assets/track-record/rising-glen.jpg";
+import casianoRd from "@/assets/track-record/casiano-rd.jpg";
+import lomaVista from "@/assets/track-record/loma-vista.jpg";
+import calvinAve from "@/assets/track-record/calvin-ave.jpg";
 
 interface DealCaseStudiesProps {
   deal: DealData;
 }
 
 const caseStudyImages: Record<string, string> = {
-  "1501 Filaree Road, Malibu": caseFilaree,
-  "6914 Eckhardt House, Hollywood Hills": caseEckhardt,
+  "5901 Filaree Heights, Malibu": filareeHeights,
+  "20737 Cool Oak Way, Malibu": coolOakWay,
+  "2460 Sunset Plaza Dr, Los Angeles": sunsetPlaza,
+  "20647 Seaboard Rd, Malibu": seaboardRd,
+  "8818 Rising Glen Place, Los Angeles": risingGlen,
+  "1394 Casiano Rd, Los Angeles": casianoRd,
+  "1061 Loma Vista Dr, Beverly Hills": lomaVista,
+  "4965 Calvin Avenue, Tarzana": calvinAve,
 };
 
 export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
@@ -25,8 +37,9 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
 
   const getCaseImage = (address: string, index: number) => {
     if (caseStudyImages[address]) return caseStudyImages[address];
-    const fallbackImages = [caseFilaree, caseEckhardt];
-    return fallbackImages[index % fallbackImages.length];
+    // Fallback to first available image
+    const images = [filareeHeights, coolOakWay, sunsetPlaza, seaboardRd, risingGlen, casianoRd, lomaVista, calvinAve];
+    return images[index % images.length];
   };
 
   // Calculate total profit
