@@ -217,6 +217,15 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/5] max-h-[65vh]"
             >
+              {/* Glow effect behind profile */}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(100,120,180,0.15) 0%, rgba(60,80,140,0.08) 40%, transparent 70%)',
+                  filter: 'blur(30px)'
+                }}
+              />
+              
               {/* Profile image - grayscale/luminosity like SignatureDealsBanner */}
               <img
                 src={deal.bannerImage || deal.leaderImage}
@@ -224,7 +233,8 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 className="absolute inset-0 w-full h-full object-contain object-bottom"
                 style={{ 
                   filter: 'grayscale(100%) contrast(1.15) brightness(1.1)',
-                  mixBlendMode: 'luminosity'
+                  mixBlendMode: 'luminosity',
+                  boxShadow: '0 0 60px 20px rgba(30,40,80,0.3), 0 0 100px 40px rgba(60,80,140,0.15)'
                 }}
               />
               
