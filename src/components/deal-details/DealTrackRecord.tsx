@@ -1,7 +1,41 @@
 import { motion } from "framer-motion";
-import { Trophy, TrendingUp, CheckCircle, Award, Sparkles } from "lucide-react";
+import { Trophy, TrendingUp, CheckCircle, Award, Sparkles, ExternalLink } from "lucide-react";
 import type { DealData } from "@/types/deal";
 import { useState } from "react";
+
+// Track record images
+import filareeHeights from "@/assets/track-record/filaree-heights.jpg";
+import coolOakWay from "@/assets/track-record/cool-oak-way.jpg";
+import sunsetPlaza from "@/assets/track-record/sunset-plaza.jpg";
+import seaboardRd from "@/assets/track-record/seaboard-rd.jpg";
+import risingGlen from "@/assets/track-record/rising-glen.jpg";
+import casianoRd from "@/assets/track-record/casiano-rd.jpg";
+import lomaVista from "@/assets/track-record/loma-vista.jpg";
+import calvinAve from "@/assets/track-record/calvin-ave.jpg";
+
+// Map addresses to images
+const trackRecordImages: Record<string, string> = {
+  "5901 Filaree Heights, Malibu": filareeHeights,
+  "20737 Cool Oak Way, Malibu": coolOakWay,
+  "2460 Sunset Plaza Dr, Los Angeles": sunsetPlaza,
+  "20647 Seaboard Rd, Malibu": seaboardRd,
+  "8818 Rising Glen Place, Los Angeles": risingGlen,
+  "1394 Casiano Rd, Los Angeles": casianoRd,
+  "1061 Loma Vista Dr, Beverly Hills": lomaVista,
+  "4965 Calvin Avenue, Tarzana": calvinAve,
+};
+
+// Map addresses to listing URLs
+const trackRecordUrls: Record<string, string> = {
+  "5901 Filaree Heights, Malibu": "https://www.zillow.com/homedetails/5901-Filaree-Heights-Ave-Malibu-CA-90265/20523887_zpid/",
+  "20737 Cool Oak Way, Malibu": "https://www.zillow.com/homedetails/20737-Cool-Oak-Way-Malibu-CA-90265/20520649_zpid/",
+  "2460 Sunset Plaza Dr, Los Angeles": "https://www.zillow.com/homedetails/2460-Sunset-Plaza-Dr-Los-Angeles-CA-90069/20795426_zpid/",
+  "20647 Seaboard Rd, Malibu": "https://www.zillow.com/homedetails/20647-Seaboard-Rd-Malibu-CA-90265/20520561_zpid/",
+  "8818 Rising Glen Place, Los Angeles": "https://www.zillow.com/homedetails/8818-Rising-Glen-Pl-Los-Angeles-CA-90069/20791579_zpid/",
+  "1394 Casiano Rd, Los Angeles": "https://www.zillow.com/homedetails/1394-Casiano-Rd-Los-Angeles-CA-90049/20533179_zpid/",
+  "1061 Loma Vista Dr, Beverly Hills": "https://www.zillow.com/homedetails/1061-Loma-Vista-Dr-Beverly-Hills-CA-90210/20533512_zpid/",
+  "4965 Calvin Avenue, Tarzana": "https://www.zillow.com/homedetails/4965-Calvin-Ave-Tarzana-CA-91356/19969377_zpid/",
+};
 
 interface DealTrackRecordProps {
   deal: DealData;
@@ -11,6 +45,13 @@ export const DealTrackRecord = ({ deal }: DealTrackRecordProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   if (!deal.trackRecord || deal.trackRecord.length === 0) return null;
+
+  const handleCardClick = (address: string) => {
+    const url = trackRecordUrls[address];
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <section className="py-32 relative overflow-hidden min-h-screen bg-slate-50">
@@ -75,6 +116,8 @@ export const DealTrackRecord = ({ deal }: DealTrackRecordProps) => {
         <div className="space-y-4">
           {deal.trackRecord.map((record, index) => {
             const isHovered = hoveredIndex === index;
+            const image = trackRecordImages[record.address];
+            const hasUrl = !!trackRecordUrls[record.address];
 
             return (
               <motion.div
@@ -85,10 +128,11 @@ export const DealTrackRecord = ({ deal }: DealTrackRecordProps) => {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => handleCardClick(record.address)}
                 className="cursor-pointer relative overflow-hidden group"
               >
                 <motion.div
-                  className={`p-6 relative transition-all duration-500 ${
+                  className={`p-5 relative transition-all duration-500 ${
                     isHovered 
                       ? 'bg-slate-800' 
                       : 'bg-white border border-slate-100'
@@ -96,25 +140,45 @@ export const DealTrackRecord = ({ deal }: DealTrackRecordProps) => {
                   animate={{ y: isHovered ? -4 : 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <div className="relative z-10 grid grid-cols-2 md:grid-cols-5 gap-6 items-center">
-                    {/* Property Name */}
-                    <div className="col-span-2 md:col-span-1">
-                      <div className="flex items-center gap-3">
+                  <div className="relative z-10 grid grid-cols-2 md:grid-cols-6 gap-4 items-center">
+                    {/* Property Image & Name */}
+                    <div className="col-span-2 md:col-span-2">
+                      <div className="flex items-center gap-4">
+                        {/* Property Image */}
                         <motion.div 
-                          className={`w-10 h-10 flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
-                            isHovered ? 'bg-slate-700' : 'bg-slate-100'
+                          className={`w-16 h-16 flex-shrink-0 overflow-hidden rounded transition-all duration-500 ${
+                            isHovered ? 'ring-2 ring-slate-500' : 'ring-1 ring-slate-200'
                           }`}
-                          animate={{ rotate: isHovered ? 6 : 0 }}
+                          animate={{ scale: isHovered ? 1.05 : 1 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <CheckCircle className={`w-4 h-4 transition-colors duration-500 ${
-                            isHovered ? 'text-slate-400' : 'text-slate-400'
-                          }`} />
+                          {image ? (
+                            <img 
+                              src={image} 
+                              alt={record.address}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className={`w-full h-full flex items-center justify-center transition-colors duration-500 ${
+                              isHovered ? 'bg-slate-700' : 'bg-slate-100'
+                            }`}>
+                              <CheckCircle className={`w-5 h-5 transition-colors duration-500 ${
+                                isHovered ? 'text-slate-400' : 'text-slate-400'
+                              }`} />
+                            </div>
+                          )}
                         </motion.div>
-                        <div>
-                          <p className={`font-medium text-sm transition-colors duration-500 ${
-                            isHovered ? 'text-white' : 'text-slate-900'
-                          }`}>{record.address}</p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className={`font-medium text-sm transition-colors duration-500 truncate ${
+                              isHovered ? 'text-white' : 'text-slate-900'
+                            }`}>{record.address}</p>
+                            {hasUrl && (
+                              <ExternalLink className={`w-3 h-3 flex-shrink-0 transition-colors duration-500 ${
+                                isHovered ? 'text-slate-400' : 'text-slate-400'
+                              }`} />
+                            )}
+                          </div>
                           <p className={`text-xs transition-colors duration-500 ${
                             isHovered ? 'text-slate-500' : 'text-slate-400'
                           }`}>Completed</p>
