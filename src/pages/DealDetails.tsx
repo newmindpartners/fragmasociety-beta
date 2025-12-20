@@ -95,6 +95,7 @@ const fallbackDeals: Record<string, DealData> = {
     totalRaise: "$5,000,000",
     currentRaised: "$1,250,000",
     investorCount: 18,
+    totalPastProfit: "$26.9M",
     team: [{
       name: "Philippe Naouri",
       role: "Lead Developer",
@@ -102,6 +103,64 @@ const fallbackDeals: Record<string, DealData> = {
       credentials: ["30+ Years Experience", "100+ Properties Developed", "Beverly Hills Specialist"],
       image: "/src/assets/philippe-naouri.png"
     }],
+    trackRecord: [
+      {
+        address: "5901 Filaree Heights, Malibu",
+        acquisitionPrice: "$4.2M",
+        totalInvestment: "$2.0M",
+        salePrice: "$14.0M",
+        profit: "$7.8M"
+      },
+      {
+        address: "20737 Cool Oak Way, Malibu",
+        acquisitionPrice: "$4.0M",
+        totalInvestment: "$1.5M",
+        salePrice: "$11.5M",
+        profit: "$6.0M"
+      },
+      {
+        address: "2460 Sunset Plaza Dr, Los Angeles",
+        acquisitionPrice: "$5.575M",
+        totalInvestment: "$500K",
+        salePrice: "$8.0M",
+        profit: "$1.925M"
+      },
+      {
+        address: "20647 Seaboard Rd, Malibu",
+        acquisitionPrice: "$1.6M",
+        totalInvestment: "$250K",
+        salePrice: "$2.495M",
+        profit: "$645K"
+      },
+      {
+        address: "8818 Rising Glen Place, Los Angeles",
+        acquisitionPrice: "$4.7M",
+        totalInvestment: "$1.5M",
+        salePrice: "$9.0M",
+        profit: "$2.8M"
+      },
+      {
+        address: "1394 Casiano Rd, Los Angeles",
+        acquisitionPrice: "$3.1M",
+        totalInvestment: "$150K",
+        salePrice: "$3.9M",
+        profit: "$650K"
+      },
+      {
+        address: "1061 Loma Vista Dr, Beverly Hills",
+        acquisitionPrice: "$5.9M",
+        totalInvestment: "$5.0M",
+        salePrice: "$17.0M",
+        profit: "$6.1M"
+      },
+      {
+        address: "4965 Calvin Avenue, Tarzana",
+        acquisitionPrice: "$1.465M",
+        totalInvestment: "$50K",
+        salePrice: "$2.495M",
+        profit: "$980K"
+      }
+    ],
     risks: [
       { title: "Market Risk", description: "Real estate values can fluctuate based on market conditions." },
       { title: "Construction Risk", description: "Renovation projects may face delays or cost overruns." },
