@@ -46,15 +46,10 @@ export const SocialProof = () => (
       
       {/* Animated logos */}
       <TooltipProvider delayDuration={100}>
-        <motion.div
-          className="flex items-center gap-16"
-          animate={{ x: [0, -50 * partners.length * 2.5] }}
-          transition={{
-            x: {
-              duration: 25,
-              repeat: Infinity,
-              ease: "linear",
-            },
+        <div
+          className="flex items-center gap-16 animate-[scroll_30s_linear_infinite]"
+          style={{
+            width: 'max-content',
           }}
         >
           {doubledPartners.map((partner, i) => (
@@ -76,11 +71,22 @@ export const SocialProof = () => (
               </TooltipContent>
             </Tooltip>
           ))}
-        </motion.div>
+        </div>
       </TooltipProvider>
     </div>
     
     {/* Bottom border */}
     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+    
+    <style>{`
+      @keyframes scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+    `}</style>
   </section>
 );
