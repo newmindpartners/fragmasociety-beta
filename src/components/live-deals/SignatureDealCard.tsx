@@ -170,16 +170,11 @@ export const SignatureDealCard = ({
             )}
           </motion.div>
           
-          {/* Top badges */}
-          <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-30">
+          {/* Top badge */}
+          <div className="absolute top-5 left-5 z-30">
             <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-white/95 text-slate-800 rounded-sm backdrop-blur-sm">
               {category}
             </span>
-            {comingSoon && (
-              <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-slate-900/90 text-white rounded-sm backdrop-blur-sm">
-                Coming Soon
-              </span>
-            )}
           </div>
 
           {/* Leader info - studio lighting on text */}
