@@ -325,6 +325,24 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               )}
 
             </motion.div>
+            
+            {/* Name and position below portrait */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-center mt-4 relative z-30"
+            >
+              <h3 
+                className="text-xl md:text-2xl font-light text-white tracking-wide"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {deal.leaderName}
+              </h3>
+              <p className="text-xs text-slate-400 uppercase tracking-[0.2em] mt-1">
+                {deal.leaderRole}
+              </p>
+            </motion.div>
           </div>
         </div>
 
