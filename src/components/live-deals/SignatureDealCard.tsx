@@ -69,7 +69,7 @@ export const SignatureDealCard = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <motion.div 
-        className="relative h-full rounded-sm overflow-hidden border border-slate-700/30 shadow-lg shadow-slate-900/20 transition-all duration-500"
+        className="relative h-full rounded-sm overflow-hidden border border-slate-700/30 bg-slate-900 transition-all duration-500"
         animate={{
           y: isHovered ? -8 : 0,
           boxShadow: isHovered 
