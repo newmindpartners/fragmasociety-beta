@@ -1,10 +1,4 @@
 import { motion } from "framer-motion";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import bankFrickLogo from "@/assets/partners/bank-frick.png";
 import dfnsLogo from "@/assets/partners/dfns.png";
@@ -15,63 +9,63 @@ import swissquoteLogo from "@/assets/partners/swissquote.png";
 import woudLawLogo from "@/assets/partners/woud-law.jpeg";
 
 const partners = [
-  { name: "Bank Frick", logo: bankFrickLogo, subtitle: "Banking Partner" },
-  { name: "DFNS", logo: dfnsLogo, subtitle: "Wallet Infrastructure" },
-  { name: "House of Web3", logo: houseOfWeb3Logo, subtitle: "Web3 Advisory" },
-  { name: "Ledgity Yield", logo: ledgityLogo, subtitle: "DeFi Partner" },
-  { name: "Realiz", logo: realizLogo, subtitle: "Technology Partner" },
-  { name: "Swissquote", logo: swissquoteLogo, subtitle: "Trading Partner" },
-  { name: "Woud Law Firm", logo: woudLawLogo, subtitle: "Legal Partner" },
+  { name: "Bank Frick", logo: bankFrickLogo },
+  { name: "DFNS", logo: dfnsLogo },
+  { name: "House of Web3", logo: houseOfWeb3Logo },
+  { name: "Ledgity Yield", logo: ledgityLogo },
+  { name: "Realiz", logo: realizLogo },
+  { name: "Swissquote", logo: swissquoteLogo },
+  { name: "Woud Law Firm", logo: woudLawLogo },
 ];
 
+// Double the partners for seamless loop
+const doubledPartners = [...partners, ...partners];
+
 export const SocialProof = () => (
-  <div className="relative w-full py-20">
-    <div className="container mx-auto px-6 text-center relative z-10">
-      <motion.h4 
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-muted-foreground text-sm font-medium mb-12 uppercase tracking-[0.3em]"
-      >
-        Trusted Partners & Infrastructure
-      </motion.h4>
-      
-      <TooltipProvider delayDuration={100}>
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16">
-          {partners.map((partner, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="cursor-pointer group">
-                    <div className="h-10 md:h-12 lg:h-14 opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 hover:scale-110">
-                      <img 
-                        src={partner.logo} 
-                        alt={partner.name}
-                        className="h-full w-auto object-contain max-w-[100px] md:max-w-[130px] lg:max-w-[160px]"
-                      />
-                    </div>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent 
-                  side="bottom" 
-                  className="bg-card/95 backdrop-blur-md border border-white/10 px-4 py-2"
-                >
-                  <div className="text-center">
-                    <p className="text-sm font-semibold text-foreground">{partner.name}</p>
-                    <p className="text-xs text-muted-foreground">{partner.subtitle}</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </motion.div>
-          ))}
-        </div>
-      </TooltipProvider>
+  <section className="relative w-full py-10 bg-white overflow-hidden">
+    {/* Top border */}
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+    
+    <div className="container mx-auto px-6 mb-6">
+      <p className="text-slate-400 text-[10px] font-medium uppercase tracking-[0.25em] text-center">
+        Trusted Partners
+      </p>
     </div>
-  </div>
+    
+    {/* Scrolling logos container */}
+    <div className="relative">
+      {/* Fade edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
+      
+      {/* Animated logos */}
+      <motion.div
+        className="flex items-center gap-16"
+        animate={{ x: [0, -50 * partners.length * 2.5] }}
+        transition={{
+          x: {
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear",
+          },
+        }}
+      >
+        {doubledPartners.map((partner, i) => (
+          <div
+            key={`${partner.name}-${i}`}
+            className="flex-shrink-0 h-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300"
+          >
+            <img 
+              src={partner.logo} 
+              alt={partner.name}
+              className="h-full w-auto object-contain max-w-[100px]"
+            />
+          </div>
+        ))}
+      </motion.div>
+    </div>
+    
+    {/* Bottom border */}
+    <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+  </section>
 );
