@@ -247,6 +247,21 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                   mixBlendMode: 'luminosity'
                 }}
               />
+              
+              {/* Smooth vertical fade overlay - bottom to top, fades out at ~20% above portrait */}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `linear-gradient(
+                    to top,
+                    rgba(15,23,42,0.95) 0%,
+                    rgba(15,23,42,0.8) 10%,
+                    rgba(15,23,42,0.5) 25%,
+                    rgba(15,23,42,0.2) 40%,
+                    transparent 60%
+                  )`
+                }}
+              />
 
               {/* Video overlay */}
               {deal.heroVideoUrl && (
