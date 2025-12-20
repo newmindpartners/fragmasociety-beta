@@ -56,7 +56,7 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
                 <Button
                   size="lg"
                   onClick={() => navigate("/auth")}
-                  className="bg-slate-900 text-white hover:bg-slate-800 px-8 h-14 text-base font-medium"
+                  className="bg-slate-900 text-white hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 px-8 h-14 text-base font-medium"
                 >
                   Express Interest
                   <motion.span
@@ -69,8 +69,8 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
                 </Button>
                 <Button
                   size="lg"
-                  variant="ghost"
-                  className="text-slate-700 hover:bg-slate-100 px-8 h-14 text-base font-medium border border-slate-200"
+                  variant="outline"
+                  className="text-slate-700 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 px-8 h-14 text-base font-medium border-slate-300 dark:border-slate-600"
                   onClick={() => window.open("https://wa.me/", "_blank")}
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
