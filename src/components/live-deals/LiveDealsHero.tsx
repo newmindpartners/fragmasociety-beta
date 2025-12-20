@@ -1,241 +1,71 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-
-// Leader data for the step-by-step animation
-const leaders = [
-  {
-    name: "Bryan Balsiger",
-    title: "Sports & Entertainment",
-    image: "/src/assets/bryan-balsinger.png",
-  },
-  {
-    name: "Philippe Naouri",
-    title: "Private Credit",
-    image: "/src/assets/philippe-naouri.png",
-  },
-  {
-    name: "André Messika",
-    title: "Luxury & Lifestyle",
-    image: "/src/assets/andre-messika.png",
-  },
-  {
-    name: "Tim Levy",
-    title: "Real Estate",
-    image: "/src/assets/tim-levy.png",
-  },
-];
+import { ArrowDown } from "lucide-react";
 
 export const LiveDealsHero = () => {
-  const [currentLeader, setCurrentLeader] = useState(0);
-  const [animationPhase, setAnimationPhase] = useState<'signature' | 'headline' | 'leaders'>('signature');
-
-  // Animation sequence
-  useEffect(() => {
-    const sequence = async () => {
-      // Phase 1: Signature Deals (already showing)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setAnimationPhase('headline');
-      
-      // Phase 2: Show headline
-      await new Promise(resolve => setTimeout(resolve, 2500));
-      setAnimationPhase('leaders');
-    };
-    
-    sequence();
-  }, []);
-
-  // Cycle through leaders
-  useEffect(() => {
-    if (animationPhase !== 'leaders') return;
-    
-    const interval = setInterval(() => {
-      setCurrentLeader((prev) => (prev + 1) % leaders.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [animationPhase]);
-
   return (
-    <section className="relative h-[45vh] min-h-[380px] max-h-[500px] flex items-center justify-center overflow-hidden">
-      {/* Dark navy gradient background - matching homepage */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/95 to-background" />
-      
-      {/* Subtle spotlight effects - matching Features section */}
-      <motion.div 
-        className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-violet-900/20 via-transparent to-transparent rounded-full blur-3xl"
-        animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div 
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-radial from-slate-800/40 via-transparent to-transparent rounded-full blur-3xl"
-        animate={{ 
-          scale: [1.1, 1, 1.1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Fine line accents */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
-          className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 2, delay: 0.5 }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 2, delay: 0.7 }}
-        />
+    <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-slate-950">
+      {/* Background with subtle texture */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800/50 via-slate-950 to-slate-950" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDI5M2EiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTZoLTJ2LTRoMnY0em0tNiA2aC0ydi00aDJ2NHptMC02aC0ydi00aDJ2NHoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30" />
       </div>
 
-      <div className="container relative z-10 text-center px-6">
-        {/* Signature Deals - Elegant Script */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="mb-4"
-        >
-          <span 
-            className="text-2xl md:text-3xl text-slate-400 tracking-wide italic"
-            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-          >
-            Signature Deals
+      {/* Accent lines */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent via-slate-600 to-transparent" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-t from-transparent via-slate-600 to-transparent" />
+
+      {/* Content */}
+      <div className="container relative z-10 text-center px-6 py-20">
+        {/* Eyebrow */}
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="w-8 h-px bg-slate-600" />
+          <span className="text-[11px] tracking-[0.35em] uppercase text-slate-500 font-medium">
+            Live Opportunities
           </span>
-        </motion.div>
-
-        {/* Main headline with animated text */}
-        <div className="relative h-[100px] md:h-[120px] flex items-center justify-center mb-4">
-          <AnimatePresence mode="wait">
-            {animationPhase === 'signature' && (
-              <motion.h1
-                key="invest"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.8 }}
-                className="absolute text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-              >
-                Invest With{" "}
-                <span className="italic text-slate-400">Industry Leaders</span>
-              </motion.h1>
-            )}
-            
-            {animationPhase === 'headline' && (
-              <motion.h1
-                key="legacy"
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.8 }}
-                className="absolute text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-              >
-                & <span className="text-slate-300">Legacy</span>{" "}
-                <span className="italic text-slate-400">Brands</span>
-              </motion.h1>
-            )}
-
-            {animationPhase === 'leaders' && (
-              <motion.div
-                key="leaders"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute flex flex-col items-center"
-              >
-                <h1 
-                  className="text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight mb-6"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-                >
-                  Invest With{" "}
-                  <span className="italic text-slate-400">Industry Leaders</span>
-                </h1>
-                
-                {/* Leader showcase */}
-                <div className="flex items-center gap-4">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentLeader}
-                      initial={{ opacity: 0, x: 50, scale: 0.9 }}
-                      animate={{ opacity: 1, x: 0, scale: 1 }}
-                      exit={{ opacity: 0, x: -50, scale: 0.9 }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
-                      className="flex items-center gap-4 bg-slate-800/60 backdrop-blur-sm px-6 py-3 rounded-full border border-slate-700/60 shadow-lg shadow-slate-900/30"
-                    >
-                      <motion.img 
-                        src={leaders[currentLeader].image}
-                        alt={leaders[currentLeader].name}
-                        className="w-12 h-12 rounded-full object-cover ring-2 ring-violet-500/30"
-                        initial={{ scale: 0.8 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.4, delay: 0.2 }}
-                      />
-                      <div className="text-left">
-                        <motion.p 
-                          className="text-white font-medium text-lg"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.3 }}
-                        >
-                          {leaders[currentLeader].name}
-                        </motion.p>
-                        <motion.p 
-                          className="text-slate-400 text-sm"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.4 }}
-                        >
-                          {leaders[currentLeader].title}
-                        </motion.p>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-
-                {/* Leader progress dots */}
-                <div className="flex gap-2 mt-4">
-                  {leaders.map((_, idx) => (
-                    <motion.div
-                      key={idx}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === currentLeader 
-                          ? 'w-6 bg-white' 
-                          : 'w-1.5 bg-slate-600'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div className="w-8 h-px bg-slate-600" />
         </div>
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: animationPhase === 'leaders' ? 0 : 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg md:text-xl text-slate-500 font-light tracking-wide max-w-xl mx-auto italic"
+        {/* Main headline */}
+        <h1 
+          className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-6 tracking-tight"
           style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
         >
-          Own a Stake in Their Next Chapter
-        </motion.p>
+          Signature Deals
+        </h1>
+
+        {/* Subheadline */}
+        <p className="text-xl md:text-2xl text-slate-400 font-light max-w-2xl mx-auto mb-4 leading-relaxed">
+          Curated investment opportunities in{" "}
+          <span className="text-white">real assets</span>,{" "}
+          <span className="text-white">tokenized</span> for modern investors.
+        </p>
+
+        {/* Stats row */}
+        <div className="flex items-center justify-center gap-8 md:gap-16 mt-12 pt-8 border-t border-slate-800/60">
+          <div className="text-center">
+            <p className="text-3xl md:text-4xl font-light text-white mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>4</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Live Deals</p>
+          </div>
+          <div className="w-px h-10 bg-slate-800" />
+          <div className="text-center">
+            <p className="text-3xl md:text-4xl font-light text-white mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>€250</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Min Entry</p>
+          </div>
+          <div className="w-px h-10 bg-slate-800" />
+          <div className="text-center">
+            <p className="text-3xl md:text-4xl font-light text-white mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>8-18%</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Target Returns</p>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-slate-600">Explore</span>
+          <ArrowDown className="w-4 h-4 text-slate-600" />
+        </div>
       </div>
 
-      {/* Bottom decorative line */}
-      <motion.div 
-        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 0.3 }}
-      />
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent" />
     </section>
   );
 };
