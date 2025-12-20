@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           asset_images: Json | null
           asset_video_url: string | null
+          banner_image: string | null
           case_studies: Json | null
           category: string
           created_at: string
@@ -59,6 +60,7 @@ export type Database = {
         Insert: {
           asset_images?: Json | null
           asset_video_url?: string | null
+          banner_image?: string | null
           case_studies?: Json | null
           category: string
           created_at?: string
@@ -100,6 +102,7 @@ export type Database = {
         Update: {
           asset_images?: Json | null
           asset_video_url?: string | null
+          banner_image?: string | null
           case_studies?: Json | null
           category?: string
           created_at?: string
