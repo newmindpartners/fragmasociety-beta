@@ -91,7 +91,7 @@ export const StrategyCTA = () => {
             >
               <Link to="/auth" className="flex items-center gap-2">
                 <Lock className="w-3.5 h-3.5" />
-                <span>Register to view details</span>
+                <span>Register your interest</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </Button>
