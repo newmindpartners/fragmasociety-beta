@@ -43,9 +43,9 @@ export const SignatureDealCard = ({
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const riskColor = {
-    Low: "text-emerald-400",
-    Medium: "text-amber-400",
-    High: "text-rose-400",
+    Low: "text-emerald-600",
+    Medium: "text-amber-600",
+    High: "text-rose-600",
   };
 
   // Handle video play/pause on hover
@@ -66,13 +66,13 @@ export const SignatureDealCard = ({
       style={{
         background: isHovered 
           ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
-          : 'rgba(15, 23, 42, 0.6)',
+          : 'rgba(255, 255, 255, 0.9)',
         border: isHovered 
           ? '1px solid rgba(139, 92, 246, 0.25)' 
-          : '1px solid rgba(71, 85, 105, 0.3)',
+          : '1px solid rgba(226, 232, 240, 0.8)',
         boxShadow: isHovered 
           ? '0 30px 60px -15px rgba(15, 23, 42, 0.6), 0 0 50px -10px rgba(139, 92, 246, 0.15)'
-          : '0 4px 30px -10px rgba(0, 0, 0, 0.2)',
+          : '0 4px 30px -10px rgba(0, 0, 0, 0.08)',
         transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)'
       }}
       animate={{ 
@@ -186,29 +186,45 @@ export const SignatureDealCard = ({
 
       {/* Card content */}
       <div className="p-5 relative z-10">
-        <h4 className="text-sm font-semibold text-white mb-1.5 line-clamp-2">{title}</h4>
-        <p className="text-xs text-slate-400 mb-4 line-clamp-2">{description}</p>
+        <h4 
+          className={`text-sm font-semibold mb-1.5 line-clamp-2 transition-colors duration-500 ${
+            isHovered ? 'text-white' : 'text-slate-900'
+          }`}
+        >
+          {title}
+        </h4>
+        <p 
+          className={`text-xs mb-4 line-clamp-2 transition-colors duration-500 ${
+            isHovered ? 'text-slate-400' : 'text-slate-500'
+          }`}
+        >
+          {description}
+        </p>
 
         {/* Stats row */}
-        <div className="grid grid-cols-4 gap-2 mb-4 py-3 border-y border-slate-700/30">
+        <div 
+          className={`grid grid-cols-4 gap-2 mb-4 py-3 border-y transition-colors duration-500 ${
+            isHovered ? 'border-slate-700/30' : 'border-slate-200/80'
+          }`}
+        >
           <div className="text-center">
-            <Euro className="w-3 h-3 text-slate-500 mx-auto mb-0.5" />
-            <p className="text-[10px] text-slate-500">From</p>
-            <p className="text-xs font-semibold text-white">{minTicket}</p>
+            <Euro className={`w-3 h-3 mx-auto mb-0.5 transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`} />
+            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>From</p>
+            <p className={`text-xs font-semibold transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>{minTicket}</p>
           </div>
           <div className="text-center">
-            <Target className="w-3 h-3 text-slate-500 mx-auto mb-0.5" />
-            <p className="text-[10px] text-slate-500">Target</p>
-            <p className="text-xs font-semibold text-white">{targetReturn}</p>
+            <Target className={`w-3 h-3 mx-auto mb-0.5 transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`} />
+            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>Target</p>
+            <p className={`text-xs font-semibold transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>{targetReturn}</p>
           </div>
           <div className="text-center">
-            <Clock className="w-3 h-3 text-slate-500 mx-auto mb-0.5" />
-            <p className="text-[10px] text-slate-500">Term</p>
-            <p className="text-xs font-semibold text-white">{term}</p>
+            <Clock className={`w-3 h-3 mx-auto mb-0.5 transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`} />
+            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>Term</p>
+            <p className={`text-xs font-semibold transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>{term}</p>
           </div>
           <div className="text-center">
             <AlertTriangle className={`w-3 h-3 mx-auto mb-0.5 ${riskColor[risk]}`} />
-            <p className="text-[10px] text-slate-500">Risk</p>
+            <p className={`text-[10px] transition-colors duration-500 ${isHovered ? 'text-slate-500' : 'text-slate-400'}`}>Risk</p>
             <p className={`text-xs font-semibold ${riskColor[risk]}`}>{risk}</p>
           </div>
         </div>
@@ -217,7 +233,11 @@ export const SignatureDealCard = ({
         <Button 
           size="sm"
           variant="outline"
-          className="w-full text-xs group/btn border-slate-600 text-white hover:bg-white hover:text-slate-900 hover:border-white transition-all duration-300"
+          className={`w-full text-xs group/btn transition-all duration-300 ${
+            isHovered 
+              ? 'border-slate-600 text-white hover:bg-white hover:text-slate-900 hover:border-white' 
+              : 'border-slate-300 text-slate-900 hover:bg-slate-900 hover:text-white hover:border-slate-900'
+          }`}
           onClick={onSeeDeal}
         >
           See deal

@@ -109,18 +109,19 @@ export const SignatureDealsGrid = () => {
 
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden">
-      {/* Premium dark background - matching homepage */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-slate-900/50 to-background">
+      {/* Premium Light Background - matching Features section */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
         {/* Subtle spotlight effects */}
-        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-slate-800/20 via-transparent to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-violet-900/10 via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
       </div>
 
       {/* Subtle grid pattern */}
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.015]"
         style={{
-          backgroundImage: `linear-gradient(rgba(148,163,184,1) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
           backgroundSize: '60px 60px'
         }}
       />
@@ -134,8 +135,8 @@ export const SignatureDealsGrid = () => {
             viewport={{ once: true }}
             className="flex items-center gap-4 mb-8"
           >
-            <div className="w-16 h-px bg-gradient-to-r from-slate-500 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-500 font-medium">
+            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
               Active Opportunities
             </span>
           </motion.div>
@@ -145,11 +146,11 @@ export const SignatureDealsGrid = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
           >
             Curated deals
             <br />
-            <span className="italic text-slate-400 font-serif">with proven leaders.</span>
+            <span className="italic text-slate-500 font-serif">with proven leaders.</span>
           </motion.h2>
         </div>
 
@@ -167,8 +168,8 @@ export const SignatureDealsGrid = () => {
               onClick={() => setActiveCategory(category)}
               className={`px-5 py-2.5 rounded-sm text-sm font-medium transition-all duration-300 ${
                 activeCategory === category
-                  ? "bg-white text-slate-900"
-                  : "bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-700/50"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
               }`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -204,7 +205,7 @@ export const SignatureDealsGrid = () => {
           transition={{ delay: 0.5, duration: 0.8 }}
           className="mt-20 flex justify-center"
         >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-600 to-transparent" />
+          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
         </motion.div>
       </div>
 
