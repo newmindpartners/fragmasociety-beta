@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { Play, ArrowDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, ArrowDown, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { DealData } from "@/types/deal";
 
 interface DealHeroProps {
@@ -10,7 +10,16 @@ interface DealHeroProps {
 
 export const DealHero = ({ deal }: DealHeroProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Auto-play video on mount
+    if (videoRef.current && deal.heroVideoUrl) {
+      videoRef.current.play().catch(() => {});
+      setIsPlaying(true);
+    }
+  }, [deal.heroVideoUrl]);
 
   const handlePlayClick = () => {
     if (videoRef.current) {
@@ -24,107 +33,111 @@ export const DealHero = ({ deal }: DealHeroProps) => {
   };
 
   return (
-    <section className="relative min-h-screen">
-      {/* Full-bleed Video/Image Background */}
-      <div className="absolute inset-0">
-        <video
-          ref={videoRef}
-          src={deal.heroVideoUrl}
-          poster={deal.leaderImage}
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        />
-        {/* Elegant gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80" />
-      </div>
-
-      {/* Content - Bottom aligned like luxury brands */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-end">
-        <div className="container mx-auto px-6 lg:px-12 pb-24 pt-32">
-          <div className="max-w-4xl">
-            {/* Category - Minimal */}
+    <section className="relative min-h-screen bg-slate-900">
+      {/* Dark Navy Background with Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950" />
+      
+      {/* Grid Layout - Content Left, Profile Right */}
+      <div className="relative z-10 min-h-screen container mx-auto px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 min-h-screen items-center pt-24 pb-16">
+          
+          {/* Left Content */}
+          <div className="order-2 lg:order-1 flex flex-col justify-center">
+            {/* Category Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="mb-8"
+              transition={{ duration: 0.6 }}
+              className="mb-6"
             >
-              <span className="text-xs tracking-[0.4em] uppercase text-white/60">
-                {deal.category} — {deal.subcategory}
+              <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-white/95 text-slate-800 rounded-sm">
+                {deal.category}
               </span>
             </motion.div>
 
-            {/* Title - Large Editorial */}
+            {/* Leader Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mb-6"
+            >
+              <p className="text-xs text-slate-400 uppercase tracking-[0.2em] mb-2 font-light">
+                {deal.leaderRole}
+              </p>
+              <h2 
+                className="text-3xl md:text-4xl font-light text-white leading-tight tracking-tight"
+                style={{ 
+                  fontFamily: "'Playfair Display', serif",
+                  textShadow: "0 0 40px rgba(255,255,255,0.15), 0 0 80px rgba(139,92,246,0.1)"
+                }}
+              >
+                {deal.leaderName}
+              </h2>
+            </motion.div>
+
+            {/* Title */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[0.95] tracking-tight mb-8"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl md:text-2xl font-medium text-white mb-4 leading-snug"
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {deal.title}
             </motion.h1>
 
-            {/* Leader - Elegant */}
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-sm text-slate-400 leading-relaxed mb-8 max-w-lg"
+            >
+              {deal.tagline}
+            </motion.p>
+
+            {/* Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex items-center gap-5 mb-10"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="grid grid-cols-4 gap-4 mb-8 py-5 border-y border-slate-700/50"
             >
-              <img 
-                src={deal.leaderImage} 
-                alt={deal.leaderName}
-                className="w-14 h-14 rounded-full object-cover ring-2 ring-white/20"
-              />
               <div>
-                <p className="text-white font-medium">{deal.leaderName}</p>
-                <p className="text-sm text-white/60">{deal.leaderRole}</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Entry</p>
+                <p className="text-sm font-medium text-white">{deal.minTicket}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Target*</p>
+                <p className="text-sm font-medium text-white">{deal.targetReturn}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Duration</p>
+                <p className="text-sm font-medium text-white">{deal.term}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Risk</p>
+                <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-sm border ${
+                  deal.risk === 'Low' ? 'bg-emerald-900/50 text-emerald-400 border-emerald-700/50' : 
+                  deal.risk === 'Medium' ? 'bg-amber-900/50 text-amber-400 border-amber-700/50' : 
+                  'bg-rose-900/50 text-rose-400 border-rose-700/50'
+                }`}>
+                  {deal.risk}
+                </span>
               </div>
             </motion.div>
 
-            {/* Key Stats - Minimal horizontal */}
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-8 md:gap-12 mb-12 pb-12 border-b border-white/10"
-            >
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase text-white/40 mb-1">From</p>
-                <p className="text-2xl md:text-3xl font-light text-white">{deal.minTicket}</p>
-              </div>
-              <div className="w-px h-12 bg-white/10 hidden md:block" />
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase text-white/40 mb-1">Target*</p>
-                <p className="text-2xl md:text-3xl font-light text-white">{deal.targetReturn}</p>
-              </div>
-              <div className="w-px h-12 bg-white/10 hidden md:block" />
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase text-white/40 mb-1">Duration</p>
-                <p className="text-2xl md:text-3xl font-light text-white">{deal.term}</p>
-              </div>
-              <div className="w-px h-12 bg-white/10 hidden md:block" />
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase text-white/40 mb-1">Risk</p>
-                <p className={`text-2xl md:text-3xl font-light ${
-                  deal.risk === 'Low' ? 'text-emerald-400' : 
-                  deal.risk === 'Medium' ? 'text-amber-400' : 'text-rose-400'
-                }`}>{deal.risk}</p>
-              </div>
-            </motion.div>
-
-            {/* CTA Buttons - Minimal */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               className="flex flex-wrap items-center gap-4"
             >
               <Button 
                 size="lg" 
-                className="bg-white text-neutral-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
+                className="bg-white text-slate-900 hover:bg-white/90 rounded-sm px-8 h-12 text-sm font-medium tracking-wide"
               >
                 Express Interest
                 <motion.span
@@ -137,8 +150,8 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               </Button>
               <Button 
                 size="lg" 
-                variant="ghost"
-                className="text-white hover:bg-white/10 rounded-full px-8 h-14 text-base font-medium border border-white/20"
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-sm px-8 h-12 text-sm font-medium tracking-wide"
                 onClick={handlePlayClick}
               >
                 <Play className="w-4 h-4 mr-2" fill="currentColor" />
@@ -150,11 +163,112 @@ export const DealHero = ({ deal }: DealHeroProps) => {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-[10px] text-white/40 mt-8 max-w-lg"
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="text-[10px] text-slate-500 mt-6"
             >
-              *Target returns are projections only. Capital at risk. This is not investment advice.
+              *Target returns are projections only. Capital at risk.
             </motion.p>
+          </div>
+
+          {/* Right - Profile Image/Video */}
+          <div className="order-1 lg:order-2 relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative aspect-[4/5] rounded-sm overflow-hidden border border-slate-700/30"
+            >
+              {/* Dark background */}
+              <div className="absolute inset-0 bg-slate-900" />
+              
+              {/* Image */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${deal.leaderImage})` }}
+              />
+
+              {/* Video overlay */}
+              {deal.heroVideoUrl && (
+                <AnimatePresence>
+                  {isPlaying && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4 }}
+                      className="absolute inset-0 z-20 bg-slate-900"
+                    >
+                      <video
+                        ref={videoRef}
+                        src={deal.heroVideoUrl}
+                        muted={isMuted}
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Gradient overlay on video */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent pointer-events-none" />
+                      
+                      {/* Sound toggle */}
+                      <motion.button
+                        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-slate-800/90 transition-colors"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsMuted(!isMuted);
+                        }}
+                      >
+                        {isMuted ? (
+                          <VolumeX className="w-4 h-4 text-white" />
+                        ) : (
+                          <Volume2 className="w-4 h-4 text-white" />
+                        )}
+                      </motion.button>
+                      
+                      {/* Playing indicator */}
+                      <motion.div 
+                        className="absolute bottom-6 left-6 flex items-center gap-2"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        <div className="flex gap-0.5">
+                          {[0, 1, 2].map((i) => (
+                            <motion.div
+                              key={i}
+                              className="w-1 bg-white rounded-full"
+                              animate={{ height: [8, 16, 8] }}
+                              transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs text-white/80 uppercase tracking-wider">
+                          {isMuted ? "Preview" : "Playing"}
+                        </span>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              )}
+              
+              {/* Play button when paused */}
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+                animate={{ opacity: isPlaying ? 0 : 0.8 }}
+                transition={{ duration: 0.3 }}
+              >
+                {deal.heroVideoUrl && (
+                  <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+                    <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Bottom gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10 pointer-events-none" />
+            </motion.div>
           </div>
         </div>
 
