@@ -244,27 +244,8 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 className="absolute inset-0 w-full h-full object-contain object-bottom"
                 style={{ 
                   filter: 'grayscale(100%) contrast(1.15) brightness(1.1)',
-                  mixBlendMode: 'luminosity',
-                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
+                  mixBlendMode: 'luminosity'
                 }}
-              />
-              
-              {/* Smooth vertical gradient overlay for portrait blend */}
-              <div 
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `
-                    linear-gradient(to bottom, rgba(15,23,42,0.6) 0%, transparent 20%, transparent 75%, rgba(15,23,42,0.8) 100%),
-                    linear-gradient(to right, rgba(15,23,42,0.4) 0%, transparent 30%, transparent 100%)
-                  `
-                }}
-              />
-              
-              {/* Subtle bottom glow */}
-              <div 
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-16 rounded-full blur-2xl"
-                style={{ background: 'rgba(148,130,180,0.15)' }}
               />
 
               {/* Video overlay */}
