@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "border border-primary text-primary hover:bg-primary/10 hover:shadow-[0_4px_20px_-6px_rgba(100,100,100,0.3)] dark:hover:shadow-[0_4px_20px_-6px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98]",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-[0_4px_20px_-6px_rgba(100,100,100,0.25)] dark:hover:shadow-[0_4px_20px_-6px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98]",
-        ghost: "text-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98]",
+        ghost: "text-foreground hover:bg-foreground/5 hover:scale-[1.02] active:scale-[0.98]",
         link: "text-primary underline-offset-4 hover:underline",
         glass:
           "bg-foreground/5 backdrop-blur-md border border-foreground/10 text-foreground hover:bg-foreground/10 hover:shadow-[0_4px_20px_-6px_rgba(100,100,100,0.2)] dark:hover:shadow-[0_4px_20px_-6px_rgba(255,255,255,0.1)] hover:scale-[1.02] active:scale-[0.98]",
