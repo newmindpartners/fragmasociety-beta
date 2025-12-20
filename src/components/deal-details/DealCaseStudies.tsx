@@ -42,6 +42,18 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
     return images[index % images.length];
   };
 
+  // Format profit to $X.XM format
+  const formatProfit = (profit: string): string => {
+    const num = parseFloat(profit.replace(/[^0-9.]/g, ''));
+    if (isNaN(num)) return profit;
+    if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(1)}M`;
+    } else if (num >= 1000) {
+      return `$${(num / 1000).toFixed(0)}K`;
+    }
+    return profit;
+  };
+
   // Calculate total profit
   const totalProfit = deal.caseStudies.reduce((acc, cs) => {
     const profitNum = parseFloat(cs.profit.replace(/[^0-9.]/g, ''));
@@ -50,13 +62,25 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Hero Header Section - Clean Slate/Violet Background */}
-      <div className="py-24 bg-slate-800 relative">
-        {/* Subtle gradient overlay - no metallic effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-700/30 via-transparent to-slate-900/50" />
+      {/* Hero Header Section - Dark Navy Gradient Background */}
+      <div className="py-24 relative">
+        {/* Dark Navy Gradient Background - matching Timeline section */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1a] via-[#0d1424] to-[#111827]" />
         
-        {/* Decorative top line */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-600/50 to-transparent" />
+        {/* Atmospheric Effects */}
+        <div className="absolute inset-0">
+          {/* Top violet glow */}
+          <div className="absolute -top-32 -right-32 w-[600px] h-[400px] bg-gradient-to-bl from-violet-900/20 via-violet-800/10 to-transparent rounded-full blur-3xl" />
+          {/* Left navy accent */}
+          <div className="absolute top-1/2 -left-20 w-[400px] h-[400px] bg-gradient-to-r from-slate-800/30 via-indigo-900/20 to-transparent rounded-full blur-3xl" />
+          {/* Bottom gradient fade */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0f1a]/80 to-transparent" />
+          {/* Subtle center glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-violet-900/5 rounded-full blur-[100px]" />
+        </div>
+        
+        {/* Top border line */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
         
         <div className="container mx-auto px-6 lg:px-12 relative z-10">
           <motion.div
@@ -67,70 +91,54 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
             className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12"
           >
             <div>
-              {/* Magazine-style badge */}
+              {/* Section label */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="flex items-center gap-4 mb-8"
+                className="flex items-center gap-4 mb-6"
               >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-violet-800 flex items-center justify-center shadow-xl shadow-violet-900/50">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-px w-8 bg-violet-500/50" />
-                  <span className="text-[11px] tracking-[0.4em] uppercase text-violet-300/80 font-medium">
-                    Success Stories
-                  </span>
-                </div>
+                <div className="w-12 h-px bg-slate-600" />
+                <span className="text-xs tracking-[0.4em] uppercase text-slate-400 font-medium">
+                  Success Stories
+                </span>
               </motion.div>
               
               {/* Editorial Title */}
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.05] mb-6">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] mb-6">
                 Case{" "}
-                <span className="italic font-serif text-violet-300">
+                <span className="italic font-serif text-slate-400">
                   Studies
                 </span>
               </h2>
               
-              {/* Decorative line */}
-              <div className="w-24 h-0.5 bg-gradient-to-r from-violet-500 to-transparent mb-6" />
-              
-              <p className="text-lg text-gray-400 max-w-xl font-light leading-relaxed">
+              <p className="text-lg text-slate-500 max-w-xl font-light leading-relaxed">
                 Detailed look at our most successful projects and proven track record
               </p>
             </div>
             
-            {/* Stats Cards - Glass morphism */}
-            <div className="flex gap-6">
+            {/* Stats Cards */}
+            <div className="flex gap-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="relative group"
+                className="p-6 text-center bg-slate-800/50 border border-slate-700/50"
               >
-                <div className="absolute inset-0 bg-violet-600/20 rounded-2xl blur-xl group-hover:bg-violet-600/30 transition-colors" />
-                <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-center">
-                  <p className="text-5xl font-light text-white mb-1">{deal.caseStudies.length}</p>
-                  <p className="text-[10px] text-violet-300/80 uppercase tracking-[0.2em]">Completed</p>
-                </div>
+                <p className="text-4xl font-light text-white mb-1">{deal.caseStudies.length}</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em]">Completed</p>
               </motion.div>
-              
-              <div className="w-px bg-gradient-to-b from-transparent via-violet-500/30 to-transparent" />
               
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="relative group"
+                className="p-6 text-center bg-white/5 border border-white/10"
               >
-                <div className="absolute inset-0 bg-violet-600/20 rounded-2xl blur-xl group-hover:bg-violet-600/30 transition-colors" />
-                <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-center">
-                  <p className="text-5xl font-light text-white">${totalProfit.toFixed(1)}M</p>
-                  <p className="text-[10px] text-violet-300/80 uppercase tracking-[0.2em]">Total Profit</p>
-                </div>
+                <p className="text-4xl font-light text-white">${(totalProfit / 1000000).toFixed(1)}M</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em]">Total Profit</p>
               </motion.div>
             </div>
           </motion.div>
@@ -138,8 +146,8 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
       </div>
 
       {/* Case Study Selector - Elegant Dark Bar */}
-      <div className="bg-slate-950 py-5 border-y border-violet-500/20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-950/20 via-transparent to-violet-950/20" />
+      <div className="bg-[#0a0f1a] py-5 border-y border-slate-700/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/50 via-transparent to-slate-900/50" />
         
         <div className="container mx-auto px-6 lg:px-12 relative">
           <div className="flex flex-wrap gap-4">
@@ -149,46 +157,30 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                 onClick={() => setActiveCase(index)}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className={`group relative px-6 py-4 rounded-xl transition-all duration-500 ${
+                className={`group relative px-5 py-3 rounded transition-all duration-500 ${
                   activeCase === index
-                    ? "bg-gradient-to-br from-violet-600/30 to-violet-800/30 border border-violet-400/40 shadow-lg shadow-violet-900/30"
-                    : "bg-slate-900/50 border border-slate-700/30 hover:border-violet-500/30 hover:bg-slate-900"
+                    ? "bg-slate-800 border border-slate-600/50"
+                    : "bg-slate-900/50 border border-slate-800/50 hover:border-slate-600/50 hover:bg-slate-800/50"
                 }`}
               >
-                {/* Active glow effect */}
-                {activeCase === index && (
-                  <motion.div
-                    layoutId="activeGlow"
-                    className="absolute inset-0 bg-violet-500/10 rounded-xl blur-lg"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-                
-                <div className="flex items-center gap-4 relative z-10">
-                  <div className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                <div className="flex items-center gap-3 relative z-10">
+                  <div className={`w-10 h-10 rounded flex items-center justify-center transition-all duration-300 ${
                     activeCase === index 
-                      ? "bg-gradient-to-br from-violet-600 to-violet-800 shadow-lg shadow-violet-900/50" 
-                      : "bg-slate-800/80 group-hover:bg-slate-800"
+                      ? "bg-slate-700" 
+                      : "bg-slate-800/80 group-hover:bg-slate-700"
                   }`}>
-                    <Building2 className={`w-5 h-5 ${activeCase === index ? "text-white" : "text-gray-400 group-hover:text-violet-300"}`} />
+                    <Building2 className={`w-4 h-4 ${activeCase === index ? "text-white" : "text-slate-400 group-hover:text-white"}`} />
                   </div>
                   <div className="text-left">
-                    <p className={`text-sm font-medium truncate max-w-[180px] transition-colors ${
-                      activeCase === index ? "text-white" : "text-gray-300 group-hover:text-white"
+                    <p className={`text-sm font-medium truncate max-w-[160px] transition-colors ${
+                      activeCase === index ? "text-white" : "text-slate-300 group-hover:text-white"
                     }`}>
                       {caseStudy.address.split(',')[0]}
                     </p>
-                    <p className={`text-xs transition-colors ${activeCase === index ? "text-violet-300" : "text-gray-500 group-hover:text-gray-400"}`}>
-                      {caseStudy.profit} profit
+                    <p className={`text-xs transition-colors ${activeCase === index ? "text-slate-400" : "text-slate-500 group-hover:text-slate-400"}`}>
+                      {formatProfit(caseStudy.profit)} profit
                     </p>
                   </div>
-                  {activeCase === index && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="w-2.5 h-2.5 rounded-full bg-violet-400 ml-2 shadow-lg shadow-violet-400/50"
-                    />
-                  )}
                 </div>
               </motion.button>
             ))}
@@ -196,18 +188,16 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
         </div>
       </div>
 
-      {/* Main Content - Premium Grey Background */}
-      <div className="py-24 bg-gradient-to-b from-gray-100 to-gray-200 relative">
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.1) 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }} />
-        </div>
+      {/* Main Content - Dark Navy Background */}
+      <div className="py-24 relative">
+        {/* Dark Navy Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1a] via-[#0d1424] to-[#111827]" />
         
-        {/* Top gradient fade */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-slate-950/10 to-transparent" />
+        {/* Subtle glow effects */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 right-1/4 w-[400px] h-[300px] bg-violet-900/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 left-0 w-[300px] h-[300px] bg-slate-800/30 rounded-full blur-3xl" />
+        </div>
         
         <div className="container mx-auto px-6 lg:px-12 relative z-10">
           <AnimatePresence mode="wait">
@@ -220,81 +210,74 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               className="max-w-7xl mx-auto"
             >
               <div className="grid lg:grid-cols-2 gap-10 items-start">
-                {/* Image Section - Editorial Style */}
+                {/* Image Section */}
                 <motion.div 
                   className="relative"
                   whileHover={{ y: -5 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/30 relative group">
+                  <div className="aspect-[4/3] rounded overflow-hidden shadow-2xl shadow-black/50 relative group border border-slate-700/50">
                     <img 
                       src={getCaseImage(currentCase.address, activeCase)} 
                       alt={currentCase.address}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a] via-[#0a0f1a]/40 to-transparent" />
                     
                     {/* Content overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-8">
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
                       <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="flex items-center gap-3 mb-4"
+                        className="flex items-center gap-3 mb-3"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-violet-600/30 backdrop-blur-sm flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-violet-300" />
+                        <div className="w-8 h-8 rounded bg-slate-800/80 backdrop-blur-sm flex items-center justify-center border border-slate-600/50">
+                          <MapPin className="w-4 h-4 text-slate-300" />
                         </div>
-                        <span className="text-lg font-medium text-white">{currentCase.address}</span>
+                        <span className="text-base font-medium text-white">{currentCase.address}</span>
                       </motion.div>
                       {currentCase.architect && (
-                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-lg text-sm text-white/80 border border-white/10">
-                          <Sparkles className="w-3 h-3 text-violet-300" />
+                        <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800/60 backdrop-blur-sm rounded text-sm text-slate-300 border border-slate-600/50">
+                          <Sparkles className="w-3 h-3 text-slate-400" />
                           {currentCase.architect}
                         </span>
                       )}
                     </div>
                   </div>
-                  
-                  {/* Decorative elements */}
-                  <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-br from-violet-600 to-slate-900 rounded-2xl -z-10 opacity-80" />
-                  <div className="absolute -top-4 -left-4 w-20 h-20 border-2 border-violet-500/20 rounded-2xl -z-10" />
                 </motion.div>
 
-                {/* Details Section - Luxury Cards */}
-                <div className="space-y-5">
+                {/* Details Section */}
+                <div className="space-y-4">
                   {/* Financial Cards Grid */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     {[
                       { label: "Acquisition", value: currentCase.acquisitionPrice, dark: false },
                       { label: "Construction", value: currentCase.constructionCost, dark: false },
                       { label: "Exit Price", value: currentCase.exitPrice, dark: false },
-                      { label: "Profit", value: currentCase.profit, dark: true, icon: true },
+                      { label: "Profit", value: formatProfit(currentCase.profit), dark: true, icon: true },
                     ].map((item, idx) => (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 * idx }}
-                        whileHover={{ y: -3, scale: 1.02 }}
-                        className={`relative group rounded-2xl p-5 transition-all duration-300 overflow-hidden ${
+                        whileHover={{ y: -2 }}
+                        className={`relative group rounded p-5 transition-all duration-300 overflow-hidden ${
                           item.dark 
-                            ? "bg-gradient-to-br from-violet-700 to-slate-900 shadow-xl shadow-violet-900/30" 
-                            : "bg-white shadow-lg hover:shadow-xl border border-gray-200/50"
+                            ? "bg-slate-800 border border-slate-600/50" 
+                            : "bg-slate-800/50 border border-slate-700/50"
                         }`}
                       >
-                        {item.dark && (
-                          <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        )}
                         <div className="relative z-10">
                           <div className="flex items-center gap-2 mb-2">
-                            {item.icon && <TrendingUp className="w-3.5 h-3.5 text-violet-300" />}
-                            <p className={`text-[10px] uppercase tracking-[0.15em] ${item.dark ? "text-violet-200/70" : "text-gray-400"}`}>
+                            {item.icon && <TrendingUp className="w-3.5 h-3.5 text-slate-400" />}
+                            <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500">
                               {item.label}
                             </p>
                           </div>
-                          <p className={`text-xl font-light ${item.dark ? "text-white" : "text-slate-900"}`}>
+                          <p className={`text-xl font-light ${item.dark ? "text-white" : "text-slate-200"}`}>
                             {item.value}
                           </p>
                         </div>
@@ -302,15 +285,15 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                     ))}
                   </div>
 
-                  {/* Property Specs - Premium Card */}
+                  {/* Property Specs Card */}
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200/50"
+                    className="bg-slate-800/50 rounded p-5 border border-slate-700/50"
                   >
-                    <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                      <span className="w-4 h-px bg-violet-500" />
+                    <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                      <span className="w-4 h-px bg-slate-600" />
                       Property Details
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -319,7 +302,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                         .map((spec, i) => (
                           <span 
                             key={i}
-                            className="px-4 py-2 bg-gray-100 rounded-lg text-xs text-slate-700 border border-gray-200"
+                            className="px-3 py-1.5 bg-slate-700/50 rounded text-xs text-slate-300 border border-slate-600/50"
                           >
                             {spec}
                           </span>
@@ -327,23 +310,22 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
                     </div>
                   </motion.div>
 
-                  {/* Description - Dark Elegant Card */}
+                  {/* Description Card */}
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 shadow-xl overflow-hidden"
+                    className="relative bg-slate-800/80 rounded p-5 border border-slate-700/50 overflow-hidden"
                   >
-                    {/* Violet accent */}
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-600 via-violet-400 to-violet-600" />
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-violet-600/10 rounded-full blur-2xl" />
+                    {/* Top accent line */}
+                    <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600" />
                     
                     <div className="relative z-10">
                       <div className="flex items-center justify-between mb-4">
-                        <p className="text-[10px] text-violet-300/70 uppercase tracking-[0.2em]">Project Summary</p>
-                        <ArrowUpRight className="w-4 h-4 text-violet-400" />
+                        <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em]">Project Summary</p>
+                        <ArrowUpRight className="w-4 h-4 text-slate-500" />
                       </div>
-                      <p className="text-sm text-gray-300 font-light leading-relaxed">
+                      <p className="text-sm text-slate-400 font-light leading-relaxed">
                         {currentCase.description}
                       </p>
                     </div>
@@ -356,7 +338,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
       </div>
       
       {/* Bottom Accent Bar */}
-      <div className="h-1.5 bg-gradient-to-r from-slate-900 via-violet-600 to-slate-900" />
+      <div className="h-px bg-gradient-to-r from-transparent via-slate-600/50 to-transparent" />
     </section>
   );
 };
