@@ -11,6 +11,7 @@ import categoryLuxury from "@/assets/category-luxury.jpg";
 import categoryCredit from "@/assets/category-credit.jpg";
 import categorySports from "@/assets/category-sports.jpg";
 import categoryEsg from "@/assets/category-esg.jpg";
+import naouriHeroBg from "@/assets/naouri-hero-bg.png";
 
 const getCategoryBackground = (category: string): string => {
   const categoryMap: Record<string, string> = {
@@ -46,9 +47,12 @@ export const DealHero = ({ deal }: DealHeroProps) => {
     }
   };
 
-  const categoryBg = deal.assetImages && deal.assetImages.length > 0 
-    ? deal.assetImages[0] 
-    : getCategoryBackground(deal.category);
+  // Use deal-specific hero background if available, otherwise use uploaded naouri background for real estate, or fall back to category
+  const categoryBg = deal.id === 'naouri-malibu-villa' 
+    ? naouriHeroBg 
+    : (deal.assetImages && deal.assetImages.length > 0 
+        ? deal.assetImages[0] 
+        : getCategoryBackground(deal.category));
 
   return (
     <section className="relative h-screen max-h-[900px] bg-slate-900 overflow-hidden">
