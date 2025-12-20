@@ -210,10 +210,15 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/5]"
             >
-              {/* Profile image - transparent cutout, no background */}
-              <div 
-                className="absolute inset-0 bg-contain bg-bottom bg-no-repeat"
-                style={{ backgroundImage: `url(${deal.bannerImage || deal.leaderImage})` }}
+              {/* Profile image - grayscale/luminosity like SignatureDealsBanner */}
+              <img
+                src={deal.bannerImage || deal.leaderImage}
+                alt={deal.leaderName}
+                className="absolute inset-0 w-full h-full object-contain object-bottom"
+                style={{ 
+                  filter: 'grayscale(100%) contrast(1.15) brightness(1.1)',
+                  mixBlendMode: 'luminosity'
+                }}
               />
 
               {/* Video overlay */}
