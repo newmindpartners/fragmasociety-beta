@@ -63,25 +63,26 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           }}
         />
         
-        {/* Dark navy gradient overlay - full hero, bottom to top fade */}
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(
-              to top,
-              rgba(15,23,42,1) 0%,
-              rgba(15,23,42,0.95) 8%,
-              rgba(15,23,42,0.85) 18%,
-              rgba(15,23,42,0.7) 30%,
-              rgba(15,23,42,0.5) 42%,
-              rgba(15,23,42,0.3) 55%,
-              rgba(15,23,42,0.15) 68%,
-              rgba(15,23,42,0.05) 80%,
-              transparent 92%
-            )`
-          }}
-        />
       </div>
+      
+      {/* Dark navy gradient overlay - z-20 to be in front of portrait */}
+      <div 
+        className="absolute inset-0 z-20 pointer-events-none"
+        style={{
+          background: `linear-gradient(
+            to top,
+            rgba(15,23,42,1) 0%,
+            rgba(15,23,42,0.95) 8%,
+            rgba(15,23,42,0.85) 18%,
+            rgba(15,23,42,0.7) 30%,
+            rgba(15,23,42,0.5) 42%,
+            rgba(15,23,42,0.3) 55%,
+            rgba(15,23,42,0.15) 68%,
+            rgba(15,23,42,0.05) 80%,
+            transparent 92%
+          )`
+        }}
+      />
 
 
       
