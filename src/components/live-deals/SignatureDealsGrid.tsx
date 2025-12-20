@@ -108,18 +108,67 @@ export const SignatureDealsGrid = () => {
     : signatureDeals.filter(deal => deal.category === activeCategory);
 
   return (
-    <section className="py-20 relative">
-      <div className="container">
+    <section className="py-24 lg:py-32 relative overflow-hidden">
+      {/* Premium dark background - matching homepage */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-slate-900/50 to-background">
+        {/* Subtle spotlight effects */}
+        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-slate-800/20 via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-violet-900/10 via-transparent to-transparent rounded-full blur-3xl" />
+      </div>
+
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(148,163,184,1) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
+
+      <div className="container relative z-10">
+        {/* Section Header */}
+        <div className="max-w-4xl mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-16 h-px bg-gradient-to-r from-slate-500 to-transparent" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-500 font-medium">
+              Active Opportunities
+            </span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
+          >
+            Curated deals
+            <br />
+            <span className="italic text-slate-400 font-serif">with proven leaders.</span>
+          </motion.h2>
+        </div>
+
         {/* Category filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-wrap gap-2 mb-12"
+        >
           {categories.map((category) => (
             <motion.button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+              className={`px-5 py-2.5 rounded-sm text-sm font-medium transition-all duration-300 ${
                 activeCategory === category
-                  ? "bg-white text-background"
-                  : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10"
+                  ? "bg-white text-slate-900"
+                  : "bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-700/50"
               }`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -127,18 +176,36 @@ export const SignatureDealsGrid = () => {
               {category}
             </motion.button>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredDeals.map((deal) => (
-            <SignatureDealCard
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {filteredDeals.map((deal, index) => (
+            <motion.div
               key={deal.id}
-              {...deal}
-              onWatchTrailer={() => handleWatchTrailer(deal)}
-              onSeeDeal={() => handleSeeDeal(deal.id)}
-            />
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
+            >
+              <SignatureDealCard
+                {...deal}
+                onWatchTrailer={() => handleWatchTrailer(deal)}
+                onSeeDeal={() => handleSeeDeal(deal.id)}
+              />
+            </motion.div>
           ))}
         </div>
+
+        {/* Bottom decorative element */}
+        <motion.div 
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="mt-20 flex justify-center"
+        >
+          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-600 to-transparent" />
+        </motion.div>
       </div>
 
       <TrailerModal

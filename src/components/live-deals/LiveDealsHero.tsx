@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 // Leader data for the step-by-step animation
 const leaders = [
   {
-    name: "Bryan Balsinger",
+    name: "Bryan Balsiger",
     title: "Sports & Entertainment",
     image: "/src/assets/bryan-balsinger.png",
   },
@@ -57,23 +57,23 @@ export const LiveDealsHero = () => {
 
   return (
     <section className="relative h-[45vh] min-h-[380px] max-h-[500px] flex items-center justify-center overflow-hidden">
-      {/* Light mode gradient background - elegant cream/warm tones */}
-      <div className="absolute inset-0 bg-gradient-to-br from-stone-50 via-amber-50/30 to-stone-100" />
+      {/* Dark navy gradient background - matching homepage */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/95 to-background" />
       
-      {/* Subtle animated accents */}
+      {/* Subtle spotlight effects - matching Features section */}
       <motion.div 
-        className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-amber-100/40 via-transparent to-transparent rounded-full blur-3xl"
+        className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-violet-900/20 via-transparent to-transparent rounded-full blur-3xl"
         animate={{ 
           scale: [1, 1.1, 1],
-          opacity: [0.4, 0.6, 0.4],
+          opacity: [0.3, 0.5, 0.3],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div 
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-stone-200/30 via-transparent to-transparent rounded-full blur-3xl"
+        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-radial from-slate-800/40 via-transparent to-transparent rounded-full blur-3xl"
         animate={{ 
           scale: [1.1, 1, 1.1],
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -81,13 +81,13 @@ export const LiveDealsHero = () => {
       {/* Fine line accents */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
-          className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stone-300/50 to-transparent"
+          className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 2, delay: 0.5 }}
         />
         <motion.div 
-          className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stone-300/50 to-transparent"
+          className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 2, delay: 0.7 }}
@@ -103,8 +103,8 @@ export const LiveDealsHero = () => {
           className="mb-4"
         >
           <span 
-            className="text-2xl md:text-3xl text-stone-500 tracking-wide"
-            style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic" }}
+            className="text-2xl md:text-3xl text-slate-400 tracking-wide italic"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             Signature Deals
           </span>
@@ -120,13 +120,11 @@ export const LiveDealsHero = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.8 }}
-                className="absolute text-4xl md:text-5xl lg:text-6xl font-light text-stone-800 tracking-tight"
+                className="absolute text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 Invest With{" "}
-                <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 bg-clip-text text-transparent font-medium">
-                  Industry Leaders
-                </span>
+                <span className="italic text-slate-400">Industry Leaders</span>
               </motion.h1>
             )}
             
@@ -137,13 +135,11 @@ export const LiveDealsHero = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.8 }}
-                className="absolute text-4xl md:text-5xl lg:text-6xl font-light text-stone-800 tracking-tight"
+                className="absolute text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
-                & <span className="text-stone-600">Legacy</span>{" "}
-                <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 bg-clip-text text-transparent font-medium">
-                  Brands
-                </span>
+                & <span className="text-slate-300">Legacy</span>{" "}
+                <span className="italic text-slate-400">Brands</span>
               </motion.h1>
             )}
 
@@ -155,13 +151,11 @@ export const LiveDealsHero = () => {
                 className="absolute flex flex-col items-center"
               >
                 <h1 
-                  className="text-4xl md:text-5xl lg:text-6xl font-light text-stone-800 tracking-tight mb-6"
+                  className="text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight mb-6"
                   style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                 >
                   Invest With{" "}
-                  <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 bg-clip-text text-transparent font-medium">
-                    Industry Leaders
-                  </span>
+                  <span className="italic text-slate-400">Industry Leaders</span>
                 </h1>
                 
                 {/* Leader showcase */}
@@ -173,19 +167,19 @@ export const LiveDealsHero = () => {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: -50, scale: 0.9 }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
-                      className="flex items-center gap-4 bg-white/60 backdrop-blur-sm px-6 py-3 rounded-full border border-stone-200/60 shadow-lg shadow-stone-200/20"
+                      className="flex items-center gap-4 bg-slate-800/60 backdrop-blur-sm px-6 py-3 rounded-full border border-slate-700/60 shadow-lg shadow-slate-900/30"
                     >
                       <motion.img 
                         src={leaders[currentLeader].image}
                         alt={leaders[currentLeader].name}
-                        className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-500/30"
+                        className="w-12 h-12 rounded-full object-cover ring-2 ring-violet-500/30"
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.4, delay: 0.2 }}
                       />
                       <div className="text-left">
                         <motion.p 
-                          className="text-stone-800 font-medium text-lg"
+                          className="text-white font-medium text-lg"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.4, delay: 0.3 }}
@@ -193,7 +187,7 @@ export const LiveDealsHero = () => {
                           {leaders[currentLeader].name}
                         </motion.p>
                         <motion.p 
-                          className="text-stone-500 text-sm"
+                          className="text-slate-400 text-sm"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.4, delay: 0.4 }}
@@ -212,8 +206,8 @@ export const LiveDealsHero = () => {
                       key={idx}
                       className={`h-1.5 rounded-full transition-all duration-300 ${
                         idx === currentLeader 
-                          ? 'w-6 bg-gradient-to-r from-amber-500 to-yellow-500' 
-                          : 'w-1.5 bg-stone-300'
+                          ? 'w-6 bg-white' 
+                          : 'w-1.5 bg-slate-600'
                       }`}
                     />
                   ))}
@@ -228,8 +222,8 @@ export const LiveDealsHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: animationPhase === 'leaders' ? 0 : 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg md:text-xl text-stone-500 font-light tracking-wide max-w-xl mx-auto"
-          style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic" }}
+          className="text-lg md:text-xl text-slate-500 font-light tracking-wide max-w-xl mx-auto italic"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
         >
           Own a Stake in Their Next Chapter
         </motion.p>
@@ -237,7 +231,7 @@ export const LiveDealsHero = () => {
 
       {/* Bottom decorative line */}
       <motion.div 
-        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stone-300 to-transparent"
+        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 1.5, delay: 0.3 }}
