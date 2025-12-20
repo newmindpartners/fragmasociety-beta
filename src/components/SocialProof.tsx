@@ -13,11 +13,11 @@ import swissquoteLogo from "@/assets/partners/swissquote-new.png";
 import woudLawLogo from "@/assets/partners/woud-law-new.png";
 
 const partners = [
-  { name: "Bank Frick", logo: bankFrickLogo },
-  { name: "DFNS", logo: dfnsLogo },
-  { name: "House of Web3", logo: houseOfWeb3Logo },
-  { name: "Swissquote", logo: swissquoteLogo },
-  { name: "Woud Law Firm", logo: woudLawLogo },
+  { name: "Bank Frick", logo: bankFrickLogo, className: "" },
+  { name: "DFNS", logo: dfnsLogo, className: "" },
+  { name: "House of Web3", logo: houseOfWeb3Logo, className: "" },
+  { name: "Swissquote", logo: swissquoteLogo, className: "scale-150" },
+  { name: "Woud Law Firm", logo: woudLawLogo, className: "" },
 ];
 
 // Double the partners for seamless loop
@@ -51,7 +51,7 @@ export const SocialProof = () => (
           {doubledPartners.map((partner, i) => (
             <Tooltip key={`${partner.name}-${i}`}>
               <TooltipTrigger asChild>
-                <div className="flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer">
+                <div className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}>
                   <img 
                     src={partner.logo} 
                     alt={partner.name}
