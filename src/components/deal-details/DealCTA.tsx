@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, Users, Clock } from "lucide-react";
+import { ArrowRight, Shield, Clock, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import type { DealData } from "@/types/deal";
@@ -11,11 +11,8 @@ interface DealCTAProps {
 export const DealCTA = ({ deal }: DealCTAProps) => {
   const navigate = useNavigate();
 
-  // Calculate progress percentage
-  const raised = parseFloat(deal.currentRaised?.replace(/[€,]/g, '') || '0');
-  const total = parseFloat(deal.totalRaise?.replace(/[€,]/g, '') || '1');
-  const progress = (raised / total) * 100;
-  const remaining = total - raised;
+  // Calculate days left to invest (example: 30 days from now)
+  const daysLeft = 14; // This could be dynamic based on deal data
 
   return (
     <section className="py-32 relative overflow-hidden">
@@ -51,30 +48,8 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
               </h2>
               
               <p className="text-lg text-slate-500 mb-10 leading-relaxed">
-                Join {deal.investorCount} investors who have already committed to this opportunity. 
-                Express your interest today to secure your allocation.
+                Express your interest today to secure your allocation in this exclusive opportunity.
               </p>
-
-              {/* Progress */}
-              <div className="mb-10 bg-white p-6 border border-slate-200">
-                <div className="flex justify-between text-sm mb-4">
-                  <span className="text-slate-500">{Math.round(progress)}% funded</span>
-                  <span className="text-slate-700 font-medium">€{remaining.toLocaleString()} remaining</span>
-                </div>
-                <div className="h-2 bg-slate-100 overflow-hidden">
-                  <motion.div
-                    className="h-full bg-slate-800"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${progress}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.3 }}
-                  />
-                </div>
-                <div className="flex justify-between mt-4 text-xs text-slate-400">
-                  <span>Raised: {deal.currentRaised}</span>
-                  <span>Target: {deal.totalRaise}</span>
-                </div>
-              </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
@@ -96,8 +71,10 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
                   size="lg"
                   variant="ghost"
                   className="text-slate-700 hover:bg-slate-100 px-8 h-14 text-base font-medium border border-slate-200"
+                  onClick={() => window.open("https://wa.me/", "_blank")}
                 >
-                  Schedule a Call
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Talk to our Team
                 </Button>
               </div>
             </motion.div>
@@ -110,26 +87,26 @@ export const DealCTA = ({ deal }: DealCTAProps) => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-4"
             >
-              {/* Featured card */}
+              {/* Featured card - Days Left */}
               <div className="bg-slate-800 p-8 relative overflow-hidden">
                 <div className="flex items-center gap-5">
                   <div className="w-14 h-14 bg-slate-700 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-white" />
+                    <Clock className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-white">Regulated Structure</p>
-                    <p className="text-sm text-slate-400">Luxembourg securitization vehicle</p>
+                    <p className="text-lg font-medium text-white">{daysLeft} Days Left</p>
+                    <p className="text-sm text-slate-400">To invest in this opportunity</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white border border-slate-200 p-6 flex items-center gap-5 hover:border-slate-300 transition-colors">
                 <div className="w-14 h-14 bg-slate-100 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-slate-600" />
+                  <Shield className="w-6 h-6 text-slate-600" />
                 </div>
                 <div>
-                  <p className="text-lg font-medium text-slate-900">{deal.investorCount} Investors</p>
-                  <p className="text-sm text-slate-500">Have already committed</p>
+                  <p className="text-lg font-medium text-slate-900">Regulated Structure</p>
+                  <p className="text-sm text-slate-500">Luxembourg securitization vehicle</p>
                 </div>
               </div>
 
