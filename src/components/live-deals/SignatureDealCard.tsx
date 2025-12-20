@@ -49,9 +49,10 @@ export const SignatureDealCard = ({
     >
       <div className="relative h-full rounded-sm overflow-hidden border border-slate-700/30 shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/30 transition-all duration-700">
         
-        {/* Editorial Image Section */}
-        <div className="relative aspect-[4/5] overflow-hidden">
-          {/* Image with Ken Burns effect */}
+        {/* Editorial Image Section - Dark navy base */}
+        <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-b from-slate-800 via-slate-900 to-slate-900">
+          {/* Dark navy solid background behind image */}
+          <div className="absolute inset-0 bg-slate-900" />
           <motion.div
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${image})` }}
