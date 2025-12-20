@@ -67,7 +67,7 @@ export const StrategyCTA = () => {
             
             {/* Subtitle */}
             <p className="text-base text-slate-400 mb-6 leading-relaxed max-w-md">
-              One fund. Broad exposure to real-world yield & digital infrastructure.
+              One click, broad exposure to RWA best opportunities and signature deals.
             </p>
 
             {/* Inline Features */}
