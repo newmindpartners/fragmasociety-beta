@@ -69,11 +69,15 @@ export const DealHero = ({ deal }: DealHeroProps) => {
           style={{
             background: `linear-gradient(
               to top,
-              rgba(15,23,42,0.98) 0%,
-              rgba(15,23,42,0.85) 15%,
-              rgba(15,23,42,0.6) 35%,
+              rgba(15,23,42,1) 0%,
+              rgba(15,23,42,0.95) 8%,
+              rgba(15,23,42,0.85) 18%,
+              rgba(15,23,42,0.7) 30%,
+              rgba(15,23,42,0.5) 42%,
               rgba(15,23,42,0.3) 55%,
-              transparent 80%
+              rgba(15,23,42,0.15) 68%,
+              rgba(15,23,42,0.05) 80%,
+              transparent 92%
             )`
           }}
         />
