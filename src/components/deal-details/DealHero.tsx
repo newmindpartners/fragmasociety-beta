@@ -217,6 +217,41 @@ export const DealHero = ({ deal }: DealHeroProps) => {
 
           {/* Right - Profile Image/Video */}
           <div className="order-1 lg:order-2 relative flex flex-col justify-end z-30">
+            {/* Signature Deals label at top of portrait */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="absolute top-20 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div 
+                  className="h-px w-6"
+                  style={{ background: 'rgba(255,255,255,0.3)' }}
+                />
+                <span 
+                  className="text-[10px] tracking-[0.25em] uppercase font-light"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                >
+                  Signature Deals
+                </span>
+                <div 
+                  className="h-px w-6"
+                  style={{ background: 'rgba(255,255,255,0.3)' }}
+                />
+              </div>
+              
+              <h3
+                className="text-xl md:text-2xl font-light tracking-wide uppercase"
+                style={{ 
+                  color: 'rgba(255,255,255,0.85)',
+                  letterSpacing: '0.15em'
+                }}
+              >
+                Invest with
+              </h3>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
