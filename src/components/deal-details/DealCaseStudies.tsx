@@ -37,22 +37,13 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Hero Header Section - Dark with Violet Accents */}
-      <div className="py-24 bg-gradient-to-br from-slate-950 via-violet-950/30 to-slate-950 relative">
-        {/* Animated gradient orbs */}
-        <motion.div 
-          animate={{ opacity: [0.2, 0.4, 0.2], scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-10 right-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl"
-        />
-        <motion.div 
-          animate={{ opacity: [0.15, 0.3, 0.15] }}
-          transition={{ duration: 6, repeat: Infinity, delay: 2 }}
-          className="absolute bottom-10 left-1/4 w-72 h-72 bg-violet-500/15 rounded-full blur-3xl"
-        />
+      {/* Hero Header Section - Clean Slate/Violet Background */}
+      <div className="py-24 bg-slate-800 relative">
+        {/* Subtle gradient overlay - no metallic effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-700/30 via-transparent to-slate-900/50" />
         
-        {/* Decorative lines */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
+        {/* Decorative top line */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-600/50 to-transparent" />
         
         <div className="container mx-auto px-6 lg:px-12 relative z-10">
           <motion.div
