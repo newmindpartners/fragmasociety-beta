@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState, useRef, useEffect } from "react";
 
 interface SignatureDealCardProps {
   id: string;
@@ -11,6 +12,7 @@ interface SignatureDealCardProps {
   title: string;
   description: string;
   image: string;
+  videoUrl?: string;
   minTicket: string;
   targetReturn: string;
   term: string;
@@ -26,6 +28,7 @@ export const SignatureDealCard = ({
   title,
   description,
   image,
+  videoUrl,
   minTicket,
   targetReturn,
   term,
@@ -33,11 +36,26 @@ export const SignatureDealCard = ({
   comingSoon = false,
   onSeeDeal,
 }: SignatureDealCardProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const riskStyles = {
-    Low: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    Medium: "bg-amber-50 text-amber-700 border-amber-200",
-    High: "bg-rose-50 text-rose-700 border-rose-200",
+    Low: "bg-emerald-900/50 text-emerald-400 border-emerald-700/50",
+    Medium: "bg-amber-900/50 text-amber-400 border-amber-700/50",
+    High: "bg-rose-900/50 text-rose-400 border-rose-700/50",
   };
+
+  // Handle video play/pause on hover
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isHovered && videoUrl) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isHovered, videoUrl]);
 
   return (
     <motion.article
@@ -46,28 +64,95 @@ export const SignatureDealCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative h-full rounded-sm overflow-hidden border border-slate-700/30 shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/30 transition-all duration-700">
+      <motion.div 
+        className="relative h-full rounded-sm overflow-hidden border border-slate-700/30 shadow-lg shadow-slate-900/20 transition-all duration-500"
+        animate={{
+          y: isHovered ? -8 : 0,
+          boxShadow: isHovered 
+            ? "0 25px 50px -12px rgba(15, 23, 42, 0.5), 0 0 30px -5px rgba(139, 92, 246, 0.15)"
+            : "0 10px 15px -3px rgba(15, 23, 42, 0.3)"
+        }}
+        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
         
         {/* Editorial Image Section - Dark navy base */}
         <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-b from-slate-800 via-slate-900 to-slate-900">
           {/* Dark navy solid background behind image */}
           <div className="absolute inset-0 bg-slate-900" />
+          
+          {/* Static image */}
           <motion.div
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${image})` }}
-            whileHover={{ scale: 1.05 }}
+            animate={{ scale: isHovered ? 1.08 : 1 }}
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
+
+          {/* Video overlay on hover */}
+          <AnimatePresence>
+            {isHovered && videoUrl && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0 z-20 bg-slate-900"
+              >
+                <video
+                  ref={videoRef}
+                  src={videoUrl}
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                {/* Gradient overlay on video */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent pointer-events-none" />
+                
+                {/* Playing indicator */}
+                <motion.div 
+                  className="absolute bottom-20 left-6 flex items-center gap-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <div className="flex gap-0.5">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="w-1 bg-white rounded-full"
+                        animate={{ height: [8, 16, 8] }}
+                        transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs text-white/80 uppercase tracking-wider">Preview</span>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           
           {/* Dark navy gradient overlay - only at bottom for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10 pointer-events-none" />
           
-          {/* Subtle studio lighting - very light */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-700/10 via-transparent to-transparent" />
+          {/* Play button indicator when not hovered */}
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+            animate={{ opacity: isHovered ? 0 : 0.8 }}
+            transition={{ duration: 0.3 }}
+          >
+            {videoUrl && (
+              <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+                <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
+              </div>
+            )}
+          </motion.div>
           
           {/* Top badges */}
-          <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
+          <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-30">
             <span className="px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] bg-white/95 text-slate-800 rounded-sm backdrop-blur-sm">
               {category}
             </span>
@@ -79,7 +164,7 @@ export const SignatureDealCard = ({
           </div>
 
           {/* Leader info - studio lighting on text */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+          <div className="absolute bottom-0 left-0 right-0 p-6 z-30">
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
@@ -98,8 +183,6 @@ export const SignatureDealCard = ({
               >
                 {leaderName}
               </h3>
-              {/* Subtle glow beneath name */}
-              <div className="absolute bottom-4 left-0 right-0 h-16 bg-gradient-to-t from-violet-500/5 to-transparent blur-xl pointer-events-none" />
             </motion.div>
           </div>
         </div>
@@ -138,25 +221,29 @@ export const SignatureDealCard = ({
             </div>
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Button - stops propagation to prevent video interference */}
           <Button 
             variant="outline"
             className="w-full group/btn border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-sm h-12 text-sm font-medium tracking-wide transition-all duration-300"
-            onClick={onSeeDeal}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSeeDeal();
+            }}
+            onMouseEnter={(e) => e.stopPropagation()}
           >
             Explore Opportunity
             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform duration-300" />
           </Button>
         </div>
 
-        {/* Subtle hover accent */}
+        {/* Hover accent line */}
         <motion.div 
-          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-violet-500 via-slate-400 to-violet-500 origin-left"
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-violet-500 via-slate-400 to-violet-500"
           initial={{ scaleX: 0 }}
-          whileHover={{ scaleX: 1 }}
+          animate={{ scaleX: isHovered ? 1 : 0 }}
           transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         />
-      </div>
+      </motion.div>
     </motion.article>
   );
 };
