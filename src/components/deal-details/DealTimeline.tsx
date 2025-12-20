@@ -549,6 +549,17 @@ export const DealTimeline = ({ deal }: DealTimelineProps) => {
             </button>
           ))}
         </div>
+
+        {/* Disclaimer */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="text-center text-slate-500 text-xs mt-8 max-w-xl mx-auto leading-relaxed"
+        >
+          <span className="text-slate-400">*</span> This timeline represents an estimated average development schedule for illustrative purposes only. 
+          Actual timelines may vary based on market conditions, permitting processes, construction factors, and other variables beyond our control.
+        </motion.p>
       </div>
     </section>
   );
