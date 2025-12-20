@@ -208,18 +208,12 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-[4/5] rounded-sm overflow-hidden border border-white/10"
+              className="relative aspect-[4/5]"
             >
-              {/* Dark navy solid background */}
-              <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" />
-              
-              {/* Profile image with transparency */}
+              {/* Profile image - no background, just the image */}
               <div 
-                className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-90"
-                style={{ 
-                  backgroundImage: `url(${deal.leaderImage})`,
-                  mixBlendMode: 'normal'
-                }}
+                className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${deal.leaderImage})` }}
               />
 
               {/* Video overlay */}
