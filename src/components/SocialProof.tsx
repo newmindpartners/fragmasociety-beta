@@ -40,10 +40,10 @@ export const SocialProof = () => (
       
       {/* Animated logos - two identical strips for seamless loop */}
       <TooltipProvider delayDuration={100}>
-        <div className="flex">
+        <div className="flex group/scroll">
           {/* First strip */}
           <div
-            className="flex items-center gap-16 shrink-0 animate-scroll-seamless"
+            className="flex items-center gap-16 shrink-0 animate-scroll-seamless group-hover/scroll:[animation-play-state:paused]"
           >
             {partners.map((partner, i) => (
               <Tooltip key={`${partner.name}-a-${i}`}>
@@ -68,7 +68,7 @@ export const SocialProof = () => (
           </div>
           {/* Second strip (duplicate for seamless loop) */}
           <div
-            className="flex items-center gap-16 shrink-0 animate-scroll-seamless"
+            className="flex items-center gap-16 shrink-0 animate-scroll-seamless group-hover/scroll:[animation-play-state:paused]"
           >
             {partners.map((partner, i) => (
               <Tooltip key={`${partner.name}-b-${i}`}>
