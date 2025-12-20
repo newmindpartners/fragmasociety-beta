@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, ArrowDown, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import type { DealData } from "@/types/deal";
 
 // Category background images
@@ -14,13 +14,15 @@ import categoryEsg from "@/assets/category-esg.jpg";
 
 const getCategoryBackground = (category: string): string => {
   const categoryMap: Record<string, string> = {
-    'Real Estate': categoryRealEstate,
-    'Film': categoryFilm,
-    'Luxury': categoryLuxury,
-    'Credit': categoryCredit,
-    'Sports': categorySports,
-    'ESG': categoryEsg,
+    "Real Estate": categoryRealEstate,
+    Film: categoryFilm,
+    Luxury: categoryLuxury,
+    Credit: categoryCredit,
+    Sports: categorySports,
+    ESG: categoryEsg,
   };
+  return categoryMap[category] || categoryRealEstate;
+};
   return categoryMap[category] || categoryRealEstate;
 };
 
@@ -32,14 +34,6 @@ export const DealHero = ({ deal }: DealHeroProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    // Auto-play video on mount
-    if (videoRef.current && deal.heroVideoUrl) {
-      videoRef.current.play().catch(() => {});
-      setIsPlaying(true);
-    }
-  }, [deal.heroVideoUrl]);
 
   const handlePlayClick = () => {
     if (videoRef.current) {
