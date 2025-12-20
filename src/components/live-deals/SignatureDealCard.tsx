@@ -59,8 +59,15 @@ export const SignatureDealCard = ({
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
           
-          {/* Refined gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          {/* Dark navy gradient overlay - studio lighting effect */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-slate-900/30" />
+          
+          {/* Studio spotlight effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-bl from-slate-800/30 via-transparent to-transparent" />
+          
+          {/* Rim light effect on edges */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/[0.03] via-transparent to-white/[0.03]" />
           
           {/* Top badges */}
           <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
@@ -74,19 +81,28 @@ export const SignatureDealCard = ({
             )}
           </div>
 
-          {/* Leader info - editorial style */}
+          {/* Leader info - studio lighting on text */}
           <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <p className="text-xs text-white/60 uppercase tracking-[0.2em] mb-2 font-light">
+              <p className="text-xs text-slate-400 uppercase tracking-[0.2em] mb-2 font-light">
                 {leaderRole}
               </p>
-              <h3 className="text-2xl md:text-3xl font-light text-white leading-tight tracking-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+              {/* Name with studio spotlight glow effect */}
+              <h3 
+                className="text-2xl md:text-3xl font-light text-white leading-tight tracking-tight relative"
+                style={{ 
+                  fontFamily: "'Playfair Display', serif",
+                  textShadow: "0 0 40px rgba(255,255,255,0.15), 0 0 80px rgba(139,92,246,0.1)"
+                }}
+              >
                 {leaderName}
               </h3>
+              {/* Subtle glow beneath name */}
+              <div className="absolute bottom-4 left-0 right-0 h-16 bg-gradient-to-t from-violet-500/5 to-transparent blur-xl pointer-events-none" />
             </motion.div>
           </div>
         </div>
