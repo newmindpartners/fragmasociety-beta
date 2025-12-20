@@ -84,7 +84,7 @@ export const DealCaseStudies = ({ deal }: DealCaseStudiesProps) => {
               {/* Editorial Title */}
               <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.05] mb-6">
                 Case{" "}
-                <span className="italic font-serif bg-gradient-to-r from-violet-300 to-violet-500 bg-clip-text text-transparent">
+                <span className="italic font-serif text-violet-300">
                   Studies
                 </span>
               </h2>
