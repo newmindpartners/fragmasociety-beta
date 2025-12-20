@@ -51,12 +51,39 @@ export const DealHero = ({ deal }: DealHeroProps) => {
     : getCategoryBackground(deal.category);
 
   return (
-    <section className="relative min-h-screen bg-background">
+    <section className="relative min-h-screen bg-slate-900">
       {/* Full Hero Industry Background */}
       <div className="absolute inset-0">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${categoryBg})` }}
+          style={{ 
+            backgroundImage: `url(${categoryBg})`,
+            opacity: 0.4,
+            filter: 'grayscale(30%) brightness(0.85)'
+          }}
+        />
+        
+        {/* Dark navy gradient overlays */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 70% 90% at 50% 100%, transparent 0%, rgba(15,23,42,0.4) 50%, rgba(15,23,42,0.8) 100%),
+              radial-gradient(ellipse 100% 60% at 50% 50%, transparent 0%, rgba(15,23,42,0.5) 100%)
+            `
+          }}
+        />
+        
+        {/* Subtle violet glow accents */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[250px] bg-violet-900/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[200px] bg-slate-700/20 rounded-full blur-3xl" />
+        
+        {/* Top spotlight glow for portrait area */}
+        <div 
+          className="absolute top-0 right-0 w-1/2 h-full"
+          style={{
+            background: 'radial-gradient(ellipse 80% 100% at 70% 80%, rgba(148,130,180,0.08) 0%, transparent 60%)'
+          }}
         />
       </div>
 
