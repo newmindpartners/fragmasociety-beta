@@ -199,7 +199,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                   onClick={handlePlayClick}
                 >
                   <Play className="w-4 h-4 mr-2" fill="currentColor" />
-                  {isPlaying ? "Pause" : "Watch Film"}
+                  {isPlaying ? "Pause" : "Watch Pitch"}
                 </Button>
               </motion.div>
 
