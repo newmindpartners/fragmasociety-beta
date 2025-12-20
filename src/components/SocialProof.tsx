@@ -53,12 +53,12 @@ export const SocialProof = () => (
         {doubledPartners.map((partner, i) => (
           <div
             key={`${partner.name}-${i}`}
-            className="flex-shrink-0 h-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300"
+            className="flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300"
           >
             <img 
               src={partner.logo} 
               alt={partner.name}
-              className="h-full w-auto object-contain max-w-[100px]"
+              className="h-full w-auto object-contain max-w-[150px]"
             />
           </div>
         ))}
