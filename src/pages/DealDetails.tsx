@@ -20,6 +20,7 @@ import { DealTimeline } from "@/components/deal-details/DealTimeline";
 import { DealFinancials } from "@/components/deal-details/DealFinancials";
 import { DealCaseStudies } from "@/components/deal-details/DealCaseStudies";
 import { DealSpecialOpportunity } from "@/components/deal-details/DealSpecialOpportunity";
+import { DealHighlights } from "@/components/deal-details/DealHighlights";
 import { useDeal } from "@/hooks/useDeal";
 import type { DealData } from "@/types/deal";
 
@@ -136,6 +137,7 @@ const DealDetails = () => {
       case "overview":
         return (
           <>
+            <DealHighlights deal={deal} />
             <DealOpportunity deal={deal} />
             <DealKeyTerms deal={deal} />
             {deal.trackRecord && deal.trackRecord.length > 0 && (
