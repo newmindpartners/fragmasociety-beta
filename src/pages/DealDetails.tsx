@@ -125,6 +125,7 @@ const DealDetails = () => {
   const sections = [
     { id: "overview", label: "Overview", available: true },
     { id: "strategy", label: "Strategy", available: !!(deal?.strategies && deal.strategies.length > 0) },
+    { id: "trackrecord", label: "Track Record", available: !!((deal?.trackRecord && deal.trackRecord.length > 0) || (deal?.caseStudies && deal.caseStudies.length > 0)) },
     { id: "portfolio", label: "Portfolio", available: !!(deal?.currentProperties && deal.currentProperties.length > 0) },
     { id: "market", label: "Market Analysis", available: !!deal?.marketData },
     { id: "financials", label: "Financials", available: !!deal?.financials },
@@ -182,14 +183,19 @@ const DealDetails = () => {
             <DealHighlights deal={deal} />
             <DealOpportunity deal={deal} />
             <DealKeyTerms deal={deal} />
+            {deal.specialOpportunity && (
+              <DealSpecialOpportunity deal={deal} />
+            )}
+          </>
+        );
+      case "trackrecord":
+        return (
+          <>
             {deal.trackRecord && deal.trackRecord.length > 0 && (
               <DealTrackRecord deal={deal} />
             )}
             {deal.caseStudies && deal.caseStudies.length > 0 && (
               <DealCaseStudies deal={deal} />
-            )}
-            {deal.specialOpportunity && (
-              <DealSpecialOpportunity deal={deal} />
             )}
           </>
         );
