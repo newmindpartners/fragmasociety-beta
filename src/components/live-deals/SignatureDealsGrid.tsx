@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { SignatureDealCard } from "./SignatureDealCard";
 import { useNavigate } from "react-router-dom";
@@ -76,6 +76,11 @@ export const SignatureDealsGrid = () => {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
 
   const scrollToIndex = useCallback((index: number) => {
     if (!scrollRef.current) return;
@@ -97,6 +102,46 @@ export const SignatureDealsGrid = () => {
     const newIndex = currentIndex === signatureDeals.length - 1 ? 0 : currentIndex + 1;
     scrollToIndex(newIndex);
   }, [currentIndex, scrollToIndex]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      scrollNext();
+    } else if (isRightSwipe) {
+      scrollPrev();
+    }
+  };
+
+  // Update current index based on scroll position
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const cardWidth = container.scrollWidth / signatureDeals.length;
+      const newIndex = Math.round(container.scrollLeft / cardWidth);
+      if (newIndex !== currentIndex && newIndex >= 0 && newIndex < signatureDeals.length) {
+        setCurrentIndex(newIndex);
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [currentIndex]);
 
   const handleSeeDeal = (dealId: string) => {
     navigate(`/deal/${dealId}`);
@@ -176,8 +221,11 @@ export const SignatureDealsGrid = () => {
           {/* Scrollable Cards */}
           <div 
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide px-6 lg:px-24 snap-x snap-mandatory"
+            className="flex gap-6 overflow-x-auto scrollbar-hide px-6 lg:px-24 snap-x snap-mandatory touch-pan-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           >
             {signatureDeals.map((deal) => (
               <div 
