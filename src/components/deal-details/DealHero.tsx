@@ -52,10 +52,22 @@ export const DealHero = ({ deal }: DealHeroProps) => {
     }
   };
 
+  const categoryBg = deal.assetImages && deal.assetImages.length > 0 
+    ? deal.assetImages[0] 
+    : getCategoryBackground(deal.category);
+
   return (
     <section className="relative min-h-screen bg-slate-900">
-      {/* Dark Navy Background with Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950" />
+      {/* Full Hero Industry Background */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${categoryBg})` }}
+        />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-transparent to-slate-900/90" />
+      </div>
       
       {/* Grid Layout - Content Left, Profile Right */}
       <div className="relative z-10 min-h-screen container mx-auto px-6 lg:px-12">
@@ -190,27 +202,16 @@ export const DealHero = ({ deal }: DealHeroProps) => {
             </motion.p>
           </div>
 
-          {/* Right - Profile Image/Video with Industry BG */}
+          {/* Right - Profile Image/Video */}
           <div className="order-1 lg:order-2 relative">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-[4/5] rounded-sm overflow-hidden border border-slate-700/30"
+              className="relative aspect-[4/5] rounded-sm overflow-hidden border border-white/10"
             >
               {/* Dark navy solid background */}
-              <div className="absolute inset-0 bg-slate-900" />
-              
-              {/* Industry/Category background image - always show */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-30"
-                style={{ 
-                  backgroundImage: `url(${deal.assetImages && deal.assetImages.length > 0 ? deal.assetImages[0] : getCategoryBackground(deal.category)})` 
-                }}
-              />
-              
-              {/* Gradient overlay for depth */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-transparent to-slate-900/80" />
+              <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" />
               
               {/* Profile image with transparency */}
               <div 
