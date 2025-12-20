@@ -4,6 +4,26 @@ import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import type { DealData } from "@/types/deal";
 
+// Category background images
+import categoryRealEstate from "@/assets/category-realestate.jpg";
+import categoryFilm from "@/assets/category-film.jpg";
+import categoryLuxury from "@/assets/category-luxury.jpg";
+import categoryCredit from "@/assets/category-credit.jpg";
+import categorySports from "@/assets/category-sports.jpg";
+import categoryEsg from "@/assets/category-esg.jpg";
+
+const getCategoryBackground = (category: string): string => {
+  const categoryMap: Record<string, string> = {
+    'Real Estate': categoryRealEstate,
+    'Film': categoryFilm,
+    'Luxury': categoryLuxury,
+    'Credit': categoryCredit,
+    'Sports': categorySports,
+    'ESG': categoryEsg,
+  };
+  return categoryMap[category] || categoryRealEstate;
+};
+
 interface DealHeroProps {
   deal: DealData;
 }
@@ -181,13 +201,13 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               {/* Dark navy solid background */}
               <div className="absolute inset-0 bg-slate-900" />
               
-              {/* Industry/Category background image */}
-              {deal.assetImages && deal.assetImages.length > 0 && (
-                <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-40"
-                  style={{ backgroundImage: `url(${deal.assetImages[0]})` }}
-                />
-              )}
+              {/* Industry/Category background image - always show */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-30"
+                style={{ 
+                  backgroundImage: `url(${deal.assetImages && deal.assetImages.length > 0 ? deal.assetImages[0] : getCategoryBackground(deal.category)})` 
+                }}
+              />
               
               {/* Gradient overlay for depth */}
               <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-transparent to-slate-900/80" />
