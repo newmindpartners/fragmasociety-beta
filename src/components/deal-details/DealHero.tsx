@@ -51,7 +51,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
     : getCategoryBackground(deal.category);
 
   return (
-    <section className="relative min-h-screen bg-slate-900">
+    <section className="relative h-screen max-h-[900px] bg-slate-900 overflow-hidden">
       {/* Full Hero Industry Background */}
       <div className="absolute inset-0">
         <div
@@ -87,8 +87,8 @@ export const DealHero = ({ deal }: DealHeroProps) => {
 
       
       {/* Grid Layout - Content Left, Profile Right */}
-      <div className="relative z-10 min-h-screen container mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 min-h-screen items-center pt-24 pb-16">
+      <div className="relative z-10 h-full container mx-auto px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 h-full items-center pt-20 pb-8">
           
           {/* Left Content */}
           <div className="order-2 lg:order-1 flex flex-col justify-center">
