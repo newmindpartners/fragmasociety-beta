@@ -34,7 +34,7 @@ const steps = [
     subtitle: "Secondary market",
     icon: ArrowLeftRight,
     content: "List your position and trade anytime on our secondary marketplace.",
-    features: ["24/7 trading", "Set your price", "Instant settlement"],
+    features: ["Non-custodial", "Order book trading", "On-chain settlement"],
   }
 ];
 

@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Shield, Network, BookOpen, Link2, TrendingUp } from "lucide-react";
 import { Button } from "./ui/button";
 
 // Asset images
@@ -199,10 +199,37 @@ export const Marketplace = () => {
               <span className="text-slate-500">real-world assets</span>
             </h2>
             
-            <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-md">
+            <p className="text-lg text-slate-500 leading-relaxed mb-8 max-w-md">
               Buy and sell your positions directly with other investors. 
               24/7 liquidity, instant settlement, transparent pricing.
             </p>
+            
+            {/* Feature Badges */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="flex flex-wrap gap-3 mb-10"
+            >
+              {[
+                { icon: Shield, label: "Non-custodial" },
+                { icon: Network, label: "Decentralized" },
+                { icon: BookOpen, label: "Order book trading" },
+                { icon: Link2, label: "On-chain settlement" },
+                { icon: TrendingUp, label: "Options trading" },
+              ].map((feature, index) => (
+                <motion.div
+                  key={feature.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: 0.5 + index * 0.1, duration: 0.4 }}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-slate-200 bg-white/80 backdrop-blur-sm text-slate-600 text-sm hover:border-slate-300 hover:bg-white transition-all duration-300"
+                >
+                  <feature.icon className="w-4 h-4 text-slate-400" strokeWidth={1.5} />
+                  <span>{feature.label}</span>
+                </motion.div>
+              ))}
+            </motion.div>
             
             <Button 
               size="lg" 
