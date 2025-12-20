@@ -107,6 +107,7 @@ export interface DealData {
   leaderName: string;
   leaderRole: string;
   leaderImage: string;
+  bannerImage?: string; // Transparent cutout image for hero
   
   // Deal content
   title: string;
