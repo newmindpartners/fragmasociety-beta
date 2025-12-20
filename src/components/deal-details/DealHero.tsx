@@ -244,8 +244,15 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                   mixBlendMode: 'luminosity'
                 }}
               />
+              
+              {/* Bottom fade for smooth transition to name */}
+              <div 
+                className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(to top, rgba(15,23,42,1) 0%, rgba(15,23,42,0.8) 30%, rgba(15,23,42,0) 100%)'
+                }}
+              />
 
-              {/* Video overlay */}
               {deal.heroVideoUrl && (
                 <AnimatePresence>
                   {isPlaying && (
