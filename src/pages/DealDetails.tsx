@@ -210,16 +210,18 @@ const DealDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <DealHero deal={deal} />
-      <DealSectionNav 
-        sections={sections} 
-        activeSection={activeSection} 
-        onSectionChange={handleSectionChange} 
-      />
-      <div className="min-h-[60vh]">
-        {renderSectionContent()}
+      <div className="relative bg-white">
+        <DealSectionNav 
+          sections={sections} 
+          activeSection={activeSection} 
+          onSectionChange={handleSectionChange} 
+        />
+        <div className="min-h-[60vh] bg-white">
+          {renderSectionContent()}
+        </div>
       </div>
       <DealCTA deal={deal} />
       <Footer />
