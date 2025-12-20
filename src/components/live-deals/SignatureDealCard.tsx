@@ -59,15 +59,11 @@ export const SignatureDealCard = ({
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
           
-          {/* Dark navy gradient overlay - studio lighting effect */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-slate-900/30" />
+          {/* Dark navy gradient overlay - only at bottom for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
           
-          {/* Studio spotlight effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-bl from-slate-800/30 via-transparent to-transparent" />
-          
-          {/* Rim light effect on edges */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/[0.03] via-transparent to-white/[0.03]" />
+          {/* Subtle studio lighting - very light */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-700/10 via-transparent to-transparent" />
           
           {/* Top badges */}
           <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
