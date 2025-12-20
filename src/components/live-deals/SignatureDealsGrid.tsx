@@ -238,7 +238,7 @@ export const SignatureDealsGrid = () => {
             {signatureDeals.map((deal) => (
               <div 
                 key={deal.id} 
-                className="flex-none w-[85%] sm:w-[45%] lg:w-[32%] snap-start"
+                className="flex-none w-[320px] sm:w-[360px] lg:w-[400px] snap-start"
               >
                 <SignatureDealCard
                   {...deal}
