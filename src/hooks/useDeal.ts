@@ -10,6 +10,7 @@ const transformDealData = (row: any): DealData => ({
   leaderName: row.leader_name,
   leaderRole: row.leader_role,
   leaderImage: row.leader_image || "",
+  bannerImage: row.banner_image || "",
   title: row.title,
   tagline: row.tagline,
   description: row.description,
