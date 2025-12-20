@@ -408,15 +408,30 @@ export const DealTimeline = ({ deal }: DealTimelineProps) => {
       </div>
       
       <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        {/* Header */}
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-light text-white text-center mb-10 tracking-tight"
-        >
-          Development Timeline
-        </motion.h2>
+        {/* Header - Consistent with other sections */}
+        <div className="mb-12">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-4 mb-6"
+          >
+            <div className="h-px w-8 bg-violet-500/50" />
+            <span className="text-[11px] tracking-[0.4em] uppercase text-violet-300/80 font-medium">
+              Project Milestones
+            </span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.05]"
+          >
+            Development{" "}
+            <span className="italic font-serif text-violet-300">Timeline</span>
+          </motion.h2>
+        </div>
 
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
@@ -534,20 +549,33 @@ export const DealTimeline = ({ deal }: DealTimelineProps) => {
         </div>
 
         {/* Scenario Toggle */}
-        <div className="flex justify-center gap-3 mt-10">
-          {["optimistic", "downside"].map((scenario) => (
-            <button
-              key={scenario}
-              onClick={() => setActiveScenario(scenario as TimelineScenario)}
-              className={`px-6 py-2.5 text-sm font-medium border transition-all duration-300 ${
-                activeScenario === scenario
-                  ? 'border-violet-500 bg-violet-500/10 text-white'
-                  : 'border-slate-600 text-slate-400 hover:border-slate-500'
-              }`}
-            >
-              {scenario.charAt(0).toUpperCase() + scenario.slice(1)}
-            </button>
-          ))}
+        <div className="flex justify-center gap-4 mt-10">
+          <button
+            onClick={() => setActiveScenario("optimistic")}
+            className={`flex flex-col items-center px-8 py-3 border transition-all duration-300 ${
+              activeScenario === "optimistic"
+                ? 'border-violet-500 bg-violet-500/10 text-white'
+                : 'border-slate-600 text-slate-400 hover:border-slate-500'
+            }`}
+          >
+            <span className="text-sm font-medium">Optimistic</span>
+            <span className={`text-xs mt-0.5 ${activeScenario === "optimistic" ? 'text-violet-400' : 'text-slate-500'}`}>
+              24 months
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveScenario("downside")}
+            className={`flex flex-col items-center px-8 py-3 border transition-all duration-300 ${
+              activeScenario === "downside"
+                ? 'border-violet-500 bg-violet-500/10 text-white'
+                : 'border-slate-600 text-slate-400 hover:border-slate-500'
+            }`}
+          >
+            <span className="text-sm font-medium">Downside</span>
+            <span className={`text-xs mt-0.5 ${activeScenario === "downside" ? 'text-violet-400' : 'text-slate-500'}`}>
+              36 months
+            </span>
+          </button>
         </div>
 
         {/* Disclaimer */}
