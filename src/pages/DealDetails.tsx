@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DealHero } from "@/components/deal-details/DealHero";
+import { DealSectionNav } from "@/components/deal-details/DealSectionNav";
 import { DealOpportunity } from "@/components/deal-details/DealOpportunity";
 import { DealKeyTerms } from "@/components/deal-details/DealKeyTerms";
 import { DealAsset } from "@/components/deal-details/DealAsset";
@@ -69,11 +71,29 @@ const fallbackDeals: Record<string, DealData> = {
 const DealDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("overview");
   
-  const { data: dbDeal, isLoading, error } = useDeal(id);
+  const { data: dbDeal, isLoading } = useDeal(id);
   
   // Use database deal if available, otherwise fall back to hardcoded data
   const deal = dbDeal || (id ? fallbackDeals[id] : null);
+
+  // Define sections based on available deal data
+  const sections = [
+    { id: "overview", label: "Overview", available: true },
+    { id: "strategy", label: "Strategy", available: !!(deal?.strategies && deal.strategies.length > 0) },
+    { id: "portfolio", label: "Portfolio", available: !!(deal?.currentProperties && deal.currentProperties.length > 0) },
+    { id: "market", label: "Market Analysis", available: !!deal?.marketData },
+    { id: "financials", label: "Financials", available: !!deal?.financials },
+    { id: "team", label: "Team", available: true },
+    { id: "risks", label: "Risks & Docs", available: true },
+  ];
+
+  const handleSectionChange = (sectionId: string) => {
+    setActiveSection(sectionId);
+    // Smooth scroll to top of content area
+    window.scrollTo({ top: 450, behavior: "smooth" });
+  };
 
   if (isLoading) {
     return (
@@ -109,58 +129,92 @@ const DealDetails = () => {
     );
   }
 
+  // Render content based on active section
+  const renderSectionContent = () => {
+    switch (activeSection) {
+      case "overview":
+        return (
+          <>
+            <DealOpportunity deal={deal} />
+            <DealKeyTerms deal={deal} />
+            {deal.trackRecord && deal.trackRecord.length > 0 && (
+              <DealTrackRecord deal={deal} />
+            )}
+            {deal.caseStudies && deal.caseStudies.length > 0 && (
+              <DealCaseStudies deal={deal} />
+            )}
+            {deal.specialOpportunity && (
+              <DealSpecialOpportunity deal={deal} />
+            )}
+          </>
+        );
+      case "strategy":
+        return (
+          <>
+            {deal.strategies && deal.strategies.length > 0 && (
+              <DealStrategy deal={deal} />
+            )}
+            {deal.timeline && (
+              <DealTimeline deal={deal} />
+            )}
+          </>
+        );
+      case "portfolio":
+        return (
+          <>
+            {deal.currentProperties && deal.currentProperties.length > 0 && (
+              <DealPortfolio deal={deal} />
+            )}
+            <DealAsset deal={deal} />
+          </>
+        );
+      case "market":
+        return (
+          <>
+            {deal.marketData && (
+              <DealMarketAnalysis deal={deal} />
+            )}
+          </>
+        );
+      case "financials":
+        return (
+          <>
+            {deal.financials && (
+              <DealFinancials deal={deal} />
+            )}
+          </>
+        );
+      case "team":
+        return (
+          <>
+            <DealTeam deal={deal} />
+            <DealHowItWorks />
+          </>
+        );
+      case "risks":
+        return (
+          <>
+            <DealRisks deal={deal} />
+            <DealDocuments />
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <DealHero deal={deal} />
-      <DealOpportunity deal={deal} />
-      <DealKeyTerms deal={deal} />
-      
-      {/* Investment Strategy */}
-      {deal.strategies && deal.strategies.length > 0 && (
-        <DealStrategy deal={deal} />
-      )}
-      
-      {/* Track Record */}
-      {deal.trackRecord && deal.trackRecord.length > 0 && (
-        <DealTrackRecord deal={deal} />
-      )}
-      
-      {/* Current Portfolio */}
-      {deal.currentProperties && deal.currentProperties.length > 0 && (
-        <DealPortfolio deal={deal} />
-      )}
-      
-      {/* Market Analysis */}
-      {deal.marketData && (
-        <DealMarketAnalysis deal={deal} />
-      )}
-      
-      {/* Case Studies */}
-      {deal.caseStudies && deal.caseStudies.length > 0 && (
-        <DealCaseStudies deal={deal} />
-      )}
-      
-      {/* Special Opportunity */}
-      {deal.specialOpportunity && (
-        <DealSpecialOpportunity deal={deal} />
-      )}
-      
-      {/* Financial Projections */}
-      {deal.financials && (
-        <DealFinancials deal={deal} />
-      )}
-      
-      {/* Timeline */}
-      {deal.timeline && (
-        <DealTimeline deal={deal} />
-      )}
-      
-      <DealAsset deal={deal} />
-      <DealTeam deal={deal} />
-      <DealHowItWorks />
-      <DealRisks deal={deal} />
-      <DealDocuments />
+      <DealSectionNav 
+        sections={sections} 
+        activeSection={activeSection} 
+        onSectionChange={handleSectionChange} 
+      />
+      <div className="min-h-[60vh]">
+        {renderSectionContent()}
+      </div>
       <DealCTA deal={deal} />
       <Footer />
     </div>
