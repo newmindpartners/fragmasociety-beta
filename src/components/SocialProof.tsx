@@ -1,4 +1,10 @@
 import { motion } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import bankFrickLogo from "@/assets/partners/bank-frick.png";
 import dfnsLogo from "@/assets/partners/dfns.png";
@@ -39,30 +45,39 @@ export const SocialProof = () => (
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
       
       {/* Animated logos */}
-      <motion.div
-        className="flex items-center gap-16"
-        animate={{ x: [0, -50 * partners.length * 2.5] }}
-        transition={{
-          x: {
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-          },
-        }}
-      >
-        {doubledPartners.map((partner, i) => (
-          <div
-            key={`${partner.name}-${i}`}
-            className="flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300"
-          >
-            <img 
-              src={partner.logo} 
-              alt={partner.name}
-              className="h-full w-auto object-contain max-w-[150px]"
-            />
-          </div>
-        ))}
-      </motion.div>
+      <TooltipProvider delayDuration={100}>
+        <motion.div
+          className="flex items-center gap-16"
+          animate={{ x: [0, -50 * partners.length * 2.5] }}
+          transition={{
+            x: {
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear",
+            },
+          }}
+        >
+          {doubledPartners.map((partner, i) => (
+            <Tooltip key={`${partner.name}-${i}`}>
+              <TooltipTrigger asChild>
+                <div className="flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer">
+                  <img 
+                    src={partner.logo} 
+                    alt={partner.name}
+                    className="h-full w-auto object-contain max-w-[150px]"
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent 
+                side="bottom" 
+                className="bg-slate-900 border-slate-700 px-3 py-1.5"
+              >
+                <p className="text-xs font-medium text-white">{partner.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </motion.div>
+      </TooltipProvider>
     </div>
     
     {/* Bottom border */}
