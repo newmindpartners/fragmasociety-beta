@@ -53,7 +53,7 @@ export const DealHowItWorks = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section className="py-32 relative overflow-hidden bg-white">
+    <section className="py-20 relative overflow-hidden bg-white">
       {/* Sophisticated background */}
       <div className="absolute inset-0">
         {/* Gradient orbs */}
@@ -72,12 +72,12 @@ export const DealHowItWorks = () => {
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Premium Header */}
-        <div className="max-w-4xl mb-24">
+        <div className="max-w-4xl mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-5 mb-8"
+            className="flex items-center gap-5 mb-5"
           >
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-slate-900" />
@@ -93,19 +93,9 @@ export const DealHowItWorks = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-light text-slate-900 leading-[1.05] mb-6"
+            className="text-4xl md:text-5xl font-light text-slate-900 leading-[1.05] mb-4"
           >
-            How it <br />
-            <span className="relative inline-block">
-              <span className="italic font-serif text-slate-700">works</span>
-              <motion.div 
-                className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-slate-800 via-slate-600 to-transparent rounded-full"
-                initial={{ scaleX: 0, originX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-              />
-            </span>
+            How it <span className="italic font-serif text-slate-700">works</span>
           </motion.h2>
 
           <motion.p
@@ -113,14 +103,14 @@ export const DealHowItWorks = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-slate-500 font-light max-w-xl"
+            className="text-base text-slate-500 font-light max-w-lg"
           >
-            From interest to ownership in six seamless steps. Our streamlined process makes investing in premium real estate simple and secure.
+            From interest to ownership in six seamless steps.
           </motion.p>
         </div>
 
         {/* Main Content - Split Layout */}
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
           {/* Left: Step Navigation */}
           <div className="lg:col-span-5">
             <div className="relative">
@@ -151,7 +141,7 @@ export const DealHowItWorks = () => {
                         transition={{ delay: index * 0.1 }}
                         onClick={() => setActiveStep(index)}
                         whileHover={{ x: isActive ? 0 : 4 }}
-                        className={`group relative flex items-start gap-6 p-5 cursor-pointer rounded-2xl transition-all duration-500 ${
+                        className={`group relative flex items-start gap-4 p-4 cursor-pointer rounded-xl transition-all duration-500 ${
                           isActive 
                             ? 'bg-slate-900 shadow-2xl shadow-slate-900/20' 
                             : 'hover:bg-slate-50'
@@ -159,7 +149,7 @@ export const DealHowItWorks = () => {
                       >
                         {/* Step indicator */}
                         <motion.div 
-                          className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                          className={`relative z-10 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
                             isActive 
                               ? 'bg-slate-800 shadow-lg' 
                               : isPast 
@@ -277,7 +267,7 @@ export const DealHowItWorks = () => {
                 className="relative"
               >
                 {/* Main card */}
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 p-12 lg:p-16 min-h-[500px] shadow-2xl">
+                <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 p-8 lg:p-10 min-h-[380px] shadow-2xl">
                   {/* Pattern overlay */}
                   <div 
                     className="absolute inset-0 opacity-10"
@@ -288,7 +278,7 @@ export const DealHowItWorks = () => {
                   />
                   
                   {/* Large step number */}
-                  <div className="absolute top-8 right-8 text-[200px] font-light leading-none text-white/10 font-serif select-none pointer-events-none">
+                  <div className="absolute top-4 right-6 text-[140px] font-light leading-none text-white/10 font-serif select-none pointer-events-none">
                     {String(activeStep + 1).padStart(2, '0')}
                   </div>
 
@@ -296,26 +286,26 @@ export const DealHowItWorks = () => {
                   <div className="relative z-10 flex flex-col h-full justify-between">
                     <div>
                       {/* Icon */}
-                      <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mb-10">
+                      <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center mb-6">
                         {(() => {
                           const StepIcon = steps[activeStep].icon;
-                          return <StepIcon className="w-10 h-10 text-white" />;
+                          return <StepIcon className="w-7 h-7 text-white" />;
                         })()}
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-4xl md:text-5xl font-light text-white mb-6 leading-tight">
+                      <h3 className="text-2xl md:text-3xl font-light text-white mb-4 leading-tight">
                         {steps[activeStep].title}
                       </h3>
 
                       {/* Description */}
-                      <p className="text-xl text-white/80 font-light leading-relaxed max-w-md">
+                      <p className="text-base text-white/80 font-light leading-relaxed max-w-md">
                         {steps[activeStep].description}
                       </p>
                     </div>
 
                     {/* Bottom detail */}
-                    <div className="flex items-center justify-between mt-12 pt-8 border-t border-white/20">
+                    <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/20">
                       <div className="flex items-center gap-4">
                         <div className="w-3 h-3 rounded-full bg-white" />
                         <span className="text-white/90 font-medium">{steps[activeStep].detail}</span>
@@ -352,18 +342,18 @@ export const DealHowItWorks = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="mt-10 flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-100"
+                className="mt-6 flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100"
               >
-                <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center flex-shrink-0">
                   <motion.div 
-                    className="w-3 h-3 rounded-full bg-emerald-500"
+                    className="w-2.5 h-2.5 rounded-full bg-violet-500"
                     animate={{ scale: [1, 1.3, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-900">Full support at every step</p>
-                  <p className="text-sm text-slate-500">Our investor relations team is here to guide you through the process</p>
+                  <p className="text-xs text-slate-500">Our investor relations team guides you through the process</p>
                 </div>
               </motion.div>
             </div>
