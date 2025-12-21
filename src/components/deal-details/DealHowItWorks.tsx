@@ -238,10 +238,26 @@ export const DealHowItWorks = () => {
 
                       {/* Active indicator */}
                       {isActive && (
-                        <motion.div 
-                          layoutId="activeStep"
-                          className="absolute right-5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white"
-                        />
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2">
+                          {/* Pulse rings */}
+                          <motion.div
+                            className="absolute inset-0 w-4 h-4 -translate-x-1 -translate-y-1 rounded-full bg-violet-400/30"
+                            animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                          />
+                          <motion.div
+                            className="absolute inset-0 w-4 h-4 -translate-x-1 -translate-y-1 rounded-full bg-violet-400/20"
+                            animate={{ scale: [1, 2.2, 1], opacity: [0.4, 0, 0.4] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                          />
+                          {/* Core dot */}
+                          <motion.div 
+                            layoutId="activeStep"
+                            className="relative w-2 h-2 rounded-full bg-white shadow-lg shadow-white/50"
+                            animate={{ scale: [1, 1.15, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                          />
+                        </div>
                       )}
                     </motion.div>
                   );
