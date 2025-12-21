@@ -23,6 +23,7 @@ export interface DealProperty {
   specs?: string;
   status?: "acquisition" | "construction" | "completed" | "listed";
   image?: string;
+  imageUrl?: string; // Cloud storage path (e.g., "properties/deerhead-road.jpg")
 }
 
 export interface DealTrackRecord {
