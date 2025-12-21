@@ -44,8 +44,8 @@ const steps = [
   {
     icon: ArrowRightLeft,
     title: "Trade on Secondary",
-    description: "List your position on the Fragma secondary marketplace.",
-    detail: "Exit anytime",
+    description: "List your position on the Fragma secondary marketplace. Liquidity is not guaranteed.",
+    detail: "Subject to market conditions",
   },
 ];
 
