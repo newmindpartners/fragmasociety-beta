@@ -148,6 +148,19 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
                 )}
               </button>
             ))}
+            
+            {/* FAQ Anchor Link */}
+            <button
+              onClick={() => {
+                const faqElement = document.getElementById('section-faq');
+                if (faqElement) {
+                  faqElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+              className="relative px-4 lg:px-5 py-5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 tracking-wide flex-shrink-0 text-slate-400 hover:text-slate-700"
+            >
+              FAQ
+            </button>
           </div>
         </div>
       </div>

@@ -45,11 +45,12 @@ export const DealSectionFAQ = () => {
 
   return (
     <motion.section
+      id="section-faq"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="py-16 px-6 lg:px-8 bg-gradient-to-b from-slate-50/50 to-white border-t border-slate-100"
+      className="py-16 px-6 lg:px-8 bg-gradient-to-b from-slate-50/50 to-white border-t border-slate-100 scroll-mt-32"
     >
       <div className="max-w-4xl mx-auto">
         {/* Header */}
