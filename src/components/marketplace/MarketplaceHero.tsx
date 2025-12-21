@@ -38,7 +38,7 @@ export const MarketplaceHero = () => {
   ];
 
   return (
-    <section className="relative min-h-screen bg-slate-900 overflow-hidden">
+    <section className="relative min-h-[85vh] bg-slate-900 overflow-hidden">
       {/* Background - Cinematic asset showcase */}
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">
@@ -77,7 +77,7 @@ export const MarketplaceHero = () => {
       </div>
 
       {/* Content - Compact layout */}
-      <div className="relative z-10 h-screen flex flex-col justify-end">
+      <div className="relative z-10 h-[85vh] flex flex-col justify-end">
         <div className="container mx-auto px-6 lg:px-12 pb-6 pt-24">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-end">
             
