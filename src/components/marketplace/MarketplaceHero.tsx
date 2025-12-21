@@ -1,211 +1,353 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Shield, TrendingUp, Wallet } from "lucide-react";
+import { ArrowRight, ArrowDown, Play, TrendingUp, Shield, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
 
-// Real asset images for the hero showcase
-const assetShowcase = [
-  { 
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
-    title: "Luxury Villa",
-    price: "€2.4M",
-    change: "+12.5%"
-  },
-  { 
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400",
-    title: "Commercial Tower",
-    price: "€8.2M",
-    change: "+8.3%"
-  },
-  { 
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400",
-    title: "Private Credit",
-    price: "€1.2M",
-    change: "+15.2%"
-  },
-];
+// Real asset images
+import malibuImage from "@/assets/malibu-sea-view.jpg";
+import villaImage from "@/assets/rwa-villa.jpg";
+import commercialImage from "@/assets/rwa-commercial.jpg";
+import luxuryImage from "@/assets/rwa-luxury.jpg";
 
-const FloatingAssetCard = ({ asset, index }: { asset: typeof assetShowcase[0]; index: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40, rotate: index % 2 === 0 ? -3 : 3 }}
-    animate={{ opacity: 1, y: 0, rotate: index % 2 === 0 ? -2 : 2 }}
-    transition={{ delay: 0.3 + index * 0.15, duration: 0.8, type: "spring" }}
-    whileHover={{ scale: 1.05, rotate: 0, y: -10 }}
-    className="absolute glass-light rounded-2xl overflow-hidden shadow-light cursor-pointer group"
-    style={{
-      width: "220px",
-      top: index === 0 ? "10%" : index === 1 ? "35%" : "60%",
-      right: index === 0 ? "5%" : index === 1 ? "25%" : "10%",
-      zIndex: 10 - index,
-    }}
-  >
-    <div className="relative h-32 overflow-hidden">
-      <img 
-        src={asset.image} 
-        alt={asset.title}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-      <motion.div 
-        className="absolute bottom-3 left-3 right-3"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 + index * 0.1 }}
-      >
-        <p className="text-white font-semibold text-sm">{asset.title}</p>
-        <div className="flex items-center justify-between mt-1">
-          <span className="text-white/90 text-xs">{asset.price}</span>
-          <span className="text-green-400 text-xs font-medium">{asset.change}</span>
-        </div>
-      </motion.div>
-    </div>
-    <div className="p-3 bg-white">
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-slate-500">24h Volume</span>
-        <span className="text-xs font-medium text-slate-700">€{(Math.random() * 500 + 100).toFixed(0)}K</span>
-      </div>
-    </div>
-  </motion.div>
-);
-
-const StatCard = ({ icon: Icon, value, label, delay }: { icon: any; value: string; label: string; delay: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.5 }}
-    className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20"
-  >
-    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-      <Icon className="w-6 h-6 text-primary" />
-    </div>
-    <div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-sm text-white/60">{label}</p>
-    </div>
-  </motion.div>
-);
+// Dynamic words that cycle through - matching homepage style
+const dynamicAssets = ["Real Estate", "Private Credit", "Film Rights", "Luxury Assets", "Infrastructure"];
 
 export const MarketplaceHero = () => {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [activeAsset, setActiveAsset] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWordIndex(prev => (prev + 1) % dynamicAssets.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveAsset(prev => (prev + 1) % 4);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const featuredAssets = [
+    { image: malibuImage, name: "Malibu Villa", price: "€2.4M", yield: "18.5%", status: "Trading" },
+    { image: villaImage, name: "Pacific Palisades", price: "€3.8M", yield: "22.3%", status: "New" },
+    { image: commercialImage, name: "Beverly Commercial", price: "€5.2M", yield: "15.8%", status: "Trading" },
+    { image: luxuryImage, name: "Luxury Portfolio", price: "€1.9M", yield: "12.4%", status: "Closing Soon" },
+  ];
+
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Dark gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-navy-deep via-navy to-navy-surface" />
-      
-      {/* Animated mesh gradient */}
-      <motion.div
-        animate={{ 
-          background: [
-            "radial-gradient(circle at 20% 30%, hsl(172 83% 50% / 0.15) 0%, transparent 50%)",
-            "radial-gradient(circle at 40% 50%, hsl(172 83% 50% / 0.15) 0%, transparent 50%)",
-            "radial-gradient(circle at 20% 30%, hsl(172 83% 50% / 0.15) 0%, transparent 50%)",
-          ]
+    <section className="relative min-h-screen bg-slate-900 overflow-hidden">
+      {/* Background - Cinematic asset showcase */}
+      <div className="absolute inset-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeAsset}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="absolute inset-0"
+          >
+            <img
+              src={featuredAssets[activeAsset].image}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{
+                filter: 'grayscale(30%) brightness(0.5) contrast(1.1)',
+              }}
+            />
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Gradient overlays - matching deal details page */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(30,41,59,0.7) 50%, rgba(15,23,42,0.9) 100%)'
+          }}
+        />
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to top, rgba(15,23,42,1) 0%, rgba(15,23,42,0.8) 30%, transparent 70%)'
+          }}
+        />
+      </div>
+
+      {/* Subtle grid overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+          backgroundSize: '60px 60px'
         }}
-        transition={{ duration: 10, repeat: Infinity }}
-        className="absolute inset-0"
       />
-      
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Content */}
-          <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              {/* Badge */}
-              <motion.div 
-                className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-primary/10 border border-primary/30"
-                whileHover={{ scale: 1.02 }}
-              >
-                <motion.div 
-                  className="w-2 h-2 rounded-full bg-primary"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-                <span className="text-sm font-medium text-primary">Secondary Marketplace</span>
-              </motion.div>
-              
-              <h1 className="text-5xl lg:text-7xl font-serif font-bold text-white leading-[1.1] mb-6 tracking-tight">
-                Trade real assets.
-                <br />
-                <span className="text-gradient">Your terms.</span>
-              </h1>
-              
-              <p className="text-xl text-white/60 leading-relaxed max-w-xl">
-                The world's first non-custodial marketplace for tokenized real-world assets. 
-                Set your price. Trade 24/7. Full ownership, always.
-              </p>
-            </motion.div>
-
-            {/* Stats row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="grid grid-cols-2 gap-4"
-            >
-              <StatCard icon={TrendingUp} value="€24M+" label="Trading Volume" delay={0.4} />
-              <StatCard icon={Shield} value="100%" label="Non-Custodial" delay={0.5} />
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-4 pt-4"
-            >
-              <Button size="lg" className="group text-lg px-8 py-6 bg-white text-navy hover:bg-white/90 rounded-xl">
-                Start Trading
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-white/30 text-white hover:bg-white/10 rounded-xl group">
-                <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-                Watch Demo
-              </Button>
-            </motion.div>
-
-            {/* Trust indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="flex items-center gap-6 pt-6 border-t border-white/10"
-            >
-              <div className="flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-primary" />
-                <span className="text-sm text-white/50">Your keys, your assets</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-primary" />
-                <span className="text-sm text-white/50">Cardano powered</span>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right - Floating Asset Cards */}
-          <div className="hidden lg:block relative h-[600px]">
-            {assetShowcase.map((asset, i) => (
-              <FloatingAssetCard key={i} asset={asset} index={i} />
-            ))}
+      {/* Content - Bottom aligned like homepage */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-end">
+        <div className="container mx-auto px-6 lg:px-12 pb-8 pt-32">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end">
             
-            {/* Decorative elements */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-dashed border-primary/20 rounded-full pointer-events-none"
-            />
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px] pointer-events-none"
-            />
+            {/* Left - Main Content */}
+            <div className="max-w-2xl">
+              {/* Badge - Minimal */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="mb-8"
+              >
+                <span className="inline-flex items-center gap-2 text-xs tracking-[0.4em] uppercase text-white/60 px-4 py-2 border border-white/20 rounded-full backdrop-blur-sm">
+                  <motion.span 
+                    className="w-1.5 h-1.5 rounded-full bg-white"
+                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  Secondary Market
+                </span>
+              </motion.div>
+
+              {/* Tagline - Elegant */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.8 }}
+                className="text-sm md:text-base tracking-[0.3em] uppercase text-white/50 font-light mb-6"
+              >
+                Non-Custodial · 24/7 · On-Chain
+              </motion.p>
+
+              {/* Main headline - Large Editorial */}
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[0.95] tracking-tight mb-4"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Trade tokenized
+              </motion.h1>
+              
+              {/* Animated dynamic word - Editorial style */}
+              <div className="h-[65px] md:h-[80px] lg:h-[95px] overflow-hidden relative mb-10">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentWordIndex}
+                    initial={{ y: 80, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -80, opacity: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="block text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[0.95] tracking-tight"
+                    style={{ fontFamily: "'Playfair Display', serif" }}
+                  >
+                    {dynamicAssets[currentWordIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+
+              {/* Progress indicator - Minimal */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="flex items-center gap-2 mb-12 pb-8 border-b border-white/10"
+              >
+                {dynamicAssets.map((_, index) => (
+                  <motion.div
+                    key={index}
+                    className={`h-0.5 rounded-full transition-all duration-500 ${
+                      index === currentWordIndex 
+                        ? "w-8 bg-white" 
+                        : "w-2 bg-white/20"
+                    }`}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-lg text-white/50 leading-relaxed mb-10 max-w-lg"
+              >
+                The world's first peer-to-peer marketplace for tokenized real-world assets. 
+                Set your price. Trade on your terms. Complete ownership, always.
+              </motion.p>
+
+              {/* CTA Buttons - Minimal, matching homepage style */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="flex flex-wrap items-center gap-4 mb-8"
+              >
+                <Button 
+                  size="lg" 
+                  className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
+                >
+                  Explore Marketplace
+                  <motion.span
+                    className="ml-2"
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.span>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-full px-8 h-14 text-base font-medium"
+                >
+                  <Play className="w-4 h-4 mr-2" fill="currentColor" />
+                  Watch Demo
+                </Button>
+              </motion.div>
+
+              {/* Trust line */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-sm text-white/40 max-w-md"
+              >
+                Powered by Cardano blockchain. Fully non-custodial. Your keys, your assets.
+              </motion.p>
+            </div>
+
+            {/* Right - Featured Asset Cards (Desktop only) */}
+            <div className="hidden lg:block">
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="space-y-4"
+              >
+                {/* Live trading indicator */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <motion.div 
+                      className="w-2 h-2 rounded-full bg-emerald-400"
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                    <span className="text-xs tracking-[0.2em] uppercase text-white/50">Live on Market</span>
+                  </div>
+                  <span className="text-xs text-white/30">4 Assets Trading</span>
+                </div>
+
+                {/* Asset cards */}
+                {featuredAssets.map((asset, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1, duration: 0.6 }}
+                    whileHover={{ x: -8, scale: 1.02 }}
+                    className={`group relative flex items-center gap-5 p-4 rounded-xl border backdrop-blur-md cursor-pointer transition-all duration-500 ${
+                      activeAsset === i 
+                        ? 'bg-white/10 border-white/30' 
+                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                    }`}
+                    onClick={() => setActiveAsset(i)}
+                  >
+                    {/* Asset image */}
+                    <div className="relative w-20 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={asset.image} 
+                        alt={asset.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    </div>
+                    
+                    {/* Asset info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-white font-medium truncate">{asset.name}</h3>
+                        <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${
+                          asset.status === 'New' 
+                            ? 'bg-white/20 text-white' 
+                            : asset.status === 'Closing Soon'
+                            ? 'bg-amber-500/20 text-amber-300'
+                            : 'bg-emerald-500/20 text-emerald-300'
+                        }`}>
+                          {asset.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm text-white/60">{asset.price}</span>
+                        <span className="text-sm text-emerald-400 font-medium">{asset.yield} Target</span>
+                      </div>
+                    </div>
+                    
+                    {/* Arrow indicator */}
+                    <ArrowRight className={`w-4 h-4 transition-all duration-300 ${
+                      activeAsset === i ? 'text-white' : 'text-white/30 group-hover:text-white/60'
+                    }`} />
+                    
+                    {/* Active indicator line */}
+                    {activeAsset === i && (
+                      <motion.div
+                        layoutId="activeIndicator"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-white rounded-full"
+                      />
+                    )}
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
+
+        {/* Stats bar at bottom - matching homepage style */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="border-t border-slate-700/50 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-900/95 backdrop-blur-md"
+        >
+          <div className="container mx-auto px-6 lg:px-12">
+            <div className="grid grid-cols-3 divide-x divide-slate-700/50">
+              {[
+                { icon: TrendingUp, value: "€24M+", label: "Trading Volume" },
+                { icon: Shield, value: "100%", label: "Non-Custodial" },
+                { icon: Clock, value: "24/7", label: "Market Access" }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                  className="py-6 px-4 md:px-8 text-center group cursor-pointer hover:bg-slate-800/50 transition-colors"
+                >
+                  <div className="flex items-center justify-center gap-3 mb-1">
+                    <stat.icon className="w-4 h-4 text-white/40 group-hover:text-white/60 transition-colors" />
+                    <p className="text-xl md:text-2xl font-medium text-white">
+                      {stat.value}
+                    </p>
+                  </div>
+                  <p className="text-xs tracking-[0.15em] uppercase text-slate-400 group-hover:text-slate-300 transition-colors">
+                    {stat.label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <ArrowDown className="w-5 h-5 text-white/40" />
+      </motion.div>
     </section>
   );
 };
