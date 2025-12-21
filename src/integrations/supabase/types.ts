@@ -14,6 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
+      deal_comments: {
+        Row: {
+          content: string
+          created_at: string
+          deal_id: string
+          id: string
+          parent_id: string | null
+          updated_at: string
+          user_avatar: string | null
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          deal_id: string
+          id?: string
+          parent_id?: string | null
+          updated_at?: string
+          user_avatar?: string | null
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          deal_id?: string
+          id?: string
+          parent_id?: string | null
+          updated_at?: string
+          user_avatar?: string | null
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "deal_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_updates: {
+        Row: {
+          content: string
+          created_at: string
+          deal_id: string
+          id: string
+          image_url: string | null
+          published_at: string
+          title: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          deal_id: string
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          deal_id?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          title?: string
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
           asset_images: Json | null
