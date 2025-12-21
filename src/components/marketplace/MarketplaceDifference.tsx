@@ -30,11 +30,11 @@ export const MarketplaceDifference = () => {
   ];
 
   return (
-    <section className="relative py-20 bg-background overflow-hidden">
+    <section className="relative py-20 section-light-mesh overflow-hidden">
       {/* Subtle background accents */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-muted/50 rounded-full blur-[80px]" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/[0.04] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[hsl(var(--cream))]/60 rounded-full blur-[80px]" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
@@ -46,7 +46,7 @@ export const MarketplaceDifference = () => {
             viewport={{ once: true }}
             className="mb-4"
           >
-            <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-muted-foreground px-3 py-1.5 border border-border rounded-full">
+            <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-light-muted px-3 py-1.5 border border-[hsl(var(--light-border))] rounded-full bg-white/60 backdrop-blur-sm">
               <motion.span 
                 className="w-1.5 h-1.5 rounded-full bg-primary"
                 animate={{ opacity: [0.4, 1, 0.4] }}
@@ -61,11 +61,11 @@ export const MarketplaceDifference = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl font-light text-foreground leading-[1.1] tracking-tight mb-4"
+            className="text-3xl md:text-4xl font-light text-light-primary leading-[1.1] tracking-tight mb-4"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Not just another{" "}
-            <span className="text-muted-foreground">trading platform.</span>
+            <span className="text-light-muted">trading platform.</span>
           </motion.h2>
 
           <motion.p
@@ -73,7 +73,7 @@ export const MarketplaceDifference = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-base text-muted-foreground max-w-xl"
+            className="text-base text-light-muted max-w-xl"
           >
             Traditional platforms give you buttons. We give you a real marketplace — 
             100% decentralized, completely non-custodial.
@@ -101,14 +101,14 @@ export const MarketplaceDifference = () => {
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 + i * 0.1 }}
                   whileHover={{ x: 4 }}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card/50 backdrop-blur-sm transition-all duration-300"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-[hsl(var(--light-border))] bg-white/70 backdrop-blur-sm transition-all duration-300 shadow-sm hover:shadow-md"
                 >
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     <item.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-foreground">{item.title}</h4>
-                    <p className="text-xs text-muted-foreground">{item.desc}</p>
+                    <h4 className="text-sm font-medium text-light-primary">{item.title}</h4>
+                    <p className="text-xs text-light-muted">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -122,15 +122,15 @@ export const MarketplaceDifference = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="relative bg-card/30 backdrop-blur-sm rounded-2xl border border-border p-6"
+              className="relative bg-white/60 backdrop-blur-sm rounded-2xl border border-[hsl(var(--light-border))] p-6 shadow-light"
             >
               {/* Table Header */}
-              <div className="grid grid-cols-12 gap-4 mb-4 pb-3 border-b border-border">
+              <div className="grid grid-cols-12 gap-4 mb-4 pb-3 border-b border-[hsl(var(--light-border))]">
                 <div className="col-span-6">
-                  <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Feature</span>
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-light-muted">Feature</span>
                 </div>
                 <div className="col-span-3 text-center">
-                  <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground/60">Traditional</span>
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-light-muted/60">Traditional</span>
                 </div>
                 <div className="col-span-3 text-center">
                   <span className="text-[10px] tracking-[0.2em] uppercase text-primary">Fragma</span>
@@ -146,11 +146,11 @@ export const MarketplaceDifference = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 + index * 0.05 }}
-                    whileHover={{ backgroundColor: 'hsl(var(--muted) / 0.3)' }}
-                    className="grid grid-cols-12 gap-4 py-3 border-b border-border/50 items-center group cursor-default transition-colors rounded-lg"
+                    whileHover={{ backgroundColor: 'hsl(var(--cream) / 0.5)' }}
+                    className="grid grid-cols-12 gap-4 py-3 border-b border-[hsl(var(--light-border))]/50 items-center group cursor-default transition-colors rounded-lg"
                   >
                     <div className="col-span-6">
-                      <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                      <span className="text-sm text-light-muted group-hover:text-light-primary transition-colors">
                         {item.feature}
                       </span>
                     </div>
@@ -185,12 +185,12 @@ export const MarketplaceDifference = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.7 }}
-                className="mt-6 flex items-center gap-3 p-3 rounded-xl border border-primary/20 bg-primary/5"
+                className="mt-6 flex items-center gap-3 p-3 rounded-xl border border-primary/30 bg-primary/10"
               >
                 <div className="w-7 h-7 rounded-lg bg-primary/20 flex items-center justify-center">
                   <Check className="w-4 h-4 text-primary" />
                 </div>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-light-muted">
                   All <span className="text-primary font-medium">6 features</span> available on Fragma
                 </span>
               </motion.div>
