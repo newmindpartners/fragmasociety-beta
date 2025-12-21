@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, ArrowDownRight, Zap, Shield, Clock, TrendingUp, ArrowLeftRight } from "lucide-react";
+import { useState } from "react";
 
 export const TwoWayOrders = () => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const benefits = [
     { icon: Zap, title: "Instant Execution", description: "Orders execute automatically when conditions are met" },
     { icon: Shield, title: "Price Protection", description: "Set your exact buy and sell prices upfront" },
@@ -10,38 +13,54 @@ export const TwoWayOrders = () => {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden bg-background">
-      {/* Gradient background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[120px]" />
-      </div>
+    <section className="py-32 bg-slate-50/50 relative overflow-hidden">
+      {/* Subtle pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
       
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 text-xs font-semibold tracking-widest uppercase rounded-full bg-secondary/80 text-foreground border border-border/50">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            Two-Way Orders
-          </span>
+        <div className="max-w-3xl mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-12 h-px bg-slate-300" />
+            <span className="text-xs tracking-[0.3em] uppercase text-slate-400 font-medium">
+              Two-Way Orders
+            </span>
+          </motion.div>
           
-          <h2 className="text-5xl lg:text-7xl font-serif font-bold text-foreground mb-6 leading-[1.1]">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-light text-slate-900 leading-[1.1] tracking-tight"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
             Buy and Sell in
             <br />
-            <span className="text-gradient italic">One Order.</span>
-          </h2>
+            <span className="italic text-slate-500">One Order.</span>
+          </motion.h2>
           
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-slate-500 max-w-xl mt-6 leading-relaxed"
+          >
             Set your entry and exit prices simultaneously. Let the market work for you.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Visual Demo */}
@@ -60,30 +79,30 @@ export const TwoWayOrders = () => {
                 transition={{ delay: 0.2 }}
                 className="absolute top-0 left-0 right-12 z-20"
               >
-                <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 border border-border/50">
+                <div className="bg-white border border-slate-200 p-6" style={{ boxShadow: '0 4px 20px -5px rgba(0, 0, 0, 0.08)' }}>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
-                        <span className="text-lg font-bold text-primary">MLV</span>
+                      <div className="w-14 h-14 bg-slate-100 border border-slate-200 flex items-center justify-center">
+                        <span className="text-sm font-medium text-slate-600">MLV</span>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Malibu Villa Token</p>
-                        <p className="text-lg font-bold text-foreground">MLV-001</p>
+                        <p className="text-xs text-slate-400 uppercase tracking-wider">Malibu Villa Token</p>
+                        <p className="text-base font-medium text-slate-800">MLV-001</p>
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 text-green-400 text-sm font-medium">
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm font-medium">
                       <ArrowDownRight className="w-4 h-4" />
                       Buy
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-5 bg-green-500/5 rounded-xl border border-green-500/20">
+                  <div className="flex justify-between items-center p-5 bg-emerald-50/50 border border-emerald-100">
                     <div>
-                      <p className="text-sm text-muted-foreground">Buy Price</p>
-                      <p className="text-3xl font-bold text-green-400">$95,000</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Buy Price</p>
+                      <p className="text-2xl font-medium text-emerald-600">$95,000</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Quantity</p>
-                      <p className="text-3xl font-bold text-foreground">10</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Quantity</p>
+                      <p className="text-2xl font-medium text-slate-800">10</p>
                     </div>
                   </div>
                 </div>
@@ -97,30 +116,30 @@ export const TwoWayOrders = () => {
                 transition={{ delay: 0.4 }}
                 className="absolute top-36 left-12 right-0 z-10"
               >
-                <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 border border-border/50">
+                <div className="bg-white border border-slate-200 p-6" style={{ boxShadow: '0 4px 20px -5px rgba(0, 0, 0, 0.08)' }}>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center">
-                        <span className="text-lg font-bold text-accent">LAF</span>
+                      <div className="w-14 h-14 bg-slate-100 border border-slate-200 flex items-center justify-center">
+                        <span className="text-sm font-medium text-slate-600">LAF</span>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">LA Investment Fund</p>
-                        <p className="text-lg font-bold text-foreground">LAF-002</p>
+                        <p className="text-xs text-slate-400 uppercase tracking-wider">LA Investment Fund</p>
+                        <p className="text-base font-medium text-slate-800">LAF-002</p>
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 text-red-400 text-sm font-medium">
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-medium">
                       <ArrowUpRight className="w-4 h-4" />
                       Sell
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-5 bg-red-500/5 rounded-xl border border-red-500/20">
+                  <div className="flex justify-between items-center p-5 bg-rose-50/50 border border-rose-100">
                     <div>
-                      <p className="text-sm text-muted-foreground">Sell Price</p>
-                      <p className="text-3xl font-bold text-red-400">$125,000</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Sell Price</p>
+                      <p className="text-2xl font-medium text-rose-600">$125,000</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Quantity</p>
-                      <p className="text-3xl font-bold text-foreground">10</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Quantity</p>
+                      <p className="text-2xl font-medium text-slate-800">10</p>
                     </div>
                   </div>
                 </div>
@@ -134,15 +153,8 @@ export const TwoWayOrders = () => {
                 transition={{ delay: 0.6 }}
                 className="absolute top-[300px] left-1/2 -translate-x-1/2 z-30"
               >
-                <div className="relative">
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute inset-0 rounded-full bg-primary/30 blur-xl"
-                  />
-                  <div className="relative w-20 h-20 rounded-full bg-primary flex items-center justify-center">
-                    <ArrowLeftRight className="w-8 h-8 text-primary-foreground" />
-                  </div>
+                <div className="w-16 h-16 bg-slate-800 border border-slate-700 flex items-center justify-center">
+                  <ArrowLeftRight className="w-7 h-7 text-white" />
                 </div>
               </motion.div>
 
@@ -154,15 +166,15 @@ export const TwoWayOrders = () => {
                 transition={{ delay: 0.8 }}
                 className="absolute bottom-0 left-6 right-6"
               >
-                <div className="bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-6">
+                <div className="bg-slate-800 border border-slate-700 p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-primary-foreground/70 text-sm mb-1">Potential Profit</p>
-                      <p className="text-4xl font-bold text-primary-foreground">+$300,000</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Potential Profit</p>
+                      <p className="text-3xl font-medium text-white">+$300,000</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-primary-foreground/70 text-sm mb-1">ROI</p>
-                      <p className="text-4xl font-bold text-primary-foreground">31.5%</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">ROI</p>
+                      <p className="text-3xl font-medium text-emerald-400">31.5%</p>
                     </div>
                   </div>
                 </div>
@@ -171,11 +183,7 @@ export const TwoWayOrders = () => {
           </motion.div>
 
           {/* Benefits */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
+          <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
             <div className="space-y-4">
               {benefits.map((benefit, i) => (
                 <motion.div
@@ -184,15 +192,27 @@ export const TwoWayOrders = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  whileHover={{ x: 8 }}
-                  className="group flex items-start gap-5 p-6 rounded-2xl bg-card/50 border border-border/40 hover:border-primary/40 hover:bg-card/80 transition-all duration-300"
+                  onMouseEnter={() => setHoveredIndex(i)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="group flex items-start gap-5 p-6 bg-white border border-slate-200/80 hover:border-slate-400/50 transition-all duration-300 cursor-pointer"
+                  style={{
+                    boxShadow: hoveredIndex === i 
+                      ? '0 8px 24px -8px rgba(15, 23, 42, 0.12)'
+                      : '0 1px 3px rgba(0, 0, 0, 0.02)',
+                  }}
                 >
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
-                    <benefit.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors" />
+                  <div className={`w-12 h-12 border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                    hoveredIndex === i 
+                      ? 'border-slate-700 bg-slate-800' 
+                      : 'border-slate-200 bg-white'
+                  }`}>
+                    <benefit.icon className={`w-5 h-5 transition-colors duration-300 ${
+                      hoveredIndex === i ? 'text-white' : 'text-slate-400'
+                    }`} strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">{benefit.title}</h3>
-                    <p className="text-muted-foreground">{benefit.description}</p>
+                    <h3 className="text-base font-medium text-slate-800 mb-1">{benefit.title}</h3>
+                    <p className="text-sm text-slate-500">{benefit.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -203,10 +223,10 @@ export const TwoWayOrders = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
-              className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20"
+              className="mt-8 p-6 bg-slate-100 border-l-2 border-slate-400"
             >
-              <p className="text-foreground leading-relaxed">
-                <span className="font-bold text-primary">How it works:</span> Place a single order that automatically buys at your target price and sells when your profit goal is reached.
+              <p className="text-slate-600 leading-relaxed">
+                <span className="font-medium text-slate-800">How it works:</span> Place a single order that automatically buys at your target price and sells when your profit goal is reached.
               </p>
             </motion.div>
           </motion.div>

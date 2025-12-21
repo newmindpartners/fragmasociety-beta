@@ -4,11 +4,7 @@ import { Wallet, Key, FileCode, CheckCircle2, ShieldCheck } from "lucide-react";
 
 export const NonCustodialTrading = () => {
   const [activeStep, setActiveStep] = useState(0);
-  
-  useEffect(() => {
-    const interval = setInterval(() => setActiveStep((prev) => (prev + 1) % 4), 3000);
-    return () => clearInterval(interval);
-  }, []);
+  useEffect(() => { const interval = setInterval(() => setActiveStep((prev) => (prev + 1) % 4), 3000); return () => clearInterval(interval); }, []);
 
   const steps = [
     { icon: Wallet, title: "Connect Wallet", subtitle: "Your keys, your control" },
@@ -18,41 +14,37 @@ export const NonCustodialTrading = () => {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden bg-background">
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-0 w-[600px] h-[600px] -translate-y-1/2 bg-primary/5 rounded-full blur-[120px]" />
-      </div>
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      
-      <div className="container mx-auto px-6 relative z-10">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-          <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 text-xs font-semibold tracking-widest uppercase rounded-full bg-secondary/80 text-foreground border border-border/50">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            Non-Custodial
-          </span>
-          <h2 className="text-5xl lg:text-7xl font-serif font-bold text-foreground mb-6 leading-[1.1]">
-            Your Assets. <span className="text-gradient italic">Your Control.</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Trade directly from your wallet. No deposits, no trust required.</p>
-        </motion.div>
+    <section className="py-32 bg-slate-900 relative overflow-hidden">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+        <div className="max-w-3xl mx-auto text-center mb-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-center justify-center gap-4 mb-8">
+            <div className="w-12 h-px bg-slate-600" />
+            <span className="text-xs tracking-[0.3em] uppercase text-slate-500 font-medium">Non-Custodial</span>
+            <div className="w-12 h-px bg-slate-600" />
+          </motion.div>
+          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl md:text-5xl font-light text-white leading-[1.1]" style={{ fontFamily: "'Playfair Display', serif" }}>
+            Your Assets. <span className="italic text-slate-400">Your Control.</span>
+          </motion.h2>
+          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-lg text-slate-400 mt-6">Trade directly from your wallet. No deposits, no trust required.</motion.p>
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-16">
           {steps.map((step, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-              className={`p-6 rounded-2xl border transition-all ${i === activeStep ? 'bg-card/80 border-primary/50' : 'bg-card/40 border-border/40'}`}>
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${i === activeStep ? 'bg-primary' : 'bg-primary/10'}`}>
-                <step.icon className={`w-6 h-6 ${i === activeStep ? 'text-primary-foreground' : 'text-primary'}`} />
+              className={`p-6 border transition-all ${i === activeStep ? 'bg-slate-800 border-slate-600' : 'bg-slate-800/30 border-slate-700/50'}`}>
+              <div className={`w-12 h-12 border flex items-center justify-center mb-4 ${i === activeStep ? 'border-white bg-white' : 'border-slate-600 bg-slate-800'}`}>
+                <step.icon className={`w-5 h-5 ${i === activeStep ? 'text-slate-900' : 'text-slate-400'}`} strokeWidth={1.5} />
               </div>
-              <h3 className="font-bold text-foreground mb-1">{step.title}</h3>
-              <p className="text-sm text-muted-foreground">{step.subtitle}</p>
+              <h3 className="font-medium text-white mb-1">{step.title}</h3>
+              <p className="text-xs text-slate-400">{step.subtitle}</p>
             </motion.div>
           ))}
         </div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-card/60 rounded-full border border-border/50">
-            <ShieldCheck className="w-6 h-6 text-primary" />
-            <span className="text-muted-foreground">Powered by <span className="text-foreground font-medium">Cardano</span> and <span className="text-foreground font-medium">Genius Yield</span></span>
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-slate-800 border border-slate-700">
+            <ShieldCheck className="w-5 h-5 text-slate-400" />
+            <span className="text-sm text-slate-400">Powered by <span className="text-white font-medium">Cardano</span> and <span className="text-white font-medium">Genius Yield</span></span>
           </div>
         </motion.div>
       </div>
