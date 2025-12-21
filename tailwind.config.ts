@@ -64,6 +64,17 @@ export default {
           DEFAULT: "hsl(var(--turquoise))",
           glow: "hsl(var(--turquoise-glow))",
         },
+        light: {
+          DEFAULT: "hsl(var(--light-bg))",
+          surface: "hsl(var(--light-surface))",
+          text: "hsl(var(--light-text))",
+          muted: "hsl(var(--light-text-muted))",
+          border: "hsl(var(--light-border))",
+        },
+        cream: {
+          DEFAULT: "hsl(var(--cream))",
+          surface: "hsl(var(--cream-surface))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

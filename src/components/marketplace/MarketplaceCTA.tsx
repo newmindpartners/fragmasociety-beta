@@ -1,32 +1,54 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Shield, Zap, TrendingUp } from "lucide-react";
+
+// Real asset images for background showcase
+const assetShowcase = [
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=300",
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300",
+  "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300",
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=300",
+];
 
 export const MarketplaceCTA = () => {
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
+    <section className="py-32 relative overflow-hidden">
+      {/* Dark gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-navy-deep via-navy to-navy-surface" />
       
-      {/* Floating orbs */}
+      {/* Animated mesh */}
       <motion.div
         animate={{ 
-          x: [0, 50, 0],
-          y: [0, -30, 0],
-          scale: [1, 1.2, 1]
+          background: [
+            "radial-gradient(circle at 30% 50%, hsl(172 83% 50% / 0.15) 0%, transparent 50%)",
+            "radial-gradient(circle at 70% 50%, hsl(172 83% 50% / 0.15) 0%, transparent 50%)",
+            "radial-gradient(circle at 30% 50%, hsl(172 83% 50% / 0.15) 0%, transparent 50%)",
+          ]
         }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[150px]"
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute inset-0"
       />
-      <motion.div
-        animate={{ 
-          x: [0, -40, 0],
-          y: [0, 40, 0],
-          scale: [1, 0.9, 1]
-        }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-accent/20 rounded-full blur-[150px]"
-      />
+
+      {/* Floating asset images */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {assetShowcase.map((img, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-32 h-32 rounded-2xl overflow-hidden opacity-[0.08]"
+            style={{
+              top: `${10 + i * 20}%`,
+              left: i % 2 === 0 ? `${5 + i * 5}%` : `${75 - i * 5}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              rotate: [0, i % 2 === 0 ? 5 : -5, 0],
+            }}
+            transition={{ duration: 8 + i * 2, repeat: Infinity }}
+          >
+            <img src={img} alt="" className="w-full h-full object-cover" />
+          </motion.div>
+        ))}
+      </div>
 
       {/* Grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
@@ -43,52 +65,49 @@ export const MarketplaceCTA = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/20 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-8"
           >
-            <Sparkles className="w-4 h-4 text-white" />
-            <span className="text-sm text-white font-semibold">Start Trading</span>
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">Start Trading Today</span>
           </motion.div>
 
-          <h2 className="text-4xl lg:text-6xl font-serif font-bold text-foreground mb-6">
-            Start trading real-world assets{" "}
-            <span className="text-gradient">with full control.</span>
+          <h2 className="text-5xl lg:text-7xl font-serif font-bold text-white mb-8 leading-tight">
+            Trade real assets.
+            <br />
+            <span className="text-gradient">Full control.</span>
           </h2>
 
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
             Browse the marketplace, create your first order, and experience 
             non-custodial trading built on institutional-grade technology.
           </p>
 
-          {/* CTAs */}
-          <div className="flex items-center justify-center">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button size="lg" className="group text-lg px-8 py-6 bg-white text-background hover:bg-white/90">
-                Explore Marketplace
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </motion.div>
-          </div>
+          {/* CTA */}
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-block"
+          >
+            <Button size="lg" className="group text-lg px-10 py-7 bg-white text-navy hover:bg-white/90 rounded-xl shadow-lg shadow-white/20">
+              Explore Marketplace
+              <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </motion.div>
 
-          {/* Trust badges */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="mt-12 pt-12 border-t border-border/30"
+            className="mt-20 pt-12 border-t border-white/10"
           >
-            <p className="text-sm text-muted-foreground mb-6">
-              The next generation of tokenised trading — simple on the surface, powerful underneath.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { label: "Non-Custodial", value: "100%" },
-                { label: "On-Chain Settlement", value: "Instant" },
-                { label: "Platform Fees", value: "Transparent" },
-                { label: "Architecture", value: "Cardano EUTXO" },
+                { icon: Shield, label: "Non-Custodial", value: "100%" },
+                { icon: Zap, label: "Settlement", value: "Instant" },
+                { icon: TrendingUp, label: "Trading Volume", value: "€24M+" },
+                { label: "Architecture", value: "Cardano" },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}
@@ -96,10 +115,10 @@ export const MarketplaceCTA = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.6 + i * 0.1 }}
-                  className="text-center px-4"
+                  className="text-center"
                 >
-                  <p className="text-2xl font-bold text-primary">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+                  <p className="text-3xl font-bold text-primary mb-2">{stat.value}</p>
+                  <p className="text-sm text-white/50 uppercase tracking-wider">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
