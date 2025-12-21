@@ -1,447 +1,276 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { TrendingUp, Shield, Coins, BarChart3, CheckCircle2, Info } from "lucide-react";
+import { motion } from "framer-motion";
 import { useState } from "react";
+import { Shield, TrendingUp, ArrowDownRight, Zap, ChevronRight, Coins, BarChart3 } from "lucide-react";
+import luxuryImage from "@/assets/rwa-luxury.jpg";
+import commercialImage from "@/assets/rwa-commercial.jpg";
 
-type OptionType = "covered-call" | "put" | "call" | "sell-put";
+type OptionType = "call" | "put" | "covered" | "sell-put";
 
-const optionsData: Record<OptionType, {
+interface OptionData {
   title: string;
   description: string;
   benefit: string;
-  icon: typeof TrendingUp;
-  color: string;
-  payoffDescription: string;
-}> = {
-  "covered-call": {
-    title: "Covered Call",
-    description: "Earn yield by letting other traders pay for the right to buy your asset later",
-    benefit: "Generate income on assets you hold",
-    icon: Coins,
-    color: "primary",
-    payoffDescription: "Collect premium, cap upside"
-  },
-  "put": {
-    title: "Put Protection",
-    description: "Protect yourself from price drops — like insurance for your portfolio",
-    benefit: "Downside protection with limited cost",
-    icon: Shield,
-    color: "green-400",
-    payoffDescription: "Pay premium, protect downside"
-  },
-  "call": {
-    title: "Call Option",
-    description: "Bet on price increases with limited risk — your max loss is the premium paid",
-    benefit: "Leverage upside with defined risk",
+  icon: typeof Shield;
+  example: {
+    asset: string;
+    strike: string;
+    premium: string;
+    potential: string;
+  };
+}
+
+const optionsData: Record<OptionType, OptionData> = {
+  call: {
+    title: "Call Options",
+    description: "Lock in the right to buy an asset at a fixed price. Perfect when you expect prices to rise.",
+    benefit: "Unlimited upside with limited downside",
     icon: TrendingUp,
-    color: "accent",
-    payoffDescription: "Pay premium, unlimited upside"
+    example: {
+      asset: "Malibu Estate",
+      strike: "$2.5M",
+      premium: "$50K",
+      potential: "+$500K"
+    }
+  },
+  put: {
+    title: "Put Options",
+    description: "Secure the right to sell at a guaranteed price. Ideal for protecting your existing holdings.",
+    benefit: "Insurance against market downturns",
+    icon: Shield,
+    example: {
+      asset: "LA Portfolio",
+      strike: "$1.8M",
+      premium: "$35K",
+      potential: "Protected"
+    }
+  },
+  covered: {
+    title: "Covered Calls",
+    description: "Earn premium income on assets you already own. Generate yield while waiting for appreciation.",
+    benefit: "Additional income on existing holdings",
+    icon: Coins,
+    example: {
+      asset: "Beverly Hills",
+      strike: "$3.2M",
+      premium: "$75K",
+      potential: "+7.5% Yield"
+    }
   },
   "sell-put": {
     title: "Sell Put",
-    description: "Get paid to potentially buy an asset at a lower price",
+    description: "Get paid to potentially buy an asset at a lower price you already want.",
     benefit: "Earn premium while waiting to buy",
     icon: BarChart3,
-    color: "amber-400",
-    payoffDescription: "Collect premium, obligated to buy"
+    example: {
+      asset: "Pacific Palisades",
+      strike: "$2.1M",
+      premium: "$45K",
+      potential: "+4.2% Yield"
+    }
   }
 };
 
-const PayoffChart = ({ type }: { type: OptionType }) => {
-  const getPath = () => {
-    switch (type) {
-      case "covered-call":
-        return "M 20 80 L 100 80 L 100 40 L 180 40";
-      case "put":
-        return "M 20 40 L 80 40 L 100 80 L 180 80";
-      case "call":
-        return "M 20 80 L 100 80 L 180 20";
-      case "sell-put":
-        return "M 20 80 L 80 80 L 100 40 L 180 40";
-    }
-  };
-
-  const getGradientId = () => `gradient-${type}`;
-  const getAreaPath = () => {
-    switch (type) {
-      case "covered-call":
-        return "M 20 80 L 100 80 L 100 40 L 180 40 L 180 100 L 20 100 Z";
-      case "put":
-        return "M 20 40 L 80 40 L 100 80 L 180 80 L 180 100 L 20 100 Z";
-      case "call":
-        return "M 20 80 L 100 80 L 180 20 L 180 100 L 20 100 Z";
-      case "sell-put":
-        return "M 20 80 L 80 80 L 100 40 L 180 40 L 180 100 L 20 100 Z";
-    }
-  };
-
-  return (
-    <div className="relative h-40 w-full">
-      {/* Animated grid background */}
-      <motion.div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '20px 20px'
-        }}
-        animate={{ opacity: [0.1, 0.2, 0.1] }}
-        transition={{ duration: 3, repeat: Infinity }}
-      />
-      
-      <svg className="w-full h-full relative z-10" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id={getGradientId()} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-          </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Axis lines */}
-        <motion.line 
-          x1="20" y1="80" x2="180" y2="80" 
-          stroke="rgba(255,255,255,0.15)" 
-          strokeWidth="1"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 0.5 }}
-        />
-        <motion.line 
-          x1="100" y1="20" x2="100" y2="80" 
-          stroke="rgba(255,255,255,0.1)" 
-          strokeWidth="1" 
-          strokeDasharray="4 4"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        />
-        
-        {/* Area fill */}
-        <motion.path
-          d={getAreaPath()}
-          fill={`url(#${getGradientId()})`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        />
-        
-        {/* Main payoff curve with glow */}
-        <motion.path
-          d={getPath()}
-          fill="none"
-          stroke="hsl(var(--primary))"
-          strokeWidth="3"
-          strokeLinecap="round"
-          filter="url(#glow)"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        />
-
-        {/* Animated point on the curve */}
-        <motion.circle
-          r="4"
-          fill="hsl(var(--primary))"
-          filter="url(#glow)"
-          initial={{ cx: 20, cy: 80 }}
-          animate={{ 
-            cx: [20, 100, 180],
-            cy: type === "call" ? [80, 80, 20] : type === "put" ? [40, 40, 80] : [80, 40, 40]
-          }}
-          transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
-        />
-
-        {/* Labels with fade in */}
-        <motion.text 
-          x="100" y="98" 
-          fill="rgba(255,255,255,0.5)" 
-          fontSize="8" 
-          textAnchor="middle"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          Price
-        </motion.text>
-        <motion.text 
-          x="8" y="50" 
-          fill="rgba(255,255,255,0.5)" 
-          fontSize="8" 
-          textAnchor="middle"
-          transform="rotate(-90, 8, 50)"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-        >
-          P/L
-        </motion.text>
-      </svg>
-    </div>
-  );
-};
-
 export const OptionsTrading = () => {
-  const [activeOption, setActiveOption] = useState<OptionType>("covered-call");
+  const [activeOption, setActiveOption] = useState<OptionType>("call");
   const currentOption = optionsData[activeOption];
-  const IconComponent = currentOption.icon;
+
+  const getPayoffPath = () => {
+    switch (activeOption) {
+      case "call": return "M 20 80 L 100 80 L 180 20";
+      case "put": return "M 20 20 L 100 80 L 180 80";
+      case "covered": return "M 20 80 L 100 80 L 100 40 L 180 40";
+      case "sell-put": return "M 20 80 L 80 80 L 100 40 L 180 40";
+    }
+  };
 
   return (
-    <section className="py-24 section-navy relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-      <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[200px]" />
+    <section className="relative py-32 overflow-hidden bg-background">
+      {/* Dark Background with Gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      
+      {/* Floating Elements */}
+      <motion.div
+        animate={{ y: [-20, 20, -20], rotate: [0, 5, 0] }}
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute top-20 right-20 w-32 h-32 rounded-2xl overflow-hidden opacity-20"
+      >
+        <img src={luxuryImage} alt="" className="w-full h-full object-cover" />
+      </motion.div>
+      <motion.div
+        animate={{ y: [20, -20, 20], rotate: [0, -5, 0] }}
+        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute bottom-20 left-20 w-40 h-40 rounded-2xl overflow-hidden opacity-20"
+      >
+        <img src={commercialImage} alt="" className="w-full h-full object-cover" />
+      </motion.div>
       
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-20"
+        >
+          <span className="inline-block px-4 py-2 mb-6 text-xs font-bold tracking-[0.2em] uppercase rounded-full bg-white/5 text-white border border-white/20">
+            Options Trading
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-foreground mb-6">
+            Advanced Strategies for
+            <span className="block text-gradient">Sophisticated Investors</span>
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Hedge your positions, generate income, or leverage your conviction with institutional-grade options.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Option Type Selector */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <span className="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider uppercase rounded-full bg-white/5 text-white border border-white/20">
-              Options Trading
-            </span>
-            <h2 className="text-3xl lg:text-5xl font-serif font-bold text-foreground mb-6">
-              Simple, safe,{" "}
-              <span className="text-gradient">powerful.</span>
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Beginner-friendly options trading to help you earn extra yield, 
-              protect your portfolio, or speculate with defined risk.
-            </p>
-          </motion.div>
-        </div>
+            <div className="space-y-4 mb-8">
+              {(Object.keys(optionsData) as OptionType[]).map((type) => {
+                const option = optionsData[type];
+                const isActive = activeOption === type;
+                
+                return (
+                  <motion.button
+                    key={type}
+                    onClick={() => setActiveOption(type)}
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full p-6 rounded-2xl border text-left transition-all duration-300 ${
+                      isActive 
+                        ? 'bg-white/10 border-primary shadow-glow' 
+                        : 'bg-white/5 border-border/30 hover:border-border'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                          isActive ? 'bg-primary' : 'bg-white/10'
+                        }`}>
+                          <option.icon className={`w-5 h-5 ${isActive ? 'text-primary-foreground' : 'text-foreground'}`} />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold text-foreground">{option.title}</h3>
+                          <p className="text-sm text-muted-foreground">{option.benefit}</p>
+                        </div>
+                      </div>
+                      <ChevronRight className={`w-5 h-5 transition-transform ${isActive ? 'rotate-90 text-primary' : 'text-muted-foreground'}`} />
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left - Option Selector */}
-          <div className="space-y-4">
-            {(Object.keys(optionsData) as OptionType[]).map((key, index) => {
-              const option = optionsData[key];
-              const isActive = activeOption === key;
-              const Icon = option.icon;
-
-              return (
-                <motion.button
-                  key={key}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+            {/* Feature Pills */}
+            <div className="flex flex-wrap gap-3">
+              {["No Margin Calls", "Defined Risk", "Premium Income", "Leverage"].map((feature, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => setActiveOption(key)}
-                  className={`w-full text-left p-5 rounded-xl border transition-all ${
-                    isActive 
-                      ? "bg-white/5 border-white/30 scale-[1.02]" 
-                      : "bg-background/50 border-border/50 hover:border-white/20"
-                  }`}
+                  transition={{ delay: i * 0.1 }}
+                  className="px-4 py-2 rounded-full bg-white/5 border border-border/30 text-sm text-muted-foreground"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      isActive ? "bg-white/10" : "bg-muted"
-                    }`}>
-                      <Icon className={`w-6 h-6 ${isActive ? "text-white" : "text-muted-foreground"}`} />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className={`font-medium mb-1 ${isActive ? "text-gradient" : "text-foreground"}`}>
-                        {option.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{option.description}</p>
-                    </div>
-                    {isActive && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-6 h-6 rounded-full bg-white flex items-center justify-center"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-background" />
-                      </motion.div>
-                    )}
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
+                  <Zap className="w-3 h-3 inline mr-2 text-primary" />
+                  {feature}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
 
-          {/* Right - Detail View - Premium Design */}
-          <div className="lg:sticky lg:top-24">
-            <motion.div
-              key={activeOption}
-              initial={{ opacity: 0, y: 30, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-              className="relative group"
-            >
-              {/* Ambient glow effect */}
-              <motion.div
-                animate={{ 
-                  opacity: [0.3, 0.5, 0.3],
-                  scale: [1, 1.02, 1]
-                }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-3xl blur-2xl"
-              />
+          {/* Option Detail Card */}
+          <motion.div
+            key={activeOption}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="relative">
+              {/* Glow Effect */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-primary/10 rounded-3xl blur-2xl" />
               
-              {/* Main card with gradient border */}
-              <div className="relative rounded-3xl p-[1px] bg-gradient-to-br from-white/20 via-white/5 to-white/10 overflow-hidden">
-                <div className="glass rounded-3xl p-8 backdrop-blur-xl bg-background/80">
-                  
-                  {/* Header with floating icon */}
-                  <div className="flex items-start gap-5 mb-8">
-                    <motion.div 
-                      className="relative"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                    >
-                      {/* Icon glow ring */}
-                      <motion.div
-                        animate={{ 
-                          boxShadow: [
-                            "0 0 20px hsl(var(--primary) / 0.3)",
-                            "0 0 40px hsl(var(--primary) / 0.5)",
-                            "0 0 20px hsl(var(--primary) / 0.3)"
-                          ]
-                        }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0 rounded-2xl"
-                      />
-                      <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 border border-primary/30 flex items-center justify-center backdrop-blur-sm">
-                        <motion.div
-                          animate={{ rotate: [0, 5, -5, 0] }}
-                          transition={{ duration: 4, repeat: Infinity }}
-                        >
-                          <IconComponent className="w-8 h-8 text-primary" />
-                        </motion.div>
-                      </div>
-                    </motion.div>
-                    
-                    <div className="flex-1 pt-1">
-                      <motion.h3 
-                        className="text-3xl font-serif font-bold text-gradient mb-1"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        {currentOption.title}
-                      </motion.h3>
-                      <motion.p 
-                        className="text-sm text-muted-foreground font-medium tracking-wide"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                      >
-                        {currentOption.payoffDescription}
-                      </motion.p>
+              <div className="relative bg-card rounded-2xl border border-border overflow-hidden">
+                {/* Header */}
+                <div className="p-8 border-b border-border/50">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-xl bg-primary/20 flex items-center justify-center">
+                      <currentOption.icon className="w-8 h-8 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground">{currentOption.title}</h3>
+                      <p className="text-primary font-medium">{currentOption.benefit}</p>
                     </div>
                   </div>
+                  <p className="text-muted-foreground leading-relaxed">{currentOption.description}</p>
+                </div>
 
-                  {/* Description with elegant styling */}
-                  <motion.p 
-                    className="text-lg text-muted-foreground leading-relaxed mb-8 pl-4 border-l-2 border-primary/30"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.15 }}
-                  >
-                    {currentOption.description}
-                  </motion.p>
-
-                  {/* Key Benefit - Premium floating card */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    className="relative mb-8 group/benefit"
-                  >
-                    {/* Shine effect on hover */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/benefit:translate-x-full transition-transform duration-1000" />
-                    
-                    <div className="relative p-5 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 overflow-hidden">
-                      <div className="flex items-center gap-3 mb-3">
-                        <motion.div
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"
-                        >
-                          <CheckCircle2 className="w-4 h-4 text-primary" />
-                        </motion.div>
-                        <span className="text-sm font-bold uppercase tracking-wider text-primary">Key Benefit</span>
-                      </div>
-                      <p className="text-lg text-foreground font-medium">{currentOption.benefit}</p>
+                {/* Example Trade */}
+                <div className="p-8 bg-background/50">
+                  <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-6">Example Trade</h4>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="p-4 bg-white/5 rounded-xl border border-border/30">
+                      <p className="text-sm text-muted-foreground mb-1">Asset</p>
+                      <p className="text-lg font-bold text-foreground">{currentOption.example.asset}</p>
                     </div>
-                  </motion.div>
-
-                  {/* Payoff Chart - Enhanced container */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.25 }}
-                    className="mb-8"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Payoff Diagram</p>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                        <span className="text-xs text-primary font-medium">Live</span>
-                      </div>
+                    <div className="p-4 bg-white/5 rounded-xl border border-border/30">
+                      <p className="text-sm text-muted-foreground mb-1">Strike Price</p>
+                      <p className="text-lg font-bold text-foreground">{currentOption.example.strike}</p>
                     </div>
-                    <div className="relative rounded-2xl p-6 bg-gradient-to-br from-white/5 to-transparent border border-white/10 overflow-hidden">
-                      {/* Corner accents */}
-                      <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-primary/30 rounded-tl-xl" />
-                      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-primary/30 rounded-br-xl" />
+                    <div className="p-4 bg-white/5 rounded-xl border border-border/30">
+                      <p className="text-sm text-muted-foreground mb-1">Premium</p>
+                      <p className="text-lg font-bold text-foreground">{currentOption.example.premium}</p>
+                    </div>
+                    <div className="p-4 bg-primary/20 rounded-xl border border-primary/30">
+                      <p className="text-sm text-primary mb-1">Potential</p>
+                      <p className="text-lg font-bold text-primary">{currentOption.example.potential}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payoff Visualization */}
+                <div className="p-8 border-t border-border/50">
+                  <div className="relative h-32">
+                    <svg className="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="none">
+                      {/* Grid */}
+                      <line x1="20" y1="80" x2="180" y2="80" stroke="currentColor" strokeOpacity="0.1" />
+                      <line x1="100" y1="20" x2="100" y2="80" stroke="currentColor" strokeOpacity="0.1" strokeDasharray="4" />
                       
-                      <PayoffChart type={activeOption} />
-                    </div>
-                  </motion.div>
-
-                  {/* Features - Premium pills with stagger animation */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { text: "Transparent", icon: "◇" },
-                      { text: "On-chain", icon: "⬡" },
-                      { text: "Easy to understand", icon: "○" },
-                      { text: "Fully collateralised", icon: "◈" }
-                    ].map((feature, i) => (
-                      <motion.div
-                        key={feature.text}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 + i * 0.08 }}
-                        whileHover={{ scale: 1.03, x: 4 }}
-                        className="group/feature flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 cursor-default"
-                      >
-                        <span className="text-primary/60 group-hover/feature:text-primary transition-colors text-sm">{feature.icon}</span>
-                        <span className="text-sm font-medium text-foreground">{feature.text}</span>
-                      </motion.div>
-                    ))}
+                      {/* Payoff Line */}
+                      <motion.path
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 1.5 }}
+                        d={getPayoffPath()}
+                        fill="none"
+                        stroke="url(#payoffGradient)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                      
+                      <defs>
+                        <linearGradient id="payoffGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.5" />
+                          <stop offset="100%" stopColor="hsl(var(--primary))" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    
+                    {/* Labels */}
+                    <div className="absolute bottom-0 left-4 text-xs text-muted-foreground">Loss</div>
+                    <div className="absolute bottom-0 right-4 text-xs text-muted-foreground">Profit</div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">Strike</div>
                   </div>
                 </div>
               </div>
-            </motion.div>
-
-            {/* Info badge - floating below */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="mt-6 relative"
-            >
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-white/5 to-transparent border border-white/10 backdrop-blur-sm">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Info className="w-5 h-5 text-primary" />
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  No complex DeFi mechanics — just clean, intuitive tools designed for everyone.
-                </p>
-              </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
