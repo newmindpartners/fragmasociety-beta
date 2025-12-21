@@ -1,24 +1,22 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { HowItWorksHero } from "@/components/how-it-works/HowItWorksHero";
-import { VisualSteps } from "@/components/how-it-works/VisualSteps";
-import { AssetShowcase } from "@/components/how-it-works/AssetShowcase";
-import { TokenOwnership } from "@/components/how-it-works/TokenOwnership";
-import { EarnPayouts } from "@/components/how-it-works/EarnPayouts";
-import { SafetyTrustSection } from "@/components/how-it-works/SafetyTrustSection";
-import { AnimatedCTA } from "@/components/how-it-works/AnimatedCTA";
+import { HowItWorksHeroNew } from "@/components/how-it-works/HowItWorksHeroNew";
+import { JourneySteps } from "@/components/how-it-works/JourneySteps";
+import { WhyFragma } from "@/components/how-it-works/WhyFragma";
+import { AssetTypesShowcase } from "@/components/how-it-works/AssetTypesShowcase";
+import { TrustSecurity } from "@/components/how-it-works/TrustSecurity";
+import { HowItWorksCTANew } from "@/components/how-it-works/HowItWorksCTANew";
 
 const HowItWorks = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <HowItWorksHero />
-      <VisualSteps />
-      <AssetShowcase />
-      <TokenOwnership />
-      <EarnPayouts />
-      <SafetyTrustSection />
-      <AnimatedCTA />
+      <HowItWorksHeroNew />
+      <JourneySteps />
+      <WhyFragma />
+      <AssetTypesShowcase />
+      <TrustSecurity />
+      <HowItWorksCTANew />
       <Footer />
     </div>
   );
