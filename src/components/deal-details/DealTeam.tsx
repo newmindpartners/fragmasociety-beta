@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Volume2, VolumeX, ExternalLink, Quote, ChevronLeft, ChevronRight, Award, Briefcase } from "lucide-react";
-import { useState, useRef } from "react";
+import { ExternalLink, Quote, ChevronLeft, ChevronRight, Award, Briefcase } from "lucide-react";
+import { useState } from "react";
 import type { DealData } from "@/types/deal";
 
 // Local imports for team images
@@ -26,31 +26,10 @@ const imageMap: Record<string, string> = {
 };
 
 export const DealTeam = ({ deal }: DealTeamProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const teamMembers = (deal.team || []) as TeamMemberType[];
   const activeMember = teamMembers[activeIndex];
-
-  const handlePlayClick = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
 
   const getImage = (imagePath?: string) => {
     if (!imagePath) return philippeNaouri;
@@ -202,70 +181,11 @@ export const DealTeam = ({ deal }: DealTeamProps) => {
                   {/* Decorative frame */}
                   <div className="absolute inset-0 rounded-3xl ring-1 ring-black/5 z-10 pointer-events-none" />
                   
-                  {activeIndex === 0 && deal.teamVideoUrl ? (
-                    <>
-                      <video
-                        ref={videoRef}
-                        src={deal.teamVideoUrl}
-                        poster={getImage(activeMember.image)}
-                        loop
-                        muted={isMuted}
-                        playsInline
-                        className="w-full h-full object-cover"
-                        onPlay={() => setIsPlaying(true)}
-                        onPause={() => setIsPlaying(false)}
-                      />
-
-                      {/* Play/Pause Overlay */}
-                      {!isPlaying && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/50 via-transparent to-transparent cursor-pointer z-10"
-                          onClick={handlePlayClick}
-                        >
-                          <motion.div
-                            whileHover={{ scale: 1.08 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center shadow-2xl"
-                          >
-                            <Play className="w-8 h-8 text-slate-900 ml-1" fill="currentColor" />
-                          </motion.div>
-                        </motion.div>
-                      )}
-
-                      {/* Controls */}
-                      <div className="absolute bottom-6 right-6 flex items-center gap-3 z-20">
-                        {isPlaying && (
-                          <button
-                            onClick={handlePlayClick}
-                            className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors shadow-lg"
-                          >
-                            <div className="flex gap-1">
-                              <div className="w-1 h-4 bg-slate-900 rounded-full" />
-                              <div className="w-1 h-4 bg-slate-900 rounded-full" />
-                            </div>
-                          </button>
-                        )}
-                        <button
-                          onClick={toggleMute}
-                          className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors shadow-lg"
-                        >
-                          {isMuted ? (
-                            <VolumeX className="w-5 h-5 text-slate-900" />
-                          ) : (
-                            <Volume2 className="w-5 h-5 text-slate-900" />
-                          )}
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <img 
-                      src={getImage(activeMember.image)} 
-                      alt={activeMember.name}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  <img 
+                    src={getImage(activeMember.image)} 
+                    alt={activeMember.name}
+                    className="w-full h-full object-cover"
+                  />
 
                   {/* Bottom Gradient Bar */}
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-800 via-violet-500 to-slate-800" />
