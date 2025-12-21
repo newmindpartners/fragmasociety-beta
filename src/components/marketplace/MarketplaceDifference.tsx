@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check, X, Zap, Shield, Users } from "lucide-react";
+import { Check, X, Zap, Shield, Users, ArrowRight } from "lucide-react";
 
 export const MarketplaceDifference = () => {
   const comparisons = [
@@ -11,209 +11,139 @@ export const MarketplaceDifference = () => {
     { feature: "Decentralized architecture", traditional: false, fragma: true },
   ];
 
-  const differentiators = [
-    { 
-      icon: Zap, 
-      title: "True P2P", 
-      desc: "Direct trades, zero intermediaries" 
-    },
-    { 
-      icon: Shield, 
-      title: "Your Keys", 
-      desc: "Complete asset ownership" 
-    },
-    { 
-      icon: Users, 
-      title: "Open Market", 
-      desc: "Set your price, find buyers" 
-    },
+  const highlights = [
+    { icon: Zap, title: "True P2P", desc: "Direct trades, zero intermediaries" },
+    { icon: Shield, title: "Your Keys", desc: "Complete asset ownership" },
+    { icon: Users, title: "Open Market", desc: "Set your price, find buyers" },
   ];
 
   return (
-    <section className="relative py-20 overflow-hidden">
-      {/* Premium Light Background - matching Features.tsx */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
-        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+    <section className="relative py-32 overflow-hidden bg-background">
+      {/* Subtle gradient */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
       </div>
+      
+      {/* Top border */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      {/* Subtle grid pattern */}
-      <div 
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }}
-      />
-
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        {/* Section Header - Matching Features style */}
-        <div className="max-w-3xl mb-16">
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="max-w-4xl mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
-          >
-            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
-              The Difference
-            </span>
-          </motion.div>
-
-          <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-light text-slate-900 leading-[1.05] mb-6"
           >
-            Not just another
-            <br />
-            <span className="italic text-slate-500 font-serif">trading platform.</span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-lg text-slate-500 leading-relaxed max-w-xl"
-          >
-            Traditional platforms give you buttons. We give you a real marketplace — 
-            100% decentralized, completely non-custodial.
-          </motion.p>
+            <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 text-xs font-semibold tracking-widest uppercase rounded-full bg-secondary/80 text-foreground border border-border/50">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              The Difference
+            </span>
+            
+            <h2 className="text-5xl lg:text-7xl font-serif font-bold text-foreground mb-6 leading-[1.1]">
+              Not just another
+              <br />
+              <span className="text-gradient italic">trading platform.</span>
+            </h2>
+            
+            <p className="text-xl text-muted-foreground max-w-xl leading-relaxed">
+              Traditional platforms give you buttons. We give you a real marketplace — 
+              100% decentralized, completely non-custodial.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
-          {/* Left - Differentiators */}
-          <div className="lg:col-span-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="space-y-3"
-            >
-              {differentiators.map((item, i) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 + i * 0.1 }}
-                  whileHover={{ x: 4 }}
-                  className="group flex items-center gap-4 p-4 rounded-sm bg-white/90 border border-slate-200/80 transition-all duration-300 hover:border-violet-300/50 hover:shadow-lg hover:shadow-slate-200/50"
-                >
-                  <div className="w-10 h-10 rounded-sm bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 group-hover:bg-slate-900 group-hover:border-violet-500/30 transition-all duration-300">
-                    <item.icon className="w-5 h-5 text-slate-600 group-hover:text-violet-300 transition-colors duration-300" strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-900">{item.title}</h4>
-                    <p className="text-xs text-slate-500">{item.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+        <div className="grid lg:grid-cols-12 gap-12 items-start">
+          {/* Highlights */}
+          <div className="lg:col-span-4 space-y-4">
+            {highlights.map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ x: 8 }}
+                className="group flex items-center gap-5 p-6 rounded-2xl bg-card/50 border border-border/40 hover:border-primary/40 hover:bg-card/80 transition-all duration-300"
+              >
+                <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+                  <item.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all ml-auto" />
+              </motion.div>
+            ))}
           </div>
 
-          {/* Right - Comparison Table */}
+          {/* Comparison Table */}
           <div className="lg:col-span-8">
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="relative bg-white/90 rounded-sm border border-slate-200/80 p-6"
-              style={{
-                boxShadow: '0 4px 30px -10px rgba(0, 0, 0, 0.08)'
-              }}
+              className="bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden"
             >
               {/* Table Header */}
-              <div className="grid grid-cols-12 gap-4 mb-4 pb-3 border-b border-slate-200">
+              <div className="grid grid-cols-12 gap-4 p-6 border-b border-border/50 bg-secondary/30">
                 <div className="col-span-6">
-                  <span className="text-[10px] tracking-[0.2em] uppercase text-slate-400 font-medium">Feature</span>
+                  <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Feature</span>
                 </div>
                 <div className="col-span-3 text-center">
-                  <span className="text-[10px] tracking-[0.2em] uppercase text-slate-400/60">Traditional</span>
+                  <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground/60">Traditional</span>
                 </div>
                 <div className="col-span-3 text-center">
-                  <span className="text-[10px] tracking-[0.2em] uppercase text-violet-600 font-medium">Fragma</span>
+                  <span className="text-xs font-semibold tracking-widest uppercase text-primary">Fragma</span>
                 </div>
               </div>
 
               {/* Table Rows */}
-              <div className="space-y-0">
+              <div className="divide-y divide-border/30">
                 {comparisons.map((item, index) => (
                   <motion.div
                     key={item.feature}
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.4 + index * 0.05 }}
-                    className="grid grid-cols-12 gap-4 py-3 border-b border-slate-100 items-center group cursor-default transition-colors hover:bg-slate-50/50 rounded-sm"
+                    transition={{ delay: index * 0.05 }}
+                    className="grid grid-cols-12 gap-4 p-6 items-center hover:bg-secondary/20 transition-colors"
                   >
                     <div className="col-span-6">
-                      <span className="text-sm text-slate-500 group-hover:text-slate-900 transition-colors">
-                        {item.feature}
-                      </span>
+                      <span className="text-foreground font-medium">{item.feature}</span>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      {item.traditional ? (
-                        <Check className="w-4 h-4 text-slate-400" />
-                      ) : (
-                        <div className="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
-                          <X className="w-3 h-3 text-red-400" />
-                        </div>
-                      )}
+                      <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
+                        <X className="w-4 h-4 text-destructive" />
+                      </div>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      {item.fragma ? (
-                        <motion.div
-                          whileHover={{ scale: 1.2 }}
-                          className="w-5 h-5 rounded-full bg-violet-100 flex items-center justify-center"
-                        >
-                          <Check className="w-3 h-3 text-violet-600" />
-                        </motion.div>
-                      ) : (
-                        <X className="w-3 h-3 text-red-400" />
-                      )}
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"
+                      >
+                        <Check className="w-4 h-4 text-primary" />
+                      </motion.div>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Summary Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.7 }}
-                className="mt-6 flex items-center gap-3 p-3 rounded-sm border border-violet-200 bg-violet-50/50"
-              >
-                <div className="w-7 h-7 rounded-sm bg-violet-100 flex items-center justify-center">
-                  <Check className="w-4 h-4 text-violet-600" />
+              {/* Summary */}
+              <div className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-t border-primary/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <Check className="w-5 h-5 text-primary" />
+                  </div>
+                  <span className="text-foreground font-medium">
+                    All <span className="text-primary font-bold">6 features</span> available exclusively on Fragma
+                  </span>
                 </div>
-                <span className="text-sm text-slate-600">
-                  All <span className="text-violet-600 font-medium">6 features</span> available on Fragma
-                </span>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
-
-        {/* Bottom decorative element */}
-        <motion.div 
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-16 flex justify-center"
-        >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
-        </motion.div>
       </div>
     </section>
   );
