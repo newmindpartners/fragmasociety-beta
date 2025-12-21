@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { MapPin, Hammer, CheckCircle, TrendingUp, Clock, Building, Eye } from "lucide-react";
-import type { DealData } from "@/types/deal";
+import type { DealData, DealProperty } from "@/types/deal";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-// Property images
+// Local fallback images
 import deerheadRoad from "@/assets/properties/deerhead-road.jpg";
 import coolOakWay from "@/assets/properties/cool-oak-way.jpg";
 import bigRockDrive from "@/assets/properties/big-rock-drive.jpg";
@@ -14,16 +15,25 @@ interface DealPortfolioProps {
   deal: DealData;
 }
 
-const propertyImages: Record<string, string> = {
-  "5878 Deerhead Road, Malibu": deerheadRoad,
-  "20799 Cool Oak Way, Malibu": coolOakWay,
-  "20771 Big Rock Drive, Malibu": bigRockDrive,
-  "20706 Rockpoint Way, Malibu": rockpointWay,
-  "3226 Serra Road, Malibu": serraRoad,
+// Local fallback mapping
+const localFallbacks: Record<string, string> = {
+  "properties/deerhead-road.jpg": deerheadRoad,
+  "properties/cool-oak-way.jpg": coolOakWay,
+  "properties/big-rock-drive.jpg": bigRockDrive,
+  "properties/rockpoint-way.jpg": rockpointWay,
+  "properties/serra-road.jpg": serraRoad,
 };
 
-const getPropertyImage = (address: string, index: number) => {
-  if (propertyImages[address]) return propertyImages[address];
+const getPropertyImage = (property: DealProperty, index: number): string => {
+  // Priority 1: Cloud storage URL
+  if (property.imageUrl) {
+    const { data } = supabase.storage.from('deal-images').getPublicUrl(property.imageUrl);
+    if (data?.publicUrl) {
+      // Check if it's a valid storage URL, otherwise use local fallback
+      return localFallbacks[property.imageUrl] || data.publicUrl;
+    }
+  }
+  // Priority 2: Local fallback by index
   const fallbackImages = [deerheadRoad, coolOakWay, bigRockDrive, rockpointWay, serraRoad];
   return fallbackImages[index % fallbackImages.length];
 };
@@ -156,7 +166,7 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
                 {/* Large Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <motion.img 
-                    src={getPropertyImage(property.address, index)} 
+                    src={getPropertyImage(property, index)} 
                     alt={property.address}
                     className="w-full h-full object-cover"
                     animate={{ scale: isHovered ? 1.08 : 1 }}
