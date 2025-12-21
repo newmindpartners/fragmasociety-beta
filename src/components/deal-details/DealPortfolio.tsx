@@ -258,15 +258,22 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
                       </div>
                     )}
                     {property.projectedExitPrice && (
-                      <div>
-                        <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
-                          isHovered ? 'text-slate-400' : 'text-slate-500'
-                        }`}>Exit Target</p>
+                      <div className={`relative px-3 py-2 -mx-3 rounded transition-all duration-500 ${
+                        isHovered ? 'bg-emerald-500/20' : 'bg-emerald-50'
+                      }`}>
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <TrendingUp className={`w-3 h-3 transition-colors duration-500 ${
+                            isHovered ? 'text-emerald-400' : 'text-emerald-600'
+                          }`} />
+                          <p className={`text-[10px] tracking-[0.15em] uppercase transition-colors duration-500 ${
+                            isHovered ? 'text-emerald-400' : 'text-emerald-600'
+                          }`}>Exit Target</p>
+                        </div>
                         <motion.p 
-                          className={`text-lg font-semibold transition-colors duration-500 ${
-                            isHovered ? 'text-white' : 'text-slate-800'
+                          className={`text-xl font-bold transition-colors duration-500 ${
+                            isHovered ? 'text-emerald-300' : 'text-emerald-700'
                           }`}
-                          animate={{ scale: isHovered ? 1.05 : 1 }}
+                          animate={{ scale: isHovered ? 1.08 : 1 }}
                           transition={{ duration: 0.3 }}
                         >
                           {property.projectedExitPrice}
