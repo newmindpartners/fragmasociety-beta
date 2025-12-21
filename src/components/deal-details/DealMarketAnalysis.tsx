@@ -65,21 +65,21 @@ export const DealMarketAnalysis = ({ deal }: DealMarketAnalysisProps) => {
                 className="group relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 hover:border-violet-500/30 transition-all duration-500">
+                <div className="relative bg-slate-800/80 backdrop-blur-sm border border-slate-600/60 rounded-2xl p-8 hover:border-violet-500/50 transition-all duration-500">
                   {/* Decorative corner */}
                   <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden rounded-tr-2xl">
-                    <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-violet-500/10 to-transparent" />
+                    <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-violet-500/20 to-transparent" />
                   </div>
                   
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-[10px] text-slate-500 uppercase tracking-[0.2em]">{stat.label}</span>
-                    <div className="p-2 rounded-lg bg-slate-700/50">
+                    <span className="text-xs text-slate-300 uppercase tracking-[0.15em] font-medium">{stat.label}</span>
+                    <div className="p-2 rounded-lg bg-violet-500/20 border border-violet-500/30">
                       {getTrendIcon(stat.trend)}
                     </div>
                   </div>
-                  <p className="text-3xl font-light text-white mb-2 group-hover:text-violet-100 transition-colors">{stat.value}</p>
+                  <p className="text-4xl font-semibold text-white mb-3 group-hover:text-violet-100 transition-colors">{stat.value}</p>
                   {stat.description && (
-                    <p className="text-xs text-slate-500 font-light">{stat.description}</p>
+                    <p className="text-sm text-slate-300 font-light">{stat.description}</p>
                   )}
                 </div>
               </motion.div>
