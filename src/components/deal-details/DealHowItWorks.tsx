@@ -173,7 +173,7 @@ export const DealHowItWorks = () => {
 
                       {/* Content */}
                       <div className="flex-1 min-w-0 pt-1">
-                        <div className="flex items-center gap-3 mb-1">
+                        <div className="flex items-center gap-3 mb-2">
                           <span className={`text-xs font-mono transition-colors duration-500 ${
                             isActive ? 'text-slate-400' : 'text-slate-400'
                           }`}>
@@ -182,6 +182,15 @@ export const DealHowItWorks = () => {
                           <div className={`w-8 h-px transition-colors duration-500 ${
                             isActive ? 'bg-slate-600' : 'bg-slate-200'
                           }`} />
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-500 ${
+                            isActive 
+                              ? 'bg-white/10' 
+                              : 'bg-slate-100'
+                          }`}>
+                            <StepIcon className={`w-3.5 h-3.5 transition-colors duration-500 ${
+                              isActive ? 'text-white' : 'text-slate-500'
+                            }`} />
+                          </div>
                         </div>
                         <h3 className={`text-lg font-medium transition-colors duration-500 ${
                           isActive ? 'text-white' : 'text-slate-900'
