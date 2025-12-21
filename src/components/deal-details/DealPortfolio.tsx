@@ -4,25 +4,27 @@ import type { DealData } from "@/types/deal";
 import { useState } from "react";
 
 // Property images
-import propertyDeerhead from "@/assets/property-deerhead-ranch.jpg";
-import propertyNimes from "@/assets/property-nimes-road.jpg";
-import propertyPalisades from "@/assets/property-palisades-site.jpg";
-import propertyMalibu from "@/assets/property-malibu.jpg";
+import deerheadRoad from "@/assets/properties/deerhead-road.jpg";
+import coolOakWay from "@/assets/properties/cool-oak-way.jpg";
+import bigRockDrive from "@/assets/properties/big-rock-drive.jpg";
+import rockpointWay from "@/assets/properties/rockpoint-way.jpg";
+import serraRoad from "@/assets/properties/serra-road.jpg";
 
 interface DealPortfolioProps {
   deal: DealData;
 }
 
 const propertyImages: Record<string, string> = {
-  "Deerhead Ranch, Malibu": propertyDeerhead,
-  "600 Nimes Road, Beverly Hills": propertyNimes,
-  "Pacific Palisades Site": propertyPalisades,
-  "22222 Malibu Road": propertyMalibu,
+  "5878 Deerhead Road, Malibu": deerheadRoad,
+  "20799 Cool Oak Way, Malibu": coolOakWay,
+  "20771 Big Rock Drive, Malibu": bigRockDrive,
+  "20706 Rockpoint Way, Malibu": rockpointWay,
+  "3226 Serra Road, Malibu": serraRoad,
 };
 
 const getPropertyImage = (address: string, index: number) => {
   if (propertyImages[address]) return propertyImages[address];
-  const fallbackImages = [propertyDeerhead, propertyNimes, propertyPalisades, propertyMalibu];
+  const fallbackImages = [deerheadRoad, coolOakWay, bigRockDrive, rockpointWay, serraRoad];
   return fallbackImages[index % fallbackImages.length];
 };
 
