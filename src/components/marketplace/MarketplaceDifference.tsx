@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
 import { Check, X, Zap, Shield, Users } from "lucide-react";
-import { useState } from "react";
 
 export const MarketplaceDifference = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
   const comparisons = [
     { feature: "True order book trading", traditional: false, fragma: true },
@@ -22,13 +19,11 @@ export const MarketplaceDifference = () => {
   ];
 
   return (
-    <section className="relative py-32 lg:py-40 overflow-hidden">
+    <section className="relative py-20 lg:py-24 overflow-hidden">
       {/* Premium Light Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
-        {/* Subtle spotlight effects */}
         <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
       </div>
 
       {/* Subtle grid pattern */}
@@ -42,12 +37,12 @@ export const MarketplaceDifference = () => {
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Header Section */}
-        <div className="max-w-4xl mb-24">
+        <div className="max-w-4xl mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-4 mb-6"
           >
             <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
             <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
@@ -60,7 +55,7 @@ export const MarketplaceDifference = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
+            className="text-3xl md:text-4xl lg:text-5xl font-light text-slate-900 leading-[1.1] mb-5"
           >
             Not just another
             <br />
@@ -72,160 +67,56 @@ export const MarketplaceDifference = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
+            className="text-base md:text-lg text-slate-500 leading-relaxed max-w-2xl"
           >
             Traditional platforms give you buttons. We give you a real marketplace — 
             100% decentralized, completely non-custodial.
           </motion.p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
+        <div className="grid lg:grid-cols-12 gap-8">
           {/* Highlights Cards */}
-          <div className="lg:col-span-4 space-y-5">
-            {highlights.map((item, i) => {
-              const isHovered = hoveredIndex === i;
-              
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                  onMouseEnter={() => setHoveredIndex(i)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  className="group cursor-pointer"
+          <div className="lg:col-span-4 space-y-4">
+            {highlights.map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
+                className="group"
+              >
+                <div
+                  className="relative p-6 overflow-hidden rounded-sm bg-white/90 border border-slate-200/80 hover:border-slate-300 hover:shadow-lg transition-all duration-300"
                 >
-                  <motion.div
-                    className="relative p-8 lg:p-10 overflow-hidden rounded-sm"
-                    style={{
-                      background: isHovered 
-                        ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
-                        : 'rgba(255, 255, 255, 0.9)',
-                      border: isHovered 
-                        ? '1px solid rgba(139, 92, 246, 0.25)' 
-                        : '1px solid rgba(226, 232, 240, 0.8)',
-                      boxShadow: isHovered 
-                        ? '0 30px 60px -15px rgba(15, 23, 42, 0.6), 0 0 50px -10px rgba(139, 92, 246, 0.15)'
-                        : '0 4px 30px -10px rgba(0, 0, 0, 0.08)',
-                      transition: 'background 0.7s cubic-bezier(0.4, 0, 0.2, 1), border 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
-                    }}
-                    animate={{ 
-                      y: isHovered ? -8 : 0,
-                      scale: isHovered ? 1.015 : 1
-                    }}
-                    transition={{ 
-                      duration: 0.7, 
-                      ease: [0.32, 0.72, 0, 1],
-                    }}
+                  {/* Large decorative number */}
+                  <span 
+                    className="absolute top-2 right-3 text-[60px] font-extralight leading-none text-slate-900/[0.04]"
+                    style={{ fontFamily: 'serif' }}
                   >
-                    {/* Subtle violet glow on hover */}
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-br from-violet-900/10 via-transparent to-slate-800/20"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: isHovered ? 1 : 0 }}
-                      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                    {item.number}
+                  </span>
+
+                  {/* Icon container */}
+                  <div className="w-11 h-11 mb-4 flex items-center justify-center border border-slate-200 bg-slate-50 group-hover:bg-slate-100 transition-colors duration-300">
+                    <item.icon 
+                      className="w-5 h-5 text-slate-600" 
+                      strokeWidth={1.5}
                     />
-
-                    {/* Large decorative number */}
-                    <motion.span 
-                      className={`absolute top-4 right-4 text-[80px] lg:text-[100px] font-extralight leading-none ${
-                        isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.04]'
-                      }`}
-                      style={{ 
-                        fontFamily: 'serif',
-                        transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
-                      }}
-                      animate={{ 
-                        x: isHovered ? 10 : 0,
-                        y: isHovered ? -10 : 0
-                      }}
-                      transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-                    >
-                      {item.number}
-                    </motion.span>
-
-                    {/* Icon container */}
-                    <motion.div 
-                      className={`w-14 h-14 mb-6 flex items-center justify-center relative ${
-                        isHovered 
-                          ? 'border-slate-600/30 bg-slate-800/40' 
-                          : 'border-slate-200 bg-slate-50'
-                      }`}
-                      style={{ 
-                        borderWidth: '1px', 
-                        borderStyle: 'solid',
-                        transition: 'background 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-                      }}
-                      animate={{ 
-                        rotate: isHovered ? 6 : 0,
-                        scale: isHovered ? 1.08 : 1
-                      }}
-                      transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-                    >
-                      <item.icon 
-                        className={`w-6 h-6 ${
-                          isHovered ? 'text-violet-300' : 'text-slate-600'
-                        }`} 
-                        style={{ transition: 'color 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
-                        strokeWidth={1.5}
-                      />
-                      
-                      {/* Icon glow on hover */}
-                      <motion.div 
-                        className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-slate-600/10 blur-xl"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: isHovered ? 1 : 0 }}
-                        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                      />
-                    </motion.div>
-                    
-                    {/* Title */}
-                    <motion.h4 
-                      className={`text-lg lg:text-xl font-medium mb-2 ${
-                        isHovered ? 'text-white/90' : 'text-slate-900'
-                      }`}
-                      style={{ transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
-                      animate={{ x: isHovered ? 4 : 0 }}
-                      transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                    >
-                      {item.title}
-                    </motion.h4>
-                    
-                    {/* Description */}
-                    <p 
-                      className={`text-sm leading-relaxed ${
-                        isHovered ? 'text-slate-400' : 'text-slate-500'
-                      }`}
-                      style={{ transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
-                    >
-                      {item.desc}
-                    </p>
-
-                    {/* Bottom accent line */}
-                    <motion.div 
-                      className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/50 via-violet-400/40 to-slate-600/30"
-                      initial={{ width: 0 }}
-                      animate={{ width: isHovered ? '100%' : 0 }}
-                      transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-                    />
-
-                    {/* Corner accent */}
-                    <motion.div 
-                      className="absolute top-0 left-0 w-12 h-12"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(139,92,246,0.1) 0%, transparent 50%)'
-                      }}
-                      animate={{ 
-                        opacity: isHovered ? 1 : 0.3,
-                        scale: isHovered ? 1.5 : 1
-                      }}
-                      transition={{ duration: 0.4 }}
-                    />
-                  </motion.div>
-                </motion.div>
-              );
-            })}
+                  </div>
+                  
+                  {/* Title */}
+                  <h4 className="text-base font-medium mb-1 text-slate-900">
+                    {item.title}
+                  </h4>
+                  
+                  {/* Description */}
+                  <p className="text-sm leading-relaxed text-slate-500">
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
 
           {/* Comparison Table */}
@@ -239,7 +130,7 @@ export const MarketplaceDifference = () => {
               style={{ boxShadow: '0 4px 30px -10px rgba(0, 0, 0, 0.08)' }}
             >
               {/* Table Header */}
-              <div className="grid grid-cols-12 gap-4 p-6 lg:p-8 border-b border-slate-100 bg-slate-50/50">
+              <div className="grid grid-cols-12 gap-4 p-5 border-b border-slate-100 bg-slate-50/50">
                 <div className="col-span-6">
                   <span className="text-[10px] tracking-[0.3em] uppercase text-slate-400 font-medium">Feature</span>
                 </div>
@@ -260,41 +151,21 @@ export const MarketplaceDifference = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 + index * 0.05 }}
-                    onMouseEnter={() => setHoveredRow(index)}
-                    onMouseLeave={() => setHoveredRow(null)}
-                    className={`grid grid-cols-12 gap-4 p-6 lg:px-8 items-center transition-all duration-500 ${
-                      hoveredRow === index 
-                        ? 'bg-slate-900' 
-                        : 'bg-transparent hover:bg-slate-50/50'
-                    }`}
+                    className="grid grid-cols-12 gap-4 p-5 items-center hover:bg-slate-50/50 transition-colors duration-300"
                   >
                     <div className="col-span-6">
-                      <span className={`text-sm lg:text-base font-medium transition-colors duration-500 ${
-                        hoveredRow === index ? 'text-white' : 'text-slate-700'
-                      }`}>
+                      <span className="text-sm font-medium text-slate-700">
                         {item.feature}
                       </span>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      <div className={`w-8 h-8 rounded-sm flex items-center justify-center transition-all duration-500 ${
-                        hoveredRow === index 
-                          ? 'bg-rose-500/20' 
-                          : 'bg-rose-50'
-                      }`}>
-                        <X className={`w-4 h-4 transition-colors duration-500 ${
-                          hoveredRow === index ? 'text-rose-400' : 'text-rose-400'
-                        }`} strokeWidth={2} />
+                      <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-rose-50">
+                        <X className="w-3.5 h-3.5 text-rose-400" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      <div className={`w-8 h-8 rounded-sm flex items-center justify-center transition-all duration-500 ${
-                        hoveredRow === index 
-                          ? 'bg-emerald-500/20' 
-                          : 'bg-emerald-50'
-                      }`}>
-                        <Check className={`w-4 h-4 transition-colors duration-500 ${
-                          hoveredRow === index ? 'text-emerald-400' : 'text-emerald-500'
-                        }`} strokeWidth={2} />
+                      <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-emerald-50">
+                        <Check className="w-3.5 h-3.5 text-emerald-500" strokeWidth={2} />
                       </div>
                     </div>
                   </motion.div>
@@ -302,33 +173,21 @@ export const MarketplaceDifference = () => {
               </div>
 
               {/* Summary Footer */}
-              <div className="p-6 lg:p-8 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-t border-slate-100">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-900 flex items-center justify-center rounded-sm">
-                    <Check className="w-5 h-5 text-white" strokeWidth={2} />
+              <div className="p-5 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-t border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-slate-900 flex items-center justify-center rounded-sm">
+                    <Check className="w-4 h-4 text-white" strokeWidth={2} />
                   </div>
                   <div>
                     <span className="text-sm text-slate-600">
                       All <span className="text-slate-900 font-semibold">6 features</span> available on Fragma
                     </span>
-                    <p className="text-xs text-slate-400 mt-0.5">A truly decentralized trading experience</p>
                   </div>
                 </div>
               </div>
             </motion.div>
           </div>
         </div>
-
-        {/* Bottom decorative element */}
-        <motion.div 
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-20 flex justify-center"
-        >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
-        </motion.div>
       </div>
     </section>
   );
