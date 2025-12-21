@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
-import { Check, X, Zap, Shield, Users, ArrowRight } from "lucide-react";
+import { Check, X, Zap, Shield, Users } from "lucide-react";
+import { useState } from "react";
 
 export const MarketplaceDifference = () => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const comparisons = [
     { feature: "True order book trading", traditional: false, fragma: true },
     { feature: "Non-custodial wallets", traditional: false, fragma: true },
@@ -18,39 +21,54 @@ export const MarketplaceDifference = () => {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden bg-background">
-      {/* Subtle gradient */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
-      </div>
-      
-      {/* Top border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+    <section className="py-24 bg-slate-50/50 relative overflow-hidden">
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
-        <div className="max-w-4xl mb-20">
+        <div className="max-w-3xl mb-16">
           <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-12 h-px bg-slate-300" />
+            <span className="text-xs tracking-[0.3em] uppercase text-slate-400 font-medium">
+              The Difference
+            </span>
+          </motion.div>
+          
+          <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-light text-slate-900 leading-[1.1] tracking-tight"
+            style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 text-xs font-semibold tracking-widest uppercase rounded-full bg-secondary/80 text-foreground border border-border/50">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-              The Difference
-            </span>
-            
-            <h2 className="text-5xl lg:text-7xl font-serif font-bold text-foreground mb-6 leading-[1.1]">
-              Not just another
-              <br />
-              <span className="text-gradient italic">trading platform.</span>
-            </h2>
-            
-            <p className="text-xl text-muted-foreground max-w-xl leading-relaxed">
-              Traditional platforms give you buttons. We give you a real marketplace — 
-              100% decentralized, completely non-custodial.
-            </p>
-          </motion.div>
+            Not just another
+            <br />
+            <span className="italic text-slate-500">trading platform.</span>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-slate-500 max-w-xl mt-6 leading-relaxed"
+          >
+            Traditional platforms give you buttons. We give you a real marketplace — 
+            100% decentralized, completely non-custodial.
+          </motion.p>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-12 items-start">
@@ -59,21 +77,32 @@ export const MarketplaceDifference = () => {
             {highlights.map((item, i) => (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                whileHover={{ x: 8 }}
-                className="group flex items-center gap-5 p-6 rounded-2xl bg-card/50 border border-border/40 hover:border-primary/40 hover:bg-card/80 transition-all duration-300"
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="group flex items-center gap-4 p-5 bg-white border border-slate-200/80 hover:border-slate-400/50 transition-all duration-300 cursor-pointer"
+                style={{
+                  boxShadow: hoveredIndex === i 
+                    ? '0 8px 24px -8px rgba(15, 23, 42, 0.12)'
+                    : '0 1px 3px rgba(0, 0, 0, 0.02)',
+                }}
               >
-                <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
-                  <item.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors" />
+                <div className={`w-12 h-12 border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                  hoveredIndex === i 
+                    ? 'border-slate-700 bg-slate-800' 
+                    : 'border-slate-200 bg-white'
+                }`}>
+                  <item.icon className={`w-5 h-5 transition-colors duration-300 ${
+                    hoveredIndex === i ? 'text-white' : 'text-slate-400'
+                  }`} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <h4 className="text-sm font-medium text-slate-900">{item.title}</h4>
+                  <p className="text-xs text-slate-500">{item.desc}</p>
                 </div>
-                <ArrowRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all ml-auto" />
               </motion.div>
             ))}
           </div>
@@ -81,26 +110,27 @@ export const MarketplaceDifference = () => {
           {/* Comparison Table */}
           <div className="lg:col-span-8">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden"
+              className="bg-white border border-slate-200/80"
+              style={{ boxShadow: '0 4px 20px -5px rgba(0, 0, 0, 0.06)' }}
             >
               {/* Table Header */}
-              <div className="grid grid-cols-12 gap-4 p-6 border-b border-border/50 bg-secondary/30">
+              <div className="grid grid-cols-12 gap-4 p-5 border-b border-slate-100">
                 <div className="col-span-6">
-                  <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Feature</span>
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-slate-400 font-medium">Feature</span>
                 </div>
                 <div className="col-span-3 text-center">
-                  <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground/60">Traditional</span>
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-slate-300">Traditional</span>
                 </div>
                 <div className="col-span-3 text-center">
-                  <span className="text-xs font-semibold tracking-widest uppercase text-primary">Fragma</span>
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-slate-700 font-medium">Fragma</span>
                 </div>
               </div>
 
               {/* Table Rows */}
-              <div className="divide-y divide-border/30">
+              <div className="divide-y divide-slate-100">
                 {comparisons.map((item, index) => (
                   <motion.div
                     key={item.feature}
@@ -108,36 +138,33 @@ export const MarketplaceDifference = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.05 }}
-                    className="grid grid-cols-12 gap-4 p-6 items-center hover:bg-secondary/20 transition-colors"
+                    className="grid grid-cols-12 gap-4 p-5 items-center hover:bg-slate-50/50 transition-colors"
                   >
                     <div className="col-span-6">
-                      <span className="text-foreground font-medium">{item.feature}</span>
+                      <span className="text-sm text-slate-600">{item.feature}</span>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
-                        <X className="w-4 h-4 text-destructive" />
+                      <div className="w-7 h-7 rounded-full bg-rose-50 flex items-center justify-center">
+                        <X className="w-3.5 h-3.5 text-rose-400" />
                       </div>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"
-                      >
-                        <Check className="w-4 h-4 text-primary" />
-                      </motion.div>
+                      <div className="w-7 h-7 rounded-full bg-emerald-50 flex items-center justify-center">
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
               {/* Summary */}
-              <div className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-t border-primary/20">
+              <div className="p-5 bg-slate-50 border-t border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                    <Check className="w-5 h-5 text-primary" />
+                  <div className="w-8 h-8 bg-white border border-slate-200 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-slate-700" />
                   </div>
-                  <span className="text-foreground font-medium">
-                    All <span className="text-primary font-bold">6 features</span> available exclusively on Fragma
+                  <span className="text-sm text-slate-600">
+                    All <span className="text-slate-900 font-medium">6 features</span> available on Fragma
                   </span>
                 </div>
               </div>
