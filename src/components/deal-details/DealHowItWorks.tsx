@@ -216,10 +216,7 @@ export const DealHowItWorks = () => {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <p className="text-sm text-slate-400 leading-relaxed mt-2 mb-3">
-                            {step.description}
-                          </p>
-                          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-xs text-slate-300">
+                          <span className="inline-flex items-center gap-2 px-3 py-1.5 mt-2 rounded-full bg-white/10 text-xs text-slate-300">
                             <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
                             {step.detail}
                           </span>
