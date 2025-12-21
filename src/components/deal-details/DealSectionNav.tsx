@@ -158,7 +158,7 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
                 className={cn(
                   "relative px-3 lg:px-3.5 py-3 text-[12px] font-medium whitespace-nowrap transition-all duration-200 tracking-wide flex-shrink-0 rounded-lg",
                   activeSection === section.id
-                    ? "text-violet-700 bg-violet-50"
+                    ? "text-slate-800 bg-slate-100"
                     : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 )}
               >
