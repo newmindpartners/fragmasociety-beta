@@ -48,14 +48,28 @@
     --text-primary: 210 40% 98%;
     --text-muted: 215 20% 65%;
 
+    /* Light Section Tokens */
+    --light-bg: 210 20% 98%;
+    --light-surface: 210 15% 95%;
+    --light-text: 225 50% 12%;
+    --light-text-muted: 220 15% 45%;
+    --light-border: 220 15% 88%;
+
+    /* Warm accent for light sections */
+    --cream: 40 30% 96%;
+    --cream-surface: 40 25% 92%;
+
     /* Gradients */
     --gradient-turquoise: linear-gradient(135deg, hsl(172 83% 50%), hsl(204 100% 60%));
     --gradient-card: linear-gradient(180deg, hsl(225 60% 11%), hsl(230 50% 2%));
     --gradient-glow: radial-gradient(circle, hsl(172 83% 50% / 0.15), transparent 70%);
+    --gradient-light: linear-gradient(180deg, hsl(210 20% 98%), hsl(210 15% 95%));
+    --gradient-cream: linear-gradient(180deg, hsl(40 30% 96%), hsl(40 25% 92%));
 
     /* Shadows */
     --shadow-turquoise: 0 0 40px hsl(172 83% 50% / 0.3);
     --shadow-card: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
+    --shadow-light: 0 25px 50px -12px hsl(220 50% 10% / 0.08);
 
     /* Sidebar - keeping for compatibility */
     --sidebar-background: 225 65% 8%;
@@ -186,6 +200,33 @@
       hsl(230 50% 2%);
   }
 
+  /* Light Section Backgrounds */
+  .section-light {
+    background: hsl(var(--light-bg));
+  }
+
+  .section-cream {
+    background: hsl(var(--cream));
+  }
+
+  .section-light-gradient {
+    background: linear-gradient(180deg, hsl(var(--light-bg)) 0%, hsl(var(--cream)) 100%);
+  }
+
+  .section-light-mesh {
+    background: 
+      radial-gradient(at 20% 30%, hsl(172 83% 50% / 0.06) 0%, transparent 50%),
+      radial-gradient(at 80% 70%, hsl(204 100% 60% / 0.04) 0%, transparent 50%),
+      hsl(var(--light-bg));
+  }
+
+  .section-cream-mesh {
+    background: 
+      radial-gradient(at 30% 20%, hsl(172 83% 50% / 0.05) 0%, transparent 40%),
+      radial-gradient(at 70% 80%, hsl(38 92% 55% / 0.04) 0%, transparent 40%),
+      hsl(var(--cream));
+  }
+
   .shadow-turquoise {
     box-shadow: var(--shadow-turquoise);
   }
@@ -194,8 +235,29 @@
     box-shadow: var(--shadow-card);
   }
 
+  .shadow-light {
+    box-shadow: var(--shadow-light);
+  }
+
   .glow-turquoise {
     filter: drop-shadow(0 0 20px hsl(172 83% 50% / 0.4));
+  }
+
+  /* Glass for light sections */
+  .glass-light {
+    @apply bg-white/80 backdrop-blur-xl border border-slate-200/60;
+    box-shadow: 
+      0 4px 24px -1px hsl(220 50% 10% / 0.06),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.8);
+  }
+
+  /* Text colors for light sections */
+  .text-light-primary {
+    color: hsl(var(--light-text));
+  }
+
+  .text-light-muted {
+    color: hsl(var(--light-text-muted));
   }
 
   /* Glass Effect */
