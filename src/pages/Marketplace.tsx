@@ -10,6 +10,7 @@ import { CardanoEUTXO } from "@/components/marketplace/CardanoEUTXO";
 import { NonCustodialTrading } from "@/components/marketplace/NonCustodialTrading";
 import { TradingSteps } from "@/components/marketplace/TradingSteps";
 import { MarketplaceCTA } from "@/components/marketplace/MarketplaceCTA";
+import { WhyFragma } from "@/components/how-it-works/WhyFragma";
 
 const Marketplace = () => {
   return (
@@ -22,6 +23,7 @@ const Marketplace = () => {
       <TwoWayOrders />
       <OptionsTrading />
       <CardanoEUTXO />
+      <WhyFragma />
       <NonCustodialTrading />
       <TradingSteps />
       <MarketplaceCTA />
