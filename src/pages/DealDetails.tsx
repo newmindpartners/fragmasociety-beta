@@ -22,6 +22,8 @@ import { DealCaseStudies } from "@/components/deal-details/DealCaseStudies";
 import { DealSpecialOpportunity } from "@/components/deal-details/DealSpecialOpportunity";
 import { DealHighlights } from "@/components/deal-details/DealHighlights";
 import { DealSectionFAQ } from "@/components/deal-details/DealSectionFAQ";
+import { DealDiscussion } from "@/components/deal-details/DealDiscussion";
+import { DealUpdates } from "@/components/deal-details/DealUpdates";
 import { useDeal } from "@/hooks/useDeal";
 import type { DealData } from "@/types/deal";
 
@@ -191,6 +193,8 @@ const DealDetails = () => {
     { id: "financials", label: "Financials", available: !!deal?.financials },
     { id: "team", label: "Team", available: true },
     { id: "howitworks", label: "How It Works", available: true },
+    { id: "updates", label: "Updates", available: true },
+    { id: "discussion", label: "Discussion", available: true },
     { id: "risks", label: "Risks & Docs", available: true },
   ];
 
@@ -312,6 +316,20 @@ const DealDetails = () => {
         return (
           <>
             <DealHowItWorks />
+            <DealSectionFAQ />
+          </>
+        );
+      case "updates":
+        return (
+          <>
+            <DealUpdates dealId={deal.id} />
+            <DealSectionFAQ />
+          </>
+        );
+      case "discussion":
+        return (
+          <>
+            <DealDiscussion dealId={deal.id} />
             <DealSectionFAQ />
           </>
         );
