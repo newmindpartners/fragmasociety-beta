@@ -6,7 +6,7 @@ import {
   Coins, 
   TrendingUp, 
   ArrowRightLeft,
-  ArrowRight
+  Check
 } from "lucide-react";
 import { useState } from "react";
 
@@ -16,96 +16,81 @@ const steps = [
     title: "Express Interest",
     description: "Register your interest and complete investor verification (KYC/AML).",
     detail: "5-10 minutes",
+    accent: "from-violet-500 to-purple-600",
   },
   {
     icon: FileText,
     title: "Review Documents",
     description: "Access full documentation including term sheet and risk disclosures.",
     detail: "Full access",
+    accent: "from-blue-500 to-cyan-500",
   },
   {
     icon: CreditCard,
     title: "Subscribe & Fund",
     description: "Complete subscription and transfer funds securely.",
     detail: "Bank or crypto",
+    accent: "from-emerald-500 to-teal-500",
   },
   {
     icon: Coins,
     title: "Receive Tokens",
     description: "Tokens representing your ownership are issued to your wallet.",
     detail: "Non-custodial",
+    accent: "from-amber-500 to-orange-500",
   },
   {
     icon: TrendingUp,
     title: "Earn Distributions",
     description: "Receive automated payouts directly to your wallet.",
     detail: "Automated",
+    accent: "from-rose-500 to-pink-500",
   },
   {
     icon: ArrowRightLeft,
     title: "Trade on Secondary",
     description: "List your position on the Fragma secondary marketplace.",
     detail: "Exit anytime",
+    accent: "from-slate-600 to-slate-800",
   },
 ];
 
-// Step graphics
-const StepGraphic = ({ index, isHovered }: { index: number; isHovered: boolean }) => {
-  const graphics = [
-    <svg viewBox="0 0 48 48" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
-      <circle cx="24" cy="16" r="8" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <path d="M12 40 C12 32 18 28 24 28 C30 28 36 32 36 40" stroke="currentColor" strokeWidth="1.5" fill="none" />
-    </svg>,
-    <svg viewBox="0 0 48 48" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
-      <rect x="8" y="8" width="32" height="32" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <path d="M14 18 L34 18 M14 26 L28 26 M14 34 L22 34" stroke="currentColor" strokeWidth="1" />
-    </svg>,
-    <svg viewBox="0 0 48 48" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
-      <rect x="8" y="14" width="32" height="22" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <path d="M8 22 L40 22" stroke="currentColor" strokeWidth="1" />
-      <rect x="12" y="28" width="8" height="4" stroke="currentColor" strokeWidth="0.75" fill="none" />
-    </svg>,
-    <svg viewBox="0 0 48 48" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
-      <circle cx="24" cy="24" r="14" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="24" cy="24" r="6" stroke="currentColor" strokeWidth="1" fill="none" />
-      <circle cx="24" cy="24" r="2" fill="currentColor" />
-    </svg>,
-    <svg viewBox="0 0 48 48" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
-      <path d="M8 36 L18 26 L28 32 L40 16" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="40" cy="16" r="3" fill="currentColor" />
-    </svg>,
-    <svg viewBox="0 0 48 48" className={`w-full h-full transition-colors duration-500 ${isHovered ? 'text-white' : 'text-slate-900'}`}>
-      <path d="M12 24 L20 24 M28 24 L36 24" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M16 20 L12 24 L16 28 M32 20 L36 24 L32 28" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="24" cy="24" r="4" stroke="currentColor" strokeWidth="1.5" fill="none" />
-    </svg>,
-  ];
-  return graphics[index % graphics.length];
-};
-
 export const DealHowItWorks = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section className="py-32 relative overflow-hidden min-h-screen">
-      {/* Light Grey Studio Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-slate-50 to-slate-100">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-white/80 via-slate-50/40 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-[500px] h-[500px] bg-gradient-radial from-slate-200/50 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+    <section className="py-32 relative overflow-hidden bg-white">
+      {/* Sophisticated background */}
+      <div className="absolute inset-0">
+        {/* Gradient orbs */}
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-radial from-violet-100/40 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-[600px] h-[600px] bg-gradient-radial from-slate-100/60 to-transparent rounded-full blur-3xl" />
+        
+        {/* Elegant grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)`,
+            backgroundSize: '80px 80px'
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        {/* Header */}
-        <div className="max-w-3xl mb-20">
+        {/* Premium Header */}
+        <div className="max-w-4xl mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-4 mb-6"
+            className="flex items-center gap-5 mb-8"
           >
-            <div className="w-12 h-px bg-slate-400" />
-            <span className="text-xs tracking-[0.4em] uppercase text-slate-500 font-medium">
-              Process
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-slate-900" />
+              <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            </div>
+            <span className="text-xs tracking-[0.35em] uppercase text-slate-500 font-semibold">
+              Investment Process
             </span>
           </motion.div>
           
@@ -114,166 +99,239 @@ export const DealHowItWorks = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.1]"
+            className="text-5xl md:text-6xl lg:text-7xl font-light text-slate-900 leading-[1.05] mb-6"
           >
-            How it <span className="italic text-slate-500 font-serif">works</span>
+            How it <br />
+            <span className="relative inline-block">
+              <span className="italic font-serif text-slate-700">works</span>
+              <motion.div 
+                className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-slate-800 via-slate-600 to-transparent rounded-full"
+                initial={{ scaleX: 0, originX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              />
+            </span>
           </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-slate-500 font-light max-w-xl"
+          >
+            From interest to ownership in six seamless steps. Our streamlined process makes investing in premium real estate simple and secure.
+          </motion.p>
         </div>
 
-        {/* Steps Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {steps.map((step, index) => {
-            const isHovered = hoveredIndex === index;
+        {/* Main Content - Split Layout */}
+        <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
+          {/* Left: Step Navigation */}
+          <div className="lg:col-span-5">
+            <div className="relative">
+              {/* Vertical line */}
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-slate-200" />
+              
+              {/* Progress line */}
+              <motion.div 
+                className="absolute left-6 top-0 w-px bg-gradient-to-b from-slate-900 via-slate-600 to-slate-400"
+                initial={{ height: 0 }}
+                animate={{ height: `${((activeStep + 1) / steps.length) * 100}%` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              />
 
-            return (
+              {/* Steps */}
+              <div className="space-y-2">
+                {steps.map((step, index) => {
+                  const isActive = index === activeStep;
+                  const isPast = index < activeStep;
+                  const StepIcon = step.icon;
+
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      onClick={() => setActiveStep(index)}
+                      className={`relative flex items-start gap-6 p-5 cursor-pointer rounded-2xl transition-all duration-500 ${
+                        isActive 
+                          ? 'bg-slate-900 shadow-2xl shadow-slate-900/20' 
+                          : 'hover:bg-slate-50'
+                      }`}
+                    >
+                      {/* Step indicator */}
+                      <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                        isActive 
+                          ? `bg-gradient-to-br ${step.accent} shadow-lg` 
+                          : isPast 
+                            ? 'bg-slate-900' 
+                            : 'bg-white border-2 border-slate-200'
+                      }`}>
+                        {isPast ? (
+                          <Check className="w-5 h-5 text-white" />
+                        ) : (
+                          <StepIcon className={`w-5 h-5 ${isActive || isPast ? 'text-white' : 'text-slate-400'}`} />
+                        )}
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 pt-1">
+                        <div className="flex items-center gap-3 mb-1">
+                          <span className={`text-xs font-mono transition-colors duration-500 ${
+                            isActive ? 'text-slate-400' : 'text-slate-400'
+                          }`}>
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <div className={`w-8 h-px transition-colors duration-500 ${
+                            isActive ? 'bg-slate-600' : 'bg-slate-200'
+                          }`} />
+                        </div>
+                        <h3 className={`text-lg font-medium transition-colors duration-500 ${
+                          isActive ? 'text-white' : 'text-slate-900'
+                        }`}>
+                          {step.title}
+                        </h3>
+                        
+                        {/* Expanded content for active step */}
+                        <motion.div
+                          initial={false}
+                          animate={{ 
+                            height: isActive ? 'auto' : 0,
+                            opacity: isActive ? 1 : 0
+                          }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-sm text-slate-400 leading-relaxed mt-2 mb-3">
+                            {step.description}
+                          </p>
+                          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-xs text-slate-300">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                            {step.detail}
+                          </span>
+                        </motion.div>
+                      </div>
+
+                      {/* Active indicator */}
+                      {isActive && (
+                        <motion.div 
+                          layoutId="activeStep"
+                          className="absolute right-5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white"
+                        />
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Visual Display */}
+          <div className="lg:col-span-7">
+            <div className="sticky top-32">
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="group relative cursor-pointer"
+                key={activeStep}
+                initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                className="relative"
               >
-                <motion.div 
-                  className={`relative p-8 h-full overflow-hidden transition-all duration-500 ${
-                    isHovered ? 'bg-slate-800' : 'bg-white border border-slate-200/50'
-                  }`}
-                  animate={{ 
-                    y: isHovered ? -8 : 0,
-                    scale: isHovered ? 1.02 : 1 
-                  }}
-                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                >
-                  {/* Decorative graphic */}
-                  <div className={`absolute top-6 right-6 w-12 h-12 transition-opacity duration-500 ${isHovered ? 'opacity-10' : 'opacity-[0.04]'}`}>
-                    <StepGraphic index={index} isHovered={isHovered} />
+                {/* Main card */}
+                <div className={`relative rounded-3xl overflow-hidden bg-gradient-to-br ${steps[activeStep].accent} p-12 lg:p-16 min-h-[500px] shadow-2xl`}>
+                  {/* Pattern overlay */}
+                  <div 
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                      backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+                      backgroundSize: '32px 32px'
+                    }}
+                  />
+                  
+                  {/* Large step number */}
+                  <div className="absolute top-8 right-8 text-[200px] font-light leading-none text-white/10 font-serif select-none pointer-events-none">
+                    {String(activeStep + 1).padStart(2, '0')}
                   </div>
 
                   {/* Content */}
-                  <div className="relative z-10">
-                    {/* Step number */}
-                    <motion.div 
-                      className="mb-8"
-                      animate={{ 
-                        scale: isHovered ? 1.1 : 1,
-                        x: isHovered ? 8 : 0 
-                      }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <span className={`text-6xl font-extralight transition-colors duration-500 font-serif ${
-                        isHovered ? 'text-slate-600' : 'text-slate-200'
-                      }`}>
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                    </motion.div>
-                    
-                    {/* Icon */}
-                    <motion.div 
-                      className={`w-14 h-14 border flex items-center justify-center mb-6 transition-all duration-500 ${
-                        isHovered 
-                          ? 'border-slate-600 bg-slate-700' 
-                          : 'border-slate-200 bg-slate-50'
-                      }`}
-                      animate={{ 
-                        rotate: isHovered ? 6 : 0,
-                        scale: isHovered ? 1.1 : 1
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <step.icon className={`w-6 h-6 transition-colors duration-500 ${
-                        isHovered ? 'text-white' : 'text-slate-500'
-                      }`} />
-                    </motion.div>
-                    
-                    {/* Content */}
-                    <motion.h3 
-                      className={`text-lg font-medium mb-3 transition-colors duration-500 ${
-                        isHovered ? 'text-white' : 'text-slate-900'
-                      }`}
-                      animate={{ y: isHovered ? -2 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {step.title}
-                    </motion.h3>
-                    
-                    <p className={`text-sm leading-relaxed font-light mb-6 transition-colors duration-500 ${
-                      isHovered ? 'text-slate-300' : 'text-slate-500'
-                    }`}>
-                      {step.description}
-                    </p>
-                    
-                    {/* Detail badge */}
-                    <motion.span 
-                      className={`inline-flex items-center gap-2 px-4 py-2 text-xs transition-all duration-500 ${
-                        isHovered 
-                          ? 'bg-slate-700 text-slate-300 border border-slate-600' 
-                          : 'bg-slate-50 text-slate-600 border border-slate-200'
-                      }`}
-                      animate={{ scale: isHovered ? 1.05 : 1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <motion.div 
-                        className={`w-1.5 h-1.5 rounded-full transition-colors duration-500 ${
-                          isHovered ? 'bg-slate-400' : 'bg-slate-400'
-                        }`}
-                        animate={{ scale: isHovered ? [1, 1.5, 1] : 1 }}
-                        transition={{ duration: 0.6 }}
-                      />
-                      {step.detail}
-                    </motion.span>
-                  </div>
+                  <div className="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                      {/* Icon */}
+                      <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mb-10">
+                        {(() => {
+                          const StepIcon = steps[activeStep].icon;
+                          return <StepIcon className="w-10 h-10 text-white" />;
+                        })()}
+                      </div>
 
-                  {/* Bottom accent */}
-                  <motion.div 
-                    className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-slate-600 via-slate-400 to-slate-600"
-                    initial={{ width: 0 }}
-                    animate={{ width: isHovered ? '100%' : 0 }}
-                    transition={{ duration: 0.4 }}
-                  />
-                </motion.div>
+                      {/* Title */}
+                      <h3 className="text-4xl md:text-5xl font-light text-white mb-6 leading-tight">
+                        {steps[activeStep].title}
+                      </h3>
 
-                {/* Connector arrow */}
-                {index < steps.length - 1 && index !== 2 && (
-                  <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10">
-                    <motion.div 
-                      className={`w-6 h-6 flex items-center justify-center transition-all duration-300 ${
-                        isHovered ? 'bg-slate-800' : 'bg-white border border-slate-200'
-                      }`}
-                      animate={{ 
-                        scale: isHovered ? 1.2 : 1,
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <ArrowRight className={`w-3 h-3 transition-colors duration-300 ${
-                        isHovered ? 'text-white' : 'text-slate-400'
-                      }`} />
-                    </motion.div>
+                      {/* Description */}
+                      <p className="text-xl text-white/80 font-light leading-relaxed max-w-md">
+                        {steps[activeStep].description}
+                      </p>
+                    </div>
+
+                    {/* Bottom detail */}
+                    <div className="flex items-center justify-between mt-12 pt-8 border-t border-white/20">
+                      <div className="flex items-center gap-4">
+                        <div className="w-3 h-3 rounded-full bg-white" />
+                        <span className="text-white/90 font-medium">{steps[activeStep].detail}</span>
+                      </div>
+                      
+                      {/* Step indicator dots */}
+                      <div className="flex items-center gap-2">
+                        {steps.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setActiveStep(idx)}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                              idx === activeStep 
+                                ? 'bg-white w-8' 
+                                : idx < activeStep 
+                                  ? 'bg-white/60' 
+                                  : 'bg-white/30'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                )}
+                </div>
+
+                {/* Decorative elements */}
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-slate-100 -z-10" />
+                <div className="absolute -top-4 -left-4 w-24 h-24 rounded-xl border-2 border-slate-200 -z-10" />
               </motion.div>
-            );
-          })}
-        </div>
 
-        {/* Bottom Note */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="mt-16 pt-8 border-t border-slate-200/50"
-        >
-          <div className="flex items-center gap-4">
-            <motion.div 
-              className="w-2 h-2 rounded-full bg-slate-600"
-              animate={{ scale: [1, 1.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            <span className="text-sm text-slate-500 font-light">Full support from our investor relations team at every step</span>
+              {/* Support note */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="mt-10 flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-100"
+              >
+                <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center flex-shrink-0">
+                  <motion.div 
+                    className="w-3 h-3 rounded-full bg-emerald-500"
+                    animate={{ scale: [1, 1.3, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-900">Full support at every step</p>
+                  <p className="text-sm text-slate-500">Our investor relations team is here to guide you through the process</p>
+                </div>
+              </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
