@@ -13,7 +13,7 @@ import categorySports from "@/assets/category-sports.jpg";
 import categoryEsg from "@/assets/category-esg.jpg";
 import naouriHeroBg from "@/assets/naouri-hero-bg.png";
 // Fallback for local assets (used when no storage URL available)
-import philippeBannerFallback from "@/assets/philippe-banner.png";
+import philippeBannerFallback from "@/assets/philippe-banner.png"; // Leader portrait fallback
 
 const getCategoryBackground = (category: string): string => {
   const categoryMap: Record<string, string> = {
