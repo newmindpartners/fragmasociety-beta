@@ -291,64 +291,90 @@ export const OrderBookExplainer = () => {
   ];
 
   return (
-    <section className="py-32 section-mesh relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+    <section className="py-32 relative overflow-hidden bg-background">
+      {/* Subtle gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-primary/[0.02]" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[120px]" />
+      
+      {/* Top border line */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-4xl mx-auto mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <span className="inline-block px-4 py-2 mb-6 text-xs font-semibold tracking-wider uppercase rounded-full bg-white/5 text-white border border-white/20">
+            <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 text-xs font-semibold tracking-widest uppercase rounded-full bg-secondary/80 text-foreground border border-border/50 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               How It Works
             </span>
-            <h2 className="text-4xl lg:text-6xl font-serif font-bold text-foreground mb-6">
+            <h2 className="text-5xl lg:text-7xl font-serif font-bold text-foreground mb-8 leading-[1.1]">
               Professional trading,
               <br />
-              <span className="text-gradient">simplified.</span>
+              <span className="text-gradient italic">simplified.</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               A traditional exchange uses an order book. We bring this same professional tool to real-world assets.
             </p>
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <AnimatedOrderBook />
+        <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-start">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <AnimatedOrderBook />
+          </motion.div>
 
-          <div className="space-y-4">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="space-y-4"
+          >
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ x: 10, scale: 1.02 }}
-                className="flex items-start gap-4 p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all cursor-default"
+                transition={{ delay: 0.4 + index * 0.1 }}
+                whileHover={{ x: 8 }}
+                className="group flex items-start gap-5 p-6 rounded-2xl bg-card/50 border border-border/40 hover:border-primary/40 hover:bg-card/80 transition-all duration-300 cursor-default"
               >
-                <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                  <benefit.icon className="w-7 h-7 text-primary" />
+                <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 group-hover:scale-105 transition-all duration-300">
+                  <benefit.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg text-foreground mb-1">{benefit.title}</h3>
+                  <h3 className="font-semibold text-lg text-foreground mb-1 group-hover:text-primary transition-colors">
+                    {benefit.title}
+                  </h3>
                   <p className="text-muted-foreground">{benefit.description}</p>
                 </div>
               </motion.div>
             ))}
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="text-white font-medium mt-8 pl-4 border-l-2 border-primary"
+              transition={{ delay: 0.9 }}
+              className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20"
             >
-              This isn't a "platform price." It's a real marketplace where you set the terms.
-            </motion.p>
-          </div>
+              <p className="text-foreground font-medium leading-relaxed">
+                <span className="text-primary font-semibold">This isn't a "platform price."</span>{" "}
+                It's a real marketplace where you set the terms.
+              </p>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>
