@@ -16,42 +16,36 @@ const steps = [
     title: "Express Interest",
     description: "Register your interest and complete investor verification (KYC/AML).",
     detail: "5-10 minutes",
-    accent: "from-violet-500 to-purple-600",
   },
   {
     icon: FileText,
     title: "Review Documents",
     description: "Access full documentation including term sheet and risk disclosures.",
     detail: "Full access",
-    accent: "from-blue-500 to-cyan-500",
   },
   {
     icon: CreditCard,
     title: "Subscribe & Fund",
     description: "Complete subscription and transfer funds securely.",
     detail: "Bank or crypto",
-    accent: "from-emerald-500 to-teal-500",
   },
   {
     icon: Coins,
     title: "Receive Tokens",
     description: "Tokens representing your ownership are issued to your wallet.",
     detail: "Non-custodial",
-    accent: "from-amber-500 to-orange-500",
   },
   {
     icon: TrendingUp,
     title: "Earn Distributions",
     description: "Receive automated payouts directly to your wallet.",
     detail: "Automated",
-    accent: "from-rose-500 to-pink-500",
   },
   {
     icon: ArrowRightLeft,
     title: "Trade on Secondary",
     description: "List your position on the Fragma secondary marketplace.",
     detail: "Exit anytime",
-    accent: "from-slate-600 to-slate-800",
   },
 ];
 
@@ -165,7 +159,7 @@ export const DealHowItWorks = () => {
                       {/* Step indicator */}
                       <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
                         isActive 
-                          ? `bg-gradient-to-br ${step.accent} shadow-lg` 
+                          ? 'bg-slate-800 shadow-lg' 
                           : isPast 
                             ? 'bg-slate-900' 
                             : 'bg-white border-2 border-slate-200'
@@ -209,7 +203,7 @@ export const DealHowItWorks = () => {
                             {step.description}
                           </p>
                           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-xs text-slate-300">
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
                             {step.detail}
                           </span>
                         </motion.div>
@@ -240,7 +234,7 @@ export const DealHowItWorks = () => {
                 className="relative"
               >
                 {/* Main card */}
-                <div className={`relative rounded-3xl overflow-hidden bg-gradient-to-br ${steps[activeStep].accent} p-12 lg:p-16 min-h-[500px] shadow-2xl`}>
+                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 p-12 lg:p-16 min-h-[500px] shadow-2xl">
                   {/* Pattern overlay */}
                   <div 
                     className="absolute inset-0 opacity-10"
