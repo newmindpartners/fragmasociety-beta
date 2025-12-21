@@ -1,187 +1,144 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Shield, Zap, Globe, Lock, Users, BarChart3 } from "lucide-react";
+import { Shield, Zap, Globe, Lock, Users, BarChart3, ArrowRight, Key, ShieldCheck, Sparkles } from "lucide-react";
+
+const benefits = [
+  {
+    title: "You Hold Your Keys",
+    description: "Assets never leave your wallet until the trade is complete. No intermediary custody.",
+    icon: Key
+  },
+  {
+    title: "No Counterparty Risk",
+    description: "Smart contracts ensure atomic swaps. Either both parties get what they agreed, or nothing happens.",
+    icon: ShieldCheck
+  },
+  {
+    title: "Instant Settlement",
+    description: "Trades settle in seconds, not days. No clearing houses, no delays.",
+    icon: Sparkles
+  },
+  {
+    title: "Full Transparency",
+    description: "Every transaction is recorded on-chain. Complete audit trail, always.",
+    icon: Lock
+  }
+];
 
 const features = [
-  {
-    icon: Shield,
-    title: "Institutional-Grade Security",
-    description: "Bank-level custody with multi-signature wallets and audited smart contracts protect your investments.",
-    number: "01"
-  },
-  {
-    icon: Zap,
-    title: "Instant Settlement",
-    description: "On-chain transactions mean no waiting. Your purchases, trades, and payouts settle in real-time.",
-    number: "02"
-  },
-  {
-    icon: Globe,
-    title: "Global Access",
-    description: "Invest in premium assets worldwide from anywhere. No borders, no barriers, no minimums of millions.",
-    number: "03"
-  },
-  {
-    icon: Lock,
-    title: "Non-Custodial Design",
-    description: "You hold your tokens. We never take custody of your assets—true ownership, always.",
-    number: "04"
-  },
-  {
-    icon: Users,
-    title: "Curated Opportunities",
-    description: "Every deal undergoes rigorous due diligence by industry experts before reaching you.",
-    number: "05"
-  },
-  {
-    icon: BarChart3,
-    title: "Transparent Reporting",
-    description: "Real-time dashboards, on-chain proof of reserves, and detailed performance analytics.",
-    number: "06"
-  }
+  { icon: Shield, title: "Bank-level security", description: "Institutional-grade custody" },
+  { icon: Zap, title: "Real-time settlement", description: "On-chain in seconds" },
+  { icon: Globe, title: "Global access", description: "Invest from anywhere" },
+  { icon: Users, title: "Curated deals", description: "Expert-vetted opportunities" },
+  { icon: BarChart3, title: "Full transparency", description: "On-chain proof" },
 ];
 
 export const WhyFragma = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Premium Light Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50" />
+    <section ref={sectionRef} className="py-32 section-mesh relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
       
-      {/* Subtle accent gradients */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-violet-100/30 via-transparent to-transparent" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/50 via-transparent to-transparent" />
-      </div>
-      
-      {/* Decorative lines */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="max-w-4xl mb-16 lg:mb-20">
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            className="flex items-center gap-4 mb-8"
-          >
-            <div className="w-12 h-px bg-gradient-to-r from-violet-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
-              The Fragma Advantage
-            </span>
-          </motion.div>
-          
-          <motion.h2
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extralight text-slate-900 leading-[1.05] mb-6"
           >
-            Why Choose
-            <span className="block font-serif italic text-slate-500 mt-2">Fragma Society</span>
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
-          >
-            Built on transparency, security, and accessibility—we're redefining 
-            what it means to invest in premium assets.
-          </motion.p>
+            <span className="inline-block px-4 py-2 mb-6 text-xs font-semibold tracking-wider uppercase rounded-full bg-white/5 text-white border border-white/20">
+              The Fragma Advantage
+            </span>
+            <h2 className="text-4xl lg:text-6xl font-serif font-bold text-foreground mb-6">
+              True
+              <br />
+              <span className="bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">decentralization.</span>
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Your assets, your control. Non-custodial by design, transparent by default.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {features.map((feature, index) => {
-            const isHovered = hoveredIndex === index;
-            const Icon = feature.icon;
-            
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.1 + index * 0.1 }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="group cursor-pointer"
-              >
-                <motion.div
-                  className="relative p-8 lg:p-10 h-full rounded-xl overflow-hidden"
-                  style={{
-                    background: isHovered 
-                      ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 100%)'
-                      : 'rgba(255, 255, 255, 0.9)',
-                    border: isHovered 
-                      ? '1px solid rgba(139, 92, 246, 0.3)' 
-                      : '1px solid rgba(226, 232, 240, 0.8)',
-                    boxShadow: isHovered 
-                      ? '0 25px 50px -12px rgba(15, 23, 42, 0.4), 0 0 40px -10px rgba(139, 92, 246, 0.15)'
-                      : '0 4px 20px -8px rgba(0, 0, 0, 0.06)',
-                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                  animate={{ 
-                    y: isHovered ? -6 : 0,
-                    scale: isHovered ? 1.02 : 1
-                  }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {/* Large decorative number */}
-                  <span 
-                    className={`absolute top-4 right-4 text-[80px] font-extralight leading-none transition-colors duration-500 ${
-                      isHovered ? 'text-white/[0.03]' : 'text-slate-900/[0.03]'
-                    }`}
-                    style={{ fontFamily: 'serif' }}
-                  >
-                    {feature.number}
-                  </span>
-                  
-                  {/* Icon */}
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-all duration-500 ${
-                    isHovered 
-                      ? 'bg-violet-500/20' 
-                      : 'bg-slate-100'
-                  }`}>
-                    <Icon 
-                      className={`w-7 h-7 transition-colors duration-500 ${
-                        isHovered ? 'text-violet-400' : 'text-slate-600'
-                      }`} 
-                      strokeWidth={1.5} 
-                    />
+        {/* Benefits Grid */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-16">
+          {benefits.map((benefit, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group relative"
+            >
+              <div className="relative p-8 bg-card rounded-2xl border border-border/50 hover:border-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/10 transition-all duration-300">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-violet-500 group-hover:border-violet-500 transition-colors">
+                    <benefit.icon className="w-6 h-6 text-violet-400 group-hover:text-white transition-colors" />
                   </div>
-                  
-                  {/* Title */}
-                  <h3 className={`text-xl lg:text-2xl font-medium mb-3 transition-colors duration-500 ${
-                    isHovered ? 'text-white' : 'text-slate-900'
-                  }`}>
-                    {feature.title}
-                  </h3>
-                  
-                  {/* Description */}
-                  <p className={`text-base leading-relaxed transition-colors duration-500 ${
-                    isHovered ? 'text-slate-400' : 'text-slate-500'
-                  }`}>
-                    {feature.description}
-                  </p>
-                  
-                  {/* Bottom accent line */}
-                  <motion.div 
-                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500 to-violet-400"
-                    initial={{ width: 0 }}
-                    animate={{ width: isHovered ? '100%' : 0 }}
-                    transition={{ duration: 0.5 }}
-                  />
-                </motion.div>
-              </motion.div>
-            );
-          })}
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground mb-2">{benefit.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Features Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.4 }}
+          className="flex flex-wrap items-center justify-center gap-4"
+        >
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: 20 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.5 + index * 0.1 }}
+              whileHover={{ x: 10, scale: 1.02 }}
+              className="flex items-center gap-3 px-5 py-3 rounded-xl bg-card border border-border/50 hover:border-violet-500/30 transition-all cursor-default"
+            >
+              <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+                <feature.icon className="w-5 h-5 text-violet-400" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground text-sm">{feature.title}</h4>
+                <p className="text-xs text-muted-foreground">{feature.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Quote highlight */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.6 }}
+          className="text-white font-medium mt-12 max-w-2xl mx-auto text-center pl-4 border-l-2 border-violet-500"
+        >
+          This isn't a "platform" holding your assets. It's true self-custody with institutional-grade infrastructure.
+        </motion.p>
+
+        {/* Trust Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.7 }}
+          className="mt-12 text-center"
+        >
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-card rounded-full border border-border/50">
+            <ShieldCheck className="w-6 h-6 text-violet-400" />
+            <span className="text-muted-foreground">
+              Powered by <span className="text-foreground font-medium">Cardano</span> blockchain with <span className="text-foreground font-medium">smart contract</span> security
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

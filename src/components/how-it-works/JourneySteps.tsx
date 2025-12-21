@@ -1,269 +1,258 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Search, CreditCard, TrendingUp, ArrowLeftRight, Check, ChevronRight } from "lucide-react";
+import { Search, CreditCard, TrendingUp, ArrowLeftRight, Check, ArrowRight, Wallet, FileCheck, Coins } from "lucide-react";
 
 const steps = [
   {
-    step: 1,
-    title: "Browse",
-    subtitle: "Discover Opportunities",
+    step: "01",
     icon: Search,
-    description: "Explore a curated selection of tokenized real estate, entertainment royalties, and private credit deals.",
-    features: [
-      "Filter by asset class and risk profile",
-      "View detailed due diligence reports",
-      "Compare projected yields"
-    ]
+    title: "Browse curated deals",
+    description: "Explore tokenized real estate, film rights, private credit and more."
   },
   {
-    step: 2,
-    title: "Invest",
-    subtitle: "Secure Your Position",
+    step: "02",
     icon: CreditCard,
-    description: "Choose your investment amount, complete payment seamlessly, and sign digitally in minutes.",
-    features: [
-      "Start from just €50",
-      "Pay via bank transfer or crypto",
-      "Instant confirmation and receipt"
-    ]
+    title: "Invest from €50",
+    description: "Choose your amount, pay via bank or crypto, sign digitally."
   },
   {
-    step: 3,
-    title: "Earn",
-    subtitle: "Receive Distributions",
+    step: "03",
+    icon: Coins,
+    title: "Receive your tokens",
+    description: "Tokens are delivered to your wallet, representing fractional ownership."
+  },
+  {
+    step: "04",
     icon: TrendingUp,
-    description: "Sit back as automated smart contracts deliver yields directly to your wallet on schedule.",
-    features: [
-      "Real-time earnings dashboard",
-      "Automated payout triggers",
-      "Full on-chain transparency"
-    ]
+    title: "Earn automated yields",
+    description: "Smart contracts distribute payouts directly to your wallet on schedule."
   },
   {
-    step: 4,
-    title: "Exit",
-    subtitle: "Trade Anytime",
+    step: "05",
+    icon: Wallet,
+    title: "Hold in Smart Vault",
+    description: "Secure your tokens in non-custodial smart vaults for added protection."
+  },
+  {
+    step: "06",
     icon: ArrowLeftRight,
-    description: "List your position on our secondary marketplace and trade with other investors 24/7.",
-    features: [
-      "Non-custodial order book",
-      "Set your own prices",
-      "Instant on-chain settlement"
-    ]
+    title: "Trade 24/7",
+    description: "List and trade your positions anytime on the secondary marketplace."
   }
 ];
 
-export const JourneySteps = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
-  useEffect(() => {
-    if (!isInView || isPaused) return;
-    
-    const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % 4);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [isInView, isPaused]);
-
-  const handleStepClick = (index: number) => {
-    setIsPaused(true);
-    setActiveStep(index);
-    setTimeout(() => setIsPaused(false), 10000);
-  };
-
-  const currentStep = steps[activeStep];
-
+const StepCard = ({ 
+  step, 
+  index, 
+  isActive, 
+  onClick 
+}: { 
+  step: typeof steps[0]; 
+  index: number; 
+  isActive: boolean;
+  onClick: () => void;
+}) => {
+  const Icon = step.icon;
+  
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Light Background with Subtle Depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50/80 to-white" />
-      
-      {/* Elegant geometric patterns */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-violet-100/40 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-radial from-slate-100/60 via-transparent to-transparent" />
-      </div>
-      
-      {/* Subtle grid */}
-      <div 
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `linear-gradient(90deg, #0f172a 1px, transparent 1px), linear-gradient(180deg, #0f172a 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }}
-      />
-
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="max-w-4xl mb-16 lg:mb-20">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      onClick={onClick}
+      className="group cursor-pointer"
+    >
+      <motion.div
+        whileHover={{ y: -8 }}
+        animate={isActive ? { scale: 1.02 } : { scale: 1 }}
+        className={`relative h-full rounded-2xl p-6 border transition-all duration-500 overflow-hidden ${
+          isActive 
+            ? 'bg-white shadow-light border-violet-300' 
+            : 'bg-white/80 border-slate-200/60 hover:border-violet-200 hover:shadow-light'
+        }`}
+      >
+        {/* Active indicator glow */}
+        {isActive && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
+            layoutId="activeGlow"
+            className="absolute inset-0 bg-gradient-to-br from-violet-50 to-transparent pointer-events-none"
+          />
+        )}
+        
+        {/* Top row */}
+        <div className="relative flex items-start justify-between mb-5">
+          <motion.div
+            animate={isActive ? { scale: 1.1 } : { scale: 1 }}
+            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-500 ${
+              isActive 
+                ? 'bg-violet-600 text-white shadow-lg shadow-violet-200' 
+                : 'bg-slate-100 text-slate-600 group-hover:bg-violet-100 group-hover:text-violet-600'
+            }`}
           >
-            <div className="w-12 h-px bg-gradient-to-r from-violet-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
-              Your Investment Journey
-            </span>
+            <Icon className="w-7 h-7" />
           </motion.div>
           
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extralight text-slate-900 leading-[1.05] mb-6"
+          <motion.span 
+            animate={{ 
+              color: isActive ? "rgb(139, 92, 246)" : "rgb(226, 232, 240)",
+            }}
+            className="text-5xl font-serif font-bold italic"
           >
-            Four Simple Steps
-            <span className="block font-serif italic text-slate-500 mt-2">to Transform Your Portfolio</span>
-          </motion.h2>
+            {step.step}
+          </motion.span>
         </div>
 
-        {/* Steps Content - Split Layout */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          {/* Left: Step Navigation */}
+        {/* Content */}
+        <div className="relative">
+          <h3 className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
+            isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'
+          }`}>
+            {step.title}
+          </h3>
+          <p className={`text-sm leading-relaxed transition-colors duration-500 ${
+            isActive ? 'text-slate-600' : 'text-slate-500 group-hover:text-slate-600'
+          }`}>
+            {step.description}
+          </p>
+        </div>
+
+        {/* Active indicator line */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: isActive ? 1 : 0 }}
+          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 to-violet-400 origin-left rounded-b-2xl"
+        />
+      </motion.div>
+    </motion.div>
+  );
+};
+
+export const JourneySteps = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 6);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="py-32 section-cream-mesh relative overflow-hidden">
+      {/* Decorative floating elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{ y: [-15, 15, -15], x: [-5, 5, -5] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute top-32 left-10 w-32 h-32 rounded-full bg-violet-200/20 blur-3xl"
+        />
+        <motion.div
+          animate={{ y: [15, -15, 15], x: [5, -5, 5] }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute bottom-32 right-10 w-48 h-48 rounded-full bg-slate-200/30 blur-3xl"
+        />
+      </div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
           >
-            {steps.map((step, index) => {
-              const isActive = activeStep === index;
-              const Icon = step.icon;
-              
-              return (
-                <motion.div
-                  key={step.step}
-                  onClick={() => handleStepClick(index)}
-                  className={`relative p-6 lg:p-8 rounded-xl cursor-pointer transition-all duration-500 ${
-                    isActive 
-                      ? 'bg-slate-900 shadow-2xl shadow-slate-900/20' 
-                      : 'bg-white border border-slate-200/80 hover:border-slate-300 hover:shadow-lg'
-                  }`}
-                  animate={{ scale: isActive ? 1 : 0.98 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {/* Progress bar for active step */}
-                  {isActive && !isPaused && (
-                    <motion.div
-                      className="absolute top-0 left-0 h-1 bg-gradient-to-r from-violet-500 to-violet-400 rounded-t-xl"
-                      initial={{ width: "0%" }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 5, ease: "linear" }}
-                    />
-                  )}
-                  
-                  <div className="flex items-start gap-5">
-                    {/* Step Number & Icon */}
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-violet-500/20' 
-                        : 'bg-slate-100'
-                    }`}>
-                      <Icon className={`w-6 h-6 transition-colors duration-300 ${
-                        isActive ? 'text-violet-400' : 'text-slate-500'
-                      }`} strokeWidth={1.5} />
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={`text-xs font-medium tracking-wider uppercase transition-colors duration-300 ${
-                          isActive ? 'text-violet-400' : 'text-slate-400'
-                        }`}>
-                          Step {step.step}
-                        </span>
-                      </div>
-                      <h3 className={`text-xl lg:text-2xl font-medium mb-1 transition-colors duration-300 ${
-                        isActive ? 'text-white' : 'text-slate-900'
-                      }`}>
-                        {step.title}
-                      </h3>
-                      <p className={`text-sm transition-colors duration-300 ${
-                        isActive ? 'text-slate-400' : 'text-slate-500'
-                      }`}>
-                        {step.subtitle}
-                      </p>
-                    </div>
-                    
-                    {/* Arrow indicator */}
-                    <ChevronRight className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${
-                      isActive ? 'text-violet-400 translate-x-1' : 'text-slate-300'
-                    }`} />
-                  </div>
-                </motion.div>
-              );
-            })}
+            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-xs font-semibold tracking-wider uppercase rounded-full bg-violet-100 text-violet-600 border border-violet-200">
+              <FileCheck className="w-3.5 h-3.5" />
+              Your Investment Journey
+            </span>
+            
+            <h2 className="text-4xl lg:text-6xl font-serif font-bold text-slate-900 mb-6 tracking-tight">
+              From discovery
+              <br />
+              <span className="bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">to earnings.</span>
+            </h2>
+            
+            <p className="text-xl text-slate-600 leading-relaxed">
+              Six simple steps to transform how you build wealth through fractional ownership.
+            </p>
           </motion.div>
-
-          {/* Right: Active Step Details */}
-          <div className="lg:sticky lg:top-32">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeStep}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="bg-white rounded-2xl border border-slate-200/80 p-8 lg:p-10 shadow-xl shadow-slate-200/50"
-              >
-                {/* Large Step Number */}
-                <div className="mb-8">
-                  <span className="text-[120px] lg:text-[160px] font-extralight text-slate-100 leading-none block -mb-8">
-                    0{currentStep.step}
-                  </span>
-                </div>
-                
-                {/* Title */}
-                <h4 className="text-3xl lg:text-4xl font-light text-slate-900 mb-4">
-                  {currentStep.title}
-                </h4>
-                
-                {/* Description */}
-                <p className="text-lg text-slate-500 leading-relaxed mb-8">
-                  {currentStep.description}
-                </p>
-                
-                {/* Features */}
-                <div className="space-y-4">
-                  {currentStep.features.map((feature, index) => (
-                    <motion.div
-                      key={feature}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-center gap-4"
-                    >
-                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
-                        <Check className="w-3.5 h-3.5 text-violet-600" />
-                      </div>
-                      <span className="text-slate-600">{feature}</span>
-                    </motion.div>
-                  ))}
-                </div>
-                
-                {/* Visual Element */}
-                <div className="mt-10 pt-8 border-t border-slate-100">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center">
-                      <currentStep.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-900">Ready to {currentStep.title.toLowerCase()}?</p>
-                      <p className="text-xs text-slate-500">Start your journey today</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
         </div>
+
+        {/* Progress bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          className="max-w-4xl mx-auto mb-12"
+        >
+          <div className="flex items-center justify-center gap-2 mb-4">
+            {steps.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveStep(i)}
+                className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
+                  activeStep === i 
+                    ? 'w-12 bg-violet-600' 
+                    : 'w-3 bg-slate-300 hover:bg-slate-400'
+                }`}
+              />
+            ))}
+          </div>
+          <p className="text-center text-sm text-slate-500">
+            Step <span className="text-violet-600 font-semibold">{activeStep + 1}</span> of 6
+          </p>
+        </motion.div>
+
+        {/* Steps Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {steps.map((step, i) => (
+            <StepCard 
+              key={i} 
+              step={step} 
+              index={i} 
+              isActive={activeStep === i}
+              onClick={() => setActiveStep(i)}
+            />
+          ))}
+        </div>
+
+        {/* Bottom highlight */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="mt-20 text-center"
+        >
+          <motion.div
+            whileHover={{ scale: 1.02, y: -4 }}
+            className="inline-block max-w-2xl bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-3xl p-10 shadow-xl shadow-slate-200/50"
+          >
+            <h3 className="text-2xl lg:text-3xl font-serif font-bold text-slate-900 mb-4">
+              Built for <span className="bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">everyone</span>.
+            </h3>
+            <p className="text-slate-600 mb-8 leading-relaxed">
+              Whether you're new to investing or an experienced portfolio manager, 
+              Fragma makes fractional ownership accessible, transparent, and rewarding.
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-3">
+              {["Full ownership", "Automated payouts", "Transparent pricing", "Secondary liquidity"].map((tag, i) => (
+                <motion.span
+                  key={tag}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6 + i * 0.05 }}
+                  className="px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700 border border-slate-200 font-medium"
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

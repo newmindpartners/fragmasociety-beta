@@ -1,37 +1,37 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Shield, CheckCircle2, Lock, FileCheck, Users, BadgeCheck } from "lucide-react";
+import { Shield, CheckCircle2, Lock, FileCheck, Users, BadgeCheck, Key, ShieldCheck } from "lucide-react";
 
 const trustPoints = [
   {
     icon: Shield,
     title: "Bank-Level Custody",
-    description: "Assets secured with institutional-grade custody partners and multi-signature wallets."
+    description: "Assets secured with institutional-grade custody partners."
   },
   {
     icon: FileCheck,
     title: "Regulatory Compliance",
-    description: "Fully regulated security token offerings with proper licensing and KYC/AML procedures."
+    description: "Fully regulated security token offerings with proper KYC."
   },
   {
     icon: Lock,
     title: "Non-Custodial Trading",
-    description: "You maintain control of your tokens at all times—we never hold your assets."
+    description: "You maintain control of your tokens at all times."
   },
   {
     icon: BadgeCheck,
     title: "Audited Smart Contracts",
-    description: "Every smart contract undergoes rigorous third-party security audits."
+    description: "Third-party security audits on every contract."
   },
   {
     icon: Users,
     title: "Verified Investors",
-    description: "All participants complete KYC verification to ensure a trusted community."
+    description: "All participants complete KYC verification."
   },
   {
     icon: CheckCircle2,
     title: "Transparent Reporting",
-    description: "On-chain proof of reserves and real-time portfolio performance dashboards."
+    description: "On-chain proof of reserves and real-time dashboards."
   }
 ];
 
@@ -40,112 +40,80 @@ export const TrustSecurity = () => {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Light Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50/50 to-white" />
-      
-      {/* Subtle patterns */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-gradient-radial from-violet-100/20 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-transparent to-transparent" />
+    <section ref={sectionRef} className="relative py-32 overflow-hidden bg-cream">
+      {/* Subtle geometric pattern */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `linear-gradient(90deg, hsl(var(--light-border)) 1px, transparent 1px), linear-gradient(hsl(var(--light-border)) 1px, transparent 1px)`,
+          backgroundSize: '64px 64px'
+        }} />
       </div>
       
-      {/* Decorative border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          className="text-center mb-20"
+        >
+          <span className="inline-block px-4 py-2 mb-6 text-xs font-bold tracking-[0.2em] uppercase rounded-full bg-violet-100 text-violet-600 border border-violet-200">
+            Security & Trust
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-light-text mb-6">
+            Your Assets.
+            <span className="block bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">Your Control.</span>
+          </h2>
+          <p className="text-xl text-light-muted max-w-2xl mx-auto">
+            Every layer of our platform is designed with security-first principles and complete transparency.
+          </p>
+        </motion.div>
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left: Content */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              className="flex items-center gap-4 mb-8"
-            >
-              <div className="w-12 h-px bg-gradient-to-r from-violet-400 to-transparent" />
-              <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
-                Security & Trust
-              </span>
-            </motion.div>
+        {/* Trust Points Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {trustPoints.map((point, i) => {
+            const Icon = point.icon;
             
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-extralight text-slate-900 leading-[1.05] mb-6"
-            >
-              Built for
-              <span className="block font-serif italic text-slate-500 mt-2">Your Peace of Mind</span>
-            </motion.h2>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 }}
-              className="text-lg md:text-xl text-slate-500 leading-relaxed mb-10"
-            >
-              Every layer of our platform is designed with security-first principles, 
-              regulatory compliance, and complete transparency.
-            </motion.p>
-            
-            {/* Shield visual */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.3 }}
-              className="relative w-64 h-64 mx-auto lg:mx-0"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-100 to-slate-100 rounded-full opacity-50" />
-              <div className="absolute inset-4 bg-gradient-to-br from-white to-slate-50 rounded-full shadow-xl flex items-center justify-center">
-                <Shield className="w-20 h-20 text-violet-500" strokeWidth={1} />
-              </div>
-              {/* Orbiting elements */}
+            return (
               <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0"
+                key={point.title}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative"
               >
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-4 h-4 bg-violet-500 rounded-full" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-4"
-              >
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2 w-3 h-3 bg-slate-400 rounded-full" />
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* Right: Trust Points Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {trustPoints.map((point, index) => {
-              const Icon = point.icon;
-              
-              return (
-                <motion.div
-                  key={point.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  className="group p-6 bg-white rounded-xl border border-slate-200/80 hover:border-violet-200 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center mb-4 group-hover:bg-violet-500 transition-colors duration-300">
-                    <Icon className="w-5 h-5 text-violet-600 group-hover:text-white transition-colors duration-300" strokeWidth={1.5} />
+                <div className="relative p-8 bg-white rounded-2xl border border-slate-200/80 hover:border-violet-300 hover:shadow-xl hover:shadow-violet-100/50 transition-all duration-300">
+                  <div className="w-14 h-14 rounded-xl bg-violet-100 flex items-center justify-center mb-4 group-hover:bg-violet-600 transition-colors">
+                    <Icon className="w-6 h-6 text-violet-600 group-hover:text-white transition-colors" strokeWidth={1.5} />
                   </div>
-                  <h4 className="text-lg font-medium text-slate-900 mb-2">{point.title}</h4>
-                  <p className="text-sm text-slate-500 leading-relaxed">{point.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
+                  <h4 className="text-xl font-bold text-slate-900 mb-2">{point.title}</h4>
+                  <p className="text-slate-500 leading-relaxed">{point.description}</p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* Trust Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.6 }}
+          className="mt-16 text-center"
+        >
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full border border-slate-200 shadow-lg shadow-slate-100">
+            <ShieldCheck className="w-6 h-6 text-violet-600" />
+            <span className="text-slate-600">
+              Powered by <span className="text-slate-900 font-medium">Cardano</span> blockchain and <span className="text-slate-900 font-medium">Genius Yield</span> smart contracts
+            </span>
+          </div>
+        </motion.div>
 
         {/* Disclaimer */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.7 }}
           className="mt-16 pt-8 border-t border-slate-200"
         >
           <p className="text-sm text-slate-400 text-center max-w-3xl mx-auto leading-relaxed">
