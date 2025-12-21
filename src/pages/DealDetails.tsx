@@ -21,6 +21,7 @@ import { DealFinancials } from "@/components/deal-details/DealFinancials";
 import { DealCaseStudies } from "@/components/deal-details/DealCaseStudies";
 import { DealSpecialOpportunity } from "@/components/deal-details/DealSpecialOpportunity";
 import { DealHighlights } from "@/components/deal-details/DealHighlights";
+import { DealSectionFAQ } from "@/components/deal-details/DealSectionFAQ";
 import { useDeal } from "@/hooks/useDeal";
 import type { DealData } from "@/types/deal";
 
@@ -245,6 +246,7 @@ const DealDetails = () => {
             {deal.specialOpportunity && (
               <DealSpecialOpportunity deal={deal} />
             )}
+            <DealSectionFAQ sectionId="overview" />
           </>
         );
       case "trackrecord":
@@ -256,6 +258,7 @@ const DealDetails = () => {
             {deal.caseStudies && deal.caseStudies.length > 0 && (
               <DealCaseStudies deal={deal} />
             )}
+            <DealSectionFAQ sectionId="trackrecord" />
           </>
         );
       case "strategy":
@@ -267,6 +270,7 @@ const DealDetails = () => {
             {deal.timeline && (
               <DealTimeline deal={deal} />
             )}
+            <DealSectionFAQ sectionId="strategy" />
           </>
         );
       case "portfolio":
@@ -276,6 +280,7 @@ const DealDetails = () => {
               <DealPortfolio deal={deal} />
             )}
             <DealAsset deal={deal} />
+            <DealSectionFAQ sectionId="portfolio" />
           </>
         );
       case "market":
@@ -284,6 +289,7 @@ const DealDetails = () => {
             {deal.marketData && (
               <DealMarketAnalysis deal={deal} />
             )}
+            <DealSectionFAQ sectionId="market" />
           </>
         );
       case "financials":
@@ -292,18 +298,21 @@ const DealDetails = () => {
             {deal.financials && (
               <DealFinancials deal={deal} />
             )}
+            <DealSectionFAQ sectionId="financials" />
           </>
         );
       case "team":
         return (
           <>
             <DealTeam deal={deal} />
+            <DealSectionFAQ sectionId="team" />
           </>
         );
       case "howitworks":
         return (
           <>
             <DealHowItWorks />
+            <DealSectionFAQ sectionId="howitworks" />
           </>
         );
       case "risks":
@@ -311,6 +320,7 @@ const DealDetails = () => {
           <>
             <DealRisks deal={deal} />
             <DealDocuments />
+            <DealSectionFAQ sectionId="risks" />
           </>
         );
       default:
