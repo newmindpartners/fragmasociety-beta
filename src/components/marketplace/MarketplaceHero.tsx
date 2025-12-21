@@ -76,30 +76,21 @@ export const MarketplaceHero = () => {
         />
       </div>
 
-      {/* Subtle grid overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
-          backgroundSize: '60px 60px'
-        }}
-      />
-
-      {/* Content - Bottom aligned like homepage */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-end">
-        <div className="container mx-auto px-6 lg:px-12 pb-8 pt-32">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end">
+      {/* Content - Compact layout */}
+      <div className="relative z-10 h-screen flex flex-col justify-end">
+        <div className="container mx-auto px-6 lg:px-12 pb-6 pt-24">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-end">
             
             {/* Left - Main Content */}
-            <div className="max-w-2xl">
+            <div className="max-w-xl">
               {/* Badge - Minimal */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="mb-8"
+                className="mb-4"
               >
-                <span className="inline-flex items-center gap-2 text-xs tracking-[0.4em] uppercase text-white/60 px-4 py-2 border border-white/20 rounded-full backdrop-blur-sm">
+                <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-white/60 px-3 py-1.5 border border-white/20 rounded-full backdrop-blur-sm">
                   <motion.span 
                     className="w-1.5 h-1.5 rounded-full bg-white"
                     animate={{ opacity: [0.4, 1, 0.4] }}
@@ -114,32 +105,32 @@ export const MarketplaceHero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
-                className="text-sm md:text-base tracking-[0.3em] uppercase text-white/50 font-light mb-6"
+                className="text-xs tracking-[0.25em] uppercase text-white/50 font-light mb-4"
               >
                 Non-Custodial · 24/7 · On-Chain
               </motion.p>
 
-              {/* Main headline - Large Editorial */}
+              {/* Main headline - Editorial */}
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[0.95] tracking-tight mb-4"
+                className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[0.95] tracking-tight mb-2"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Trade tokenized
               </motion.h1>
               
               {/* Animated dynamic word - Editorial style */}
-              <div className="h-[65px] md:h-[80px] lg:h-[95px] overflow-hidden relative mb-10">
+              <div className="h-[50px] md:h-[60px] lg:h-[70px] overflow-hidden relative mb-6">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={currentWordIndex}
-                    initial={{ y: 80, opacity: 0 }}
+                    initial={{ y: 60, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -80, opacity: 0 }}
+                    exit={{ y: -60, opacity: 0 }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="block text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[0.95] tracking-tight"
+                    className="block text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[0.95] tracking-tight"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
                     {dynamicAssets[currentWordIndex]}
@@ -152,15 +143,15 @@ export const MarketplaceHero = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="flex items-center gap-2 mb-12 pb-8 border-b border-white/10"
+                className="flex items-center gap-1.5 mb-6"
               >
                 {dynamicAssets.map((_, index) => (
                   <motion.div
                     key={index}
                     className={`h-0.5 rounded-full transition-all duration-500 ${
                       index === currentWordIndex 
-                        ? "w-8 bg-white" 
-                        : "w-2 bg-white/20"
+                        ? "w-6 bg-white" 
+                        : "w-1.5 bg-white/20"
                     }`}
                   />
                 ))}
@@ -171,50 +162,41 @@ export const MarketplaceHero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-lg text-white/50 leading-relaxed mb-10 max-w-lg"
+                className="text-sm text-white/50 leading-relaxed mb-6 max-w-md"
               >
                 The world's first peer-to-peer marketplace for tokenized real-world assets. 
-                Set your price. Trade on your terms. Complete ownership, always.
+                Set your price. Trade on your terms.
               </motion.p>
 
-              {/* CTA Buttons - Minimal, matching homepage style */}
+              {/* CTA Buttons - Compact */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="flex flex-wrap items-center gap-4 mb-8"
+                className="flex flex-wrap items-center gap-3 mb-4"
               >
                 <Button 
-                  size="lg" 
-                  className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
+                  className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-6 h-11 text-sm font-medium"
                 >
                   Explore Marketplace
-                  <motion.span
-                    className="ml-2"
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </motion.span>
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-                <Button 
-                  size="lg" 
+                <Button
                   variant="outline"
-                  className="border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-full px-8 h-14 text-base font-medium"
+                  className="border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-full px-6 h-11 text-sm font-medium"
                 >
-                  <Play className="w-4 h-4 mr-2" fill="currentColor" />
-                  Watch Demo
+                  <Play className="w-3 h-3 mr-2" fill="currentColor" />
+                  Demo
                 </Button>
               </motion.div>
-
               {/* Trust line */}
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-sm text-white/40 max-w-md"
+                className="text-xs text-white/40"
               >
-                Powered by Cardano blockchain. Fully non-custodial. Your keys, your assets.
+                Powered by Cardano · Non-custodial · Your keys, your assets
               </motion.p>
             </div>
 
@@ -224,76 +206,70 @@ export const MarketplaceHero = () => {
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="space-y-4"
+                className="space-y-2"
               >
                 {/* Live trading indicator */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
                     <motion.div 
-                      className="w-2 h-2 rounded-full bg-emerald-400"
+                      className="w-1.5 h-1.5 rounded-full bg-emerald-400"
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     />
-                    <span className="text-xs tracking-[0.2em] uppercase text-white/50">Live on Market</span>
+                    <span className="text-[10px] tracking-[0.15em] uppercase text-white/50">Live on Market</span>
                   </div>
-                  <span className="text-xs text-white/30">4 Assets Trading</span>
+                  <span className="text-[10px] text-white/30">4 Assets</span>
                 </div>
 
-                {/* Asset cards */}
+                {/* Asset cards - Compact */}
                 {featuredAssets.map((asset, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + i * 0.1, duration: 0.6 }}
-                    whileHover={{ x: -8, scale: 1.02 }}
-                    className={`group relative flex items-center gap-5 p-4 rounded-xl border backdrop-blur-md cursor-pointer transition-all duration-500 ${
+                    transition={{ delay: 0.5 + i * 0.08, duration: 0.5 }}
+                    whileHover={{ x: -4 }}
+                    className={`group relative flex items-center gap-4 p-3 rounded-lg border backdrop-blur-md cursor-pointer transition-all duration-300 ${
                       activeAsset === i 
                         ? 'bg-white/10 border-white/30' 
-                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                        : 'bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20'
                     }`}
                     onClick={() => setActiveAsset(i)}
                   >
                     {/* Asset image */}
-                    <div className="relative w-20 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="relative w-14 h-11 rounded-md overflow-hidden flex-shrink-0">
                       <img 
                         src={asset.image} 
                         alt={asset.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     </div>
                     
                     {/* Asset info */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-white font-medium truncate">{asset.name}</h3>
-                        <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${
-                          asset.status === 'New' 
-                            ? 'bg-white/20 text-white' 
-                            : asset.status === 'Closing Soon'
-                            ? 'bg-amber-500/20 text-amber-300'
-                            : 'bg-emerald-500/20 text-emerald-300'
-                        }`}>
-                          {asset.status}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm text-white/60">{asset.price}</span>
-                        <span className="text-sm text-emerald-400 font-medium">{asset.yield} Target</span>
+                      <h3 className="text-sm text-white font-medium truncate">{asset.name}</h3>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-white/50">{asset.price}</span>
+                        <span className="text-xs text-emerald-400">{asset.yield}</span>
                       </div>
                     </div>
                     
-                    {/* Arrow indicator */}
-                    <ArrowRight className={`w-4 h-4 transition-all duration-300 ${
-                      activeAsset === i ? 'text-white' : 'text-white/30 group-hover:text-white/60'
-                    }`} />
+                    {/* Status badge */}
+                    <span className={`text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                      asset.status === 'New' 
+                        ? 'bg-white/20 text-white' 
+                        : asset.status === 'Closing Soon'
+                        ? 'bg-amber-500/20 text-amber-300'
+                        : 'bg-emerald-500/20 text-emerald-300'
+                    }`}>
+                      {asset.status}
+                    </span>
                     
                     {/* Active indicator line */}
                     {activeAsset === i && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-white rounded-full"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-white rounded-full"
                       />
                     )}
                   </motion.div>
@@ -303,34 +279,34 @@ export const MarketplaceHero = () => {
           </div>
         </div>
 
-        {/* Stats bar at bottom - matching homepage style */}
+        {/* Stats bar at bottom - Compact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="border-t border-slate-700/50 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-900/95 backdrop-blur-md"
+          className="border-t border-slate-700/50 bg-slate-900/95 backdrop-blur-md"
         >
           <div className="container mx-auto px-6 lg:px-12">
             <div className="grid grid-cols-3 divide-x divide-slate-700/50">
               {[
-                { icon: TrendingUp, value: "€24M+", label: "Trading Volume" },
+                { icon: TrendingUp, value: "€24M+", label: "Volume" },
                 { icon: Shield, value: "100%", label: "Non-Custodial" },
-                { icon: Clock, value: "24/7", label: "Market Access" }
+                { icon: Clock, value: "24/7", label: "Access" }
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                  className="py-6 px-4 md:px-8 text-center group cursor-pointer hover:bg-slate-800/50 transition-colors"
+                  transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                  className="py-4 px-3 md:px-6 text-center"
                 >
-                  <div className="flex items-center justify-center gap-3 mb-1">
-                    <stat.icon className="w-4 h-4 text-white/40 group-hover:text-white/60 transition-colors" />
-                    <p className="text-xl md:text-2xl font-medium text-white">
+                  <div className="flex items-center justify-center gap-2 mb-0.5">
+                    <stat.icon className="w-3 h-3 text-white/40" />
+                    <p className="text-lg md:text-xl font-medium text-white">
                       {stat.value}
                     </p>
                   </div>
-                  <p className="text-xs tracking-[0.15em] uppercase text-slate-400 group-hover:text-slate-300 transition-colors">
+                  <p className="text-[10px] tracking-[0.1em] uppercase text-slate-500">
                     {stat.label}
                   </p>
                 </motion.div>
@@ -340,10 +316,10 @@ export const MarketplaceHero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - repositioned */}
       <motion.div
-        className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20"
-        animate={{ y: [0, 8, 0] }}
+        className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20"
+        animate={{ y: [0, 6, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
         <ArrowDown className="w-5 h-5 text-white/40" />
