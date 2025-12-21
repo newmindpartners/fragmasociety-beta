@@ -142,34 +142,52 @@ export const DealHowItWorks = () => {
                   const isPast = index < activeStep;
                   const StepIcon = step.icon;
 
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => setActiveStep(index)}
-                      className={`relative flex items-start gap-6 p-5 cursor-pointer rounded-2xl transition-all duration-500 ${
-                        isActive 
-                          ? 'bg-slate-900 shadow-2xl shadow-slate-900/20' 
-                          : 'hover:bg-slate-50'
-                      }`}
-                    >
-                      {/* Step indicator */}
-                      <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
-                        isActive 
-                          ? 'bg-slate-800 shadow-lg' 
-                          : isPast 
-                            ? 'bg-slate-900' 
-                            : 'bg-white border-2 border-slate-200'
-                      }`}>
-                        {isPast ? (
-                          <Check className="w-5 h-5 text-white" />
-                        ) : (
-                          <StepIcon className={`w-5 h-5 ${isActive || isPast ? 'text-white' : 'text-slate-400'}`} />
-                        )}
-                      </div>
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 }}
+                        onClick={() => setActiveStep(index)}
+                        whileHover={{ x: isActive ? 0 : 4 }}
+                        className={`group relative flex items-start gap-6 p-5 cursor-pointer rounded-2xl transition-all duration-500 ${
+                          isActive 
+                            ? 'bg-slate-900 shadow-2xl shadow-slate-900/20' 
+                            : 'hover:bg-slate-50'
+                        }`}
+                      >
+                        {/* Step indicator */}
+                        <motion.div 
+                          className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                            isActive 
+                              ? 'bg-slate-800 shadow-lg' 
+                              : isPast 
+                                ? 'bg-slate-900' 
+                                : 'bg-white border-2 border-slate-200 group-hover:border-slate-300 group-hover:shadow-md'
+                          }`}
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                        >
+                          {isPast ? (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                            >
+                              <Check className="w-5 h-5 text-white" />
+                            </motion.div>
+                          ) : (
+                            <motion.div
+                              whileHover={{ scale: 1.2 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            >
+                              <StepIcon className={`w-5 h-5 transition-colors duration-300 ${
+                                isActive || isPast ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'
+                              }`} />
+                            </motion.div>
+                          )}
+                        </motion.div>
 
                       {/* Content */}
                       <div className="flex-1 min-w-0 pt-1">
