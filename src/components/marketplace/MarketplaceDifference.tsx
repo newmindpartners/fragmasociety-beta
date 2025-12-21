@@ -225,74 +225,129 @@ export const MarketplaceDifference = () => {
           })}
         </div>
 
-        {/* Comparison Table */}
+        {/* Comparison Table - Premium Design */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="max-w-4xl mx-auto"
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="max-w-5xl mx-auto"
         >
+          {/* Section label */}
+          <div className="flex items-center gap-4 mb-10">
+            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+              Feature Comparison
+            </span>
+            <div className="flex-1 h-px bg-gradient-to-r from-slate-200 to-transparent" />
+          </div>
+
           <div
-            className="bg-white/90 border border-slate-200/80 rounded-sm overflow-hidden"
-            style={{ boxShadow: '0 4px 30px -10px rgba(0, 0, 0, 0.08)' }}
+            className="relative overflow-hidden"
+            style={{ 
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%)',
+              borderRadius: '2px',
+              boxShadow: '0 0 0 1px rgba(226,232,240,0.9), 0 25px 80px -20px rgba(15,23,42,0.1), 0 8px 30px -10px rgba(0,0,0,0.05)'
+            }}
           >
+            {/* Decorative gradient accent top */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 p-6 border-b border-slate-100 bg-slate-50/50">
-              <div className="col-span-6">
-                <span className="text-[10px] tracking-[0.3em] uppercase text-slate-400 font-medium">Feature</span>
+            <div className="grid grid-cols-12 gap-4 px-8 md:px-12 py-8 border-b border-slate-100">
+              <div className="col-span-6 md:col-span-5">
+                <span className="text-[11px] tracking-[0.3em] uppercase text-primary/70 font-semibold">Feature</span>
+              </div>
+              <div className="col-span-3 md:col-span-4 text-center">
+                <span className="text-[11px] tracking-[0.3em] uppercase text-slate-300 font-medium">Traditional</span>
               </div>
               <div className="col-span-3 text-center">
-                <span className="text-[10px] tracking-[0.3em] uppercase text-slate-300 font-medium">Traditional</span>
-              </div>
-              <div className="col-span-3 text-center">
-                <span className="text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold">Fragma</span>
+                <div className="inline-flex items-center gap-2">
+                  <span className="text-[11px] tracking-[0.3em] uppercase text-slate-800 font-bold">Fragma</span>
+                  <motion.div 
+                    className="w-1.5 h-1.5 rounded-full bg-primary"
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
               </div>
             </div>
 
             {/* Table Rows */}
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-50">
               {comparisons.map((item, index) => (
                 <motion.div
                   key={item.feature}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                  className="grid grid-cols-12 gap-4 p-5 items-center hover:bg-slate-50/50 transition-colors duration-300"
+                  transition={{ delay: 0.1 + index * 0.08, duration: 0.5 }}
+                  className="group relative grid grid-cols-12 gap-4 px-8 md:px-12 py-6 items-center hover:bg-slate-50/70 transition-all duration-500"
                 >
-                  <div className="col-span-6">
-                    <span className="text-sm font-medium text-slate-700">
+                  {/* Hover accent */}
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-gradient-to-b from-primary/60 to-primary/20 group-hover:h-full transition-all duration-500 rounded-r" />
+                  
+                  <div className="col-span-6 md:col-span-5">
+                    <span className="text-[15px] md:text-base font-medium text-slate-700 group-hover:text-slate-900 transition-colors duration-300">
                       {item.feature}
                     </span>
                   </div>
-                  <div className="col-span-3 flex justify-center">
-                    <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-rose-50">
-                      <X className="w-3.5 h-3.5 text-rose-400" strokeWidth={2} />
-                    </div>
+                  <div className="col-span-3 md:col-span-4 flex justify-center">
+                    <motion.div 
+                      whileHover={{ scale: 1.1 }}
+                      className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-rose-50 to-rose-100/80 border border-rose-100/80"
+                      style={{ boxShadow: '0 2px 8px -2px rgba(244,63,94,0.15)' }}
+                    >
+                      <X className="w-4 h-4 text-rose-400" strokeWidth={2.5} />
+                    </motion.div>
                   </div>
                   <div className="col-span-3 flex justify-center">
-                    <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-emerald-50">
-                      <Check className="w-3.5 h-3.5 text-emerald-500" strokeWidth={2} />
-                    </div>
+                    <motion.div 
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100/80 border border-emerald-200/60"
+                      style={{ boxShadow: '0 2px 8px -2px rgba(16,185,129,0.2)' }}
+                    >
+                      <Check className="w-4 h-4 text-emerald-500" strokeWidth={2.5} />
+                    </motion.div>
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            {/* Summary Footer */}
-            <div className="p-5 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-t border-slate-100">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-900 flex items-center justify-center rounded-sm">
-                  <Check className="w-4 h-4 text-white" strokeWidth={2} />
+            {/* Summary Footer - Premium */}
+            <div className="relative px-8 md:px-12 py-7 bg-gradient-to-r from-slate-50/80 via-white to-slate-50/80 border-t border-slate-100">
+              {/* Decorative line */}
+              <div className="absolute top-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <motion.div 
+                    whileHover={{ scale: 1.05, rotate: -3 }}
+                    className="w-10 h-10 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center rounded-lg"
+                    style={{ boxShadow: '0 4px 15px -3px rgba(15,23,42,0.3)' }}
+                  >
+                    <Check className="w-5 h-5 text-white" strokeWidth={2.5} />
+                  </motion.div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-sm text-slate-600">
+                      All <span className="text-slate-900 font-bold">6 features</span> available on Fragma
+                    </span>
+                    <span className="text-[11px] text-slate-400">Complete marketplace capabilities</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-sm text-slate-600">
-                    All <span className="text-slate-900 font-semibold">6 features</span> available on Fragma
-                  </span>
-                </div>
+                
+                {/* Decorative badge */}
+                <motion.div 
+                  whileHover={{ scale: 1.03 }}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/10"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                  <span className="text-[11px] font-medium text-primary/80 tracking-wide uppercase">Full Access</span>
+                </motion.div>
               </div>
             </div>
+
+            {/* Decorative gradient accent bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
           </div>
         </motion.div>
 
@@ -301,10 +356,11 @@ export const MarketplaceDifference = () => {
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-20 flex justify-center"
+          transition={{ delay: 0.6, duration: 1 }}
+          className="mt-24 flex flex-col items-center gap-4"
         >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <div className="h-px w-48 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <span className="text-[10px] tracking-[0.4em] uppercase text-slate-300 font-light">Built different</span>
         </motion.div>
       </div>
     </section>
