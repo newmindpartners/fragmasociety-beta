@@ -246,7 +246,7 @@ const DealDetails = () => {
             {deal.specialOpportunity && (
               <DealSpecialOpportunity deal={deal} />
             )}
-            <DealSectionFAQ sectionId="overview" />
+            <DealSectionFAQ />
           </>
         );
       case "trackrecord":
@@ -258,7 +258,7 @@ const DealDetails = () => {
             {deal.caseStudies && deal.caseStudies.length > 0 && (
               <DealCaseStudies deal={deal} />
             )}
-            <DealSectionFAQ sectionId="trackrecord" />
+            <DealSectionFAQ />
           </>
         );
       case "strategy":
@@ -270,7 +270,7 @@ const DealDetails = () => {
             {deal.timeline && (
               <DealTimeline deal={deal} />
             )}
-            <DealSectionFAQ sectionId="strategy" />
+            <DealSectionFAQ />
           </>
         );
       case "portfolio":
@@ -280,7 +280,7 @@ const DealDetails = () => {
               <DealPortfolio deal={deal} />
             )}
             <DealAsset deal={deal} />
-            <DealSectionFAQ sectionId="portfolio" />
+            <DealSectionFAQ />
           </>
         );
       case "market":
@@ -289,7 +289,7 @@ const DealDetails = () => {
             {deal.marketData && (
               <DealMarketAnalysis deal={deal} />
             )}
-            <DealSectionFAQ sectionId="market" />
+            <DealSectionFAQ />
           </>
         );
       case "financials":
@@ -298,21 +298,21 @@ const DealDetails = () => {
             {deal.financials && (
               <DealFinancials deal={deal} />
             )}
-            <DealSectionFAQ sectionId="financials" />
+            <DealSectionFAQ />
           </>
         );
       case "team":
         return (
           <>
             <DealTeam deal={deal} />
-            <DealSectionFAQ sectionId="team" />
+            <DealSectionFAQ />
           </>
         );
       case "howitworks":
         return (
           <>
             <DealHowItWorks />
-            <DealSectionFAQ sectionId="howitworks" />
+            <DealSectionFAQ />
           </>
         );
       case "risks":
@@ -320,7 +320,7 @@ const DealDetails = () => {
           <>
             <DealRisks deal={deal} />
             <DealDocuments />
-            <DealSectionFAQ sectionId="risks" />
+            <DealSectionFAQ />
           </>
         );
       default:
