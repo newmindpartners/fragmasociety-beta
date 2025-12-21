@@ -19,7 +19,10 @@ export const MarketplaceHero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-slate-900 overflow-hidden">
+    <section className="relative min-h-screen overflow-hidden">
+      {/* Deep slate/navy base - matching SignatureDealsBanner */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
+      
       {/* Background Image */}
       <div className="absolute inset-0">
         <img 
@@ -27,14 +30,18 @@ export const MarketplaceHero = () => {
           alt="" 
           className="w-full h-full object-cover"
           style={{ 
-            filter: 'grayscale(30%) brightness(0.5) contrast(1.1)',
+            opacity: 0.35,
+            filter: 'grayscale(30%) brightness(0.85)',
           }}
         />
-        {/* Gradient overlays */}
+        {/* Gradient overlays matching SignatureDealsBanner */}
         <div 
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(30,41,59,0.7) 50%, rgba(15,23,42,0.9) 100%)'
+            background: `
+              radial-gradient(ellipse 70% 90% at 50% 100%, transparent 0%, rgba(15,23,42,0.3) 50%, rgba(15,23,42,0.7) 100%),
+              radial-gradient(ellipse 100% 60% at 50% 50%, transparent 0%, rgba(15,23,42,0.4) 100%)
+            `
           }}
         />
         <div 
@@ -44,6 +51,19 @@ export const MarketplaceHero = () => {
           }}
         />
       </div>
+
+      {/* Violet glow accents - matching SignatureDealsBanner */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[250px] bg-violet-900/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[200px] bg-slate-700/20 rounded-full blur-3xl" />
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px]"
+        style={{
+          background: 'radial-gradient(ellipse at center top, rgba(148,130,180,0.08) 0%, transparent 70%)'
+        }}
+      />
+
+      {/* Top border accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 lg:px-12 min-h-screen flex flex-col justify-center pt-20">
@@ -55,11 +75,11 @@ export const MarketplaceHero = () => {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
-            <span className="inline-flex items-center gap-3 px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase bg-white/10 backdrop-blur-sm text-white/80 border border-white/20 rounded-sm">
+            <span className="inline-flex items-center gap-3 px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase bg-white/5 backdrop-blur-sm text-white/80 border border-white/20 rounded-sm">
               <motion.span
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="w-2 h-2 rounded-full bg-white"
+                className="w-2 h-2 rounded-full bg-violet-400"
               />
               Secondary Market — Live
             </span>
@@ -80,8 +100,15 @@ export const MarketplaceHero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[0.95] tracking-tight mb-3"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-5xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight mb-3"
+            style={{ 
+              fontFamily: "'Playfair Display', serif",
+              background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
+              backgroundSize: '200% 200%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
           >
             Trade tokenized
           </motion.h1>
@@ -95,7 +122,7 @@ export const MarketplaceHero = () => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -80, opacity: 0 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="block text-5xl md:text-6xl lg:text-7xl font-light text-white/70 italic leading-[0.95] tracking-tight"
+                className="block text-5xl md:text-6xl lg:text-7xl font-light text-white/50 italic leading-[0.95] tracking-tight"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {dynamicWords[currentIndex]}
@@ -119,6 +146,9 @@ export const MarketplaceHero = () => {
                     ? "w-8 bg-white" 
                     : "w-2 bg-white/30 hover:bg-white/50"
                 }`}
+                style={{
+                  boxShadow: i === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
+                }}
               />
             ))}
           </motion.div>
@@ -151,7 +181,7 @@ export const MarketplaceHero = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-sm px-8 h-12 text-sm font-medium tracking-wide"
+              className="border-white/20 text-white hover:bg-white/10 rounded-sm px-8 h-12 text-sm font-medium tracking-wide bg-transparent"
             >
               <Play className="w-4 h-4 mr-2" fill="currentColor" />
               Watch Demo
@@ -178,6 +208,14 @@ export const MarketplaceHero = () => {
       >
         <ArrowDown className="w-5 h-5 text-white/40" />
       </motion.div>
+
+      {/* Bottom border accent */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-px"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.3) 50%, transparent 100%)'
+        }}
+      />
     </section>
   );
 };
