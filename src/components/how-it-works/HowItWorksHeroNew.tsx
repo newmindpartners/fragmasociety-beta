@@ -67,21 +67,12 @@ export const HowItWorksHeroNew = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-4"
             >
               <Button 
                 size="lg"
                 className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
               >
                 Start Investing
-              </Button>
-              <Button 
-                variant="outline"
-                size="lg"
-                className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 h-14 text-base font-medium bg-transparent"
-              >
-                <Play className="w-4 h-4 mr-2 fill-current" />
-                Watch Video
               </Button>
             </motion.div>
           </div>
