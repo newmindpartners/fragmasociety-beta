@@ -4,6 +4,7 @@ import { Menu, X, ArrowRight, ChevronDown, Zap, ShoppingCart, HelpCircle, Crown,
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import fragmaLogo from "@/assets/fragma-logo-new.png";
 
 interface MenuItem {
   label: string;
@@ -183,7 +184,7 @@ export const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center group">
             <motion.img 
-              src="/fragma-society-logo.png" 
+              src={fragmaLogo} 
               alt="Fragma Society" 
               className="h-7 lg:h-8 transition-transform duration-300 group-hover:scale-105"
               whileHover={{ opacity: 0.9 }}
