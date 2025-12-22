@@ -68,15 +68,15 @@ const StepCard = ({
         animate={isActive ? { scale: 1.02 } : { scale: 1 }}
         className={`relative h-full rounded-2xl p-6 border transition-all duration-500 overflow-hidden ${
           isActive 
-            ? 'bg-white shadow-light border-violet-300' 
-            : 'bg-white/80 border-slate-200/60 hover:border-violet-200 hover:shadow-light'
+            ? 'bg-white/[0.08] backdrop-blur-xl border-turquoise/40 shadow-lg shadow-turquoise/10' 
+            : 'bg-white/[0.03] backdrop-blur-sm border-white/10 hover:border-turquoise/30 hover:bg-white/[0.06]'
         }`}
       >
         {/* Active indicator glow */}
         {isActive && (
           <motion.div
             layoutId="activeGlow"
-            className="absolute inset-0 bg-gradient-to-br from-violet-50 to-transparent pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-br from-turquoise/10 to-transparent pointer-events-none"
           />
         )}
         
@@ -86,8 +86,8 @@ const StepCard = ({
             animate={isActive ? { scale: 1.1 } : { scale: 1 }}
             className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-500 ${
               isActive 
-                ? 'bg-violet-600 text-white shadow-lg shadow-violet-200' 
-                : 'bg-slate-100 text-slate-600 group-hover:bg-violet-100 group-hover:text-violet-600'
+                ? 'bg-turquoise text-background shadow-lg shadow-turquoise/30' 
+                : 'bg-white/10 text-white/70 group-hover:bg-turquoise/20 group-hover:text-turquoise'
             }`}
           >
             <Icon className="w-7 h-7" />
@@ -95,7 +95,7 @@ const StepCard = ({
           
           <motion.span 
             animate={{ 
-              color: isActive ? "rgb(139, 92, 246)" : "rgb(226, 232, 240)",
+              color: isActive ? "hsl(var(--turquoise))" : "rgba(255,255,255,0.15)",
             }}
             className="text-5xl font-serif font-bold italic"
           >
@@ -106,12 +106,12 @@ const StepCard = ({
         {/* Content */}
         <div className="relative">
           <h3 className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
-            isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'
+            isActive ? 'text-white' : 'text-white/80 group-hover:text-white'
           }`}>
             {step.title}
           </h3>
           <p className={`text-sm leading-relaxed transition-colors duration-500 ${
-            isActive ? 'text-slate-600' : 'text-slate-500 group-hover:text-slate-600'
+            isActive ? 'text-white/70' : 'text-white/50 group-hover:text-white/60'
           }`}>
             {step.description}
           </p>
@@ -121,7 +121,7 @@ const StepCard = ({
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: isActive ? 1 : 0 }}
-          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 to-violet-400 origin-left rounded-b-2xl"
+          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-turquoise to-turquoise/60 origin-left rounded-b-2xl"
         />
       </motion.div>
     </motion.div>
@@ -141,18 +141,24 @@ export const JourneySteps = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 section-cream-mesh relative overflow-hidden">
+    <section ref={sectionRef} className="py-32 bg-background relative overflow-hidden">
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-30" style={{
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+        backgroundSize: '64px 64px'
+      }} />
+      
       {/* Decorative floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ y: [-15, 15, -15], x: [-5, 5, -5] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-32 left-10 w-32 h-32 rounded-full bg-violet-200/20 blur-3xl"
+          className="absolute top-32 left-10 w-64 h-64 rounded-full bg-turquoise/5 blur-3xl"
         />
         <motion.div
           animate={{ y: [15, -15, 15], x: [5, -5, 5] }}
           transition={{ duration: 10, repeat: Infinity }}
-          className="absolute bottom-32 right-10 w-48 h-48 rounded-full bg-slate-200/30 blur-3xl"
+          className="absolute bottom-32 right-10 w-80 h-80 rounded-full bg-white/5 blur-3xl"
         />
       </div>
       
@@ -163,18 +169,18 @@ export const JourneySteps = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-xs font-semibold tracking-wider uppercase rounded-full bg-violet-100 text-violet-600 border border-violet-200">
+            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-xs font-semibold tracking-[0.2em] uppercase rounded-full bg-turquoise/10 text-turquoise border border-turquoise/20">
               <FileCheck className="w-3.5 h-3.5" />
               Your Investment Journey
             </span>
             
-            <h2 className="text-4xl lg:text-6xl font-serif font-bold text-slate-900 mb-6 tracking-tight">
+            <h2 className="text-4xl lg:text-6xl font-serif font-light text-white mb-6 tracking-tight">
               From discovery
               <br />
-              <span className="bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">to earnings.</span>
+              <span className="text-turquoise">to earnings.</span>
             </h2>
             
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-xl text-white/60 leading-relaxed">
               Six simple steps to transform how you build wealth through fractional ownership.
             </p>
           </motion.div>
@@ -191,16 +197,16 @@ export const JourneySteps = () => {
               <button
                 key={i}
                 onClick={() => setActiveStep(i)}
-                className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
+                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
                   activeStep === i 
-                    ? 'w-12 bg-violet-600' 
-                    : 'w-3 bg-slate-300 hover:bg-slate-400'
+                    ? 'w-12 bg-turquoise' 
+                    : 'w-3 bg-white/20 hover:bg-white/30'
                 }`}
               />
             ))}
           </div>
-          <p className="text-center text-sm text-slate-500">
-            Step <span className="text-violet-600 font-semibold">{activeStep + 1}</span> of 6
+          <p className="text-center text-sm text-white/50">
+            Step <span className="text-turquoise font-semibold">{activeStep + 1}</span> of 6
           </p>
         </motion.div>
 
@@ -227,12 +233,12 @@ export const JourneySteps = () => {
         >
           <motion.div
             whileHover={{ scale: 1.02, y: -4 }}
-            className="inline-block max-w-2xl bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-3xl p-10 shadow-xl shadow-slate-200/50"
+            className="inline-block max-w-2xl bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-10"
           >
-            <h3 className="text-2xl lg:text-3xl font-serif font-bold text-slate-900 mb-4">
-              Built for <span className="bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">everyone</span>.
+            <h3 className="text-2xl lg:text-3xl font-serif font-light text-white mb-4">
+              Built for <span className="text-turquoise">everyone</span>.
             </h3>
-            <p className="text-slate-600 mb-8 leading-relaxed">
+            <p className="text-white/60 mb-8 leading-relaxed">
               Whether you're new to investing or an experienced portfolio manager, 
               Fragma makes fractional ownership accessible, transparent, and rewarding.
             </p>
@@ -245,7 +251,7 @@ export const JourneySteps = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.6 + i * 0.05 }}
-                  className="px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700 border border-slate-200 font-medium"
+                  className="px-4 py-2 text-sm rounded-full bg-white/5 text-white/70 border border-white/10 font-medium"
                 >
                   {tag}
                 </motion.span>
