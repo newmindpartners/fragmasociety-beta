@@ -109,29 +109,48 @@ export const CardanoEUTXO = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 * index }}
               className="group"
+              whileHover={{ y: -4 }}
             >
               <div 
-                className="relative p-6 lg:p-8 h-full rounded-sm border transition-all duration-300 hover:border-primary/30"
+                className="relative p-6 lg:p-8 h-full rounded-lg border transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
                 style={{ 
                   background: 'white',
                   borderColor: 'hsl(var(--light-border))'
                 }}
               >
-                {/* Icon */}
-                <div 
-                  className="w-12 h-12 rounded-sm border flex items-center justify-center mb-5 group-hover:border-primary/30 transition-colors duration-300"
+                {/* Icon with animation */}
+                <motion.div 
+                  className="w-14 h-14 rounded-lg border flex items-center justify-center mb-5 transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/5"
                   style={{ 
                     background: 'hsl(var(--light-surface))',
                     borderColor: 'hsl(var(--light-border))'
                   }}
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: [0, -5, 5, 0],
+                    transition: { duration: 0.4 }
+                  }}
                 >
-                  <benefit.icon className="w-5 h-5 text-light-muted group-hover:text-primary transition-colors duration-300" strokeWidth={1.5} />
-                </div>
+                  <motion.div
+                    initial={{ scale: 1 }}
+                    whileHover={{ scale: 1.15 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <benefit.icon 
+                      className="w-6 h-6 transition-colors duration-300 group-hover:text-primary" 
+                      style={{ color: 'hsl(var(--light-text-muted))' }}
+                      strokeWidth={1.5} 
+                    />
+                  </motion.div>
+                </motion.div>
                 
                 <h4 className="text-lg font-medium text-light-primary mb-2">
                   {benefit.title}
                 </h4>
-                <p className="text-sm text-light-muted group-hover:text-light-primary/70 transition-colors duration-300">
+                <p 
+                  className="text-sm transition-colors duration-300"
+                  style={{ color: 'hsl(var(--light-text-muted))' }}
+                >
                   {benefit.description}
                 </p>
               </div>
@@ -260,7 +279,7 @@ export const CardanoEUTXO = () => {
                   borderColor: 'hsl(var(--light-border))'
                 }}
               >
-                <div className="p-4 text-xs text-light-muted uppercase tracking-wider">Feature</div>
+                <div className="p-4 text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--light-text))' }}>Feature</div>
                 <div className="p-4 text-xs text-primary uppercase tracking-wider text-center border-l" style={{ borderColor: 'hsl(var(--light-border))' }}>EUTXO (Cardano)</div>
                 <div className="p-4 text-xs text-light-muted uppercase tracking-wider text-center border-l" style={{ borderColor: 'hsl(var(--light-border))' }}>Account (ETH L1/L2)</div>
               </div>
@@ -276,7 +295,7 @@ export const CardanoEUTXO = () => {
                   className={`grid grid-cols-3 ${i !== comparisons.length - 1 ? 'border-b' : ''} hover:bg-primary/5 transition-colors duration-200`}
                   style={{ borderColor: 'hsl(var(--light-border))' }}
                 >
-                  <div className="p-4 text-sm text-light-primary/80">{row.feature}</div>
+                  <div className="p-4 text-sm font-medium" style={{ color: 'hsl(var(--light-text))' }}>{row.feature}</div>
                   <div className="p-4 text-sm text-center border-l" style={{ borderColor: 'hsl(var(--light-border))' }}>
                     <div className="flex items-center justify-center gap-2">
                       <Check className="w-4 h-4 text-primary" />
