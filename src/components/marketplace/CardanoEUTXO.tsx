@@ -123,7 +123,7 @@ export const CardanoEUTXO = () => {
               className="p-6 bg-slate-100 border-l-2 border-slate-400 rounded-r-sm"
             >
               <p className="text-slate-600 leading-relaxed italic">
-                "This is why Genius Yield and Fragma chose Cardano — it is designed for safety-first financial markets."
+                "This is why Fragma chose Cardano — it is designed for safety-first financial markets."
               </p>
               <p className="text-sm text-slate-500 font-medium mt-3">— Fragma Technical Team</p>
             </motion.div>
