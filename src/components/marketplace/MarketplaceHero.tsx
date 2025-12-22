@@ -14,50 +14,16 @@ import rwaCommercial from "@/assets/rwa-commercial.jpg";
 
 const dynamicWords = ["Real Estate", "Private Credit", "Film Rights", "Luxury Assets"];
 
-// Asset cards data for the animated grid
+// Asset cards data for the animated grid - expanded for full height
 const assetCards = [
-  { 
-    image: categoryRealEstate, 
-    type: "buy" as const, 
-    price: "€892", 
-    delay: 0,
-    position: { row: 1, col: 3 }
-  },
-  { 
-    image: categoryFilm, 
-    type: "sell" as const, 
-    price: "€156", 
-    delay: 0.1,
-    position: { row: 1, col: 2 }
-  },
-  { 
-    image: rwaVilla, 
-    type: "sell" as const, 
-    price: "€678", 
-    delay: 0.2,
-    position: { row: 2, col: 1 }
-  },
-  { 
-    image: rwaCommercial, 
-    type: "sell" as const, 
-    price: "€1025", 
-    delay: 0.15,
-    position: { row: 2, col: 2 }
-  },
-  { 
-    image: categoryLuxury, 
-    type: "buy" as const, 
-    price: "€445", 
-    delay: 0.25,
-    position: { row: 2, col: 3 }
-  },
-  { 
-    image: categoryCredit, 
-    type: "buy" as const, 
-    price: "€312", 
-    delay: 0.3,
-    position: { row: 1, col: 1 }
-  },
+  { image: categoryRealEstate, type: "buy" as const, price: "€892", delay: 0 },
+  { image: categoryFilm, type: "sell" as const, price: "€156", delay: 0.1 },
+  { image: rwaVilla, type: "sell" as const, price: "€678", delay: 0.2 },
+  { image: rwaCommercial, type: "sell" as const, price: "€1025", delay: 0.15 },
+  { image: categoryLuxury, type: "buy" as const, price: "€445", delay: 0.25 },
+  { image: categoryCredit, type: "buy" as const, price: "€312", delay: 0.3 },
+  { image: malibuImage, type: "buy" as const, price: "€1,250", delay: 0.35 },
+  { image: categoryRealEstate, type: "sell" as const, price: "€567", delay: 0.4 },
 ];
 
 const AssetCard = ({ 
@@ -77,20 +43,17 @@ const AssetCard = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ 
-        delay: 0.8 + delay, 
-        duration: 0.6,
+        delay: 0.3 + delay, 
+        duration: 0.5,
         ease: [0.16, 1, 0.3, 1]
       }}
-      whileHover={{ y: -8, scale: 1.02 }}
+      whileHover={{ y: -4, scale: 1.02 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="relative rounded-2xl overflow-hidden shadow-2xl cursor-pointer group"
-      style={{
-        aspectRatio: index === 0 ? '3/4' : index === 3 ? '3/5' : '4/3',
-      }}
+      className="relative rounded-2xl overflow-hidden shadow-2xl cursor-pointer group w-full h-full"
     >
       <img 
         src={image} 
@@ -328,27 +291,49 @@ export const MarketplaceHero = () => {
             </motion.p>
           </div>
 
-          {/* Right Content - Animated Asset Cards Grid */}
-          <div className="hidden lg:block relative">
-            <div className="grid grid-cols-3 gap-4 max-w-lg ml-auto">
-              {/* Row 1 */}
-              <motion.div 
-                className="col-span-1 row-span-2"
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-              >
-                <AssetCard 
-                  image={assetCards[5].image} 
-                  type={assetCards[5].type} 
-                  price={assetCards[5].price} 
-                  delay={assetCards[5].delay}
-                  index={0}
-                />
-              </motion.div>
+          {/* Right Content - Animated Asset Cards Grid - Full Height */}
+          <div className="hidden lg:block relative h-[calc(100vh-10rem)]">
+            <div className="grid grid-cols-3 gap-3 h-full max-w-2xl ml-auto">
+              {/* Column 1 - 2 tall cards */}
+              <div className="flex flex-col gap-3 h-full">
+                <motion.div 
+                  className="flex-1 min-h-0"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                >
+                  <AssetCard 
+                    image={assetCards[5].image} 
+                    type={assetCards[5].type} 
+                    price={assetCards[5].price} 
+                    delay={assetCards[5].delay}
+                    index={0}
+                  />
+                </motion.div>
+                <motion.div 
+                  className="flex-[0.6] min-h-0"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7, duration: 0.8 }}
+                >
+                  <AssetCard 
+                    image={assetCards[2].image} 
+                    type={assetCards[2].type} 
+                    price={assetCards[2].price} 
+                    delay={assetCards[2].delay}
+                    index={5}
+                  />
+                </motion.div>
+              </div>
               
-              <div className="col-span-2 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              {/* Column 2 - 3 medium cards */}
+              <div className="flex flex-col gap-3 h-full">
+                <motion.div 
+                  className="flex-[0.7] min-h-0"
+                  initial={{ opacity: 0, y: -30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.65, duration: 0.8 }}
+                >
                   <AssetCard 
                     image={assetCards[1].image} 
                     type={assetCards[1].type} 
@@ -356,16 +341,13 @@ export const MarketplaceHero = () => {
                     delay={assetCards[1].delay}
                     index={1}
                   />
-                  <AssetCard 
-                    image={assetCards[0].image} 
-                    type={assetCards[0].type} 
-                    price={assetCards[0].price} 
-                    delay={assetCards[0].delay}
-                    index={2}
-                  />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
+                </motion.div>
+                <motion.div 
+                  className="flex-1 min-h-0"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.75, duration: 0.8 }}
+                >
                   <AssetCard 
                     image={assetCards[3].image} 
                     type={assetCards[3].type} 
@@ -373,6 +355,45 @@ export const MarketplaceHero = () => {
                     delay={assetCards[3].delay}
                     index={3}
                   />
+                </motion.div>
+                <motion.div 
+                  className="flex-[0.5] min-h-0"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.85, duration: 0.8 }}
+                >
+                  <AssetCard 
+                    image={assetCards[7].image} 
+                    type={assetCards[7].type} 
+                    price={assetCards[7].price} 
+                    delay={assetCards[7].delay}
+                    index={7}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Column 3 - 3 varied cards */}
+              <div className="flex flex-col gap-3 h-full">
+                <motion.div 
+                  className="flex-[0.5] min-h-0"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7, duration: 0.8 }}
+                >
+                  <AssetCard 
+                    image={assetCards[0].image} 
+                    type={assetCards[0].type} 
+                    price={assetCards[0].price} 
+                    delay={assetCards[0].delay}
+                    index={2}
+                  />
+                </motion.div>
+                <motion.div 
+                  className="flex-1 min-h-0"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                >
                   <AssetCard 
                     image={assetCards[4].image} 
                     type={assetCards[4].type} 
@@ -380,7 +401,21 @@ export const MarketplaceHero = () => {
                     delay={assetCards[4].delay}
                     index={4}
                   />
-                </div>
+                </motion.div>
+                <motion.div 
+                  className="flex-[0.7] min-h-0"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.9, duration: 0.8 }}
+                >
+                  <AssetCard 
+                    image={assetCards[6].image} 
+                    type={assetCards[6].type} 
+                    price={assetCards[6].price} 
+                    delay={assetCards[6].delay}
+                    index={6}
+                  />
+                </motion.div>
               </div>
             </div>
 
