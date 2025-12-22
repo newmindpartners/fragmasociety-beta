@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Wallet, Key, FileCode, CheckCircle2, ShieldCheck } from "lucide-react";
+import { Wallet, Key, FileCode, CheckCircle2 } from "lucide-react";
 
 export const NonCustodialTrading = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -12,6 +12,26 @@ export const NonCustodialTrading = () => {
     { icon: FileCode, title: "Smart Contract", subtitle: "Trustless execution" },
     { icon: CheckCircle2, title: "Settlement", subtitle: "Instant and final" },
   ];
+
+  const iconAnimations = {
+    idle: { scale: 1, rotate: 0 },
+    active: { 
+      scale: [1, 1.15, 1],
+      rotate: [0, -5, 5, 0],
+      transition: { duration: 0.6, repeat: Infinity, repeatDelay: 1.5 }
+    }
+  };
+
+  const pulseAnimation = {
+    idle: { boxShadow: "0 0 0 0 rgba(255,255,255,0)" },
+    active: {
+      boxShadow: [
+        "0 0 0 0 rgba(255,255,255,0.3)",
+        "0 0 0 12px rgba(255,255,255,0)",
+      ],
+      transition: { duration: 1.2, repeat: Infinity }
+    }
+  };
 
   return (
     <section className="py-32 relative overflow-hidden">
@@ -57,25 +77,33 @@ export const NonCustodialTrading = () => {
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-lg mt-6" style={{ color: 'rgba(255,255,255,0.5)' }}>Trade directly from your wallet. No deposits, no trust required.</motion.p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
           {steps.map((step, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-              className={`p-6 border transition-all ${i === activeStep ? 'bg-white/5 border-white/20' : 'bg-white/[0.02] border-white/10'}`}>
-              <div className={`w-12 h-12 border flex items-center justify-center mb-4 ${i === activeStep ? 'border-white bg-white' : 'border-white/20 bg-white/5'}`}>
-                <step.icon className={`w-5 h-5 ${i === activeStep ? 'text-slate-900' : 'text-white/60'}`} strokeWidth={1.5} />
-              </div>
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ delay: i * 0.1 }}
+              className={`p-6 border transition-all duration-300 ${i === activeStep ? 'bg-white/5 border-white/20' : 'bg-white/[0.02] border-white/10'}`}
+            >
+              <motion.div 
+                className={`w-12 h-12 border flex items-center justify-center mb-4 rounded-sm ${i === activeStep ? 'border-white bg-white' : 'border-white/20 bg-white/5'}`}
+                variants={pulseAnimation}
+                animate={i === activeStep ? "active" : "idle"}
+              >
+                <motion.div
+                  variants={iconAnimations}
+                  animate={i === activeStep ? "active" : "idle"}
+                >
+                  <step.icon className={`w-5 h-5 ${i === activeStep ? 'text-slate-900' : 'text-white/60'}`} strokeWidth={1.5} />
+                </motion.div>
+              </motion.div>
               <h3 className="font-medium text-white mb-1">{step.title}</h3>
               <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{step.subtitle}</p>
             </motion.div>
           ))}
         </div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white/5 border border-white/10 backdrop-blur-sm">
-            <ShieldCheck className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.6)' }} />
-            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>Powered by <span className="text-white font-medium">Cardano</span> and <span className="text-white font-medium">Genius Yield</span></span>
-          </div>
-        </motion.div>
       </div>
 
       {/* Bottom border accent */}
