@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Check, 
   Crown, 
@@ -22,7 +23,9 @@ import {
   Shield,
   CreditCard,
   RefreshCw,
-  Info
+  Info,
+  Sparkles,
+  ChevronDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,6 +59,7 @@ const TIERS = {
     description: "Start your investment journey with essential tools",
     badge: null,
     icon: Zap,
+    color: "slate",
     features: [
       { icon: TrendingUp, label: "Weekly Market Analysis & Trends", tooltip: "Receive curated weekly insights on market movements, emerging opportunities, and key trends in alternative investments." },
       { icon: BookOpen, label: "Tokenization Case Studies", tooltip: "Access detailed case studies showing how real-world assets are tokenized, including success stories and lessons learned." },
@@ -75,6 +79,7 @@ const TIERS = {
     description: "Advanced tools for serious investors seeking growth",
     badge: "Most Popular",
     icon: Star,
+    color: "violet",
     features: [
       { icon: Check, label: "Everything in Explorer", tooltip: "All features from the Explorer tier are included in your Premium membership." },
       { icon: Video, label: "Expert Webinars (monthly) + Replays", tooltip: "Attend exclusive monthly webinars with industry experts and access full replay library on-demand." },
@@ -95,6 +100,7 @@ const TIERS = {
     description: "Exclusive access for top-tier investors",
     badge: "VIP",
     icon: Crown,
+    color: "amber",
     features: [
       { icon: Check, label: "Everything in Premium", tooltip: "All features from Premium tier are included in your Elite membership." },
       { icon: Calendar, label: "Private Events (virtual & in-person)", tooltip: "Exclusive invitations to private investor events, both virtual roundtables and in-person gatherings." },
@@ -111,133 +117,191 @@ const TIERS = {
 
 const tierOrder = ["explorer", "premium", "elite"] as const;
 
-// Clean tier card component
+// Premium tier card component with light mode design
 const TierCard = ({ 
   tier, 
   isCurrentPlan, 
   isAuthenticated, 
   onSubscribe, 
   isLoading,
+  index,
 }: { 
   tier: typeof TIERS.explorer;
   isCurrentPlan: boolean;
   isAuthenticated: boolean;
   onSubscribe: (priceId: string) => void;
   isLoading: boolean;
+  index: number;
 }) => {
   const Icon = tier.icon;
   const isPaid = tier.priceId !== null;
   const isPremium = tier.id === "premium";
   const isElite = tier.id === "elite";
+  const [isHovered, setIsHovered] = useState(false);
+
+  const cardColors = {
+    explorer: {
+      gradient: "from-slate-50 to-slate-100",
+      border: "border-slate-200",
+      icon: "bg-slate-100 text-slate-600",
+      badge: "bg-slate-600 text-white",
+      button: "bg-slate-800 hover:bg-slate-900 text-white",
+    },
+    premium: {
+      gradient: "from-violet-50 via-white to-violet-50",
+      border: "border-violet-200",
+      icon: "bg-gradient-to-br from-violet-500 to-violet-600 text-white",
+      badge: "bg-violet-600 text-white",
+      button: "bg-violet-600 hover:bg-violet-700 text-white",
+    },
+    elite: {
+      gradient: "from-amber-50 via-white to-amber-50",
+      border: "border-amber-200",
+      icon: "bg-gradient-to-br from-amber-500 to-amber-600 text-white",
+      badge: "bg-gradient-to-r from-amber-500 to-amber-600 text-white",
+      button: "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white",
+    },
+  };
+
+  const colors = cardColors[tier.id as keyof typeof cardColors];
 
   return (
-    <div className={`relative flex flex-col h-full ${isPremium ? "lg:-mt-4 lg:mb-4" : ""}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className={`relative flex flex-col h-full ${isPremium ? "lg:-mt-6 lg:mb-6 z-10" : ""}`}
+    >
       {/* Badge */}
-      {tier.badge && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <div
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide ${
-              isElite ? "bg-elite text-elite-foreground" : "bg-foreground text-background"
-            }`}
+      <AnimatePresence>
+        {tier.badge && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.4 + index * 0.1, duration: 0.4 }}
+            className="absolute -top-4 left-1/2 -translate-x-1/2 z-20"
           >
-            {tier.badge}
-          </div>
-        </div>
-      )}
+            <div className={`px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shadow-lg ${colors.badge}`}>
+              <span className="flex items-center gap-1.5">
+                {isElite && <Sparkles className="w-3 h-3" />}
+                {tier.badge}
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Card */}
-      <div className={`flex flex-col h-full rounded-2xl border p-8 ${
-        isPremium || isElite
-          ? "border-white/30 bg-white/[0.03]" 
-          : "border-border bg-card"
-      }`}>
+      <motion.div
+        animate={{
+          y: isHovered ? -8 : 0,
+          boxShadow: isHovered
+            ? "0 32px 64px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)"
+            : "0 8px 32px -8px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)",
+        }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className={`flex flex-col h-full rounded-3xl border-2 p-8 bg-gradient-to-b ${colors.gradient} ${colors.border} overflow-hidden relative`}
+      >
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-slate-100/50 via-transparent to-transparent rounded-full blur-3xl -translate-y-32 translate-x-32 pointer-events-none" />
+        
         {/* Current plan indicator */}
         {isCurrentPlan && (
-          <div className="absolute top-4 right-4">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-white" />
-              <span className="text-xs font-medium text-white">Active</span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="absolute top-6 right-6"
+          >
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-200">
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-2 h-2 rounded-full bg-emerald-500"
+              />
+              <span className="text-xs font-semibold text-emerald-700">Active</span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Icon */}
-        <div
-          className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${
-            isElite
-              ? "bg-elite text-elite-foreground"
-              : isPremium
-                ? "bg-foreground text-background"
-                : "bg-muted text-muted-foreground"
-          }`}
+        <motion.div
+          animate={{ rotate: isHovered ? 5 : 0, scale: isHovered ? 1.05 : 1 }}
+          transition={{ duration: 0.3 }}
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg ${colors.icon}`}
         >
-          <Icon className="w-6 h-6" strokeWidth={1.5} />
-        </div>
+          <Icon className="w-7 h-7" strokeWidth={1.5} />
+        </motion.div>
 
         {/* Name & Price */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold text-foreground mb-2">{tier.name}</h3>
+        <div className="mb-8 relative">
+          <h3 className="text-xl font-semibold text-slate-900 mb-2 font-sans">{tier.name}</h3>
           <div className="flex items-baseline gap-1">
-            <span className={`text-4xl font-bold ${
-              isPremium || isElite
-                ? "text-white" 
-                : "text-foreground"
-            }`}>
+            <motion.span
+              animate={{ scale: isHovered ? 1.02 : 1 }}
+              className="text-5xl font-bold text-slate-900 tracking-tight"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
               {tier.price}
-            </span>
+            </motion.span>
             {isPaid && (
-              <span className="text-muted-foreground text-sm">/month</span>
+              <span className="text-slate-500 text-base font-medium">/month</span>
             )}
           </div>
-          <p className="text-muted-foreground text-sm mt-2">{tier.description}</p>
+          <p className="text-slate-600 text-sm mt-3 leading-relaxed">{tier.description}</p>
         </div>
 
         {/* CTA Button */}
-        <div className="mb-6">
+        <div className="mb-8">
           {isCurrentPlan ? (
             <Button 
-              variant="outline" 
-              className="w-full h-11 rounded-lg"
+              className="w-full h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-100 cursor-default shadow-none border border-slate-200"
               disabled
             >
-              <Check size={16} className="mr-2" />
+              <Check size={18} className="mr-2" />
               Current Plan
             </Button>
           ) : !isAuthenticated ? (
             <Link to="/auth" className="block">
               <Button 
-                className={`w-full h-11 rounded-lg font-medium ${
-                  isPremium || isElite
-                    ? "bg-white hover:bg-white/90 text-background" 
-                    : "bg-muted hover:bg-muted/80 text-foreground"
-                }`}
+                className={`w-full h-12 rounded-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl ${colors.button}`}
               >
                 {isPaid ? "Sign Up to Subscribe" : "Get Started Free"}
-                <ArrowRight size={16} className="ml-2" />
+                <motion.span
+                  animate={{ x: isHovered ? 4 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ArrowRight size={18} className="ml-2" />
+                </motion.span>
               </Button>
             </Link>
           ) : isPaid ? (
             <Button 
-              className="w-full h-11 rounded-lg font-medium bg-white hover:bg-white/90 text-background"
+              className={`w-full h-12 rounded-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl ${colors.button}`}
               onClick={() => onSubscribe(tier.priceId!)}
               disabled={isLoading}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 size={16} className="animate-spin" />
+                  <Loader2 size={18} className="animate-spin" />
                   Processing...
                 </span>
               ) : (
                 <>
                   Subscribe Now
-                  <ArrowRight size={16} className="ml-2" />
+                  <motion.span
+                    animate={{ x: isHovered ? 4 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ArrowRight size={18} className="ml-2" />
+                  </motion.span>
                 </>
               )}
             </Button>
           ) : (
             <Button 
-              variant="outline" 
-              className="w-full h-11 rounded-lg"
+              className="w-full h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-100 cursor-default shadow-none border border-slate-200"
               disabled
             >
               Free Forever
@@ -246,47 +310,62 @@ const TierCard = ({
         </div>
 
         {/* Divider */}
-        <div className="border-t border-border mb-6" />
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8" />
 
         {/* Features */}
         <TooltipProvider delayDuration={200}>
-          <div className="space-y-3 flex-1">
+          <div className="space-y-4 flex-1">
             {tier.features.map((feature, featureIndex) => {
               const FeatureIcon = feature.icon;
               const isHighlight = feature.label.startsWith("Everything in");
               
               return (
-                <div
+                <motion.div
                   key={featureIndex}
-                  className={`flex items-start gap-3 ${
-                    isHighlight ? "text-white" : "text-muted-foreground"
-                  }`}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + featureIndex * 0.05 }}
+                  className="flex items-start gap-3 group/feature"
                 >
-                  <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center mt-0.5 ${
-                    isHighlight ? "bg-white/10" : "bg-muted"
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center mt-0.5 ${
+                      isHighlight 
+                        ? isPremium ? "bg-violet-100" : "bg-amber-100"
+                        : "bg-slate-100"
+                    }`}
+                  >
+                    <FeatureIcon 
+                      size={14} 
+                      className={`${
+                        isHighlight 
+                          ? isPremium ? "text-violet-600" : "text-amber-600"
+                          : "text-slate-600"
+                      }`} 
+                    />
+                  </motion.div>
+                  <span className={`text-sm leading-relaxed flex-1 ${
+                    isHighlight ? "font-semibold text-slate-900" : "text-slate-700"
                   }`}>
-                    <FeatureIcon size={12} className={isHighlight ? "text-white" : "text-muted-foreground"} />
-                  </div>
-                  <span className={`text-sm leading-relaxed flex-1 ${isHighlight ? "font-medium" : ""}`}>
                     {feature.label}
                   </span>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button className="flex-shrink-0 mt-0.5 opacity-50 hover:opacity-100 transition-opacity">
-                        <Info size={14} className="text-muted-foreground" />
+                      <button className="flex-shrink-0 mt-0.5 opacity-40 hover:opacity-100 transition-opacity">
+                        <Info size={14} className="text-slate-400" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-[250px] text-xs">
+                    <TooltipContent side="top" className="max-w-[280px] text-xs bg-slate-900 text-white border-slate-800">
                       {feature.tooltip}
                     </TooltipContent>
                   </Tooltip>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </TooltipProvider>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -429,59 +508,121 @@ const Membership = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20">
-        <div className="container mx-auto px-6">
+      {/* Hero Section - Light Mode with elegant design */}
+      <section className="relative pt-32 pb-24 overflow-hidden">
+        {/* Light background with subtle gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50" />
+        
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-200/30 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-1/4 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        
+        {/* Animated grid pattern */}
+        <div className="absolute inset-0 opacity-[0.015]" 
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
+
+        <div className="container mx-auto px-6 relative z-10">
           {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-6">
-              <Crown size={14} />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-xs font-semibold uppercase tracking-wider mb-8 shadow-lg"
+            >
+              <Crown size={14} className="text-amber-400" />
               Investor Membership
-            </div>
+            </motion.div>
             
-            <h1 className="text-4xl lg:text-5xl font-serif font-bold leading-tight mb-6">
-              Choose Your <span className="text-gradient">Membership</span>
-            </h1>
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-6 text-slate-900"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              Choose Your{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-violet-600 to-violet-500 bg-clip-text text-transparent">
+                  Membership
+                </span>
+                <motion.span
+                  className="absolute -bottom-2 left-0 right-0 h-3 bg-violet-200/50 -z-0"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.8, duration: 0.6 }}
+                  style={{ originX: 0 }}
+                />
+              </span>
+            </motion.h1>
             
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="text-lg text-slate-600 max-w-xl mx-auto leading-relaxed"
+            >
               Select the plan that matches your investment goals and unlock exclusive benefits.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Subscription Status */}
-          {isAuthenticated && currentProductId && (
-            <div className="max-w-md mx-auto mb-12">
-              <div className="p-5 rounded-xl bg-white/5 border border-white/20">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Active Membership</p>
-                    <p className="text-lg font-semibold text-foreground flex items-center gap-2">
-                      {TIERS[currentTierId as keyof typeof TIERS]?.name}
-                    </p>
-                    {subscriptionEnd && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Renews {new Date(subscriptionEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          <AnimatePresence>
+            {isAuthenticated && currentProductId && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                className="max-w-md mx-auto mb-16"
+              >
+                <div className="p-6 rounded-2xl bg-white shadow-xl shadow-slate-200/50 border border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-500 mb-1">Active Membership</p>
+                      <p className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                        {TIERS[currentTierId as keyof typeof TIERS]?.name}
+                        <motion.span
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="w-2 h-2 rounded-full bg-emerald-500"
+                        />
                       </p>
-                    )}
+                      {subscriptionEnd && (
+                        <p className="text-xs text-slate-400 mt-1">
+                          Renews {new Date(subscriptionEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      )}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleManageSubscription}
+                      disabled={isLoading}
+                      className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                    >
+                      <RefreshCw size={14} className="mr-2" />
+                      Manage
+                    </Button>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleManageSubscription}
-                    disabled={isLoading}
-                    className="rounded-lg border-white/30 text-white hover:bg-white/10"
-                  >
-                    <RefreshCw size={14} className="mr-2" />
-                    Manage
-                  </Button>
                 </div>
-              </div>
-            </div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Pricing Cards */}
-          <div className="grid lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {tierOrder.map((tierId) => (
+          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-16">
+            {tierOrder.map((tierId, index) => (
               <TierCard
                 key={tierId}
                 tier={TIERS[tierId]}
@@ -489,45 +630,66 @@ const Membership = () => {
                 isAuthenticated={isAuthenticated}
                 onSubscribe={handleSubscribe}
                 isLoading={isLoading}
+                index={index}
               />
             ))}
           </div>
 
           {/* Trust Indicators */}
-          <div className="mt-16 flex flex-wrap justify-center gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="flex flex-wrap justify-center gap-8 lg:gap-12"
+          >
             {[
               { icon: Shield, label: "Secure Payments" },
               { icon: CreditCard, label: "Powered by Stripe" },
               { icon: RefreshCw, label: "Cancel Anytime" },
               { icon: MessageCircle, label: "24/7 Support" },
             ].map((item, index) => (
-              <div key={index} className="flex items-center gap-2 text-muted-foreground">
-                <item.icon size={16} />
-                <span className="text-sm">{item.label}</span>
-              </div>
+              <motion.div
+                key={index}
+                whileHover={{ y: -2 }}
+                className="flex items-center gap-2.5 text-slate-500 group cursor-default"
+              >
+                <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+                  <item.icon size={16} className="text-slate-600" />
+                </div>
+                <span className="text-sm font-medium">{item.label}</span>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-muted/30">
+      {/* FAQ Section - Light Mode */}
+      <section className="py-24 bg-gradient-to-b from-white to-slate-50 relative">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-sm font-medium mb-6">
               <HelpCircle size={14} />
               FAQ
             </div>
-            <h2 className="text-3xl font-serif font-bold text-foreground mb-3">
+            <h2 className="text-4xl lg:text-5xl font-light text-slate-900 mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
               Frequently Asked Questions
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-slate-600 text-lg">
               Everything you need to know about our membership plans
             </p>
-          </div>
+          </motion.div>
 
           <div className="max-w-2xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-3">
+            <Accordion type="single" collapsible className="space-y-4">
               {[
                 {
                   value: "billing-1",
@@ -559,22 +721,31 @@ const Membership = () => {
                   question: "How do I contact support?",
                   answer: "Explorer and Premium members can reach support via email. Elite members enjoy VIP support through a dedicated WhatsApp group with priority response times."
                 },
-              ].map((faq) => (
-                <AccordionItem 
+              ].map((faq, index) => (
+                <motion.div
                   key={faq.value}
-                  value={faq.value} 
-                  className="bg-background border border-border rounded-lg px-5"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
-                  <AccordionTrigger className="text-left hover:no-underline py-4">
-                    <span className="font-medium text-foreground flex items-center gap-2">
-                      <ChevronRight size={14} className="text-muted-foreground" />
-                      {faq.question}
-                    </span>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-4 pl-6 text-sm">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
+                  <AccordionItem 
+                    value={faq.value} 
+                    className="bg-white border border-slate-200 rounded-2xl px-6 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                  >
+                    <AccordionTrigger className="text-left hover:no-underline py-5 group">
+                      <span className="font-medium text-slate-900 flex items-center gap-3 text-base">
+                        <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-violet-100 transition-colors">
+                          <ChevronDown size={14} className="text-slate-500 group-hover:text-violet-600 transition-colors" />
+                        </div>
+                        {faq.question}
+                      </span>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 pb-5 pl-9 text-base leading-relaxed">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                </motion.div>
               ))}
             </Accordion>
           </div>
