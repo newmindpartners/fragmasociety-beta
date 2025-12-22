@@ -67,29 +67,19 @@ export const HowItWorksCTANew = () => {
             Start with as little as €50 and build a diversified portfolio of real-world assets.
           </motion.p>
           
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Link to="/live-deals">
+            <Link to="/membership">
               <Button 
                 size="lg" 
                 className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-10 h-14 text-base font-medium group"
               >
-                Browse Live Deals
+                Register Your Interest
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-            <Link to="/membership">
-              <Button 
-                variant="outline"
-                size="lg"
-                className="border-white/20 text-white hover:bg-white/10 rounded-full px-10 h-14 text-base font-medium bg-transparent"
-              >
-                Apply for Elite Access
               </Button>
             </Link>
           </motion.div>
