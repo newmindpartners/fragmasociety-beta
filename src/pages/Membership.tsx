@@ -100,7 +100,7 @@ const TIERS = {
     description: "Exclusive access for top-tier investors",
     badge: "VIP",
     icon: Crown,
-    color: "amber",
+    color: "violet",
     features: [
       { icon: Check, label: "Everything in Premium", tooltip: "All features from Premium tier are included in your Elite membership." },
       { icon: Calendar, label: "Private Events (virtual & in-person)", tooltip: "Exclusive invitations to private investor events, both virtual roundtables and in-person gatherings." },
@@ -155,11 +155,11 @@ const TierCard = ({
       button: "bg-violet-600 hover:bg-violet-700 text-white",
     },
     elite: {
-      gradient: "from-amber-50 via-white to-amber-50",
-      border: "border-amber-200",
-      icon: "bg-gradient-to-br from-amber-500 to-amber-600 text-white",
-      badge: "bg-gradient-to-r from-amber-500 to-amber-600 text-white",
-      button: "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white",
+      gradient: "from-violet-50/80 via-white to-violet-50/80",
+      border: "border-violet-300",
+      icon: "bg-gradient-to-br from-violet-600 to-violet-700 text-white",
+      badge: "bg-gradient-to-r from-violet-600 to-violet-700 text-white",
+      button: "bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-700 hover:to-violet-800 text-white",
     },
   };
 
@@ -331,15 +331,15 @@ const TierCard = ({
                     whileHover={{ scale: 1.1 }}
                     className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center mt-0.5 ${
                       isHighlight 
-                        ? isPremium ? "bg-violet-100" : "bg-amber-100"
+                        ? "bg-violet-100"
                         : "bg-slate-100"
                     }`}
                   >
-                    <FeatureIcon 
+                    <FeatureIcon
                       size={14} 
                       className={`${
                         isHighlight 
-                          ? isPremium ? "text-violet-600" : "text-amber-600"
+                          ? "text-violet-600"
                           : "text-slate-600"
                       }`} 
                     />
@@ -508,20 +508,20 @@ const Membership = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      {/* Hero Section - Light Mode with elegant design */}
+      {/* Hero Section - Dark Mode with elegant design */}
       <section className="relative pt-32 pb-24 overflow-hidden">
-        {/* Light background with subtle gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50" />
+        {/* Dark background with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
         
         {/* Decorative elements */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-200/30 rounded-full blur-3xl" />
-        <div className="absolute top-40 right-1/4 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-900/20 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-1/4 w-80 h-80 bg-violet-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
         
         {/* Animated grid pattern */}
-        <div className="absolute inset-0 opacity-[0.015]" 
+        <div className="absolute inset-0 opacity-[0.03]" 
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
         />
 
@@ -538,9 +538,9 @@ const Membership = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-xs font-semibold uppercase tracking-wider mb-8 shadow-lg"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-8"
             >
-              <Crown size={14} className="text-amber-400" />
+              <Crown size={14} className="text-violet-400" />
               Investor Membership
             </motion.div>
             
@@ -549,16 +549,16 @@ const Membership = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-6 text-slate-900"
+              className="text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-6 text-white"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Choose Your{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 bg-gradient-to-r from-violet-600 to-violet-500 bg-clip-text text-transparent">
+                <span className="relative z-10 bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">
                   Membership
                 </span>
                 <motion.span
-                  className="absolute -bottom-2 left-0 right-0 h-3 bg-violet-200/50 -z-0"
+                  className="absolute -bottom-2 left-0 right-0 h-3 bg-violet-500/30 -z-0"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
@@ -571,7 +571,7 @@ const Membership = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-lg text-slate-600 max-w-xl mx-auto leading-relaxed"
+              className="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed"
             >
               Select the plan that matches your investment goals and unlock exclusive benefits.
             </motion.p>
@@ -586,11 +586,11 @@ const Membership = () => {
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 className="max-w-md mx-auto mb-16"
               >
-                <div className="p-6 rounded-2xl bg-white shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-500 mb-1">Active Membership</p>
-                      <p className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                      <p className="text-sm text-slate-400 mb-1">Active Membership</p>
+                      <p className="text-xl font-semibold text-white flex items-center gap-2">
                         {TIERS[currentTierId as keyof typeof TIERS]?.name}
                         <motion.span
                           animate={{ scale: [1, 1.2, 1] }}
@@ -599,7 +599,7 @@ const Membership = () => {
                         />
                       </p>
                       {subscriptionEnd && (
-                        <p className="text-xs text-slate-400 mt-1">
+                        <p className="text-xs text-slate-500 mt-1">
                           Renews {new Date(subscriptionEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </p>
                       )}
@@ -609,7 +609,7 @@ const Membership = () => {
                       size="sm"
                       onClick={handleManageSubscription}
                       disabled={isLoading}
-                      className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                      className="rounded-xl border-white/20 text-white hover:bg-white/10 hover:border-white/30"
                     >
                       <RefreshCw size={14} className="mr-2" />
                       Manage
@@ -651,10 +651,10 @@ const Membership = () => {
               <motion.div
                 key={index}
                 whileHover={{ y: -2 }}
-                className="flex items-center gap-2.5 text-slate-500 group cursor-default"
+                className="flex items-center gap-2.5 text-slate-400 group cursor-default"
               >
-                <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
-                  <item.icon size={16} className="text-slate-600" />
+                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                  <item.icon size={16} className="text-slate-300" />
                 </div>
                 <span className="text-sm font-medium">{item.label}</span>
               </motion.div>
