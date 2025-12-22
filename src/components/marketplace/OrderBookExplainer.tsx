@@ -2,19 +2,17 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ArrowDown, ArrowUp, Target, Clock, Eye, CheckCircle2, Sparkles, Zap, TrendingUp } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
-// Import property images
-import bigRockDrive from "@/assets/properties/big-rock-drive.jpg";
-import coolOakWay from "@/assets/properties/cool-oak-way.jpg";
-import deerheadRoad from "@/assets/properties/deerhead-road.jpg";
-import rockpointWay from "@/assets/properties/rockpoint-way.jpg";
-import serraRoad from "@/assets/properties/serra-road.jpg";
+// Import asset images
+import malibuVilla from "@/assets/orderbook/malibu-villa.jpg";
+import filmFund from "@/assets/orderbook/film-fund.jpg";
+import musicRights from "@/assets/orderbook/music-rights.jpg";
+import corporateBond from "@/assets/orderbook/corporate-bond.jpg";
 
 const tradingAssets = [
-  { name: "Big Rock Drive", symbol: "BRD-001", image: bigRockDrive, location: "Malibu, CA" },
-  { name: "Cool Oak Way", symbol: "COW-002", image: coolOakWay, location: "Beverly Hills, CA" },
-  { name: "Deerhead Ranch", symbol: "DHR-003", image: deerheadRoad, location: "Pacific Palisades, CA" },
-  { name: "Rockpoint Estate", symbol: "RPE-004", image: rockpointWay, location: "Bel Air, CA" },
-  { name: "Serra Road Villa", symbol: "SRV-005", image: serraRoad, location: "Malibu, CA" },
+  { name: "Malibu Villa", symbol: "MLB-VLA", image: malibuVilla, category: "Real Estate" },
+  { name: "Film Fund", symbol: "FLM-FND", image: filmFund, category: "Entertainment" },
+  { name: "Music Rights", symbol: "MSC-RGT", image: musicRights, category: "Royalties" },
+  { name: "Corporate Bond", symbol: "CRP-BND", image: corporateBond, category: "Fixed Income" },
 ];
 
 // Particle effect component
@@ -69,8 +67,8 @@ const OrderRow = ({
         animate={isThisMatching ? {
           scale: [1, 1.03, 1],
           boxShadow: isBid 
-            ? ['0 0 0 rgba(16, 185, 129, 0)', '0 0 30px rgba(16, 185, 129, 0.4)', '0 0 0 rgba(16, 185, 129, 0)']
-            : ['0 0 0 rgba(239, 68, 68, 0)', '0 0 30px rgba(239, 68, 68, 0.4)', '0 0 0 rgba(239, 68, 68, 0)']
+            ? ['0 0 0 rgba(16, 185, 129, 0)', '0 0 30px rgba(16, 185, 129, 0.5)', '0 0 0 rgba(16, 185, 129, 0)']
+            : ['0 0 0 rgba(239, 68, 68, 0)', '0 0 30px rgba(239, 68, 68, 0.5)', '0 0 0 rgba(239, 68, 68, 0)']
         } : {}}
         transition={{ duration: 0.6 }}
         className={`
@@ -82,18 +80,18 @@ const OrderRow = ({
           }
         `}
       >
-        {/* Progress bar fill */}
+        {/* Progress bar fill - solid color */}
         <motion.div 
-          className={`absolute inset-y-0 ${isBid ? 'left-0' : 'right-0'} ${isBid ? 'bg-emerald-500/15' : 'bg-rose-500/15'}`}
+          className={`absolute inset-y-0 ${isBid ? 'left-0 bg-emerald-500/15' : 'right-0 bg-rose-500/15'}`}
           initial={{ width: 0 }}
           whileInView={{ width: `${(order.total / 5) * 100}%` }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 + index * 0.1, duration: 0.8, ease: "easeOut" }}
         />
         
-        {/* Hover glow */}
+        {/* Hover highlight - solid */}
         <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 
-          ${isBid ? 'bg-gradient-to-r from-emerald-500/10 to-transparent' : 'bg-gradient-to-l from-rose-500/10 to-transparent'}`} 
+          ${isBid ? 'bg-emerald-500/10' : 'bg-rose-500/10'}`} 
         />
 
         <span className={`text-base font-semibold relative z-10 ${isBid ? 'text-emerald-400' : 'text-rose-400'}`}>
@@ -106,7 +104,7 @@ const OrderRow = ({
           €{order.total}M
         </span>
 
-        {/* Match indicator */}
+        {/* Match indicator - solid colors */}
         <AnimatePresence>
           {isThisMatching && (
             <motion.div
@@ -179,7 +177,6 @@ const AnimatedOrderBook = () => {
       setMatchIndex(newMatchIndex);
       setShowMatch(true);
       
-      // Show center celebration after individual match
       setTimeout(() => {
         setShowMatch(false);
         setShowCenterMatch(true);
@@ -201,24 +198,23 @@ const AnimatedOrderBook = () => {
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Ambient background effects */}
+      {/* Ambient background - solid colors */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{ 
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.35, 0.2],
             scale: [1, 1.1, 1],
-            rotate: [0, 5, 0]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-radial from-violet-600/20 via-transparent to-transparent"
+          className="absolute -top-1/2 -left-1/2 w-full h-full bg-violet-600/15 rounded-full blur-[100px]"
         />
         <motion.div
           animate={{ 
-            opacity: [0.2, 0.4, 0.2],
+            opacity: [0.15, 0.25, 0.15],
             scale: [1, 1.2, 1],
           }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-radial from-emerald-600/15 via-transparent to-transparent"
+          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-emerald-600/10 rounded-full blur-[80px]"
         />
       </div>
 
@@ -235,7 +231,7 @@ const AnimatedOrderBook = () => {
         ))}
       </div>
 
-      {/* Center Match Celebration */}
+      {/* Center Match Celebration - solid colors, no gradients */}
       <AnimatePresence>
         {showCenterMatch && (
           <motion.div
@@ -244,18 +240,18 @@ const AnimatedOrderBook = () => {
             exit={{ opacity: 0 }}
             className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/95 backdrop-blur-md"
           >
-            {/* Ripple effect */}
+            {/* Ripple effects - solid borders */}
             <motion.div
               initial={{ scale: 0, opacity: 0.8 }}
               animate={{ scale: 4, opacity: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="absolute w-24 h-24 rounded-full border-2 border-violet-500/50"
+              className="absolute w-24 h-24 rounded-full border-2 border-violet-500/60"
             />
             <motion.div
               initial={{ scale: 0, opacity: 0.6 }}
               animate={{ scale: 3, opacity: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-              className="absolute w-24 h-24 rounded-full border-2 border-emerald-500/50"
+              className="absolute w-24 h-24 rounded-full border-2 border-emerald-500/60"
             />
             
             <motion.div
@@ -265,10 +261,11 @@ const AnimatedOrderBook = () => {
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="relative flex flex-col items-center gap-4"
             >
+              {/* Solid color icon container */}
               <motion.div
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/30"
+                className="w-16 h-16 rounded-2xl bg-violet-500 flex items-center justify-center shadow-lg shadow-violet-500/40"
               >
                 <CheckCircle2 className="w-8 h-8 text-white" />
               </motion.div>
@@ -283,28 +280,19 @@ const AnimatedOrderBook = () => {
                 <p className="text-white/60 text-sm">Trade executed successfully</p>
               </motion.div>
               
-              {/* Confetti particles */}
+              {/* Confetti particles - solid colors */}
               <div className="absolute inset-0 pointer-events-none">
                 {[...Array(12)].map((_, i) => (
                   <motion.div
                     key={i}
-                    initial={{ 
-                      opacity: 1,
-                      x: 0,
-                      y: 0,
-                      scale: 1
-                    }}
+                    initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
                     animate={{ 
                       opacity: 0,
                       x: (Math.random() - 0.5) * 200,
                       y: (Math.random() - 0.5) * 200,
                       scale: 0
                     }}
-                    transition={{ 
-                      duration: 1,
-                      delay: i * 0.05,
-                      ease: "easeOut"
-                    }}
+                    transition={{ duration: 1, delay: i * 0.05, ease: "easeOut" }}
                     className={`absolute left-1/2 top-1/2 w-2 h-2 rounded-full ${
                       i % 3 === 0 ? 'bg-emerald-400' : i % 3 === 1 ? 'bg-violet-400' : 'bg-amber-400'
                     }`}
@@ -333,7 +321,7 @@ const AnimatedOrderBook = () => {
               alt={currentAsset.name}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-black/20" />
             
             {/* Live indicator on image */}
             <motion.div 
@@ -359,17 +347,17 @@ const AnimatedOrderBook = () => {
                   {currentAsset.name}
                 </h3>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-mono tracking-wider text-violet-400/80 bg-violet-500/10 px-2 py-0.5 rounded">
+                  <span className="text-xs font-mono tracking-wider text-violet-400 bg-violet-500/15 px-2 py-0.5 rounded">
                     {currentAsset.symbol}
                   </span>
-                  <span className="text-xs text-white/40">{currentAsset.location}</span>
+                  <span className="text-xs text-white/40">{currentAsset.category}</span>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
           
           {/* Live Status */}
-          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
+          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/30 rounded-full">
             <motion.div
               animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -379,15 +367,15 @@ const AnimatedOrderBook = () => {
           </div>
         </div>
         
-        {/* Asset thumbnail strip */}
-        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/5">
+        {/* Asset thumbnail strip - 4 assets */}
+        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
           {tradingAssets.map((asset, i) => (
             <motion.button
               key={asset.symbol}
               onClick={() => setCurrentAssetIndex(i)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`relative w-10 h-10 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+              className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                 i === currentAssetIndex 
                   ? 'border-violet-500 shadow-lg shadow-violet-500/30' 
                   : 'border-white/10 opacity-50 hover:opacity-80'
@@ -397,7 +385,7 @@ const AnimatedOrderBook = () => {
               {i === currentAssetIndex && (
                 <motion.div 
                   layoutId="activeAsset"
-                  className="absolute inset-0 border-2 border-violet-400 rounded-lg"
+                  className="absolute inset-0 border-2 border-violet-400 rounded-xl"
                 />
               )}
             </motion.button>
@@ -491,10 +479,10 @@ const AnimatedOrderBook = () => {
 
         {/* Match center indicator */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="flex-1 h-px bg-white/10" />
           <motion.div
             animate={{ 
-              boxShadow: ['0 0 0 rgba(139, 92, 246, 0)', '0 0 20px rgba(139, 92, 246, 0.5)', '0 0 0 rgba(139, 92, 246, 0)']
+              boxShadow: ['0 0 0 rgba(139, 92, 246, 0)', '0 0 20px rgba(139, 92, 246, 0.4)', '0 0 0 rgba(139, 92, 246, 0)']
             }}
             transition={{ duration: 2, repeat: Infinity }}
             className="mx-4 px-4 py-2 bg-white/5 border border-white/10 rounded-full flex items-center gap-2"
@@ -502,7 +490,7 @@ const AnimatedOrderBook = () => {
             <Sparkles className="w-4 h-4 text-violet-400" />
             <span className="text-xs text-white/60">Orders match automatically</span>
           </motion.div>
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="flex-1 h-px bg-white/10" />
         </div>
       </div>
     </motion.div>
@@ -524,10 +512,10 @@ export const OrderBookExplainer = () => {
 
   return (
     <section ref={sectionRef} className="py-32 relative overflow-hidden">
-      {/* Deep premium background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
+      {/* Deep premium background - solid color */}
+      <div className="absolute inset-0 bg-slate-950" />
       
-      {/* Ambient glows */}
+      {/* Ambient glows - solid colors */}
       <motion.div 
         animate={{ opacity: [0.15, 0.25, 0.15] }}
         transition={{ duration: 8, repeat: Infinity }}
@@ -549,7 +537,7 @@ export const OrderBookExplainer = () => {
       />
 
       {/* Top border accent */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-violet-500/30" />
       
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
@@ -571,23 +559,12 @@ export const OrderBookExplainer = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6"
-            style={{ 
-              fontFamily: "'Playfair Display', serif",
-              background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6 text-white"
+            style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Professional trading,
             <br />
-            <span 
-              className="italic"
-              style={{ color: 'rgba(255,255,255,0.5)', WebkitTextFillColor: 'unset' }}
-            >
-              simplified.
-            </span>
+            <span className="italic text-white/50">simplified.</span>
           </motion.h2>
           
           <motion.p
@@ -669,9 +646,9 @@ export const OrderBookExplainer = () => {
                       </p>
                     </div>
 
-                    {/* Bottom accent line */}
+                    {/* Bottom accent line - solid */}
                     <motion.div 
-                      className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/80 via-violet-400/50 to-transparent"
+                      className="absolute bottom-0 left-0 h-[2px] bg-violet-500/80"
                       initial={{ width: 0 }}
                       animate={{ width: isHovered ? '100%' : 0 }}
                       transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
@@ -685,11 +662,11 @@ export const OrderBookExplainer = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="mt-8 p-6 bg-gradient-to-r from-violet-500/10 via-violet-500/5 to-transparent border-l-2 border-violet-500 rounded-r-xl"
+              className="mt-8 p-6 bg-violet-500/10 border-l-2 border-violet-500 rounded-r-xl"
             >
               <p className="leading-relaxed text-sm text-white/60">
-                <span className="text-white font-medium">This isn't a "platform price."</span>{" "}
-                It's a true market where buyers and sellers meet. <span className="text-violet-400">Your price, your terms.</span>
+                <span className="text-white font-medium">This is not a platform price.</span>{" "}
+                It is a true market where buyers and sellers meet. <span className="text-violet-400">Your price, your terms.</span>
               </p>
             </motion.div>
           </div>
