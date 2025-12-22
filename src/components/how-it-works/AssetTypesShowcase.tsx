@@ -55,6 +55,30 @@ const assetTypes = [
       { label: "Target Return", value: "12-20%" },
       { label: "Typical Term", value: "5-10 years" }
     ]
+  },
+  {
+    id: "music",
+    icon: Music,
+    title: "Music Rights",
+    subtitle: "Royalties & Catalogs",
+    description: "Invest in music royalty streams and catalog acquisitions—earn ongoing income from streaming, licensing, and performance rights.",
+    image: categoryFilm,
+    stats: [
+      { label: "Target Yield", value: "8-14%" },
+      { label: "Typical Term", value: "5-15 years" }
+    ]
+  },
+  {
+    id: "equities",
+    icon: TrendingUp,
+    title: "Companies Equities",
+    subtitle: "Private & Pre-IPO Stakes",
+    description: "Access equity stakes in high-growth private companies and pre-IPO opportunities typically reserved for institutional investors.",
+    image: categoryCredit,
+    stats: [
+      { label: "Target Return", value: "20-40%" },
+      { label: "Typical Term", value: "3-7 years" }
+    ]
   }
 ];
 
