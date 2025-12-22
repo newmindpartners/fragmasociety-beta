@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, ArrowDownRight, Zap, Shield, Clock, TrendingUp, ArrowLeftRight } from "lucide-react";
 import { useState, useRef } from "react";
+import malibuVilla from "@/assets/orderbook/malibu-villa.jpg";
 
 const benefits = [
   { icon: Zap, title: "Instant Execution", description: "Orders execute automatically when conditions are met" },
@@ -96,8 +97,8 @@ export const TwoWayOrders = () => {
                 <div className="bg-white border border-slate-200 p-6 rounded-sm" style={{ boxShadow: '0 8px 30px -10px rgba(0, 0, 0, 0.12)' }}>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 bg-slate-100 border border-slate-200 flex items-center justify-center">
-                        <span className="text-sm font-medium text-slate-600">MLV</span>
+                      <div className="w-14 h-14 rounded-sm overflow-hidden border border-slate-200">
+                        <img src={malibuVilla} alt="Malibu Villa" className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <p className="text-xs text-slate-400 uppercase tracking-wider">Malibu Villa Token</p>
@@ -112,11 +113,11 @@ export const TwoWayOrders = () => {
                   <div className="flex justify-between items-center p-5 bg-emerald-50/50 border border-emerald-100 rounded-sm">
                     <div>
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Buy Price</p>
-                      <p className="text-2xl font-medium text-emerald-600">$95,000</p>
+                      <p className="text-2xl font-medium text-emerald-600">$75,000</p>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Quantity</p>
-                      <p className="text-2xl font-medium text-slate-800">10</p>
+                      <p className="text-2xl font-medium text-slate-800">1</p>
                     </div>
                   </div>
                 </div>
@@ -132,12 +133,12 @@ export const TwoWayOrders = () => {
                 <div className="bg-white border border-slate-200 p-6 rounded-sm" style={{ boxShadow: '0 8px 30px -10px rgba(0, 0, 0, 0.12)' }}>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 bg-slate-100 border border-slate-200 flex items-center justify-center">
-                        <span className="text-sm font-medium text-slate-600">LAF</span>
+                      <div className="w-14 h-14 rounded-sm overflow-hidden border border-slate-200">
+                        <img src={malibuVilla} alt="Malibu Villa" className="w-full h-full object-cover" />
                       </div>
                       <div>
-                        <p className="text-xs text-slate-400 uppercase tracking-wider">LA Investment Fund</p>
-                        <p className="text-base font-medium text-slate-800">LAF-002</p>
+                        <p className="text-xs text-slate-400 uppercase tracking-wider">Malibu Villa Token</p>
+                        <p className="text-base font-medium text-slate-800">MLV-001</p>
                       </div>
                     </div>
                     <span className="inline-flex items-center gap-2 px-4 py-2 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-medium rounded-sm">
@@ -148,11 +149,11 @@ export const TwoWayOrders = () => {
                   <div className="flex justify-between items-center p-5 bg-rose-50/50 border border-rose-100 rounded-sm">
                     <div>
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Sell Price</p>
-                      <p className="text-2xl font-medium text-rose-600">$125,000</p>
+                      <p className="text-2xl font-medium text-rose-600">$100,000</p>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Quantity</p>
-                      <p className="text-2xl font-medium text-slate-800">10</p>
+                      <p className="text-2xl font-medium text-slate-800">1</p>
                     </div>
                   </div>
                 </div>
@@ -181,11 +182,11 @@ export const TwoWayOrders = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Potential Profit</p>
-                      <p className="text-3xl font-medium text-white">+$300,000</p>
+                      <p className="text-3xl font-medium text-white">+$25,000</p>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">ROI</p>
-                      <p className="text-3xl font-medium text-emerald-400">31.5%</p>
+                      <p className="text-3xl font-medium text-emerald-400">33.3%</p>
                     </div>
                   </div>
                 </div>
