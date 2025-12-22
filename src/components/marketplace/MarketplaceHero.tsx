@@ -69,12 +69,14 @@ const AssetCard = ({
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
       
-      {/* Category badge - top left */}
+      {/* Category badge - position opposite to price tag */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.5 + delay, duration: 0.4 }}
-        className="absolute top-3 left-3"
+        className={`absolute ${
+          type === "buy" ? "bottom-3 left-3" : "top-3 left-3"
+        }`}
       >
         <div className="px-2.5 py-1.5 rounded-md bg-black/50 backdrop-blur-md flex items-center gap-1.5 border border-white/10">
           <Icon className="w-3 h-3 text-white/80" strokeWidth={2} />
