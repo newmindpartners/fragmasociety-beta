@@ -7,6 +7,7 @@ import categoryFilm from "@/assets/category-film.jpg";
 import categoryCredit from "@/assets/category-credit.jpg";
 import categoryLuxury from "@/assets/category-luxury.jpg";
 import categoryMusic from "@/assets/category-music.jpg";
+import categoryEquities from "@/assets/category-equities.jpg";
 
 const assetTypes = [
   {
@@ -75,7 +76,7 @@ const assetTypes = [
     title: "Companies Equities",
     subtitle: "Private & Pre-IPO Stakes",
     description: "Access equity stakes in high-growth private companies and pre-IPO opportunities typically reserved for institutional investors.",
-    image: categoryCredit,
+    image: categoryEquities,
     stats: [
       { label: "Target Return", value: "20-40%" },
       { label: "Typical Term", value: "3-7 years" }
