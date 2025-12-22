@@ -8,7 +8,6 @@ import { TwoWayOrders } from "@/components/marketplace/TwoWayOrders";
 import { OptionsTrading } from "@/components/marketplace/OptionsTrading";
 import { CardanoEUTXO } from "@/components/marketplace/CardanoEUTXO";
 import { NonCustodialTrading } from "@/components/marketplace/NonCustodialTrading";
-import { TradingSteps } from "@/components/marketplace/TradingSteps";
 import { MarketplaceCTA } from "@/components/marketplace/MarketplaceCTA";
 
 
@@ -25,7 +24,7 @@ const Marketplace = () => {
       <CardanoEUTXO />
       
       <NonCustodialTrading />
-      <TradingSteps />
+      
       <MarketplaceCTA />
       <Footer />
     </div>
