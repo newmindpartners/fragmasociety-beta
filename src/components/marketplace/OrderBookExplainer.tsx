@@ -9,10 +9,82 @@ import musicRights from "@/assets/orderbook/music-rights.jpg";
 import corporateBond from "@/assets/orderbook/corporate-bond.jpg";
 
 const tradingAssets = [
-  { name: "Malibu Villa", symbol: "MLB-VLA", image: malibuVilla, category: "Real Estate" },
-  { name: "Film Fund", symbol: "FLM-FND", image: filmFund, category: "Entertainment" },
-  { name: "Music Rights", symbol: "MSC-RGT", image: musicRights, category: "Royalties" },
-  { name: "Corporate Bond", symbol: "CRP-BND", image: corporateBond, category: "Fixed Income" },
+  { 
+    name: "Malibu Villa", 
+    symbol: "MLB-VLA", 
+    image: malibuVilla, 
+    category: "Real Estate",
+    basePrice: 12450.00,
+    bids: [
+      { price: 12380.00, size: 8, total: 0.99 },
+      { price: 12320.00, size: 12, total: 1.48 },
+      { price: 12250.00, size: 18, total: 2.21 },
+      { price: 12180.00, size: 25, total: 3.04 },
+    ],
+    asks: [
+      { price: 12520.00, size: 6, total: 0.75 },
+      { price: 12580.00, size: 10, total: 1.26 },
+      { price: 12650.00, size: 15, total: 1.90 },
+      { price: 12720.00, size: 22, total: 2.80 },
+    ]
+  },
+  { 
+    name: "Film Fund", 
+    symbol: "FLM-FND", 
+    image: filmFund, 
+    category: "Entertainment",
+    basePrice: 250.00,
+    bids: [
+      { price: 248.50, size: 450, total: 0.11 },
+      { price: 247.25, size: 820, total: 0.20 },
+      { price: 245.80, size: 1250, total: 0.31 },
+      { price: 244.00, size: 1680, total: 0.41 },
+    ],
+    asks: [
+      { price: 251.50, size: 380, total: 0.10 },
+      { price: 253.25, size: 650, total: 0.16 },
+      { price: 255.00, size: 920, total: 0.23 },
+      { price: 257.50, size: 1400, total: 0.36 },
+    ]
+  },
+  { 
+    name: "Music Rights", 
+    symbol: "MSC-RGT", 
+    image: musicRights, 
+    category: "Royalties",
+    basePrice: 85.50,
+    bids: [
+      { price: 85.20, size: 1200, total: 0.10 },
+      { price: 84.80, size: 2400, total: 0.20 },
+      { price: 84.25, size: 3800, total: 0.32 },
+      { price: 83.50, size: 5200, total: 0.43 },
+    ],
+    asks: [
+      { price: 85.80, size: 950, total: 0.08 },
+      { price: 86.25, size: 1800, total: 0.16 },
+      { price: 86.90, size: 2900, total: 0.25 },
+      { price: 87.50, size: 4100, total: 0.36 },
+    ]
+  },
+  { 
+    name: "Corporate Bond", 
+    symbol: "CRP-BND", 
+    image: corporateBond, 
+    category: "Fixed Income",
+    basePrice: 1025.00,
+    bids: [
+      { price: 1023.50, size: 85, total: 0.87 },
+      { price: 1021.25, size: 142, total: 1.45 },
+      { price: 1018.75, size: 198, total: 2.02 },
+      { price: 1015.00, size: 265, total: 2.69 },
+    ],
+    asks: [
+      { price: 1026.50, size: 72, total: 0.74 },
+      { price: 1028.75, size: 118, total: 1.21 },
+      { price: 1031.25, size: 165, total: 1.70 },
+      { price: 1034.00, size: 220, total: 2.27 },
+    ]
+  },
 ];
 
 // Particle effect component
@@ -134,43 +206,35 @@ const AnimatedOrderBook = () => {
   const currentAsset = tradingAssets[currentAssetIndex];
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const [bids] = useState([
-    { price: 1245.50, size: 21628, total: 2.21 },
-    { price: 892.25, size: 47056, total: 4.65 },
-    { price: 456.80, size: 29241, total: 2.99 },
-    { price: 187.35, size: 46023, total: 4.55 },
-  ]);
-
-  const [asks] = useState([
-    { price: 1248.75, size: 16207, total: 1.72 },
-    { price: 895.50, size: 49376, total: 4.97 },
-    { price: 459.20, size: 29524, total: 2.92 },
-    { price: 189.85, size: 41270, total: 4.05 },
-  ]);
-
-  const [lastPrice, setLastPrice] = useState(1247.06);
+  const [lastPrice, setLastPrice] = useState(currentAsset.basePrice);
   const [change24h] = useState(2.39);
   const [showMatch, setShowMatch] = useState(false);
   const [matchIndex, setMatchIndex] = useState(0);
   const [showCenterMatch, setShowCenterMatch] = useState(false);
 
-  // Asset rotation
+  // Update price when asset changes
+  useEffect(() => {
+    setLastPrice(currentAsset.basePrice);
+  }, [currentAssetIndex, currentAsset.basePrice]);
+
+  // Asset rotation - slower pace (12 seconds)
   useEffect(() => {
     const assetInterval = setInterval(() => {
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentAssetIndex(prev => (prev + 1) % tradingAssets.length);
         setIsTransitioning(false);
-      }, 400);
-    }, 6000);
+      }, 500);
+    }, 12000);
     return () => clearInterval(assetInterval);
   }, []);
 
-  // Price fluctuation & order matching
+  // Price fluctuation based on current asset's price range
   useEffect(() => {
     const priceInterval = setInterval(() => {
-      setLastPrice(prev => +(prev + (Math.random() - 0.5) * 2).toFixed(2));
-    }, 1500);
+      const fluctuation = currentAsset.basePrice * 0.001 * (Math.random() - 0.5);
+      setLastPrice(prev => +(prev + fluctuation).toFixed(2));
+    }, 2000);
     
     const matchInterval = setInterval(() => {
       const newMatchIndex = Math.floor(Math.random() * 4);
@@ -182,13 +246,13 @@ const AnimatedOrderBook = () => {
         setShowCenterMatch(true);
         setTimeout(() => setShowCenterMatch(false), 1200);
       }, 600);
-    }, 5000);
+    }, 6000);
 
     return () => {
       clearInterval(priceInterval);
       clearInterval(matchInterval);
     };
-  }, []);
+  }, [currentAsset.basePrice]);
 
   return (
     <motion.div 
@@ -442,7 +506,7 @@ const AnimatedOrderBook = () => {
               <span className="text-right">Total</span>
             </div>
             <div className="space-y-2">
-              {bids.map((bid, i) => (
+              {currentAsset.bids.map((bid, i) => (
                 <OrderRow 
                   key={i} 
                   order={bid} 
@@ -463,7 +527,7 @@ const AnimatedOrderBook = () => {
               <span className="text-right">Total</span>
             </div>
             <div className="space-y-2">
-              {asks.map((ask, i) => (
+              {currentAsset.asks.map((ask, i) => (
                 <OrderRow 
                   key={i} 
                   order={ask} 
