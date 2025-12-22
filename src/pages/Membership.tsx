@@ -137,7 +137,6 @@ const TierCard = ({
   const isPaid = tier.priceId !== null;
   const isPremium = tier.id === "premium";
   const isElite = tier.id === "elite";
-  const isDark = isPremium || isElite;
   const [isHovered, setIsHovered] = useState(false);
 
   const cardColors = {
@@ -147,28 +146,23 @@ const TierCard = ({
       icon: "bg-slate-100 text-slate-600",
       badge: "bg-slate-600 text-white",
       button: "bg-slate-800 hover:bg-slate-900 text-white",
+      accent: "slate",
     },
     premium: {
-      gradient: "from-slate-900 via-slate-800 to-slate-900",
-      border: "border-slate-700",
-      icon: "bg-gradient-to-br from-slate-600 to-slate-700 text-white",
-      badge: "bg-slate-600 text-white",
-      button: "bg-slate-600 hover:bg-slate-500 text-white",
-      textColor: "text-white",
-      subtextColor: "text-slate-300",
-      featureBg: "bg-slate-700/50",
-      featureText: "text-slate-200",
+      gradient: "from-slate-50 via-white to-slate-50",
+      border: "border-slate-300",
+      icon: "bg-gradient-to-br from-slate-700 to-slate-900 text-white",
+      badge: "bg-slate-800 text-white",
+      button: "bg-slate-800 hover:bg-slate-900 text-white",
+      accent: "slate",
     },
     elite: {
-      gradient: "from-violet-600 via-violet-500 to-violet-600",
-      border: "border-violet-400",
-      icon: "bg-gradient-to-br from-white/20 to-white/10 text-white",
-      badge: "bg-white text-violet-600",
-      button: "bg-white hover:bg-violet-50 text-violet-600",
-      textColor: "text-white",
-      subtextColor: "text-violet-100",
-      featureBg: "bg-white/10",
-      featureText: "text-violet-50",
+      gradient: "from-violet-50/50 via-white to-violet-50/50",
+      border: "border-violet-200",
+      icon: "bg-gradient-to-br from-violet-500 to-violet-700 text-white",
+      badge: "bg-gradient-to-r from-violet-500 to-violet-600 text-white",
+      button: "bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 text-white",
+      accent: "violet",
     },
   };
 
@@ -214,7 +208,7 @@ const TierCard = ({
         className={`flex flex-col h-full rounded-3xl border-2 p-8 bg-gradient-to-b ${colors.gradient} ${colors.border} overflow-hidden relative`}
       >
         {/* Decorative elements */}
-        <div className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-br ${isDark ? 'from-white/10' : 'from-slate-100/50'} via-transparent to-transparent rounded-full blur-3xl -translate-y-32 translate-x-32 pointer-events-none`} />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-slate-100/50 via-transparent to-transparent rounded-full blur-3xl -translate-y-32 translate-x-32 pointer-events-none" />
         
         {/* Current plan indicator */}
         {isCurrentPlan && (
@@ -245,20 +239,20 @@ const TierCard = ({
 
         {/* Name & Price */}
         <div className="mb-8 relative">
-          <h3 className={`text-xl font-semibold mb-2 font-sans ${isDark ? 'text-white' : 'text-slate-900'}`}>{tier.name}</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-2 font-sans">{tier.name}</h3>
           <div className="flex items-baseline gap-1">
             <motion.span
               animate={{ scale: isHovered ? 1.02 : 1 }}
-              className={`text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}
+              className="text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {tier.price}
             </motion.span>
             {isPaid && (
-              <span className={`text-base font-medium ${isDark ? 'text-white/70' : 'text-slate-500'}`}>/month</span>
+              <span className="text-slate-500 text-base font-medium">/month</span>
             )}
           </div>
-          <p className={`text-sm mt-3 leading-relaxed ${isDark ? 'text-white/80' : 'text-slate-600'}`}>{tier.description}</p>
+          <p className="text-slate-600 text-sm mt-3 leading-relaxed">{tier.description}</p>
         </div>
 
         {/* CTA Button */}
@@ -319,7 +313,7 @@ const TierCard = ({
         </div>
 
         {/* Divider */}
-        <div className={`h-px bg-gradient-to-r from-transparent ${isDark ? 'via-white/20' : 'via-slate-200'} to-transparent mb-8`} />
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8" />
 
         {/* Features */}
         <TooltipProvider delayDuration={200}>
@@ -339,35 +333,29 @@ const TierCard = ({
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center mt-0.5 ${
-                      isDark 
-                        ? "bg-white/10"
-                        : isHighlight 
-                          ? "bg-violet-100"
-                          : "bg-slate-100"
+                      isHighlight 
+                        ? isElite ? "bg-violet-100" : isPremium ? "bg-slate-200" : "bg-violet-100"
+                        : "bg-slate-100"
                     }`}
                   >
                     <FeatureIcon
                       size={14} 
                       className={`${
-                        isDark 
-                          ? "text-white"
-                          : isHighlight 
-                            ? "text-violet-600"
-                            : "text-slate-600"
+                        isHighlight 
+                          ? isElite ? "text-violet-600" : isPremium ? "text-slate-700" : "text-violet-600"
+                          : "text-slate-600"
                       }`} 
                     />
                   </motion.div>
                   <span className={`text-sm leading-relaxed flex-1 ${
-                    isDark
-                      ? isHighlight ? "font-semibold text-white" : "text-white/80"
-                      : isHighlight ? "font-semibold text-slate-900" : "text-slate-700"
+                    isHighlight ? "font-semibold text-slate-900" : "text-slate-700"
                   }`}>
                     {feature.label}
                   </span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button className="flex-shrink-0 mt-0.5 opacity-40 hover:opacity-100 transition-opacity">
-                        <Info size={14} className={isDark ? "text-white/50" : "text-slate-400"} />
+                        <Info size={14} className="text-slate-400" />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-[280px] text-xs bg-slate-900 text-white border-slate-800">
