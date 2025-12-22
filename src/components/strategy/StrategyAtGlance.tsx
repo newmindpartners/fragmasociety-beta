@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { Target, Users, Shield, AlertTriangle, Globe } from "lucide-react";
-import strategyRiskBg from "@/assets/strategy-risk-bg.jpg";
 
 export const StrategyAtGlance = () => {
   const cards = [
@@ -47,8 +46,10 @@ export const StrategyAtGlance = () => {
   };
 
   return (
-    <section className="py-24 bg-card relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[120px]" />
+    <section className="py-24 bg-slate-950 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-500/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-slate-800/50 rounded-full blur-[100px]" />
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -59,7 +60,7 @@ export const StrategyAtGlance = () => {
           className="text-center mb-16"
         >
           <motion.span 
-            className="inline-block text-primary text-sm font-medium tracking-wider uppercase mb-4"
+            className="inline-block text-violet-400 text-xs font-medium tracking-[0.2em] uppercase mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -67,10 +68,13 @@ export const StrategyAtGlance = () => {
           >
             At a Glance
           </motion.span>
-          <h2 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-4">
-            A Luxembourg-based securitisation platform for alternative assets.
+          <h2 
+            className="text-3xl lg:text-4xl font-light text-white mb-4"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            A Luxembourg-based securitisation platform
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-white/50 max-w-2xl mx-auto text-sm leading-relaxed">
             Fragma transforms real estate, digital infrastructure, and alternative assets into 
             fractional, tokenized investment products with professional governance.
           </p>
@@ -87,7 +91,7 @@ export const StrategyAtGlance = () => {
             <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-amber-200/80">
               <p className="font-medium mb-1">Important Risk Information</p>
-              <p>Investments are high-risk, illiquid and speculative. You may lose all or part of your invested capital. Returns are not guaranteed. Capital at risk.</p>
+              <p className="text-xs">Investments are high-risk, illiquid and speculative. You may lose all or part of your invested capital. Returns are not guaranteed. Capital at risk.</p>
             </div>
           </div>
         </motion.div>
@@ -104,47 +108,38 @@ export const StrategyAtGlance = () => {
               key={index}
               variants={cardVariants}
               whileHover={{ y: -6 }}
-              className="card-premium p-8 group"
+              className="relative p-8 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-colors duration-300 group"
             >
               <motion.div 
-                className="icon-premium w-14 h-14 mb-6"
+                className="w-14 h-14 mb-6 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <card.icon className="w-7 h-7 text-primary" />
+                <card.icon className="w-7 h-7 text-violet-400" />
               </motion.div>
-              <p className="text-sm text-primary font-medium tracking-wide mb-1">{card.title}</p>
-              <h3 className="text-xl font-serif font-bold text-foreground mb-4 group-hover:text-gradient transition-all duration-300">{card.subtitle}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
+              <p className="text-xs text-violet-400 font-medium tracking-wider uppercase mb-1">{card.title}</p>
+              <h3 className="text-xl font-medium text-white mb-4 group-hover:text-violet-200 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
+                {card.subtitle}
+              </h3>
+              <p className="text-sm text-white/50 leading-relaxed">{card.description}</p>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Access Restriction Notice with Premium Background */}
+        {/* Access Restriction Notice */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="mt-12 relative rounded-2xl overflow-hidden max-w-3xl mx-auto"
+          className="mt-12 max-w-3xl mx-auto"
         >
-          {/* Background Image with Blur */}
-          <div className="absolute inset-0">
-            <img 
-              src={strategyRiskBg} 
-              alt="" 
-              className="w-full h-full object-cover scale-110"
-            />
-            <div className="absolute inset-0 bg-background/60 backdrop-blur-xl" />
-          </div>
-          
-          {/* Glass Content Layer */}
-          <div className="relative z-10 p-8 backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl">
+          <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/10">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Globe className="w-5 h-5 text-white" />
-              <span className="font-semibold text-white">Access Restrictions Apply</span>
+              <Globe className="w-5 h-5 text-white/70" />
+              <span className="font-medium text-white">Access Restrictions Apply</span>
             </div>
-            <p className="text-sm text-white/80 text-center leading-relaxed">
+            <p className="text-sm text-white/50 text-center leading-relaxed">
               Certain opportunities are only available to professional or qualified investors. 
               Availability depends on your country of residence and investor profile. 
               Detailed terms and specific investment parameters are available to verified investors only.
