@@ -6,6 +6,7 @@ import categoryRealEstate from "@/assets/category-realestate.jpg";
 import categoryFilm from "@/assets/category-film.jpg";
 import categoryCredit from "@/assets/category-credit.jpg";
 import categoryLuxury from "@/assets/category-luxury.jpg";
+import categoryMusic from "@/assets/category-music.jpg";
 
 const assetTypes = [
   {
@@ -62,7 +63,7 @@ const assetTypes = [
     title: "Music Rights",
     subtitle: "Royalties & Catalogs",
     description: "Invest in music royalty streams and catalog acquisitions—earn ongoing income from streaming, licensing, and performance rights.",
-    image: categoryFilm,
+    image: categoryMusic,
     stats: [
       { label: "Target Yield", value: "8-14%" },
       { label: "Typical Term", value: "5-15 years" }
