@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Factory, Cpu, Server, Network } from "lucide-react";
+import { Building2, Landmark, Server, Gem } from "lucide-react";
 
 // Import strategy background images
 import smeCreditBg from "@/assets/strategy-sme-credit.jpg";
@@ -10,32 +10,32 @@ import ecosystemBg from "@/assets/strategy-ecosystem.jpg";
 export const StrategyPillars = () => {
   const pillars = [
     {
-      icon: Factory,
-      title: "SME Private Credit & Bonds",
-      description: "Growth and transition SMEs financing expansion, acquisitions and capex via senior-secured loans, revenue-linked notes and selected mezzanine structures.",
+      icon: Building2,
+      title: "Prime Real Estate",
+      description: "Curated residential and commercial opportunities in high-demand markets. Development, repositioning, and income-generating assets.",
       bgImage: smeCreditBg,
-      category: "Income"
+      allocation: "30-40%"
     },
     {
-      icon: Cpu,
-      title: "BTC Mining Revenue Strategies",
-      description: "Structured exposure to professional mining operators through hashrate contracts and revenue-share notes, with emphasis on low-cost power and modern fleets.",
+      icon: Landmark,
+      title: "Private Credit",
+      description: "Senior-secured lending to established businesses with stable cash flows. Consistent income with downside protection.",
       bgImage: btcMiningBg,
-      category: "Income"
+      allocation: "25-35%"
     },
     {
       icon: Server,
-      title: "AI / HPC Datacenter Infrastructure",
-      description: "GPU clusters and high-density datacenter capacity contracted to AI/ML and enterprise clients under long-term leases and compute-as-a-service agreements.",
+      title: "Digital Infrastructure",
+      description: "GPU clusters, data centers, and compute capacity powering AI and enterprise workloads under long-term contracts.",
       bgImage: aiInfraBg,
-      category: "Growth"
+      allocation: "15-25%"
     },
     {
-      icon: Network,
-      title: "Fragma Ecosystem Equity",
-      description: "Equity and equity-linked positions in digital infrastructure, tokenisation, fintech and AI/data companies within the Fragma network.",
+      icon: Gem,
+      title: "Signature Deals",
+      description: "Exclusive co-investment opportunities in exceptional assets—from film finance to luxury collectibles.",
       bgImage: ecosystemBg,
-      category: "Growth"
+      allocation: "10-20%"
     }
   ];
 
@@ -56,15 +56,8 @@ export const StrategyPillars = () => {
       opacity: 1, 
       y: 0,
       scale: 1,
-      transition: {
-        duration: 0.7
-      }
+      transition: { duration: 0.7 }
     }
-  };
-
-  const categoryColors = {
-    Income: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-    Growth: "bg-violet-500/20 text-violet-400 border-violet-500/30"
   };
 
   return (
@@ -88,14 +81,18 @@ export const StrategyPillars = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Investment Strategy
+            What You Get
           </motion.span>
           <h2 
-            className="text-3xl lg:text-4xl font-light text-slate-900"
+            className="text-3xl lg:text-4xl font-light text-slate-900 mb-6"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Four pillars of the portfolio
+            Broad exposure, carefully balanced
           </h2>
+          <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+            Each allocation is weighted for risk-adjusted returns. 
+            You get the diversification of a fund with the selectivity of direct investment.
+          </p>
         </motion.div>
 
         <motion.div 
@@ -138,15 +135,14 @@ export const StrategyPillars = () => {
                   </motion.div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-xl font-medium text-slate-900 group-hover:text-violet-700 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      <h3 
+                        className="text-xl font-medium text-slate-900 group-hover:text-violet-700 transition-colors duration-300" 
+                        style={{ fontFamily: "'Playfair Display', serif" }}
+                      >
                         {pillar.title}
                       </h3>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${
-                        pillar.category === "Income" 
-                          ? "bg-emerald-100 text-emerald-700 border-emerald-200" 
-                          : "bg-violet-100 text-violet-700 border-violet-200"
-                      }`}>
-                        {pillar.category}
+                      <span className="text-[10px] px-2 py-0.5 rounded-full border bg-violet-100 text-violet-700 border-violet-200">
+                        {pillar.allocation}
                       </span>
                     </div>
                     <p className="text-slate-600 leading-relaxed text-sm group-hover:text-slate-700 transition-colors duration-300">
@@ -156,7 +152,10 @@ export const StrategyPillars = () => {
                 </div>
                 
                 {/* Number */}
-                <div className="absolute top-6 right-6 text-6xl font-light text-slate-100 select-none" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <div 
+                  className="absolute top-6 right-6 text-6xl font-light text-slate-100 select-none" 
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
                   {String(index + 1).padStart(2, '0')}
                 </div>
               </div>
