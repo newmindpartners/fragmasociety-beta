@@ -62,10 +62,8 @@ const TIERS = {
     color: "slate",
     features: [
       { icon: TrendingUp, label: "Weekly Market Analysis & Trends", tooltip: "Receive curated weekly insights on market movements, emerging opportunities, and key trends in alternative investments." },
-      { icon: BookOpen, label: "Tokenization Case Studies", tooltip: "Access detailed case studies showing how real-world assets are tokenized, including success stories and lessons learned." },
       { icon: Users, label: "Community Access (discussions, live Q&A)", tooltip: "Join our active community of investors for discussions, networking, and live Q&A sessions with industry experts." },
       { icon: Calendar, label: "Events Lobby", tooltip: "Browse and register for upcoming webinars, workshops, and networking events in the Fragma ecosystem." },
-      { icon: Eye, label: "Watchlist on 1 Asset", tooltip: "Track one asset of your choice with price alerts and updates delivered to your dashboard." },
       { icon: Rocket, label: "1 Deal Investment per Year (up to $3,000, if eligible)", tooltip: "Participate in one investment opportunity annually with a maximum investment of $3,000, subject to eligibility requirements." },
     ],
   },
@@ -83,8 +81,6 @@ const TIERS = {
     features: [
       { icon: Check, label: "Everything in Explorer", tooltip: "All features from the Explorer tier are included in your Premium membership." },
       { icon: Video, label: "Expert Webinars (monthly) + Replays", tooltip: "Attend exclusive monthly webinars with industry experts and access full replay library on-demand." },
-      { icon: BookOpen, label: "Research Reports", tooltip: "Deep-dive research reports on asset classes, market sectors, and specific investment opportunities." },
-      { icon: Eye, label: "Unlimited Asset Watchlist", tooltip: "Track unlimited assets with personalized alerts, price movements, and real-time updates." },
       { icon: Zap, label: "3 Deal Investments per Year (up to $10,000, if eligible)", tooltip: "Participate in up to three investment opportunities annually with a maximum of $10,000 per deal, subject to eligibility." },
       { icon: FileText, label: "Basic Tax Export", tooltip: "Export your investment activity in a format ready for tax reporting and financial planning." },
       { icon: Rocket, label: "Early Window Previews on New Listings", tooltip: "Get exclusive previews of upcoming investment opportunities before they go live to the general community." },
@@ -108,7 +104,6 @@ const TIERS = {
       { icon: Rocket, label: "3-Day Early Access to Public Deals", tooltip: "Get priority access to invest in public deals 3 days before they open to other members." },
       { icon: Lock, label: "Access to Off-Market Fragma Deals", tooltip: "Exclusive access to private, off-market investment opportunities not available to other membership tiers." },
       { icon: Zap, label: "Unlimited Deals Investments", tooltip: "No limits on the number of deals you can participate in annually (subject to deal-specific terms)." },
-      { icon: PieChart, label: "Portfolio Pro Tools (digest, alerts, planner)", tooltip: "Advanced portfolio management with automated digests, smart alerts, and financial planning tools." },
       { icon: FileText, label: "Full Tax Exports", tooltip: "Comprehensive tax documentation including detailed transaction history, gains/losses reports, and jurisdiction-specific formats." },
       { icon: MessageCircle, label: "VIP Support (WhatsApp, Priority)", tooltip: "Direct WhatsApp access to our support team with priority response times and dedicated assistance." },
     ],
