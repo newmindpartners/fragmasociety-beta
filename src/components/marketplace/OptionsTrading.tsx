@@ -1,7 +1,7 @@
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { Shield, TrendingUp, Zap, ChevronRight, Coins, BarChart3 } from "lucide-react";
-import palisadesBg from "@/assets/palisades-rebuild.jpg";
+import trading3dBg from "@/assets/trading-3d-bg.jpg";
 
 type OptionType = "call" | "put" | "covered" | "sell-put";
 
@@ -119,7 +119,7 @@ export const OptionsTrading = () => {
       {/* Stunning Background Image with Overlay */}
       <div className="absolute inset-0">
         <motion.img 
-          src={palisadesBg} 
+          src={trading3dBg} 
           alt="" 
           className="w-full h-full object-cover"
           initial={{ scale: 1.1 }}
