@@ -165,14 +165,14 @@ export const MarketplaceFAQ = () => {
   }, [filteredCategories]);
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-card/30 to-background" />
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[150px] pointer-events-none"
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <section className="py-24 relative overflow-hidden bg-slate-50">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgb(148 163 184 / 0.3) 1px, transparent 0)`,
+          backgroundSize: '32px 32px'
+        }} />
+      </div>
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
@@ -186,17 +186,17 @@ export const MarketplaceFAQ = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6"
           >
-            <HelpCircle className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">FAQ</span>
+            <HelpCircle className="w-4 h-4 text-[#0BDFE9]" />
+            <span className="text-sm font-medium text-slate-700">FAQ</span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 mb-4">
             Frequently Asked{" "}
-            <span className="text-gradient">Questions</span>
+            <span className="text-[#0BDFE9]">Questions</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Everything you need to know about the Fragma Society secondary marketplace
           </p>
         </motion.div>
@@ -209,15 +209,15 @@ export const MarketplaceFAQ = () => {
           className="max-w-xl mx-auto mb-12"
         >
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0BDFE9]/20 to-cyan-400/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
             <div className="relative flex items-center">
-              <Search className="absolute left-4 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Search className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
               <Input
                 type="text"
                 placeholder="Search questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-12 py-6 text-base bg-card/80 border-border/50 rounded-2xl focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all"
+                className="pl-12 pr-12 py-6 text-base bg-white border-slate-200 rounded-2xl focus:border-[#0BDFE9]/50 focus:ring-2 focus:ring-[#0BDFE9]/20 transition-all text-slate-900 placeholder:text-slate-400"
               />
               <AnimatePresence>
                 {searchQuery && (
@@ -226,9 +226,9 @@ export const MarketplaceFAQ = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-4 p-1 rounded-full hover:bg-muted transition-colors"
+                    className="absolute right-4 p-1 rounded-full hover:bg-slate-100 transition-colors"
                   >
-                    <X className="w-4 h-4 text-muted-foreground" />
+                    <X className="w-4 h-4 text-slate-500" />
                   </motion.button>
                 )}
               </AnimatePresence>
@@ -242,13 +242,13 @@ export const MarketplaceFAQ = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="text-sm text-muted-foreground text-center mt-4"
+                className="text-sm text-slate-500 text-center mt-4"
               >
                 {totalResults === 0 ? (
                   "No results found"
                 ) : (
                   <>
-                    Found <span className="text-primary font-medium">{totalResults}</span> result{totalResults !== 1 ? "s" : ""}
+                    Found <span className="text-[#0BDFE9] font-medium">{totalResults}</span> result{totalResults !== 1 ? "s" : ""}
                   </>
                 )}
               </motion.p>
@@ -272,22 +272,22 @@ export const MarketplaceFAQ = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: categoryIndex * 0.05 }}
-                  className="card-premium p-6"
+                  className="bg-white rounded-2xl p-6 shadow-lg border border-slate-100"
                 >
                   {/* Category Header */}
                   <div className="flex items-center gap-3 mb-6">
                     <motion.div
-                      className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center`}
+                      className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0BDFE9]/20 to-cyan-400/20 flex items-center justify-center"
                       whileHover={{ rotate: 5, scale: 1.05 }}
                     >
-                      <category.icon className="w-5 h-5 text-primary" />
+                      <category.icon className="w-5 h-5 text-[#0BDFE9]" />
                     </motion.div>
                     <div>
-                      <h3 className="text-lg font-semibold text-foreground">
+                      <h3 className="text-lg font-semibold text-slate-900">
                         {category.title}
                       </h3>
                       {searchQuery && (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-slate-500">
                           {category.faqs.length} result{category.faqs.length !== 1 ? "s" : ""}
                         </p>
                       )}
@@ -300,12 +300,12 @@ export const MarketplaceFAQ = () => {
                       <AccordionItem
                         key={faqIndex}
                         value={`${category.id}-${faqIndex}`}
-                        className="border border-border/30 rounded-xl px-4 data-[state=open]:bg-card/50 transition-colors"
+                        className="border border-slate-100 rounded-xl px-4 data-[state=open]:bg-slate-50 transition-colors"
                       >
-                        <AccordionTrigger className="text-left text-sm font-medium hover:no-underline hover:text-primary transition-colors py-4">
+                        <AccordionTrigger className="text-left text-sm font-medium text-slate-800 hover:no-underline hover:text-[#0BDFE9] transition-colors py-4">
                           <HighlightText text={faq.question} highlight={searchQuery} />
                         </AccordionTrigger>
-                        <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+                        <AccordionContent className="text-sm text-slate-600 leading-relaxed pb-4">
                           <HighlightText text={faq.answer} highlight={searchQuery} />
                         </AccordionContent>
                       </AccordionItem>
@@ -322,16 +322,16 @@ export const MarketplaceFAQ = () => {
               exit={{ opacity: 0, y: -20 }}
               className="text-center py-16"
             >
-              <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
-                <Search className="w-8 h-8 text-muted-foreground" />
+              <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-slate-400" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">No results found</h3>
-              <p className="text-muted-foreground mb-4">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">No results found</h3>
+              <p className="text-slate-500 mb-4">
                 Try searching with different keywords
               </p>
               <button
                 onClick={() => setSearchQuery("")}
-                className="text-primary hover:underline text-sm"
+                className="text-[#0BDFE9] hover:underline text-sm"
               >
                 Clear search
               </button>
@@ -347,12 +347,12 @@ export const MarketplaceFAQ = () => {
           transition={{ delay: 0.5 }}
           className="text-center mt-16"
         >
-          <p className="text-muted-foreground mb-4">
+          <p className="text-slate-500 mb-4">
             Still have questions?
           </p>
           <motion.a
             href="mailto:support@fragma.io"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/30 text-primary font-medium hover:bg-primary/20 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0BDFE9] text-slate-900 font-medium hover:bg-[#0BDFE9]/90 transition-colors shadow-lg"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -377,8 +377,8 @@ const HighlightText = ({ text, highlight }: { text: string; highlight: string })
     <>
       {parts.map((part, index) =>
         regex.test(part) ? (
-          <mark key={index} className="bg-primary/30 text-foreground rounded px-0.5">
-            {part}
+        <mark key={index} className="bg-[#0BDFE9]/30 text-slate-900 rounded px-0.5">
+          {part}
           </mark>
         ) : (
           part

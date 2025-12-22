@@ -4,7 +4,7 @@ import { MarketplaceFAQ } from "@/components/marketplace/MarketplaceFAQ";
 
 const FAQ = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
       <Navbar />
       <div className="pt-20">
         <MarketplaceFAQ />
