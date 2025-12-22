@@ -40,17 +40,17 @@ export const TrustSecurity = () => {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} className="relative py-32 overflow-hidden bg-background">
+    <section ref={sectionRef} className="relative py-32 overflow-hidden bg-slate-50">
       {/* Subtle geometric pattern */}
-      <div className="absolute inset-0 opacity-30" style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+      <div className="absolute inset-0 opacity-50" style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)`,
         backgroundSize: '64px 64px'
       }} />
       
       {/* Gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-0 w-96 h-96 bg-turquoise/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-turquoise/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-slate-200/50 rounded-full blur-3xl" />
       </div>
       
       <div className="container mx-auto px-6 relative z-10">
@@ -63,11 +63,11 @@ export const TrustSecurity = () => {
           <span className="inline-block px-4 py-2 mb-6 text-xs font-semibold tracking-[0.2em] uppercase rounded-full bg-turquoise/10 text-turquoise border border-turquoise/20">
             Security & Trust
           </span>
-          <h2 className="text-4xl md:text-6xl font-serif font-light text-white mb-6">
+          <h2 className="text-4xl md:text-6xl font-serif font-light text-slate-900 mb-6">
             Your Assets.
             <span className="block text-turquoise">Your Control.</span>
           </h2>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
             Every layer of our platform is designed with security-first principles and complete transparency.
           </p>
         </motion.div>
@@ -86,12 +86,12 @@ export const TrustSecurity = () => {
                 whileHover={{ y: -8, scale: 1.02 }}
                 className="group relative"
               >
-                <div className="relative p-8 bg-white/[0.03] backdrop-blur-sm rounded-2xl border border-white/10 hover:border-turquoise/40 hover:bg-white/[0.06] transition-all duration-300">
+                <div className="relative p-8 bg-white rounded-2xl border border-slate-200 hover:border-turquoise/40 hover:shadow-xl transition-all duration-300">
                   <div className="w-14 h-14 rounded-xl bg-turquoise/10 flex items-center justify-center mb-4 group-hover:bg-turquoise transition-colors">
-                    <Icon className="w-6 h-6 text-turquoise group-hover:text-background transition-colors" strokeWidth={1.5} />
+                    <Icon className="w-6 h-6 text-turquoise group-hover:text-white transition-colors" strokeWidth={1.5} />
                   </div>
-                  <h4 className="text-xl font-semibold text-white mb-2">{point.title}</h4>
-                  <p className="text-white/50 leading-relaxed">{point.description}</p>
+                  <h4 className="text-xl font-semibold text-slate-900 mb-2">{point.title}</h4>
+                  <p className="text-slate-500 leading-relaxed">{point.description}</p>
                 </div>
               </motion.div>
             );
@@ -105,10 +105,10 @@ export const TrustSecurity = () => {
           transition={{ delay: 0.6 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white/[0.03] backdrop-blur-sm rounded-full border border-white/10">
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full border border-slate-200 shadow-sm">
             <ShieldCheck className="w-6 h-6 text-turquoise" />
-            <span className="text-white/60">
-              Powered by <span className="text-white font-medium">Cardano</span> blockchain and <span className="text-white font-medium">Genius Yield</span> smart contracts
+            <span className="text-slate-600">
+              Powered by <span className="text-slate-900 font-medium">Cardano</span> blockchain and <span className="text-slate-900 font-medium">Genius Yield</span> smart contracts
             </span>
           </div>
         </motion.div>
@@ -118,10 +118,10 @@ export const TrustSecurity = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.7 }}
-          className="mt-16 pt-8 border-t border-white/10"
+          className="mt-16 pt-8 border-t border-slate-200"
         >
-          <p className="text-sm text-white/40 text-center max-w-3xl mx-auto leading-relaxed">
-            <span className="font-medium text-white/50">Important:</span> All investments carry risk. 
+          <p className="text-sm text-slate-500 text-center max-w-3xl mx-auto leading-relaxed">
+            <span className="font-medium text-slate-600">Important:</span> All investments carry risk. 
             Past performance does not guarantee future results. Please read all offering documents 
             carefully and consider your financial situation before investing.
           </p>
