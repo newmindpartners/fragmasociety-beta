@@ -1,25 +1,27 @@
 import { motion } from "framer-motion";
-import { Target, Users, Shield, AlertTriangle, Globe } from "lucide-react";
+import { Target, Layers, TrendingUp, AlertTriangle, Clock } from "lucide-react";
 
 export const StrategyAtGlance = () => {
-  const cards = [
+  const benefits = [
     {
       icon: Target,
-      title: "Instrument",
-      subtitle: "Luxembourg Securitisation",
-      description: "A regulated Luxembourg securitisation vehicle with ring-fenced compartments. Each project is legally separated for investor protection."
+      title: "Pre-Vetted Quality",
+      description: "Every opportunity passes our rigorous due diligence. We reject more than we accept."
     },
     {
-      icon: Users,
-      title: "Designed For",
-      subtitle: "Qualified Investors",
-      description: "Certain opportunities are only available to professional or qualified investors. Availability depends on your country of residence and investor profile."
+      icon: Layers,
+      title: "Built-In Diversification",
+      description: "Automatic exposure across real estate, private credit, and digital infrastructure."
     },
     {
-      icon: Shield,
-      title: "Strategy",
-      subtitle: "Dual-engine approach",
-      description: "Income-focused strategies with potential for regular distributions and capital growth through digital infrastructure and real-world assets."
+      icon: TrendingUp,
+      title: "Aligned Incentives",
+      description: "We invest alongside you. Our returns depend on your returns."
+    },
+    {
+      icon: Clock,
+      title: "Time Reclaimed",
+      description: "No deal-by-deal decisions. One allocation, ongoing access to our best ideas."
     }
   ];
 
@@ -28,7 +30,7 @@ export const StrategyAtGlance = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
         delayChildren: 0.2
       }
     }
@@ -39,16 +41,14 @@ export const StrategyAtGlance = () => {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: {
-        duration: 0.6
-      }
+      transition: { duration: 0.6 }
     }
   };
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-100/50 rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-100/40 rounded-full blur-[120px]" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-slate-100 rounded-full blur-[100px]" />
       
       <div className="container mx-auto px-6 relative z-10">
@@ -56,7 +56,7 @@ export const StrategyAtGlance = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <motion.span 
@@ -66,17 +66,19 @@ export const StrategyAtGlance = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            At a Glance
+            The Advantage
           </motion.span>
           <h2 
-            className="text-3xl lg:text-4xl font-light text-slate-900 mb-4"
+            className="text-3xl lg:text-4xl font-light text-slate-900 mb-6"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            A Luxembourg-based securitisation platform
+            Why investors choose
+            <br />
+            <span className="text-violet-600">the managed approach</span>
           </h2>
-          <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">
-            Fragma transforms real estate, digital infrastructure, and alternative assets into 
-            fractional, tokenized investment products with professional governance.
+          <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+            Evaluating deals takes time. Structuring takes expertise. 
+            Fragma One handles both—so you can focus on what matters.
           </p>
         </motion.div>
 
@@ -90,20 +92,23 @@ export const StrategyAtGlance = () => {
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-amber-800">
-              <p className="font-medium mb-1">Important Risk Information</p>
-              <p className="text-xs text-amber-700">Investments are high-risk, illiquid and speculative. You may lose all or part of your invested capital. Returns are not guaranteed. Capital at risk.</p>
+              <p className="font-medium mb-1">Capital at Risk</p>
+              <p className="text-xs text-amber-700">
+                Alternative investments are illiquid and speculative. Past performance does not guarantee future results. 
+                You may lose some or all of your investment.
+              </p>
             </div>
           </div>
         </motion.div>
 
         <motion.div 
-          className="grid md:grid-cols-3 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {cards.map((card, index) => (
+          {benefits.map((benefit, index) => (
             <motion.div
               key={index}
               variants={cardVariants}
@@ -115,36 +120,17 @@ export const StrategyAtGlance = () => {
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <card.icon className="w-7 h-7 text-violet-600" />
+                <benefit.icon className="w-7 h-7 text-violet-600" />
               </motion.div>
-              <p className="text-xs text-violet-600 font-medium tracking-wider uppercase mb-1">{card.title}</p>
-              <h3 className="text-xl font-medium text-slate-900 mb-4 group-hover:text-violet-700 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
-                {card.subtitle}
+              <h3 
+                className="text-lg font-medium text-slate-900 mb-3 group-hover:text-violet-700 transition-colors duration-300"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {benefit.title}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{card.description}</p>
+              <p className="text-sm text-slate-600 leading-relaxed">{benefit.description}</p>
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Access Restriction Notice */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="mt-12 max-w-3xl mx-auto"
-        >
-          <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Globe className="w-5 h-5 text-slate-700" />
-              <span className="font-medium text-slate-900">Access Restrictions Apply</span>
-            </div>
-            <p className="text-sm text-slate-600 text-center leading-relaxed">
-              Certain opportunities are only available to professional or qualified investors. 
-              Availability depends on your country of residence and investor profile. 
-              Detailed terms and specific investment parameters are available to verified investors only.
-            </p>
-          </div>
         </motion.div>
       </div>
     </section>
