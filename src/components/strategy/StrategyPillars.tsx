@@ -68,10 +68,10 @@ export const StrategyPillars = () => {
   };
 
   return (
-    <section className="py-24 bg-slate-900 relative overflow-hidden">
+    <section className="py-24 bg-slate-50 relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute top-1/2 -left-40 w-80 h-80 bg-violet-500/5 rounded-full blur-[100px]" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px]" />
+      <div className="absolute top-1/2 -left-40 w-80 h-80 bg-violet-100/50 rounded-full blur-[100px]" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-slate-200/50 rounded-full blur-[120px]" />
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -82,7 +82,7 @@ export const StrategyPillars = () => {
           className="text-center mb-16"
         >
           <motion.span 
-            className="inline-block text-violet-400 text-xs font-medium tracking-[0.2em] uppercase mb-4"
+            className="inline-block text-violet-600 text-xs font-medium tracking-[0.2em] uppercase mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -91,7 +91,7 @@ export const StrategyPillars = () => {
             Investment Strategy
           </motion.span>
           <h2 
-            className="text-3xl lg:text-4xl font-light text-white"
+            className="text-3xl lg:text-4xl font-light text-slate-900"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Four pillars of the portfolio
@@ -120,39 +120,43 @@ export const StrategyPillars = () => {
                   alt="" 
                   className="w-full h-full object-cover scale-110 blur-[2px] group-hover:scale-115 group-hover:blur-[1px] transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-slate-900/80 group-hover:bg-slate-900/75 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-white/85 group-hover:bg-white/80 transition-colors duration-500" />
               </div>
               
               {/* Border */}
-              <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/20 transition-colors duration-300" />
+              <div className="absolute inset-0 rounded-2xl border border-slate-200 group-hover:border-violet-300 transition-colors duration-300" />
               
               {/* Content */}
               <div className="relative z-10 p-8 h-full">
                 <div className="flex items-start gap-6">
                   <motion.div 
-                    className="w-16 h-16 shrink-0 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300"
+                    className="w-16 h-16 shrink-0 rounded-xl bg-violet-100 flex items-center justify-center group-hover:bg-violet-200 transition-colors duration-300"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <pillar.icon className="w-8 h-8 text-violet-400" />
+                    <pillar.icon className="w-8 h-8 text-violet-600" />
                   </motion.div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-xl font-medium text-white group-hover:text-violet-200 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      <h3 className="text-xl font-medium text-slate-900 group-hover:text-violet-700 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
                         {pillar.title}
                       </h3>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${categoryColors[pillar.category as keyof typeof categoryColors]}`}>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                        pillar.category === "Income" 
+                          ? "bg-emerald-100 text-emerald-700 border-emerald-200" 
+                          : "bg-violet-100 text-violet-700 border-violet-200"
+                      }`}>
                         {pillar.category}
                       </span>
                     </div>
-                    <p className="text-white/50 leading-relaxed text-sm group-hover:text-white/60 transition-colors duration-300">
+                    <p className="text-slate-600 leading-relaxed text-sm group-hover:text-slate-700 transition-colors duration-300">
                       {pillar.description}
                     </p>
                   </div>
                 </div>
                 
                 {/* Number */}
-                <div className="absolute top-6 right-6 text-6xl font-light text-white/5 select-none" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <div className="absolute top-6 right-6 text-6xl font-light text-slate-100 select-none" style={{ fontFamily: "'Playfair Display', serif" }}>
                   {String(index + 1).padStart(2, '0')}
                 </div>
               </div>

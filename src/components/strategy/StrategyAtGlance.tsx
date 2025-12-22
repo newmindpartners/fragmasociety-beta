@@ -46,10 +46,10 @@ export const StrategyAtGlance = () => {
   };
 
   return (
-    <section className="py-24 bg-slate-950 relative overflow-hidden">
+    <section className="py-24 bg-white relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-500/5 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-slate-800/50 rounded-full blur-[100px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-100/50 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-slate-100 rounded-full blur-[100px]" />
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -60,7 +60,7 @@ export const StrategyAtGlance = () => {
           className="text-center mb-16"
         >
           <motion.span 
-            className="inline-block text-violet-400 text-xs font-medium tracking-[0.2em] uppercase mb-4"
+            className="inline-block text-violet-600 text-xs font-medium tracking-[0.2em] uppercase mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -69,12 +69,12 @@ export const StrategyAtGlance = () => {
             At a Glance
           </motion.span>
           <h2 
-            className="text-3xl lg:text-4xl font-light text-white mb-4"
+            className="text-3xl lg:text-4xl font-light text-slate-900 mb-4"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             A Luxembourg-based securitisation platform
           </h2>
-          <p className="text-white/50 max-w-2xl mx-auto text-sm leading-relaxed">
+          <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">
             Fragma transforms real estate, digital infrastructure, and alternative assets into 
             fractional, tokenized investment products with professional governance.
           </p>
@@ -85,13 +85,13 @@ export const StrategyAtGlance = () => {
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto mb-12 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20"
+          className="max-w-4xl mx-auto mb-12 p-4 rounded-xl bg-amber-50 border border-amber-200"
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-amber-200/80">
+            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-amber-800">
               <p className="font-medium mb-1">Important Risk Information</p>
-              <p className="text-xs">Investments are high-risk, illiquid and speculative. You may lose all or part of your invested capital. Returns are not guaranteed. Capital at risk.</p>
+              <p className="text-xs text-amber-700">Investments are high-risk, illiquid and speculative. You may lose all or part of your invested capital. Returns are not guaranteed. Capital at risk.</p>
             </div>
           </div>
         </motion.div>
@@ -108,20 +108,20 @@ export const StrategyAtGlance = () => {
               key={index}
               variants={cardVariants}
               whileHover={{ y: -6 }}
-              className="relative p-8 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-colors duration-300 group"
+              className="relative p-8 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-100/50 transition-all duration-300 group"
             >
               <motion.div 
-                className="w-14 h-14 mb-6 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300"
+                className="w-14 h-14 mb-6 rounded-xl bg-violet-100 flex items-center justify-center group-hover:bg-violet-200 transition-colors duration-300"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <card.icon className="w-7 h-7 text-violet-400" />
+                <card.icon className="w-7 h-7 text-violet-600" />
               </motion.div>
-              <p className="text-xs text-violet-400 font-medium tracking-wider uppercase mb-1">{card.title}</p>
-              <h3 className="text-xl font-medium text-white mb-4 group-hover:text-violet-200 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <p className="text-xs text-violet-600 font-medium tracking-wider uppercase mb-1">{card.title}</p>
+              <h3 className="text-xl font-medium text-slate-900 mb-4 group-hover:text-violet-700 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
                 {card.subtitle}
               </h3>
-              <p className="text-sm text-white/50 leading-relaxed">{card.description}</p>
+              <p className="text-sm text-slate-600 leading-relaxed">{card.description}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -134,12 +134,12 @@ export const StrategyAtGlance = () => {
           transition={{ delay: 0.5 }}
           className="mt-12 max-w-3xl mx-auto"
         >
-          <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/10">
+          <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Globe className="w-5 h-5 text-white/70" />
-              <span className="font-medium text-white">Access Restrictions Apply</span>
+              <Globe className="w-5 h-5 text-slate-700" />
+              <span className="font-medium text-slate-900">Access Restrictions Apply</span>
             </div>
-            <p className="text-sm text-white/50 text-center leading-relaxed">
+            <p className="text-sm text-slate-600 text-center leading-relaxed">
               Certain opportunities are only available to professional or qualified investors. 
               Availability depends on your country of residence and investor profile. 
               Detailed terms and specific investment parameters are available to verified investors only.
