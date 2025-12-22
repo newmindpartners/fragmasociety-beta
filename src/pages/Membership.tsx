@@ -141,28 +141,31 @@ const TierCard = ({
 
   const cardColors = {
     explorer: {
-      gradient: "from-slate-50 to-slate-100",
+      bg: "bg-slate-50",
       border: "border-slate-200",
-      icon: "bg-slate-100 text-slate-600",
+      icon: "bg-slate-200 text-slate-600",
       badge: "bg-slate-600 text-white",
       button: "bg-slate-800 hover:bg-slate-900 text-white",
-      accent: "slate",
+      checkBg: "bg-slate-100",
+      checkIcon: "text-slate-500",
     },
     premium: {
-      gradient: "from-slate-50 via-white to-slate-50",
+      bg: "bg-slate-100",
       border: "border-slate-300",
-      icon: "bg-gradient-to-br from-slate-700 to-slate-900 text-white",
-      badge: "bg-slate-800 text-white",
-      button: "bg-slate-800 hover:bg-slate-900 text-white",
-      accent: "slate",
+      icon: "bg-slate-700 text-white",
+      badge: "bg-slate-700 text-white",
+      button: "bg-slate-700 hover:bg-slate-800 text-white",
+      checkBg: "bg-slate-200",
+      checkIcon: "text-slate-600",
     },
     elite: {
-      gradient: "from-violet-50/50 via-white to-violet-50/50",
-      border: "border-violet-200",
-      icon: "bg-gradient-to-br from-violet-500 to-violet-700 text-white",
-      badge: "bg-gradient-to-r from-violet-500 to-violet-600 text-white",
-      button: "bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 text-white",
-      accent: "violet",
+      bg: "bg-stone-200",
+      border: "border-stone-300",
+      icon: "bg-violet-500 text-white",
+      badge: "bg-violet-500 text-white",
+      button: "bg-violet-500 hover:bg-violet-600 text-white",
+      checkBg: "bg-violet-100",
+      checkIcon: "text-violet-500",
     },
   };
 
@@ -205,10 +208,19 @@ const TierCard = ({
             : "0 8px 32px -8px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)",
         }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className={`flex flex-col h-full rounded-3xl border-2 p-8 bg-gradient-to-b ${colors.gradient} ${colors.border} overflow-hidden relative`}
+        className={`flex flex-col h-full rounded-3xl border-2 p-8 ${colors.bg} ${colors.border} overflow-hidden relative`}
       >
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-slate-100/50 via-transparent to-transparent rounded-full blur-3xl -translate-y-32 translate-x-32 pointer-events-none" />
+        {/* Decorative dot pattern */}
+        <div className="absolute top-4 left-4 grid grid-cols-4 gap-1.5 opacity-20 pointer-events-none">
+          {[...Array(16)].map((_, i) => (
+            <div key={i} className="w-1 h-1 rounded-full bg-slate-400" />
+          ))}
+        </div>
+        <div className="absolute bottom-4 right-4 grid grid-cols-4 gap-1.5 opacity-20 pointer-events-none">
+          {[...Array(16)].map((_, i) => (
+            <div key={i} className="w-1 h-1 rounded-full bg-slate-400" />
+          ))}
+        </div>
         
         {/* Current plan indicator */}
         {isCurrentPlan && (
@@ -332,29 +344,24 @@ const TierCard = ({
                 >
                   <motion.div
                     whileHover={{ scale: 1.1 }}
-                    className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center mt-0.5 ${
-                      isHighlight 
-                        ? isElite ? "bg-violet-100" : isPremium ? "bg-slate-200" : "bg-violet-100"
-                        : "bg-slate-100"
+                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5 ${
+                      isHighlight ? colors.checkBg : "bg-slate-100/80"
                     }`}
                   >
-                    <FeatureIcon
-                      size={14} 
-                      className={`${
-                        isHighlight 
-                          ? isElite ? "text-violet-600" : isPremium ? "text-slate-700" : "text-violet-600"
-                          : "text-slate-600"
-                      }`} 
-                    />
+                    {isHighlight ? (
+                      <Check size={16} className={colors.checkIcon} strokeWidth={2.5} />
+                    ) : (
+                      <FeatureIcon size={14} className="text-slate-500" />
+                    )}
                   </motion.div>
-                  <span className={`text-sm leading-relaxed flex-1 ${
-                    isHighlight ? "font-semibold text-slate-900" : "text-slate-700"
+                  <span className={`text-sm leading-relaxed flex-1 pt-1.5 ${
+                    isHighlight ? "font-semibold text-slate-900" : "text-slate-600"
                   }`}>
                     {feature.label}
                   </span>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button className="flex-shrink-0 mt-0.5 opacity-40 hover:opacity-100 transition-opacity">
+                      <button className="flex-shrink-0 mt-1.5 opacity-30 hover:opacity-100 transition-opacity">
                         <Info size={14} className="text-slate-400" />
                       </button>
                     </TooltipTrigger>
