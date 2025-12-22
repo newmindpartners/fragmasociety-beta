@@ -241,10 +241,13 @@ export const CardanoEUTXO = () => {
             >
               <div className="absolute -left-4 top-0 bottom-0 w-px bg-primary/40" />
               <div className="pl-8">
-                <p className="text-lg text-light-primary/80 leading-relaxed italic mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <p 
+                  className="text-lg leading-relaxed italic mb-3" 
+                  style={{ fontFamily: "'Playfair Display', serif", color: 'hsl(var(--light-text))' }}
+                >
                   "This is why Fragma chose Cardano — it is designed for safety-first financial markets."
                 </p>
-                <p className="text-sm text-light-muted">
+                <p className="text-sm" style={{ color: 'hsl(var(--light-text-muted))' }}>
                   — Fragma Technology Team
                 </p>
               </div>
