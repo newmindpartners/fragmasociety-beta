@@ -47,9 +47,8 @@ export const StrategyAtGlance = () => {
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-100/40 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-slate-100 rounded-full blur-[100px]" />
+      {/* Subtle background elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-slate-100/80 rounded-full blur-[120px]" />
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -60,7 +59,7 @@ export const StrategyAtGlance = () => {
           className="text-center mb-16"
         >
           <motion.span 
-            className="inline-block text-violet-600 text-xs font-medium tracking-[0.2em] uppercase mb-4"
+            className="inline-block text-slate-500 text-xs font-medium tracking-[0.2em] uppercase mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -74,9 +73,9 @@ export const StrategyAtGlance = () => {
           >
             Why investors choose
             <br />
-            <span className="text-violet-600">the managed approach</span>
+            <span className="text-slate-600">the managed approach</span>
           </h2>
-          <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
             Evaluating deals takes time. Structuring takes expertise. 
             Fragma One handles both—so you can focus on what matters.
           </p>
@@ -112,23 +111,23 @@ export const StrategyAtGlance = () => {
             <motion.div
               key={index}
               variants={cardVariants}
-              whileHover={{ y: -6 }}
-              className="relative p-8 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-100/50 transition-all duration-300 group"
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="relative p-8 rounded-2xl bg-gradient-to-b from-slate-50/80 to-white border border-slate-200/60 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 group"
             >
               <motion.div 
-                className="w-14 h-14 mb-6 rounded-xl bg-violet-100 flex items-center justify-center group-hover:bg-violet-200 transition-colors duration-300"
-                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="w-14 h-14 mb-6 rounded-xl bg-slate-100 flex items-center justify-center group-hover:bg-slate-200/80 transition-colors duration-300"
+                whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <benefit.icon className="w-7 h-7 text-violet-600" />
+                <benefit.icon className="w-6 h-6 text-slate-600" />
               </motion.div>
               <h3 
-                className="text-lg font-medium text-slate-900 mb-3 group-hover:text-violet-700 transition-colors duration-300"
+                className="text-lg font-medium text-slate-900 mb-3 group-hover:text-slate-700 transition-colors duration-300"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {benefit.title}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{benefit.description}</p>
+              <p className="text-sm text-slate-500 leading-relaxed">{benefit.description}</p>
             </motion.div>
           ))}
         </motion.div>
