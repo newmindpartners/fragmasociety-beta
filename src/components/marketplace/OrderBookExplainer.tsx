@@ -505,27 +505,18 @@ const AnimatedOrderBook = () => {
               <span className="text-center">Size</span>
               <span className="text-right">Total</span>
             </div>
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={currentAsset.symbol + '-bids'}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-2"
-              >
-                {currentAsset.bids.map((bid, i) => (
-                  <OrderRow 
-                    key={i} 
-                    order={bid} 
-                    type="bid" 
-                    index={i}
-                    isMatching={showMatch}
-                    matchIndex={matchIndex}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+            <div className="space-y-2">
+              {currentAsset.bids.map((bid, i) => (
+                <OrderRow 
+                  key={i} 
+                  order={bid} 
+                  type="bid" 
+                  index={i}
+                  isMatching={showMatch}
+                  matchIndex={matchIndex}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Asks (Sell) */}
@@ -535,67 +526,20 @@ const AnimatedOrderBook = () => {
               <span className="text-center">Size</span>
               <span className="text-right">Total</span>
             </div>
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={currentAsset.symbol + '-asks'}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-2"
-              >
-                {currentAsset.asks.map((ask, i) => (
-                  <OrderRow 
-                    key={i} 
-                    order={ask} 
-                    type="ask" 
-                    index={i}
-                    isMatching={showMatch}
-                    matchIndex={matchIndex}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+            <div className="space-y-2">
+              {currentAsset.asks.map((ask, i) => (
+                <OrderRow 
+                  key={i} 
+                  order={ask} 
+                  type="ask" 
+                  index={i}
+                  isMatching={showMatch}
+                  matchIndex={matchIndex}
+                />
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* Potential Profit Indicator */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="mt-6 p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest text-emerald-400/70 mb-1">Potential Profit</p>
-                <p className="text-sm text-white/60">Based on current spread & volume</p>
-              </div>
-            </div>
-            <motion.div 
-              key={currentAsset.symbol + '-profit'}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="text-right"
-            >
-              <motion.p 
-                className="text-3xl font-light text-emerald-400"
-                animate={{ 
-                  textShadow: ['0 0 0 rgba(16, 185, 129, 0)', '0 0 20px rgba(16, 185, 129, 0.5)', '0 0 0 rgba(16, 185, 129, 0)']
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                +$25,000
-              </motion.p>
-              <p className="text-xs text-white/40 mt-1">Est. annual return</p>
-            </motion.div>
-          </div>
-        </motion.div>
 
         {/* Match center indicator */}
         <div className="relative flex items-center justify-center my-6">
