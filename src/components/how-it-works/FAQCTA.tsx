@@ -9,15 +9,7 @@ export const FAQCTA = () => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section ref={ref} className="py-20 bg-slate-50 relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgb(148 163 184 / 0.3) 1px, transparent 0)`,
-          backgroundSize: '32px 32px'
-        }} />
-      </div>
-
+    <section ref={ref} className="py-20 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -30,7 +22,7 @@ export const FAQCTA = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-lg border border-slate-100 mb-6"
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-50 shadow-lg border border-slate-100 mb-6"
           >
             <HelpCircle className="w-8 h-8 text-[#0BDFE9]" />
           </motion.div>
@@ -71,25 +63,6 @@ export const FAQCTA = () => {
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-          </motion.div>
-
-          {/* Quick stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-10 flex flex-wrap justify-center gap-8"
-          >
-            {[
-              { label: "Topics Covered", value: "20+" },
-              { label: "Response Time", value: "Instant" },
-              { label: "Updated", value: "Weekly" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                <div className="text-sm text-slate-500">{stat.label}</div>
-              </div>
-            ))}
           </motion.div>
         </motion.div>
       </div>
