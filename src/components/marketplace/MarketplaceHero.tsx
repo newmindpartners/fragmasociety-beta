@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, ArrowDown } from "lucide-react";
+import { ArrowRight, Play, ArrowDown, Building2, Film, Watch, Landmark, Home, TrendingUp, Gem, Building, LucideIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
-// Category images
+// Category images - all unique
 import malibuImage from "@/assets/malibu-sea-view.jpg";
 import categoryRealEstate from "@/assets/category-realestate.jpg";
 import categoryFilm from "@/assets/category-film.jpg";
@@ -11,19 +11,20 @@ import categoryLuxury from "@/assets/category-luxury.jpg";
 import categoryCredit from "@/assets/category-credit.jpg";
 import rwaVilla from "@/assets/rwa-villa.jpg";
 import rwaCommercial from "@/assets/rwa-commercial.jpg";
+import categorySports from "@/assets/category-sports.jpg";
 
 const dynamicWords = ["Real Estate", "Private Credit", "Film Rights", "Luxury Assets"];
 
-// Asset cards data for the animated grid - expanded for full height
+// Asset cards data - all unique images with category badges
 const assetCards = [
-  { image: categoryRealEstate, type: "buy" as const, price: "€892", delay: 0 },
-  { image: categoryFilm, type: "sell" as const, price: "€156", delay: 0.1 },
-  { image: rwaVilla, type: "sell" as const, price: "€678", delay: 0.2 },
-  { image: rwaCommercial, type: "sell" as const, price: "€1025", delay: 0.15 },
-  { image: categoryLuxury, type: "buy" as const, price: "€445", delay: 0.25 },
-  { image: categoryCredit, type: "buy" as const, price: "€312", delay: 0.3 },
-  { image: malibuImage, type: "buy" as const, price: "€1,250", delay: 0.35 },
-  { image: categoryRealEstate, type: "sell" as const, price: "€567", delay: 0.4 },
+  { image: categoryRealEstate, type: "buy" as const, price: "€892", delay: 0, category: "Real Estate", icon: Building2 },
+  { image: categoryFilm, type: "sell" as const, price: "€156", delay: 0.1, category: "Film", icon: Film },
+  { image: rwaVilla, type: "sell" as const, price: "€678", delay: 0.2, category: "Villa", icon: Home },
+  { image: rwaCommercial, type: "sell" as const, price: "€1,025", delay: 0.15, category: "Commercial", icon: Building },
+  { image: categoryLuxury, type: "buy" as const, price: "€445", delay: 0.25, category: "Luxury", icon: Watch },
+  { image: categoryCredit, type: "buy" as const, price: "€312", delay: 0.3, category: "Credit", icon: Landmark },
+  { image: malibuImage, type: "buy" as const, price: "€1,250", delay: 0.35, category: "Beachfront", icon: Gem },
+  { image: categorySports, type: "sell" as const, price: "€567", delay: 0.4, category: "Sports", icon: TrendingUp },
 ];
 
 const AssetCard = ({ 
@@ -31,13 +32,17 @@ const AssetCard = ({
   type, 
   price, 
   delay,
-  index 
+  index,
+  category,
+  icon: Icon
 }: { 
   image: string; 
   type: "buy" | "sell"; 
   price: string; 
   delay: number;
   index: number;
+  category: string;
+  icon: LucideIcon;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -57,34 +62,49 @@ const AssetCard = ({
     >
       <img 
         src={image} 
-        alt="Asset" 
+        alt={category} 
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
       />
       
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+      
+      {/* Category badge - top left */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.5 + delay, duration: 0.4 }}
+        className="absolute top-3 left-3"
+      >
+        <div className="px-2.5 py-1.5 rounded-md bg-black/50 backdrop-blur-md flex items-center gap-1.5 border border-white/10">
+          <Icon className="w-3 h-3 text-white/80" strokeWidth={2} />
+          <span className="text-[9px] font-medium text-white/90 uppercase tracking-wider">
+            {category}
+          </span>
+        </div>
+      </motion.div>
       
       {/* Price tag */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1 + delay, duration: 0.4 }}
+        transition={{ delay: 0.7 + delay, duration: 0.4 }}
         className={`absolute ${
-          type === "buy" ? "top-4 right-4" : "bottom-4 left-4"
+          type === "buy" ? "top-3 right-3" : "bottom-3 left-3"
         }`}
       >
         <motion.div
           animate={isHovered ? { scale: 1.1 } : { scale: 1 }}
-          className={`px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-sm shadow-lg ${
+          className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm shadow-lg ${
             type === "buy" 
               ? "bg-emerald-500/90 text-white" 
               : "bg-violet-500/90 text-white"
           }`}
         >
-          <span className="text-[10px] font-semibold uppercase tracking-wider">
+          <span className="text-[9px] font-semibold uppercase tracking-wider">
             {type}
           </span>
-          <span className="text-sm font-bold">{price}</span>
+          <span className="text-xs font-bold">{price}</span>
         </motion.div>
       </motion.div>
 
@@ -308,6 +328,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[5].price} 
                     delay={assetCards[5].delay}
                     index={0}
+                    category={assetCards[5].category}
+                    icon={assetCards[5].icon}
                   />
                 </motion.div>
                 <motion.div 
@@ -322,6 +344,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[2].price} 
                     delay={assetCards[2].delay}
                     index={5}
+                    category={assetCards[2].category}
+                    icon={assetCards[2].icon}
                   />
                 </motion.div>
               </div>
@@ -340,6 +364,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[1].price} 
                     delay={assetCards[1].delay}
                     index={1}
+                    category={assetCards[1].category}
+                    icon={assetCards[1].icon}
                   />
                 </motion.div>
                 <motion.div 
@@ -354,6 +380,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[3].price} 
                     delay={assetCards[3].delay}
                     index={3}
+                    category={assetCards[3].category}
+                    icon={assetCards[3].icon}
                   />
                 </motion.div>
                 <motion.div 
@@ -368,6 +396,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[7].price} 
                     delay={assetCards[7].delay}
                     index={7}
+                    category={assetCards[7].category}
+                    icon={assetCards[7].icon}
                   />
                 </motion.div>
               </div>
@@ -386,6 +416,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[0].price} 
                     delay={assetCards[0].delay}
                     index={2}
+                    category={assetCards[0].category}
+                    icon={assetCards[0].icon}
                   />
                 </motion.div>
                 <motion.div 
@@ -400,6 +432,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[4].price} 
                     delay={assetCards[4].delay}
                     index={4}
+                    category={assetCards[4].category}
+                    icon={assetCards[4].icon}
                   />
                 </motion.div>
                 <motion.div 
@@ -414,6 +448,8 @@ export const MarketplaceHero = () => {
                     price={assetCards[6].price} 
                     delay={assetCards[6].delay}
                     index={6}
+                    category={assetCards[6].category}
+                    icon={assetCards[6].icon}
                   />
                 </motion.div>
               </div>
