@@ -55,13 +55,20 @@ const AnimatedOrderBook = () => {
 
   return (
     <motion.div 
-      className="relative bg-secondary/80 border border-border/50 backdrop-blur-sm overflow-hidden"
+      className="relative bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden rounded-2xl"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -4, transition: { duration: 0.3 } }}
     >
+      {/* Background glow */}
+      <motion.div
+        animate={{ opacity: [0.15, 0.25, 0.15], scale: [1, 1.03, 1] }}
+        transition={{ duration: 5, repeat: Infinity }}
+        className="absolute inset-0 bg-violet-500/10 rounded-2xl blur-[60px] -z-10"
+      />
+
       {/* Match Flash */}
       <AnimatePresence>
         {showMatch && (
@@ -69,27 +76,27 @@ const AnimatedOrderBook = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm"
+            className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/95 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="flex items-center gap-3 px-8 py-4 bg-primary/10 border border-primary/30"
+              className="flex items-center gap-3 px-8 py-4 bg-violet-500/20 border border-violet-500/40 rounded-full"
             >
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span className="font-medium text-primary tracking-wide">Trade Matched</span>
+              <CheckCircle2 className="w-5 h-5 text-violet-400" />
+              <span className="font-medium text-white tracking-wide">Trade Matched</span>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Header */}
-      <div className="p-6 border-b border-border/30">
+      <div className="p-6 border-b border-white/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-muted/40 border border-border/30 flex items-center justify-center">
-              <span className="text-sm font-medium text-muted-foreground">
+            <div className="w-12 h-12 bg-white/5 border border-white/20 rounded-lg flex items-center justify-center">
+              <span className="text-sm font-medium text-white/70">
                 {currentAsset.symbol.slice(0, 2)}
               </span>
             </div>
@@ -101,45 +108,46 @@ const AnimatedOrderBook = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3 }}
-                  className="text-lg font-light text-foreground tracking-wide font-serif"
+                  className="text-lg font-light text-white tracking-wide"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {currentAsset.name}
                 </motion.h3>
               </AnimatePresence>
-              <span className="text-xs font-mono text-muted-foreground tracking-wider">{currentAsset.symbol}</span>
+              <span className="text-xs font-mono tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>{currentAsset.symbol}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <motion.div
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-2 h-2 rounded-full bg-primary"
+              className="w-2 h-2 rounded-full bg-violet-400"
             />
-            <span className="text-xs text-primary font-medium tracking-wider">Live</span>
+            <span className="text-xs text-violet-400 font-medium tracking-wider">Live</span>
           </div>
         </div>
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-3 gap-4 p-5 bg-muted/20 border-b border-border/30">
+      <div className="grid grid-cols-3 gap-4 p-5 bg-white/[0.02] border-b border-white/10">
         <div className="text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-1">Last Price</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Last Price</p>
           <motion.p 
             key={lastPrice} 
             initial={{ opacity: 0.5 }}
             animate={{ opacity: 1 }}
-            className="text-lg font-light text-foreground"
+            className="text-lg font-light text-white"
           >
             €{lastPrice.toFixed(2)}
           </motion.p>
         </div>
         <div className="text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-1">24h Change</p>
-          <p className="text-lg font-light text-primary">+{change24h}%</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>24h Change</p>
+          <p className="text-lg font-light text-emerald-400">+{change24h}%</p>
         </div>
         <div className="text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-1">Spread</p>
-          <p className="text-lg font-light text-foreground/80">0.26%</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Spread</p>
+          <p className="text-lg font-light" style={{ color: 'rgba(255,255,255,0.7)' }}>0.26%</p>
         </div>
       </div>
 
@@ -148,7 +156,7 @@ const AnimatedOrderBook = () => {
         <div className="grid grid-cols-2 gap-4">
           {/* Bids */}
           <div>
-            <div className="grid grid-cols-3 gap-2 mb-3 text-[9px] text-muted-foreground uppercase tracking-[0.15em]">
+            <div className="grid grid-cols-3 gap-2 mb-3 text-[9px] uppercase tracking-[0.15em]" style={{ color: 'rgba(255,255,255,0.4)' }}>
               <span>Price</span>
               <span className="text-center">Size</span>
               <span className="text-right">Total</span>
@@ -161,18 +169,18 @@ const AnimatedOrderBook = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.4 }}
-                  className="grid grid-cols-3 gap-2 p-2.5 bg-primary/5 border border-primary/10 relative overflow-hidden group hover:bg-primary/10 transition-colors duration-300"
+                  className="grid grid-cols-3 gap-2 p-2.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg relative overflow-hidden group hover:bg-emerald-500/10 transition-colors duration-300"
                 >
                   <motion.div 
-                    className="absolute left-0 top-0 bottom-0 bg-primary/10"
+                    className="absolute left-0 top-0 bottom-0 bg-emerald-500/10"
                     initial={{ width: 0 }}
                     whileInView={{ width: `${(bid.total / 5) * 100}%` }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.08, duration: 0.6 }}
                   />
-                  <span className="text-sm font-medium text-primary relative z-10">€{bid.price.toFixed(2)}</span>
-                  <span className="text-sm text-center text-muted-foreground relative z-10">{bid.size.toLocaleString()}</span>
-                  <span className="text-sm text-right text-muted-foreground/70 relative z-10">€{bid.total}M</span>
+                  <span className="text-sm font-medium text-emerald-400 relative z-10">€{bid.price.toFixed(2)}</span>
+                  <span className="text-sm text-center relative z-10" style={{ color: 'rgba(255,255,255,0.6)' }}>{bid.size.toLocaleString()}</span>
+                  <span className="text-sm text-right relative z-10" style={{ color: 'rgba(255,255,255,0.4)' }}>€{bid.total}M</span>
                 </motion.div>
               ))}
             </div>
@@ -180,7 +188,7 @@ const AnimatedOrderBook = () => {
 
           {/* Asks */}
           <div>
-            <div className="grid grid-cols-3 gap-2 mb-3 text-[9px] text-muted-foreground uppercase tracking-[0.15em]">
+            <div className="grid grid-cols-3 gap-2 mb-3 text-[9px] uppercase tracking-[0.15em]" style={{ color: 'rgba(255,255,255,0.4)' }}>
               <span>Price</span>
               <span className="text-center">Size</span>
               <span className="text-right">Total</span>
@@ -193,18 +201,18 @@ const AnimatedOrderBook = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.4 }}
-                  className="grid grid-cols-3 gap-2 p-2.5 bg-destructive/5 border border-destructive/10 relative overflow-hidden group hover:bg-destructive/10 transition-colors duration-300"
+                  className="grid grid-cols-3 gap-2 p-2.5 bg-red-500/5 border border-red-500/10 rounded-lg relative overflow-hidden group hover:bg-red-500/10 transition-colors duration-300"
                 >
                   <motion.div 
-                    className="absolute right-0 top-0 bottom-0 bg-destructive/10"
+                    className="absolute right-0 top-0 bottom-0 bg-red-500/10"
                     initial={{ width: 0 }}
                     whileInView={{ width: `${(ask.total / 5) * 100}%` }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.08, duration: 0.6 }}
                   />
-                  <span className="text-sm font-medium text-destructive relative z-10">€{ask.price.toFixed(2)}</span>
-                  <span className="text-sm text-center text-muted-foreground relative z-10">{ask.size.toLocaleString()}</span>
-                  <span className="text-sm text-right text-muted-foreground/70 relative z-10">€{ask.total}M</span>
+                  <span className="text-sm font-medium text-red-400 relative z-10">€{ask.price.toFixed(2)}</span>
+                  <span className="text-sm text-center relative z-10" style={{ color: 'rgba(255,255,255,0.6)' }}>{ask.size.toLocaleString()}</span>
+                  <span className="text-sm text-right relative z-10" style={{ color: 'rgba(255,255,255,0.4)' }}>€{ask.total}M</span>
                 </motion.div>
               ))}
             </div>
@@ -229,24 +237,22 @@ export const OrderBookExplainer = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden section-mesh">
-      {/* Premium gradient overlays */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/3 w-[800px] h-[800px] bg-primary/[0.04] rounded-full blur-[180px]" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-accent/[0.03] rounded-full blur-[150px]" />
-      </div>
-
-      {/* Subtle grid overlay */}
+    <section ref={sectionRef} className="py-32 relative overflow-hidden">
+      {/* Deep slate/navy background - matching SignatureDealsBanner */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
+      
+      {/* Violet glow accents */}
+      <div className="absolute top-0 left-1/3 w-[600px] h-[300px] bg-violet-900/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[250px] bg-slate-700/20 rounded-full blur-3xl" />
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px]"
         style={{
-          backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px'
+          background: 'radial-gradient(ellipse at center, rgba(148,130,180,0.06) 0%, transparent 70%)'
         }}
       />
 
-      {/* Top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {/* Top border accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
       
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
@@ -257,35 +263,43 @@ export const OrderBookExplainer = () => {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-center gap-4 mb-8"
           >
-            <div className="w-12 h-px bg-gradient-to-r from-primary/60 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground font-medium">
+            <div className="w-12 h-px" style={{ background: 'rgba(255,255,255,0.3)' }} />
+            <span className="text-xs tracking-[0.3em] uppercase font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>
               How It Works
             </span>
+            <div className="w-12 h-px" style={{ background: 'rgba(255,255,255,0.3)' }} />
           </motion.div>
           
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground leading-[1.05] tracking-tight mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6"
+            style={{ 
+              fontFamily: "'Playfair Display', serif",
+              background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
+              backgroundSize: '200% 200%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
           >
             Professional trading,
             <br />
-            <motion.span 
-              className="italic text-muted-foreground font-serif"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
+            <span 
+              className="italic"
+              style={{ color: 'rgba(255,255,255,0.5)', WebkitTextFillColor: 'unset' }}
             >
               simplified.
-            </motion.span>
+            </span>
           </motion.h2>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed"
+            className="text-base md:text-lg max-w-xl leading-relaxed"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
           >
             A traditional exchange uses an order book. We bring this same professional tool to real-world assets.
           </motion.p>
@@ -311,19 +325,11 @@ export const OrderBookExplainer = () => {
                   className="group cursor-pointer"
                 >
                   <motion.div
-                    className="relative flex items-center gap-5 p-5 overflow-hidden"
-                    style={{
-                      background: isHovered 
-                        ? 'linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--card)) 100%)'
-                        : 'hsl(var(--secondary) / 0.3)',
-                      border: isHovered 
-                        ? '1px solid hsl(var(--primary) / 0.3)' 
-                        : '1px solid hsl(var(--border) / 0.3)',
-                      boxShadow: isHovered 
-                        ? '0 20px 40px -15px hsl(0 0% 0% / 0.4), 0 0 30px -10px hsl(var(--primary) / 0.1)'
-                        : 'none',
-                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-                    }}
+                    className={`relative flex items-center gap-5 p-5 overflow-hidden rounded-xl transition-all duration-500 ${
+                      isHovered 
+                        ? 'bg-white/[0.06] border border-violet-500/30' 
+                        : 'bg-white/[0.03] border border-white/10'
+                    }`}
                     animate={{ 
                       y: isHovered ? -4 : 0,
                       scale: isHovered ? 1.01 : 1
@@ -332,20 +338,19 @@ export const OrderBookExplainer = () => {
                   >
                     {/* Decorative number */}
                     <span 
-                      className="absolute top-2 right-4 text-4xl font-extralight text-foreground/[0.03] font-serif"
-                      style={{ transition: 'color 0.4s' }}
+                      className="absolute top-2 right-4 text-4xl font-extralight font-serif"
+                      style={{ color: 'rgba(255,255,255,0.03)' }}
                     >
                       {benefit.number}
                     </span>
 
                     {/* Icon container */}
                     <motion.div 
-                      className={`w-12 h-12 border flex items-center justify-center flex-shrink-0 ${
+                      className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-400 ${
                         isHovered 
-                          ? 'border-primary/40 bg-primary/10' 
-                          : 'border-border/40 bg-muted/30'
+                          ? 'border-violet-500/40 bg-violet-500/20 border' 
+                          : 'border-white/20 bg-white/5 border'
                       }`}
-                      style={{ transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }}
                       animate={{ 
                         rotate: isHovered ? 3 : 0,
                         scale: isHovered ? 1.05 : 1
@@ -353,22 +358,20 @@ export const OrderBookExplainer = () => {
                       transition={{ duration: 0.4 }}
                     >
                       <benefit.icon 
-                        className={`w-5 h-5 ${isHovered ? 'text-primary' : 'text-muted-foreground'}`} 
-                        style={{ transition: 'color 0.4s' }}
+                        className={`w-5 h-5 transition-colors duration-400 ${isHovered ? 'text-violet-400' : 'text-white/60'}`}
                         strokeWidth={1.5} 
                       />
                     </motion.div>
                     
                     <div className="relative z-10">
                       <h3 
-                        className={`font-medium mb-0.5 tracking-wide ${isHovered ? 'text-foreground' : 'text-foreground/90'}`}
-                        style={{ transition: 'color 0.4s' }}
+                        className={`font-medium mb-0.5 tracking-wide transition-colors duration-400 ${isHovered ? 'text-white' : 'text-white/90'}`}
                       >
                         {benefit.title}
                       </h3>
                       <p 
-                        className={`text-sm ${isHovered ? 'text-muted-foreground' : 'text-muted-foreground/70'}`}
-                        style={{ transition: 'color 0.4s' }}
+                        className="text-sm transition-colors duration-400"
+                        style={{ color: isHovered ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.4)' }}
                       >
                         {benefit.description}
                       </p>
@@ -376,7 +379,7 @@ export const OrderBookExplainer = () => {
 
                     {/* Bottom accent line */}
                     <motion.div 
-                      className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary/60 via-primary/40 to-accent/30"
+                      className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/60 via-violet-400/40 to-transparent"
                       initial={{ width: 0 }}
                       animate={{ width: isHovered ? '100%' : 0 }}
                       transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
@@ -390,10 +393,10 @@ export const OrderBookExplainer = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.7, duration: 0.6 }}
-              className="mt-6 p-5 bg-secondary/20 border-l-2 border-primary/40"
+              className="mt-6 p-5 bg-violet-500/10 border-l-2 border-violet-500 rounded-r-lg"
             >
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                <span className="text-foreground font-medium">This isn't a "platform price."</span>{" "}
+              <p className="leading-relaxed text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <span className="text-white font-medium">This isn't a "platform price."</span>{" "}
                 It's a real marketplace where you set the terms.
               </p>
             </motion.div>
@@ -401,15 +404,13 @@ export const OrderBookExplainer = () => {
         </div>
       </div>
 
-      {/* Bottom decorative element */}
-      <motion.div 
-        initial={{ opacity: 0, scaleX: 0 }}
-        animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
-        transition={{ delay: 0.8, duration: 0.8 }}
-        className="mt-20 flex justify-center relative z-10"
-      >
-        <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-      </motion.div>
+      {/* Bottom border accent */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-px"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.3) 50%, transparent 100%)'
+        }}
+      />
     </section>
   );
 };
