@@ -8,7 +8,7 @@ export const ReferralBanner = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="bg-card rounded-xl border border-border p-6 shadow-sm"
+      className="bg-card rounded-xl border border-border p-6 shadow-sm h-full"
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-2">
