@@ -1,6 +1,37 @@
-import { BookOpen, Shield, Zap, Wallet, Scale, Users } from "lucide-react";
+import { BookOpen, Shield, Zap, Wallet, Scale, Users, TrendingUp } from "lucide-react";
 
 export const faqCategories = [
+  {
+    id: "investors",
+    icon: TrendingUp,
+    title: "Investors",
+    faqs: [
+      {
+        question: "Who can invest on Fragma Society?",
+        answer: "Both retail and professional investors can invest, depending on the asset type and jurisdiction. Some deals may be restricted to accredited or professional investors only. You'll see clear eligibility requirements before committing to any investment."
+      },
+      {
+        question: "What is the minimum investment amount?",
+        answer: "The minimum investment starts at just €50 for most deals, making premium assets accessible to everyone. Each deal may have its own minimum threshold, clearly displayed on the deal page."
+      },
+      {
+        question: "How do I receive returns on my investment?",
+        answer: "Returns are distributed automatically via smart contracts directly to your wallet. Depending on the asset, you may receive rental income, profit shares, royalties, or capital gains. Distribution frequency varies by deal — monthly, quarterly, or at exit."
+      },
+      {
+        question: "What types of assets can I invest in?",
+        answer: "Fragma offers a diverse range of tokenized real-world assets including luxury real estate, commercial properties, film productions, music royalties, private credit, and SME financing. Each asset class has its own risk-return profile."
+      },
+      {
+        question: "How is my investment protected?",
+        answer: "Your investment is protected through multiple layers: Luxembourg-regulated SPV structures, on-chain transparency, non-custodial wallets where you control your assets, and rigorous due diligence on all deals before listing."
+      },
+      {
+        question: "Can I sell my investment before maturity?",
+        answer: "Yes. You can trade your tokens 24/7 on the Fragma secondary marketplace. Set your own price, place limit orders, and exit when you choose — subject to market liquidity and buyer availability."
+      }
+    ]
+  },
   {
     id: "basics",
     icon: BookOpen,
