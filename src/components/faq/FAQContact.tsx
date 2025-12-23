@@ -8,24 +8,34 @@ export const FAQContact = () => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section ref={ref} className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Premium Light Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50" />
-      
-      {/* Subtle geometric pattern */}
+    <section ref={ref} className="relative py-24 lg:py-32 overflow-hidden bg-slate-900">
+      {/* Subtle grid pattern */}
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
-          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
           backgroundSize: '60px 60px'
         }}
       />
 
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-0 w-px h-40 bg-gradient-to-b from-transparent via-slate-200 to-transparent" />
-        <div className="absolute top-1/2 right-0 w-px h-40 bg-gradient-to-b from-transparent via-slate-200 to-transparent" />
+        <motion.div
+          animate={{ opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 6, repeat: Infinity }}
+          className="absolute top-1/4 left-[20%] w-64 h-64 rounded-full bg-turquoise/10 blur-3xl"
+        />
+        <motion.div
+          animate={{ opacity: [0.15, 0.25, 0.15] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute bottom-1/4 right-[20%] w-80 h-80 rounded-full bg-white/5 blur-3xl"
+        />
+        <div className="absolute top-1/2 left-0 w-px h-40 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+        <div className="absolute top-1/2 right-0 w-px h-40 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
       </div>
+
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -49,7 +59,7 @@ export const FAQContact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-light text-slate-900 leading-[1.1] mb-6"
+            className="text-3xl md:text-4xl lg:text-5xl font-serif font-light text-white leading-[1.1] mb-6"
           >
             Still have <span className="text-turquoise italic">questions?</span>
           </motion.h2>
@@ -59,7 +69,7 @@ export const FAQContact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed"
+            className="text-lg text-white/50 mb-10 max-w-lg mx-auto leading-relaxed"
           >
             Our investor relations team is here to help. Reach out and we'll get back to you within 24 hours.
           </motion.p>
@@ -77,7 +87,7 @@ export const FAQContact = () => {
             >
               <Button
                 size="lg"
-                className="bg-slate-900 hover:bg-slate-800 text-white font-medium px-8 py-6 h-auto text-base rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                className="bg-white hover:bg-white/90 text-slate-900 font-medium px-8 py-6 h-auto text-base rounded-full shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300 group"
               >
                 <Mail className="w-4 h-4 mr-3" strokeWidth={1.5} />
                 Contact Support
@@ -91,7 +101,7 @@ export const FAQContact = () => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-8 text-sm text-slate-400"
+            className="mt-8 text-sm text-white/30"
           >
             support@fragma.io · Response within 24 hours
           </motion.p>
@@ -104,7 +114,7 @@ export const FAQContact = () => {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="mt-16 flex justify-center"
         >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <div className="h-px w-32 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         </motion.div>
       </div>
     </section>
