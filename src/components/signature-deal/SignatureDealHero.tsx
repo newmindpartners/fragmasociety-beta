@@ -142,7 +142,7 @@ export const SignatureDealHero = () => {
             >
               <span className="text-white">Launch Your</span>
               <br />
-              <span className="text-gradient">
+              <span className="text-gradient font-signature italic">
                 Signature Deal
               </span>
             </motion.h1>
