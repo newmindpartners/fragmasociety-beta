@@ -54,24 +54,12 @@ const Dashboard = () => {
               <DashboardStats />
             </div>
 
-            {/* Main Grid Layout - Investment Overview + Order Book */}
+            {/* Main Grid Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-              {/* Left Column - Investment Overview (1 col) */}
-              <div className="lg:col-span-1">
-                <InvestmentOverview />
-              </div>
-
-              {/* Right Column - Order Book (2 cols) */}
-              <div className="lg:col-span-2">
-                <OpenTransactions />
-              </div>
-            </div>
-
-            {/* Second Row - Status + My Investments */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-              {/* Left Column - Status (1 col) */}
-              <div className="lg:col-span-1">
+              {/* Left Column - Status + Investment Overview (1 col) */}
+              <div className="lg:col-span-1 space-y-5">
                 <InvestmentStatus />
+                <InvestmentOverview />
               </div>
 
               {/* Right Column - My Investments (2 cols) */}
@@ -80,10 +68,18 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Lower Grid - Referral + Support */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-              <ReferralBanner />
-              <SupportSection />
+            {/* Lower Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+              {/* Open Transactions - Takes 2 columns */}
+              <div className="lg:col-span-2">
+                <OpenTransactions />
+              </div>
+
+              {/* Right Column - Referral Banner + Support */}
+              <div className="lg:col-span-1 space-y-5">
+                <ReferralBanner />
+                <SupportSection />
+              </div>
             </div>
           </div>
         </main>
