@@ -21,15 +21,15 @@ export const InvestmentOverview = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-gradient-to-br from-card via-card to-primary/5 rounded-xl border border-primary/30 p-6 h-full flex flex-col shadow-lg shadow-primary/5 ring-1 ring-primary/10"
+      className="bg-gradient-to-br from-card via-card to-primary/5 rounded-xl border border-primary/30 p-6 flex flex-col shadow-lg shadow-primary/5 ring-1 ring-primary/10"
     >
       {/* Header */}
-      <h3 className="text-2xl font-serif font-semibold text-foreground mb-8 leading-tight">
+      <h3 className="text-2xl font-serif font-semibold text-foreground mb-6 leading-tight">
         Investment & Cash<br />Overview
       </h3>
 
       {/* Gauge Chart */}
-      <div className="flex flex-col items-center mb-8 flex-1">
+      <div className="flex flex-col items-center mb-6">
         <div className="relative w-56 h-32">
           {/* Tick marks */}
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 120">
@@ -101,7 +101,7 @@ export const InvestmentOverview = () => {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-between w-full max-w-xs mt-8">
+        <div className="flex items-center justify-between w-full max-w-xs mt-6">
           <div className="flex flex-col items-center">
             <span className="text-sm text-muted-foreground">Invest.</span>
             <span className="text-xl font-serif font-bold text-foreground">${portfolioData.invested}</span>
