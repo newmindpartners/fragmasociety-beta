@@ -62,6 +62,7 @@ export const SignatureDealWhy = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const paginate = useCallback((newDirection: number) => {
     setCurrentIndex((prevIndex) => {
@@ -84,43 +85,66 @@ export const SignatureDealWhy = () => {
   const CurrentIcon = currentReason.icon;
 
   return (
-    <section className="py-32 relative overflow-hidden section-light-mesh" ref={containerRef}>
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-      
-      {/* Subtle pattern */}
-      <div className="absolute inset-0 opacity-30" style={{
-        backgroundImage: 'radial-gradient(hsl(var(--primary) / 0.08) 1px, transparent 1px)',
-        backgroundSize: '32px 32px'
-      }} />
+    <section className="relative py-32 lg:py-40 overflow-hidden" ref={containerRef}>
+      {/* Premium Light Background - matching MarketplaceDifference */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
+        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
+      </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-16"
-        >
-          <span className="inline-block px-5 py-2.5 mb-6 text-xs font-bold tracking-[0.25em] uppercase rounded-full bg-primary/10 text-primary border border-primary/20">
-            The Fragma Advantage
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-light-primary mb-6">
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
+
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+        {/* Header Section */}
+        <div className="max-w-4xl mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+              The Fragma Advantage
+            </span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
+          >
             Why launch your signature deal
             <br />
-            <span className="text-primary">
-              with Fragma?
-            </span>
-          </h2>
-          <p className="text-lg text-light-muted max-w-2xl mx-auto">
-            Everything you need to transform your vision into a world-class investment opportunity
-          </p>
-        </motion.div>
+            <span className="italic text-slate-500 font-serif">with Fragma?</span>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
+          >
+            Everything you need to transform your vision into a world-class investment opportunity.
+          </motion.p>
+        </div>
 
         {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
           
           {/* Left - Card Carousel */}
           <motion.div
@@ -146,39 +170,37 @@ export const SignatureDealWhy = () => {
                   }}
                   className="absolute inset-0"
                 >
-                  {/* Glass Card */}
-                  <div className="relative h-full p-10 rounded-3xl overflow-hidden glass-light">
-                    {/* Decorative gradient spots */}
-                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-primary/10 to-accent/5 rounded-full blur-3xl pointer-events-none" />
-                    <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-accent/10 to-primary/5 rounded-full blur-3xl pointer-events-none" />
+                  {/* Card */}
+                  <div 
+                    className="relative h-full p-10 lg:p-12 overflow-hidden rounded-sm"
+                    style={{ 
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      border: '1px solid rgba(226, 232, 240, 0.8)',
+                      boxShadow: '0 8px 40px -12px rgba(0, 0, 0, 0.1)'
+                    }}
+                  >
+                    {/* Large decorative number */}
+                    <motion.span 
+                      className="absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none text-slate-900/[0.04]"
+                      style={{ fontFamily: "'Playfair Display', serif" }}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3, duration: 0.4 }}
+                    >
+                      0{currentIndex + 1}
+                    </motion.span>
                     
                     {/* Content */}
                     <div className="relative z-10 h-full flex flex-col">
-                      {/* Header */}
-                      <div className="flex items-start justify-between mb-8">
-                        {/* Icon */}
-                        <motion.div 
-                          className="relative"
-                          initial={{ scale: 0.8, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          transition={{ delay: 0.2, duration: 0.4 }}
-                        >
-                        <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/25">
-                            <CurrentIcon className="w-7 h-7 text-white" />
-                          </div>
-                        </motion.div>
-                        
-                        {/* Number */}
-                        <motion.span 
-                          className="text-7xl font-bold text-primary/15"
-                          style={{ fontFamily: "'Playfair Display', serif" }}
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.3, duration: 0.4 }}
-                        >
-                          0{currentIndex + 1}
-                        </motion.span>
-                      </div>
+                      {/* Icon */}
+                      <motion.div 
+                        className="w-16 h-16 mb-10 flex items-center justify-center border border-slate-200 bg-slate-50"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.4 }}
+                      >
+                        <CurrentIcon className="w-7 h-7 text-slate-600" strokeWidth={1.5} />
+                      </motion.div>
 
                       {/* Text Content */}
                       <motion.div
@@ -187,22 +209,22 @@ export const SignatureDealWhy = () => {
                         transition={{ delay: 0.25, duration: 0.5 }}
                         className="flex-1"
                       >
-                        <h3 className="text-2xl md:text-3xl font-semibold text-light-primary mb-2">
+                        <h3 className="text-xl lg:text-2xl font-medium text-slate-900 mb-2">
                           {currentReason.title}
                         </h3>
-                        <p className="text-sm font-semibold text-primary mb-5 uppercase tracking-wide">
+                        <p className="text-[11px] font-medium text-primary uppercase tracking-[0.2em] mb-5">
                           {currentReason.subtitle}
                         </p>
-                        <p className="text-light-muted text-base md:text-lg leading-relaxed">
+                        <p className="text-slate-500 text-base leading-relaxed">
                           {currentReason.description}
                         </p>
                       </motion.div>
                       
                       {/* Bottom accent line */}
                       <motion.div 
-                        className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
+                        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary/60 to-slate-300/40"
+                        initial={{ width: 0 }}
+                        animate={{ width: '100%' }}
                         transition={{ delay: 0.4, duration: 0.6 }}
                       />
                     </div>
@@ -212,10 +234,11 @@ export const SignatureDealWhy = () => {
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center justify-center gap-6 mt-8">
+            <div className="flex items-center justify-center gap-6 mt-10">
               <button
                 onClick={() => paginate(-1)}
-                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 shadow-sm"
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-800 hover:border-slate-300 transition-all duration-300"
+                style={{ boxShadow: '0 2px 8px -2px rgba(0,0,0,0.08)' }}
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -226,10 +249,10 @@ export const SignatureDealWhy = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className={`h-2 rounded-full transition-all duration-500 ${
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
                       currentIndex === index 
-                        ? "w-10 bg-primary"
-                        : "w-2 bg-slate-300 hover:bg-primary/40"
+                        ? "w-10 bg-slate-800" 
+                        : "w-1.5 bg-slate-300 hover:bg-slate-400"
                     }`}
                   />
                 ))}
@@ -237,7 +260,8 @@ export const SignatureDealWhy = () => {
 
               <button
                 onClick={() => paginate(1)}
-                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 shadow-sm"
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-800 hover:border-slate-300 transition-all duration-300"
+                style={{ boxShadow: '0 2px 8px -2px rgba(0,0,0,0.08)' }}
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -250,82 +274,133 @@ export const SignatureDealWhy = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="space-y-4"
+            className="space-y-3"
           >
             {reasons.map((reason, index) => {
               const Icon = reason.icon;
               const isActive = index === currentIndex;
+              const isHovered = hoveredIndex === index;
               
               return (
                 <motion.button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 * index }}
-                  className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
-                    isActive 
-                      ? "bg-white border-primary/30 shadow-lg shadow-primary/10" 
-                      : "bg-white/50 border-slate-200/60 hover:bg-white hover:border-slate-300"
-                  }`}
+                  className="w-full text-left group cursor-pointer"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                      isActive 
-                        ? "bg-primary"
-                        : "bg-slate-100"
-                    }`}>
-                      <Icon className={`w-5 h-5 transition-colors ${
-                        isActive ? "text-white" : "text-slate-500"
-                      }`} />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h4 className={`font-semibold transition-colors ${
-                        isActive ? "text-light-primary" : "text-slate-600"
-                      }`}>
-                        {reason.title}
-                      </h4>
-                      <p className={`text-sm transition-colors ${
-                        isActive ? "text-primary" : "text-slate-400"
-                      }`}>
-                        {reason.subtitle}
-                      </p>
-                    </div>
-                    
-                    {isActive && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center"
+                  <motion.div
+                    className="relative p-5 overflow-hidden rounded-sm"
+                    style={{
+                      background: isActive || isHovered 
+                        ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
+                        : 'rgba(255, 255, 255, 0.9)',
+                      border: isActive || isHovered 
+                        ? '1px solid rgba(139, 92, 246, 0.25)' 
+                        : '1px solid rgba(226, 232, 240, 0.8)',
+                      boxShadow: isActive || isHovered 
+                        ? '0 20px 40px -15px rgba(15, 23, 42, 0.5), 0 0 30px -10px rgba(139, 92, 246, 0.1)'
+                        : '0 2px 10px -5px rgba(0, 0, 0, 0.05)',
+                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                    animate={{ 
+                      y: isActive || isHovered ? -4 : 0,
+                      scale: isActive || isHovered ? 1.01 : 1
+                    }}
+                    transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                  >
+                    {/* Corner accent */}
+                    <motion.div 
+                      className="absolute top-0 left-0 w-12 h-12"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(139,92,246,0.1) 0%, transparent 50%)'
+                      }}
+                      animate={{ 
+                        opacity: isActive || isHovered ? 1 : 0.3,
+                        scale: isActive || isHovered ? 1.5 : 1
+                      }}
+                      transition={{ duration: 0.4 }}
+                    />
+
+                    <div className="flex items-center gap-4 relative z-10">
+                      <motion.div 
+                        className={`w-12 h-12 flex items-center justify-center transition-all duration-500 ${
+                          isActive || isHovered 
+                            ? 'border-slate-600/30 bg-slate-800/40' 
+                            : 'border-slate-200 bg-slate-50'
+                        }`}
+                        style={{ borderWidth: '1px', borderStyle: 'solid' }}
+                        animate={{ 
+                          rotate: isActive || isHovered ? 6 : 0,
+                          scale: isActive || isHovered ? 1.05 : 1
+                        }}
+                        transition={{ duration: 0.4 }}
                       >
-                        <CheckCircle2 className="w-4 h-4 text-primary" />
+                        <Icon 
+                          className={`w-5 h-5 transition-colors duration-500 ${
+                            isActive || isHovered ? 'text-violet-300' : 'text-slate-500'
+                          }`} 
+                          strokeWidth={1.5} 
+                        />
                       </motion.div>
-                    )}
-                  </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`font-medium transition-colors duration-500 ${
+                          isActive || isHovered ? 'text-white/90' : 'text-slate-700'
+                        }`}>
+                          {reason.title}
+                        </h4>
+                        <p className={`text-sm transition-colors duration-500 ${
+                          isActive || isHovered ? 'text-slate-400' : 'text-slate-400'
+                        }`}>
+                          {reason.subtitle}
+                        </p>
+                      </div>
+                      
+                      {isActive && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-violet-400" />
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Bottom accent line */}
+                    <motion.div 
+                      className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/50 via-violet-400/40 to-slate-600/30"
+                      initial={{ width: 0 }}
+                      animate={{ width: isActive || isHovered ? '100%' : 0 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </motion.div>
                 </motion.button>
               );
             })}
           </motion.div>
         </div>
 
-        {/* Bottom Trust Statement */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        {/* Bottom decorative element */}
+        <motion.div 
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="mt-20 text-center"
+          transition={{ delay: 0.6, duration: 1 }}
+          className="mt-24 flex flex-col items-center gap-4"
         >
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full border border-slate-200 shadow-sm">
-            <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-            <span className="text-light-muted">
-              Trusted by <span className="text-light-primary font-semibold">15+ industry leaders</span> across Film, Music, Real Estate & more
-            </span>
-          </div>
+          <div className="h-px w-48 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <span className="text-[10px] tracking-[0.4em] uppercase text-slate-300 font-light">Trusted by 15+ industry leaders</span>
         </motion.div>
       </div>
+
+      {/* Bottom accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
     </section>
   );
 };
