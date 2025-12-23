@@ -39,7 +39,7 @@ export const FAQContact = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center justify-center w-16 h-16 mb-8 rounded-2xl bg-gradient-to-br from-turquoise/15 to-cyan-400/10 border border-turquoise/20"
+            className="inline-flex items-center justify-center w-16 h-16 mb-8 rounded-2xl bg-turquoise/10 border border-turquoise/20"
           >
             <MessageCircle className="w-7 h-7 text-turquoise" strokeWidth={1.5} />
           </motion.div>

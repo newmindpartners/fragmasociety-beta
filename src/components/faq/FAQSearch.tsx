@@ -21,7 +21,7 @@ export const FAQSearch = ({ searchQuery, setSearchQuery, totalResults }: FAQSear
           {/* Search Container */}
           <div className="relative group">
             {/* Glow effect on focus */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-turquoise/20 via-cyan-400/10 to-turquoise/20 rounded-3xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+            <div className="absolute -inset-2 bg-turquoise/10 rounded-3xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
             
             <div className="relative bg-white rounded-2xl border border-slate-200 shadow-lg shadow-slate-100/50 overflow-hidden">
               <div className="relative flex items-center">
