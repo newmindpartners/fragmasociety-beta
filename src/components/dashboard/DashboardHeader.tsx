@@ -213,11 +213,6 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             {navSections.map((section) => (
               <NavDropdown key={section.label} section={section} />
             ))}
-            <Link to="/live-deals">
-              <Button className="rounded-full px-5 h-9 text-sm font-medium bg-primary hover:bg-primary/90 text-white shadow-sm transition-all duration-200 ml-2">
-                Invest Now
-              </Button>
-            </Link>
           </motion.nav>
         </div>
       </div>
