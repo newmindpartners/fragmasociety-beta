@@ -39,7 +39,7 @@ export const ReferralBanner = () => {
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-6 w-full">
         <div className="flex-1">
           {/* Heading */}
-          <h3 className="text-xl lg:text-2xl font-serif text-foreground mb-3">
+          <h3 className="text-xl lg:text-2xl font-serif text-foreground mb-3 whitespace-nowrap">
             Earn{" "}
             <span className="inline-flex items-center px-3 py-1 bg-primary text-white rounded-md font-semibold text-lg">
               $100
