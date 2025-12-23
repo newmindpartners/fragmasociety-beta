@@ -11,7 +11,7 @@ export const MyInvestments = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="bg-card rounded-xl border border-border p-4 h-full shadow-sm"
+      className="bg-card rounded-xl border border-border p-4 shadow-sm max-h-[320px] overflow-hidden"
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">

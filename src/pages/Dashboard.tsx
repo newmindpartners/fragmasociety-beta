@@ -66,14 +66,14 @@ const Dashboard = () => {
             </div>
 
             {/* Lower Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
               {/* Open Transactions - Takes 2 columns */}
               <div className="lg:col-span-2">
                 <OpenTransactions />
               </div>
 
               {/* Right Column */}
-              <div className="lg:col-span-1 space-y-5">
+              <div className="lg:col-span-1 space-y-4 self-start">
                 <MyInvestments />
                 <QuickActions />
               </div>
