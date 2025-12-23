@@ -101,9 +101,9 @@ export const SignatureDealAudience = () => {
           </motion.div>
           
           {/* Main headline */}
-          <div className="overflow-hidden mb-4">
+          <div className="overflow-visible mb-4">
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-[0.95] tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-[1.1] tracking-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
               initial={{ y: 100, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
@@ -112,9 +112,9 @@ export const SignatureDealAudience = () => {
               Who Should Launch a
             </motion.h2>
           </div>
-          <div className="overflow-hidden">
+          <div className="overflow-visible py-2">
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[0.95] tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] tracking-tight"
               initial={{ y: 100, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.35 }}
