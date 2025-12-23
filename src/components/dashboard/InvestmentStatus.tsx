@@ -59,7 +59,7 @@ export const InvestmentStatus = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className="bg-card rounded-xl border border-border p-6 shadow-sm h-full flex flex-col"
+      className="bg-white dark:bg-card rounded-xl border border-border/60 p-6 shadow-sm h-full flex flex-col"
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-5">
