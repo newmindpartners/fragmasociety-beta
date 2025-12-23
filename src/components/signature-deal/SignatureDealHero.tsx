@@ -1,11 +1,66 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Sparkles, Users, Award, Briefcase } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Users, Award, Briefcase, Film, Building2, Music, Gem } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import signatureDealHeroBg from "@/assets/signature-deal-cta-bg.jpg";
+import categoryFilm from "@/assets/category-film.jpg";
+import categoryRealestate from "@/assets/category-realestate.jpg";
+import categoryMusic from "@/assets/category-music.jpg";
+import categoryLuxury from "@/assets/category-luxury.jpg";
+
+const industries = [
+  {
+    id: 1,
+    title: "Film & Entertainment",
+    subtitle: "Blockbuster Productions",
+    image: categoryFilm,
+    icon: Film,
+    color: "from-cyan-500 to-blue-600",
+    accent: "cyan"
+  },
+  {
+    id: 2,
+    title: "Prime Real Estate",
+    subtitle: "Global Properties",
+    image: categoryRealestate,
+    icon: Building2,
+    color: "from-violet-500 to-purple-600",
+    accent: "violet"
+  },
+  {
+    id: 3,
+    title: "Music & Royalties",
+    subtitle: "Catalog Investments",
+    image: categoryMusic,
+    icon: Music,
+    color: "from-rose-500 to-pink-600",
+    accent: "rose"
+  },
+  {
+    id: 4,
+    title: "Luxury Assets",
+    subtitle: "Collectibles & Art",
+    image: categoryLuxury,
+    icon: Gem,
+    color: "from-amber-500 to-orange-600",
+    accent: "amber"
+  }
+];
 
 export const SignatureDealHero = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % industries.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const activeIndustry = industries[activeIndex];
+
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* Background */}
@@ -15,7 +70,7 @@ export const SignatureDealHero = () => {
         <img 
           src={signatureDealHeroBg} 
           alt="" 
-          className="w-full h-full object-cover opacity-25"
+          className="w-full h-full object-cover opacity-20"
           style={{ filter: 'grayscale(30%) brightness(0.7)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/80" />
@@ -128,118 +183,177 @@ export const SignatureDealHero = () => {
             </motion.p>
           </div>
           
-          {/* Right - Feature Cards */}
+          {/* Right - Industry Showcase */}
           <motion.div 
-            className="relative hidden lg:flex justify-center"
+            className="relative hidden lg:flex justify-center items-center"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <div className="relative w-[400px]">
-              {/* Stacked cards effect */}
-              <div className="absolute top-6 left-6 right-0 bottom-0 rounded-3xl bg-white/[0.02] border border-white/[0.04] backdrop-blur-sm" />
-              <div className="absolute top-3 left-3 right-0 bottom-0 rounded-3xl bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm" />
+            <div className="relative w-[480px] h-[580px]">
               
-              {/* Main Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/[0.12]"
-              >
-                {/* Card glow effect */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-cyan-500 to-teal-500 opacity-20 blur-3xl" />
+              {/* Background floating images */}
+              {industries.map((industry, i) => {
+                const positions = [
+                  { top: '0%', left: '60%', size: 'w-32 h-40', rotate: 6, delay: 0 },
+                  { top: '15%', left: '0%', size: 'w-28 h-36', rotate: -8, delay: 0.1 },
+                  { top: '55%', left: '70%', size: 'w-36 h-44', rotate: 12, delay: 0.2 },
+                  { top: '65%', left: '5%', size: 'w-30 h-38', rotate: -5, delay: 0.3 },
+                ];
+                const pos = positions[i];
+                const isActive = i === activeIndex;
                 
-                <div className="relative p-8">
-                  {/* Header */}
-                  <div className="flex items-start justify-between mb-8">
-                    <motion.div 
-                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center shadow-lg"
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.6 }}
-                    >
-                      <Sparkles className="w-8 h-8 text-white" />
-                    </motion.div>
-                    
-                    <motion.div 
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.7 }}
-                      className="text-right"
-                    >
-                      <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 mb-1">Your Deal</p>
-                      <p className="text-2xl font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
-                        Signature
-                      </p>
-                    </motion.div>
-                  </div>
-                  
-                  {/* Process Steps */}
-                  <motion.div 
-                    className="space-y-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.75 }}
+                return (
+                  <motion.div
+                    key={industry.id}
+                    className={`absolute ${pos.size} rounded-2xl overflow-hidden cursor-pointer transition-all duration-500`}
+                    style={{ top: pos.top, left: pos.left }}
+                    initial={{ opacity: 0, scale: 0.8, rotate: pos.rotate }}
+                    animate={{ 
+                      opacity: isActive ? 1 : 0.4, 
+                      scale: isActive ? 1.05 : 1,
+                      rotate: isActive ? 0 : pos.rotate,
+                      zIndex: isActive ? 10 : 1
+                    }}
+                    transition={{ duration: 0.5, delay: pos.delay }}
+                    onClick={() => setActiveIndex(i)}
+                    whileHover={{ scale: 1.08, opacity: 0.9 }}
                   >
-                    {[
-                      { step: "01", label: "Define Your Vision", desc: "Asset, brand, or expertise" },
-                      { step: "02", label: "Structure & Tokenize", desc: "Compliant investment vehicle" },
-                      { step: "03", label: "Launch & Grow", desc: "Attract your audience" },
-                    ].map((item, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.8 + i * 0.1 }}
-                        className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.06] transition-colors"
+                    <img 
+                      src={industry.image} 
+                      alt={industry.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent transition-opacity duration-300 ${isActive ? 'opacity-60' : 'opacity-80'}`} />
+                    
+                    {/* Active glow ring */}
+                    {isActive && (
+                      <motion.div 
+                        className={`absolute inset-0 rounded-2xl border-2 border-${industry.accent}-400/60`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </motion.div>
+                );
+              })}
+              
+              {/* Center Main Card */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] z-20">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                    className="relative overflow-hidden rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/15 shadow-2xl"
+                  >
+                    {/* Card glow */}
+                    <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${activeIndustry.color} opacity-30 blur-3xl`} />
+                    
+                    {/* Featured Image */}
+                    <div className="relative h-44 overflow-hidden">
+                      <motion.img 
+                        src={activeIndustry.image} 
+                        alt={activeIndustry.title}
+                        className="w-full h-full object-cover"
+                        initial={{ scale: 1.1 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+                      
+                      {/* Icon badge */}
+                      <motion.div 
+                        className={`absolute top-4 left-4 w-12 h-12 rounded-xl bg-gradient-to-br ${activeIndustry.color} flex items-center justify-center shadow-lg`}
+                        initial={{ scale: 0, rotate: -20 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                       >
-                        <span className="text-lg font-light text-cyan-400" style={{ fontFamily: "'Playfair Display', serif" }}>
-                          {item.step}
-                        </span>
-                        <div>
-                          <p className="text-sm text-white font-medium">{item.label}</p>
-                          <p className="text-[10px] text-white/40">{item.desc}</p>
+                        <activeIndustry.icon className="w-6 h-6 text-white" />
+                      </motion.div>
+                      
+                      {/* "Your Deal" floating label */}
+                      <motion.div 
+                        className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <span className="text-[9px] uppercase tracking-widest text-white/80 font-medium">Your Deal</span>
+                      </motion.div>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="p-6">
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                      >
+                        <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 mb-1">{activeIndustry.subtitle}</p>
+                        <h3 
+                          className="text-xl font-light text-white mb-4"
+                          style={{ fontFamily: "'Playfair Display', serif" }}
+                        >
+                          {activeIndustry.title}
+                        </h3>
+                      </motion.div>
+                      
+                      {/* Mini stats */}
+                      <motion.div 
+                        className="flex gap-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.25 }}
+                      >
+                        <div className="flex-1 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                          <p className="text-lg font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>€10M+</p>
+                          <p className="text-[8px] uppercase tracking-wider text-white/40">Deal Size</p>
+                        </div>
+                        <div className="flex-1 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                          <p className="text-lg font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>500+</p>
+                          <p className="text-[8px] uppercase tracking-wider text-white/40">Investors</p>
                         </div>
                       </motion.div>
-                    ))}
+                    </div>
                   </motion.div>
-                  
-                  {/* Divider */}
-                  <div className="h-px bg-gradient-to-r from-white/5 via-white/15 to-white/5 my-6" />
-                  
-                  {/* Bottom CTA */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1 }}
-                    className="text-center"
-                  >
-                    <p className="text-white/50 text-sm mb-2">Ready to launch?</p>
-                    <p className="text-[10px] text-white/30">Join visionaries building the future of ownership</p>
-                  </motion.div>
+                </AnimatePresence>
+                
+                {/* Navigation dots */}
+                <div className="flex justify-center gap-2 mt-6">
+                  {industries.map((industry, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveIndex(index)}
+                      className="group relative"
+                    >
+                      <motion.div
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          activeIndex === index 
+                            ? `w-8 bg-gradient-to-r ${industry.color}` 
+                            : 'w-1.5 bg-white/20 hover:bg-white/40'
+                        }`}
+                        layout
+                      />
+                    </button>
+                  ))}
                 </div>
-              </motion.div>
+              </div>
               
-              {/* Stats row */}
+              {/* Decorative elements */}
               <motion.div 
-                className="flex justify-center gap-10 mt-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 }}
-              >
-                {[
-                  { value: "€50M+", label: "Deals Launched" },
-                  { value: "12+", label: "Partners" },
-                ].map((stat, i) => (
-                  <div key={i} className="text-center">
-                    <p className="text-2xl font-light text-white/80" style={{ fontFamily: "'Playfair Display', serif" }}>
-                      {stat.value}
-                    </p>
-                    <p className="text-[9px] text-white/30 uppercase tracking-[0.15em] mt-1">{stat.label}</p>
-                  </div>
-                ))}
-              </motion.div>
+                className="absolute top-10 right-20 w-20 h-20 rounded-full border border-white/10"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              />
+              <motion.div 
+                className="absolute bottom-20 left-10 w-32 h-32 rounded-full border border-dashed border-white/5"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              />
             </div>
           </motion.div>
         </div>
