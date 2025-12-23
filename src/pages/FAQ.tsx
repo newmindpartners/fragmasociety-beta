@@ -32,9 +32,9 @@ const FAQ = () => {
   }, [filteredCategories]);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
-      <div className="pt-20">
+      <main>
         <FAQHero />
         <FAQSearch 
           searchQuery={searchQuery}
@@ -46,7 +46,7 @@ const FAQ = () => {
           searchQuery={searchQuery}
         />
         <FAQContact />
-      </div>
+      </main>
       <Footer />
     </div>
   );

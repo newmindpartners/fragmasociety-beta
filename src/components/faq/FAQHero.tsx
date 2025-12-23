@@ -3,7 +3,7 @@ import { HelpCircle, ArrowDown } from "lucide-react";
 
 export const FAQHero = () => {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden bg-slate-900">
+    <section className="relative pt-32 lg:pt-40 pb-24 lg:pb-32 overflow-hidden bg-slate-900">
       {/* Dark Background with subtle pattern */}
       <div 
         className="absolute inset-0 opacity-[0.03]"
