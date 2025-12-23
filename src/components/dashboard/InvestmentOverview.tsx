@@ -21,10 +21,10 @@ export const InvestmentOverview = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white rounded-2xl border-2 border-indigo-500/20 p-8 h-full flex flex-col shadow-sm"
+      className="bg-card rounded-2xl border-2 border-primary/20 p-8 h-full flex flex-col shadow-sm"
     >
       {/* Header */}
-      <h3 className="text-2xl font-semibold text-slate-900 mb-8 leading-tight">
+      <h3 className="text-2xl font-semibold text-foreground mb-8 leading-tight">
         Investment & Cash<br />Overview
       </h3>
 
@@ -49,7 +49,7 @@ export const InvestmentOverview = () => {
                     y1={y1}
                     x2={x2}
                     y2={y2}
-                    stroke="#e2e8f0"
+                    stroke="hsl(var(--border))"
                     strokeWidth={tick.isLong ? 2 : 1.5}
                     strokeLinecap="round"
                   />
@@ -63,7 +63,7 @@ export const InvestmentOverview = () => {
             <path
               d="M 20 100 A 80 80 0 0 1 180 100"
               fill="none"
-              stroke="#f1f5f9"
+              stroke="hsl(var(--muted))"
               strokeWidth="8"
               strokeLinecap="round"
             />
@@ -71,7 +71,7 @@ export const InvestmentOverview = () => {
             <motion.path
               d="M 20 100 A 80 80 0 0 1 180 100"
               fill="none"
-              stroke="#1e3a5f"
+              stroke="hsl(var(--primary))"
               strokeWidth="8"
               strokeLinecap="round"
               strokeDasharray="251.2"
@@ -89,13 +89,13 @@ export const InvestmentOverview = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5, type: "spring" }}
-              className="text-4xl font-bold text-indigo-900"
+              className="text-4xl font-bold text-foreground"
             >
               {portfolioData.growth}%
             </motion.span>
             <div className="flex items-center gap-1.5 mt-1">
-              <span className="text-sm text-slate-400">Your Balance Growth</span>
-              <Info className="w-3.5 h-3.5 text-slate-300" />
+              <span className="text-sm text-muted-foreground">Your Balance Growth</span>
+              <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
             </div>
           </div>
         </div>
@@ -103,18 +103,18 @@ export const InvestmentOverview = () => {
         {/* Legend */}
         <div className="flex items-center justify-between w-full max-w-xs mt-8">
           <div className="flex flex-col items-center">
-            <span className="text-sm text-slate-400">Invest.</span>
-            <span className="text-xl font-bold text-slate-900">${portfolioData.invested}</span>
+            <span className="text-sm text-muted-foreground">Invest.</span>
+            <span className="text-xl font-bold text-foreground">${portfolioData.invested}</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-sm text-slate-400">Cash</span>
-            <span className="text-xl font-bold text-slate-900">${portfolioData.cash}</span>
+            <span className="text-sm text-muted-foreground">Cash</span>
+            <span className="text-xl font-bold text-foreground">${portfolioData.cash}</span>
           </div>
         </div>
       </div>
 
       {/* Deposit Button */}
-      <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-full h-14 text-lg font-medium shadow-lg shadow-indigo-200/50">
+      <Button className="w-full rounded-full h-14 text-lg font-medium shadow-lg">
         Deposit
       </Button>
     </motion.div>

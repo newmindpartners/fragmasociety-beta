@@ -65,14 +65,14 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
             "group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden",
             isCollapsed ? "justify-center" : "",
             isActive 
-              ? "bg-slate-800 text-white shadow-lg shadow-slate-900/20" 
-              : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+              ? "bg-primary text-primary-foreground shadow-lg" 
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
           )}
         >
           <Icon 
             className={cn(
               "w-[18px] h-[18px] flex-shrink-0 transition-all duration-300",
-              isActive ? "text-white" : "text-slate-400 group-hover:text-slate-700",
+              isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground",
               !isCollapsed && "group-hover:scale-105"
             )} 
             strokeWidth={1.75} 
@@ -95,14 +95,14 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
             <motion.span 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="ml-auto bg-slate-800 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"
+              className="ml-auto bg-primary text-primary-foreground text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"
             >
               {item.badge}
             </motion.span>
           )}
 
           {item.badge && isCollapsed && (
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-destructive rounded-full" />
           )}
         </Link>
       </motion.div>
@@ -114,11 +114,11 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
       initial={false}
       animate={{ width: isCollapsed ? 72 : 256 }}
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      className="fixed left-0 top-0 h-screen bg-white border-r border-slate-200/80 flex flex-col z-40 shadow-sm"
+      className="fixed left-0 top-0 h-screen bg-card border-r border-border flex flex-col z-40 shadow-sm"
     >
       {/* Logo Section */}
       <div className={cn(
-        "p-4 border-b border-slate-100 flex items-center",
+        "p-4 border-b border-border flex items-center",
         isCollapsed ? "justify-center" : "justify-between"
       )}>
         <Link to="/" className="flex items-center gap-3">
@@ -137,14 +137,14 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
           whileTap={{ scale: 0.95 }}
           onClick={onToggle}
           className={cn(
-            "p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/60 transition-all duration-200",
-            isCollapsed && "absolute -right-3 top-5 bg-white shadow-md"
+            "p-2 rounded-lg bg-muted hover:bg-muted/80 border border-border transition-all duration-200",
+            isCollapsed && "absolute -right-3 top-5 bg-card shadow-md"
           )}
         >
           {isCollapsed ? (
-            <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
           ) : (
-            <ChevronLeft className="w-3.5 h-3.5 text-slate-500" />
+            <ChevronLeft className="w-3.5 h-3.5 text-muted-foreground" />
           )}
         </motion.button>
       </div>
@@ -158,7 +158,7 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
         </div>
 
         {/* Divider */}
-        <div className="my-4 border-t border-slate-100" />
+        <div className="my-4 border-t border-border" />
 
         {/* Bottom Navigation */}
         <div className="space-y-0.5">
@@ -169,22 +169,22 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
       </nav>
 
       {/* User Profile Section */}
-      <div className="p-3 border-t border-slate-100">
+      <div className="p-3 border-t border-border">
         <motion.div 
           whileHover={{ scale: 1.01 }}
           className={cn(
-            "flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 cursor-pointer group transition-all duration-300 border border-slate-100",
+            "flex items-center gap-3 p-2.5 rounded-xl bg-muted/50 cursor-pointer group transition-all duration-300 border border-border",
             isCollapsed && "justify-center p-2"
           )}
         >
           <div className="relative flex-shrink-0">
             <div className={cn(
-              "rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white font-semibold",
+              "rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-semibold",
               isCollapsed ? "w-8 h-8 text-xs" : "w-9 h-9 text-sm"
             )}>
               IN
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-card" />
           </div>
           
           <AnimatePresence>
@@ -195,14 +195,14 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
                 exit={{ opacity: 0 }}
                 className="flex-1 min-w-0"
               >
-                <p className="text-sm font-semibold text-slate-800 truncate">Investor</p>
-                <p className="text-xs text-slate-400 truncate">investor@fragma.io</p>
+                <p className="text-sm font-semibold text-foreground truncate">Investor</p>
+                <p className="text-xs text-muted-foreground truncate">investor@fragma.io</p>
               </motion.div>
             )}
           </AnimatePresence>
           
           {!isCollapsed && (
-            <LogOut className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors flex-shrink-0" strokeWidth={1.5} />
+            <LogOut className="w-4 h-4 text-muted-foreground/60 group-hover:text-muted-foreground transition-colors flex-shrink-0" strokeWidth={1.5} />
           )}
         </motion.div>
       </div>
