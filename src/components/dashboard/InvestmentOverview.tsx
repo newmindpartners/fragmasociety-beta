@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingUp, Wallet, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const InvestmentOverview = () => {
@@ -9,92 +9,112 @@ export const InvestmentOverview = () => {
     growth: 0,
   };
 
-  const circumference = 2 * Math.PI * 50;
-  const investedPercent = portfolioData.invested > 0 
-    ? (portfolioData.invested / (portfolioData.invested + portfolioData.cash)) * 100 
-    : 0;
-  const strokeDashoffset = circumference - (investedPercent / 100) * circumference;
+  // Generate tick marks for the gauge
+  const tickMarks = Array.from({ length: 13 }, (_, i) => {
+    const angle = -135 + (i * 270) / 12; // From -135deg to 135deg (270 degree arc)
+    const isLong = i % 3 === 0;
+    return { angle, isLong };
+  });
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white rounded-xl border border-slate-200/80 p-6 h-full flex flex-col"
+      className="bg-white rounded-2xl border-2 border-indigo-500/20 p-8 h-full flex flex-col shadow-sm"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-sm font-semibold text-slate-900">
-          Investment & Cash Overview
-        </h3>
-        <button className="p-1 rounded hover:bg-slate-50 transition-colors">
-          <Info className="w-4 h-4 text-slate-300" />
-        </button>
-      </div>
+      <h3 className="text-2xl font-semibold text-slate-900 mb-8 leading-tight">
+        Investment & Cash<br />Overview
+      </h3>
 
-      {/* Donut Chart */}
-      <div className="flex flex-col items-center mb-6 flex-1">
-        <div className="relative">
-          <svg className="w-36 h-36 -rotate-90">
-            {/* Background arc */}
-            <circle
-              cx="72"
-              cy="72"
-              r="50"
+      {/* Gauge Chart */}
+      <div className="flex flex-col items-center mb-8 flex-1">
+        <div className="relative w-56 h-32">
+          {/* Tick marks */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 120">
+            <g transform="translate(100, 100)">
+              {tickMarks.map((tick, i) => {
+                const radians = (tick.angle * Math.PI) / 180;
+                const innerRadius = tick.isLong ? 65 : 70;
+                const outerRadius = 78;
+                const x1 = innerRadius * Math.cos(radians);
+                const y1 = innerRadius * Math.sin(radians);
+                const x2 = outerRadius * Math.cos(radians);
+                const y2 = outerRadius * Math.sin(radians);
+                return (
+                  <line
+                    key={i}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    stroke="#e2e8f0"
+                    strokeWidth={tick.isLong ? 2 : 1.5}
+                    strokeLinecap="round"
+                  />
+                );
+              })}
+            </g>
+          </svg>
+
+          {/* Main arc background */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 120">
+            <path
+              d="M 20 100 A 80 80 0 0 1 180 100"
               fill="none"
-              stroke="#e2e8f0"
+              stroke="#f1f5f9"
               strokeWidth="8"
               strokeLinecap="round"
-              strokeDasharray={`${circumference * 0.75} ${circumference}`}
             />
             {/* Progress arc */}
-            <motion.circle
-              cx="72"
-              cy="72"
-              r="50"
+            <motion.path
+              d="M 20 100 A 80 80 0 0 1 180 100"
               fill="none"
-              stroke="#1e293b"
+              stroke="#1e3a5f"
               strokeWidth="8"
               strokeLinecap="round"
-              strokeDasharray={`${circumference * 0.75} ${circumference}`}
-              initial={{ strokeDashoffset: circumference * 0.75 }}
-              animate={{ strokeDashoffset: circumference * 0.75 - (investedPercent / 100) * circumference * 0.75 }}
+              strokeDasharray="251.2"
+              initial={{ strokeDashoffset: 251.2 }}
+              animate={{ 
+                strokeDashoffset: 251.2 - (portfolioData.growth / 100) * 251.2 
+              }}
               transition={{ duration: 1.5, ease: "easeOut" }}
             />
           </svg>
-          
+
           {/* Center text */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-end pb-2">
             <motion.span 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5, type: "spring" }}
-              className="text-3xl font-semibold text-slate-900"
+              className="text-4xl font-bold text-indigo-900"
             >
               {portfolioData.growth}%
             </motion.span>
-            <span className="text-[10px] text-slate-400 mt-0.5">Your Balance Growth</span>
+            <div className="flex items-center gap-1.5 mt-1">
+              <span className="text-sm text-slate-400">Your Balance Growth</span>
+              <Info className="w-3.5 h-3.5 text-slate-300" />
+            </div>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-8 mt-6">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
-            <span className="text-xs text-slate-500">Invest.</span>
-            <span className="text-sm font-semibold text-slate-900">€{portfolioData.invested}</span>
+        <div className="flex items-center justify-between w-full max-w-xs mt-8">
+          <div className="flex flex-col items-center">
+            <span className="text-sm text-slate-400">Invest.</span>
+            <span className="text-xl font-bold text-slate-900">${portfolioData.invested}</span>
           </div>
-          <div className="w-px h-4 bg-slate-200" />
-          <div className="flex items-center gap-2">
-            <Wallet className="w-3.5 h-3.5 text-slate-400" />
-            <span className="text-xs text-slate-500">Cash</span>
-            <span className="text-sm font-semibold text-slate-900">€{portfolioData.cash}</span>
+          <div className="flex flex-col items-center">
+            <span className="text-sm text-slate-400">Cash</span>
+            <span className="text-xl font-bold text-slate-900">${portfolioData.cash}</span>
           </div>
         </div>
       </div>
 
       {/* Deposit Button */}
-      <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-lg h-11 font-medium">
+      <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-full h-14 text-lg font-medium shadow-lg shadow-indigo-200/50">
         Deposit
       </Button>
     </motion.div>
