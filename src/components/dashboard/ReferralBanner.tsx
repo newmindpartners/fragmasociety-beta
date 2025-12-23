@@ -42,13 +42,13 @@ export const ReferralBanner = () => {
           <h3 className="text-xl lg:text-2xl font-serif text-slate-900 mb-3">
             Earn{" "}
             <span className="inline-flex items-center px-3 py-1 bg-teal-500 text-white rounded-md font-semibold text-lg">
-              $10,000
+              $100
             </span>
-            {" "}for Referring a Founder!
+            {" "}to refer a friend
           </h3>
 
           <p className="text-slate-500 text-sm max-w-md leading-relaxed">
-            Do you know an inspiring entrepreneur or founder who could benefit from our program? If so, refer them to us, and you could earn a generous $10,000 reward!
+            Know someone who could benefit from Fragma? Refer a friend and earn $100 when they make their first investment.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ export const ReferralBanner = () => {
             variant="outline"
             className="border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white rounded-full px-5 h-10 font-medium group transition-all duration-200"
           >
-            Learn How To Qualify
+            Refer a Friend
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>
