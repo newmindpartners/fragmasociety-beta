@@ -144,24 +144,6 @@ export const StrategyPillars = () => {
                       </div>
                     </div>
                     
-                    {/* Leader Image */}
-                    {strategy.leaderImage && (
-                      <motion.div 
-                        className="absolute bottom-4 right-5"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.4 + index * 0.1 }}
-                      >
-                        <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-950 shadow-2xl">
-                          <img 
-                            src={strategy.leaderImage} 
-                            alt={strategy.leader || ""}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </motion.div>
-                    )}
                   </div>
                   
                   {/* Content Section */}
