@@ -8,23 +8,22 @@ export const ReferralBanner = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="relative rounded-xl bg-card border border-border p-6 h-full flex items-center shadow-sm overflow-visible"
+      className="relative rounded-xl bg-card border border-border p-6 h-full flex items-center shadow-sm overflow-hidden"
     >
       {/* Decorative background */}
-      <div className="absolute right-0 top-0 bottom-0 w-1/3 overflow-hidden pointer-events-none">
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-10">
         <svg 
-          viewBox="0 0 400 300" 
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[300px] opacity-10"
+          viewBox="0 0 200 150" 
+          className="w-[160px] h-[120px]"
           fill="none"
         >
-          {/* Abstract waveform pattern */}
-          {[...Array(20)].map((_, i) => (
+          {[...Array(12)].map((_, i) => (
             <motion.line
               key={i}
-              x1={200 + i * 10}
-              y1={150 - 30 - Math.sin(i * 0.5) * 40}
-              x2={200 + i * 10}
-              y2={150 + 30 + Math.sin(i * 0.5) * 40}
+              x1={20 + i * 14}
+              y1={75 - 20 - Math.sin(i * 0.5) * 30}
+              x2={20 + i * 14}
+              y2={75 + 20 + Math.sin(i * 0.5) * 30}
               stroke="hsl(var(--primary))"
               strokeWidth="3"
               strokeLinecap="round"
@@ -36,36 +35,27 @@ export const ReferralBanner = () => {
         </svg>
       </div>
 
-      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-6 w-full">
-        <div className="flex-1">
-          {/* Heading */}
-          <h3 className="text-xl lg:text-2xl font-serif text-foreground mb-3 whitespace-nowrap">
+      <div className="relative z-10 flex items-center justify-between gap-4 w-full">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg lg:text-xl font-serif text-foreground mb-2 whitespace-nowrap">
             Earn{" "}
-            <span className="inline-flex items-center px-3 py-1 bg-primary text-white rounded-md font-semibold text-lg">
+            <span className="inline-flex items-center px-2 py-0.5 bg-primary text-white rounded-md font-semibold text-base">
               $100
             </span>
             {" "}to refer a friend
           </h3>
-
-          <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
-            Know someone who could benefit from Fragma? Refer a friend and earn $100 when they make their first investment.
+          <p className="text-muted-foreground text-sm leading-snug">
+            Invite friends and earn $100 when they invest.
           </p>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.6 }}
-          className="flex-shrink-0"
+        <Button 
+          variant="outline"
+          className="rounded-full px-5 h-9 font-medium group border-border text-foreground hover:bg-accent hover:text-primary hover:border-primary/40 transition-all duration-200 flex-shrink-0"
         >
-          <Button 
-            variant="outline"
-            className="rounded-full px-5 h-10 font-medium group border-border text-foreground hover:bg-accent hover:text-primary hover:border-primary/40 transition-all duration-200"
-          >
-            Refer a Friend
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </motion.div>
+          Refer a Friend
+          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+        </Button>
       </div>
     </motion.div>
   );
