@@ -226,11 +226,19 @@ export const OpenTransactions = () => {
                       <span className="text-xs text-muted-foreground">
                         {order.tokens} tokens @
                       </span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-secondary text-xs font-bold text-foreground border border-border">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold border ${
+                        order.orderType === "buy"
+                          ? "bg-emerald-500/5 text-emerald-700 border-emerald-500/20"
+                          : "bg-rose-500/5 text-rose-600 border-rose-500/20"
+                      }`}>
                         {order.pricePerToken}
                       </span>
                       <span className="text-xs text-muted-foreground">•</span>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-primary/10 text-sm font-bold text-primary border border-primary/20">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-bold border ${
+                        order.orderType === "buy"
+                          ? "bg-emerald-500/10 text-emerald-700 border-emerald-500/30"
+                          : "bg-rose-500/10 text-rose-600 border-rose-500/30"
+                      }`}>
                         {order.totalValue}
                       </span>
                     </div>
