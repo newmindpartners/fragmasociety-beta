@@ -39,7 +39,7 @@ export const DashboardStats = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 + index * 0.05 }}
-            className="group relative bg-card rounded-xl border border-border p-5 hover:border-primary/40 hover:shadow-md transition-all duration-300"
+            className="group relative bg-card rounded-xl border border-border p-6 shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
