@@ -186,14 +186,14 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
       >
         <div className="flex items-center justify-center gap-4">
           <span className="text-sm font-medium text-primary">
-            Connect Your Wallet — Step Into RWA Swaps
+            Create your wallet in a few clicks
           </span>
           <Button 
             size="sm" 
             className="rounded-full h-7 px-4 text-xs font-medium group bg-primary hover:bg-primary/90 text-white"
           >
             <Wallet className="w-3 h-3 mr-1.5" />
-            Connect Wallet
+            Create Wallet
             <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
           </Button>
         </div>
