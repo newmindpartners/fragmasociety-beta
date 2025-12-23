@@ -152,21 +152,18 @@ export const SignatureDealBenefits = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <p className="text-xl md:text-2xl lg:text-3xl font-light text-slate-600 tracking-tight">
-            This is not just fundraising.{" "}
-            <span className="font-medium text-slate-900">
-              This is{" "}
-              <span 
-                className="font-signature italic pb-1"
-                style={{
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                brand-owned private markets
-              </span>
+          <p className="text-xl md:text-2xl lg:text-3xl text-slate-800 tracking-tight">
+            This is not just fundraising. This is{" "}
+            <span 
+              className="font-signature italic pb-1"
+              style={{
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              brand-owned private markets
             </span>
           </p>
         </motion.div>
