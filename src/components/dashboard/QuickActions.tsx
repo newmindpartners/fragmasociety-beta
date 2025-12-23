@@ -35,7 +35,7 @@ export const QuickActions = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6 }}
-      className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+      className="rounded-xl border border-border bg-card p-6 shadow-sm"
     >
       <h3 className="mb-4 text-sm font-semibold text-foreground">Quick Actions</h3>
 
