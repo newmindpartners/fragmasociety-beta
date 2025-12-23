@@ -331,9 +331,9 @@ export const SignatureDealHero = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.1 }}
-                  className="mt-8 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
+                  className="mt-8 w-full flex items-center justify-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
                 >
-                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
                   <p className="text-sm text-white/80 font-medium whitespace-nowrap">
                     This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
                   </p>
