@@ -5,12 +5,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, TrendingDown, Calendar, Hash, Coins, Tag, Clock, X } from "lucide-react";
+import { TrendingUp, TrendingDown, Calendar, Hash, Coins, Tag, Clock, X, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Order {
   id: string;
   assetName: string;
   assetType: string;
+  assetId?: string;
   orderType: "buy" | "sell";
   tokens: number;
   pricePerToken: string;
@@ -71,8 +73,8 @@ export const OrderDetailsModal = ({
           <DialogTitle className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
               order.orderType === "buy" 
-                ? "bg-emerald-100 dark:bg-emerald-500/10" 
-                : "bg-rose-100 dark:bg-rose-500/10"
+                ? "bg-emerald-100" 
+                : "bg-rose-100"
             }`}>
               {order.orderType === "buy" ? (
                 <TrendingUp className="w-5 h-5 text-emerald-600" />
@@ -80,8 +82,15 @@ export const OrderDetailsModal = ({
                 <TrendingDown className="w-5 h-5 text-rose-500" />
               )}
             </div>
-            <div>
-              <span className="block text-foreground">{order.assetName}</span>
+            <div className="flex-1">
+              <Link 
+                to={order.assetId ? `/deals/${order.assetId}` : "/live-deals"}
+                className="flex items-center gap-1 text-foreground hover:text-primary transition-colors group"
+                onClick={onClose}
+              >
+                <span>{order.assetName}</span>
+                <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              </Link>
               <span className={`text-sm font-normal ${
                 order.orderType === "buy" ? "text-emerald-600" : "text-rose-500"
               }`}>
