@@ -224,7 +224,7 @@ export const SignatureDealAudience = () => {
               {/* Content */}
               <div className="relative z-10 text-center">
                 <motion.p 
-                  className="text-white/40 text-lg md:text-xl mb-3 font-light"
+                  className="text-white/40 text-xl md:text-2xl mb-4 font-light"
                   initial={{ opacity: 0 }}
                   animate={isInView ? { opacity: 1 } : {}}
                   transition={{ delay: 1 }}
@@ -232,16 +232,16 @@ export const SignatureDealAudience = () => {
                   If you have a valuable asset or a strong brand —
                 </motion.p>
                 <motion.p 
-                  className="text-xl md:text-2xl font-light text-white"
+                  className="text-2xl md:text-3xl lg:text-4xl font-light text-white leading-snug"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                   initial={{ opacity: 0 }}
                   animate={isInView ? { opacity: 1 } : {}}
                   transition={{ delay: 1.1 }}
                 >
                   your community{' '}
-                  <span className="relative inline-block">
+                  <span className="relative inline-block pb-1">
                     <span 
-                      className="font-signature italic"
+                      className="font-signature italic text-3xl md:text-4xl lg:text-5xl"
                       style={{
                         background: 'linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #8b5cf6 100%)',
                         WebkitBackgroundClip: 'text',
@@ -253,7 +253,7 @@ export const SignatureDealAudience = () => {
                     </span>
                     {/* Underline animation */}
                     <motion.span 
-                      className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-violet-400 to-violet-300"
+                      className="absolute -bottom-0.5 left-0 right-0 h-px bg-gradient-to-r from-violet-400 to-violet-300"
                       initial={{ scaleX: 0 }}
                       animate={isInView ? { scaleX: 1 } : {}}
                       transition={{ delay: 1.3, duration: 0.6 }}
