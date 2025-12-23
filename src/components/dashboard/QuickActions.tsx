@@ -35,29 +35,41 @@ export const QuickActions = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6 }}
-      className="bg-card rounded-xl border border-border p-5 shadow-sm"
+      className="rounded-2xl border border-border bg-card p-6 shadow-sm"
     >
-      <h3 className="text-sm font-semibold text-foreground mb-4">Quick Actions</h3>
-      
-      <div className="grid grid-cols-2 gap-3">
+      <h3 className="mb-4 text-sm font-semibold text-foreground">Quick Actions</h3>
+
+      <div className="grid grid-cols-2 gap-4">
         {actions.map((action, index) => {
           const Icon = action.icon;
           return (
             <motion.div
               key={action.label}
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.65 + index * 0.05 }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.99 }}
+              className="h-full"
             >
               <Link
                 to={action.href}
-                className="group flex flex-col p-3 rounded-lg border border-border hover:border-primary/30 hover:bg-accent hover:shadow-sm transition-all duration-200"
+                className="group flex h-full min-h-[124px] flex-col rounded-xl border border-border/70 bg-card p-4 shadow-sm transition-all duration-200 hover:border-primary/30 hover:bg-accent/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center mb-2 group-hover:bg-primary/10 transition-colors">
-                  <Icon className="w-4 h-4 text-primary" strokeWidth={1.75} />
+                <div className="flex items-start justify-between">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/10 transition-colors group-hover:bg-primary/15">
+                    <Icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  </div>
                 </div>
-                <p className="font-medium text-sm text-foreground">{action.label}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">{action.description}</p>
+
+                <div className="mt-3 space-y-1">
+                  <p className="text-base font-medium leading-tight text-foreground">
+                    {action.label}
+                  </p>
+                  <p className="text-sm leading-tight text-muted-foreground">
+                    {action.description}
+                  </p>
+                </div>
               </Link>
             </motion.div>
           );
@@ -66,3 +78,4 @@ export const QuickActions = () => {
     </motion.div>
   );
 };
+
