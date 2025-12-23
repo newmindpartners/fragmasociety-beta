@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingUp, Wallet, BarChart3, Target } from "lucide-react";
+import { TrendingUp, Wallet, BarChart3, Target, ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 const stats = [
   {
@@ -8,8 +8,9 @@ const stats = [
     value: "€0",
     change: "+0%",
     positive: true,
-    color: "from-emerald-500/10 to-emerald-500/5",
-    iconColor: "text-emerald-500",
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+    badgeBg: "bg-emerald-50 text-emerald-600",
   },
   {
     icon: Wallet,
@@ -17,8 +18,9 @@ const stats = [
     value: "€0",
     change: "Ready to invest",
     positive: true,
-    color: "from-primary/10 to-primary/5",
-    iconColor: "text-primary",
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-600",
+    badgeBg: "bg-violet-50 text-violet-600",
   },
   {
     icon: BarChart3,
@@ -26,8 +28,9 @@ const stats = [
     value: "0",
     change: "0 pending",
     positive: true,
-    color: "from-accent/10 to-accent/5",
-    iconColor: "text-accent",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+    badgeBg: "bg-blue-50 text-blue-600",
   },
   {
     icon: Target,
@@ -35,8 +38,9 @@ const stats = [
     value: "—",
     change: "Target: 15-25%",
     positive: true,
-    color: "from-amber-500/10 to-amber-500/5",
-    iconColor: "text-amber-500",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-600",
+    badgeBg: "bg-amber-50 text-amber-600",
   },
 ];
 
@@ -50,41 +54,25 @@ export const DashboardStats = () => {
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + index * 0.1 }}
-            whileHover={{ y: -2, boxShadow: "0 10px 40px -10px rgba(0,0,0,0.1)" }}
-            className="group relative bg-white rounded-2xl border border-slate-200/60 p-5 overflow-hidden cursor-pointer transition-all duration-300"
+            transition={{ delay: 0.05 + index * 0.05 }}
+            className="group relative bg-white rounded-2xl border border-slate-200/60 p-5 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300"
           >
-            {/* Gradient background */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-            
             {/* Content */}
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-4">
-                <motion.div 
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}
-                >
-                  <Icon className={`w-5 h-5 ${stat.iconColor}`} strokeWidth={1.5} />
-                </motion.div>
-                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                  stat.positive ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"
-                }`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className={`w-10 h-10 rounded-xl ${stat.iconBg} flex items-center justify-center`}>
+                  <Icon className={`w-5 h-5 ${stat.iconColor}`} strokeWidth={1.75} />
+                </div>
+                <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full ${stat.badgeBg}`}>
                   {stat.change}
                 </span>
               </div>
 
               <div>
-                <p className="text-sm text-slate-500 mb-1">{stat.label}</p>
-                <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+                <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">{stat.label}</p>
+                <p className="text-2xl font-bold text-slate-900 tracking-tight">{stat.value}</p>
               </div>
             </div>
-
-            {/* Hover decoration */}
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              whileHover={{ scale: 1, opacity: 0.1 }}
-              className={`absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-gradient-to-br ${stat.color.replace('/10', '/30').replace('/5', '/20')}`}
-            />
           </motion.div>
         );
       })}
