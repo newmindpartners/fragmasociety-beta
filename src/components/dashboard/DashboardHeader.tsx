@@ -207,8 +207,7 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
           </span>
           <Button 
             size="sm" 
-            variant="secondary"
-            className="rounded-full h-7 px-4 text-xs font-medium group bg-primary/20 hover:bg-primary/30 text-primary border-0"
+            className="rounded-full h-7 px-4 text-xs font-medium group bg-primary hover:bg-primary/90 text-white"
           >
             <Wallet className="w-3 h-3 mr-1.5" />
             Connect Wallet
