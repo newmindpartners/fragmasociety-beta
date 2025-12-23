@@ -166,7 +166,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                 <>
                   <Button asChild size="lg" className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-14 text-sm font-medium">
                     <Link to="/auth">
-                      Register to View Details
+                      Register Your Interest
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Link>
                   </Button>
