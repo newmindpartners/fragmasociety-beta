@@ -195,7 +195,7 @@ export const SignatureDealHero = () => {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="flex flex-wrap items-center gap-4"
             >
-              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-14 text-sm font-medium bg-transparent">
+              <Button size="lg" className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-14 text-sm font-medium">
                 <Play className="w-4 h-4 mr-2" fill="currentColor" />
                 Book a Strategy Call
               </Button>
