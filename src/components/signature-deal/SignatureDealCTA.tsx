@@ -105,52 +105,47 @@ export const SignatureDealCTA = () => {
             and open it to investors worldwide.
           </motion.p>
 
-          {/* Email Capture Form */}
-          <motion.form
+          {/* CTAs Row - Email form + Book a Call */}
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-8"
+            className="flex flex-col lg:flex-row gap-4 max-w-3xl mx-auto mb-8 items-stretch"
           >
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 h-14 px-5 bg-white/[0.08] border-white/10 text-white placeholder:text-white/30 
-                rounded-sm backdrop-blur-sm
-                focus:border-white/30 focus:ring-0 focus:bg-white/[0.12]
-                transition-all duration-300"
-              required
-            />
-            <Button 
-              type="submit"
-              size="lg"
-              disabled={isSubmitting}
-              className="h-14 px-8 bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/15
-                rounded-sm backdrop-blur-sm font-medium tracking-wide
-                hover:border-white/30 transition-all duration-300
-                disabled:opacity-50"
-            >
-              {isSubmitting ? (
-                "Sending..."
-              ) : (
-                <>
-                  Get Started
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </>
-              )}
-            </Button>
-          </motion.form>
+            {/* Email Capture Form */}
+            <form onSubmit={handleSubmit} className="flex flex-1 gap-3">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 h-14 px-5 bg-white/[0.08] border-white/10 text-white placeholder:text-white/30 
+                  rounded-sm backdrop-blur-sm
+                  focus:border-white/30 focus:ring-0 focus:bg-white/[0.12]
+                  transition-all duration-300"
+                required
+              />
+              <Button 
+                type="submit"
+                size="lg"
+                disabled={isSubmitting}
+                className="h-14 px-8 bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/15
+                  rounded-sm backdrop-blur-sm font-medium tracking-wide
+                  hover:border-white/30 transition-all duration-300
+                  disabled:opacity-50"
+              >
+                {isSubmitting ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    Get Started
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </>
+                )}
+              </Button>
+            </form>
 
-          {/* Book a Call CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mb-8"
-          >
+            {/* Book a Call CTA */}
             <Button 
               size="lg"
               className="h-14 px-10 bg-white hover:bg-white/90 text-slate-900
