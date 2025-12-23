@@ -66,20 +66,21 @@ export const OrderDetailsModal = ({
     ? Math.round((order.filledTokens / order.tokens) * 100) 
     : order.status === "completed" ? 100 : 0;
 
+  const isBuy = order.orderType === "buy";
+  const colorClasses = isBuy 
+    ? { bg: "bg-emerald-500/10", border: "border-emerald-500/20", text: "text-emerald-600", bgLight: "bg-emerald-50", borderLight: "border-emerald-200" }
+    : { bg: "bg-rose-500/10", border: "border-rose-500/20", text: "text-rose-500", bgLight: "bg-rose-50", borderLight: "border-rose-200" };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="theme-dashboard sm:max-w-md bg-card border-border">
+      <DialogContent className="theme-dashboard sm:max-w-md bg-card border-2 border-primary/30 shadow-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-              order.orderType === "buy" 
-                ? "bg-emerald-100" 
-                : "bg-rose-100"
-            }`}>
-              {order.orderType === "buy" ? (
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${colorClasses.bg} ${colorClasses.border} border`}>
+              {isBuy ? (
+                <TrendingUp className="w-6 h-6 text-emerald-600" />
               ) : (
-                <TrendingDown className="w-5 h-5 text-rose-500" />
+                <TrendingDown className="w-6 h-6 text-rose-500" />
               )}
             </div>
             <div className="flex-1">
@@ -88,13 +89,11 @@ export const OrderDetailsModal = ({
                 className="flex items-center gap-1 text-foreground hover:text-primary transition-colors group"
                 onClick={onClose}
               >
-                <span>{order.assetName}</span>
+                <span className="font-semibold">{order.assetName}</span>
                 <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
               </Link>
-              <span className={`text-sm font-normal ${
-                order.orderType === "buy" ? "text-emerald-600" : "text-rose-500"
-              }`}>
-                {order.orderType === "buy" ? "Buy Order" : "Sell Order"}
+              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold mt-1 ${colorClasses.bg} ${colorClasses.text} border ${colorClasses.border}`}>
+                {isBuy ? "Buy Order" : "Sell Order"}
               </span>
             </div>
           </DialogTitle>
@@ -102,64 +101,64 @@ export const OrderDetailsModal = ({
 
         <div className="space-y-4 mt-4">
           {/* Status */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/30 border border-border/50">
             <span className="text-sm text-muted-foreground">Status</span>
             {getStatusBadge(order.status)}
           </div>
 
           {/* Order Details Grid */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-lg bg-secondary/50 border border-border/50">
+            <div className="p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors">
               <div className="flex items-center gap-2 text-muted-foreground mb-1">
                 <Hash className="w-3.5 h-3.5" />
                 <span className="text-xs">Order ID</span>
               </div>
-              <p className="font-mono text-sm font-medium text-foreground">#{order.id}</p>
+              <p className="font-mono text-sm font-semibold text-foreground">#{order.id}</p>
             </div>
 
-            <div className="p-3 rounded-lg bg-secondary/50 border border-border/50">
+            <div className="p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors">
               <div className="flex items-center gap-2 text-muted-foreground mb-1">
                 <Tag className="w-3.5 h-3.5" />
                 <span className="text-xs">Asset Type</span>
               </div>
-              <p className="text-sm font-medium text-foreground">{order.assetType}</p>
+              <p className="text-sm font-semibold text-foreground">{order.assetType}</p>
             </div>
 
-            <div className="p-3 rounded-lg bg-secondary/50 border border-border/50">
+            <div className="p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors">
               <div className="flex items-center gap-2 text-muted-foreground mb-1">
                 <Coins className="w-3.5 h-3.5" />
                 <span className="text-xs">Tokens</span>
               </div>
-              <p className="text-sm font-medium text-foreground">{order.tokens} tokens</p>
+              <p className="text-sm font-semibold text-foreground">{order.tokens} tokens</p>
             </div>
 
-            <div className="p-3 rounded-lg bg-secondary/50 border border-border/50">
+            <div className={`p-3 rounded-xl border ${colorClasses.bg} ${colorClasses.border}`}>
               <div className="flex items-center gap-2 text-muted-foreground mb-1">
                 <Tag className="w-3.5 h-3.5" />
                 <span className="text-xs">Price/Token</span>
               </div>
-              <p className="text-sm font-medium text-foreground">{order.pricePerToken}</p>
+              <p className={`text-sm font-bold ${colorClasses.text}`}>{order.pricePerToken}</p>
             </div>
           </div>
 
           {/* Total Value */}
-          <div className="p-4 rounded-lg bg-muted/50 border border-border">
+          <div className={`p-4 rounded-xl border-2 ${colorClasses.bg} ${colorClasses.border}`}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Total Value</span>
-              <span className="text-lg font-bold text-foreground">{order.totalValue}</span>
+              <span className="text-sm font-medium text-muted-foreground">Total Value</span>
+              <span className={`text-xl font-bold ${colorClasses.text}`}>{order.totalValue}</span>
             </div>
           </div>
 
           {/* Fill Progress (for active/partial orders) */}
           {(order.status === "active" || order.status === "partial") && (
-            <div className="space-y-2">
+            <div className="space-y-2 p-3 rounded-xl bg-secondary/30 border border-border/50">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Fill Progress</span>
-                <span className="font-medium text-foreground">{filledPercentage}%</span>
+                <span className={`font-bold ${colorClasses.text}`}>{filledPercentage}%</span>
               </div>
-              <div className="h-2 rounded-full bg-muted overflow-hidden">
+              <div className="h-2.5 rounded-full bg-muted overflow-hidden">
                 <div 
-                  className="h-full rounded-full bg-primary transition-all duration-300"
+                  className={`h-full rounded-full transition-all duration-300 ${isBuy ? "bg-emerald-500" : "bg-rose-500"}`}
                   style={{ width: `${filledPercentage}%` }}
                 />
               </div>
