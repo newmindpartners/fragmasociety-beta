@@ -2,7 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import ctaBg from "@/assets/signature-deal-cta-bg.jpg";
@@ -143,6 +143,26 @@ export const SignatureDealCTA = () => {
               )}
             </Button>
           </motion.form>
+
+          {/* Book a Call CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="mb-8"
+          >
+            <Button 
+              variant="outline"
+              size="lg"
+              className="h-14 px-10 bg-transparent hover:bg-white/[0.08] text-white/70 hover:text-white 
+                border border-white/20 hover:border-white/40
+                rounded-sm font-medium tracking-wide
+                transition-all duration-300"
+            >
+              <Phone className="mr-3 w-4 h-4" />
+              Book a Strategy Call
+            </Button>
+          </motion.div>
 
           {/* Privacy note */}
           <motion.p
