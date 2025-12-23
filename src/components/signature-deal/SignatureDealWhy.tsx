@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { 
   Palette, 
   Shield, 
@@ -9,9 +9,9 @@ import {
   ArrowLeftRight, 
   Headphones,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  CheckCircle2
 } from "lucide-react";
-import advantageBg from "@/assets/signature-deal-advantage-bg.jpg";
 
 const reasons = [
   {
@@ -19,282 +19,44 @@ const reasons = [
     title: "A deal crafted with you",
     subtitle: "Not copied from templates",
     description: "We co-create a bespoke investment product around your asset, brand, and story. Every detail is engineered for investor trust and long-term value.",
-    graphic: "craft", // Pen/brush strokes
   },
   {
     icon: Shield,
     title: "Institutional-grade structuring",
     subtitle: "Luxembourg compliance",
     description: "Regulated Luxembourg or partner frameworks ensure compliance, transparency, and cross-border investment access.",
-    graphic: "shield", // Shield layers
   },
   {
     icon: Crown,
     title: "Premium investor experience",
     subtitle: "Luxury-grade interface",
     description: "Your deal is showcased in a luxury-grade interface that elevates your brand and positions your project as a true investment product.",
-    graphic: "crown", // Crown sparkles
   },
   {
     icon: Users,
     title: "Community activation",
     subtitle: "Fans become co-investors",
     description: "Transform your followers, fans, or customers into co-investors who care about your success.",
-    graphic: "community", // Connected nodes
   },
   {
     icon: Zap,
     title: "Automated earnings",
     subtitle: "Smart contract distributions",
     description: "Yields, royalty flows, or revenues are distributed automatically through smart contracts.",
-    graphic: "lightning", // Energy bolts
   },
   {
     icon: ArrowLeftRight,
     title: "Secondary-market liquidity",
     subtitle: "Trade on our marketplace",
     description: "Your investors can trade their ownership on our decentralized marketplace — increasing attractiveness and long-term engagement.",
-    graphic: "exchange", // Flow arrows
   },
   {
     icon: Headphones,
     title: "Full-service support",
     subtitle: "End-to-end partnership",
     description: "Structuring, design, web experience, legal setup, tokenization, distribution, compliance, marketing… We handle everything.",
-    graphic: "support", // Circular support
   }
 ];
-
-// Custom graphics for each card
-const CardGraphic = ({ type }: { type: string }) => {
-  const baseClass = "absolute right-4 top-4 w-32 h-32 opacity-20";
-  
-  switch (type) {
-    case "craft":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          <motion.path
-            d="M20 80 Q 40 20 60 50 T 90 30"
-            stroke="url(#turquoise)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-          />
-          <motion.circle
-            cx="85" cy="25" r="8"
-            fill="url(#turquoise)"
-            initial={{ scale: 0 }}
-            animate={{ scale: [0, 1, 0.8] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <defs>
-            <linearGradient id="turquoise" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00CED1" />
-              <stop offset="100%" stopColor="#20B2AA" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    case "shield":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          <motion.path
-            d="M50 10 L80 25 L80 55 Q80 80 50 95 Q20 80 20 55 L20 25 Z"
-            stroke="url(#turquoise2)"
-            strokeWidth="2"
-            fill="none"
-            initial={{ opacity: 0.3 }}
-            animate={{ opacity: [0.3, 0.8, 0.3] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          <motion.path
-            d="M50 25 L65 35 L65 50 Q65 65 50 75 Q35 65 35 50 L35 35 Z"
-            fill="url(#turquoise2)"
-            initial={{ scale: 0.8 }}
-            animate={{ scale: [0.8, 1, 0.8] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <defs>
-            <linearGradient id="turquoise2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00CED1" />
-              <stop offset="100%" stopColor="#008B8B" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    case "crown":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          <motion.path
-            d="M15 70 L25 35 L40 50 L50 20 L60 50 L75 35 L85 70 Z"
-            stroke="url(#turquoise3)"
-            strokeWidth="2"
-            fill="url(#turquoise3)"
-            fillOpacity="0.3"
-            initial={{ y: 5 }}
-            animate={{ y: [5, -5, 5] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          {[25, 50, 75].map((x, i) => (
-            <motion.circle
-              key={i}
-              cx={x} cy={15 + i * 5}
-              r="3"
-              fill="#00CED1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 1.5, delay: i * 0.3, repeat: Infinity }}
-            />
-          ))}
-          <defs>
-            <linearGradient id="turquoise3" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#40E0D0" />
-              <stop offset="100%" stopColor="#00CED1" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    case "community":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          {[[50, 30], [25, 55], [75, 55], [35, 80], [65, 80]].map(([cx, cy], i) => (
-            <motion.circle
-              key={i}
-              cx={cx} cy={cy}
-              r="10"
-              stroke="url(#turquoise4)"
-              strokeWidth="2"
-              fill="url(#turquoise4)"
-              fillOpacity="0.2"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: [0.8, 1.1, 0.8] }}
-              transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
-            />
-          ))}
-          <motion.line x1="50" y1="40" x2="35" y2="55" stroke="#00CED1" strokeWidth="1" />
-          <motion.line x1="50" y1="40" x2="65" y2="55" stroke="#00CED1" strokeWidth="1" />
-          <motion.line x1="25" y1="65" x2="35" y2="70" stroke="#00CED1" strokeWidth="1" />
-          <motion.line x1="75" y1="65" x2="65" y2="70" stroke="#00CED1" strokeWidth="1" />
-          <defs>
-            <linearGradient id="turquoise4" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00CED1" />
-              <stop offset="100%" stopColor="#20B2AA" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    case "lightning":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          <motion.path
-            d="M55 10 L35 45 L50 45 L45 90 L70 50 L55 50 Z"
-            fill="url(#turquoise5)"
-            initial={{ opacity: 0.5 }}
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
-          />
-          {[1, 2, 3].map((_, i) => (
-            <motion.circle
-              key={i}
-              cx={30 + i * 20}
-              cy={70 + i * 5}
-              r="4"
-              fill="#00CED1"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: [0, 1, 0], scale: [0, 1, 0] }}
-              transition={{ duration: 1, delay: i * 0.3, repeat: Infinity }}
-            />
-          ))}
-          <defs>
-            <linearGradient id="turquoise5" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#40E0D0" />
-              <stop offset="100%" stopColor="#00CED1" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    case "exchange":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          <motion.path
-            d="M20 35 L70 35"
-            stroke="url(#turquoise6)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            initial={{ x: -10 }}
-            animate={{ x: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <motion.path
-            d="M60 25 L75 35 L60 45"
-            stroke="url(#turquoise6)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-          <motion.path
-            d="M80 65 L30 65"
-            stroke="url(#turquoise6)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            initial={{ x: 10 }}
-            animate={{ x: [0, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <motion.path
-            d="M40 55 L25 65 L40 75"
-            stroke="url(#turquoise6)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-          <defs>
-            <linearGradient id="turquoise6" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00CED1" />
-              <stop offset="100%" stopColor="#20B2AA" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    case "support":
-      return (
-        <svg className={baseClass} viewBox="0 0 100 100" fill="none">
-          <motion.circle
-            cx="50" cy="50" r="35"
-            stroke="url(#turquoise7)"
-            strokeWidth="2"
-            fill="none"
-            strokeDasharray="10 5"
-            initial={{ rotate: 0 }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            style={{ originX: "50px", originY: "50px" }}
-          />
-          <motion.circle
-            cx="50" cy="50" r="20"
-            fill="url(#turquoise7)"
-            fillOpacity="0.3"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: [0.9, 1.1, 0.9] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <circle cx="50" cy="50" r="8" fill="#00CED1" />
-          <defs>
-            <linearGradient id="turquoise7" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#40E0D0" />
-              <stop offset="100%" stopColor="#008B8B" />
-            </linearGradient>
-          </defs>
-        </svg>
-      );
-    default:
-      return null;
-  }
-};
 
 export const SignatureDealWhy = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -322,14 +84,16 @@ export const SignatureDealWhy = () => {
   const CurrentIcon = currentReason.icon;
 
   return (
-    <section className="py-32 relative overflow-hidden" ref={containerRef}>
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${advantageBg})` }}
-      />
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-background/60" />
+    <section className="py-32 relative overflow-hidden section-light-mesh" ref={containerRef}>
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
+      
+      {/* Subtle pattern */}
+      <div className="absolute inset-0 opacity-30" style={{
+        backgroundImage: 'radial-gradient(hsl(var(--primary) / 0.08) 1px, transparent 1px)',
+        backgroundSize: '32px 32px'
+      }} />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
@@ -338,150 +102,227 @@ export const SignatureDealWhy = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <span className="text-white/50 font-medium text-sm tracking-wider uppercase mb-4 block">
+          <span className="inline-block px-5 py-2.5 mb-6 text-xs font-bold tracking-[0.25em] uppercase rounded-full bg-primary/10 text-primary border border-primary/20">
             The Fragma Advantage
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-light-primary mb-6">
             Why launch your signature deal
             <br />
             <span className="text-gradient">
               with Fragma?
             </span>
           </h2>
+          <p className="text-lg text-light-muted max-w-2xl mx-auto">
+            Everything you need to transform your vision into a world-class investment opportunity
+          </p>
         </motion.div>
 
-        {/* Card Carousel */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative max-w-3xl mx-auto"
-          onMouseEnter={() => setIsAutoPlaying(false)}
-          onMouseLeave={() => setIsAutoPlaying(true)}
-        >
-          {/* Main Card */}
-          <div className="relative h-[380px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, scale: 1.02, filter: "blur(10px)" }}
-                transition={{ 
-                  duration: 0.6, 
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                className="absolute inset-0"
-              >
-                {/* Glass Card */}
-                <div className="relative h-full p-10 md:p-12 rounded-3xl overflow-hidden
-                  bg-white/[0.03] backdrop-blur-3xl
-                  border border-white/[0.08]
-                  shadow-[0_8px_60px_-15px_rgba(0,206,209,0.15),inset_0_1px_0_rgba(255,255,255,0.05)]
-                ">
-                  {/* Turquoise spotlight gradient */}
-                  <div className="absolute -top-20 -right-20 w-80 h-80 bg-gradient-to-br from-cyan-500/20 via-teal-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-gradient-to-tr from-teal-500/10 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-                  
-                  {/* Subtle inner glow */}
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
-                  
-                  {/* Card Graphic */}
-                  <CardGraphic type={currentReason.graphic} />
-                  
-                  {/* Content */}
-                  <div className="relative z-10 h-full flex flex-col">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-8">
-                      {/* Icon */}
-                      <motion.div 
-                        className="relative"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.2, duration: 0.4 }}
+        {/* Two Column Layout */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
+          
+          {/* Left - Card Carousel */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+          >
+            {/* Main Card */}
+            <div className="relative h-[420px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ 
+                    duration: 0.5, 
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
+                  className="absolute inset-0"
+                >
+                  {/* Glass Card */}
+                  <div className="relative h-full p-10 rounded-3xl overflow-hidden glass-light">
+                    {/* Decorative gradient spots */}
+                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-primary/10 to-accent/5 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-accent/10 to-primary/5 rounded-full blur-3xl pointer-events-none" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 h-full flex flex-col">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-8">
+                        {/* Icon */}
+                        <motion.div 
+                          className="relative"
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.2, duration: 0.4 }}
+                        >
+                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
+                            <CurrentIcon className="w-7 h-7 text-white" />
+                          </div>
+                        </motion.div>
+                        
+                        {/* Number */}
+                        <motion.span 
+                          className="text-7xl font-bold text-primary/15"
+                          style={{ fontFamily: "'Playfair Display', serif" }}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3, duration: 0.4 }}
+                        >
+                          0{currentIndex + 1}
+                        </motion.span>
+                      </div>
+
+                      {/* Text Content */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25, duration: 0.5 }}
+                        className="flex-1"
                       >
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/10 backdrop-blur-xl border border-cyan-500/20 flex items-center justify-center">
-                          <CurrentIcon className="w-7 h-7 text-cyan-400" />
-                        </div>
-                        {/* Icon glow */}
-                        <div className="absolute inset-0 bg-cyan-500/30 rounded-2xl blur-xl opacity-50" />
+                        <h3 className="text-2xl md:text-3xl font-semibold text-light-primary mb-2">
+                          {currentReason.title}
+                        </h3>
+                        <p className="text-sm font-semibold text-primary mb-5 uppercase tracking-wide">
+                          {currentReason.subtitle}
+                        </p>
+                        <p className="text-light-muted text-base md:text-lg leading-relaxed">
+                          {currentReason.description}
+                        </p>
                       </motion.div>
                       
-                      {/* Number */}
-                      <motion.span 
-                        className="text-7xl font-bold bg-gradient-to-b from-cyan-500/20 to-transparent bg-clip-text text-transparent"
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.4 }}
-                      >
-                        0{currentIndex + 1}
-                      </motion.span>
+                      {/* Bottom accent line */}
+                      <motion.div 
+                        className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent rounded-full"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 0.4, duration: 0.6 }}
+                      />
                     </div>
-
-                    {/* Text Content */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.25, duration: 0.5 }}
-                      className="flex-1"
-                    >
-                      <h3 className="text-2xl md:text-3xl font-semibold text-white mb-2">
-                        {currentReason.title}
-                      </h3>
-                      <p className="text-sm font-medium text-cyan-400/80 mb-5 uppercase tracking-wide">
-                        {currentReason.subtitle}
-                      </p>
-                      <p className="text-white/50 text-base md:text-lg leading-relaxed max-w-lg">
-                        {currentReason.description}
-                      </p>
-                    </motion.div>
-                    
-                    {/* Bottom accent line */}
-                    <motion.div 
-                      className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ delay: 0.4, duration: 0.6 }}
-                    />
                   </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-6 mt-10">
-            <button
-              onClick={() => paginate(-1)}
-              className="w-12 h-12 rounded-full bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex items-center justify-center text-white/50 hover:text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            {/* Dot indicators */}
-            <div className="flex gap-2">
-              {reasons.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`h-1.5 rounded-full transition-all duration-500 ${
-                    currentIndex === index 
-                      ? "w-10 bg-gradient-to-r from-cyan-400 to-teal-400" 
-                      : "w-1.5 bg-white/20 hover:bg-cyan-400/40"
-                  }`}
-                />
-              ))}
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            <button
-              onClick={() => paginate(1)}
-              className="w-12 h-12 rounded-full bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex items-center justify-center text-white/50 hover:text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+            {/* Navigation */}
+            <div className="flex items-center justify-center gap-6 mt-8">
+              <button
+                onClick={() => paginate(-1)}
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 shadow-sm"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+
+              {/* Dot indicators */}
+              <div className="flex gap-2">
+                {reasons.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-500 ${
+                      currentIndex === index 
+                        ? "w-10 bg-gradient-to-r from-primary to-accent" 
+                        : "w-2 bg-slate-300 hover:bg-primary/40"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={() => paginate(1)}
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 shadow-sm"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Right - All Benefits List */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="space-y-4"
+          >
+            {reasons.map((reason, index) => {
+              const Icon = reason.icon;
+              const isActive = index === currentIndex;
+              
+              return (
+                <motion.button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 * index }}
+                  className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
+                    isActive 
+                      ? "bg-white border-primary/30 shadow-lg shadow-primary/10" 
+                      : "bg-white/50 border-slate-200/60 hover:bg-white hover:border-slate-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                      isActive 
+                        ? "bg-gradient-to-br from-primary to-accent" 
+                        : "bg-slate-100"
+                    }`}>
+                      <Icon className={`w-5 h-5 transition-colors ${
+                        isActive ? "text-white" : "text-slate-500"
+                      }`} />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <h4 className={`font-semibold transition-colors ${
+                        isActive ? "text-light-primary" : "text-slate-600"
+                      }`}>
+                        {reason.title}
+                      </h4>
+                      <p className={`text-sm transition-colors ${
+                        isActive ? "text-primary" : "text-slate-400"
+                      }`}>
+                        {reason.subtitle}
+                      </p>
+                    </div>
+                    
+                    {isActive && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-primary" />
+                      </motion.div>
+                    )}
+                  </div>
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        </div>
+
+        {/* Bottom Trust Statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="mt-20 text-center"
+        >
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full border border-slate-200 shadow-sm">
+            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-accent animate-pulse" />
+            <span className="text-light-muted">
+              Trusted by <span className="text-light-primary font-semibold">15+ industry leaders</span> across Film, Music, Real Estate & more
+            </span>
           </div>
         </motion.div>
       </div>
