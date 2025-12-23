@@ -224,9 +224,13 @@ export const OpenTransactions = () => {
                       <span className="text-xs text-muted-foreground">
                         {order.tokens} tokens @
                       </span>
-                      <span className="text-xs font-bold text-foreground">{order.pricePerToken}</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-secondary text-xs font-bold text-foreground border border-border">
+                        {order.pricePerToken}
+                      </span>
                       <span className="text-xs text-muted-foreground">•</span>
-                      <span className="text-sm font-bold text-primary">{order.totalValue}</span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-primary/10 text-sm font-bold text-primary border border-primary/20">
+                        {order.totalValue}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-[10px] text-muted-foreground">{order.assetType}</span>
