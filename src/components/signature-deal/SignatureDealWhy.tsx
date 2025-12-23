@@ -110,7 +110,7 @@ export const SignatureDealWhy = () => {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-light-primary mb-6">
             Why launch your signature deal
             <br />
-            <span className="text-gradient">
+            <span className="text-primary">
               with Fragma?
             </span>
           </h2>
@@ -163,7 +163,7 @@ export const SignatureDealWhy = () => {
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ delay: 0.2, duration: 0.4 }}
                         >
-                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
+                        <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/25">
                             <CurrentIcon className="w-7 h-7 text-white" />
                           </div>
                         </motion.div>
@@ -200,7 +200,7 @@ export const SignatureDealWhy = () => {
                       
                       {/* Bottom accent line */}
                       <motion.div 
-                        className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent rounded-full"
+                        className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ delay: 0.4, duration: 0.6 }}
@@ -228,7 +228,7 @@ export const SignatureDealWhy = () => {
                     onClick={() => setCurrentIndex(index)}
                     className={`h-2 rounded-full transition-all duration-500 ${
                       currentIndex === index 
-                        ? "w-10 bg-gradient-to-r from-primary to-accent" 
+                        ? "w-10 bg-primary"
                         : "w-2 bg-slate-300 hover:bg-primary/40"
                     }`}
                   />
@@ -273,7 +273,7 @@ export const SignatureDealWhy = () => {
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
                       isActive 
-                        ? "bg-gradient-to-br from-primary to-accent" 
+                        ? "bg-primary"
                         : "bg-slate-100"
                     }`}>
                       <Icon className={`w-5 h-5 transition-colors ${
@@ -319,7 +319,7 @@ export const SignatureDealWhy = () => {
           className="mt-20 text-center"
         >
           <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full border border-slate-200 shadow-sm">
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-accent animate-pulse" />
+            <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
             <span className="text-light-muted">
               Trusted by <span className="text-light-primary font-semibold">15+ industry leaders</span> across Film, Music, Real Estate & more
             </span>
