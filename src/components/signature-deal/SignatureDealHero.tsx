@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Sparkles, Users, Award, Briefcase, Trophy, Gem, TrendingUp, Music, Film, Building2, Palette } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Crown, Diamond, Star, Trophy, Gem, TrendingUp, Music, Film, Building2, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -65,12 +65,6 @@ const industries = [
   }
 ];
 
-const steps = [
-  { number: "01", label: "Define", desc: "Your vision & asset" },
-  { number: "02", label: "Structure", desc: "Compliant tokenization" },
-  { number: "03", label: "Launch", desc: "To your audience" },
-];
-
 export const SignatureDealHero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -84,174 +78,246 @@ export const SignatureDealHero = () => {
   const activeIndustry = industries[activeIndex];
 
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      {/* Full-screen sliding background images */}
+    <section className="relative min-h-screen overflow-hidden bg-[#0a0a0f]">
+      {/* Full-screen sliding background images with Ken Burns */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 1.15 }}
+          animate={{ opacity: 1, scale: 1.05 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <img 
+          <motion.img 
             src={activeIndustry.image} 
             alt="" 
             className="w-full h-full object-cover"
+            animate={{ scale: [1.05, 1.1] }}
+            transition={{ duration: 8, ease: "linear" }}
           />
         </motion.div>
       </AnimatePresence>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
-
-      {/* Subtle animated gradient accent */}
+      {/* Luxury gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
+      
+      {/* Premium gold/warm accent glow */}
       <motion.div 
-        className="absolute bottom-0 left-0 w-full h-1/2 opacity-30"
-        style={{ background: 'linear-gradient(to top, hsl(262 84% 64% / 0.2), transparent)' }}
-        animate={{ opacity: [0.2, 0.35, 0.2] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-0 left-0 w-full h-2/3"
+        style={{ 
+          background: 'radial-gradient(ellipse at 30% 100%, rgba(212,175,55,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(139,92,246,0.06) 0%, transparent 40%)'
+        }}
+        animate={{ opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
 
+      {/* Luxury noise texture overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+        }}
+      />
+
+      {/* Decorative corner accents */}
+      <div className="absolute top-0 left-0 w-32 h-32">
+        <div className="absolute top-8 left-8 w-16 h-px bg-gradient-to-r from-amber-400/40 to-transparent" />
+        <div className="absolute top-8 left-8 w-px h-16 bg-gradient-to-b from-amber-400/40 to-transparent" />
+      </div>
+      <div className="absolute top-0 right-0 w-32 h-32">
+        <div className="absolute top-8 right-8 w-16 h-px bg-gradient-to-l from-amber-400/40 to-transparent" />
+        <div className="absolute top-8 right-8 w-px h-16 bg-gradient-to-b from-amber-400/40 to-transparent" />
+      </div>
+
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 min-h-screen flex items-center pt-24">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
+      <div className="relative z-10 container mx-auto px-6 lg:px-16 min-h-screen flex items-center pt-24">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
           
           {/* Left Content */}
           <div className="max-w-xl">
+            {/* Luxury badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-8"
+              transition={{ duration: 0.8 }}
+              className="mb-10"
             >
-              <span className="inline-flex items-center gap-3 px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase bg-white/5 backdrop-blur-sm text-white/80 border border-white/20 rounded-full">
-                <Sparkles className="w-3.5 h-3.5 text-primary" />
-                For Visionaries & Industry Leaders
+              <span className="inline-flex items-center gap-3 px-6 py-3 text-[9px] tracking-[0.35em] uppercase text-amber-200/90 border border-amber-400/20 bg-gradient-to-r from-amber-900/10 to-transparent backdrop-blur-sm">
+                <Diamond className="w-3 h-3 text-amber-400" />
+                Exclusive For Visionaries
+                <Diamond className="w-3 h-3 text-amber-400" />
               </span>
             </motion.div>
 
+            {/* Main headline */}
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-6"
+              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-8"
             >
               <span 
-                className="block text-5xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight text-white"
+                className="block text-5xl md:text-6xl lg:text-7xl font-extralight leading-[0.9] tracking-tight text-white/90"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Launch Your
               </span>
               <span 
-                className="block text-6xl md:text-7xl lg:text-8xl text-gradient mt-2"
-                style={{ fontFamily: "'Caveat', cursive", fontWeight: 600 }}
+                className="block text-6xl md:text-7xl lg:text-[5.5rem] mt-3"
+                style={{ 
+                  fontFamily: "'Caveat', cursive", 
+                  fontWeight: 500,
+                  background: 'linear-gradient(135deg, #c9a86c 0%, #f4d484 25%, #c9a86c 50%, #a67c52 75%, #c9a86c 100%)',
+                  backgroundSize: '200% auto',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
               >
-                Signature Deal
+                <motion.span
+                  animate={{ backgroundPosition: ['0% center', '200% center'] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  style={{ display: 'inline-block' }}
+                >
+                  Signature Deal
+                </motion.span>
               </span>
             </motion.h1>
+            
+            {/* Elegant divider */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="w-24 h-px bg-gradient-to-r from-amber-400/60 via-amber-300/40 to-transparent mb-8 origin-left"
+            />
             
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-lg text-white/50 mb-4 leading-relaxed max-w-md"
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-lg md:text-xl text-white/50 mb-4 leading-relaxed max-w-md font-light"
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Turn your vision, asset, or expertise into an investment loved by your audience.
+              Turn your vision, asset, or expertise into an investment 
+              <span className="text-amber-300/70 italic"> loved by your audience.</span>
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="text-base text-white/40 mb-10 leading-relaxed max-w-lg"
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="text-sm text-white/35 mb-12 leading-relaxed max-w-lg"
             >
-              We help industry leaders design, structure, and launch iconic investment deals — all powered by regulated, tokenized infrastructure.
+              We help industry leaders design, structure, and launch iconic investment deals — 
+              all powered by regulated, tokenized infrastructure.
             </motion.p>
 
+            {/* Luxury feature pills */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-wrap gap-3 mb-10"
+              transition={{ delay: 0.6 }}
+              className="flex flex-wrap gap-4 mb-12"
             >
               {[
-                { icon: Users, label: "Build Community" },
-                { icon: Award, label: "Elevate Your Brand" },
-                { icon: Briefcase, label: "Unlock Capital" },
+                { icon: Crown, label: "Elevate Your Brand" },
+                { icon: Star, label: "Build Legacy" },
+                { icon: Gem, label: "Unlock Capital" },
               ].map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-white/60"
+                  transition={{ delay: 0.7 + i * 0.1 }}
+                  className="flex items-center gap-3 px-5 py-3 border border-white/10 bg-white/[0.02] backdrop-blur-sm text-xs text-white/60 tracking-wide"
                 >
-                  <item.icon className="w-3.5 h-3.5" />
-                  {item.label}
+                  <item.icon className="w-4 h-4 text-amber-400/70" strokeWidth={1.5} />
+                  <span className="uppercase tracking-[0.15em]">{item.label}</span>
                 </motion.div>
               ))}
             </motion.div>
 
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-wrap items-center gap-4"
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="flex flex-wrap items-center gap-5"
             >
-              <Button asChild size="lg" className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-14 text-sm font-medium">
+              <Button 
+                asChild 
+                size="lg" 
+                className="bg-gradient-to-r from-amber-600 to-amber-500 text-black hover:from-amber-500 hover:to-amber-400 px-10 h-14 text-xs font-semibold tracking-[0.2em] uppercase border-0 shadow-xl shadow-amber-900/30"
+              >
                 <Link to="/auth">
                   Start Your Deal
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-4 h-4 ml-3" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-14 text-sm font-medium bg-transparent">
-                <Play className="w-4 h-4 mr-2" fill="currentColor" />
-                Book a Strategy Call
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/15 text-white/80 hover:bg-white/5 hover:border-white/25 px-8 h-14 text-xs tracking-[0.15em] uppercase bg-transparent backdrop-blur-sm"
+              >
+                <Play className="w-3.5 h-3.5 mr-3" fill="currentColor" />
+                Strategy Call
               </Button>
             </motion.div>
-
           </div>
           
-          {/* Right - Stunning Visual Showcase */}
+          {/* Right - Luxury Visual */}
           <motion.div 
             className="relative hidden lg:flex justify-center items-center"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
           >
-            <div className="relative w-[580px] h-[600px]">
+            <div className="relative w-[560px] h-[620px]">
               
-              {/* Decorative rings */}
+              {/* Elegant outer glow */}
               <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/5 rounded-full"
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] border border-dashed border-primary/20 rounded-full"
-              />
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] border border-white/10 rounded-full"
+                animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.02, 1] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full"
+                style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%)' }}
               />
 
-              {/* Floating industry icons */}
+              {/* Decorative diamond rings */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px]"
+              >
+                <div className="absolute inset-0 border border-amber-400/10 rounded-full" />
+                {[0, 90, 180, 270].map((angle, i) => (
+                  <div 
+                    key={i}
+                    className="absolute top-1/2 left-1/2 w-2 h-2"
+                    style={{ transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-240px)` }}
+                  >
+                    <Diamond className="w-2 h-2 text-amber-400/40" />
+                  </div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border border-dashed border-white/5 rounded-full"
+              />
+
+              {/* Floating industry cards */}
               {[
-                { angle: 0, delay: 0 },
-                { angle: 60, delay: 0.5 },
-                { angle: 120, delay: 1 },
-                { angle: 180, delay: 1.5 },
-                { angle: 240, delay: 2 },
-                { angle: 300, delay: 2.5 },
+                { angle: -30, delay: 0 },
+                { angle: 30, delay: 0.3 },
+                { angle: 150, delay: 0.6 },
+                { angle: 210, delay: 0.9 },
               ].map((item, i) => {
                 const industry = industries[i % industries.length];
-                const radius = 220;
+                const radius = 200;
                 const x = Math.cos((item.angle * Math.PI) / 180) * radius;
                 const y = Math.sin((item.angle * Math.PI) / 180) * radius;
                 
@@ -260,89 +326,108 @@ export const SignatureDealHero = () => {
                     key={i}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.8 + item.delay * 0.15, duration: 0.5 }}
+                    transition={{ delay: 1 + item.delay, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute top-1/2 left-1/2"
                     style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
                   >
                     <motion.div
-                      animate={{ y: [0, -8, 0] }}
-                      transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
-                      className={`w-14 h-14 rounded-2xl flex items-center justify-center backdrop-blur-xl border shadow-xl ${
-                        i === activeIndex % 6 
-                          ? 'bg-primary/20 border-primary/40 shadow-primary/20' 
-                          : 'bg-white/10 border-white/20 shadow-black/20'
+                      animate={{ y: [0, -6, 0] }}
+                      transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
+                      className={`w-16 h-16 flex items-center justify-center backdrop-blur-xl border shadow-2xl transition-all duration-500 ${
+                        i === activeIndex % 4 
+                          ? 'bg-gradient-to-br from-amber-900/40 to-amber-800/20 border-amber-400/30 shadow-amber-900/30' 
+                          : 'bg-white/5 border-white/10 shadow-black/30'
                       }`}
                     >
-                      <industry.icon className={`w-6 h-6 ${i === activeIndex % 6 ? 'text-primary' : 'text-white/70'}`} />
+                      <industry.icon 
+                        className={`w-6 h-6 ${i === activeIndex % 4 ? 'text-amber-300' : 'text-white/50'}`} 
+                        strokeWidth={1.5} 
+                      />
                     </motion.div>
                   </motion.div>
                 );
               })}
 
-              {/* Center Card */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] z-30">
+              {/* Center Premium Card */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] z-30">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900/98 to-slate-800/95 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/50"
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative overflow-hidden bg-gradient-to-br from-[#1a1a24] to-[#12121a] backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/60"
                 >
+                  {/* Gold accent line top */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+                  
                   {/* Premium card glow */}
-                  <div className="absolute -top-32 -right-32 w-64 h-64 bg-gradient-to-br from-primary/30 to-accent/20 blur-3xl" />
-                  <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl" />
+                  <motion.div 
+                    className="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/10 blur-3xl"
+                    animate={{ opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  />
                   
                   <div className="relative p-6">
                     {/* Header */}
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 }}
-                      className="text-center mb-6"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.8 }}
+                      className="text-center mb-5"
                     >
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-primary mb-2 font-medium">You Are The</p>
+                      <Crown className="w-5 h-5 text-amber-400/80 mx-auto mb-3" strokeWidth={1.5} />
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-amber-400/70 mb-1 font-medium">You Are The</p>
                       <h3 
-                        className="text-xl font-light text-white leading-tight mb-1"
+                        className="text-lg font-light text-white/90 leading-tight"
                         style={{ fontFamily: "'Playfair Display', serif" }}
                       >
                         Industry Leader
                       </h3>
-                      <p className="text-xs text-white/50">Your vision. Your deal. Your legacy.</p>
                     </motion.div>
+
+                    {/* Elegant divider */}
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent to-amber-400/20" />
+                      <Diamond className="w-2 h-2 text-amber-400/40" />
+                      <div className="flex-1 h-px bg-gradient-to-l from-transparent to-amber-400/20" />
+                    </div>
                     
                     {/* Active Industry */}
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={activeIndex}
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/5 border border-primary/20"
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.4 }}
+                        className="flex items-center gap-3 p-4 bg-white/[0.03] border border-white/5"
                       >
-                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
-                          <activeIndustry.icon className="w-5 h-5 text-white" />
+                        <div className="w-10 h-10 bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-400/20 flex items-center justify-center">
+                          <activeIndustry.icon className="w-4 h-4 text-amber-300" strokeWidth={1.5} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] uppercase tracking-wider text-white/50 mb-0.5">Your Industry</p>
-                          <p className="text-sm text-white font-medium">{activeIndustry.title}</p>
+                          <p className="text-[8px] uppercase tracking-[0.2em] text-white/40 mb-0.5">Your Industry</p>
+                          <p className="text-sm text-white/80 font-light">{activeIndustry.title}</p>
                         </div>
                       </motion.div>
                     </AnimatePresence>
                     
                     {/* Bottom text */}
                     <motion.p 
-                      className="text-center text-[10px] text-white/40 mt-4"
+                      className="text-center text-[9px] text-white/30 mt-5 tracking-wider"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 1 }}
+                      transition={{ delay: 1.2 }}
                     >
                       Join 15+ leaders who launched with Fragma
                     </motion.p>
                   </div>
+
+                  {/* Gold accent line bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
                 </motion.div>
                 
                 {/* Navigation dots */}
-                <div className="flex justify-center gap-2 mt-5">
+                <div className="flex justify-center gap-2 mt-6">
                   {industries.map((_, index) => (
                     <button
                       key={index}
@@ -350,10 +435,10 @@ export const SignatureDealHero = () => {
                       className="group relative"
                     >
                       <motion.div
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                        className={`h-1 transition-all duration-500 ${
                           activeIndex === index 
-                            ? 'w-8 bg-primary' 
-                            : 'w-1.5 bg-white/25 hover:bg-white/50'
+                            ? 'w-8 bg-gradient-to-r from-amber-400 to-amber-300' 
+                            : 'w-1 bg-white/20 hover:bg-white/40'
                         }`}
                         layout
                       />
@@ -362,16 +447,15 @@ export const SignatureDealHero = () => {
                 </div>
               </div>
 
-              {/* Highlighted text below */}
+              {/* Bottom tagline */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1 }}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
+                transition={{ delay: 1.4 }}
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center"
               >
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                <p className="text-sm text-white/80 font-medium whitespace-nowrap">
-                  This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
+                <p className="text-[10px] text-white/40 tracking-[0.3em] uppercase">
+                  Not crowdfunding. <span className="text-amber-400/60">Co-ownership</span> — elevated.
                 </p>
               </motion.div>
             </div>
@@ -379,6 +463,8 @@ export const SignatureDealHero = () => {
         </div>
       </div>
 
+      {/* Bottom border accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/20 to-transparent" />
     </section>
   );
 };
