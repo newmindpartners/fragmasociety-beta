@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown } from "lucide-react";
+import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { OrderDetailsModal } from "./OrderDetailsModal";
@@ -205,20 +205,28 @@ export const OpenTransactions = () => {
                   {/* Details */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-foreground text-sm">{order.assetName}</h4>
+                      <Link 
+                        to="/live-deals"
+                        onClick={(e) => e.stopPropagation()}
+                        className="font-semibold text-foreground text-sm hover:text-primary transition-colors flex items-center gap-1 group/link"
+                      >
+                        {order.assetName}
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover/link:text-primary transition-colors" />
+                      </Link>
                       {getStatusBadge(order.status)}
                     </div>
-                    <div className="flex items-center gap-3 mt-1.5">
-                      <span className={`text-xs font-medium ${
+                    <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                      <span className={`text-xs font-semibold ${
                         order.orderType === "buy" ? "text-emerald-600" : "text-rose-500"
                       }`}>
                         {order.orderType === "buy" ? "Buy" : "Sell"}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {order.tokens} tokens @ {order.pricePerToken}
+                        {order.tokens} tokens @
                       </span>
+                      <span className="text-xs font-bold text-foreground">{order.pricePerToken}</span>
                       <span className="text-xs text-muted-foreground">•</span>
-                      <span className="text-xs font-medium text-foreground">{order.totalValue}</span>
+                      <span className="text-sm font-bold text-primary">{order.totalValue}</span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-[10px] text-muted-foreground">{order.assetType}</span>
