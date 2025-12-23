@@ -345,56 +345,6 @@ export const SignatureDealHero = () => {
         </div>
       </div>
 
-      {/* Industry thumbnails bar at bottom */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-        className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/90 to-transparent"
-      >
-        <div className="container mx-auto px-6 lg:px-12 py-6">
-          <div className="flex items-center justify-center gap-4 overflow-x-auto pb-2">
-            {industries.map((industry, index) => (
-              <motion.button
-                key={industry.id}
-                onClick={() => setActiveIndex(index)}
-                className={`relative flex-shrink-0 group transition-all duration-500 ${
-                  activeIndex === index ? 'scale-110' : 'opacity-60 hover:opacity-100'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className={`w-24 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
-                  activeIndex === index 
-                    ? 'border-primary shadow-lg shadow-primary/30' 
-                    : 'border-white/10 hover:border-white/30'
-                }`}>
-                  <img 
-                    src={industry.image} 
-                    alt={industry.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  
-                  {/* Label on hover */}
-                  <div className="absolute bottom-1 left-0 right-0 text-center">
-                    <p className="text-[8px] text-white font-medium truncate px-1">{industry.title}</p>
-                  </div>
-                </div>
-                
-                {/* Active indicator */}
-                {activeIndex === index && (
-                  <motion.div
-                    layoutId="activeThumb"
-                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-              </motion.button>
-            ))}
-          </div>
-        </div>
-      </motion.div>
     </section>
   );
 };
