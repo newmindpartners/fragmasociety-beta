@@ -207,14 +207,17 @@ export const SignatureDealHero = () => {
               </Button>
             </motion.div>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
-              className="mt-8 text-xs text-white/30"
+              className="mt-10 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
             >
-              This is not crowdfunding. This is co-ownership — elevated.
-            </motion.p>
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <p className="text-sm text-white/80 font-medium">
+                This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
+              </p>
+            </motion.div>
           </div>
           
           {/* Right - Premium Visual Showcase */}
