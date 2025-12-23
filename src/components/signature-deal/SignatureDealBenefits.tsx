@@ -145,20 +145,19 @@ export const SignatureDealBenefits = () => {
           </div>
         </div>
 
-        {/* Compact Bottom Statement */}
+        {/* Bottom Statement */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-14 text-center"
+          className="mt-16 text-center"
         >
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white border border-slate-200 shadow-sm">
-            <span className="text-slate-400 text-sm">This is not just fundraising.</span>
-            <span className="w-px h-4 bg-slate-200" />
-            <span className="text-sm font-medium text-slate-700">
+          <p className="text-xl md:text-2xl lg:text-3xl font-light text-slate-600 tracking-tight">
+            This is not just fundraising.{" "}
+            <span className="font-medium text-slate-900">
               This is{" "}
               <span 
-                className="font-signature italic"
+                className="font-signature italic pb-1"
                 style={{
                   background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
                   WebkitBackgroundClip: 'text',
@@ -169,7 +168,7 @@ export const SignatureDealBenefits = () => {
                 brand-owned private markets
               </span>
             </span>
-          </div>
+          </p>
         </motion.div>
       </div>
 
