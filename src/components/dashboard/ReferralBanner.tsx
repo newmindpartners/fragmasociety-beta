@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Gift } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const ReferralBanner = () => {
@@ -8,18 +8,38 @@ export const ReferralBanner = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      whileHover={{ scale: 1.01, y: -2 }}
-      className="relative overflow-hidden rounded-xl bg-white border border-slate-200 p-6 lg:p-8 h-full flex items-center cursor-pointer transition-shadow duration-300 hover:shadow-lg hover:border-slate-300"
+      className="relative overflow-hidden rounded-xl bg-white border border-slate-200/80 p-6 lg:p-8 h-full flex items-center"
     >
-      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-6 w-full">
-        {/* Icon */}
-        <div className="hidden lg:flex items-center justify-center w-14 h-14 rounded-full bg-teal-50 border border-teal-100 flex-shrink-0">
-          <Gift className="w-6 h-6 text-teal-600" />
-        </div>
+      {/* Decorative background */}
+      <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden pointer-events-none">
+        <svg 
+          viewBox="0 0 400 300" 
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[300px] opacity-[0.08]"
+          fill="none"
+        >
+          {/* Abstract waveform pattern */}
+          {[...Array(20)].map((_, i) => (
+            <motion.line
+              key={i}
+              x1={200 + i * 10}
+              y1={150 - 30 - Math.sin(i * 0.5) * 40}
+              x2={200 + i * 10}
+              y2={150 + 30 + Math.sin(i * 0.5) * 40}
+              stroke="#0d9488"
+              strokeWidth="3"
+              strokeLinecap="round"
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{ delay: 0.4 + i * 0.02, duration: 0.5 }}
+            />
+          ))}
+        </svg>
+      </div>
 
+      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-6 w-full">
         <div className="flex-1">
           {/* Heading */}
-          <h3 className="text-xl lg:text-2xl font-serif text-slate-900 mb-2">
+          <h3 className="text-xl lg:text-2xl font-serif text-slate-900 mb-3">
             Earn{" "}
             <span className="inline-flex items-center px-3 py-1 bg-teal-500 text-white rounded-md font-semibold text-lg">
               $100
