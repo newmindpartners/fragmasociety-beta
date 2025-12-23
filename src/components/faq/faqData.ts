@@ -48,6 +48,18 @@ export const faqCategories = [
       {
         question: "Do I have to understand DeFi to use the marketplace?",
         answer: "No. Everything is designed to be simple, intuitive, and beginner-friendly. You see clear prices, you choose your price, you confirm the transaction — smart contracts handle the rest. If you've ever used a stock trading app, you'll feel right at home."
+      },
+      {
+        question: "How do I create an account?",
+        answer: "Simply click 'Get Started' and complete the registration process. You'll need to verify your email, complete KYC verification, and connect a compatible wallet. The entire process typically takes less than 10 minutes."
+      },
+      {
+        question: "What documents do I need to get verified?",
+        answer: "For KYC verification, you'll need a valid government-issued ID (passport or national ID), proof of address (utility bill or bank statement dated within 3 months), and in some cases, proof of income for larger investments."
+      },
+      {
+        question: "Is there a mobile app available?",
+        answer: "Currently, Fragma Society is available as a fully responsive web application that works seamlessly on all devices. A dedicated mobile app is on our roadmap for future development."
       }
     ]
   },
