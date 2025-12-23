@@ -101,9 +101,9 @@ export const SignatureDealAudience = () => {
           </motion.div>
           
           {/* Main headline */}
-          <div className="overflow-visible mb-4">
+          <div className="overflow-visible mb-6">
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-[1.1] tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-[1.2] tracking-tight pb-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
               initial={{ y: 100, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
@@ -112,15 +112,15 @@ export const SignatureDealAudience = () => {
               Who Should Launch a
             </motion.h2>
           </div>
-          <div className="overflow-visible py-2">
+          <div className="overflow-visible pt-2 pb-6">
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.35] tracking-tight"
               initial={{ y: 100, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.35 }}
             >
               <span 
-                className="font-signature italic"
+                className="font-signature italic inline-block pb-4"
                 style={{
                   background: 'linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #8b5cf6 100%)',
                   WebkitBackgroundClip: 'text',
