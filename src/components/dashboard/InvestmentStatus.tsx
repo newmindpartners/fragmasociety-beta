@@ -61,19 +61,46 @@ export const InvestmentStatus = () => {
       transition={{ delay: 0.15 }}
       className="relative overflow-hidden rounded-2xl h-full flex flex-col"
       style={{
-        background: 'linear-gradient(145deg, hsl(225 65% 10%), hsl(230 50% 4%))',
+        background: 'linear-gradient(165deg, hsl(225 45% 12%) 0%, hsl(228 50% 6%) 50%, hsl(230 55% 4%) 100%)',
       }}
     >
-      {/* Subtle glow effect */}
-      <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/5 rounded-full blur-2xl pointer-events-none" />
+      {/* Studio spotlight effects */}
+      <div 
+        className="absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none opacity-40"
+        style={{
+          background: 'radial-gradient(circle, hsl(262 70% 50% / 0.15) 0%, transparent 70%)',
+        }}
+      />
+      <div 
+        className="absolute top-1/2 -left-32 w-64 h-64 rounded-full pointer-events-none opacity-30"
+        style={{
+          background: 'radial-gradient(circle, hsl(220 60% 40% / 0.12) 0%, transparent 70%)',
+        }}
+      />
+      <div 
+        className="absolute -bottom-16 right-1/4 w-48 h-48 rounded-full pointer-events-none opacity-25"
+        style={{
+          background: 'radial-gradient(circle, hsl(262 60% 45% / 0.1) 0%, transparent 70%)',
+        }}
+      />
+      
+      {/* Subtle noise texture overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
+        }}
+      />
       
       {/* Content */}
       <div className="relative z-10 p-6 flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse" />
-          <h3 className="text-sm font-semibold text-white tracking-wide">Status</h3>
+        <div className="flex items-center gap-2.5 mb-6">
+          <div className="relative">
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+            <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping opacity-75" />
+          </div>
+          <h3 className="text-sm font-semibold text-white/95 tracking-wide">Status</h3>
         </div>
 
         {/* Timeline */}
@@ -83,10 +110,10 @@ export const InvestmentStatus = () => {
               {/* Vertical line */}
               {index < steps.length - 1 && (
                 <div 
-                  className={`absolute left-[13px] top-8 w-0.5 h-[calc(100%-12px)] ${
+                  className={`absolute left-[13px] top-8 w-px h-[calc(100%-12px)] ${
                     step.completed 
-                      ? 'bg-gradient-to-b from-primary to-primary/50' 
-                      : 'border-l-2 border-dashed border-white/20'
+                      ? 'bg-gradient-to-b from-primary via-primary/60 to-primary/20' 
+                      : 'border-l border-dashed border-white/15'
                   }`} 
                 />
               )}
@@ -94,37 +121,41 @@ export const InvestmentStatus = () => {
               {/* Icon */}
               <div className="relative z-10 flex-shrink-0">
                 {step.completed ? (
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30 ring-2 ring-primary/20">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.3)]">
                     <CheckCircle className="w-4 h-4 text-white" />
                   </div>
                 ) : step.current ? (
-                  <div className="w-7 h-7 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                  <motion.div 
+                    animate={{ boxShadow: ['0 0 15px rgba(139,92,246,0.2)', '0 0 25px rgba(139,92,246,0.35)', '0 0 15px rgba(139,92,246,0.2)'] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-7 h-7 rounded-full bg-primary/15 border-2 border-primary flex items-center justify-center backdrop-blur-sm"
+                  >
                     <span className="text-xs font-bold text-primary">{step.id}</span>
-                  </div>
+                  </motion.div>
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <span className="text-xs font-medium text-white/50">{step.id}</span>
+                  <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                    <span className="text-xs font-medium text-white/40">{step.id}</span>
                   </div>
                 )}
               </div>
 
               {/* Content */}
               <div className={`flex-1 pb-6 ${index === steps.length - 1 ? 'pb-0' : ''}`}>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`text-sm font-medium ${
-                    step.completed || step.current ? 'text-white' : 'text-white/50'
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span className={`text-sm font-medium transition-colors ${
+                    step.completed ? 'text-white/90' : step.current ? 'text-white' : 'text-white/40'
                   }`}>
                     {step.title}
                   </span>
                   {step.subtitle && (
-                    <span className="text-[10px] bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded-full text-white/70 border border-white/10">
+                    <span className="text-[10px] bg-white/8 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-white/60 border border-white/10">
                       {step.subtitle}
                     </span>
                   )}
                 </div>
                 
                 {step.description && step.current && (
-                  <p className="text-xs text-white/60 mt-1.5 leading-relaxed max-w-[280px]">
+                  <p className="text-xs text-white/50 mt-1.5 leading-relaxed max-w-[260px]">
                     {step.description}
                   </p>
                 )}
@@ -132,7 +163,7 @@ export const InvestmentStatus = () => {
                 {step.action && step.current && (
                   <Button 
                     size="sm"
-                    className="mt-3 rounded-full h-10 px-5 text-xs font-semibold bg-primary hover:bg-primary/90 text-white group shadow-lg shadow-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40"
+                    className="mt-4 rounded-full h-10 px-5 text-xs font-semibold bg-primary hover:bg-primary/90 text-white group shadow-[0_8px_30px_rgba(139,92,246,0.25)] hover:shadow-[0_8px_40px_rgba(139,92,246,0.35)] transition-all duration-300"
                   >
                     {step.action.label}
                     <ArrowRight className="w-3.5 h-3.5 ml-2 group-hover:translate-x-0.5 transition-transform" />
@@ -144,8 +175,9 @@ export const InvestmentStatus = () => {
         </div>
       </div>
       
-      {/* Bottom border glow */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {/* Edge highlights */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
     </motion.div>
   );
 };
