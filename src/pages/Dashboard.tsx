@@ -13,81 +13,86 @@ const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#f8fafc' }}>
+    <div className="theme-dashboard min-h-screen w-full bg-background text-foreground">
       {/* Sidebar - Fixed */}
-      <DashboardSidebar 
-        isCollapsed={sidebarCollapsed} 
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
+      <DashboardSidebar
+        isCollapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
       {/* Main Content Wrapper - Adjusts for sidebar */}
-      <div 
-        className="min-h-screen flex flex-col transition-all duration-300 ease-out"
-        style={{ 
-          marginLeft: sidebarCollapsed ? 72 : 256,
-          backgroundColor: '#f8fafc'
-        }}
+      <div
+        className="min-h-screen flex flex-col transition-[margin-left] duration-300 ease-out"
+        style={{ marginLeft: sidebarCollapsed ? 72 : 256 }}
       >
         {/* Header */}
         <DashboardHeader onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
         {/* Page Content */}
-        <main className="flex-1 p-6 lg:p-8" style={{ backgroundColor: '#f8fafc' }}>
-          {/* Welcome Section */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
-          >
-            <h1 className="text-2xl font-serif text-slate-900">
-              Welcome back, <span className="font-semibold">Investor</span>
-            </h1>
-            <p className="text-slate-400 text-sm mt-1">
-              Here's an overview of your portfolio and recent activity.
-            </p>
-          </motion.div>
+        <main className="flex-1 px-6 py-6 lg:px-10 lg:py-8 bg-background">
+          <div className="mx-auto w-full max-w-[1400px]">
+            {/* Welcome Section */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6"
+            >
+              <h1 className="text-2xl font-serif text-foreground">
+                Welcome back, <span className="font-semibold">Investor</span>
+              </h1>
+              <p className="text-muted-foreground text-sm mt-1">
+                Here's an overview of your portfolio and recent activity.
+              </p>
+            </motion.div>
 
-          {/* Stats Grid */}
-          <div className="mb-6">
-            <DashboardStats />
-          </div>
-
-          {/* Main Grid Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-            {/* Left Column - Investment Overview */}
-            <div className="lg:col-span-1">
-              <InvestmentOverview />
+            {/* Stats Grid */}
+            <div className="mb-6">
+              <DashboardStats />
             </div>
 
-            {/* Right Column - Referral Banner */}
-            <div className="lg:col-span-2">
-              <ReferralBanner />
-            </div>
-          </div>
+            {/* Main Grid Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+              {/* Left Column - Investment Overview */}
+              <div className="lg:col-span-1">
+                <InvestmentOverview />
+              </div>
 
-          {/* Lower Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {/* Open Transactions - Takes 2 columns */}
-            <div className="lg:col-span-2">
-              <OpenTransactions />
+              {/* Right Column - Referral Banner */}
+              <div className="lg:col-span-2">
+                <ReferralBanner />
+              </div>
             </div>
 
-            {/* Right Column */}
-            <div className="lg:col-span-1 space-y-5">
-              <MyInvestments />
-              <QuickActions />
+            {/* Lower Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              {/* Open Transactions - Takes 2 columns */}
+              <div className="lg:col-span-2">
+                <OpenTransactions />
+              </div>
+
+              {/* Right Column */}
+              <div className="lg:col-span-1 space-y-5">
+                <MyInvestments />
+                <QuickActions />
+              </div>
             </div>
           </div>
         </main>
 
         {/* Footer */}
-        <footer className="px-6 lg:px-8 py-5 border-t border-slate-200 bg-white">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+        <footer className="px-6 lg:px-10 py-5 border-t border-border bg-card">
+          <div className="mx-auto w-full max-w-[1400px] flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
             <p>© 2024 Fragma Finance. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-slate-600 transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-slate-600 transition-colors">Contact</a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Terms of Service
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Contact
+              </a>
             </div>
           </div>
         </footer>

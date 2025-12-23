@@ -119,12 +119,10 @@ export const DisclaimerModal = () => {
         </ScrollArea>
 
         <div className="pt-4">
-          <Button 
-            onClick={handleAccept} 
-            className="w-full bg-white hover:bg-white/90 text-background font-semibold py-3"
-          >
+          <Button onClick={handleAccept} className="w-full py-3 font-semibold">
             I UNDERSTAND
           </Button>
+        </div>
         </div>
       </DialogContent>
     </Dialog>
