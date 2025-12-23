@@ -39,18 +39,18 @@ export const DashboardStats = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 + index * 0.05 }}
-            className="group relative bg-white rounded-xl border border-slate-200/80 p-5 hover:border-slate-300 transition-all duration-300"
+            className="group relative bg-card rounded-xl border border-border p-5 hover:border-primary/30 transition-all duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center">
-                <Icon className="w-4 h-4 text-slate-600" strokeWidth={1.75} />
+              <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center">
+                <Icon className="w-4 h-4 text-foreground/70" strokeWidth={1.75} />
               </div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{stat.label}</p>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{stat.label}</p>
             </div>
 
             <div className="flex items-end justify-between">
-              <p className="text-2xl font-semibold text-slate-900 tracking-tight">{stat.value}</p>
-              <span className="text-[11px] text-slate-400 font-medium">
+              <p className="text-2xl font-semibold text-foreground tracking-tight">{stat.value}</p>
+              <span className="text-[11px] text-muted-foreground font-medium">
                 {stat.change}
               </span>
             </div>

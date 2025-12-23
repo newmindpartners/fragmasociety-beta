@@ -8,7 +8,7 @@ export const ReferralBanner = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="relative overflow-hidden rounded-xl bg-white border border-slate-200/80 p-6 lg:p-8 h-full flex items-center"
+      className="relative overflow-hidden rounded-xl bg-card border border-border p-6 lg:p-8 h-full flex items-center"
     >
       {/* Decorative background */}
       <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden pointer-events-none">
@@ -25,7 +25,7 @@ export const ReferralBanner = () => {
               y1={150 - 30 - Math.sin(i * 0.5) * 40}
               x2={200 + i * 10}
               y2={150 + 30 + Math.sin(i * 0.5) * 40}
-              stroke="#0d9488"
+              stroke="hsl(var(--primary))"
               strokeWidth="3"
               strokeLinecap="round"
               initial={{ scaleY: 0 }}
@@ -39,15 +39,15 @@ export const ReferralBanner = () => {
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-6 w-full">
         <div className="flex-1">
           {/* Heading */}
-          <h3 className="text-xl lg:text-2xl font-serif text-slate-900 mb-3">
+          <h3 className="text-xl lg:text-2xl font-serif text-foreground mb-3">
             Earn{" "}
-            <span className="inline-flex items-center px-3 py-1 bg-teal-500 text-white rounded-md font-semibold text-lg">
+            <span className="inline-flex items-center px-3 py-1 bg-primary text-primary-foreground rounded-md font-semibold text-lg">
               $100
             </span>
             {" "}to refer a friend
           </h3>
 
-          <p className="text-slate-500 text-sm max-w-md leading-relaxed">
+          <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
             Know someone who could benefit from Fragma? Refer a friend and earn $100 when they make their first investment.
           </p>
         </div>
@@ -60,7 +60,7 @@ export const ReferralBanner = () => {
         >
           <Button 
             variant="outline"
-            className="border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white rounded-full px-5 h-10 font-medium group transition-all duration-200"
+            className="rounded-full px-5 h-10 font-medium group transition-all duration-200"
           >
             Refer a Friend
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

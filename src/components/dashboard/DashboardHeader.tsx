@@ -9,20 +9,21 @@ interface DashboardHeaderProps {
 
 export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-slate-100">
+    <header className="sticky top-0 z-30 bg-card/95 backdrop-blur-xl border-b border-border">
       {/* Connect Wallet Banner */}
       <motion.div 
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-slate-900 text-white py-2.5 px-6"
+        className="bg-primary text-primary-foreground py-2.5 px-6"
       >
         <div className="flex items-center justify-center gap-4">
-          <span className="text-sm font-medium text-slate-300">
+          <span className="text-sm font-medium opacity-90">
             Connect Your Wallet — Step Into RWA Swaps
           </span>
           <Button 
             size="sm" 
-            className="bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white rounded-full h-7 px-4 text-xs font-medium group border border-slate-500/30"
+            variant="secondary"
+            className="rounded-full h-7 px-4 text-xs font-medium group"
           >
             <Wallet className="w-3 h-3 mr-1.5" />
             Connect Wallet
@@ -37,9 +38,9 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
           {/* Mobile Menu Button */}
           <button 
             onClick={onMenuToggle}
-            className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
           >
-            <Menu className="w-5 h-5 text-slate-600" />
+            <Menu className="w-5 h-5 text-foreground/70" />
           </button>
 
           {/* Search Bar */}
@@ -50,11 +51,11 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             className="flex-1 max-w-md"
           >
             <div className="relative group">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-slate-500 transition-colors" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 group-focus-within:text-foreground/70 transition-colors" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-sm placeholder:text-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-300 focus:border-slate-300 transition-all duration-200"
+                className="w-full pl-10 pr-4 py-2.5 bg-muted border border-border rounded-xl text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all duration-200 text-foreground"
               />
             </div>
           </motion.div>
@@ -66,11 +67,11 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             transition={{ delay: 0.2 }}
             className="hidden lg:flex items-center gap-8"
           >
-            {["Start Investing", "Businesses", "How It Works", "Learning Center"].map((item, index) => (
+            {["Start Investing", "Businesses", "How It Works", "Learning Center"].map((item) => (
               <Link 
                 key={item} 
                 to="#" 
-                className="text-sm font-medium text-slate-400 hover:text-slate-800 transition-colors duration-200"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
                 {item}
               </Link>
@@ -83,7 +84,7 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Button className="bg-slate-900 hover:bg-slate-800 text-white rounded-full px-5 h-9 text-sm font-medium transition-all duration-200">
+            <Button className="rounded-full px-5 h-9 text-sm font-medium transition-all duration-200">
               Invest Now
             </Button>
           </motion.div>

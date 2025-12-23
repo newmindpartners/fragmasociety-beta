@@ -123,7 +123,6 @@ export const DisclaimerModal = () => {
             I UNDERSTAND
           </Button>
         </div>
-        </div>
       </DialogContent>
     </Dialog>
   );

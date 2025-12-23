@@ -11,13 +11,13 @@ export const MyInvestments = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="bg-white rounded-xl border border-slate-200/80 p-6 h-full"
+      className="bg-card rounded-xl border border-border p-6 h-full"
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-5">
-        <h3 className="text-sm font-semibold text-slate-900">My Investments</h3>
+        <h3 className="text-sm font-semibold text-foreground">My Investments</h3>
         <button className="p-0.5">
-          <Info className="w-3.5 h-3.5 text-slate-300" />
+          <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
         </button>
       </div>
 
@@ -34,8 +34,8 @@ export const MyInvestments = () => {
             transition={{ delay: 0.6, type: "spring" }}
             className="mb-4"
           >
-            <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-slate-300" />
+            <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center">
+              <Briefcase className="w-6 h-6 text-muted-foreground/60" />
             </div>
           </motion.div>
 
@@ -44,10 +44,10 @@ export const MyInvestments = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            <h4 className="text-sm font-semibold text-slate-900 mb-2">
+            <h4 className="text-sm font-semibold text-foreground mb-2">
               You Haven't Made Any Investments Yet
             </h4>
-            <p className="text-xs text-slate-400 mb-5 max-w-[220px] leading-relaxed">
+            <p className="text-xs text-muted-foreground mb-5 max-w-[220px] leading-relaxed">
               This is where your investment history and project details will appear. Explore our guide to get started with investing today!
             </p>
           </motion.div>
@@ -56,7 +56,7 @@ export const MyInvestments = () => {
             <Button 
               variant="outline"
               size="sm"
-              className="rounded-full border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white h-9 px-5 text-xs font-medium transition-all duration-200 group"
+              className="rounded-full h-9 px-5 text-xs font-medium transition-all duration-200 group"
             >
               Explore
               <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
