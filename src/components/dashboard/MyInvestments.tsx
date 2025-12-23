@@ -11,10 +11,10 @@ export const MyInvestments = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="bg-card rounded-xl border border-border p-6 h-full shadow-sm"
+      className="bg-card rounded-xl border border-border p-4 h-full shadow-sm"
     >
       {/* Header */}
-      <div className="flex items-center gap-2 mb-5">
+      <div className="flex items-center gap-2 mb-3">
         <h3 className="text-sm font-semibold text-foreground">My Investments</h3>
         <button className="p-0.5">
           <Info className="w-3.5 h-3.5 text-muted-foreground" />
@@ -22,20 +22,20 @@ export const MyInvestments = () => {
       </div>
 
       {hasInvestments ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Investment items would go here */}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-6 text-center">
+        <div className="flex flex-col items-center justify-center py-3 text-center">
           {/* Empty State */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.6, type: "spring" }}
-            className="mb-4"
+            className="mb-3"
           >
-            <div className="w-14 h-14 rounded-xl bg-accent flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-primary" />
+            <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">
+              <Briefcase className="w-5 h-5 text-primary" />
             </div>
           </motion.div>
 
@@ -44,11 +44,11 @@ export const MyInvestments = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            <h4 className="text-sm font-semibold text-foreground mb-2">
+            <h4 className="text-sm font-semibold text-foreground mb-1">
               You Haven't Made Any Investments Yet
             </h4>
-            <p className="text-xs text-muted-foreground mb-5 max-w-[220px] leading-relaxed">
-              This is where your investment history and project details will appear. Explore our guide to get started with investing today!
+            <p className="text-xs text-muted-foreground mb-3 max-w-[220px] leading-relaxed">
+              Explore our guide to get started with investing today!
             </p>
           </motion.div>
 
