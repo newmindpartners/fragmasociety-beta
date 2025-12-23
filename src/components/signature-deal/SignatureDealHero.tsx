@@ -331,15 +331,12 @@ export const SignatureDealHero = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.1 }}
-                  className="mt-8 w-full flex flex-col items-center gap-1 px-6 py-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-primary/30"
+                  className="mt-8 w-full flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
-                    <p className="text-sm text-white/80 font-medium">
-                      This is not crowdfunding. This is <span className="text-primary">co-ownership</span>
-                    </p>
-                  </div>
-                  <p className="text-sm text-white/80 font-medium">— elevated.</p>
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse flex-shrink-0" />
+                  <p className="text-xs text-white/70 font-medium">
+                    This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
+                  </p>
                 </motion.div>
               </div>
             </div>
