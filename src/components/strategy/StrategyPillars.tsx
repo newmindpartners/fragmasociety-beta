@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { Bitcoin, Building2, Film, ArrowUpRight, Quote } from "lucide-react";
+import { Bitcoin, Building2, Film, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 // Import images
 import btcMiningBg from "@/assets/strategy-btc-mining.jpg";
@@ -19,8 +21,11 @@ export const StrategyPillars = () => {
       description: "Institutional-grade Bitcoin mining operations with emphasis on low-cost power and modern fleets.",
       bgImage: btcMiningBg,
       leaderImage: null,
+      leader: null,
       highlights: ["Hashrate Contracts", "Revenue Share", "Professional Operators"],
-      accent: "from-amber-500/20 to-orange-600/20"
+      gradientFrom: "from-amber-500",
+      gradientTo: "to-orange-600",
+      glowColor: "rgba(245, 158, 11, 0.15)"
     },
     {
       id: 2,
@@ -34,7 +39,9 @@ export const StrategyPillars = () => {
       bgImage: philippeBanner,
       leaderImage: philippeNaouri,
       highlights: ["Malibu Development", "European Assets", "Income Generation"],
-      accent: "from-violet-500/20 to-purple-600/20"
+      gradientFrom: "from-violet-500",
+      gradientTo: "to-purple-600",
+      glowColor: "rgba(139, 92, 246, 0.15)"
     },
     {
       id: 3,
@@ -48,236 +55,220 @@ export const StrategyPillars = () => {
       bgImage: timBanner,
       leaderImage: timLevy,
       highlights: ["Film Finance", "Corporate Loans", "Entertainment Industry"],
-      accent: "from-cyan-500/20 to-blue-600/20"
+      gradientFrom: "from-cyan-500",
+      gradientTo: "to-blue-600",
+      glowColor: "rgba(6, 182, 212, 0.15)"
     }
   ];
 
   return (
-    <section className="py-32 bg-slate-950 relative overflow-hidden">
-      {/* Dramatic background effects */}
+    <section className="py-32 lg:py-40 bg-slate-950 relative overflow-hidden">
+      {/* Subtle background gradient */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,100,180,0.15),transparent)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_60%_40%_at_100%_100%,rgba(80,70,120,0.1),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(100,80,150,0.08),transparent_70%)]" />
       </div>
       
-      {/* Animated grain texture */}
-      <div 
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
-      
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Header */}
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+        {/* Refined Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20 lg:mb-24"
         >
-          <motion.div 
-            className="inline-flex items-center gap-4 mb-8"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/40 to-white/20" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-white/40 font-light">
-              Portfolio Composition
-            </span>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent via-white/40 to-white/20" />
-          </motion.div>
+          <span className="text-[10px] tracking-[0.3em] uppercase text-white/30 font-light mb-6 block">
+            Portfolio Composition
+          </span>
           
           <h2 
-            className="text-5xl md:text-6xl lg:text-7xl font-light text-white mb-6 leading-[0.95]"
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-5"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             What You Get
           </h2>
-          <p className="text-white/35 max-w-lg mx-auto text-lg leading-relaxed">
+          <p className="text-white/30 max-w-md mx-auto text-base leading-relaxed">
             Three carefully selected strategies. One unified allocation.
           </p>
         </motion.div>
 
-        {/* Strategy Cards - Horizontal Layout */}
-        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Strategy Cards - Clean Grid */}
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-10">
           {strategies.map((strategy, index) => (
             <motion.div
               key={strategy.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: index * 0.15 }}
-              className="group relative"
+              transition={{ duration: 0.7, delay: index * 0.12 }}
+              className="group"
             >
-              {/* Card */}
-              <div className="relative overflow-hidden rounded-[2rem] bg-slate-900/50 border border-white/[0.08] backdrop-blur-sm h-full">
-                {/* Top Image Section */}
-                <div className="relative h-64 overflow-hidden">
-                  <img 
-                    src={strategy.bgImage} 
-                    alt="" 
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                  />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${strategy.accent} opacity-60`} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+              <div className="relative h-full">
+                {/* Card Container */}
+                <div className="relative overflow-hidden rounded-2xl bg-slate-900/40 border border-white/[0.06] h-full flex flex-col transition-all duration-500 group-hover:border-white/[0.12] group-hover:bg-slate-900/60">
                   
-                  {/* Allocation Badge */}
-                  <div className="absolute top-6 left-6">
+                  {/* Image Section */}
+                  <div className="relative h-72 overflow-hidden">
+                    <img 
+                      src={strategy.bgImage} 
+                      alt="" 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    
+                    {/* Gradient overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{ background: `linear-gradient(to top, ${strategy.glowColor}, transparent)` }}
+                    />
+                    
+                    {/* Allocation Badge - Top Left */}
                     <motion.div 
-                      className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20"
-                      whileHover={{ scale: 1.05 }}
+                      className="absolute top-5 left-5"
+                      whileHover={{ scale: 1.02 }}
                     >
-                      <span className="text-2xl font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
-                        {strategy.allocation}
-                      </span>
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${strategy.gradientFrom} ${strategy.gradientTo} flex items-center justify-center shadow-xl`}>
+                        <span 
+                          className="text-xl font-semibold text-white"
+                          style={{ fontFamily: "'Playfair Display', serif" }}
+                        >
+                          {strategy.allocation}
+                        </span>
+                      </div>
                     </motion.div>
-                  </div>
-                  
-                  {/* Icon */}
-                  <div className="absolute top-6 right-6">
-                    <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
-                      <strategy.icon className="w-6 h-6 text-white" />
+                    
+                    {/* Icon - Top Right */}
+                    <div className="absolute top-5 right-5">
+                      <div className="w-12 h-12 rounded-xl bg-white/[0.08] backdrop-blur-sm border border-white/[0.1] flex items-center justify-center">
+                        <strategy.icon className="w-5 h-5 text-white/70" />
+                      </div>
                     </div>
-                  </div>
-                  
-                  {/* Leader Image (if exists) */}
-                  {strategy.leaderImage && (
-                    <div className="absolute -bottom-12 right-6">
+                    
+                    {/* Leader Image */}
+                    {strategy.leaderImage && (
                       <motion.div 
-                        className="relative"
-                        initial={{ y: 20, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
+                        className="absolute bottom-4 right-5"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.3 + index * 0.15 }}
+                        transition={{ delay: 0.4 + index * 0.1 }}
                       >
-                        <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-slate-900 shadow-2xl">
+                        <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-950 shadow-2xl">
                           <img 
                             src={strategy.leaderImage} 
-                            alt={strategy.leader}
+                            alt={strategy.leader || ""}
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        {/* Glow effect */}
-                        <div className="absolute inset-0 rounded-2xl bg-white/20 blur-xl -z-10 scale-75" />
                       </motion.div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Content Section */}
-                <div className="p-8 pt-6">
-                  {/* Subtitle */}
-                  <span className="text-[10px] tracking-[0.25em] uppercase text-white/40 font-medium">
-                    {strategy.subtitle}
-                  </span>
-                  
-                  {/* Title */}
-                  <h3 
-                    className="text-2xl font-light text-white mt-2 mb-2 group-hover:text-white/90 transition-colors"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    {strategy.title}
-                  </h3>
-                  
-                  {/* Leader name */}
-                  {strategy.leader && (
-                    <p className="text-sm text-violet-400/80 mb-4">
-                      Led by {strategy.leader}
-                    </p>
-                  )}
-                  
-                  {/* Description */}
-                  <p className="text-white/40 text-sm leading-relaxed mb-6">
-                    {strategy.description}
-                  </p>
-                  
-                  {/* Highlights */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {strategy.highlights.map((tag, i) => (
-                      <span 
-                        key={i} 
-                        className="text-[9px] tracking-wider uppercase px-3 py-1.5 rounded-full bg-white/[0.05] text-white/50 border border-white/[0.08]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    )}
                   </div>
                   
-                  {/* Hover CTA */}
-                  <motion.div 
-                    className="flex items-center gap-2 text-white/30 group-hover:text-white/60 transition-colors cursor-pointer"
-                    whileHover={{ x: 5 }}
-                  >
-                    <span className="text-xs tracking-wider uppercase">Learn more</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </motion.div>
+                  {/* Content Section */}
+                  <div className="p-7 flex-1 flex flex-col">
+                    {/* Subtitle */}
+                    <span className="text-[9px] tracking-[0.25em] uppercase text-white/35 font-medium">
+                      {strategy.subtitle}
+                    </span>
+                    
+                    {/* Title */}
+                    <h3 
+                      className="text-2xl font-light text-white mt-2 mb-1"
+                      style={{ fontFamily: "'Playfair Display', serif" }}
+                    >
+                      {strategy.title}
+                    </h3>
+                    
+                    {/* Leader name */}
+                    {strategy.leader && (
+                      <p className={`text-sm bg-gradient-to-r ${strategy.gradientFrom} ${strategy.gradientTo} bg-clip-text text-transparent mb-4`}>
+                        Led by {strategy.leader}
+                      </p>
+                    )}
+                    
+                    {/* Description */}
+                    <p className="text-white/35 text-sm leading-relaxed mb-6 flex-1">
+                      {strategy.description}
+                    </p>
+                    
+                    {/* Highlights */}
+                    <div className="flex flex-wrap gap-2">
+                      {strategy.highlights.map((tag, i) => (
+                        <span 
+                          key={i} 
+                          className="text-[9px] tracking-wider uppercase px-3 py-1.5 rounded-lg bg-white/[0.04] text-white/40 border border-white/[0.06]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                
-                {/* Border glow on hover */}
-                <div className="absolute inset-0 rounded-[2rem] border border-white/0 group-hover:border-white/10 transition-colors duration-500 pointer-events-none" />
               </div>
             </motion.div>
           ))}
         </div>
         
-        {/* Bottom Quote/Statement */}
+        {/* Allocation Bar */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-20 max-w-3xl mx-auto text-center"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-20 max-w-xl mx-auto"
         >
-          <Quote className="w-8 h-8 text-white/10 mx-auto mb-6 rotate-180" />
-          <p 
-            className="text-xl md:text-2xl text-white/50 font-light leading-relaxed italic"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Three distinct opportunities. One allocation. 
-            Complete exposure to Fragma's signature deals.
-          </p>
-        </motion.div>
-        
-        {/* Allocation visualization */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-16 max-w-2xl mx-auto"
-        >
-          <div className="h-2 rounded-full bg-white/5 overflow-hidden flex">
+          <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden flex">
             <motion.div 
               className="h-full bg-gradient-to-r from-amber-500 to-orange-500"
               initial={{ width: 0 }}
               whileInView={{ width: "30%" }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.8 }}
+              transition={{ duration: 1, delay: 0.6 }}
             />
             <motion.div 
               className="h-full bg-gradient-to-r from-violet-500 to-purple-500"
               initial={{ width: 0 }}
               whileInView={{ width: "35%" }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
             />
             <motion.div 
               className="h-full bg-gradient-to-r from-cyan-500 to-blue-500"
               initial={{ width: 0 }}
               whileInView={{ width: "35%" }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 1.2 }}
+              transition={{ duration: 1, delay: 1 }}
             />
           </div>
-          <div className="flex justify-between mt-4 text-xs text-white/30">
+          <div className="flex justify-between mt-3 text-[10px] text-white/25 tracking-wide">
             <span>BTC Mining</span>
             <span>Real Estate</span>
             <span>Film & Loans</span>
           </div>
+        </motion.div>
+        
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="mt-20 text-center"
+        >
+          <Button 
+            asChild 
+            size="lg" 
+            className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-10 h-14 text-sm font-medium shadow-xl shadow-white/5"
+          >
+            <Link to="/auth">
+              Register Your Interest
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          </Button>
+          
+          <p className="mt-6 text-[10px] text-white/20 max-w-xs mx-auto">
+            For qualified investors only. Capital at risk.
+          </p>
         </motion.div>
       </div>
     </section>
