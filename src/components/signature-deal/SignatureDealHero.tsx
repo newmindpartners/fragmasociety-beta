@@ -137,12 +137,18 @@ export const SignatureDealHero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight mb-6"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="mb-6"
             >
-              <span className="text-white">Launch Your</span>
-              <br />
-              <span className="text-gradient">
+              <span 
+                className="block text-5xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight text-white"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Launch Your
+              </span>
+              <span 
+                className="block text-6xl md:text-7xl lg:text-8xl text-gradient mt-2"
+                style={{ fontFamily: "'Caveat', cursive", fontWeight: 600 }}
+              >
                 Signature Deal
               </span>
             </motion.h1>
@@ -209,17 +215,72 @@ export const SignatureDealHero = () => {
 
           </div>
           
-          {/* Right - Premium Visual Showcase */}
+          {/* Right - Stunning Visual Showcase */}
           <motion.div 
             className="relative hidden lg:flex justify-center items-center"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <div className="relative w-[520px] h-[580px]">
+            <div className="relative w-[580px] h-[600px]">
               
-              {/* Center Card - "You Are The Leader" */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] z-30">
+              {/* Decorative rings */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/5 rounded-full"
+              />
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] border border-dashed border-primary/20 rounded-full"
+              />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] border border-white/10 rounded-full"
+              />
+
+              {/* Floating industry icons */}
+              {[
+                { angle: 0, delay: 0 },
+                { angle: 60, delay: 0.5 },
+                { angle: 120, delay: 1 },
+                { angle: 180, delay: 1.5 },
+                { angle: 240, delay: 2 },
+                { angle: 300, delay: 2.5 },
+              ].map((item, i) => {
+                const industry = industries[i % industries.length];
+                const radius = 220;
+                const x = Math.cos((item.angle * Math.PI) / 180) * radius;
+                const y = Math.sin((item.angle * Math.PI) / 180) * radius;
+                
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.8 + item.delay * 0.15, duration: 0.5 }}
+                    className="absolute top-1/2 left-1/2"
+                    style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
+                  >
+                    <motion.div
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center backdrop-blur-xl border shadow-xl ${
+                        i === activeIndex % 6 
+                          ? 'bg-primary/20 border-primary/40 shadow-primary/20' 
+                          : 'bg-white/10 border-white/20 shadow-black/20'
+                      }`}
+                    >
+                      <industry.icon className={`w-6 h-6 ${i === activeIndex % 6 ? 'text-primary' : 'text-white/70'}`} />
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+
+              {/* Center Card */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] z-30">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -230,55 +291,23 @@ export const SignatureDealHero = () => {
                   <div className="absolute -top-32 -right-32 w-64 h-64 bg-gradient-to-br from-primary/30 to-accent/20 blur-3xl" />
                   <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl" />
                   
-                  <div className="relative p-7">
+                  <div className="relative p-6">
                     {/* Header */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
-                      className="text-center mb-7"
+                      className="text-center mb-6"
                     >
-                      <p className="text-[11px] uppercase tracking-[0.3em] text-primary mb-2 font-medium">You Are The</p>
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-primary mb-2 font-medium">You Are The</p>
                       <h3 
-                        className="text-2xl font-light text-white leading-tight mb-2"
+                        className="text-xl font-light text-white leading-tight mb-1"
                         style={{ fontFamily: "'Playfair Display', serif" }}
                       >
                         Industry Leader
                       </h3>
-                      <p className="text-sm text-white/50">Your vision. Your deal. Your legacy.</p>
+                      <p className="text-xs text-white/50">Your vision. Your deal. Your legacy.</p>
                     </motion.div>
-                    
-                    {/* Steps */}
-                    <motion.div 
-                      className="space-y-2.5 mb-5"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.7 }}
-                    >
-                      {steps.map((step, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.75 + i * 0.1 }}
-                          className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.06] border border-white/[0.08] hover:bg-white/[0.1] transition-all duration-300 group"
-                        >
-                          <span 
-                            className="text-lg font-light text-primary w-7 group-hover:text-primary/80 transition-colors"
-                            style={{ fontFamily: "'Playfair Display', serif" }}
-                          >
-                            {step.number}
-                          </span>
-                          <div>
-                            <p className="text-sm text-white font-medium">{step.label}</p>
-                            <p className="text-[10px] text-white/40">{step.desc}</p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                    
-                    {/* Divider */}
-                    <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4" />
                     
                     {/* Active Industry */}
                     <AnimatePresence mode="wait">
@@ -288,21 +317,21 @@ export const SignatureDealHero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.3 }}
-                        className="flex items-center gap-4 p-3.5 rounded-xl bg-gradient-to-r from-primary/10 to-accent/5 border border-primary/20"
+                        className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/5 border border-primary/20"
                       >
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
-                          <activeIndustry.icon className="w-6 h-6 text-white" />
+                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+                          <activeIndustry.icon className="w-5 h-5 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-[9px] uppercase tracking-wider text-white/50 mb-0.5">Your Industry</p>
-                          <p className="text-base text-white font-medium">{activeIndustry.title}</p>
+                          <p className="text-sm text-white font-medium">{activeIndustry.title}</p>
                         </div>
                       </motion.div>
                     </AnimatePresence>
                     
                     {/* Bottom text */}
                     <motion.p 
-                      className="text-center text-[10px] text-white/40 mt-5"
+                      className="text-center text-[10px] text-white/40 mt-4"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
@@ -313,7 +342,7 @@ export const SignatureDealHero = () => {
                 </motion.div>
                 
                 {/* Navigation dots */}
-                <div className="flex justify-center gap-2 mt-6">
+                <div className="flex justify-center gap-2 mt-5">
                   {industries.map((_, index) => (
                     <button
                       key={index}
@@ -331,20 +360,20 @@ export const SignatureDealHero = () => {
                     </button>
                   ))}
                 </div>
-                
-                {/* Highlighted text */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.1 }}
-                  className="mt-8 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
-                >
-                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  <p className="text-sm text-white/80 font-medium">
-                    This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
-                  </p>
-                </motion.div>
               </div>
+
+              {/* Highlighted text below */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 }}
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
+              >
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <p className="text-sm text-white/80 font-medium whitespace-nowrap">
+                  This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
+                </p>
+              </motion.div>
             </div>
           </motion.div>
         </div>
