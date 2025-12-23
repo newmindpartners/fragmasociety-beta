@@ -24,7 +24,7 @@ export const InvestmentOverview = () => {
       className="bg-card rounded-2xl border-2 border-primary/20 p-8 h-full flex flex-col shadow-sm"
     >
       {/* Header */}
-      <h3 className="text-2xl font-semibold text-foreground mb-8 leading-tight">
+      <h3 className="text-2xl font-serif font-semibold text-foreground mb-8 leading-tight">
         Investment & Cash<br />Overview
       </h3>
 
@@ -89,13 +89,13 @@ export const InvestmentOverview = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5, type: "spring" }}
-              className="text-4xl font-bold text-foreground"
+              className="text-4xl font-serif font-bold text-foreground"
             >
               {portfolioData.growth}%
             </motion.span>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="text-sm text-muted-foreground">Your Balance Growth</span>
-              <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <Info className="w-3.5 h-3.5 text-muted-foreground" />
             </div>
           </div>
         </div>
@@ -104,17 +104,17 @@ export const InvestmentOverview = () => {
         <div className="flex items-center justify-between w-full max-w-xs mt-8">
           <div className="flex flex-col items-center">
             <span className="text-sm text-muted-foreground">Invest.</span>
-            <span className="text-xl font-bold text-foreground">${portfolioData.invested}</span>
+            <span className="text-xl font-serif font-bold text-foreground">${portfolioData.invested}</span>
           </div>
           <div className="flex flex-col items-center">
             <span className="text-sm text-muted-foreground">Cash</span>
-            <span className="text-xl font-bold text-foreground">${portfolioData.cash}</span>
+            <span className="text-xl font-serif font-bold text-foreground">${portfolioData.cash}</span>
           </div>
         </div>
       </div>
 
       {/* Deposit Button */}
-      <Button className="w-full rounded-full h-14 text-lg font-medium shadow-lg">
+      <Button className="w-full rounded-full h-14 text-lg font-medium bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all duration-200">
         Deposit
       </Button>
     </motion.div>

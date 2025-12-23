@@ -33,13 +33,13 @@ export const OpenTransactions = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
-      className="bg-card rounded-xl border border-border p-6"
+      className="bg-card rounded-xl border border-border p-6 shadow-sm"
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-2">
         <h3 className="text-sm font-semibold text-foreground">Open Transactions</h3>
         <button className="p-0.5">
-          <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
+          <Info className="w-3.5 h-3.5 text-muted-foreground" />
         </button>
       </div>
 
@@ -59,13 +59,13 @@ export const OpenTransactions = () => {
             className={`flex items-center gap-2 text-sm font-medium transition-colors ${
               activeTab === tab.key
                 ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground/80"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {tab.label}
             <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
               activeTab === tab.key
-                ? "bg-primary text-primary-foreground"
+                ? "bg-primary text-white"
                 : "bg-muted text-muted-foreground"
             }`}>
               {tab.count}
@@ -85,11 +85,11 @@ export const OpenTransactions = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-4 p-4 rounded-lg border border-border hover:border-primary/30 transition-colors"
+                className="flex items-center gap-4 p-4 rounded-lg border border-border hover:border-primary/30 hover:shadow-sm transition-all duration-200"
               >
                 {/* Image placeholder */}
-                <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />
+                <div className="w-14 h-14 rounded-lg bg-accent flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/10" />
                 </div>
 
                 {/* Details */}
@@ -97,20 +97,20 @@ export const OpenTransactions = () => {
                   <h4 className="font-semibold text-foreground text-sm">{transaction.name}</h4>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">Annual Return from:</span>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded bg-muted text-foreground text-xs font-semibold">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded bg-accent text-primary text-xs font-semibold">
                       {transaction.returnRate}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">{transaction.category}</span>
-                    <span className="text-xs text-muted-foreground/60">|</span>
+                    <span className="text-xs text-muted-foreground">|</span>
                     <span className="text-xs text-muted-foreground">{transaction.shares} Shares</span>
                   </div>
                 </div>
 
                 {/* Action */}
                 <Button 
-                  className="rounded-full h-9 px-4 text-sm font-medium flex-shrink-0"
+                  className="rounded-full h-9 px-4 text-sm font-medium flex-shrink-0 bg-primary hover:bg-primary/90 text-white"
                 >
                   Learn More
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -123,8 +123,8 @@ export const OpenTransactions = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-12 text-center"
             >
-              <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center mb-4">
-                <Clock className="w-5 h-5 text-muted-foreground/60" />
+              <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
+                <Clock className="w-5 h-5 text-primary" />
               </div>
               <p className="text-foreground font-medium text-sm">No {activeTab} yet</p>
               <p className="text-xs text-muted-foreground mt-1">Your transactions will appear here</p>

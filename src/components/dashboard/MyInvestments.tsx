@@ -11,13 +11,13 @@ export const MyInvestments = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="bg-card rounded-xl border border-border p-6 h-full"
+      className="bg-card rounded-xl border border-border p-6 h-full shadow-sm"
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-5">
         <h3 className="text-sm font-semibold text-foreground">My Investments</h3>
         <button className="p-0.5">
-          <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
+          <Info className="w-3.5 h-3.5 text-muted-foreground" />
         </button>
       </div>
 
@@ -34,8 +34,8 @@ export const MyInvestments = () => {
             transition={{ delay: 0.6, type: "spring" }}
             className="mb-4"
           >
-            <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-muted-foreground/60" />
+            <div className="w-14 h-14 rounded-xl bg-accent flex items-center justify-center">
+              <Briefcase className="w-6 h-6 text-primary" />
             </div>
           </motion.div>
 
@@ -56,7 +56,7 @@ export const MyInvestments = () => {
             <Button 
               variant="outline"
               size="sm"
-              className="rounded-full h-9 px-5 text-xs font-medium transition-all duration-200 group"
+              className="rounded-full h-9 px-5 text-xs font-medium border-border text-foreground hover:bg-accent hover:text-primary hover:border-primary/40 transition-all duration-200 group"
             >
               Explore
               <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-0.5 transition-transform" />

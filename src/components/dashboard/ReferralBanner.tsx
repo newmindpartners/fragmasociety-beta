@@ -8,13 +8,13 @@ export const ReferralBanner = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="relative overflow-hidden rounded-xl bg-card border border-border p-6 lg:p-8 h-full flex items-center"
+      className="relative overflow-hidden rounded-xl bg-card border border-border p-6 lg:p-8 h-full flex items-center shadow-sm"
     >
       {/* Decorative background */}
       <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden pointer-events-none">
         <svg 
           viewBox="0 0 400 300" 
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[300px] opacity-[0.08]"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[300px] opacity-10"
           fill="none"
         >
           {/* Abstract waveform pattern */}
@@ -41,7 +41,7 @@ export const ReferralBanner = () => {
           {/* Heading */}
           <h3 className="text-xl lg:text-2xl font-serif text-foreground mb-3">
             Earn{" "}
-            <span className="inline-flex items-center px-3 py-1 bg-primary text-primary-foreground rounded-md font-semibold text-lg">
+            <span className="inline-flex items-center px-3 py-1 bg-primary text-white rounded-md font-semibold text-lg">
               $100
             </span>
             {" "}to refer a friend
@@ -60,7 +60,7 @@ export const ReferralBanner = () => {
         >
           <Button 
             variant="outline"
-            className="rounded-full px-5 h-10 font-medium group transition-all duration-200"
+            className="rounded-full px-5 h-10 font-medium group border-border text-foreground hover:bg-accent hover:text-primary hover:border-primary/40 transition-all duration-200"
           >
             Refer a Friend
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
