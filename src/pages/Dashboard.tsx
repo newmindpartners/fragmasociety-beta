@@ -13,19 +13,18 @@ const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="theme-dashboard relative min-h-screen w-full overflow-x-hidden bg-background text-foreground">
+    <div className="theme-dashboard relative flex min-h-screen w-full bg-background text-foreground">
       {/* Sidebar - Fixed */}
       <DashboardSidebar
         isCollapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      {/* Main Content Wrapper - Adjusts for sidebar */}
+      {/* Main Content Wrapper - Flex child that takes remaining space */}
       <div
-        className="min-h-screen w-full min-w-0 flex flex-col overflow-x-hidden transition-[margin-left,width] duration-300 ease-out"
+        className="flex min-h-screen flex-1 flex-col overflow-hidden transition-[margin-left] duration-300 ease-out"
         style={{
           marginLeft: sidebarCollapsed ? 72 : 256,
-          width: `calc(100% - ${sidebarCollapsed ? 72 : 256}px)`,
         }}
       >
         {/* Header */}
