@@ -59,9 +59,10 @@ const Dashboard = () => {
                 <InvestmentOverview />
               </div>
 
-              {/* Right Column - Referral Banner */}
-              <div className="lg:col-span-2">
-                <ReferralBanner />
+              {/* Right Column - My Investments + Quick Actions */}
+              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <MyInvestments />
+                <QuickActions />
               </div>
             </div>
 
@@ -72,10 +73,9 @@ const Dashboard = () => {
                 <OpenTransactions />
               </div>
 
-              {/* Right Column */}
-              <div className="lg:col-span-1 space-y-4 self-start">
-                <MyInvestments />
-                <QuickActions />
+              {/* Right Column - Referral Banner */}
+              <div className="lg:col-span-1 self-start">
+                <ReferralBanner />
               </div>
             </div>
           </div>
