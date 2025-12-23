@@ -64,7 +64,7 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
             "group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden",
             isCollapsed ? "justify-center" : "",
             isActive 
-              ? "bg-[hsl(var(--sidebar-primary))] text-white shadow-lg shadow-[hsl(var(--sidebar-primary))/20]" 
+              ? "bg-white/10 text-white border border-white/20" 
               : "text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))]"
           )}
         >
