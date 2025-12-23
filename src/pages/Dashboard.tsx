@@ -13,23 +13,26 @@ const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen h-full w-full bg-slate-50 fixed inset-0 overflow-auto">
-      {/* Sidebar */}
+    <div className="min-h-screen w-full" style={{ backgroundColor: '#f8fafc' }}>
+      {/* Sidebar - Fixed */}
       <DashboardSidebar 
         isCollapsed={sidebarCollapsed} 
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
       />
 
-      {/* Main Content */}
-      <motion.div 
-        className="flex-1 flex flex-col min-h-screen transition-all duration-300 ease-out"
-        animate={{ marginLeft: sidebarCollapsed ? 72 : 256 }}
+      {/* Main Content Wrapper - Adjusts for sidebar */}
+      <div 
+        className="min-h-screen flex flex-col transition-all duration-300 ease-out"
+        style={{ 
+          marginLeft: sidebarCollapsed ? 72 : 256,
+          backgroundColor: '#f8fafc'
+        }}
       >
         {/* Header */}
         <DashboardHeader onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
         {/* Page Content */}
-        <main className="flex-1 p-6 lg:p-8 bg-slate-50">
+        <main className="flex-1 p-6 lg:p-8" style={{ backgroundColor: '#f8fafc' }}>
           {/* Welcome Section */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -88,7 +91,7 @@ const Dashboard = () => {
             </div>
           </div>
         </footer>
-      </motion.div>
+      </div>
     </div>
   );
 };
