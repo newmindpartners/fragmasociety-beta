@@ -395,7 +395,7 @@ export const SignatureDealWhy = () => {
           className="mt-24 flex flex-col items-center gap-4"
         >
           <div className="h-px w-48 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
-          <span className="text-[10px] tracking-[0.4em] uppercase text-slate-300 font-light">Trusted by 15+ industry leaders</span>
+          <span className="text-[10px] tracking-[0.4em] uppercase text-slate-300 font-light">Trusted by industry leaders</span>
         </motion.div>
       </div>
 
