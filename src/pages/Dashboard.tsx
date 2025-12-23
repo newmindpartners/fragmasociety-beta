@@ -53,14 +53,14 @@ const Dashboard = () => {
             </div>
 
             {/* Main Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-              {/* Left Column - Investment Overview */}
-              <div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+              {/* Left Column - Investment Overview (1 col) */}
+              <div className="lg:col-span-1">
                 <InvestmentOverview />
               </div>
 
-              {/* Right Column - My Investments */}
-              <div className="h-full">
+              {/* Right Column - My Investments (2 cols) */}
+              <div className="lg:col-span-2 h-full">
                 <MyInvestments />
               </div>
             </div>
