@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Phone } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import ctaBg from "@/assets/signature-deal-cta-bg.jpg";
 
 export const SignatureDealCTA = () => {
@@ -9,154 +9,147 @@ export const SignatureDealCTA = () => {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-32 relative overflow-hidden" ref={containerRef}>
-      {/* Background image - B&W */}
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden" ref={containerRef}>
+      {/* Full background image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat grayscale"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${ctaBg})` }}
       />
       
-      {/* Dark navy overlay - deeper */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220,50%,2%)/96] via-[hsl(220,45%,3%)/94] to-[hsl(220,50%,2%)/96]" />
+      {/* Premium dark overlay with depth */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/75 to-slate-950/90" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/60" />
       
-      {/* Additional depth gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(220,50%,1%)_100%)]" />
-      
-      {/* White ambient glows */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-full blur-[200px]"
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-1/4 right-1/4 w-[300px] h-[300px] bg-white/[0.05] rounded-full blur-[150px]"
-        animate={{
-          scale: [1.1, 1, 1.1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      />
-      
-      {/* Floating particles */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-white/30 rounded-full"
-          style={{
-            left: `${15 + (i * 10)}%`,
-            top: `${30 + (i % 3) * 15}%`,
-          }}
-          animate={{
-            y: [-15, 15, -15],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: 4 + i * 0.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.3,
-          }}
-        />
-      ))}
+      {/* Vignette effect */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(2,6,23,0.7)_100%)]" />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
-        >
-          {/* Premium glass card */}
-          <div className="relative p-12 md:p-16 rounded-3xl 
-            bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent
-            backdrop-blur-2xl 
-            border border-white/[0.1] 
-            overflow-hidden
-            shadow-[0_20px_80px_-20px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)]"
+      {/* Subtle grid overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
+          backgroundSize: '80px 80px'
+        }}
+      />
+
+      {/* Ambient light effects */}
+      <motion.div
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-br from-violet-500/[0.08] via-slate-500/[0.05] to-transparent rounded-full blur-[150px]"
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.4, 0.6, 0.4],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+        <div className="max-w-5xl">
+          {/* Section Label */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-4 mb-10"
           >
-            {/* White decorative glows */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-white/[0.1] to-transparent rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-60 h-60 bg-gradient-to-tr from-white/[0.08] to-transparent rounded-full blur-3xl" />
-            
-            {/* Top highlight line */}
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            <div className="w-16 h-px bg-gradient-to-r from-white/50 to-transparent" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-white/50 font-medium">
+              Ready to Launch?
+            </span>
+          </motion.div>
 
-            <div className="relative z-10 text-center">
-              {/* Badge with white accent */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full 
-                  bg-white/[0.08] backdrop-blur-xl
-                  border border-white/[0.15] 
-                  mb-8 relative overflow-hidden
-                  shadow-[0_4px_20px_-5px_rgba(255,255,255,0.1)]"
-              >
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
-                <Sparkles className="w-4 h-4 text-white" />
-                <span className="text-sm text-white font-semibold">Ready to Launch?</span>
-              </motion.div>
+          {/* Main Headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[1.05] mb-8"
+          >
+            Ready to launch your
+            <br />
+            <span className="italic text-white/50 font-serif">Signature Deal?</span>
+          </motion.h2>
 
-              {/* Headline */}
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6"
-              >
-                Ready to launch your
-                <br />
-                <span className="font-signature italic bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-                  Signature Deal?
-                </span>
-              </motion.h2>
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg md:text-xl text-white/40 max-w-2xl mb-12 leading-relaxed"
+          >
+            Let's design a premium investment product around your vision — 
+            and open it to investors worldwide.
+          </motion.p>
 
-              {/* Description */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-lg text-white/60 max-w-2xl mx-auto mb-10"
-              >
-                Let's design a premium investment product around your vision —
-                and open it to investors worldwide.
-              </motion.p>
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <Button 
+              size="lg" 
+              className="group text-base px-10 py-7 bg-white text-slate-900 hover:bg-white/90 
+                rounded-sm font-medium tracking-wide
+                shadow-[0_20px_60px_-15px_rgba(255,255,255,0.25)]
+                hover:shadow-[0_25px_70px_-15px_rgba(255,255,255,0.35)]
+                transition-all duration-500"
+            >
+              Start Your Deal
+              <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="text-base px-10 py-7 rounded-sm font-medium tracking-wide
+                border-white/20 text-white/80 
+                hover:bg-white hover:text-slate-900 hover:border-white
+                transition-all duration-500"
+            >
+              <Phone className="mr-3 w-4 h-4" />
+              Book a Strategy Call
+            </Button>
+          </motion.div>
 
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-              >
-                <Button 
-                  size="lg" 
-                  className="group text-base px-8 py-6 bg-white text-background hover:bg-white/90 
-                    shadow-[0_8px_30px_-10px_rgba(255,255,255,0.3)]
-                    hover:shadow-[0_12px_40px_-10px_rgba(255,255,255,0.4)]
-                    transition-all duration-300"
+          {/* Stats Row */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-20 pt-12 border-t border-white/10"
+          >
+            <div className="grid grid-cols-3 gap-8 max-w-2xl">
+              {[
+                { value: "$50M+", label: "Deals Launched" },
+                { value: "15+", label: "Global Partners" },
+                { value: "100%", label: "Compliant" },
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                  className="text-center sm:text-left"
                 >
-                  Start Your Deal
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="text-base px-8 py-6 border-white text-white hover:bg-white hover:text-background transition-all duration-300"
-                >
-                  <Phone className="mr-2 w-4 h-4" />
-                  Book a Strategy Call
-                </Button>
-              </motion.div>
+                  <div className="text-2xl md:text-3xl lg:text-4xl font-light text-white mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-[11px] tracking-[0.2em] uppercase text-white/30">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
+
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
+      
+      {/* Corner accents */}
+      <div className="absolute top-0 left-0 w-32 h-32 border-l border-t border-white/10" />
+      <div className="absolute bottom-0 right-0 w-32 h-32 border-r border-b border-white/10" />
     </section>
   );
 };
