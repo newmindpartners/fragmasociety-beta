@@ -152,11 +152,11 @@ export const SignatureDealCTA = () => {
             className="mb-8"
           >
             <Button 
-              variant="outline"
               size="lg"
-              className="h-14 px-10 bg-transparent hover:bg-white/[0.08] text-white/70 hover:text-white 
-                border border-white/20 hover:border-white/40
+              className="h-14 px-10 bg-white hover:bg-white/90 text-slate-900
                 rounded-sm font-medium tracking-wide
+                shadow-[0_20px_60px_-15px_rgba(255,255,255,0.25)]
+                hover:shadow-[0_25px_70px_-15px_rgba(255,255,255,0.35)]
                 transition-all duration-300"
             >
               <Phone className="mr-3 w-4 h-4" />
