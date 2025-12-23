@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="theme-dashboard min-h-screen w-full bg-background text-foreground">
+    <div className="theme-dashboard relative min-h-screen w-full overflow-x-hidden bg-background text-foreground">
       {/* Sidebar - Fixed */}
       <DashboardSidebar
         isCollapsed={sidebarCollapsed}
@@ -22,14 +22,17 @@ const Dashboard = () => {
 
       {/* Main Content Wrapper - Adjusts for sidebar */}
       <div
-        className="min-h-screen flex flex-col transition-[margin-left] duration-300 ease-out"
-        style={{ marginLeft: sidebarCollapsed ? 72 : 256 }}
+        className="min-h-screen w-full min-w-0 flex flex-col overflow-x-hidden transition-[margin-left,width] duration-300 ease-out"
+        style={{
+          marginLeft: sidebarCollapsed ? 72 : 256,
+          width: `calc(100% - ${sidebarCollapsed ? 72 : 256}px)`,
+        }}
       >
         {/* Header */}
         <DashboardHeader onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
         {/* Page Content */}
-        <main className="flex-1 px-6 py-6 lg:px-10 lg:py-8 bg-background">
+        <main className="flex-1 min-w-0 bg-background px-6 py-6 lg:px-10 lg:py-8">
           <div className="mx-auto w-full max-w-[1400px]">
             {/* Welcome Section */}
             <motion.div
