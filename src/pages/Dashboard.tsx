@@ -7,7 +7,7 @@ import { InvestmentOverview } from "@/components/dashboard/InvestmentOverview";
 import { ReferralBanner } from "@/components/dashboard/ReferralBanner";
 import { OpenTransactions } from "@/components/dashboard/OpenTransactions";
 import { MyInvestments } from "@/components/dashboard/MyInvestments";
-import { QuickActions } from "@/components/dashboard/QuickActions";
+
 
 const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -53,16 +53,15 @@ const Dashboard = () => {
             </div>
 
             {/* Main Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
               {/* Left Column - Investment Overview */}
-              <div className="lg:col-span-1">
+              <div>
                 <InvestmentOverview />
               </div>
 
-              {/* Right Column - My Investments + Quick Actions */}
-              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Right Column - My Investments */}
+              <div className="h-full">
                 <MyInvestments />
-                <QuickActions />
               </div>
             </div>
 
