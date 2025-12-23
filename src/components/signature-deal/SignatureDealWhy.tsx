@@ -127,7 +127,7 @@ export const SignatureDealWhy = () => {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
           >
-            Why launch your signature deal
+            Why launch your <span className="font-signature italic">signature deal</span>
             <br />
             <span className="italic text-slate-500 font-serif">with Fragma?</span>
           </motion.h2>

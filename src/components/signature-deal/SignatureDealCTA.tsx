@@ -111,7 +111,7 @@ export const SignatureDealCTA = () => {
               >
                 Ready to launch your
                 <br />
-                <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+                <span className="font-signature italic bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
                   Signature Deal?
                 </span>
               </motion.h2>
