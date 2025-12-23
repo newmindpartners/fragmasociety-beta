@@ -255,15 +255,15 @@ export const SignatureDealHero = () => {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.75 + i * 0.1 }}
-                          className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.06] border border-white/[0.08] hover:bg-white/[0.1] transition-all duration-300 group"
+                          className="flex items-center gap-4 p-3.5 rounded-xl bg-white/[0.06] border border-white/[0.08] hover:bg-white/[0.1] transition-all duration-300 group"
                         >
                           <span 
-                            className="text-lg font-light text-primary w-7 group-hover:text-primary/80 transition-colors"
+                            className="text-lg font-light text-primary w-8 group-hover:text-primary/80 transition-colors"
                             style={{ fontFamily: "'Playfair Display', serif" }}
                           >
                             {step.number}
                           </span>
-                          <div>
+                          <div className="flex-1">
                             <p className="text-sm text-white font-medium">{step.label}</p>
                             <p className="text-[10px] text-white/40">{step.desc}</p>
                           </div>
