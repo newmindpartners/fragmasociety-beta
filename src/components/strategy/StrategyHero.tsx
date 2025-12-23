@@ -12,32 +12,35 @@ const strategies = [
   {
     id: 1,
     title: "BTC Mining",
-    subtitle: "Digital Infrastructure",
+    subtitle: "hearstcorporation.io",
     allocation: "30%",
     icon: Bitcoin,
     color: "from-amber-500 to-orange-600",
     image: null,
-    leader: null
+    leader: null,
+    description: "Institutional Mining Operations"
   },
   {
     id: 2,
     title: "Prime Real Estate",
-    subtitle: "Signature Deal",
+    subtitle: "Malibu & Beverly Hills",
     allocation: "35%",
     icon: Building2,
     color: "from-violet-500 to-purple-600",
     leader: "Philippe Naouri",
-    image: philippeNaouri
+    image: philippeNaouri,
+    description: "Prime Location Real Estate"
   },
   {
     id: 3,
-    title: "Film & Loans",
-    subtitle: "Signature Deal",
+    title: "Blockbuster Film",
+    subtitle: "Film Financing",
     allocation: "35%",
     icon: Film,
     color: "from-cyan-500 to-blue-600",
     leader: "Tim Levy",
-    image: timLevy
+    image: timLevy,
+    description: "Blockbuster Film Financing"
   }
 ];
 
@@ -283,7 +286,7 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                         className="flex items-center gap-3"
                       >
                         <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500" />
-                        <p className="text-white/50 text-sm">Institutional Mining Operations</p>
+                        <p className="text-white/50 text-sm">{activeStrategy.description}</p>
                       </motion.div>
                     )}
                   </div>
