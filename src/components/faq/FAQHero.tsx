@@ -21,12 +21,12 @@ export const FAQHero = () => {
         <motion.div
           animate={{ y: [-10, 10, -10], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-20 left-[10%] w-72 h-72 rounded-full bg-gradient-to-br from-turquoise/10 to-cyan-300/5 blur-3xl"
+          className="absolute top-20 left-[10%] w-72 h-72 rounded-full bg-turquoise/5 blur-3xl"
         />
         <motion.div
           animate={{ y: [10, -10, 10], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 10, repeat: Infinity }}
-          className="absolute bottom-10 right-[10%] w-96 h-96 rounded-full bg-gradient-to-tl from-slate-200/40 to-slate-100/20 blur-3xl"
+          className="absolute bottom-10 right-[10%] w-96 h-96 rounded-full bg-slate-200/30 blur-3xl"
         />
         
         {/* Geometric accents */}
