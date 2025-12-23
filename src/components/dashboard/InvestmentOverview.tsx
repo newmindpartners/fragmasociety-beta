@@ -21,7 +21,7 @@ export const InvestmentOverview = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-card rounded-xl border border-border p-6 h-full flex flex-col shadow-sm"
+      className="bg-card rounded-xl border border-primary/30 p-6 h-full flex flex-col shadow-sm ring-1 ring-primary/10"
     >
       {/* Header */}
       <h3 className="text-2xl font-serif font-semibold text-foreground mb-8 leading-tight">
