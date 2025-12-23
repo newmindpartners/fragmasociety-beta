@@ -14,7 +14,7 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
       <motion.div 
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-primary text-primary-foreground py-2.5 px-6"
+        className="bg-primary text-white py-2.5 px-6"
       >
         <div className="flex items-center justify-center gap-4">
           <span className="text-sm font-medium opacity-90">
@@ -23,7 +23,7 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
           <Button 
             size="sm" 
             variant="secondary"
-            className="rounded-full h-7 px-4 text-xs font-medium group"
+            className="rounded-full h-7 px-4 text-xs font-medium group bg-white/20 hover:bg-white/30 text-white border-0"
           >
             <Wallet className="w-3 h-3 mr-1.5" />
             Connect Wallet
@@ -33,14 +33,14 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
       </motion.div>
 
       {/* Main Header */}
-      <div className="px-6 py-3">
+      <div className="px-6 py-3 bg-card">
         <div className="flex items-center justify-between gap-6">
           {/* Mobile Menu Button */}
           <button 
             onClick={onMenuToggle}
             className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
           >
-            <Menu className="w-5 h-5 text-foreground/70" />
+            <Menu className="w-5 h-5 text-foreground" />
           </button>
 
           {/* Search Bar */}
@@ -51,11 +51,11 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             className="flex-1 max-w-md"
           >
             <div className="relative group">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 group-focus-within:text-foreground/70 transition-colors" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2.5 bg-muted border border-border rounded-xl text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all duration-200 text-foreground"
+                className="w-full pl-10 pr-4 py-2.5 bg-muted border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all duration-200 text-foreground"
               />
             </div>
           </motion.div>
@@ -84,7 +84,7 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Button className="rounded-full px-5 h-9 text-sm font-medium transition-all duration-200">
+            <Button className="rounded-full px-5 h-9 text-sm font-medium bg-primary hover:bg-primary/90 text-white shadow-sm transition-all duration-200">
               Invest Now
             </Button>
           </motion.div>
