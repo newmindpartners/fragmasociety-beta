@@ -67,13 +67,13 @@ const Dashboard = () => {
 
             {/* Lower Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-              {/* Open Transactions - Takes 2 columns */}
-              <div className="lg:col-span-2">
+              {/* Open Transactions - Takes 1 column */}
+              <div className="lg:col-span-1">
                 <OpenTransactions />
               </div>
 
-              {/* Right Column - Referral Banner */}
-              <div className="lg:col-span-1 self-start">
+              {/* Referral Banner - Takes 2 columns */}
+              <div className="lg:col-span-2 self-start">
                 <ReferralBanner />
               </div>
             </div>
