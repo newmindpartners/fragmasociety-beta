@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bitcoin, Building2, Film, ArrowRight } from "lucide-react";
+import { Bitcoin, Building2, Film, ArrowRight, TrendingUp, Shield, Clock, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -25,7 +25,13 @@ export const StrategyPillars = () => {
       highlights: ["Hashrate Contracts", "Revenue Share", "Professional Operators"],
       gradientFrom: "from-amber-500",
       gradientTo: "to-orange-600",
-      glowColor: "rgba(245, 158, 11, 0.15)"
+      glowColor: "rgba(245, 158, 11, 0.15)",
+      hoverDetails: {
+        targetReturn: "18-25% APY",
+        riskLevel: "Medium-High",
+        liquidity: "Quarterly",
+        keyMetric: "50+ MW capacity"
+      }
     },
     {
       id: 2,
@@ -41,7 +47,13 @@ export const StrategyPillars = () => {
       highlights: ["Malibu Development", "European Assets", "Income Generation"],
       gradientFrom: "from-violet-500",
       gradientTo: "to-purple-600",
-      glowColor: "rgba(139, 92, 246, 0.15)"
+      glowColor: "rgba(139, 92, 246, 0.15)",
+      hoverDetails: {
+        targetReturn: "15-22% IRR",
+        riskLevel: "Medium",
+        liquidity: "24-36 months",
+        keyMetric: "$50M+ portfolio"
+      }
     },
     {
       id: 3,
@@ -57,7 +69,13 @@ export const StrategyPillars = () => {
       highlights: ["Film Finance", "Corporate Loans", "Entertainment Industry"],
       gradientFrom: "from-cyan-500",
       gradientTo: "to-blue-600",
-      glowColor: "rgba(6, 182, 212, 0.15)"
+      glowColor: "rgba(6, 182, 212, 0.15)",
+      hoverDetails: {
+        targetReturn: "12-18% APY",
+        riskLevel: "Medium",
+        liquidity: "12-24 months",
+        keyMetric: "20+ productions"
+      }
     }
   ];
 
@@ -122,9 +140,51 @@ export const StrategyPillars = () => {
                       style={{ background: `linear-gradient(to top, ${strategy.glowColor}, transparent)` }}
                     />
                     
+                    {/* Hover Details Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-slate-950/80 backdrop-blur-sm">
+                      <div className="grid grid-cols-2 gap-4 p-6 w-full">
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/[0.08]">
+                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${strategy.gradientFrom} ${strategy.gradientTo} flex items-center justify-center`}>
+                            <TrendingUp className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-[9px] uppercase tracking-wider text-white/40">Target Return</p>
+                            <p className="text-sm font-medium text-white">{strategy.hoverDetails.targetReturn}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/[0.08]">
+                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${strategy.gradientFrom} ${strategy.gradientTo} flex items-center justify-center`}>
+                            <Shield className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-[9px] uppercase tracking-wider text-white/40">Risk Level</p>
+                            <p className="text-sm font-medium text-white">{strategy.hoverDetails.riskLevel}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/[0.08]">
+                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${strategy.gradientFrom} ${strategy.gradientTo} flex items-center justify-center`}>
+                            <Clock className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-[9px] uppercase tracking-wider text-white/40">Liquidity</p>
+                            <p className="text-sm font-medium text-white">{strategy.hoverDetails.liquidity}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/[0.08]">
+                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${strategy.gradientFrom} ${strategy.gradientTo} flex items-center justify-center`}>
+                            <Target className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-[9px] uppercase tracking-wider text-white/40">Key Metric</p>
+                            <p className="text-sm font-medium text-white">{strategy.hoverDetails.keyMetric}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
                     {/* Allocation Badge - Top Left */}
                     <motion.div 
-                      className="absolute top-5 left-5"
+                      className="absolute top-5 left-5 z-10"
                       whileHover={{ scale: 1.02 }}
                     >
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${strategy.gradientFrom} ${strategy.gradientTo} flex items-center justify-center shadow-xl`}>
@@ -138,7 +198,7 @@ export const StrategyPillars = () => {
                     </motion.div>
                     
                     {/* Icon - Top Right */}
-                    <div className="absolute top-5 right-5">
+                    <div className="absolute top-5 right-5 z-10">
                       <div className="w-12 h-12 rounded-xl bg-white/[0.08] backdrop-blur-sm border border-white/[0.1] flex items-center justify-center">
                         <strategy.icon className="w-5 h-5 text-white/70" />
                       </div>
