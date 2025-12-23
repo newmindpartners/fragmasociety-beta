@@ -9,20 +9,19 @@ import {
   ArrowLeftRight, 
   FileText, 
   Megaphone,
-  Users,
-  Sparkles
+  Users
 } from "lucide-react";
 
 const benefits = [
-  { icon: TrendingUp, label: "New revenue stream" },
-  { icon: Heart, label: "Community loyalty" },
-  { icon: Award, label: "Institutional credibility" },
-  { icon: Coins, label: "Tokenized ownership" },
-  { icon: Globe, label: "Global access" },
-  { icon: ArrowLeftRight, label: "Built-in liquidity" },
-  { icon: FileText, label: "Automated payouts" },
-  { icon: Megaphone, label: "Brand storytelling" },
-  { icon: Users, label: "Investor ecosystem" },
+  { icon: TrendingUp, label: "New revenue stream", number: "01" },
+  { icon: Heart, label: "Community loyalty", number: "02" },
+  { icon: Award, label: "Institutional credibility", number: "03" },
+  { icon: Coins, label: "Tokenized ownership", number: "04" },
+  { icon: Globe, label: "Global access", number: "05" },
+  { icon: ArrowLeftRight, label: "Built-in liquidity", number: "06" },
+  { icon: FileText, label: "Automated payouts", number: "07" },
+  { icon: Megaphone, label: "Brand storytelling", number: "08" },
+  { icon: Users, label: "Investor ecosystem", number: "09" },
 ];
 
 export const SignatureDealBenefits = () => {
@@ -31,146 +30,155 @@ export const SignatureDealBenefits = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-20 lg:py-28 relative overflow-hidden" ref={containerRef}>
-      {/* Premium Light Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50" />
-      
-      {/* Subtle grid */}
+    <section className="relative py-24 lg:py-32 overflow-hidden" ref={containerRef}>
+      {/* Premium Light Background - matching Marketplace */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
+        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      {/* Subtle grid pattern */}
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.015]"
         style={{
-          backgroundImage: `linear-gradient(90deg, #0f172a 1px, transparent 1px), linear-gradient(180deg, #0f172a 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
           backgroundSize: '60px 60px'
         }}
       />
-      
-      {/* Top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        {/* Compact Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 shadow-sm mb-6">
-            <Sparkles className="w-3.5 h-3.5 text-violet-500" />
-            <span className="text-[10px] tracking-[0.3em] uppercase text-slate-500 font-medium">
+        {/* Header - Marketplace style */}
+        <div className="max-w-4xl mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
               Unlock Your Potential
             </span>
-          </div>
+          </motion.div>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-slate-900 leading-tight tracking-tight">
-            What you unlock with a{" "}
-            <span 
-              className="font-signature italic"
-              style={{
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Signature Deal
-            </span>
-          </h2>
-        </motion.div>
-
-        {/* Visual Benefits Grid - Compact Icon Cards */}
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3">
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
-              const isHovered = hoveredIndex === index;
-              
-              return (
-                <motion.div
-                  key={benefit.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.1 + index * 0.04 }}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  className="group"
-                >
-                  <motion.div
-                    className="relative flex flex-col items-center text-center cursor-pointer"
-                    animate={{ y: isHovered ? -4 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {/* Icon Circle */}
-                    <motion.div
-                      className={`w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-3 transition-all duration-400 ${
-                        isHovered 
-                          ? 'bg-slate-900 shadow-xl' 
-                          : 'bg-white border border-slate-200 shadow-sm'
-                      }`}
-                      animate={{ 
-                        scale: isHovered ? 1.1 : 1,
-                        rotate: isHovered ? 6 : 0
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Icon 
-                        className={`w-7 h-7 lg:w-8 lg:h-8 transition-colors duration-300 ${
-                          isHovered ? 'text-white' : 'text-slate-400'
-                        }`} 
-                        strokeWidth={1.5} 
-                      />
-                    </motion.div>
-                    
-                    {/* Label */}
-                    <span className={`text-[11px] lg:text-xs font-medium leading-tight transition-colors duration-300 max-w-[80px] ${
-                      isHovered ? 'text-slate-900' : 'text-slate-500'
-                    }`}>
-                      {benefit.label}
-                    </span>
-                    
-                    {/* Hover indicator dot */}
-                    <motion.div
-                      className="w-1 h-1 rounded-full bg-violet-500 mt-2"
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ 
-                        opacity: isHovered ? 1 : 0,
-                        scale: isHovered ? 1 : 0
-                      }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </div>
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.1]"
+          >
+            What you unlock with a
+            <br />
+            <span className="italic text-slate-500 font-serif">Signature Deal.</span>
+          </motion.h2>
         </div>
 
-        {/* Bottom Statement */}
+        {/* Benefits Grid - Compact 3x3 */}
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-4 lg:gap-6 mb-20">
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon;
+            const isHovered = hoveredIndex === index;
+            
+            return (
+              <motion.div
+                key={benefit.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.1 + index * 0.04 }}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="group cursor-pointer"
+              >
+                <motion.div
+                  className="relative flex flex-col items-center text-center p-4 lg:p-5 rounded-sm overflow-hidden"
+                  style={{
+                    background: isHovered 
+                      ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 100%)'
+                      : 'rgba(255, 255, 255, 0.7)',
+                    border: isHovered 
+                      ? '1px solid rgba(139, 92, 246, 0.25)' 
+                      : '1px solid rgba(226, 232, 240, 0.6)',
+                    boxShadow: isHovered 
+                      ? '0 20px 40px -10px rgba(15, 23, 42, 0.4)'
+                      : '0 2px 15px -5px rgba(0, 0, 0, 0.05)',
+                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                  }}
+                  animate={{ 
+                    y: isHovered ? -6 : 0,
+                    scale: isHovered ? 1.03 : 1
+                  }}
+                  transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                >
+                  {/* Icon */}
+                  <motion.div
+                    className={`w-12 h-12 lg:w-14 lg:h-14 rounded-sm flex items-center justify-center mb-3 ${
+                      isHovered 
+                        ? 'bg-slate-800/50 border-slate-600/30' 
+                        : 'bg-slate-50 border-slate-200'
+                    }`}
+                    style={{ 
+                      borderWidth: '1px',
+                      borderStyle: 'solid',
+                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                    animate={{ rotate: isHovered ? 6 : 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <Icon 
+                      className={`w-5 h-5 lg:w-6 lg:h-6 ${
+                        isHovered ? 'text-violet-300' : 'text-slate-500'
+                      }`} 
+                      style={{ transition: 'color 0.4s' }}
+                      strokeWidth={1.5} 
+                    />
+                  </motion.div>
+                  
+                  {/* Label */}
+                  <span 
+                    className={`text-xs lg:text-sm font-medium leading-tight ${
+                      isHovered ? 'text-white/90' : 'text-slate-700'
+                    }`}
+                    style={{ transition: 'color 0.4s' }}
+                  >
+                    {benefit.label}
+                  </span>
+
+                  {/* Bottom accent line */}
+                  <motion.div 
+                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-violet-500/60 to-slate-600/30"
+                    initial={{ width: 0 }}
+                    animate={{ width: isHovered ? '100%' : 0 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Bottom Statement - Clean, consistent typography */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16 text-center"
+          className="text-center"
         >
-          <p className="text-xl md:text-2xl lg:text-3xl text-slate-800 tracking-tight">
+          <p className="text-2xl md:text-3xl lg:text-4xl font-light text-slate-900 leading-relaxed tracking-tight">
             This is not just fundraising. This is{" "}
-            <span 
-              className="font-signature italic pb-1"
-              style={{
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              brand-owned private markets
-            </span>
+            <span className="italic text-slate-500 font-serif">brand-owned private markets.</span>
           </p>
         </motion.div>
-      </div>
 
-      {/* Bottom accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+        {/* Bottom decorative element */}
+        <motion.div 
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
+          transition={{ delay: 0.7, duration: 1 }}
+          className="mt-16 flex flex-col items-center gap-4"
+        >
+          <div className="h-px w-48 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+        </motion.div>
+      </div>
     </section>
   );
 };
