@@ -9,9 +9,6 @@ import categorySports from "@/assets/category-sports.jpg";
 import categoryLuxury from "@/assets/category-luxury.jpg";
 import categoryEquities from "@/assets/category-equities.jpg";
 import categoryCredit from "@/assets/category-credit.jpg";
-import philippeNaouri from "@/assets/philippe-naouri.png";
-import timLevy from "@/assets/tim-levy.png";
-import bryanBalsinger from "@/assets/bryan-balsinger.png";
 
 const industries = [
   {
@@ -52,10 +49,10 @@ const industries = [
   }
 ];
 
-const leaders = [
-  { name: "Philippe Naouri", role: "Real Estate", image: philippeNaouri },
-  { name: "Tim Levy", role: "Film & Media", image: timLevy },
-  { name: "Bryan Balsinger", role: "Sports", image: bryanBalsinger },
+const steps = [
+  { number: "01", label: "Define", desc: "Your vision & asset" },
+  { number: "02", label: "Structure", desc: "Compliant tokenization" },
+  { number: "03", label: "Launch", desc: "To your audience" },
 ];
 
 export const SignatureDealHero = () => {
@@ -254,8 +251,8 @@ export const SignatureDealHero = () => {
                 );
               })}
               
-              {/* Center - "Invest with Industry Leaders" Card */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] z-20">
+              {/* Center - "You Are The Leader" Card */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] z-20">
                 <motion.div
                   initial={{ opacity: 0, y: 20, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -266,59 +263,54 @@ export const SignatureDealHero = () => {
                   <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-cyan-500 to-violet-500 opacity-20 blur-3xl" />
                   
                   <div className="relative p-6">
-                    {/* Header */}
+                    {/* Header - Empowering message */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
                       className="text-center mb-6"
                     >
-                      <p className="text-[9px] uppercase tracking-[0.25em] text-cyan-400/80 mb-2">Partner With</p>
+                      <p className="text-[9px] uppercase tracking-[0.25em] text-cyan-400/80 mb-2">You Are The</p>
                       <h3 
-                        className="text-xl font-light text-white leading-tight"
+                        className="text-2xl font-light text-white leading-tight"
                         style={{ fontFamily: "'Playfair Display', serif" }}
                       >
-                        Industry Leaders
+                        Industry Leader
                       </h3>
+                      <p className="text-[10px] text-white/40 mt-2">Your vision. Your deal. Your legacy.</p>
                     </motion.div>
                     
-                    {/* Leaders avatars */}
+                    {/* Steps to launch */}
                     <motion.div 
-                      className="flex justify-center mb-5"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      className="space-y-3 mb-5"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
                       transition={{ delay: 0.7 }}
                     >
-                      <div className="flex -space-x-4">
-                        {leaders.map((leader, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.8 + i * 0.1 }}
-                            className="relative group"
+                      {steps.map((step, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.75 + i * 0.1 }}
+                          className="flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.06] transition-colors"
+                        >
+                          <span 
+                            className="text-sm font-light text-cyan-400"
+                            style={{ fontFamily: "'Playfair Display', serif" }}
                           >
-                            <div className="w-14 h-14 rounded-full overflow-hidden border-3 border-slate-900 ring-2 ring-white/20 shadow-lg transition-transform group-hover:scale-110 group-hover:z-10">
-                              <img 
-                                src={leader.image} 
-                                alt={leader.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            {/* Tooltip on hover */}
-                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
-                              <div className="bg-slate-800 px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl border border-white/10">
-                                <p className="text-[10px] text-white font-medium">{leader.name}</p>
-                                <p className="text-[8px] text-white/50">{leader.role}</p>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
+                            {step.number}
+                          </span>
+                          <div>
+                            <p className="text-xs text-white font-medium">{step.label}</p>
+                            <p className="text-[9px] text-white/35">{step.desc}</p>
+                          </div>
+                        </motion.div>
+                      ))}
                     </motion.div>
                     
                     {/* Divider */}
-                    <div className="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent mb-5" />
+                    <div className="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent mb-4" />
                     
                     {/* Active Industry Display */}
                     <AnimatePresence mode="wait">
@@ -328,35 +320,27 @@ export const SignatureDealHero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3 }}
-                        className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.05] border border-white/[0.08]"
+                        className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-white/[0.06] to-white/[0.02] border border-white/[0.1]"
                       >
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${activeIndustry.color} flex items-center justify-center`}>
+                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${activeIndustry.color} flex items-center justify-center shadow-lg`}>
                           <activeIndustry.icon className="w-5 h-5 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
+                          <p className="text-[8px] uppercase tracking-wider text-white/40 mb-0.5">Your Industry</p>
                           <p className="text-sm text-white font-medium truncate">{activeIndustry.title}</p>
-                          <p className="text-[9px] text-white/40">{activeIndustry.subtitle}</p>
                         </div>
                       </motion.div>
                     </AnimatePresence>
                     
-                    {/* Stats row */}
-                    <motion.div 
-                      className="flex justify-between mt-5 pt-4 border-t border-white/[0.06]"
+                    {/* CTA hint */}
+                    <motion.p 
+                      className="text-center text-[9px] text-white/30 mt-4"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 0.9 }}
+                      transition={{ delay: 1 }}
                     >
-                      <div className="text-center">
-                        <p className="text-lg font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>€50M+</p>
-                        <p className="text-[8px] uppercase tracking-wider text-white/40">Deployed</p>
-                      </div>
-                      <div className="w-px bg-white/10" />
-                      <div className="text-center">
-                        <p className="text-lg font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>15+</p>
-                        <p className="text-[8px] uppercase tracking-wider text-white/40">Deals</p>
-                      </div>
-                    </motion.div>
+                      Join 15+ leaders who launched with Fragma
+                    </motion.p>
                   </div>
                 </motion.div>
                 
