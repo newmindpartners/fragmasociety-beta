@@ -12,7 +12,7 @@ export const faqCategories = [
       },
       {
         question: "What is the minimum investment amount?",
-        answer: "The minimum investment starts at just €50 for most deals, making premium assets accessible to everyone. Each deal may have its own minimum threshold, clearly displayed on the deal page."
+        answer: "Each deal has its own minimum investment threshold, which varies depending on the asset type and structure. The lowest minimum across our deals starts at €50, making premium assets accessible to a wider audience. Check the specific deal page to see the exact minimum for each opportunity."
       },
       {
         question: "How do I receive returns on my investment?",
