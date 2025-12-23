@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Wallet, ArrowRight, Menu, ChevronDown, Zap, ShoppingCart, HelpCircle, Crown, Briefcase, Rocket, Coins, Users, FileText } from "lucide-react";
+import { Wallet, ArrowRight, Menu, ChevronDown, Zap, ShoppingCart, HelpCircle, Crown, Briefcase, Rocket, Coins, Users, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -155,7 +155,7 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
     <header className="sticky top-0 z-30 bg-card/95 backdrop-blur-xl border-b border-border">
       {/* Main Header */}
       <div className="px-6 py-3 bg-card">
-        <div className="flex items-center justify-between gap-6">
+        <div className="flex items-center gap-6">
           {/* Mobile Menu Button */}
           <button 
             onClick={onMenuToggle}
@@ -164,28 +164,11 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
             <Menu className="w-5 h-5 text-foreground" />
           </button>
 
-          {/* Search Bar */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex-1 max-w-md"
-          >
-            <div className="relative group">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2.5 bg-muted border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all duration-200 text-foreground"
-              />
-            </div>
-          </motion.div>
-
-          {/* Navigation Links with Dropdowns */}
+          {/* Navigation Links with Dropdowns - Left aligned */}
           <motion.nav 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1 }}
             className="hidden lg:flex items-center gap-1"
           >
             {navSections.map((section) => (
