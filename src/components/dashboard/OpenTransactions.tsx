@@ -216,8 +216,10 @@ export const OpenTransactions = () => {
                       {getStatusBadge(order.status)}
                     </div>
                     <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                      <span className={`text-xs font-semibold ${
-                        order.orderType === "buy" ? "text-emerald-600" : "text-rose-500"
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold ${
+                        order.orderType === "buy" 
+                          ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" 
+                          : "bg-rose-500/10 text-rose-500 border border-rose-500/20"
                       }`}>
                         {order.orderType === "buy" ? "Buy" : "Sell"}
                       </span>
