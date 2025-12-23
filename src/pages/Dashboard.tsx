@@ -83,20 +83,31 @@ const Dashboard = () => {
         </main>
 
         {/* Footer */}
-        <footer className="px-6 lg:px-10 py-5 border-t border-border bg-card">
-          <div className="mx-auto w-full max-w-[1400px] flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2024 Fragma Finance. All rights reserved.</p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-foreground transition-colors">
+        <footer className="mt-auto border-t border-border/60 bg-card px-6 py-4 lg:px-10">
+          <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 sm:flex-row">
+            <p className="text-xs text-muted-foreground">
+              © 2024 Fragma Finance. All rights reserved.
+            </p>
+            <nav className="flex items-center gap-8">
+              <a
+                href="#"
+                className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
                 Privacy Policy
               </a>
-              <a href="#" className="hover:text-foreground transition-colors">
+              <a
+                href="#"
+                className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
                 Terms of Service
               </a>
-              <a href="#" className="hover:text-foreground transition-colors">
+              <a
+                href="#"
+                className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
                 Contact
               </a>
-            </div>
+            </nav>
           </div>
         </footer>
       </div>
