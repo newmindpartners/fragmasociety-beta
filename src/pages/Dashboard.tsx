@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen h-full w-full bg-slate-50 fixed inset-0 overflow-auto">
       {/* Sidebar */}
       <DashboardSidebar 
         isCollapsed={sidebarCollapsed} 
