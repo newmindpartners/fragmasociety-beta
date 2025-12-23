@@ -193,6 +193,9 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative w-[380px]">
+              {/* Shadow card behind for depth */}
+              <div className="absolute top-4 left-4 right-0 bottom-0 rounded-3xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm" />
+              
               {/* Main Card */}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -307,26 +310,30 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                 ))}
               </div>
               
-              {/* Stats below card */}
+              {/* Single stat */}
               <motion.div 
-                className="flex justify-center gap-12 mt-10"
+                className="flex justify-center mt-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
               >
-                {[
-                  { value: "3", label: "Strategies" },
-                  { value: "€50", label: "Min Ticket" },
-                  { value: "Q4", label: "Distributions" }
-                ].map((stat, i) => (
-                  <div key={i} className="text-center">
-                    <p className="text-2xl font-light text-white/80" style={{ fontFamily: "'Playfair Display', serif" }}>
-                      {stat.value}
-                    </p>
-                    <p className="text-[9px] text-white/30 uppercase tracking-[0.15em] mt-1">{stat.label}</p>
-                  </div>
-                ))}
+                <div className="text-center">
+                  <p className="text-2xl font-light text-white/80" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    3
+                  </p>
+                  <p className="text-[9px] text-white/30 uppercase tracking-[0.15em] mt-1">Strategies</p>
+                </div>
               </motion.div>
+              
+              {/* Disclaimer */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="text-center text-[9px] text-white/25 mt-6 max-w-[280px] mx-auto leading-relaxed"
+              >
+                Past performance is not indicative of future results. Target returns are not guaranteed.
+              </motion.p>
             </div>
           </motion.div>
         </div>
