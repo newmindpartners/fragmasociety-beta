@@ -340,7 +340,7 @@ export const SignatureDealHero = () => {
                   className="mt-8 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-primary/30"
                 >
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  <p className="text-sm text-white/80 font-medium">
+                  <p className="text-sm text-white/80 font-medium whitespace-nowrap">
                     This is not crowdfunding. This is <span className="text-primary">co-ownership</span> — elevated.
                   </p>
                 </motion.div>
