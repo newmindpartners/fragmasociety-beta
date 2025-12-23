@@ -7,6 +7,8 @@ import { InvestmentOverview } from "@/components/dashboard/InvestmentOverview";
 import { ReferralBanner } from "@/components/dashboard/ReferralBanner";
 import { OpenTransactions } from "@/components/dashboard/OpenTransactions";
 import { MyInvestments } from "@/components/dashboard/MyInvestments";
+import { InvestmentStatus } from "@/components/dashboard/InvestmentStatus";
+import { SupportSection } from "@/components/dashboard/SupportSection";
 
 
 const Dashboard = () => {
@@ -54,8 +56,9 @@ const Dashboard = () => {
 
             {/* Main Grid Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-              {/* Left Column - Investment Overview (1 col) */}
-              <div className="lg:col-span-1">
+              {/* Left Column - Status + Investment Overview (1 col) */}
+              <div className="lg:col-span-1 space-y-5">
+                <InvestmentStatus />
                 <InvestmentOverview />
               </div>
 
@@ -72,9 +75,10 @@ const Dashboard = () => {
                 <OpenTransactions />
               </div>
 
-              {/* Right Column - Referral Banner */}
-              <div className="lg:col-span-1 self-start">
+              {/* Right Column - Referral Banner + Support */}
+              <div className="lg:col-span-1 space-y-5">
                 <ReferralBanner />
+                <SupportSection />
               </div>
             </div>
           </div>

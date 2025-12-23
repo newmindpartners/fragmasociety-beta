@@ -14,11 +14,17 @@ export const MyInvestments = () => {
       className="bg-card rounded-xl border border-border p-6 shadow-sm h-full flex flex-col"
     >
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <h3 className="text-sm font-semibold text-foreground">My Investments</h3>
-        <button className="p-0.5">
-          <Info className="w-3.5 h-3.5 text-muted-foreground" />
-        </button>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-foreground">My Investments</h3>
+          <button className="p-0.5">
+            <Info className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground">Active Investments</span>
+          <span className="text-sm font-bold text-foreground bg-accent px-2 py-0.5 rounded-md">0</span>
+        </div>
       </div>
 
       {hasInvestments ? (
