@@ -230,13 +230,15 @@ export const StrategyHero = ({ isAuthenticated = false }: StrategyHeroProps) => 
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
                       >
-                        <span 
-                          className={`text-5xl font-light bg-gradient-to-r ${activeStrategy.color} bg-clip-text text-transparent`}
-                          style={{ fontFamily: "'Playfair Display', serif" }}
-                        >
-                          {activeStrategy.allocation}
-                        </span>
-                        <p className="text-white/30 text-[10px] uppercase tracking-[0.15em] mt-1">Allocation</p>
+                        <div className={`inline-block px-4 py-2 rounded-xl bg-gradient-to-r ${activeStrategy.color} shadow-lg`}>
+                          <span 
+                            className="text-4xl font-semibold text-white drop-shadow-md"
+                            style={{ fontFamily: "'Playfair Display', serif" }}
+                          >
+                            {activeStrategy.allocation}
+                          </span>
+                        </div>
+                        <p className="text-white/40 text-[10px] uppercase tracking-[0.15em] mt-2">Allocation</p>
                       </motion.div>
                     </div>
                     
