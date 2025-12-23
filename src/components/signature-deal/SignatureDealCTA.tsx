@@ -1,7 +1,5 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Phone } from "lucide-react";
 import ctaBg from "@/assets/signature-deal-cta-bg.jpg";
 
 export const SignatureDealCTA = () => {
@@ -80,67 +78,6 @@ export const SignatureDealCTA = () => {
             and open it to investors worldwide.
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Button 
-              size="lg" 
-              className="group text-base px-10 py-7 bg-white text-slate-900 hover:bg-white/90 
-                rounded-sm font-medium tracking-wide
-                shadow-[0_20px_60px_-15px_rgba(255,255,255,0.25)]
-                hover:shadow-[0_25px_70px_-15px_rgba(255,255,255,0.35)]
-                transition-all duration-500"
-            >
-              Start Your Deal
-              <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="text-base px-10 py-7 rounded-sm font-medium tracking-wide
-                border-white/20 text-white/80 
-                hover:bg-white hover:text-slate-900 hover:border-white
-                transition-all duration-500"
-            >
-              <Phone className="mr-3 w-4 h-4" />
-              Book a Strategy Call
-            </Button>
-          </motion.div>
-
-          {/* Stats Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-20 pt-12 border-t border-white/10"
-          >
-            <div className="grid grid-cols-3 gap-8 max-w-2xl">
-              {[
-                { value: "$50M+", label: "Deals Launched" },
-                { value: "15+", label: "Global Partners" },
-                { value: "100%", label: "Compliant" },
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                  className="text-center sm:text-left"
-                >
-                  <div className="text-2xl md:text-3xl lg:text-4xl font-light text-white mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-[11px] tracking-[0.2em] uppercase text-white/30">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </div>
 
