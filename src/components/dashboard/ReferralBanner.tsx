@@ -8,10 +8,10 @@ export const ReferralBanner = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="relative overflow-hidden rounded-xl bg-card border border-border p-6 h-full flex items-center shadow-sm"
+      className="relative rounded-xl bg-card border border-border p-6 h-full flex items-center shadow-sm overflow-visible"
     >
       {/* Decorative background */}
-      <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden pointer-events-none">
+      <div className="absolute right-0 top-0 bottom-0 w-1/3 overflow-hidden pointer-events-none">
         <svg 
           viewBox="0 0 400 300" 
           className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[300px] opacity-10"
