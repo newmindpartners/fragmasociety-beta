@@ -213,7 +213,7 @@ export const SignatureDealHero = () => {
             <div className="relative w-[520px] h-[580px]">
               
               {/* Center Card - "You Are The Leader" */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] z-30">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] z-30">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
