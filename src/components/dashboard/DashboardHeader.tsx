@@ -153,28 +153,6 @@ interface DashboardHeaderProps {
 export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
   return (
     <header className="sticky top-0 z-30 bg-card/95 backdrop-blur-xl border-b border-border">
-      {/* Connect Wallet Banner */}
-      <motion.div 
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="bg-primary text-white py-2.5 px-6"
-      >
-        <div className="flex items-center justify-center gap-4">
-          <span className="text-sm font-medium opacity-90">
-            Connect Your Wallet — Step Into RWA Swaps
-          </span>
-          <Button 
-            size="sm" 
-            variant="secondary"
-            className="rounded-full h-7 px-4 text-xs font-medium group bg-white/20 hover:bg-white/30 text-white border-0"
-          >
-            <Wallet className="w-3 h-3 mr-1.5" />
-            Connect Wallet
-            <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
-          </Button>
-        </div>
-      </motion.div>
-
       {/* Main Header */}
       <div className="px-6 py-3 bg-card">
         <div className="flex items-center justify-between gap-6">
@@ -216,6 +194,28 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
           </motion.nav>
         </div>
       </div>
+
+      {/* Connect Wallet Banner - Below Menu */}
+      <motion.div 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-primary/10 py-2.5 px-6 border-t border-primary/20"
+      >
+        <div className="flex items-center justify-center gap-4">
+          <span className="text-sm font-medium text-primary">
+            Connect Your Wallet — Step Into RWA Swaps
+          </span>
+          <Button 
+            size="sm" 
+            variant="secondary"
+            className="rounded-full h-7 px-4 text-xs font-medium group bg-primary/20 hover:bg-primary/30 text-primary border-0"
+          >
+            <Wallet className="w-3 h-3 mr-1.5" />
+            Connect Wallet
+            <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
+          </Button>
+        </div>
+      </motion.div>
     </header>
   );
 };
