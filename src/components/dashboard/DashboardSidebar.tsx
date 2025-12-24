@@ -5,7 +5,8 @@ import {
   Heart, 
   Building2, 
   FileText, 
-  Wallet, 
+  Wallet,
+  TrendingUp,
   BarChart3, 
   Bell, 
   Settings, 
@@ -32,6 +33,7 @@ const mainNavItems: NavItem[] = [
   { icon: Building2, label: "Banking", href: "/dashboard/banking" },
   { icon: FileText, label: "Documents", href: "/dashboard/documents" },
   { icon: Wallet, label: "Wallet", href: "/dashboard/wallet" },
+  { icon: TrendingUp, label: "Earnings", href: "/dashboard/earnings" },
   { icon: BarChart3, label: "Secondary Market", href: "/dashboard/market" },
 ];
 
