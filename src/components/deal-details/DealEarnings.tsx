@@ -98,20 +98,20 @@ export const DealEarnings = ({ dealId, dealTitle = "Investment" }: DealEarningsP
   };
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-6">
+    <section className="py-8 bg-white">
+      <div className="px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-10"
+          className="mb-8"
         >
-          <h2 className="text-3xl font-serif font-semibold text-slate-900 mb-2">
-            Earnings Overview
+          <h2 className="text-2xl font-serif font-semibold text-slate-900 mb-1">
+            {dealTitle} - Earnings
           </h2>
-          <p className="text-slate-600">
-            Track your earnings, tax withholdings, and payout history for this investment.
+          <p className="text-sm text-slate-500">
+            Track your earnings, tax withholdings, and payout history.
           </p>
         </motion.div>
 

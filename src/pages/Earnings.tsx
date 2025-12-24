@@ -4,7 +4,7 @@ import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { TotalInvestedCard } from "@/components/wallet/TotalInvestedCard";
 import { RecentPayouts } from "@/components/wallet/RecentPayouts";
-import { WalletPortfolio } from "@/components/wallet/WalletPortfolio";
+import { PortfolioEarningsSelector } from "@/components/wallet/PortfolioEarningsSelector";
 
 const Earnings = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -31,7 +31,7 @@ const Earnings = () => {
       >
         <DashboardHeader onMenuToggle={handleToggleSidebar} />
 
-        <main className="flex-1 min-w-0 bg-background px-6 py-6 lg:px-10 lg:py-8">
+        <main className="flex-1 min-w-0 bg-slate-50 px-6 py-6 lg:px-10 lg:py-8">
           <div className="mx-auto w-full max-w-[1400px]">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -55,25 +55,25 @@ const Earnings = () => {
               {/* Recent Payouts */}
               <RecentPayouts onViewAll={() => console.log("View all earnings")} />
 
-              {/* Portfolio Table */}
-              <WalletPortfolio />
+              {/* Portfolio Earnings Selector */}
+              <PortfolioEarningsSelector />
             </motion.div>
           </div>
         </main>
 
-        <footer className="mt-auto border-t border-border/60 bg-card px-6 py-4 lg:px-10">
+        <footer className="mt-auto border-t border-slate-200 bg-white px-6 py-4 lg:px-10">
           <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 sm:flex-row">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-slate-500">
               © 2024 Fragma Finance. All rights reserved.
             </p>
             <nav className="flex items-center gap-8">
-              <a href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <a href="#" className="text-xs font-medium text-slate-500 transition-colors hover:text-slate-900">
                 Privacy Policy
               </a>
-              <a href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <a href="#" className="text-xs font-medium text-slate-500 transition-colors hover:text-slate-900">
                 Terms of Service
               </a>
-              <a href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <a href="#" className="text-xs font-medium text-slate-500 transition-colors hover:text-slate-900">
                 Contact
               </a>
             </nav>
