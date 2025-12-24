@@ -118,13 +118,13 @@ export const TotalInvestedCard = ({
 
           {/* Next Payout */}
           <div className="mt-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-teal-500/15 border border-teal-400/20">
-              <Calendar className="w-3.5 h-3.5 text-teal-400" />
-              <span className="text-xs text-teal-300/90 font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-violet-500/15 border border-violet-400/20">
+              <Calendar className="w-3.5 h-3.5 text-violet-400" />
+              <span className="text-xs text-violet-300/90 font-medium">
                 Next: in {nextPayoutDays} days
               </span>
               <span className="text-white/30">·</span>
-              <span className="text-xs text-teal-200 font-semibold">
+              <span className="text-xs text-violet-200 font-semibold">
                 est. €{nextPayoutAmount.toFixed(2)}
               </span>
             </div>
