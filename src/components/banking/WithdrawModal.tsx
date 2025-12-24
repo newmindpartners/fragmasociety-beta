@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowUpRight, Plus, X } from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { AddBankAccountModal } from "./AddBankAccountModal";
 
 interface WithdrawModalProps {
   open: boolean;
@@ -31,6 +32,7 @@ const mockAccounts: BankAccount[] = [
 export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
   const [selectedAccount, setSelectedAccount] = useState(mockAccounts[0]?.id || "");
   const [amount, setAmount] = useState("");
+  const [addBankAccountOpen, setAddBankAccountOpen] = useState(false);
   const availableBalance = 5000;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,9 +81,10 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                 variant="ghost"
                 size="sm"
                 className="text-primary hover:text-primary/80 hover:bg-transparent p-0 h-auto"
+                onClick={() => setAddBankAccountOpen(true)}
               >
                 <Plus className="w-4 h-4 mr-1" />
-                Add Card
+                Add Bank Account
               </Button>
             </div>
 
@@ -151,6 +154,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
           </div>
         </form>
       </DialogContent>
+      <AddBankAccountModal open={addBankAccountOpen} onOpenChange={setAddBankAccountOpen} />
     </Dialog>
   );
 };
