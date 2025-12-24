@@ -1,8 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Transfer } from "@/hooks/useTransfers";
 import { format, parseISO } from "date-fns";
-import { ArrowUpRight, ArrowDownLeft, Building2, Calendar, Hash, FileText, Clock, DollarSign } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, Building2, Calendar, Hash, FileText, Clock, DollarSign, Download } from "lucide-react";
+import { toast } from "sonner";
 
 interface TransferDetailsModalProps {
   transfer: Transfer | null;
@@ -13,15 +15,15 @@ interface TransferDetailsModalProps {
 const getStatusStyles = (status: Transfer["status"]) => {
   switch (status) {
     case "completed":
-      return "bg-green-100 text-green-700 border-0";
+      return "bg-green-50 text-green-700 border-green-200";
     case "processing":
-      return "bg-yellow-100 text-yellow-700 border-0";
+      return "bg-yellow-50 text-yellow-700 border-yellow-200";
     case "pending":
-      return "bg-blue-100 text-blue-700 border-0";
+      return "bg-blue-50 text-blue-700 border-blue-200";
     case "failed":
-      return "bg-red-100 text-red-700 border-0";
+      return "bg-red-50 text-red-700 border-red-200";
     default:
-      return "bg-gray-100 text-gray-700 border-0";
+      return "bg-gray-50 text-gray-700 border-gray-200";
   }
 };
 
@@ -37,14 +39,47 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
 
   const isDeposit = transfer.type === "deposit";
 
+  const handleExportPDF = () => {
+    // Create a simple PDF-like content for printing/saving
+    const content = `
+TRANSFER RECEIPT
+================
+
+Type: ${isDeposit ? "Deposit" : "Withdrawal"}
+Amount: ${isDeposit ? "+" : "-"}${formatAmount(transfer.amount, transfer.currency)}
+Status: ${transfer.status.charAt(0).toUpperCase() + transfer.status.slice(1)}
+Date: ${format(parseISO(transfer.created_at), "MMMM d, yyyy 'at' h:mm a")}
+Reference: ${transfer.reference || "N/A"}
+Bank: ${transfer.bank_name || "N/A"}
+Account: **** ${transfer.account_last4 || "N/A"}
+Currency: ${transfer.currency}
+${transfer.notes ? `Notes: ${transfer.notes}` : ""}
+
+Generated on: ${format(new Date(), "MMMM d, yyyy 'at' h:mm a")}
+    `.trim();
+
+    // Create blob and download
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `transfer-${transfer.reference || transfer.id}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast.success("Receipt exported successfully");
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-background">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                isDeposit ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600"
+                isDeposit ? "bg-green-50 text-green-600" : "bg-orange-50 text-orange-600"
               }`}
             >
               {isDeposit ? (
@@ -53,13 +88,13 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
                 <ArrowUpRight className="w-5 h-5" />
               )}
             </div>
-            <span>{isDeposit ? "Deposit Details" : "Withdrawal Details"}</span>
+            <span className="text-foreground">{isDeposit ? "Deposit Details" : "Withdrawal Details"}</span>
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="space-y-4 py-4">
           {/* Amount */}
-          <div className="text-center py-4 bg-muted/30 rounded-xl">
+          <div className="text-center py-6 bg-muted/30 rounded-xl border border-border">
             <p className="text-sm text-muted-foreground mb-1">Amount</p>
             <p className={`text-3xl font-bold ${isDeposit ? "text-green-600" : "text-foreground"}`}>
               {isDeposit ? "+" : "-"}{formatAmount(transfer.amount, transfer.currency)}
@@ -70,9 +105,9 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
           <div className="flex items-center justify-between py-3 border-b border-border">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="w-4 h-4" />
-              <span>Status</span>
+              <span className="text-sm">Status</span>
             </div>
-            <Badge variant="secondary" className={getStatusStyles(transfer.status)}>
+            <Badge variant="outline" className={getStatusStyles(transfer.status)}>
               {transfer.status.charAt(0).toUpperCase() + transfer.status.slice(1)}
             </Badge>
           </div>
@@ -81,9 +116,9 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
           <div className="flex items-center justify-between py-3 border-b border-border">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="w-4 h-4" />
-              <span>Date & Time</span>
+              <span className="text-sm">Date & Time</span>
             </div>
-            <span className="font-medium text-foreground">
+            <span className="font-medium text-foreground text-sm">
               {format(parseISO(transfer.created_at), "MMM d, yyyy 'at' h:mm a")}
             </span>
           </div>
@@ -93,7 +128,7 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
             <div className="flex items-center justify-between py-3 border-b border-border">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Hash className="w-4 h-4" />
-                <span>Reference</span>
+                <span className="text-sm">Reference</span>
               </div>
               <span className="font-mono text-sm font-medium text-foreground">
                 {transfer.reference}
@@ -106,12 +141,12 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
             <div className="flex items-center justify-between py-3 border-b border-border">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Building2 className="w-4 h-4" />
-                <span>Bank Account</span>
+                <span className="text-sm">Bank Account</span>
               </div>
               <div className="text-right">
-                <p className="font-medium text-foreground">{transfer.bank_name}</p>
+                <p className="font-medium text-foreground text-sm">{transfer.bank_name}</p>
                 {transfer.account_last4 && (
-                  <p className="text-sm text-muted-foreground">**** {transfer.account_last4}</p>
+                  <p className="text-xs text-muted-foreground">**** {transfer.account_last4}</p>
                 )}
               </div>
             </div>
@@ -121,9 +156,9 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
           <div className="flex items-center justify-between py-3 border-b border-border">
             <div className="flex items-center gap-2 text-muted-foreground">
               <DollarSign className="w-4 h-4" />
-              <span>Currency</span>
+              <span className="text-sm">Currency</span>
             </div>
-            <span className="font-medium text-foreground">{transfer.currency}</span>
+            <span className="font-medium text-foreground text-sm">{transfer.currency}</span>
           </div>
 
           {/* Notes */}
@@ -131,13 +166,23 @@ export const TransferDetailsModal = ({ transfer, open, onOpenChange }: TransferD
             <div className="py-3">
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <FileText className="w-4 h-4" />
-                <span>Notes</span>
+                <span className="text-sm">Notes</span>
               </div>
-              <p className="text-foreground bg-muted/30 rounded-lg p-3 text-sm">
+              <p className="text-foreground bg-muted/30 rounded-lg p-3 text-sm border border-border">
                 {transfer.notes}
               </p>
             </div>
           )}
+
+          {/* Export Button */}
+          <Button 
+            onClick={handleExportPDF} 
+            variant="outline" 
+            className="w-full mt-4"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export Receipt
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
