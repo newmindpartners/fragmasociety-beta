@@ -17,6 +17,7 @@ import DealDetails from "./pages/DealDetails";
 import FAQ from "./pages/FAQ";
 import HowItWorks from "./pages/HowItWorks";
 import Dashboard from "./pages/Dashboard";
+import Banking from "./pages/Banking";
 import OrderDetails from "./pages/OrderDetails";
 import NotFound from "./pages/NotFound";
 
@@ -44,6 +45,8 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/banking" element={<Banking />} />
+            <Route path="/dashboard/banking/*" element={<Banking />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/fund" element={<Strategy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
