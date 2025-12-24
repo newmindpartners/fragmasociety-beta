@@ -217,6 +217,81 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          deposit_confirmed: boolean
+          id: string
+          status_updates: boolean
+          transfer_email: boolean
+          transfer_push: boolean
+          updated_at: string
+          user_id: string
+          withdrawal_confirmed: boolean
+        }
+        Insert: {
+          created_at?: string
+          deposit_confirmed?: boolean
+          id?: string
+          status_updates?: boolean
+          transfer_email?: boolean
+          transfer_push?: boolean
+          updated_at?: string
+          user_id: string
+          withdrawal_confirmed?: boolean
+        }
+        Update: {
+          created_at?: string
+          deposit_confirmed?: boolean
+          id?: string
+          status_updates?: boolean
+          transfer_email?: boolean
+          transfer_push?: boolean
+          updated_at?: string
+          user_id?: string
+          withdrawal_confirmed?: boolean
+        }
+        Relationships: []
+      }
+      payment_methods: {
+        Row: {
+          account_holder_name: string | null
+          bank_name: string | null
+          card_brand: string | null
+          created_at: string
+          id: string
+          is_default: boolean
+          last4: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_holder_name?: string | null
+          bank_name?: string | null
+          card_brand?: string | null
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          last4: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_holder_name?: string | null
+          bank_name?: string | null
+          card_brand?: string | null
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          last4?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       transfers: {
         Row: {
           account_last4: string | null
