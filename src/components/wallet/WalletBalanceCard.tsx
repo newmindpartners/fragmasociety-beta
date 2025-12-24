@@ -98,7 +98,7 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
 
         {/* Footer */}
         <p className="text-[13px] text-white/30 mt-6 tracking-wide">
-          Your wallet is securely stored with Fragma
+          Your wallet is securely stored with Dfns
         </p>
       </div>
     </div>
