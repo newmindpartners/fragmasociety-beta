@@ -42,28 +42,28 @@ export const WalletPortfolio = () => {
   const getStatusColor = (status: Project["status"]) => {
     switch (status) {
       case "Secondary market":
-        return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400";
+        return "bg-emerald-50 text-emerald-700 border border-emerald-200";
       case "Primary":
-        return "bg-primary/10 text-primary";
+        return "bg-blue-50 text-blue-700 border border-blue-200";
       case "Pending":
-        return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
+        return "bg-amber-50 text-amber-700 border border-amber-200";
       default:
-        return "bg-muted text-muted-foreground";
+        return "bg-slate-100 text-slate-600";
     }
   };
 
   const getTypeIcon = (type: string) => {
     if (type === "Swap") {
-      return <ArrowDownUp className="w-4 h-4 text-violet-500" />;
+      return <ArrowDownUp className="w-4 h-4 text-emerald-600" />;
     }
     return null;
   };
 
   const getAmountColor = (amount: string, type: string) => {
-    if (type === "Swap") return "text-violet-600";
+    if (type === "Swap") return "text-emerald-600";
     if (amount.startsWith("+")) return "text-emerald-600";
     if (amount.startsWith("-")) return "text-red-500";
-    return "text-foreground";
+    return "text-slate-900";
   };
 
   return (
@@ -224,7 +224,7 @@ export const WalletPortfolio = () => {
                 <div>
                   <Badge 
                     variant={transaction.status === "Completed" ? "default" : "outline"}
-                    className={transaction.status === "Completed" && transaction.type === "Swap" ? "bg-violet-500" : ""}
+                    className={transaction.status === "Completed" ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "border-slate-200 text-slate-600"}
                   >
                     {transaction.status}
                   </Badge>
