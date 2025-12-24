@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, TrendingUp, TrendingDown, Clock, FileText, Download, Share2, AlertCircle, CheckCircle, Info, Calendar, CreditCard, Building2, Layers, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 
 interface OrderData {
   id: string;
@@ -17,7 +18,6 @@ interface OrderData {
   createdAt: string;
   filledTokens: number;
   expiresAt?: string;
-  // Additional details
   fees: string;
   costBasis: string;
   account: string;
@@ -30,7 +30,7 @@ interface OrderData {
   blockchainHash?: string;
 }
 
-// Mock data - in production this would come from API/database
+// Mock data
 const mockOrders: Record<string, OrderData> = {
   "1": {
     id: "1",
@@ -131,7 +131,7 @@ const OrderDetails = () => {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="theme-dashboard min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-2">Order Not Found</h1>
           <p className="text-muted-foreground mb-4">The order you're looking for doesn't exist.</p>
@@ -143,10 +143,10 @@ const OrderDetails = () => {
 
   const getStatusBadge = (status: OrderData["status"]) => {
     const config = {
-      active: { bg: "bg-emerald-500/10", text: "text-emerald-600", border: "border-emerald-500/20", icon: Clock, label: "Active" },
-      partial: { bg: "bg-amber-500/10", text: "text-amber-600", border: "border-amber-500/20", icon: AlertCircle, label: "Partially Filled" },
+      active: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", icon: Clock, label: "Active" },
+      partial: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", icon: AlertCircle, label: "Partially Filled" },
       completed: { bg: "bg-primary/10", text: "text-primary", border: "border-primary/20", icon: CheckCircle, label: "Completed" },
-      cancelled: { bg: "bg-muted", text: "text-muted-foreground", border: "border-border", icon: AlertCircle, label: "Cancelled" },
+      cancelled: { bg: "bg-gray-100", text: "text-gray-600", border: "border-gray-200", icon: AlertCircle, label: "Cancelled" },
     };
     
     const { bg, text, border, icon: Icon, label } = config[status];
@@ -159,29 +159,40 @@ const OrderDetails = () => {
     );
   };
 
-  const DetailRow = ({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) => (
-    <div className="flex items-center justify-between py-4 border-b border-border last:border-b-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className={`text-sm font-medium ${highlight ? 'text-primary font-bold' : 'text-foreground'}`}>{value}</span>
+  const DetailRow = ({ label, value }: { label: string; value: string }) => (
+    <div className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
+      <span className="text-sm text-gray-500">{label}</span>
+      <span className="text-sm font-medium text-gray-900">{value}</span>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <DashboardSidebar isCollapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+    <div className="theme-dashboard relative flex min-h-screen w-full bg-background text-foreground">
+      <DashboardSidebar
+        isCollapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
 
-      <main className="flex-1 p-8 overflow-y-auto">
-          <div className="max-w-3xl mx-auto">
+      <div
+        className="flex min-h-screen flex-1 flex-col overflow-hidden transition-[margin-left] duration-300 ease-out"
+        style={{
+          marginLeft: sidebarCollapsed ? 72 : 256,
+        }}
+      >
+        <DashboardHeader onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+
+        <main className="flex-1 min-w-0 bg-background px-6 py-6 lg:px-10 lg:py-8">
+          <div className="mx-auto w-full max-w-3xl">
             {/* Back Button */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="mb-8"
+              className="mb-6"
             >
               <Button
                 variant="ghost"
                 onClick={() => navigate(-1)}
-                className="text-muted-foreground hover:text-foreground -ml-2"
+                className="text-gray-500 hover:text-gray-900 -ml-2"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
@@ -201,10 +212,10 @@ const OrderDetails = () => {
               >
                 {order.assetName}
               </Link>
-              <h1 className="text-3xl font-bold text-foreground mt-1 mb-4">Order Details</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mt-1 mb-4">Order Details</h1>
               <div className="flex items-center gap-4">
                 {getStatusBadge(order.status)}
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-gray-500">
                   Transaction ID: {order.transactionId}
                 </span>
               </div>
@@ -215,11 +226,11 @@ const OrderDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card rounded-xl border border-border p-6 mb-6"
+              className="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm"
             >
-              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
+              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                  order.orderType === "buy" ? "bg-emerald-500/10" : "bg-rose-500/10"
+                  order.orderType === "buy" ? "bg-emerald-50" : "bg-rose-50"
                 }`}>
                   {order.orderType === "buy" ? (
                     <TrendingUp className="w-7 h-7 text-emerald-600" />
@@ -228,13 +239,13 @@ const OrderDetails = () => {
                   )}
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground">{order.assetName}</h2>
-                  <p className="text-sm text-muted-foreground">{order.assetType}</p>
+                  <h2 className="text-xl font-semibold text-gray-900">{order.assetName}</h2>
+                  <p className="text-sm text-gray-500">{order.assetType}</p>
                 </div>
                 <span className={`ml-auto px-3 py-1.5 rounded-lg text-sm font-bold ${
                   order.orderType === "buy" 
-                    ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" 
-                    : "bg-rose-500/10 text-rose-500 border border-rose-500/20"
+                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+                    : "bg-rose-50 text-rose-600 border border-rose-200"
                 }`}>
                   {order.orderType === "buy" ? "Buy Order" : "Sell Order"}
                 </span>
@@ -245,10 +256,11 @@ const OrderDetails = () => {
               <DetailRow label="Total Shares" value={order.tokens.toString()} />
               <DetailRow label="Share Price" value={order.pricePerToken} />
               <DetailRow label="Fees" value={order.fees} />
-              <div className="flex items-center justify-between py-4 mt-2 bg-accent/30 -mx-6 px-6 rounded-b-xl">
+              
+              <div className="flex items-center justify-between py-4 mt-2 bg-primary/5 -mx-6 px-6 rounded-b-xl border-t border-primary/10">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">Cost Basis</span>
-                  <Info className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-gray-900">Cost Basis</span>
+                  <Info className="w-4 h-4 text-gray-400" />
                 </div>
                 <span className="text-lg font-bold text-primary">{order.costBasis}</span>
               </div>
@@ -259,66 +271,66 @@ const OrderDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-accent/50 rounded-xl p-6 mb-6"
+              className="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-100"
             >
               <div className="space-y-0">
-                <div className="flex items-center justify-between py-4 border-b border-border/50">
+                <div className="flex items-center justify-between py-4 border-b border-gray-200">
                   <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Account</span>
+                    <Building2 className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">Account</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{order.account}</span>
+                  <span className="text-sm font-medium text-gray-900">{order.account}</span>
                 </div>
-                <div className="flex items-center justify-between py-4 border-b border-border/50">
+                <div className="flex items-center justify-between py-4 border-b border-gray-200">
                   <div className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Payment Method</span>
+                    <CreditCard className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">Payment Method</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{order.paymentMethod}</span>
+                  <span className="text-sm font-medium text-gray-900">{order.paymentMethod}</span>
                 </div>
-                <div className="flex items-center justify-between py-4 border-b border-border/50">
+                <div className="flex items-center justify-between py-4 border-b border-gray-200">
                   <div className="flex items-center gap-2">
-                    <Tag className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Offering Type</span>
+                    <Tag className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">Offering Type</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{order.offeringType}</span>
+                  <span className="text-sm font-medium text-gray-900">{order.offeringType}</span>
                 </div>
-                <div className="flex items-center justify-between py-4 border-b border-border/50">
+                <div className="flex items-center justify-between py-4 border-b border-gray-200">
                   <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Shares Offered</span>
+                    <Layers className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">Shares Offered</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{order.sharesOffered}</span>
+                  <span className="text-sm font-medium text-gray-900">{order.sharesOffered}</span>
                 </div>
-                <div className="flex items-center justify-between py-4 border-b border-border/50">
+                <div className="flex items-center justify-between py-4 border-b border-gray-200">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Instrument Type</span>
+                    <FileText className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">Instrument Type</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{order.instrumentType}</span>
+                  <span className="text-sm font-medium text-gray-900">{order.instrumentType}</span>
                 </div>
                 <div className="flex items-center justify-between py-4">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Submitted</span>
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">Submitted</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{order.submittedAt}</span>
+                  <span className="text-sm font-medium text-gray-900">{order.submittedAt}</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Blockchain Info (if available) */}
+            {/* Blockchain Info */}
             {order.blockchainHash && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-card rounded-xl border border-border p-6 mb-6"
+                className="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm"
               >
-                <h3 className="text-sm font-semibold text-foreground mb-4">Blockchain Verification</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">Blockchain Verification</h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Transaction Hash</span>
-                  <code className="text-xs bg-muted px-2 py-1 rounded font-mono text-muted-foreground truncate max-w-[300px]">
+                  <span className="text-sm text-gray-500">Transaction Hash</span>
+                  <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono text-gray-600 truncate max-w-[300px]">
                     {order.blockchainHash}
                   </code>
                 </div>
@@ -332,11 +344,11 @@ const OrderDetails = () => {
               transition={{ delay: 0.5 }}
               className="flex items-center gap-4"
             >
-              <Button variant="outline" className="flex-1">
+              <Button variant="outline" className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50">
                 <Download className="w-4 h-4 mr-2" />
                 Download Receipt
               </Button>
-              <Button variant="outline" className="flex-1">
+              <Button variant="outline" className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50">
                 <Share2 className="w-4 h-4 mr-2" />
                 Share Details
               </Button>
@@ -348,7 +360,28 @@ const OrderDetails = () => {
             </motion.div>
           </div>
         </main>
+
+        {/* Footer */}
+        <footer className="mt-auto border-t border-gray-200 bg-white px-6 py-4 lg:px-10">
+          <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 sm:flex-row">
+            <p className="text-xs text-gray-500">
+              © 2024 Fragma Finance. All rights reserved.
+            </p>
+            <nav className="flex items-center gap-8">
+              <a href="#" className="text-xs font-medium text-gray-500 transition-colors hover:text-gray-900">
+                Privacy Policy
+              </a>
+              <a href="#" className="text-xs font-medium text-gray-500 transition-colors hover:text-gray-900">
+                Terms of Service
+              </a>
+              <a href="#" className="text-xs font-medium text-gray-500 transition-colors hover:text-gray-900">
+                Contact
+              </a>
+            </nav>
+          </div>
+        </footer>
       </div>
+    </div>
   );
 };
 
