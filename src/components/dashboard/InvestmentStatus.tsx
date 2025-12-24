@@ -207,59 +207,55 @@ export const InvestmentStatus = () => {
           </div>
 
           {/* Deal Selector Dropdown */}
-          {displayInvestments.length > 1 && (
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-              >
-                <span className="text-sm text-white/90 truncate">
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer"
+            >
+              <div className="text-left">
+                <p className="text-sm font-medium text-white/90">
                   {selectedInvestment?.deal?.title || 'Select Deal'}
-                </span>
-                <ChevronDown className={`w-4 h-4 text-white/60 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-              
-              <AnimatePresence>
-                {isDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="absolute top-full left-0 right-0 mt-1 bg-[#1a2640] border border-white/10 rounded-lg overflow-hidden z-20 shadow-xl"
-                  >
-                    {displayInvestments.map((inv) => (
-                      <button
-                        key={inv.id}
-                        onClick={() => {
-                          setSelectedDealId(inv.deal_id);
-                          setIsDropdownOpen(false);
-                        }}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-white/10 transition-colors ${
-                          inv.deal_id === selectedInvestment?.deal_id ? 'bg-primary/20' : ''
-                        }`}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-white/90 truncate">{inv.deal?.title}</p>
-                          <p className="text-xs text-white/50">{inv.deal?.category}</p>
-                        </div>
-                        {inv.current_step === 'investment_complete' && (
-                          <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          )}
-
-          {/* Single deal display */}
-          {displayInvestments.length === 1 && selectedInvestment?.deal && (
-            <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
-              <p className="text-sm text-white/90">{selectedInvestment.deal.title}</p>
-              <p className="text-xs text-white/50">{selectedInvestment.deal.category}</p>
-            </div>
-          )}
+                </p>
+                <p className="text-xs text-white/50">
+                  {selectedInvestment?.deal?.category || 'No category'}
+                </p>
+              </div>
+              <ChevronDown className={`w-4 h-4 text-white/60 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-[#1a2640] border border-white/15 rounded-xl overflow-hidden z-50 shadow-2xl"
+                >
+                  {displayInvestments.map((inv, index) => (
+                    <button
+                      key={inv.id}
+                      onClick={() => {
+                        setSelectedDealId(inv.deal_id);
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/10 transition-colors ${
+                        inv.deal_id === selectedInvestment?.deal_id ? 'bg-primary/20' : ''
+                      } ${index !== displayInvestments.length - 1 ? 'border-b border-white/5' : ''}`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-white/90 truncate">{inv.deal?.title}</p>
+                        <p className="text-xs text-white/50">{inv.deal?.category}</p>
+                      </div>
+                      {inv.current_step === 'investment_complete' && (
+                        <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                      )}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
 
         {/* Timeline */}
