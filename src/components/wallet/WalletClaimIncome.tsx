@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { EarningsSummaryCard } from "./EarningsSummaryCard";
 import { EarningsAtGlance } from "./EarningsAtGlance";
 import { RecentPayouts } from "./RecentPayouts";
 import { WalletWithdrawModal } from "./WalletWithdrawModal";
@@ -9,15 +8,6 @@ export const WalletClaimIncome = () => {
 
   return (
     <div className="space-y-8">
-      {/* Top Summary Card */}
-      <EarningsSummaryCard
-        totalInvested={4250}
-        totalEarnings={312.40}
-        earningsPercent={7.3}
-        nextPayoutDays={5}
-        nextPayoutAmount={23.50}
-      />
-
       {/* Earnings at a Glance */}
       <EarningsAtGlance
         availableNow={145.20}
