@@ -12,26 +12,25 @@ export const WalletDashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Top Section - Balance + Claim Income */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <WalletBalanceCard
-            onCredit={() => setCreditModalOpen(true)}
-            onWithdraw={() => setWithdrawModalOpen(true)}
-          />
-        </motion.div>
+      {/* Balance Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <WalletBalanceCard
+          onCredit={() => setCreditModalOpen(true)}
+          onWithdraw={() => setWithdrawModalOpen(true)}
+        />
+      </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <WalletClaimIncome />
-        </motion.div>
-      </div>
+      {/* Claim Income / Earnings Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <WalletClaimIncome />
+      </motion.div>
 
       {/* Portfolio Section */}
       <motion.div
