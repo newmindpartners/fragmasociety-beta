@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 import { Plus, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { PaymentMethodSelector } from "./PaymentMethodSelector";
 import { AddPaymentMethodModal } from "./AddPaymentMethodModal";
+import { AddBankAccountModal } from "./AddBankAccountModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +16,10 @@ import {
 
 interface PaymentMethod {
   id: string;
-  type: "mastercard" | "visa";
+  type: "mastercard" | "visa" | "bank";
   last4: string;
   isDefault: boolean;
+  bankName?: string;
 }
 
 const mockPaymentMethods: PaymentMethod[] = [
@@ -24,7 +27,9 @@ const mockPaymentMethods: PaymentMethod[] = [
 ];
 
 export const PaymentMethods = () => {
-  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [selectorOpen, setSelectorOpen] = useState(false);
+  const [addCardOpen, setAddCardOpen] = useState(false);
+  const [addBankOpen, setAddBankOpen] = useState(false);
   const [paymentMethods] = useState<PaymentMethod[]>(mockPaymentMethods);
 
   return (
@@ -97,7 +102,7 @@ export const PaymentMethods = () => {
       <Button
         variant="ghost"
         className="text-primary hover:text-primary/80 hover:bg-transparent p-0 h-auto font-medium"
-        onClick={() => setAddModalOpen(true)}
+        onClick={() => setSelectorOpen(true)}
       >
         <Plus className="w-4 h-4 mr-2" />
         Add Payment Methods
@@ -109,7 +114,14 @@ export const PaymentMethods = () => {
         <p className="text-primary text-lg">US$0.00 Available</p>
       </div>
 
-      <AddPaymentMethodModal open={addModalOpen} onOpenChange={setAddModalOpen} />
+      <PaymentMethodSelector 
+        open={selectorOpen} 
+        onOpenChange={setSelectorOpen}
+        onSelectCard={() => setAddCardOpen(true)}
+        onSelectBankAccount={() => setAddBankOpen(true)}
+      />
+      <AddPaymentMethodModal open={addCardOpen} onOpenChange={setAddCardOpen} />
+      <AddBankAccountModal open={addBankOpen} onOpenChange={setAddBankOpen} />
     </div>
   );
 };
