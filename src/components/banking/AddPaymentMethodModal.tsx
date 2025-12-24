@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreditCard, ChevronDown, X } from "lucide-react";
+import { CreditCard, ChevronDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { toast } from "sonner";
+import { usePaymentMethods } from "@/hooks/usePaymentMethods";
 
 interface AddPaymentMethodModalProps {
   open: boolean;
@@ -23,18 +24,56 @@ interface AddPaymentMethodModalProps {
 
 export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodModalProps) => {
   const [recommendationOpen, setRecommendationOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     nameOnCard: "",
     expiry: "",
     cardNumber: "",
     cvv: "",
   });
+  const { addPaymentMethod } = usePaymentMethods();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const detectCardBrand = (number: string): "mastercard" | "visa" | "amex" | "discover" => {
+    const cleaned = number.replace(/\s/g, "");
+    if (/^5[1-5]/.test(cleaned) || /^2[2-7]/.test(cleaned)) return "mastercard";
+    if (/^3[47]/.test(cleaned)) return "amex";
+    if (/^6(?:011|5)/.test(cleaned)) return "discover";
+    return "visa";
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Payment method added successfully");
-    onOpenChange(false);
-    setFormData({ nameOnCard: "", expiry: "", cardNumber: "", cvv: "" });
+    
+    if (!formData.nameOnCard || !formData.cardNumber || !formData.expiry || !formData.cvv) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    const cleanedNumber = formData.cardNumber.replace(/\s/g, "");
+    if (cleanedNumber.length < 15) {
+      toast.error("Please enter a valid card number");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await addPaymentMethod({
+        type: "card",
+        card_brand: detectCardBrand(formData.cardNumber),
+        last4: cleanedNumber.slice(-4),
+        bank_name: null,
+        account_holder_name: formData.nameOnCard,
+        is_default: false,
+      });
+      toast.success("Payment method added successfully");
+      onOpenChange(false);
+      setFormData({ nameOnCard: "", expiry: "", cardNumber: "", cvv: "" });
+    } catch (err: any) {
+      console.error("Error adding payment method:", err);
+      toast.error("Failed to add payment method. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const formatCardNumber = (value: string) => {
@@ -56,8 +95,15 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
     return v;
   };
 
+  const handleClose = () => {
+    if (!isSubmitting) {
+      onOpenChange(false);
+      setFormData({ nameOnCard: "", expiry: "", cardNumber: "", cvv: "" });
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="theme-dashboard sm:max-w-md bg-white border-gray-200 text-gray-900">
         <DialogHeader className="space-y-4">
           <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -100,6 +146,7 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
                 value={formData.nameOnCard}
                 onChange={(e) => setFormData({ ...formData, nameOnCard: e.target.value })}
                 className="bg-background border-border"
+                disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
@@ -111,6 +158,7 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
                 value={formData.expiry}
                 onChange={(e) => setFormData({ ...formData, expiry: formatExpiry(e.target.value) })}
                 className="bg-background border-border"
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -130,6 +178,7 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
                   value={formData.cardNumber}
                   onChange={(e) => setFormData({ ...formData, cardNumber: formatCardNumber(e.target.value) })}
                   className="bg-background border-border pl-12"
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
@@ -142,6 +191,7 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
                 value={formData.cvv}
                 onChange={(e) => setFormData({ ...formData, cvv: e.target.value.replace(/[^0-9]/g, "") })}
                 className="bg-background border-border"
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -151,15 +201,24 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
               type="button"
               variant="outline"
               className="flex-1 border-border text-foreground hover:bg-muted"
-              onClick={() => onOpenChange(false)}
+              onClick={handleClose}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+              disabled={isSubmitting}
             >
-              Confirm Payment Method
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Adding...
+                </>
+              ) : (
+                "Confirm Payment Method"
+              )}
             </Button>
           </div>
         </form>
