@@ -233,7 +233,7 @@ export const InvestmentStatus = () => {
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       className="w-8 h-8 rounded-xl bg-primary/20 border-2 border-primary flex items-center justify-center backdrop-blur-sm"
                     >
-                      <StepIcon className="w-4 h-4 text-primary" />
+                      <StepIcon className="w-4 h-4 text-white" />
                     </motion.div>
                   ) : (
                     <motion.div 
