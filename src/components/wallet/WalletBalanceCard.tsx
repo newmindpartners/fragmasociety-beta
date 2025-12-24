@@ -1,5 +1,5 @@
 import { Copy, MoreHorizontal, Plus, ArrowUpRight, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 interface WalletBalanceCardProps {
@@ -18,7 +18,12 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
   };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl h-full min-h-[280px] flex flex-col">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="relative overflow-hidden rounded-3xl h-full min-h-[280px] flex flex-col"
+    >
       {/* Background with gradient layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f0f23]" />
       
@@ -101,6 +106,6 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
           Your wallet is securely stored with Dfns
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
