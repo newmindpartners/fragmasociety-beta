@@ -17,6 +17,7 @@ import DealDetails from "./pages/DealDetails";
 import FAQ from "./pages/FAQ";
 import HowItWorks from "./pages/HowItWorks";
 import Dashboard from "./pages/Dashboard";
+import OrderDetails from "./pages/OrderDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/signature-deal" element={<SignatureDeal />} />
             <Route path="/live-deals" element={<LiveDeals />} />
             <Route path="/deal/:id" element={<DealDetails />} />
+            <Route path="/order/:orderId" element={<OrderDetails />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/dashboard" element={<Dashboard />} />
