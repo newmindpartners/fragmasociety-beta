@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDownLeft, Plus, Copy, Check, Clock, Building2 } from "lucide-react";
+import { ArrowDownLeft, Plus, Copy, Check, Clock, Building2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { AddBankAccountModal } from "./AddBankAccountModal";
+import { useTransfers } from "@/hooks/useTransfers";
 
 interface DepositModalProps {
   open: boolean;
@@ -45,6 +46,9 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
   const [amount, setAmount] = useState("");
   const [addBankAccountOpen, setAddBankAccountOpen] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [depositReference, setDepositReference] = useState(fragmaAccountDetails.reference);
+  const { createTransfer } = useTransfers();
   const currentBalance = 5000;
   const dailyLimit = 25000;
 
@@ -65,11 +69,33 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
       toast.error(`Amount exceeds daily limit of $${dailyLimit.toLocaleString()}`);
       return;
     }
+    // Generate unique reference
+    const ref = `DEP-${Date.now().toString(36).toUpperCase()}`;
+    setDepositReference(ref);
     setStep("confirmation");
   };
 
-  const handleConfirmDeposit = () => {
-    setStep("success");
+  const handleConfirmDeposit = async () => {
+    setIsSubmitting(true);
+    try {
+      const selectedAccountData = mockAccounts.find(a => a.id === selectedAccount);
+      await createTransfer({
+        type: "deposit",
+        amount: parseFloat(amount),
+        currency: "USD",
+        status: "processing",
+        reference: depositReference,
+        bank_name: fragmaAccountDetails.bankName,
+        account_last4: selectedAccountData?.last4 || null,
+        notes: null,
+      });
+      setStep("success");
+    } catch (err: any) {
+      console.error("Error creating deposit:", err);
+      toast.error("Failed to create deposit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -257,7 +283,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                 />
                 <CopyableField 
                   label="Payment Reference" 
-                  value={fragmaAccountDetails.reference} 
+                  value={depositReference} 
                   fieldName="Reference" 
                 />
               </div>
@@ -276,6 +302,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                   variant="outline"
                   className="flex-1 border-border text-foreground hover:bg-muted"
                   onClick={() => setStep("form")}
+                  disabled={isSubmitting}
                 >
                   Back
                 </Button>
@@ -283,8 +310,16 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                   type="button"
                   className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
                   onClick={handleConfirmDeposit}
+                  disabled={isSubmitting}
                 >
-                  I've Made the Transfer
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    "I've Made the Transfer"
+                  )}
                 </Button>
               </div>
             </div>
@@ -321,7 +356,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                 </div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-muted-foreground">Reference</span>
-                  <span className="text-sm font-medium text-foreground">{fragmaAccountDetails.reference}</span>
+                  <span className="text-sm font-medium text-foreground font-mono">{depositReference}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Estimated Time</span>
