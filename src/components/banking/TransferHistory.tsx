@@ -1,10 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ArrowDownLeft, CreditCard, Loader2, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTransfers, Transfer } from "@/hooks/useTransfers";
+import { TransferDetailsModal } from "./TransferDetailsModal";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
 
 interface TransferGroup {
@@ -146,9 +147,17 @@ export const TransferHistory = () => {
     },
   ];
 
+  const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+
   const displayTransfers = transfers.length > 0 ? transfers : mockTransfers;
   const groupedTransfers = useMemo(() => groupTransfersByDate(displayTransfers), [displayTransfers]);
   const hasTransfers = displayTransfers.length > 0;
+
+  const handleTransferClick = (transfer: Transfer) => {
+    setSelectedTransfer(transfer);
+    setDetailsOpen(true);
+  };
 
   if (loading) {
     return (
@@ -221,7 +230,8 @@ export const TransferHistory = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: groupIndex * 0.1 + index * 0.05 }}
-                    className="bg-card border border-border rounded-xl p-4 flex items-center justify-between"
+                    onClick={() => handleTransferClick(transfer)}
+                    className="bg-card border border-border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-4">
                       <div
@@ -274,6 +284,12 @@ export const TransferHistory = () => {
           ))}
         </div>
       )}
+
+      <TransferDetailsModal
+        transfer={selectedTransfer}
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+      />
     </div>
   );
 };
