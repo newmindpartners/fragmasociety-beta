@@ -6,7 +6,6 @@ export const WalletClaimIncome = () => {
   const incomeData = {
     earnedThisWeek: 23,
     availableToClaim: 112.45,
-    availableAda: 58.23,
     lastClaimed: "$85.10",
     lastClaimedDate: "Apr 13, 2025",
     nextClaim: "6 Days",
@@ -67,8 +66,7 @@ export const WalletClaimIncome = () => {
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-500/80" />
                 <p className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">Earned this week</p>
               </div>
-              <p className="text-2xl font-bold text-slate-800 tracking-tight">{incomeData.earnedThisWeek}</p>
-              <p className="text-xs text-slate-400 mt-1">ADA</p>
+              <p className="text-2xl font-bold text-slate-800 tracking-tight">${incomeData.earnedThisWeek}</p>
             </div>
           </div>
 
@@ -82,7 +80,6 @@ export const WalletClaimIncome = () => {
                 <p className="text-[11px] text-emerald-700 uppercase tracking-wider font-medium">Available to claim</p>
               </div>
               <p className="text-2xl font-bold text-slate-800 tracking-tight">${incomeData.availableToClaim}</p>
-              <p className="text-xs text-emerald-600/70 mt-1">≈ {incomeData.availableAda} ADA</p>
             </div>
           </div>
 
