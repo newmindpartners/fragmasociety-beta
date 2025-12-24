@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { AddBankAccountModal } from "./AddBankAccountModal";
 
 interface DepositModalProps {
   open: boolean;
@@ -31,6 +32,7 @@ const mockAccounts: BankAccount[] = [
 export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
   const [selectedAccount, setSelectedAccount] = useState(mockAccounts[0]?.id || "");
   const [amount, setAmount] = useState("");
+  const [addBankAccountOpen, setAddBankAccountOpen] = useState(false);
   const currentBalance = 5000;
   const dailyLimit = 25000;
 
@@ -80,9 +82,10 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                 variant="ghost"
                 size="sm"
                 className="text-primary hover:text-primary/80 hover:bg-transparent p-0 h-auto"
+                onClick={() => setAddBankAccountOpen(true)}
               >
                 <Plus className="w-4 h-4 mr-1" />
-                Add Card
+                Add Bank Account
               </Button>
             </div>
 
@@ -152,6 +155,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
           </div>
         </form>
       </DialogContent>
+      <AddBankAccountModal open={addBankAccountOpen} onOpenChange={setAddBankAccountOpen} />
     </Dialog>
   );
 };
