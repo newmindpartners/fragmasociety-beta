@@ -280,9 +280,9 @@ export const InvestmentStatus = () => {
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: index * 0.1 + 0.4 }}
-                          className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                        className={`text-[10px] px-2 py-0.5 rounded-full border ${
                             step.current 
-                              ? 'bg-primary/20 text-primary border-primary/30' 
+                              ? 'bg-primary/30 text-white border-primary/40' 
                               : step.completed 
                                 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
                                 : 'bg-white/5 text-white/50 border-white/10'
