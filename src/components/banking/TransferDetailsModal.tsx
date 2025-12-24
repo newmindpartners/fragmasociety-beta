@@ -74,7 +74,7 @@ Generated on: ${format(new Date(), "MMMM d, yyyy 'at' h:mm a")}
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-background">
+      <DialogContent className="sm:max-w-md !bg-white dark:!bg-white">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div
@@ -88,22 +88,22 @@ Generated on: ${format(new Date(), "MMMM d, yyyy 'at' h:mm a")}
                 <ArrowUpRight className="w-5 h-5" />
               )}
             </div>
-            <span className="text-foreground">{isDeposit ? "Deposit Details" : "Withdrawal Details"}</span>
+            <span className="text-gray-900">{isDeposit ? "Deposit Details" : "Withdrawal Details"}</span>
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Amount */}
-          <div className="text-center py-6 bg-muted/30 rounded-xl border border-border">
-            <p className="text-sm text-muted-foreground mb-1">Amount</p>
-            <p className={`text-3xl font-bold ${isDeposit ? "text-green-600" : "text-foreground"}`}>
+          <div className="text-center py-6 bg-gray-50 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-500 mb-1">Amount</p>
+            <p className={`text-3xl font-bold ${isDeposit ? "text-green-600" : "text-gray-900"}`}>
               {isDeposit ? "+" : "-"}{formatAmount(transfer.amount, transfer.currency)}
             </p>
           </div>
 
           {/* Status */}
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center justify-between py-3 border-b border-gray-200">
+            <div className="flex items-center gap-2 text-gray-500">
               <Clock className="w-4 h-4" />
               <span className="text-sm">Status</span>
             </div>
@@ -113,24 +113,24 @@ Generated on: ${format(new Date(), "MMMM d, yyyy 'at' h:mm a")}
           </div>
 
           {/* Date */}
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center justify-between py-3 border-b border-gray-200">
+            <div className="flex items-center gap-2 text-gray-500">
               <Calendar className="w-4 h-4" />
               <span className="text-sm">Date & Time</span>
             </div>
-            <span className="font-medium text-foreground text-sm">
+            <span className="font-medium text-gray-900 text-sm">
               {format(parseISO(transfer.created_at), "MMM d, yyyy 'at' h:mm a")}
             </span>
           </div>
 
           {/* Reference */}
           {transfer.reference && (
-            <div className="flex items-center justify-between py-3 border-b border-border">
-              <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center justify-between py-3 border-b border-gray-200">
+              <div className="flex items-center gap-2 text-gray-500">
                 <Hash className="w-4 h-4" />
                 <span className="text-sm">Reference</span>
               </div>
-              <span className="font-mono text-sm font-medium text-foreground">
+              <span className="font-mono text-sm font-medium text-gray-900">
                 {transfer.reference}
               </span>
             </div>
@@ -138,37 +138,37 @@ Generated on: ${format(new Date(), "MMMM d, yyyy 'at' h:mm a")}
 
           {/* Bank Details */}
           {transfer.bank_name && (
-            <div className="flex items-center justify-between py-3 border-b border-border">
-              <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center justify-between py-3 border-b border-gray-200">
+              <div className="flex items-center gap-2 text-gray-500">
                 <Building2 className="w-4 h-4" />
                 <span className="text-sm">Bank Account</span>
               </div>
               <div className="text-right">
-                <p className="font-medium text-foreground text-sm">{transfer.bank_name}</p>
+                <p className="font-medium text-gray-900 text-sm">{transfer.bank_name}</p>
                 {transfer.account_last4 && (
-                  <p className="text-xs text-muted-foreground">**** {transfer.account_last4}</p>
+                  <p className="text-xs text-gray-500">**** {transfer.account_last4}</p>
                 )}
               </div>
             </div>
           )}
 
           {/* Currency */}
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center justify-between py-3 border-b border-gray-200">
+            <div className="flex items-center gap-2 text-gray-500">
               <DollarSign className="w-4 h-4" />
               <span className="text-sm">Currency</span>
             </div>
-            <span className="font-medium text-foreground text-sm">{transfer.currency}</span>
+            <span className="font-medium text-gray-900 text-sm">{transfer.currency}</span>
           </div>
 
           {/* Notes */}
           {transfer.notes && (
             <div className="py-3">
-              <div className="flex items-center gap-2 text-muted-foreground mb-2">
+              <div className="flex items-center gap-2 text-gray-500 mb-2">
                 <FileText className="w-4 h-4" />
                 <span className="text-sm">Notes</span>
               </div>
-              <p className="text-foreground bg-muted/30 rounded-lg p-3 text-sm border border-border">
+              <p className="text-gray-900 bg-gray-50 rounded-lg p-3 text-sm border border-gray-200">
                 {transfer.notes}
               </p>
             </div>
@@ -178,7 +178,7 @@ Generated on: ${format(new Date(), "MMMM d, yyyy 'at' h:mm a")}
           <Button 
             onClick={handleExportPDF} 
             variant="outline" 
-            className="w-full mt-4"
+            className="w-full mt-4 border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             <Download className="w-4 h-4 mr-2" />
             Export Receipt
