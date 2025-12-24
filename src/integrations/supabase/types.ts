@@ -217,6 +217,44 @@ export type Database = {
         }
         Relationships: []
       }
+      user_investments: {
+        Row: {
+          created_at: string
+          current_step: Database["public"]["Enums"]["investment_step"]
+          deal_id: string
+          id: string
+          step_deadline: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_step?: Database["public"]["Enums"]["investment_step"]
+          deal_id: string
+          id?: string
+          step_deadline?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_step?: Database["public"]["Enums"]["investment_step"]
+          deal_id?: string
+          id?: string
+          step_deadline?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_investments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -225,7 +263,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      investment_step:
+        | "verify_identity"
+        | "select_deal"
+        | "review_documents"
+        | "payment_processing"
+        | "funds_in_escrow"
+        | "investment_complete"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -352,6 +396,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      investment_step: [
+        "verify_identity",
+        "select_deal",
+        "review_documents",
+        "payment_processing",
+        "funds_in_escrow",
+        "investment_complete",
+      ],
+    },
   },
 } as const

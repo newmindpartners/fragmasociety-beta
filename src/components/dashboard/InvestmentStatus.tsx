@@ -1,21 +1,63 @@
-import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, UserCheck, Briefcase, FileSignature, CreditCard, Vault, Trophy } from "lucide-react";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle, ArrowRight, UserCheck, Briefcase, FileSignature, CreditCard, Vault, Trophy, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
+import { useUserInvestments, getStepIndex, InvestmentStep, UserInvestment } from "@/hooks/useUserInvestments";
 
 interface StatusStep {
-  id: number;
+  id: InvestmentStep;
   title: string;
   subtitle?: string;
   description?: string;
-  completed: boolean;
-  current: boolean;
   icon: LucideIcon;
   action?: {
     label: string;
-    deadline?: string;
   };
 }
+
+const STEPS_CONFIG: StatusStep[] = [
+  {
+    id: 'verify_identity',
+    title: "Verify Identity",
+    subtitle: "KYC Required",
+    description: "Complete identity verification to proceed with your investment.",
+    icon: UserCheck,
+  },
+  {
+    id: 'select_deal',
+    title: "Select Your Investment Deal",
+    subtitle: "Browse Deals",
+    description: "Choose from our curated selection of premium investment opportunities.",
+    icon: Briefcase,
+  },
+  {
+    id: 'review_documents',
+    title: "Review and Sign Documents",
+    description: "Review all legal documents and sign electronically to proceed.",
+    icon: FileSignature,
+    action: { label: "Sign Documents" },
+  },
+  {
+    id: 'payment_processing',
+    title: "Payment Processing",
+    description: "Your payment is being securely processed.",
+    icon: CreditCard,
+  },
+  {
+    id: 'funds_in_escrow',
+    title: "Funds in Escrow",
+    subtitle: "Up to 3 months",
+    description: "Your funds are held securely until the deal closes.",
+    icon: Vault,
+  },
+  {
+    id: 'investment_complete',
+    title: "Investment Complete",
+    description: "Congratulations! Your investment is now active.",
+    icon: Trophy,
+  },
+];
 
 const stepVariants = {
   hidden: { opacity: 0, x: -20, scale: 0.95 },
@@ -58,64 +100,49 @@ const lineVariants = {
   }),
 };
 
+// Mock data for when user has no investments yet
+const MOCK_INVESTMENT: UserInvestment = {
+  id: 'mock-1',
+  user_id: 'mock-user',
+  deal_id: 'palisades-rebuild',
+  current_step: 'review_documents',
+  step_deadline: '2025-08-01',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  deal: {
+    id: 'palisades-rebuild',
+    title: 'Palisades Rebuild Fund',
+    banner_image: null,
+    category: 'Real Estate',
+  },
+};
+
 export const InvestmentStatus = () => {
-  const steps: StatusStep[] = [
-    {
-      id: 1,
-      title: "Verify Identity",
-      subtitle: "KYC Required",
-      description: "Complete identity verification to proceed with your investment.",
-      completed: true,
-      current: false,
-      icon: UserCheck,
-    },
-    {
-      id: 2,
-      title: "Select Your Investment Deal",
-      subtitle: "Browse Deals",
-      description: "Choose from our curated selection of premium investment opportunities.",
-      completed: true,
-      current: false,
-      icon: Briefcase,
-    },
-    {
-      id: 3,
-      title: "Review and Sign Documents",
-      subtitle: "by 01.08.25",
-      description: "Review all legal documents and sign electronically to proceed.",
-      completed: false,
-      current: true,
-      icon: FileSignature,
-      action: {
-        label: "Sign Documents",
-      },
-    },
-    {
-      id: 4,
-      title: "Payment Processing",
-      description: "Your payment is being securely processed.",
-      completed: false,
-      current: false,
-      icon: CreditCard,
-    },
-    {
-      id: 5,
-      title: "Funds in Escrow",
-      subtitle: "Up to 3 months",
-      description: "Your funds are held securely until the deal closes.",
-      completed: false,
-      current: false,
-      icon: Vault,
-    },
-    {
-      id: 6,
-      title: "Investment Complete",
-      description: "Congratulations! Your investment is now active.",
-      completed: false,
-      current: false,
-      icon: Trophy,
-    },
-  ];
+  const { data: investments = [], isLoading } = useUserInvestments();
+  const [selectedDealId, setSelectedDealId] = useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Use mock data if no real investments
+  const displayInvestments = investments.length > 0 ? investments : [MOCK_INVESTMENT];
+  
+  // Set initial selection
+  const selectedInvestment = useMemo(() => {
+    if (selectedDealId) {
+      return displayInvestments.find(inv => inv.deal_id === selectedDealId) || displayInvestments[0];
+    }
+    return displayInvestments[0];
+  }, [selectedDealId, displayInvestments]);
+
+  const currentStepIndex = selectedInvestment ? getStepIndex(selectedInvestment.current_step) : 0;
+  const completedSteps = currentStepIndex;
+  const progressPercent = Math.round((completedSteps / STEPS_CONFIG.length) * 100);
+
+  const getStepStatus = (stepId: InvestmentStep) => {
+    const stepIndex = getStepIndex(stepId);
+    if (stepIndex < currentStepIndex) return 'completed';
+    if (stepIndex === currentStepIndex) return 'current';
+    return 'pending';
+  };
 
   return (
     <motion.div
@@ -164,181 +191,251 @@ export const InvestmentStatus = () => {
       
       {/* Content */}
       <div className="relative z-10 p-6 flex flex-col h-full">
-        {/* Header */}
+        {/* Header with Deal Selector */}
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="flex items-center gap-2.5 mb-6"
+          className="mb-6"
         >
-          <div className="relative">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-            <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping opacity-75" />
+          <div className="flex items-center gap-2.5 mb-3">
+            <div className="relative">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+              <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping opacity-75" />
+            </div>
+            <h3 className="text-sm font-semibold text-white/95 tracking-wide">Investment Progress</h3>
           </div>
-          <h3 className="text-sm font-semibold text-white/95 tracking-wide">Investment Progress</h3>
+
+          {/* Deal Selector Dropdown */}
+          {displayInvestments.length > 1 && (
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                <span className="text-sm text-white/90 truncate">
+                  {selectedInvestment?.deal?.title || 'Select Deal'}
+                </span>
+                <ChevronDown className={`w-4 h-4 text-white/60 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              <AnimatePresence>
+                {isDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="absolute top-full left-0 right-0 mt-1 bg-[#1a2640] border border-white/10 rounded-lg overflow-hidden z-20 shadow-xl"
+                  >
+                    {displayInvestments.map((inv) => (
+                      <button
+                        key={inv.id}
+                        onClick={() => {
+                          setSelectedDealId(inv.deal_id);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-white/10 transition-colors ${
+                          inv.deal_id === selectedInvestment?.deal_id ? 'bg-primary/20' : ''
+                        }`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-white/90 truncate">{inv.deal?.title}</p>
+                          <p className="text-xs text-white/50">{inv.deal?.category}</p>
+                        </div>
+                        {inv.current_step === 'investment_complete' && (
+                          <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                        )}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* Single deal display */}
+          {displayInvestments.length === 1 && selectedInvestment?.deal && (
+            <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+              <p className="text-sm text-white/90">{selectedInvestment.deal.title}</p>
+              <p className="text-xs text-white/50">{selectedInvestment.deal.category}</p>
+            </div>
+          )}
         </motion.div>
 
         {/* Timeline */}
         <div className="relative flex-1 space-y-1">
-          {steps.map((step, index) => {
-            const StepIcon = step.icon;
-            
-            return (
-              <motion.div 
-                key={step.id} 
-                className="relative flex gap-4"
-                custom={index}
-                initial="hidden"
-                animate="visible"
-                variants={stepVariants}
-              >
-                {/* Vertical line */}
-                {index < steps.length - 1 && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedInvestment?.deal_id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-1"
+            >
+              {STEPS_CONFIG.map((step, index) => {
+                const StepIcon = step.icon;
+                const status = getStepStatus(step.id);
+                const isCompleted = status === 'completed';
+                const isCurrent = status === 'current';
+                
+                return (
                   <motion.div 
+                    key={step.id} 
+                    className="relative flex gap-4"
                     custom={index}
                     initial="hidden"
                     animate="visible"
-                    variants={lineVariants}
-                    className="absolute left-[15px] top-9 w-px h-[calc(100%-8px)] origin-top"
-                    style={{
-                      background: step.completed 
-                        ? 'linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--primary) / 0.3))' 
-                        : 'linear-gradient(to bottom, hsl(var(--muted) / 0.3), transparent)',
-                    }}
-                  />
-                )}
-                
-                {/* Icon Container */}
-                <motion.div 
-                  className="relative z-10 flex-shrink-0"
-                  custom={index}
-                  initial="hidden"
-                  animate="visible"
-                  variants={iconVariants}
-                >
-                  {step.completed ? (
+                    variants={stepVariants}
+                  >
+                    {/* Vertical line */}
+                    {index < STEPS_CONFIG.length - 1 && (
+                      <motion.div 
+                        custom={index}
+                        initial="hidden"
+                        animate="visible"
+                        variants={lineVariants}
+                        className="absolute left-[15px] top-9 w-px h-[calc(100%-8px)] origin-top"
+                        style={{
+                          background: isCompleted 
+                            ? 'linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--primary) / 0.3))' 
+                            : 'linear-gradient(to bottom, hsl(var(--muted) / 0.3), transparent)',
+                        }}
+                      />
+                    )}
+                    
+                    {/* Icon Container */}
                     <motion.div 
-                      className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)]"
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      className="relative z-10 flex-shrink-0"
+                      custom={index}
+                      initial="hidden"
+                      animate="visible"
+                      variants={iconVariants}
                     >
-                      <CheckCircle className="w-4 h-4 text-white" />
+                      {isCompleted ? (
+                        <motion.div 
+                          className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)]"
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                        >
+                          <CheckCircle className="w-4 h-4 text-white" />
+                        </motion.div>
+                      ) : isCurrent ? (
+                        <motion.div 
+                          animate={{ 
+                            boxShadow: ['0 0 15px rgba(139,92,246,0.3)', '0 0 30px rgba(139,92,246,0.5)', '0 0 15px rgba(139,92,246,0.3)'],
+                            scale: [1, 1.05, 1],
+                          }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                          className="w-8 h-8 rounded-xl bg-primary/20 border-2 border-primary flex items-center justify-center backdrop-blur-sm"
+                        >
+                          <StepIcon className="w-4 h-4 text-white" />
+                        </motion.div>
+                      ) : (
+                        <motion.div 
+                          className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center"
+                          whileHover={{ 
+                            scale: 1.05, 
+                            backgroundColor: "rgba(255,255,255,0.1)",
+                            borderColor: "rgba(255,255,255,0.2)",
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <StepIcon className="w-4 h-4 text-white/30" />
+                        </motion.div>
+                      )}
                     </motion.div>
-                  ) : step.current ? (
+
+                    {/* Content Card */}
                     <motion.div 
-                      animate={{ 
-                        boxShadow: ['0 0 15px rgba(139,92,246,0.3)', '0 0 30px rgba(139,92,246,0.5)', '0 0 15px rgba(139,92,246,0.3)'],
-                        scale: [1, 1.05, 1],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      className="w-8 h-8 rounded-xl bg-primary/20 border-2 border-primary flex items-center justify-center backdrop-blur-sm"
-                    >
-                      <StepIcon className="w-4 h-4 text-white" />
-                    </motion.div>
-                  ) : (
-                    <motion.div 
-                      className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center"
-                      whileHover={{ 
-                        scale: 1.05, 
-                        backgroundColor: "rgba(255,255,255,0.1)",
-                        borderColor: "rgba(255,255,255,0.2)",
-                      }}
+                      className={`flex-1 pb-4 ${index === STEPS_CONFIG.length - 1 ? 'pb-0' : ''}`}
+                      whileHover={isCurrent ? { x: 4 } : {}}
                       transition={{ duration: 0.2 }}
                     >
-                      <StepIcon className="w-4 h-4 text-white/30" />
-                    </motion.div>
-                  )}
-                </motion.div>
-
-                {/* Content Card */}
-                <motion.div 
-                  className={`flex-1 pb-4 ${index === steps.length - 1 ? 'pb-0' : ''}`}
-                  whileHover={step.current ? { x: 4 } : {}}
-                  transition={{ duration: 0.2 }}
-                >
-                  <motion.div 
-                    className={`rounded-xl p-3 transition-all duration-300 ${
-                      step.current 
-                        ? 'bg-white/5 border border-primary/30 shadow-[0_0_30px_rgba(139,92,246,0.1)]' 
-                        : step.completed 
-                          ? 'bg-white/[0.02]' 
-                          : ''
-                    }`}
-                    whileHover={step.current ? { 
-                      backgroundColor: "rgba(255,255,255,0.08)",
-                      borderColor: "rgba(139,92,246,0.5)",
-                    } : {}}
-                  >
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className={`text-sm font-medium transition-colors ${
-                        step.completed ? 'text-white/80' : step.current ? 'text-white' : 'text-white/40'
-                      }`}>
-                        {step.title}
-                      </span>
-                      {step.subtitle && (
-                        <motion.span 
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.1 + 0.4 }}
-                        className={`text-[10px] px-2 py-0.5 rounded-full border ${
-                            step.current 
-                              ? 'bg-primary/30 text-white border-primary/40' 
-                              : step.completed 
-                                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
-                                : 'bg-white/5 text-white/50 border-white/10'
-                          }`}
-                        >
-                          {step.subtitle}
-                        </motion.span>
-                      )}
-                      {step.completed && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + 0.5 }}
-                          className="text-[10px] text-emerald-400 font-medium"
-                        >
-                          ✓ Complete
-                        </motion.span>
-                      )}
-                    </div>
-                    
-                    {step.description && step.current && (
-                      <motion.p 
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="text-xs text-white/50 mt-2 leading-relaxed"
+                      <motion.div 
+                        className={`rounded-xl p-3 transition-all duration-300 ${
+                          isCurrent 
+                            ? 'bg-white/5 border border-primary/30 shadow-[0_0_30px_rgba(139,92,246,0.1)]' 
+                            : isCompleted 
+                              ? 'bg-white/[0.02]' 
+                              : ''
+                        }`}
+                        whileHover={isCurrent ? { 
+                          backgroundColor: "rgba(255,255,255,0.08)",
+                          borderColor: "rgba(139,92,246,0.5)",
+                        } : {}}
                       >
-                        {step.description}
-                      </motion.p>
-                    )}
-                    
-                    {step.action && step.current && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
-                      >
-                        <Button 
-                          size="sm"
-                          className="mt-3 rounded-full h-9 px-5 text-xs font-semibold bg-primary hover:bg-primary/90 text-white group shadow-[0_8px_30px_rgba(139,92,246,0.25)] hover:shadow-[0_8px_40px_rgba(139,92,246,0.4)] transition-all duration-300"
-                        >
-                          <motion.span
-                            className="flex items-center"
-                            whileHover={{ x: 2 }}
+                        <div className="flex items-center gap-2.5 flex-wrap">
+                          <span className={`text-sm font-medium transition-colors ${
+                            isCompleted ? 'text-white/80' : isCurrent ? 'text-white' : 'text-white/40'
+                          }`}>
+                            {step.title}
+                          </span>
+                          {step.subtitle && (
+                            <motion.span 
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: index * 0.1 + 0.4 }}
+                              className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                                isCurrent 
+                                  ? 'bg-primary/30 text-white border-primary/40' 
+                                  : isCompleted 
+                                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
+                                    : 'bg-white/5 text-white/50 border-white/10'
+                              }`}
+                            >
+                              {step.subtitle}
+                            </motion.span>
+                          )}
+                          {isCompleted && (
+                            <motion.span
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 + 0.5 }}
+                              className="text-[10px] text-emerald-400 font-medium"
+                            >
+                              ✓ Complete
+                            </motion.span>
+                          )}
+                        </div>
+                        
+                        {step.description && isCurrent && (
+                          <motion.p 
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="text-xs text-white/50 mt-2 leading-relaxed"
                           >
-                            {step.action.label}
-                            <ArrowRight className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 transition-transform" />
-                          </motion.span>
-                        </Button>
+                            {step.description}
+                          </motion.p>
+                        )}
+                        
+                        {step.action && isCurrent && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
+                          >
+                            <Button 
+                              size="sm"
+                              className="mt-3 rounded-full h-9 px-5 text-xs font-semibold bg-primary hover:bg-primary/90 text-white group shadow-[0_8px_30px_rgba(139,92,246,0.25)] hover:shadow-[0_8px_40px_rgba(139,92,246,0.4)] transition-all duration-300"
+                            >
+                              <motion.span
+                                className="flex items-center"
+                                whileHover={{ x: 2 }}
+                              >
+                                {step.action.label}
+                                <ArrowRight className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 transition-transform" />
+                              </motion.span>
+                            </Button>
+                          </motion.div>
+                        )}
                       </motion.div>
-                    )}
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Progress indicator */}
@@ -350,12 +447,12 @@ export const InvestmentStatus = () => {
         >
           <div className="flex items-center justify-between text-xs mb-2">
             <span className="text-white/60">Overall Progress</span>
-            <span className="text-primary font-semibold">2 of 6 Complete</span>
+            <span className="text-primary font-semibold">{completedSteps} of {STEPS_CONFIG.length} Complete</span>
           </div>
           <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
             <motion.div 
               initial={{ width: 0 }}
-              animate={{ width: "33%" }}
+              animate={{ width: `${progressPercent}%` }}
               transition={{ delay: 1, duration: 1, ease: "easeOut" }}
               className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
               style={{
