@@ -11,7 +11,7 @@ interface WalletSwapModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-type Currency = "USD" | "USDC" | "ADA";
+type Currency = "USD" | "USDC" | "ADA" | "BTC";
 
 const RATES = {
   "USDC-USD": 1.0,
@@ -20,12 +20,19 @@ const RATES = {
   "USD-ADA": 2.857,
   "USDC-ADA": 2.857,
   "ADA-USDC": 0.35,
+  "BTC-USD": 42500,
+  "USD-BTC": 0.0000235,
+  "BTC-USDC": 42500,
+  "USDC-BTC": 0.0000235,
+  "BTC-ADA": 121428.57,
+  "ADA-BTC": 0.00000823,
 };
 
 const currencyIcons: Record<Currency, { bg: string; text: string; label: string }> = {
   USD: { bg: "bg-emerald-500", text: "text-white", label: "$" },
   USDC: { bg: "bg-blue-500", text: "text-white", label: "USDC" },
-  ADA: { bg: "bg-slate-800", text: "text-white", label: "ADA" },
+  ADA: { bg: "bg-slate-700", text: "text-white", label: "ADA" },
+  BTC: { bg: "bg-orange-500", text: "text-white", label: "₿" },
 };
 
 export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) => {
@@ -64,7 +71,7 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
     setAmount("100");
   };
 
-  const currencies: Currency[] = ["USD", "USDC", "ADA"];
+  const currencies: Currency[] = ["USD", "USDC", "ADA", "BTC"];
 
   const CurrencyButton = ({ 
     currency, 
