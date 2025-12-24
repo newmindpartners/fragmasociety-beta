@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, ArrowUpRight, ArrowDownLeft, History, Plus, ArrowRight, Bell, MoreHorizontal, Trash2, Star } from "lucide-react";
+import { CreditCard, ArrowUpRight, ArrowDownLeft, History, Plus, ArrowRight, Bell, MoreHorizontal, Trash2, Star, Pencil, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WithdrawModal } from "./WithdrawModal";
@@ -67,9 +67,13 @@ export const BankingOverview = () => {
   const [addCardOpen, setAddCardOpen] = useState(false);
   const [addBankOpen, setAddBankOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [showAllMethods, setShowAllMethods] = useState(false);
   const navigate = useNavigate();
   
   const { paymentMethods, loading: methodsLoading, setAsDefault, deletePaymentMethod } = usePaymentMethods();
+  
+  const defaultMethod = paymentMethods.find(m => m.is_default);
+  const otherMethods = paymentMethods.filter(m => !m.is_default);
 
   const handleCardClick = (action: BankingAction) => {
     if (action.action === "withdraw") {
@@ -118,7 +122,7 @@ export const BankingOverview = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="bg-card border border-border rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
                   <CreditCard className="w-5 h-5 text-primary" strokeWidth={1.5} />
@@ -143,65 +147,123 @@ export const BankingOverview = () => {
               </Button>
             </div>
 
-            {/* Connected Payment Methods */}
-            {paymentMethods.length > 0 && (
-              <div className="border-t border-border pt-4 space-y-3">
-                {paymentMethods.map((method) => (
-                  <div
-                    key={method.id}
-                    className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-12 h-8 rounded-md flex items-center justify-center ${
-                        method.type === "card" 
-                          ? "bg-gradient-to-br from-red-500 to-orange-400" 
-                          : "bg-gradient-to-br from-blue-500 to-blue-600"
-                      }`}>
-                        {method.type === "card" ? getCardIcon(method.card_brand) : (
-                          <span className="text-white font-bold text-[10px]">BANK</span>
-                        )}
+            {/* Preferred/Default Payment Method */}
+            {defaultMethod && (
+              <div className="mt-4 p-4 rounded-xl border-2 border-primary/20 bg-primary/5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-14 h-10 rounded-lg flex items-center justify-center ${
+                      defaultMethod.type === "card" 
+                        ? "bg-gradient-to-br from-red-500 to-orange-400" 
+                        : "bg-gradient-to-br from-blue-500 to-blue-600"
+                    }`}>
+                      {defaultMethod.type === "card" ? getCardIcon(defaultMethod.card_brand) : (
+                        <span className="text-white font-bold text-[10px]">BANK</span>
+                      )}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="bg-primary/10 text-primary border-0 text-xs">
+                          Preferred
+                        </Badge>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-foreground text-sm">
-                            {method.type === "card" 
-                              ? (method.card_brand?.charAt(0).toUpperCase() + method.card_brand?.slice(1))
-                              : method.bank_name || "Bank Account"
-                            }
-                          </span>
-                          <span className="text-muted-foreground text-sm">•••• {method.last4}</span>
-                          {method.is_default && (
-                            <Badge variant="secondary" className="bg-primary/10 text-primary border-0 text-xs">
-                              Default
-                            </Badge>
-                          )}
-                        </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="font-medium text-foreground">
+                          {defaultMethod.type === "card" 
+                            ? (defaultMethod.card_brand?.charAt(0).toUpperCase() + defaultMethod.card_brand?.slice(1))
+                            : defaultMethod.bank_name || "Bank Account"
+                          }
+                        </span>
+                        <span className="text-muted-foreground">•••• {defaultMethod.last4}</span>
                       </div>
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
-                          <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        {!method.is_default && (
-                          <DropdownMenuItem onClick={() => setAsDefault(method.id)}>
-                            <Star className="w-4 h-4 mr-2" />
-                            Set as Default
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem 
-                          className="text-destructive"
-                          onClick={() => handleDeletePaymentMethod(method.id)}
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Remove
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </div>
-                ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-primary/30 text-primary hover:bg-primary/10 rounded-full px-4"
+                    onClick={() => navigate("/dashboard/banking/payment-methods")}
+                  >
+                    <Pencil className="w-3.5 h-3.5 mr-1.5" />
+                    Update
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Other Payment Methods (Collapsible) */}
+            {otherMethods.length > 0 && (
+              <div className="mt-3">
+                <button
+                  onClick={() => setShowAllMethods(!showAllMethods)}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors w-full justify-center py-2"
+                >
+                  {showAllMethods ? (
+                    <>
+                      <ChevronUp className="w-4 h-4" />
+                      Hide other methods
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="w-4 h-4" />
+                      Show {otherMethods.length} other method{otherMethods.length > 1 ? 's' : ''}
+                    </>
+                  )}
+                </button>
+                
+                {showAllMethods && (
+                  <div className="space-y-2 mt-2">
+                    {otherMethods.map((method) => (
+                      <div
+                        key={method.id}
+                        className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-8 rounded-md flex items-center justify-center ${
+                            method.type === "card" 
+                              ? "bg-gradient-to-br from-red-500 to-orange-400" 
+                              : "bg-gradient-to-br from-blue-500 to-blue-600"
+                          }`}>
+                            {method.type === "card" ? getCardIcon(method.card_brand) : (
+                              <span className="text-white font-bold text-[10px]">BANK</span>
+                            )}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-foreground text-sm">
+                                {method.type === "card" 
+                                  ? (method.card_brand?.charAt(0).toUpperCase() + method.card_brand?.slice(1))
+                                  : method.bank_name || "Bank Account"
+                                }
+                              </span>
+                              <span className="text-muted-foreground text-sm">•••• {method.last4}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
+                              <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => setAsDefault(method.id)}>
+                              <Star className="w-4 h-4 mr-2" />
+                              Set as Default
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => handleDeletePaymentMethod(method.id)}
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Remove
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
