@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ArrowUpRight, Plus, CheckCircle2, ArrowLeft, Clock, Building2 } from "lucide-react";
+import { ArrowUpRight, Plus, CheckCircle2, ArrowLeft, Clock, Building2, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { AddBankAccountModal } from "./AddBankAccountModal";
+import { useTransfers } from "@/hooks/useTransfers";
 
 interface WithdrawModalProps {
   open: boolean;
@@ -37,16 +39,20 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
   const [selectedAccount, setSelectedAccount] = useState(mockAccounts[0]?.id || "");
   const [amount, setAmount] = useState("");
   const [addBankAccountOpen, setAddBankAccountOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [withdrawReference, setWithdrawReference] = useState("");
+  const { createTransfer } = useTransfers();
+  const navigate = useNavigate();
   const availableBalance = 5000;
 
   const selectedAccountData = mockAccounts.find(a => a.id === selectedAccount);
 
   const handleClose = () => {
     onOpenChange(false);
-    // Reset after animation
     setTimeout(() => {
       setStep("form");
       setAmount("");
+      setWithdrawReference("");
     }, 200);
   };
 
@@ -59,11 +65,36 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
       toast.error("Insufficient balance");
       return;
     }
+    const ref = `WTH-${Date.now().toString(36).toUpperCase()}`;
+    setWithdrawReference(ref);
     setStep("confirm");
   };
 
-  const handleConfirmWithdrawal = () => {
-    setStep("success");
+  const handleConfirmWithdrawal = async () => {
+    setIsSubmitting(true);
+    try {
+      await createTransfer({
+        type: "withdrawal",
+        amount: parseFloat(amount),
+        currency: "USD",
+        status: "processing",
+        reference: withdrawReference,
+        bank_name: selectedAccountData?.bankName || null,
+        account_last4: selectedAccountData?.last4 || null,
+        notes: null,
+      });
+      setStep("success");
+    } catch (err: any) {
+      console.error("Error creating withdrawal:", err);
+      toast.error("Failed to create withdrawal. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleViewTransferHistory = () => {
+    handleClose();
+    navigate("/dashboard/banking/transfer-history");
   };
 
   const renderFormStep = () => (
@@ -178,6 +209,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
         <button 
           onClick={() => setStep("form")}
           className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
+          disabled={isSubmitting}
         >
           <ArrowLeft className="w-5 h-5 text-gray-600" />
         </button>
@@ -214,6 +246,10 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
             <span className="text-gray-900 font-medium">{selectedAccountData?.bankName || "Bank Account"}</span>
           </div>
           <div className="flex items-center justify-between py-3 border-b border-gray-100">
+            <span className="text-gray-500">Reference</span>
+            <span className="text-gray-900 font-medium font-mono text-sm">{withdrawReference}</span>
+          </div>
+          <div className="flex items-center justify-between py-3 border-b border-gray-100">
             <span className="text-gray-500">Processing Time</span>
             <span className="text-gray-900 font-medium">1-3 Business Days</span>
           </div>
@@ -230,6 +266,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
             variant="outline"
             className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50"
             onClick={() => setStep("form")}
+            disabled={isSubmitting}
           >
             Back
           </Button>
@@ -237,8 +274,16 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
             type="button"
             onClick={handleConfirmWithdrawal}
             className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+            disabled={isSubmitting}
           >
-            Confirm Withdrawal
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              "Confirm Withdrawal"
+            )}
           </Button>
         </div>
       </div>
@@ -262,6 +307,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
         <div className="bg-gray-50 rounded-2xl p-6 mb-6 border border-gray-200">
           <p className="text-sm text-gray-500 mb-1">Amount</p>
           <p className="text-3xl font-bold text-gray-900">${parseFloat(amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+          <p className="text-xs text-gray-400 mt-2 font-mono">{withdrawReference}</p>
         </div>
 
         {/* Status Card */}
@@ -296,7 +342,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
           <Button
             type="button"
             className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
-            onClick={handleClose}
+            onClick={handleViewTransferHistory}
           >
             View Transfer History
           </Button>
