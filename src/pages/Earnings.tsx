@@ -22,56 +22,61 @@ const Earnings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 flex">
+    <div className="theme-dashboard relative flex min-h-screen w-full bg-background text-foreground">
       <DashboardSidebar isCollapsed={sidebarCollapsed} onToggle={handleToggleSidebar} />
 
       <div
-        className="flex-1 flex flex-col transition-all duration-300"
+        className="flex min-h-screen flex-1 flex-col overflow-hidden transition-[margin-left] duration-300 ease-out"
         style={{ marginLeft: sidebarCollapsed ? 72 : 256 }}
       >
-        <DashboardHeader />
+        <DashboardHeader onMenuToggle={handleToggleSidebar} />
 
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-7xl mx-auto space-y-8"
-          >
-            {/* Total Invested Card - Full Width */}
-            <TotalInvestedCard
-              totalInvested={4250}
-              totalEarnings={312.40}
-              earningsPercent={7.3}
-              nextPayoutDays={5}
-              nextPayoutAmount={23.50}
-              inProgress={89.10}
-              upcomingThisMonth={78.10}
-            />
+        <main className="flex-1 min-w-0 bg-background px-6 py-6 lg:px-10 lg:py-8">
+          <div className="mx-auto w-full max-w-[1400px]">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-8"
+            >
+              {/* Total Invested Card */}
+              <div className="max-w-2xl">
+                <TotalInvestedCard
+                  totalInvested={4250}
+                  totalEarnings={312.40}
+                  earningsPercent={7.3}
+                  nextPayoutDays={5}
+                  nextPayoutAmount={23.50}
+                  inProgress={89.10}
+                  upcomingThisMonth={78.10}
+                />
+              </div>
 
-            {/* Recent Payouts */}
-            <RecentPayouts onViewAll={() => console.log("View all earnings")} />
+              {/* Recent Payouts */}
+              <RecentPayouts onViewAll={() => console.log("View all earnings")} />
 
-            {/* Portfolio Table */}
-            <WalletPortfolio />
-          </motion.div>
+              {/* Portfolio Table */}
+              <WalletPortfolio />
+            </motion.div>
+          </div>
         </main>
 
-        {/* Footer */}
-        <footer className="border-t border-slate-200/80 bg-white/50 backdrop-blur-sm py-4 px-6">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-            <p>© 2025 Fragma. All rights reserved.</p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-slate-700 transition-colors">
+        <footer className="mt-auto border-t border-border/60 bg-card px-6 py-4 lg:px-10">
+          <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 sm:flex-row">
+            <p className="text-xs text-muted-foreground">
+              © 2024 Fragma Finance. All rights reserved.
+            </p>
+            <nav className="flex items-center gap-8">
+              <a href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
                 Privacy Policy
               </a>
-              <a href="#" className="hover:text-slate-700 transition-colors">
+              <a href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
                 Terms of Service
               </a>
-              <a href="#" className="hover:text-slate-700 transition-colors">
-                Support
+              <a href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
+                Contact
               </a>
-            </div>
+            </nav>
           </div>
         </footer>
       </div>
