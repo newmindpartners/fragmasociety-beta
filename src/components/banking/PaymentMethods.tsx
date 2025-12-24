@@ -50,6 +50,86 @@ export const PaymentMethods = () => {
     toast.success("Payment method removed");
   };
 
+  // Separate cards and bank accounts
+  const cards = displayMethods.filter(m => m.type === "card");
+  const bankAccounts = displayMethods.filter(m => m.type === "bank" || m.type === "bank_account");
+
+  const renderPaymentMethod = (method: typeof displayMethods[0], index: number) => (
+    <motion.div
+      key={method.id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="flex items-center justify-between py-3"
+    >
+      <div className="flex items-center gap-4">
+        {method.type === "card" ? (
+          <div className={`w-14 h-10 rounded-lg flex items-center justify-center ${
+            method.card_brand === "mastercard" 
+              ? "bg-gradient-to-br from-red-500 to-orange-400" 
+              : method.card_brand === "visa"
+                ? "bg-gradient-to-br from-blue-600 to-blue-400"
+                : "bg-gradient-to-br from-gray-600 to-gray-400"
+          }`}>
+            {method.card_brand === "mastercard" && (
+              <div className="flex -space-x-2">
+                <div className="w-5 h-5 rounded-full bg-red-600"></div>
+                <div className="w-5 h-5 rounded-full bg-orange-400"></div>
+              </div>
+            )}
+            {method.card_brand === "visa" && (
+              <span className="text-white font-bold text-xs">VISA</span>
+            )}
+            {!method.card_brand && <CreditCard className="w-5 h-5 text-white" />}
+          </div>
+        ) : (
+          <div className="w-14 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-white" />
+          </div>
+        )}
+        <div className="flex flex-col">
+          <div className="flex items-center gap-3">
+            <span className="font-medium text-foreground">
+              {method.type === "card" ? (method.card_brand || "Card") : (method.bank_name || "Bank Account")}
+            </span>
+            {method.is_default && (
+              <Badge variant="secondary" className="bg-primary/10 text-primary border-0 text-xs">
+                Default
+              </Badge>
+            )}
+          </div>
+          {method.account_holder_name && (
+            <span className="text-sm text-muted-foreground">{method.account_holder_name}</span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <span className="text-muted-foreground">**** {method.last4}</span>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full bg-muted/50">
+              <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {!method.is_default && (
+              <DropdownMenuItem onClick={() => handleSetDefault(method.id)}>
+                Set as Default
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem 
+              className="text-destructive"
+              onClick={() => handleRemove(method.id)}
+            >
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </motion.div>
+  );
+
   return (
     <div>
       {/* Breadcrumb */}
@@ -64,83 +144,41 @@ export const PaymentMethods = () => {
       <h1 className="text-3xl font-serif font-semibold text-foreground mb-2">Payment Methods</h1>
       <p className="text-muted-foreground mb-8">All info is kept highly secure</p>
 
-      {/* Payment Methods List */}
-      <div className="bg-card border border-border rounded-2xl p-6 mb-4">
-        {loading ? (
-          <div className="text-muted-foreground">Loading...</div>
-        ) : (
-          displayMethods.map((method, index) => (
-            <motion.div
-              key={method.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="flex items-center justify-between py-3"
-            >
-              <div className="flex items-center gap-4">
-                {method.type === "card" ? (
-                  <div className={`w-14 h-10 rounded-lg flex items-center justify-center ${
-                    method.card_brand === "mastercard" 
-                      ? "bg-gradient-to-br from-red-500 to-orange-400" 
-                      : method.card_brand === "visa"
-                        ? "bg-gradient-to-br from-blue-600 to-blue-400"
-                        : "bg-gradient-to-br from-gray-600 to-gray-400"
-                  }`}>
-                    {method.card_brand === "mastercard" && (
-                      <div className="flex -space-x-2">
-                        <div className="w-5 h-5 rounded-full bg-red-600"></div>
-                        <div className="w-5 h-5 rounded-full bg-orange-400"></div>
-                      </div>
-                    )}
-                    {method.card_brand === "visa" && (
-                      <span className="text-white font-bold text-xs">VISA</span>
-                    )}
-                    {!method.card_brand && <CreditCard className="w-5 h-5 text-white" />}
-                  </div>
-                ) : (
-                  <div className="w-14 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center">
-                    <Building2 className="w-5 h-5 text-white" />
-                  </div>
-                )}
-                <div className="flex items-center gap-3">
-                  <span className="font-medium text-foreground capitalize">
-                    {method.type === "card" ? method.card_brand || "Card" : method.bank_name || "Bank Account"}
-                  </span>
-                  {method.is_default && (
-                    <Badge variant="secondary" className="bg-primary/10 text-primary border-0 text-xs">
-                      Default
-                    </Badge>
-                  )}
-                </div>
-              </div>
+      {loading ? (
+        <div className="text-muted-foreground">Loading...</div>
+      ) : (
+        <>
+          {/* Cards Section */}
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+              <CreditCard className="w-5 h-5" />
+              Cards
+            </h2>
+            <div className="bg-card border border-border rounded-2xl p-6">
+              {cards.length > 0 ? (
+                cards.map((method, index) => renderPaymentMethod(method, index))
+              ) : (
+                <p className="text-muted-foreground text-sm">No cards added yet</p>
+              )}
+            </div>
+          </div>
 
-              <div className="flex items-center gap-4">
-                <span className="text-muted-foreground">**** {method.last4}</span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full bg-muted/50">
-                      <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {!method.is_default && (
-                      <DropdownMenuItem onClick={() => handleSetDefault(method.id)}>
-                        Set as Default
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem 
-                      className="text-destructive"
-                      onClick={() => handleRemove(method.id)}
-                    >
-                      Remove
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </motion.div>
-          ))
-        )}
-      </div>
+          {/* Bank Accounts Section */}
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Building2 className="w-5 h-5" />
+              Bank Accounts
+            </h2>
+            <div className="bg-card border border-border rounded-2xl p-6">
+              {bankAccounts.length > 0 ? (
+                bankAccounts.map((method, index) => renderPaymentMethod(method, index))
+              ) : (
+                <p className="text-muted-foreground text-sm">No bank accounts added yet</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Add Payment Method Button */}
       <Button
