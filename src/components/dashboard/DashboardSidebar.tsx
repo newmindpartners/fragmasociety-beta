@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import fragmaLogo from "@/assets/fragma-logo-new.png";
+import fragmaIcon from "@/assets/fragma-icon.png";
 
 interface NavItem {
   icon: LucideIcon;
@@ -121,14 +122,19 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
         isCollapsed ? "justify-center" : "justify-between"
       )}>
         <Link to="/" className="flex items-center gap-3">
-          <img 
-            src={fragmaLogo} 
-            alt="Fragma" 
-            className={cn(
-              "transition-all duration-300 brightness-0 invert",
-              isCollapsed ? "h-7 w-7 object-contain" : "h-7 w-auto"
-            )} 
-          />
+          {isCollapsed ? (
+            <img 
+              src={fragmaIcon} 
+              alt="Fragma" 
+              className="h-7 w-7 object-contain transition-all duration-300" 
+            />
+          ) : (
+            <img 
+              src={fragmaLogo} 
+              alt="Fragma" 
+              className="h-7 w-auto transition-all duration-300 brightness-0 invert" 
+            />
+          )}
         </Link>
         
         <motion.button
