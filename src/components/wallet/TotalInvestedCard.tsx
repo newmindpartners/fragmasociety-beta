@@ -38,7 +38,7 @@ export const TotalInvestedCard = ({
         {/* Ambient glow - emerald/green tint for "invested" theme */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/15 rounded-full blur-[100px] -translate-y-1/2" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4" />
-        <div className="absolute top-1/2 right-0 w-64 h-64 bg-violet-500/10 rounded-full blur-[60px] translate-x-1/2" />
+        <div className="absolute top-1/2 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[60px] translate-x-1/2" />
         
         {/* Subtle noise texture overlay */}
         <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
@@ -104,12 +104,12 @@ export const TotalInvestedCard = ({
             </button>
 
             {/* Upcoming */}
-            <div className="bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-violet-500/20">
+            <div className="bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-emerald-500/20">
               <div className="flex items-center gap-1.5 mb-1">
-                <div className="w-5 h-5 rounded-md bg-violet-500/20 flex items-center justify-center">
-                  <TrendingUp className="w-3 h-3 text-violet-400" />
+                <div className="w-5 h-5 rounded-md bg-emerald-500/20 flex items-center justify-center">
+                  <TrendingUp className="w-3 h-3 text-emerald-400" />
                 </div>
-                <span className="text-[10px] text-violet-400/80 uppercase tracking-wider font-medium">Upcoming</span>
+                <span className="text-[10px] text-emerald-400/80 uppercase tracking-wider font-medium">Upcoming</span>
               </div>
               <p className="text-lg font-bold text-white">€{upcomingThisMonth.toFixed(2)}</p>
               <span className="text-[10px] text-white/40">This month</span>
@@ -118,13 +118,13 @@ export const TotalInvestedCard = ({
 
           {/* Next Payout */}
           <div className="mt-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-violet-500/15 border border-violet-400/20">
-              <Calendar className="w-3.5 h-3.5 text-violet-400" />
-              <span className="text-xs text-violet-300/90 font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-teal-500/15 border border-teal-400/20">
+              <Calendar className="w-3.5 h-3.5 text-teal-400" />
+              <span className="text-xs text-teal-300/90 font-medium">
                 Next: in {nextPayoutDays} days
               </span>
               <span className="text-white/30">·</span>
-              <span className="text-xs text-violet-200 font-semibold">
+              <span className="text-xs text-teal-200 font-semibold">
                 est. €{nextPayoutAmount.toFixed(2)}
               </span>
             </div>
