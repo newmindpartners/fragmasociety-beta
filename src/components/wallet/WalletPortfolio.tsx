@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowDownUp } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useWalletHistory } from "@/hooks/useWalletHistory";
 
 interface Project {
   id: string;
@@ -34,22 +35,9 @@ const mockOrders: Order[] = [
   { id: "2", project: "Santexpat.fr", type: "Sell", amount: "€250.00", status: "Filled", date: "Apr 8, 2025" },
 ];
 
-interface Transaction {
-  id: string;
-  type: "Credit" | "Withdraw" | "Claim";
-  amount: string;
-  date: string;
-  status: "Completed" | "Processing" | "Failed";
-}
-
-const mockHistory: Transaction[] = [
-  { id: "1", type: "Credit", amount: "+$500.00", date: "Apr 12, 2025", status: "Completed" },
-  { id: "2", type: "Claim", amount: "+$85.10", date: "Apr 10, 2025", status: "Completed" },
-  { id: "3", type: "Withdraw", amount: "-$200.00", date: "Apr 5, 2025", status: "Completed" },
-];
-
 export const WalletPortfolio = () => {
   const [activeTab, setActiveTab] = useState("project");
+  const { history } = useWalletHistory();
 
   const getStatusColor = (status: Project["status"]) => {
     switch (status) {
@@ -62,6 +50,20 @@ export const WalletPortfolio = () => {
       default:
         return "bg-muted text-muted-foreground";
     }
+  };
+
+  const getTypeIcon = (type: string) => {
+    if (type === "Swap") {
+      return <ArrowDownUp className="w-4 h-4 text-violet-500" />;
+    }
+    return null;
+  };
+
+  const getAmountColor = (amount: string, type: string) => {
+    if (type === "Swap") return "text-violet-600";
+    if (amount.startsWith("+")) return "text-emerald-600";
+    if (amount.startsWith("-")) return "text-red-500";
+    return "text-foreground";
   };
 
   return (
@@ -198,7 +200,7 @@ export const WalletPortfolio = () => {
             </div>
 
             {/* Table Body */}
-            {mockHistory.map((transaction, index) => (
+            {history.map((transaction, index) => (
               <motion.div
                 key={transaction.id}
                 initial={{ opacity: 0, y: 10 }}
@@ -206,13 +208,24 @@ export const WalletPortfolio = () => {
                 transition={{ delay: index * 0.05 }}
                 className="grid grid-cols-4 gap-4 px-6 py-4 items-center border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
               >
-                <div className="font-medium text-foreground">{transaction.type}</div>
-                <div className={transaction.amount.startsWith("+") ? "text-emerald-600" : "text-foreground"}>
-                  {transaction.amount}
+                <div className="flex items-center gap-2">
+                  {getTypeIcon(transaction.type)}
+                  <span className="font-medium text-foreground">{transaction.type}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className={getAmountColor(transaction.amount, transaction.type)}>
+                    {transaction.amount}
+                  </span>
+                  {transaction.details && (
+                    <span className="text-xs text-muted-foreground">{transaction.details}</span>
+                  )}
                 </div>
                 <div className="text-muted-foreground text-sm">{transaction.date}</div>
                 <div>
-                  <Badge variant={transaction.status === "Completed" ? "default" : "outline"}>
+                  <Badge 
+                    variant={transaction.status === "Completed" ? "default" : "outline"}
+                    className={transaction.status === "Completed" && transaction.type === "Swap" ? "bg-violet-500" : ""}
+                  >
                     {transaction.status}
                   </Badge>
                 </div>

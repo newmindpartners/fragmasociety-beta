@@ -5,6 +5,7 @@ import {
   DialogContent,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useWalletHistory } from "@/hooks/useWalletHistory";
 
 interface WalletSwapModalProps {
   open: boolean;
@@ -43,6 +44,8 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
   const [showFromDropdown, setShowFromDropdown] = useState(false);
   const [showToDropdown, setShowToDropdown] = useState(false);
 
+  const { addTransaction } = useWalletHistory();
+
   const rateKey = `${fromCurrency}-${toCurrency}` as keyof typeof RATES;
   const rate = RATES[rateKey] || 1;
   const convertedAmount = (parseFloat(amount || "0") * rate).toFixed(2);
@@ -60,6 +63,15 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
 
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Add swap to history
+    addTransaction({
+      type: "Swap",
+      amount: `${amount} ${fromCurrency} → ${convertedAmount} ${toCurrency}`,
+      details: `Rate: 1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`,
+      status: "Completed",
+    });
+
     setIsSubmitting(false);
     toast.success(`Swapped ${amount} ${fromCurrency} to ${convertedAmount} ${toCurrency}`);
     onOpenChange(false);
@@ -101,7 +113,7 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
       </button>
       
       {showDropdown && (
-        <div className="absolute top-full mt-1 right-0 bg-white rounded-xl border border-slate-200 shadow-lg py-1 z-20 min-w-[100px]">
+        <div className="absolute top-full mt-1 right-0 bg-white rounded-xl border border-slate-200 shadow-lg py-1 z-50 min-w-[100px]">
           {currencies.filter(c => c !== excludeCurrency).map((c) => (
             <button
               key={c}
@@ -155,7 +167,7 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
 
             {/* Title */}
             <h2 className="text-xl font-semibold text-slate-800 mb-1">Swap Currency</h2>
-            <p className="text-sm text-slate-500 mb-6">Convert between USD, USDC and ADA</p>
+            <p className="text-sm text-slate-500 mb-6">Convert between USD, USDC, ADA and BTC</p>
 
             {/* Amount Inputs */}
             <div className="space-y-3">
