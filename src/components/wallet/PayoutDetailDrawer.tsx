@@ -89,18 +89,19 @@ export const PayoutDetailDrawer = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md bg-white border-l border-slate-200">
-        <SheetHeader className="pb-6 border-b border-slate-100">
-          <SheetTitle className="text-xl font-semibold text-slate-800">
-            Payout details
-          </SheetTitle>
-        </SheetHeader>
+      <SheetContent className="w-full sm:max-w-md !bg-white border-l border-slate-200 p-0">
+        <div className="p-6 border-b border-slate-100 bg-white">
+          <SheetHeader>
+            <SheetTitle className="text-xl font-semibold text-slate-900">
+              Payout details
+            </SheetTitle>
+          </SheetHeader>
+        </div>
 
-        <div className="py-6 space-y-6">
-          {/* Title & Amount */}
+        <div className="p-6 space-y-6 bg-white overflow-y-auto max-h-[calc(100vh-100px)]">
           <div>
             <p className="text-sm text-slate-500 mb-1">{payout.title}</p>
-            <p className="text-4xl font-bold text-slate-800">
+            <p className="text-4xl font-bold text-slate-900">
               +€{payout.amount.toFixed(2)}
             </p>
           </div>
