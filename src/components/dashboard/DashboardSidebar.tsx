@@ -121,20 +121,32 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
         "p-4 border-b border-[hsl(var(--sidebar-border))] flex items-center",
         isCollapsed ? "justify-center" : "justify-between"
       )}>
-        <Link to="/" className="flex items-center gap-3">
-          {isCollapsed ? (
-            <img 
-              src={fragmaIcon} 
-              alt="Fragma" 
-              className="h-7 w-7 object-contain transition-all duration-300" 
-            />
-          ) : (
-            <img 
-              src={fragmaLogo} 
-              alt="Fragma" 
-              className="h-7 w-auto transition-all duration-300 brightness-0 invert" 
-            />
-          )}
+        <Link to="/" className="flex items-center gap-3 relative h-7">
+          <AnimatePresence mode="wait">
+            {isCollapsed ? (
+              <motion.img 
+                key="icon"
+                src={fragmaIcon} 
+                alt="Fragma" 
+                className="h-7 w-7 object-contain"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              />
+            ) : (
+              <motion.img 
+                key="logo"
+                src={fragmaLogo} 
+                alt="Fragma" 
+                className="h-7 w-auto brightness-0 invert"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              />
+            )}
+          </AnimatePresence>
         </Link>
         
         <motion.button
