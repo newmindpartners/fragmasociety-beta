@@ -48,16 +48,16 @@ export const EarningsDetailsDrawer = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg bg-background border-l border-border p-0">
-        <div className="p-6 border-b border-border">
+      <SheetContent className="w-full sm:max-w-lg !bg-white border-l border-slate-200 p-0">
+        <div className="p-6 border-b border-slate-100 bg-white">
           <SheetHeader>
-            <SheetTitle className="text-2xl font-semibold text-foreground tracking-tight">
+            <SheetTitle className="text-2xl font-semibold text-slate-900 tracking-tight">
               Distributions in progress
             </SheetTitle>
           </SheetHeader>
         </div>
 
-        <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]">
+        <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-100px)] bg-white">
           {/* Summary Card */}
           <div className="bg-amber-50 rounded-2xl border border-amber-200/80 p-5">
             <div className="flex items-start gap-4">
