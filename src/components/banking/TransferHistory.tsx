@@ -72,8 +72,83 @@ const getStatusStyles = (status: Transfer["status"]) => {
 export const TransferHistory = () => {
   const { transfers, loading, error, refetch } = useTransfers();
 
-  const groupedTransfers = useMemo(() => groupTransfersByDate(transfers), [transfers]);
-  const hasTransfers = transfers.length > 0;
+  // Mock data for display when no real data exists
+  const mockTransfers: Transfer[] = [
+    {
+      id: "mock-1",
+      user_id: "mock-user",
+      type: "deposit",
+      amount: 5000,
+      currency: "USD",
+      status: "completed",
+      bank_name: "Chase Bank",
+      account_last4: "7890",
+      reference: "DEP-2024-001",
+      notes: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+    {
+      id: "mock-2",
+      user_id: "mock-user",
+      type: "withdrawal",
+      amount: 1500,
+      currency: "USD",
+      status: "processing",
+      bank_name: "Chase Bank",
+      account_last4: "7890",
+      reference: "WTH-2024-002",
+      notes: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+    {
+      id: "mock-3",
+      user_id: "mock-user",
+      type: "deposit",
+      amount: 10000,
+      currency: "USD",
+      status: "completed",
+      bank_name: "Bank of America",
+      account_last4: "4532",
+      reference: "DEP-2024-003",
+      notes: null,
+      created_at: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+      updated_at: new Date(Date.now() - 86400000).toISOString(),
+    },
+    {
+      id: "mock-4",
+      user_id: "mock-user",
+      type: "withdrawal",
+      amount: 2500,
+      currency: "USD",
+      status: "completed",
+      bank_name: "Chase Bank",
+      account_last4: "7890",
+      reference: "WTH-2024-004",
+      notes: null,
+      created_at: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+      updated_at: new Date(Date.now() - 86400000).toISOString(),
+    },
+    {
+      id: "mock-5",
+      user_id: "mock-user",
+      type: "deposit",
+      amount: 25000,
+      currency: "USD",
+      status: "completed",
+      bank_name: "Wells Fargo",
+      account_last4: "1234",
+      reference: "DEP-2024-005",
+      notes: null,
+      created_at: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+      updated_at: new Date(Date.now() - 172800000).toISOString(),
+    },
+  ];
+
+  const displayTransfers = transfers.length > 0 ? transfers : mockTransfers;
+  const groupedTransfers = useMemo(() => groupTransfersByDate(displayTransfers), [displayTransfers]);
+  const hasTransfers = displayTransfers.length > 0;
 
   if (loading) {
     return (
