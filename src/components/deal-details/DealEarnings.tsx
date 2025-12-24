@@ -118,34 +118,61 @@ export const DealEarnings = ({ dealId, dealTitle = "Investment" }: DealEarningsP
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Summary & Tax Info */}
           <div className="space-y-6">
-            {/* YTD Summary Card */}
+            {/* YTD Summary Card - Premium Dark Violet */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-violet-600 to-purple-700 rounded-2xl p-6 text-white"
+              className="relative overflow-hidden rounded-2xl p-6 text-white"
             >
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <span className="text-sm font-medium text-white/80">Year-to-Date</span>
-              </div>
+              {/* Deep dark violet gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a2e] via-[#2d1b4e] to-[#1a0a2e]" />
               
-              <div className="space-y-4">
-                <div>
-                  <p className="text-xs text-white/60 uppercase tracking-wider mb-1">Gross Earnings</p>
-                  <p className="text-2xl font-bold">€{taxInfo.ytdGrossEarnings.toFixed(2)}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-white/60 uppercase tracking-wider mb-1">Withholding</p>
-                    <p className="text-lg font-semibold">-€{taxInfo.ytdWithholding.toFixed(2)}</p>
+              {/* Animated spotlight glow - top right */}
+              <div className="absolute -top-20 -right-20 w-60 h-60 bg-violet-500/30 rounded-full blur-[80px] animate-pulse" />
+              
+              {/* Secondary glow - bottom left */}
+              <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-purple-600/25 rounded-full blur-[60px]" />
+              
+              {/* Accent glow - center */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-fuchsia-500/20 rounded-full blur-[50px]" />
+              
+              {/* Subtle grain texture */}
+              <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
+              
+              {/* Inner border glow */}
+              <div className="absolute inset-0 rounded-2xl border border-violet-400/20" />
+              <div className="absolute inset-[1px] rounded-2xl border border-white/[0.05]" />
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-violet-400/40 rounded-full blur-md animate-pulse" />
+                    <div className="relative w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                      <TrendingUp className="w-5 h-5 text-white" />
+                    </div>
                   </div>
+                  <span className="text-sm font-medium text-violet-200">Year-to-Date</span>
+                </div>
+                
+                <div className="space-y-5">
                   <div>
-                    <p className="text-xs text-white/60 uppercase tracking-wider mb-1">Net Received</p>
-                    <p className="text-lg font-semibold text-emerald-300">€{taxInfo.ytdNetEarnings.toFixed(2)}</p>
+                    <p className="text-[10px] text-violet-300/70 uppercase tracking-widest font-medium mb-1.5">Gross Earnings</p>
+                    <p className="text-3xl font-bold tracking-tight">
+                      <span className="text-white/70">€</span>{taxInfo.ytdGrossEarnings.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                    <div>
+                      <p className="text-[10px] text-violet-300/70 uppercase tracking-widest font-medium mb-1.5">Withholding</p>
+                      <p className="text-xl font-bold text-red-300">-€{taxInfo.ytdWithholding.toFixed(2)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-violet-300/70 uppercase tracking-widest font-medium mb-1.5">Net Received</p>
+                      <p className="text-xl font-bold text-emerald-400">€{taxInfo.ytdNetEarnings.toFixed(2)}</p>
+                    </div>
                   </div>
                 </div>
               </div>
