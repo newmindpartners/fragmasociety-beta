@@ -4,9 +4,10 @@ import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DocumentsStatements } from "@/components/documents/DocumentsStatements";
 import { DocumentsTaxDocuments } from "@/components/documents/DocumentsTaxDocuments";
+import { DocumentsUploads } from "@/components/documents/DocumentsUploads";
 import { cn } from "@/lib/utils";
 
-type TabType = "statements" | "tax";
+type TabType = "statements" | "tax" | "uploads";
 
 const Documents = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -67,6 +68,17 @@ const Documents = () => {
                 >
                   Tax Documents
                 </button>
+                <button
+                  onClick={() => setActiveTab("uploads")}
+                  className={cn(
+                    "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                    activeTab === "uploads"
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                  )}
+                >
+                  My Uploads
+                </button>
               </div>
 
               {/* Tab Content */}
@@ -76,11 +88,9 @@ const Documents = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                {activeTab === "statements" ? (
-                  <DocumentsStatements />
-                ) : (
-                  <DocumentsTaxDocuments />
-                )}
+                {activeTab === "statements" && <DocumentsStatements />}
+                {activeTab === "tax" && <DocumentsTaxDocuments />}
+                {activeTab === "uploads" && <DocumentsUploads />}
               </motion.div>
             </motion.div>
           </div>
