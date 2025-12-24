@@ -6,10 +6,14 @@ import { TotalInvestedCard } from "@/components/wallet/TotalInvestedCard";
 import { RecentPayouts } from "@/components/wallet/RecentPayouts";
 import { PortfolioEarningsSelector } from "@/components/wallet/PortfolioEarningsSelector";
 import { EarningsNotificationBanner } from "@/components/wallet/EarningsNotificationBanner";
+import { ReinvestModal } from "@/components/wallet/ReinvestModal";
 import { toast } from "sonner";
 
 const Earnings = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [reinvestModalOpen, setReinvestModalOpen] = useState(false);
+  const [reinvestAmount, setReinvestAmount] = useState(0);
+  const [reinvestSourceDeal, setReinvestSourceDeal] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem("sidebar-collapsed");
@@ -31,9 +35,9 @@ const Earnings = () => {
   };
 
   const handleReinvest = (notification: { dealName: string; amount: number }) => {
-    toast.success(`Reinvesting €${notification.amount.toFixed(2)} from ${notification.dealName}`, {
-      description: "Redirecting to investment options...",
-    });
+    setReinvestAmount(notification.amount);
+    setReinvestSourceDeal(notification.dealName);
+    setReinvestModalOpen(true);
   };
 
   const handleDismissNotification = (id: string) => {
@@ -108,6 +112,14 @@ const Earnings = () => {
           </div>
         </footer>
       </div>
+
+      {/* Reinvest Modal */}
+      <ReinvestModal
+        open={reinvestModalOpen}
+        onOpenChange={setReinvestModalOpen}
+        availableAmount={reinvestAmount}
+        sourceDealName={reinvestSourceDeal}
+      />
     </div>
   );
 };
