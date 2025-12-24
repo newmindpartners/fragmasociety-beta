@@ -5,6 +5,8 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { TotalInvestedCard } from "@/components/wallet/TotalInvestedCard";
 import { RecentPayouts } from "@/components/wallet/RecentPayouts";
 import { PortfolioEarningsSelector } from "@/components/wallet/PortfolioEarningsSelector";
+import { EarningsNotificationBanner } from "@/components/wallet/EarningsNotificationBanner";
+import { toast } from "sonner";
 
 const Earnings = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -19,6 +21,23 @@ const Earnings = () => {
       localStorage.setItem("sidebar-collapsed", JSON.stringify(!prev));
       return !prev;
     });
+  };
+
+  const handleViewEarnings = (notification: { dealName: string; amount: number }) => {
+    toast.success(`Viewing earnings for ${notification.dealName}`);
+    // Scroll to portfolio section or open deal details
+    const portfolioSection = document.querySelector('[data-portfolio-section]');
+    portfolioSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleReinvest = (notification: { dealName: string; amount: number }) => {
+    toast.success(`Reinvesting €${notification.amount.toFixed(2)} from ${notification.dealName}`, {
+      description: "Redirecting to investment options...",
+    });
+  };
+
+  const handleDismissNotification = (id: string) => {
+    console.log("Dismissed notification:", id);
   };
 
   return (
@@ -39,6 +58,13 @@ const Earnings = () => {
               transition={{ duration: 0.3 }}
               className="space-y-8"
             >
+              {/* Earnings Notification Banner */}
+              <EarningsNotificationBanner
+                onViewEarnings={handleViewEarnings}
+                onReinvest={handleReinvest}
+                onDismiss={handleDismissNotification}
+              />
+
               {/* Total Invested Card */}
               <div className="max-w-2xl">
                 <TotalInvestedCard
@@ -56,7 +82,9 @@ const Earnings = () => {
               <RecentPayouts onViewAll={() => console.log("View all earnings")} />
 
               {/* Portfolio Earnings Selector */}
-              <PortfolioEarningsSelector />
+              <div data-portfolio-section>
+                <PortfolioEarningsSelector />
+              </div>
             </motion.div>
           </div>
         </main>
