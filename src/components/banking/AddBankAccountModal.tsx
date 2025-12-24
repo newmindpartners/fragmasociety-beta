@@ -70,23 +70,23 @@ export const AddBankAccountModal = ({ open, onOpenChange }: AddBankAccountModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="theme-dashboard sm:max-w-lg bg-white border-gray-200 text-gray-900">
-        <DialogHeader className="space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Building2 className="w-6 h-6 text-primary" />
+      <DialogContent className="theme-dashboard sm:max-w-lg bg-white border-gray-200 text-gray-900 max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="space-y-3 flex-shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <DialogTitle className="text-xl font-semibold text-foreground">Add Bank Account</DialogTitle>
-            <p className="text-sm text-muted-foreground mt-1">
+            <DialogTitle className="text-lg font-semibold text-gray-900">Add Bank Account</DialogTitle>
+            <p className="text-sm text-gray-500 mt-0.5">
               Add your bank account details for deposits and withdrawals
             </p>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-4 pr-1 -mr-1">
           {/* Account Holder Name */}
-          <div className="space-y-2">
-            <Label htmlFor="accountHolderName" className="text-foreground font-medium">
+          <div className="space-y-1.5">
+            <Label htmlFor="accountHolderName" className="text-gray-700 font-medium text-sm">
               Account Holder Name <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -94,34 +94,34 @@ export const AddBankAccountModal = ({ open, onOpenChange }: AddBankAccountModalP
               placeholder="Enter full name as on bank account"
               value={formData.accountHolderName}
               onChange={(e) => setFormData({ ...formData, accountHolderName: e.target.value })}
-              className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400"
+              className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 h-10"
             />
           </div>
 
           {/* Bank Name */}
-          <div className="space-y-2">
-            <Label htmlFor="bankName" className="text-foreground font-medium">Bank Name</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="bankName" className="text-gray-700 font-medium text-sm">Bank Name</Label>
             <Input
               id="bankName"
               placeholder="Enter bank name"
               value={formData.bankName}
               onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
-              className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400"
+              className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 h-10"
             />
           </div>
 
           {/* Currency */}
-          <div className="space-y-2">
-            <Label className="text-foreground font-medium">
+          <div className="space-y-1.5">
+            <Label className="text-gray-700 font-medium text-sm">
               Currency <span className="text-red-500">*</span>
             </Label>
             <Select value={formData.currency} onValueChange={(value) => setFormData({ ...formData, currency: value })}>
-              <SelectTrigger className="bg-white border-gray-200 text-gray-900">
+              <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-10">
                 <SelectValue placeholder="Select currency" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gray-200 z-50">
+              <SelectContent className="bg-white border-gray-200 z-[100]">
                 {currencies.map((currency) => (
-                  <SelectItem key={currency.code} value={currency.code} className="text-gray-900">
+                  <SelectItem key={currency.code} value={currency.code} className="text-gray-900 cursor-pointer">
                     {currency.code} - {currency.name}
                   </SelectItem>
                 ))}
@@ -130,8 +130,8 @@ export const AddBankAccountModal = ({ open, onOpenChange }: AddBankAccountModalP
           </div>
 
           {/* IBAN */}
-          <div className="space-y-2">
-            <Label htmlFor="iban" className="text-foreground font-medium">
+          <div className="space-y-1.5">
+            <Label htmlFor="iban" className="text-gray-700 font-medium text-sm">
               IBAN <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -139,68 +139,69 @@ export const AddBankAccountModal = ({ open, onOpenChange }: AddBankAccountModalP
               placeholder="e.g., DE89 3704 0044 0532 0130 00"
               value={formData.iban}
               onChange={(e) => setFormData({ ...formData, iban: formatIBAN(e.target.value) })}
-              className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 font-mono"
+              className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 font-mono h-10"
             />
-            <p className="text-xs text-muted-foreground">International Bank Account Number</p>
+            <p className="text-xs text-gray-400">International Bank Account Number</p>
           </div>
 
           {/* SWIFT/BIC */}
-          <div className="space-y-2">
-            <Label htmlFor="swiftBic" className="text-foreground font-medium">SWIFT/BIC Code</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="swiftBic" className="text-gray-700 font-medium text-sm">SWIFT/BIC Code</Label>
             <Input
               id="swiftBic"
               placeholder="e.g., COBADEFFXXX"
               value={formData.swiftBic}
               onChange={(e) => setFormData({ ...formData, swiftBic: e.target.value.toUpperCase() })}
-              className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 font-mono uppercase"
+              className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 font-mono uppercase h-10"
               maxLength={11}
             />
-            <p className="text-xs text-muted-foreground">8 or 11 character code identifying your bank</p>
+            <p className="text-xs text-gray-400">8 or 11 character code identifying your bank</p>
           </div>
 
           {/* US-specific fields (optional) */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="accountNumber" className="text-foreground font-medium">Account Number</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="accountNumber" className="text-gray-700 font-medium text-sm">Account Number</Label>
               <Input
                 id="accountNumber"
                 placeholder="For US accounts"
                 value={formData.accountNumber}
                 onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value.replace(/\D/g, "") })}
-                className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400"
+                className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 h-10"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="routingNumber" className="text-foreground font-medium">Routing Number</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="routingNumber" className="text-gray-700 font-medium text-sm">Routing Number</Label>
               <Input
                 id="routingNumber"
                 placeholder="9 digits"
                 value={formData.routingNumber}
                 onChange={(e) => setFormData({ ...formData, routingNumber: e.target.value.replace(/\D/g, "").slice(0, 9) })}
-                className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400"
+                className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 h-10"
                 maxLength={9}
               />
             </div>
           </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50"
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Add Bank Account
-            </Button>
-          </div>
         </form>
+
+        {/* Action Buttons - Fixed at bottom */}
+        <div className="flex gap-3 pt-4 border-t border-gray-100 mt-4 flex-shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 h-11"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            onClick={handleSubmit}
+            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 h-11"
+          >
+            Add Bank Account
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
