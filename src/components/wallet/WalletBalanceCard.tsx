@@ -1,4 +1,4 @@
-import { Copy, MoreHorizontal, Plus, ArrowUpRight, TrendingUp } from "lucide-react";
+import { Copy, MoreHorizontal, Plus, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -10,7 +10,6 @@ interface WalletBalanceCardProps {
 export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardProps) => {
   const walletAddress = "0x1cf2...9a56";
   const balance = 3000.00;
-  const adaEquivalent = 9064.61;
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText("0x1cf2a8b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9a56");
@@ -77,10 +76,6 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
           <p className="text-[3.5rem] font-bold text-white tracking-tight leading-none">
             <span className="text-white/90">$</span> {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
-          <div className="flex items-center gap-2 mt-3 text-white/40">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-sm font-medium">{adaEquivalent.toLocaleString()} ADA</span>
-          </div>
         </div>
 
         {/* Action Buttons */}
