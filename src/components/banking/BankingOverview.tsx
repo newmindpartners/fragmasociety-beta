@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CreditCard, ArrowUpRight, ArrowDownLeft, History, Plus, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WithdrawModal } from "./WithdrawModal";
@@ -53,12 +53,15 @@ const bankingActions: BankingAction[] = [
 export const BankingOverview = () => {
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [depositOpen, setDepositOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handleActionClick = (action: BankingAction) => {
+  const handleCardClick = (action: BankingAction) => {
     if (action.action === "withdraw") {
       setWithdrawOpen(true);
     } else if (action.action === "deposit") {
       setDepositOpen(true);
+    } else if (action.href) {
+      navigate(action.href);
     }
   };
 
@@ -69,9 +72,6 @@ export const BankingOverview = () => {
       <div className="space-y-4">
         {bankingActions.map((action, index) => {
           const Icon = action.icon;
-          const isLink = action.action === "link" || action.action === "button";
-          const Wrapper = isLink && action.href ? Link : "div";
-          const wrapperProps = isLink && action.href ? { to: action.href } : {};
 
           return (
             <motion.div
@@ -80,10 +80,9 @@ export const BankingOverview = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Wrapper
-                {...(wrapperProps as any)}
-                className="block"
-                onClick={() => !isLink && handleActionClick(action)}
+              <div
+                className="block cursor-pointer"
+                onClick={() => handleCardClick(action)}
               >
                 <div className="bg-card border border-border rounded-2xl p-5 hover:border-primary/30 hover:shadow-sm transition-all cursor-pointer group">
                   <div className="flex items-center justify-between">
@@ -112,7 +111,7 @@ export const BankingOverview = () => {
                     )}
                   </div>
                 </div>
-              </Wrapper>
+              </div>
             </motion.div>
           );
         })}
