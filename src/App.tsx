@@ -19,6 +19,7 @@ import HowItWorks from "./pages/HowItWorks";
 import Dashboard from "./pages/Dashboard";
 import Banking from "./pages/Banking";
 import Documents from "./pages/Documents";
+import Wallet from "./pages/Wallet";
 import OrderDetails from "./pages/OrderDetails";
 import NotFound from "./pages/NotFound";
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/dashboard/banking" element={<Banking />} />
             <Route path="/dashboard/banking/*" element={<Banking />} />
             <Route path="/dashboard/documents" element={<Documents />} />
+            <Route path="/dashboard/wallet" element={<Wallet />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/fund" element={<Strategy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
