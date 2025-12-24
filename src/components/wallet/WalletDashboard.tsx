@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { WalletBalanceCard } from "./WalletBalanceCard";
+import { WalletPortfolio } from "./WalletPortfolio";
 import { WalletCreditModal } from "./WalletCreditModal";
 import { WalletWithdrawModal } from "./WalletWithdrawModal";
 
@@ -20,6 +21,15 @@ export const WalletDashboard = () => {
           onCredit={() => setCreditModalOpen(true)}
           onWithdraw={() => setWithdrawModalOpen(true)}
         />
+      </motion.div>
+
+      {/* Portfolio Overview */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <WalletPortfolio />
       </motion.div>
 
       {/* Modals */}
