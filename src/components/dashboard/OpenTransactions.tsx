@@ -2,8 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { OrderDetailsModal } from "./OrderDetailsModal";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Order {
   id: string;
@@ -77,17 +76,10 @@ const orderHistory: Order[] = [
 
 export const OpenTransactions = () => {
   const [activeTab, setActiveTab] = useState<"orders" | "history">("orders");
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOrderClick = (order: Order) => {
-    setSelectedOrder(order);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedOrder(null);
+    navigate(`/order/${order.id}`);
   };
 
   const handleCancelOrder = (orderId: string) => {
@@ -120,8 +112,7 @@ export const OpenTransactions = () => {
   const orders = activeTab === "orders" ? activeOrders : orderHistory;
 
   return (
-    <>
-      <motion.div
+    <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
@@ -302,15 +293,5 @@ export const OpenTransactions = () => {
           </Link>
         </div>
       </motion.div>
-
-      {/* Order Details Modal */}
-      <OrderDetailsModal
-        order={selectedOrder}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onCancel={handleCancelOrder}
-        showCancelButton={activeTab === "orders"}
-      />
-    </>
   );
 };
