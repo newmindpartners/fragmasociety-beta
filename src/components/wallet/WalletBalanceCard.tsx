@@ -17,6 +17,7 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
     usd: 3000.00,
     usdc: 1500.00,
     ada: 4532.30,
+    btc: 0.0847,
   };
 
   const handleCopyAddress = () => {
@@ -90,36 +91,48 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
             </p>
           </div>
 
-          {/* USDC and ADA Balances */}
-          <div className="flex gap-3 mb-6">
+          {/* Currency Balances */}
+          <div className="grid grid-cols-4 gap-2 mb-6">
             {/* USDC */}
-            <div className="flex-1 bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-white/[0.06]">
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
-                  <span className="text-[8px] font-bold text-white">U</span>
+            <div className="bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-white/[0.06]">
+              <div className="flex items-center gap-1.5 mb-1">
+                <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
+                  <span className="text-[7px] font-bold text-white">U</span>
                 </div>
-                <span className="text-xs text-white/50 font-medium">USDC</span>
+                <span className="text-[10px] text-white/50 font-medium">USDC</span>
               </div>
-              <p className="text-lg font-semibold text-white">{balances.usdc.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+              <p className="text-base font-semibold text-white">{balances.usdc.toLocaleString()}</p>
             </div>
 
             {/* ADA */}
-            <div className="flex-1 bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-white/[0.06]">
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center">
-                  <span className="text-[8px] font-bold text-white">A</span>
+            <div className="bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-white/[0.06]">
+              <div className="flex items-center gap-1.5 mb-1">
+                <div className="w-4 h-4 rounded-full bg-slate-700 flex items-center justify-center">
+                  <span className="text-[7px] font-bold text-white">A</span>
                 </div>
-                <span className="text-xs text-white/50 font-medium">ADA</span>
+                <span className="text-[10px] text-white/50 font-medium">ADA</span>
               </div>
-              <p className="text-lg font-semibold text-white">{balances.ada.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+              <p className="text-base font-semibold text-white">{balances.ada.toLocaleString()}</p>
+            </div>
+
+            {/* BTC */}
+            <div className="bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-white/[0.06]">
+              <div className="flex items-center gap-1.5 mb-1">
+                <div className="w-4 h-4 rounded-full bg-orange-500 flex items-center justify-center">
+                  <span className="text-[7px] font-bold text-white">₿</span>
+                </div>
+                <span className="text-[10px] text-white/50 font-medium">BTC</span>
+              </div>
+              <p className="text-base font-semibold text-white">{balances.btc.toFixed(4)}</p>
             </div>
 
             {/* Swap Button */}
             <button
               onClick={() => setSwapModalOpen(true)}
-              className="w-14 bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm rounded-xl border border-violet-500/30 flex items-center justify-center hover:from-violet-500/30 hover:to-purple-500/30 hover:border-violet-500/40 transition-all duration-300 group"
+              className="bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm rounded-xl border border-violet-500/30 flex flex-col items-center justify-center hover:from-violet-500/30 hover:to-purple-500/30 hover:border-violet-500/40 transition-all duration-300 group"
             >
-              <ArrowDownUp className="w-5 h-5 text-violet-400 group-hover:text-violet-300 transition-colors" />
+              <ArrowDownUp className="w-4 h-4 text-violet-400 group-hover:text-violet-300 transition-colors" />
+              <span className="text-[9px] text-violet-400/80 mt-1 font-medium">Swap</span>
             </button>
           </div>
 
