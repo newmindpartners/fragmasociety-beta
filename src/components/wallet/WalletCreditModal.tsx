@@ -235,14 +235,27 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                   </div>
                 </div>
 
-                {/* Deposit Address */}
+                {/* Deposit Address with QR Code */}
                 <div className="bg-violet-50/80 rounded-xl border border-violet-200/60 p-4">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-3">
                     <p className="text-xs text-violet-600 font-medium">Deposit Address</p>
                     <span className="text-[10px] text-violet-500 bg-violet-100 px-2 py-0.5 rounded-full">
                       {currencyInfo[selectedCrypto].network}
                     </span>
                   </div>
+                  
+                  {/* QR Code */}
+                  <div className="flex justify-center mb-3">
+                    <div className="p-3 bg-white rounded-xl border border-violet-100 shadow-sm">
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(cryptoAddresses[selectedCrypto])}&bgcolor=ffffff&color=4c1d95`}
+                        alt={`${selectedCrypto} deposit address QR code`}
+                        className="w-[120px] h-[120px]"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Address with copy button */}
                   <div className="flex items-center gap-2">
                     <p className="text-xs text-slate-700 font-mono bg-white/80 rounded-lg px-3 py-2 flex-1 truncate border border-violet-100">
                       {cryptoAddresses[selectedCrypto]}
