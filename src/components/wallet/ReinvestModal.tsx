@@ -261,15 +261,17 @@ export const ReinvestModal = ({
                 </p>
 
                 <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
-                  {mockDeals.map((deal) => (
+                  {mockDeals.map((deal) => {
+                    const canAfford = availableAmount >= deal.minInvestment;
+                    return (
                     <button
                       key={deal.id}
                       onClick={() => handleSelectDeal(deal)}
-                      disabled={availableAmount < deal.minInvestment}
-                      className={`w-full p-4 rounded-xl border text-left transition-all ${
-                        availableAmount < deal.minInvestment
+                      disabled={!canAfford}
+                      className={`w-full p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                        !canAfford
                           ? "opacity-50 cursor-not-allowed border-slate-200 bg-slate-50"
-                          : "border-slate-200 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-100/50 bg-white"
+                          : "border-slate-200 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-100/50 bg-white active:scale-[0.99]"
                       }`}
                     >
                       <div className="flex items-start gap-3">
@@ -302,7 +304,8 @@ export const ReinvestModal = ({
                         <ArrowRight className="w-5 h-5 text-slate-300 flex-shrink-0 mt-3" />
                       </div>
                     </button>
-                  ))}
+                  );
+                  })}
                 </div>
               </motion.div>
             )}
