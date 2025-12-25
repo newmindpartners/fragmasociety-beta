@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { MarketChart } from "@/components/market/MarketChart";
 import { MarketOverview } from "@/components/market/MarketOverview";
 import { OrderPanel } from "@/components/market/OrderPanel";
+import { QuickTradeWidget } from "@/components/market/QuickTradeWidget";
 import { TradeDetails } from "@/pages/SecondaryMarket";
 
 interface OverviewPanelProps {
@@ -19,6 +20,7 @@ export const OverviewPanel = ({ onSubmitTrade }: OverviewPanelProps) => {
     >
       {/* Left Column - Chart & Overview */}
       <div className="space-y-6">
+        <QuickTradeWidget onSubmitTrade={onSubmitTrade} />
         <MarketChart />
         <MarketOverview />
       </div>
