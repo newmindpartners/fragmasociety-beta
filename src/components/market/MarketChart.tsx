@@ -54,31 +54,43 @@ interface CandlestickRendererProps {
   data: OHLCData[];
   xAxisMap?: any;
   yAxisMap?: any;
+  offset?: any;
 }
 
-const CandlestickRenderer = ({ data, xAxisMap, yAxisMap }: CandlestickRendererProps) => {
-  if (!xAxisMap || !yAxisMap) return null;
+const CandlestickRenderer = ({ data, xAxisMap, yAxisMap, offset }: CandlestickRendererProps) => {
+  if (!xAxisMap || !yAxisMap || !offset) return null;
   
   const xAxis = Object.values(xAxisMap)[0] as any;
   const yAxis = Object.values(yAxisMap)[0] as any;
   
   if (!xAxis?.scale || !yAxis?.scale) return null;
   
-  const xScale = xAxis.scale;
   const yScale = yAxis.scale;
-  const bandwidth = xAxis.bandSize || 10;
-  const candleWidth = Math.max(bandwidth * 0.6, 4);
+  
+  // Calculate chart dimensions from offset
+  const chartWidth = offset.width || 0;
+  const chartLeft = offset.left || 0;
+  const dataLength = data.length;
+  
+  if (dataLength === 0 || chartWidth === 0) return null;
+  
+  // Calculate bar width and spacing
+  const barSpacing = chartWidth / dataLength;
+  const candleWidth = Math.max(barSpacing * 0.6, 4);
+  const padding = (barSpacing - candleWidth) / 2;
   
   return (
     <g className="candlestick-layer">
       {data.map((entry, index) => {
-        const x = xScale(index);
-        if (x === undefined) return null;
+        const x = chartLeft + (index * barSpacing) + padding;
         
         const highY = yScale(entry.high);
         const lowY = yScale(entry.low);
         const openY = yScale(entry.open);
         const closeY = yScale(entry.close);
+        
+        // Check for valid coordinates
+        if (isNaN(highY) || isNaN(lowY) || isNaN(openY) || isNaN(closeY)) return null;
         
         const isGreen = entry.close >= entry.open;
         const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
@@ -353,7 +365,8 @@ export const MarketChart = () => {
                   <CandlestickRenderer 
                     data={chartData} 
                     xAxisMap={props.xAxisMap} 
-                    yAxisMap={props.yAxisMap} 
+                    yAxisMap={props.yAxisMap}
+                    offset={props.offset}
                   />
                 )}
               />
