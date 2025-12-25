@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, Briefcase, TrendingUp, X } from "lucide-react";
+import { ChevronRight, Briefcase, TrendingUp, X, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DealEarnings } from "@/components/deal-details/DealEarnings";
 
@@ -80,6 +80,25 @@ const mockPortfolioDeals: PortfolioDeal[] = [
 
 export const PortfolioEarningsSelector = () => {
   const [selectedDeal, setSelectedDeal] = useState<PortfolioDeal | null>(null);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current;
+    if (!scrollEl) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl;
+      // Hide hint when scrolled near bottom (within 50px)
+      setShowScrollHint(scrollHeight - scrollTop - clientHeight > 50);
+    };
+
+    scrollEl.addEventListener("scroll", handleScroll);
+    // Initial check
+    handleScroll();
+
+    return () => scrollEl.removeEventListener("scroll", handleScroll);
+  }, [selectedDeal]);
 
   const getStatusBadge = (status: PortfolioDeal["status"]) => {
     switch (status) {
@@ -136,12 +155,13 @@ export const PortfolioEarningsSelector = () => {
           /* Deal Selection Grid */
           <div className="relative">
             <motion.div
+              ref={scrollRef}
               key="portfolio-grid"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="grid gap-4 max-h-[400px] overflow-y-auto pr-2 pb-8"
+              className="grid gap-4 max-h-[400px] overflow-y-auto pr-2 pb-8 scroll-smooth"
             >
             {mockPortfolioDeals.map((deal, index) => (
               <motion.button
@@ -202,6 +222,22 @@ export const PortfolioEarningsSelector = () => {
             </motion.div>
             {/* Gradient fade overlay */}
             <div className="absolute bottom-0 left-0 right-2 h-16 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
+            
+            {/* Scroll indicator */}
+            <AnimatePresence>
+              {showScrollHint && mockPortfolioDeals.length > 3 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs text-slate-400 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-200 shadow-sm"
+                >
+                  <ChevronDown className="w-3.5 h-3.5 animate-bounce" />
+                  <span>Scroll for more</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         ) : (
           /* Deal Earnings Detail */
