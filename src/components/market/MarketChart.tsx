@@ -19,30 +19,30 @@ interface OHLCData {
   volume: number;
 }
 
-// Generate mock chart data with OHLC for candlestick
+// Generate mock chart data with OHLC for candlestick (MLV token price in USD)
 const generateChartData = (days: number): OHLCData[] => {
   const data: OHLCData[] = [];
-  const basePrice = 0.604;
+  const basePrice = 75.05; // MLV token price in USD
   const now = new Date();
   
   for (let i = days; i >= 0; i--) {
     const date = new Date(now);
     date.setDate(date.getDate() - i);
     
-    const randomChange = (Math.random() - 0.5) * 0.02;
-    const open = basePrice + randomChange + (Math.sin(i / 5) * 0.01);
-    const close = open + (Math.random() - 0.5) * 0.01;
-    const high = Math.max(open, close) + Math.random() * 0.005;
-    const low = Math.min(open, close) - Math.random() * 0.005;
+    const randomChange = (Math.random() - 0.5) * 3;
+    const open = basePrice + randomChange + (Math.sin(i / 5) * 1.5);
+    const close = open + (Math.random() - 0.5) * 2;
+    const high = Math.max(open, close) + Math.random() * 1;
+    const low = Math.min(open, close) - Math.random() * 1;
     const volume = Math.floor(Math.random() * 50000) + 10000;
     
     data.push({
       date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      price: parseFloat(close.toFixed(4)),
-      open: parseFloat(open.toFixed(4)),
-      high: parseFloat(high.toFixed(4)),
-      low: parseFloat(low.toFixed(4)),
-      close: parseFloat(close.toFixed(4)),
+      price: parseFloat(close.toFixed(2)),
+      open: parseFloat(open.toFixed(2)),
+      high: parseFloat(high.toFixed(2)),
+      low: parseFloat(low.toFixed(2)),
+      close: parseFloat(close.toFixed(2)),
       volume,
     });
   }
@@ -155,8 +155,8 @@ export const MarketChart = () => {
     selectedRange === "1Y" ? 365 : 730
   );
 
-  const currentPrice = chartData[chartData.length - 1]?.close || 0.604;
-  const previousPrice = chartData[0]?.close || 0.604;
+  const currentPrice = chartData[chartData.length - 1]?.close || 75.05;
+  const previousPrice = chartData[0]?.close || 73.00;
   const priceChange = ((currentPrice - previousPrice) / previousPrice) * 100;
   const isPositive = priceChange >= 0;
 
@@ -167,23 +167,23 @@ export const MarketChart = () => {
         <div className="flex items-center gap-4">
           {/* Asset Icon */}
           <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xs">$</span>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-xs">MLV</span>
             </div>
           </div>
           
           <div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-              <span>ADA / USDC</span>
+              <span>MLV / USD</span>
               <button className="p-1 hover:bg-muted/50 rounded transition-colors">
                 <ArrowRightLeft className="w-3.5 h-3.5" />
               </button>
             </div>
             <div className="flex items-baseline gap-3">
               <span className="text-2xl lg:text-3xl font-bold text-foreground font-sans">
-                {currentPrice.toFixed(8)}
+                ${currentPrice.toFixed(2)}
               </span>
-              <span className="text-lg text-muted-foreground">ADA</span>
+              <span className="text-lg text-muted-foreground">USD</span>
             </div>
             <div className="flex items-center gap-2 mt-1">
               <span className={`text-sm font-medium flex items-center gap-1 ${isPositive ? 'text-green-600' : 'text-red-500'}`}>
