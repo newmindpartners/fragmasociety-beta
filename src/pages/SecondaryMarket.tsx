@@ -13,7 +13,7 @@ import { TradeSuccessModal } from "@/components/market/TradeSuccessModal";
 import { TradeErrorModal } from "@/components/market/TradeErrorModal";
 
 export type TradeType = "buy" | "sell";
-export type Currency = "USDC" | "ADA" | "EUR";
+export type Currency = "USDC" | "USD" | "MLV";
 
 export interface TradeDetails {
   type: TradeType;

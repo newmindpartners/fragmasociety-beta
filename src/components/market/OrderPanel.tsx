@@ -2,44 +2,32 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ArrowUpDown, Coins, Clock, Zap, AlertCircle, TrendingUp, TrendingDown } from "lucide-react";
+import { ChevronDown, Clock, Zap, AlertCircle, TrendingUp, TrendingDown, Building2 } from "lucide-react";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
-import type { TradeDetails, TradeType, Currency } from "@/pages/SecondaryMarket";
+import type { TradeDetails, TradeType } from "@/pages/SecondaryMarket";
 
 interface OrderPanelProps {
   onSubmitTrade: (details: TradeDetails) => void;
 }
 
 type OrderMode = "market" | "limit";
+type PaymentCurrency = "USDC" | "USD";
 
-const currencies: Currency[] = ["USDC", "ADA", "EUR"];
+const paymentCurrencies: PaymentCurrency[] = ["USDC", "USD"];
 
-const currencyConfig: Record<Currency, { icon: React.ReactNode; color: string }> = {
+const currencyConfig: Record<PaymentCurrency, { icon: React.ReactNode; color: string }> = {
   USDC: { 
     icon: <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold">$</div>,
     color: "bg-blue-600"
   },
-  ADA: { 
-    icon: <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-      <Coins className="w-3.5 h-3.5 text-white" />
-    </div>,
-    color: "bg-blue-500"
-  },
-  EUR: { 
-    icon: <div className="w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center text-white text-[10px] font-bold">€</div>,
-    color: "bg-blue-700"
+  USD: { 
+    icon: <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-white text-[10px] font-bold">$</div>,
+    color: "bg-green-600"
   },
 };
 
-// Mock exchange rates
-const rates: Record<string, number> = {
-  "USDC-ADA": 1.6439,
-  "USDC-EUR": 0.92,
-  "ADA-USDC": 0.6084,
-  "ADA-EUR": 0.56,
-  "EUR-USDC": 1.09,
-  "EUR-ADA": 1.79,
-};
+// MLV token price in USD
+const MLV_MARKET_PRICE = 75.05;
 
 // Expiration options for limit orders
 const expirationOptions = [
@@ -57,60 +45,68 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
   const [limitPrice, setLimitPrice] = useState<string>("");
   const [expiration, setExpiration] = useState("24h");
   const [showExpirationDropdown, setShowExpirationDropdown] = useState(false);
-  const [payCurrency, setPayCurrency] = useState<Currency>("USDC");
-  const [receiveCurrency, setReceiveCurrency] = useState<Currency>("ADA");
+  const [payCurrency, setPayCurrency] = useState<PaymentCurrency>("USDC");
   const [showPayDropdown, setShowPayDropdown] = useState(false);
-  const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
 
   const availableBalance = 3000.00;
-  const feePercent = orderMode === "market" ? 2 : 1.5; // Lower fee for limit orders
-  const networkCost = 5.67;
+  const availableMLV = 12.5; // Mock MLV holdings
+  const feePercent = orderMode === "market" ? 2 : 1.5;
+  const networkCost = 2.50;
 
-  const rateKey = `${payCurrency}-${receiveCurrency}`;
-  const marketRate = rates[rateKey] || 1;
-  
   // Use custom limit price or market rate
-  const effectiveRate = orderMode === "limit" && limitPrice 
-    ? parseFloat(limitPrice) || marketRate 
-    : marketRate;
+  const effectivePrice = orderMode === "limit" && limitPrice 
+    ? parseFloat(limitPrice) || MLV_MARKET_PRICE 
+    : MLV_MARKET_PRICE;
   
   const payValue = parseFloat(payAmount) || 0;
-  const receiveAmount = payValue * effectiveRate;
-  const feeAmount = receiveAmount * (feePercent / 100);
-  const total = receiveAmount - feeAmount - networkCost;
+  
+  // For buy: pay USD/USDC, receive MLV tokens
+  // For sell: pay MLV tokens, receive USD/USDC
+  const tokensAmount = tradeType === "buy" 
+    ? payValue / effectivePrice 
+    : payValue;
+  const cashAmount = tradeType === "buy"
+    ? payValue
+    : payValue * effectivePrice;
+  
+  const feeAmount = cashAmount * (feePercent / 100);
+  const total = tradeType === "buy"
+    ? tokensAmount - (feeAmount / effectivePrice)
+    : cashAmount - feeAmount - networkCost;
 
   // Calculate price difference from market
   const priceDiffPercent = orderMode === "limit" && limitPrice 
-    ? ((effectiveRate - marketRate) / marketRate) * 100 
+    ? ((effectivePrice - MLV_MARKET_PRICE) / MLV_MARKET_PRICE) * 100 
     : 0;
 
-  const handleSwapCurrencies = () => {
-    const tempCurrency = payCurrency;
-    setPayCurrency(receiveCurrency);
-    setReceiveCurrency(tempCurrency);
-    setLimitPrice(""); // Reset limit price on swap
-  };
-
   const handleMaxClick = () => {
-    setPayAmount(availableBalance.toString());
+    if (tradeType === "buy") {
+      setPayAmount(availableBalance.toString());
+    } else {
+      setPayAmount(availableMLV.toString());
+    }
   };
 
   const handleHalfClick = () => {
-    setPayAmount((availableBalance / 2).toString());
+    if (tradeType === "buy") {
+      setPayAmount((availableBalance / 2).toString());
+    } else {
+      setPayAmount((availableMLV / 2).toString());
+    }
   };
 
   const handleSetMarketPrice = () => {
-    setLimitPrice(marketRate.toFixed(4));
+    setLimitPrice(MLV_MARKET_PRICE.toFixed(2));
   };
 
   const handleSubmit = () => {
     const details: TradeDetails = {
       type: tradeType,
       payAmount: payValue,
-      payCurrency,
-      receiveAmount,
-      receiveCurrency,
-      rate: `1 ${payCurrency} ≈ ${effectiveRate.toFixed(4)} ${receiveCurrency}`,
+      payCurrency: tradeType === "buy" ? payCurrency : "USDC",
+      receiveAmount: tradeType === "buy" ? total : total,
+      receiveCurrency: tradeType === "buy" ? "USDC" : payCurrency,
+      rate: `$${effectivePrice.toFixed(2)} per MLV`,
       fee: feeAmount,
       networkCost,
       total,
@@ -118,45 +114,35 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
     onSubmitTrade(details);
   };
 
-  const CurrencyDropdown = ({
-    selected,
-    onSelect,
-    isOpen,
-    setIsOpen,
-    exclude,
-  }: {
-    selected: Currency;
-    onSelect: (currency: Currency) => void;
-    isOpen: boolean;
-    setIsOpen: (open: boolean) => void;
-    exclude: Currency;
-  }) => (
+  const PaymentCurrencyDropdown = () => (
     <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setShowPayDropdown(!showPayDropdown)}
         className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
       >
-        {currencyConfig[selected].icon}
-        <span className="font-medium text-foreground">{selected}</span>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        {currencyConfig[payCurrency].icon}
+        <span className="font-medium text-foreground">{payCurrency}</span>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${showPayDropdown ? 'rotate-180' : ''}`} />
       </button>
       
       <AnimatePresence>
-        {isOpen && (
+        {showPayDropdown && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="absolute right-0 top-full mt-2 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden min-w-[120px]"
           >
-            {currencies.filter(c => c !== exclude).map((currency) => (
+            {paymentCurrencies.map((currency) => (
               <button
                 key={currency}
                 onClick={() => {
-                  onSelect(currency);
-                  setIsOpen(false);
+                  setPayCurrency(currency);
+                  setShowPayDropdown(false);
                 }}
-                className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-muted/50 transition-colors"
+                className={`w-full flex items-center gap-2 px-3 py-2.5 hover:bg-muted/50 transition-colors ${
+                  payCurrency === currency ? 'bg-primary/10' : ''
+                }`}
               >
                 {currencyConfig[currency].icon}
                 <span className="font-medium text-foreground">{currency}</span>
@@ -168,6 +154,15 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
     </div>
   );
 
+  const MLVBadge = () => (
+    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20">
+      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+        <Building2 className="w-3.5 h-3.5 text-primary-foreground" />
+      </div>
+      <span className="font-semibold text-primary">MLV</span>
+    </div>
+  );
+
   return (
     <Card className="overflow-hidden bg-gradient-to-b from-card to-muted/20 border-border/50 sticky top-24">
       {/* Buy/Sell Toggle */}
@@ -176,21 +171,21 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
           onClick={() => setTradeType("buy")}
           className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
             tradeType === "buy"
-              ? "bg-primary text-primary-foreground shadow-md"
+              ? "bg-green-600 text-white shadow-md"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          Buy
+          Buy MLV
         </button>
         <button
           onClick={() => setTradeType("sell")}
           className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
             tradeType === "sell"
-              ? "bg-primary text-primary-foreground shadow-md"
+              ? "bg-red-500 text-white shadow-md"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          Sell
+          Sell MLV
         </button>
       </div>
 
@@ -229,13 +224,13 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
           <p className="text-xs text-muted-foreground mt-1">
             {orderMode === "market" ? (
               <>
-                The market will place the order at the best available rate.
+                Execute at best available price.
                 <br />
-                (This price includes a {feePercent}% fee applied to the transaction)
+                ({feePercent}% fee included)
               </>
             ) : (
               <>
-                Set your preferred price and the order will execute when the market matches.
+                Set your price and wait for execution.
                 <br />
                 (Lower {feePercent}% fee for limit orders)
               </>
@@ -253,28 +248,27 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
               className="space-y-2 overflow-hidden"
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Limit price</span>
-                <InfoTooltip content="Set your desired exchange rate. The order will execute when the market reaches this price." />
+                <span className="text-sm text-muted-foreground">Limit price per MLV</span>
+                <InfoTooltip content="Set your desired price per MLV token" />
               </div>
               <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
                 <div className="flex items-center justify-between gap-3">
-                  <input
-                    type="text"
-                    value={limitPrice}
-                    onChange={(e) => setLimitPrice(e.target.value.replace(/[^0-9.]/g, ''))}
-                    className="text-2xl font-bold text-foreground bg-transparent outline-none w-full"
-                    placeholder={marketRate.toFixed(4)}
-                  />
-                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground whitespace-nowrap">
-                    <span>{receiveCurrency}</span>
-                    <span>/</span>
-                    <span>{payCurrency}</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-2xl text-muted-foreground">$</span>
+                    <input
+                      type="text"
+                      value={limitPrice}
+                      onChange={(e) => setLimitPrice(e.target.value.replace(/[^0-9.]/g, ''))}
+                      className="text-2xl font-bold text-foreground bg-transparent outline-none w-full"
+                      placeholder={MLV_MARKET_PRICE.toFixed(2)}
+                    />
                   </div>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">per MLV</span>
                 </div>
                 <div className="flex items-center justify-between mt-3">
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">
-                      Market: {marketRate.toFixed(4)}
+                      Market: ${MLV_MARKET_PRICE.toFixed(2)}
                     </span>
                     {priceDiffPercent !== 0 && (
                       <span className={`text-xs font-medium flex items-center gap-0.5 ${
@@ -361,8 +355,10 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
         {/* You Pay Section */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">You pay</span>
-            <InfoTooltip content="Enter the amount you want to spend" />
+            <span className="text-sm text-muted-foreground">
+              {tradeType === "buy" ? "You pay" : "You sell"}
+            </span>
+            <InfoTooltip content={tradeType === "buy" ? "Enter amount to spend" : "Enter MLV tokens to sell"} />
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
             <div className="flex items-center justify-between">
@@ -373,17 +369,18 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
                 className="text-3xl font-bold text-foreground bg-transparent outline-none w-full"
                 placeholder="0"
               />
-              <CurrencyDropdown
-                selected={payCurrency}
-                onSelect={setPayCurrency}
-                isOpen={showPayDropdown}
-                setIsOpen={setShowPayDropdown}
-                exclude={receiveCurrency}
-              />
+              {tradeType === "buy" ? (
+                <PaymentCurrencyDropdown />
+              ) : (
+                <MLVBadge />
+              )}
             </div>
             <div className="flex items-center justify-between mt-3">
               <span className="text-xs text-muted-foreground">
-                Available: ${availableBalance.toLocaleString()}
+                Available: {tradeType === "buy" 
+                  ? `$${availableBalance.toLocaleString()} ${payCurrency}` 
+                  : `${availableMLV} MLV`
+                }
               </span>
               <div className="flex gap-2">
                 <button
@@ -403,37 +400,33 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
           </div>
         </div>
 
-        {/* Swap Button */}
-        <div className="flex justify-center -my-2">
-          <button
-            onClick={handleSwapCurrencies}
-            className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary/20 transition-all hover:scale-105"
-          >
-            <ArrowUpDown className="w-4 h-4 text-primary" />
-          </button>
-        </div>
-
         {/* You Receive Section */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">You receive</span>
-            <InfoTooltip content="Estimated amount you will receive after fees" />
+            <span className="text-sm text-muted-foreground">
+              {tradeType === "buy" ? "You receive" : "You get"}
+            </span>
+            <InfoTooltip content="Estimated amount after fees" />
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
             <div className="flex items-center justify-between">
               <span className="text-3xl font-bold text-foreground">
-                {receiveAmount.toFixed(2)}
+                {tradeType === "buy" 
+                  ? total.toFixed(4)
+                  : `$${total.toFixed(2)}`
+                }
               </span>
-              <CurrencyDropdown
-                selected={receiveCurrency}
-                onSelect={setReceiveCurrency}
-                isOpen={showReceiveDropdown}
-                setIsOpen={setShowReceiveDropdown}
-                exclude={payCurrency}
-              />
+              {tradeType === "buy" ? (
+                <MLVBadge />
+              ) : (
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50">
+                  {currencyConfig[payCurrency].icon}
+                  <span className="font-medium text-foreground">{payCurrency}</span>
+                </div>
+              )}
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              {orderMode === "limit" ? "Est. fill amount" : "Min. received"}: {(total * 0.99).toLocaleString(undefined, { minimumFractionDigits: 5 })}
+              @ ${effectivePrice.toFixed(2)} per MLV
             </p>
           </div>
         </div>
@@ -442,25 +435,19 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
         <div className="space-y-3 p-4 rounded-xl bg-muted/20 border border-border/30">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
-              {orderMode === "limit" ? "Limit rate" : "Rate"}
+              {orderMode === "limit" ? "Limit price" : "Market price"}
             </span>
-            <span className="text-foreground">
-              1 {payCurrency} ≈ {effectiveRate.toFixed(4)} {receiveCurrency}
-              <span className="text-muted-foreground ml-1">(${(payValue * 0.0224).toFixed(2)})</span>
+            <span className="text-foreground font-medium">
+              ${effectivePrice.toFixed(2)} / MLV
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Fee ({feePercent}%)</span>
-            <span className="text-foreground">≈{feeAmount.toFixed(2)} {receiveCurrency}</span>
+            <span className="text-foreground">${feeAmount.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Network cost</span>
-            <div className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
-                <Coins className="w-2.5 h-2.5 text-white" />
-              </div>
-              <span className="text-foreground">{networkCost}</span>
-            </div>
+            <span className="text-foreground">${networkCost.toFixed(2)}</span>
           </div>
           {orderMode === "limit" && (
             <div className="flex justify-between text-sm">
@@ -474,7 +461,10 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
             <div className="flex justify-between">
               <span className="font-medium text-foreground">Total</span>
               <span className="font-semibold text-primary">
-                ≈ {total.toFixed(2)} {receiveCurrency}
+                {tradeType === "buy" 
+                  ? `${total.toFixed(4)} MLV`
+                  : `$${total.toFixed(2)} ${payCurrency}`
+                }
               </span>
             </div>
           </div>
@@ -483,7 +473,7 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
         {/* Disclaimer */}
         <p className="text-xs text-center text-muted-foreground">
           {orderMode === "market" 
-            ? "Once confirmed, this swap is final and cannot be reversed."
+            ? "Once confirmed, this trade is final and cannot be reversed."
             : "Limit orders can be cancelled before they are filled."
           }
         </p>
@@ -491,11 +481,15 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
         {/* Submit Button */}
         <Button
           onClick={handleSubmit}
-          className="w-full py-6 text-base font-semibold"
+          className={`w-full py-6 text-base font-semibold ${
+            tradeType === "buy" 
+              ? "bg-green-600 hover:bg-green-700" 
+              : "bg-red-500 hover:bg-red-600"
+          }`}
           disabled={!payValue || payValue <= 0 || (orderMode === "limit" && !limitPrice)}
         >
           {orderMode === "market" 
-            ? (tradeType === "buy" ? "Buy Now" : "Sell Now")
+            ? (tradeType === "buy" ? "Buy MLV Now" : "Sell MLV Now")
             : (tradeType === "buy" ? "Place Buy Order" : "Place Sell Order")
           }
         </Button>
