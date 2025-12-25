@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { MarketChart } from "@/components/market/MarketChart";
-import { OrderPanel } from "@/components/market/OrderPanel";
-import { MarketOverview } from "@/components/market/MarketOverview";
 import { AssetInfoHeader } from "@/components/market/AssetInfoHeader";
+import { OverviewPanel } from "@/components/market/panels/OverviewPanel";
+import { InvestorsPanel } from "@/components/market/panels/InvestorsPanel";
+import { UpdatesPanel } from "@/components/market/panels/UpdatesPanel";
+import { DiscussionPanel } from "@/components/market/panels/DiscussionPanel";
 import { ReviewTradeModal } from "@/components/market/ReviewTradeModal";
 import { TradeProcessingModal } from "@/components/market/TradeProcessingModal";
 import { TradeSuccessModal } from "@/components/market/TradeSuccessModal";
@@ -70,6 +71,21 @@ const SecondaryMarket = () => {
     setShowReviewModal(true);
   };
 
+  const renderActivePanel = () => {
+    switch (activeTab) {
+      case "Overview":
+        return <OverviewPanel onSubmitTrade={handleTradeSubmit} />;
+      case "Investors":
+        return <InvestorsPanel />;
+      case "Updates":
+        return <UpdatesPanel />;
+      case "Discussion":
+        return <DiscussionPanel />;
+      default:
+        return <OverviewPanel onSubmitTrade={handleTradeSubmit} />;
+    }
+  };
+
   return (
     <div className="min-h-screen theme-dashboard bg-background flex w-full">
       <DashboardSidebar 
@@ -86,21 +102,14 @@ const SecondaryMarket = () => {
         <DashboardHeader />
         
         <div className="p-6 lg:p-8">
-          {/* Asset Info Header */}
+          {/* Asset Info Header with Tabs */}
           <AssetInfoHeader activeTab={activeTab} onTabChange={setActiveTab} />
 
-          {/* Main Grid */}
-          <div className="grid lg:grid-cols-[1fr,380px] gap-6 mt-6">
-            {/* Left Column - Chart & Overview */}
-            <div className="space-y-6">
-              <MarketChart />
-              <MarketOverview />
-            </div>
-
-            {/* Right Column - Order Panel */}
-            <div>
-              <OrderPanel onSubmitTrade={handleTradeSubmit} />
-            </div>
+          {/* Active Panel Content */}
+          <div className="mt-6">
+            <AnimatePresence mode="wait">
+              {renderActivePanel()}
+            </AnimatePresence>
           </div>
         </div>
       </motion.main>
