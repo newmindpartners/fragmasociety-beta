@@ -8,7 +8,6 @@ import {
   Calendar, 
   Users, 
   TrendingUp, 
-  Shield, 
   Building2,
   Globe,
   ChevronDown,
@@ -154,97 +153,6 @@ export const AssetInfoHeader = ({ activeTab = "Overview", onTabChange }: AssetIn
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="my-6 lg:my-8 border-t border-border/50" />
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            {/* Available Shares */}
-            <motion.div 
-              className="group relative p-4 lg:p-5 rounded-xl bg-gradient-to-br from-muted/50 to-muted/30 border border-border/50 hover:border-primary/30 transition-all duration-300"
-              whileHover={{ y: -2 }}
-            >
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Available Shares</span>
-                  <InfoTooltip content="Total value of shares currently available for trading" />
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl lg:text-2xl font-bold text-foreground tabular-nums">
-                    ${assetData.availableShares.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Valuation */}
-            <motion.div 
-              className="group relative p-4 lg:p-5 rounded-xl bg-gradient-to-br from-muted/50 to-muted/30 border border-border/50 hover:border-primary/30 transition-all duration-300"
-              whileHover={{ y: -2 }}
-            >
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Valuation</span>
-                  <InfoTooltip content="Current indicative valuation of the asset" />
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl lg:text-2xl font-bold text-foreground tabular-nums">
-                    ${(assetData.valuation / 1000000).toFixed(0)}M
-                  </span>
-                  <span className="text-sm font-semibold text-green-600 flex items-center gap-0.5">
-                    <TrendingUp className="w-3.5 h-3.5" />
-                    +{assetData.valuationChange}%
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Total Investors */}
-            <motion.div 
-              className="group relative p-4 lg:p-5 rounded-xl bg-gradient-to-br from-muted/50 to-muted/30 border border-border/50 hover:border-primary/30 transition-all duration-300"
-              whileHover={{ y: -2 }}
-            >
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Investors</span>
-                  <InfoTooltip content="Total number of investors in this asset" />
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl lg:text-2xl font-bold text-foreground tabular-nums">
-                    {assetData.totalInvestors.toLocaleString()}
-                  </span>
-                  <Users className="w-4 h-4 text-muted-foreground" />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Eligibility Status */}
-            <motion.div 
-              className="group relative p-4 lg:p-5 rounded-xl bg-gradient-to-br from-green-500/5 to-green-500/0 border border-green-500/20 hover:border-green-500/40 transition-all duration-300"
-              whileHover={{ y: -2 }}
-            >
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</span>
-                  <InfoTooltip content="Your eligibility to trade this asset" />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                  </span>
-                  <span className="text-lg lg:text-xl font-bold text-green-600">
-                    {assetData.eligibilityStatus}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
           {/* Expandable Details */}
           <AnimatePresence>
             {showMoreInfo && (
@@ -336,7 +244,7 @@ export const AssetInfoHeader = ({ activeTab = "Overview", onTabChange }: AssetIn
         </div>
       </Card>
 
-      {/* Navigation Tabs */}
+      {/* Navigation Tabs - Now positioned below header */}
       <div className="relative">
         <div className="flex items-center gap-1 p-1 bg-muted/30 rounded-xl border border-border/50">
           {tabs.map((tab) => (
@@ -363,6 +271,94 @@ export const AssetInfoHeader = ({ activeTab = "Overview", onTabChange }: AssetIn
             </motion.button>
           ))}
         </div>
+      </div>
+
+      {/* Stats Grid - Moved below tabs */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        {/* Available Shares */}
+        <motion.div 
+          className="group relative p-4 lg:p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300"
+          whileHover={{ y: -2 }}
+        >
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Available Shares</span>
+              <InfoTooltip content="Total value of shares currently available for trading" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl lg:text-2xl font-bold text-foreground tabular-nums">
+                ${assetData.availableShares.toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Valuation */}
+        <motion.div 
+          className="group relative p-4 lg:p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300"
+          whileHover={{ y: -2 }}
+        >
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Valuation</span>
+              <InfoTooltip content="Current indicative valuation of the asset" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl lg:text-2xl font-bold text-foreground tabular-nums">
+                ${(assetData.valuation / 1000000).toFixed(0)}M
+              </span>
+              <span className="text-sm font-semibold text-green-600 flex items-center gap-0.5">
+                <TrendingUp className="w-3.5 h-3.5" />
+                +{assetData.valuationChange}%
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Total Investors */}
+        <motion.div 
+          className="group relative p-4 lg:p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300"
+          whileHover={{ y: -2 }}
+        >
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Investors</span>
+              <InfoTooltip content="Total number of investors in this asset" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl lg:text-2xl font-bold text-foreground tabular-nums">
+                {assetData.totalInvestors.toLocaleString()}
+              </span>
+              <Users className="w-4 h-4 text-muted-foreground" />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Eligibility Status */}
+        <motion.div 
+          className="group relative p-4 lg:p-5 rounded-xl bg-gradient-to-br from-green-500/5 to-green-500/0 border border-green-500/20 hover:border-green-500/40 transition-all duration-300"
+          whileHover={{ y: -2 }}
+        >
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</span>
+              <InfoTooltip content="Your eligibility to trade this asset" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+              </span>
+              <span className="text-lg lg:text-xl font-bold text-green-600">
+                {assetData.eligibilityStatus}
+              </span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );
