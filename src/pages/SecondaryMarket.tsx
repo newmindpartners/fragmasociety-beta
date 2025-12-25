@@ -5,6 +5,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { MarketChart } from "@/components/market/MarketChart";
 import { OrderPanel } from "@/components/market/OrderPanel";
 import { MarketOverview } from "@/components/market/MarketOverview";
+import { AssetInfoHeader } from "@/components/market/AssetInfoHeader";
 import { ReviewTradeModal } from "@/components/market/ReviewTradeModal";
 import { TradeProcessingModal } from "@/components/market/TradeProcessingModal";
 import { TradeSuccessModal } from "@/components/market/TradeSuccessModal";
@@ -27,6 +28,7 @@ export interface TradeDetails {
 
 const SecondaryMarket = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [activeTab, setActiveTab] = useState("Overview");
   
   // Modal states
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -84,22 +86,11 @@ const SecondaryMarket = () => {
         <DashboardHeader />
         
         <div className="p-6 lg:p-8">
-          {/* Page Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <h1 className="text-2xl lg:text-3xl font-serif font-bold text-foreground mb-2">
-              Market
-            </h1>
-            <p className="text-muted-foreground">
-              Trade tokenized assets on the Fragma Society marketplace
-            </p>
-          </motion.div>
+          {/* Asset Info Header */}
+          <AssetInfoHeader activeTab={activeTab} onTabChange={setActiveTab} />
 
           {/* Main Grid */}
-          <div className="grid lg:grid-cols-[1fr,380px] gap-6">
+          <div className="grid lg:grid-cols-[1fr,380px] gap-6 mt-6">
             {/* Left Column - Chart & Overview */}
             <div className="space-y-6">
               <MarketChart />
