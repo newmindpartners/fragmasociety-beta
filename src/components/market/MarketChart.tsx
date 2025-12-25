@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { ArrowRightLeft, TrendingUp, TrendingDown, BarChart3, LineChart } from "lucide-react";
@@ -58,50 +58,73 @@ interface CandlestickRendererProps {
 }
 
 const CandlestickRenderer = ({ data, xAxisMap, yAxisMap, offset }: CandlestickRendererProps) => {
-  if (!xAxisMap || !yAxisMap || !offset) return null;
-  
-  const xAxis = Object.values(xAxisMap)[0] as any;
-  const yAxis = Object.values(yAxisMap)[0] as any;
-  
-  if (!xAxis?.scale || !yAxis?.scale) return null;
-  
-  const yScale = yAxis.scale;
-  
-  // Calculate chart dimensions from offset
-  const chartWidth = offset.width || 0;
-  const chartLeft = offset.left || 0;
-  const dataLength = data.length;
-  
-  if (dataLength === 0 || chartWidth === 0) return null;
-  
-  // Calculate bar width and spacing
-  const barSpacing = chartWidth / dataLength;
-  const candleWidth = Math.max(barSpacing * 0.6, 4);
-  const padding = (barSpacing - candleWidth) / 2;
-  
+  if (!xAxisMap || !yAxisMap) return null;
+
+  const xAxis = (Object.values(xAxisMap)[0] as any) ?? null;
+  const yAxis = (yAxisMap?.price as any) ?? (Object.values(yAxisMap)[0] as any) ?? null;
+
+  const xScale = xAxis?.scale;
+  const yScale = yAxis?.scale;
+
+  if (typeof xScale !== "function" || typeof yScale !== "function") return null;
+
+  const bandWidth =
+    typeof xScale.bandwidth === "function"
+      ? xScale.bandwidth()
+      : typeof xAxis?.bandSize === "number"
+        ? xAxis.bandSize
+        : 10;
+
+  const candleWidth = Math.max(bandWidth * 0.6, 4);
+
+  const getX = (entry: OHLCData, index: number) => {
+    const scaled = xScale(entry.date);
+
+    // Primary path: use axis scale (preferred)
+    if (typeof scaled === "number" && !Number.isNaN(scaled)) {
+      // band scales return the left edge
+      if (typeof xScale.bandwidth === "function") {
+        return scaled + (bandWidth - candleWidth) / 2;
+      }
+      // point-like scales return the center
+      return scaled - candleWidth / 2;
+    }
+
+    // Fallback: compute positions from chart offset if available
+    const width = offset?.width;
+    const left = offset?.left ?? 0;
+    if (typeof width === "number" && width > 0 && data.length > 0) {
+      const barSpacing = width / data.length;
+      return left + index * barSpacing + (barSpacing - candleWidth) / 2;
+    }
+
+    return null;
+  };
+
   return (
     <g className="candlestick-layer">
       {data.map((entry, index) => {
-        const x = chartLeft + (index * barSpacing) + padding;
-        
+        const x = getX(entry, index);
+        if (typeof x !== "number") return null;
+
         const highY = yScale(entry.high);
         const lowY = yScale(entry.low);
         const openY = yScale(entry.open);
         const closeY = yScale(entry.close);
-        
-        // Check for valid coordinates
-        if (isNaN(highY) || isNaN(lowY) || isNaN(openY) || isNaN(closeY)) return null;
-        
+
+        if ([highY, lowY, openY, closeY].some((v) => typeof v !== "number" || Number.isNaN(v))) {
+          return null;
+        }
+
         const isGreen = entry.close >= entry.open;
         const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
-        
+
         const bodyTop = Math.min(openY, closeY);
         const bodyHeight = Math.max(Math.abs(openY - closeY), 2);
         const wickX = x + candleWidth / 2;
-        
+
         return (
           <g key={`candle-${index}`}>
-            {/* Wick (high to low line) */}
             <line
               x1={wickX}
               y1={highY}
@@ -109,16 +132,9 @@ const CandlestickRenderer = ({ data, xAxisMap, yAxisMap, offset }: CandlestickRe
               y2={lowY}
               stroke={color}
               strokeWidth={1.5}
+              strokeLinecap="round"
             />
-            {/* Body (open to close rectangle) */}
-            <rect
-              x={x}
-              y={bodyTop}
-              width={candleWidth}
-              height={bodyHeight}
-              fill={color}
-              rx={1}
-            />
+            <rect x={x} y={bodyTop} width={candleWidth} height={bodyHeight} fill={color} rx={1} />
           </g>
         );
       })}
@@ -359,17 +375,11 @@ export const MarketChart = () => {
                   return null;
                 }}
               />
+              {/* Hidden series so Recharts computes scales (we draw candles ourselves) */}
+              <Area yAxisId="price" dataKey="close" type="monotone" stroke="transparent" fill="transparent" dot={false} isAnimationActive={false} />
+
               {/* Custom SVG Candlestick Layer */}
-              <Customized 
-                component={(props: any) => (
-                  <CandlestickRenderer 
-                    data={chartData} 
-                    xAxisMap={props.xAxisMap} 
-                    yAxisMap={props.yAxisMap}
-                    offset={props.offset}
-                  />
-                )}
-              />
+              <Customized component={<CandlestickRenderer data={chartData} />} />
             </ComposedChart>
           )}
         </ResponsiveContainer>
