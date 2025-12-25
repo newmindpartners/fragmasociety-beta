@@ -2,6 +2,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ChevronDown, Clock, Zap, AlertCircle, TrendingUp, TrendingDown, Building2 } from "lucide-react";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 import type { TradeDetails, TradeType } from "@/pages/SecondaryMarket";
@@ -295,51 +301,41 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
               {/* Expiration Selector */}
               <div className="flex items-center justify-between mt-3">
                 <span className="text-sm text-muted-foreground">Order expires</span>
-                <div className="relative">
-                  <button
-                    onClick={() => setShowExpirationDropdown(!showExpirationDropdown)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-sm"
-                  >
-                    <Clock className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span className="font-medium text-foreground">
-                      {expirationOptions.find(o => o.value === expiration)?.label}
-                    </span>
-                    <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${showExpirationDropdown ? 'rotate-180' : ''}`} />
-                  </button>
-                  
-                  <AnimatePresence>
-                    {showExpirationDropdown && (
-                      <>
-                        {/* Backdrop to close dropdown */}
-                        <div 
-                          className="fixed inset-0 z-40" 
-                          onClick={() => setShowExpirationDropdown(false)} 
-                        />
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="absolute right-0 top-full mt-2 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden min-w-[160px]"
-                        >
-                          {expirationOptions.map((option) => (
-                            <button
-                              key={option.value}
-                              onClick={() => {
-                                setExpiration(option.value);
-                                setShowExpirationDropdown(false);
-                              }}
-                              className={`w-full flex items-center gap-2 px-3 py-2.5 hover:bg-slate-100 transition-colors text-sm ${
-                                expiration === option.value ? 'bg-violet-100 text-violet-700' : 'text-slate-900'
-                              }`}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
-                        </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>
-                </div>
+                <DropdownMenu open={showExpirationDropdown} onOpenChange={setShowExpirationDropdown}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-sm"
+                    >
+                      <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="font-medium text-foreground">
+                        {expirationOptions.find((o) => o.value === expiration)?.label}
+                      </span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${showExpirationDropdown ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="end" className="min-w-[180px] z-[1000]">
+                    {expirationOptions.map((option) => (
+                      <DropdownMenuItem
+                        key={option.value}
+                        onSelect={() => {
+                          setExpiration(option.value);
+                          setShowExpirationDropdown(false);
+                        }}
+                        className={
+                          expiration === option.value
+                            ? "bg-accent text-accent-foreground"
+                            : ""
+                        }
+                      >
+                        {option.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               {/* Price Alert */}
