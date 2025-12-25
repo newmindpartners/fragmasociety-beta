@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Clock, Zap, AlertCircle, TrendingUp, TrendingDown, Building2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Clock, Zap, AlertCircle, TrendingUp, TrendingDown, Building2, Settings2 } from "lucide-react";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 import type { TradeDetails, TradeType } from "@/pages/SecondaryMarket";
 
@@ -53,6 +53,15 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
   const [showExpirationDropdown, setShowExpirationDropdown] = useState(false);
   const [payCurrency, setPayCurrency] = useState<PaymentCurrency>("USDC");
   const [showPayDropdown, setShowPayDropdown] = useState(false);
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+
+  // Below market price percentage options
+  const belowMarketOptions = [5, 10, 25];
+
+  const handleBelowMarketClick = (percent: number) => {
+    const belowPrice = MLV_MARKET_PRICE * (1 - percent / 100);
+    setLimitPrice(belowPrice.toFixed(2));
+  };
 
   const availableBalance = 3000.00;
   const availableMLV = 12.5; // Mock MLV holdings
@@ -298,52 +307,105 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
                 </div>
               </div>
 
-              {/* Expiration Selector */}
-              <div className="flex items-center justify-between mt-3">
-                <span className="text-sm text-muted-foreground">Order expires</span>
-                <DropdownMenu open={showExpirationDropdown} onOpenChange={setShowExpirationDropdown}>
-                  <DropdownMenuTrigger asChild>
+              {/* Below Market Price Quick Buttons */}
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-sm text-muted-foreground">Below market price:</span>
+                <div className="flex items-center gap-2">
+                  {belowMarketOptions.map((percent) => (
                     <button
-                      type="button"
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-sm"
+                      key={percent}
+                      onClick={() => handleBelowMarketClick(percent)}
+                      className="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all"
                     >
-                      <Clock className="w-3.5 h-3.5 text-muted-foreground" />
-                      <span className="font-medium text-foreground">
-                        {expirationOptions.find((o) => o.value === expiration)?.label}
-                      </span>
-                      <ChevronDown
-                        className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${showExpirationDropdown ? "rotate-180" : ""}`}
-                      />
+                      {percent}%
                     </button>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent align="end" className="min-w-[180px] z-[1000]">
-                    {expirationOptions.map((option) => (
-                      <DropdownMenuItem
-                        key={option.value}
-                        onSelect={() => {
-                          setExpiration(option.value);
-                          setShowExpirationDropdown(false);
-                        }}
-                        className={
-                          expiration === option.value
-                            ? "bg-accent text-accent-foreground"
-                            : ""
-                        }
-                      >
-                        {option.label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  ))}
+                </div>
               </div>
+
+              {/* Advanced Settings Toggle */}
+              <button
+                onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
+                className="flex items-center gap-1.5 mt-4 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              >
+                <span>Advanced settings</span>
+                <ChevronRight 
+                  className={`w-4 h-4 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-90' : ''}`} 
+                />
+              </button>
+
+              {/* Advanced Settings Panel */}
+              <AnimatePresence>
+                {showAdvancedSettings && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-3 p-4 rounded-xl bg-muted/30 border border-border/50 space-y-4">
+                      {/* Expiration Selector */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Order expires</span>
+                        <DropdownMenu open={showExpirationDropdown} onOpenChange={setShowExpirationDropdown}>
+                          <DropdownMenuTrigger asChild>
+                            <button
+                              type="button"
+                              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors text-sm"
+                            >
+                              <Clock className="w-3.5 h-3.5 text-slate-500" />
+                              <span className="font-medium">
+                                {expirationOptions.find((o) => o.value === expiration)?.label}
+                              </span>
+                              <ChevronDown
+                                className={`w-3.5 h-3.5 text-slate-500 transition-transform ${showExpirationDropdown ? "rotate-180" : ""}`}
+                              />
+                            </button>
+                          </DropdownMenuTrigger>
+
+                          <DropdownMenuContent 
+                            align="end" 
+                            className="min-w-[180px] z-[1000] bg-white border border-slate-200 shadow-xl"
+                          >
+                            {expirationOptions.map((option) => (
+                              <DropdownMenuItem
+                                key={option.value}
+                                onSelect={() => {
+                                  setExpiration(option.value);
+                                  setShowExpirationDropdown(false);
+                                }}
+                                className={`cursor-pointer text-slate-700 hover:bg-slate-100 focus:bg-slate-100 ${
+                                  expiration === option.value
+                                    ? "bg-violet-100 text-violet-700 font-medium"
+                                    : ""
+                                }`}
+                              >
+                                {option.label}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+
+                      {/* Additional settings can go here */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Post-only order</span>
+                        <button className="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-500">
+                          Off
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Price Alert */}
               {limitPrice && priceDiffPercent < -5 && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"
+                  className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 mt-3"
                 >
                   <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-amber-600">
