@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRightLeft, TrendingUp, TrendingDown } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { ArrowRightLeft, TrendingUp, TrendingDown, BarChart3, LineChart } from "lucide-react";
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Bar, ComposedChart, Cell } from "recharts";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 const timeRanges = ["1D", "7D", "1M", "6M", "1Y", "All"];
 
-// Generate mock chart data
+type ChartType = "line" | "candlestick";
+
+// Generate mock chart data with OHLC for candlestick
 const generateChartData = (days: number) => {
   const data = [];
   const basePrice = 0.604;
@@ -19,21 +20,63 @@ const generateChartData = (days: number) => {
     date.setDate(date.getDate() - i);
     
     const randomChange = (Math.random() - 0.5) * 0.02;
-    const price = basePrice + randomChange + (Math.sin(i / 5) * 0.01);
+    const open = basePrice + randomChange + (Math.sin(i / 5) * 0.01);
+    const close = open + (Math.random() - 0.5) * 0.01;
+    const high = Math.max(open, close) + Math.random() * 0.005;
+    const low = Math.min(open, close) - Math.random() * 0.005;
     const volume = Math.floor(Math.random() * 50000) + 10000;
     
     data.push({
       date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      price: parseFloat(price.toFixed(4)),
+      price: parseFloat(close.toFixed(4)),
+      open: parseFloat(open.toFixed(4)),
+      high: parseFloat(high.toFixed(4)),
+      low: parseFloat(low.toFixed(4)),
+      close: parseFloat(close.toFixed(4)),
       volume,
     });
   }
   return data;
 };
 
+// Custom Candlestick shape component
+const CandlestickBar = (props: any) => {
+  const { x, y, width, height, open, close, high, low, yAxisScale } = props;
+  const isGreen = close >= open;
+  const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
+  
+  const wickX = x + width / 2;
+  const highY = yAxisScale ? yAxisScale(high) : y;
+  const lowY = yAxisScale ? yAxisScale(low) : y + height;
+  
+  return (
+    <g>
+      {/* Wick */}
+      <line
+        x1={wickX}
+        y1={highY}
+        x2={wickX}
+        y2={lowY}
+        stroke={color}
+        strokeWidth={1}
+      />
+      {/* Body */}
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={Math.max(height, 2)}
+        fill={color}
+        rx={1}
+      />
+    </g>
+  );
+};
+
 export const MarketChart = () => {
   const [selectedRange, setSelectedRange] = useState("1M");
-  const [showVolume, setShowVolume] = useState(true);
+  const [chartType, setChartType] = useState<ChartType>("line");
+  const [showVolume, setShowVolume] = useState(false);
   
   const chartData = generateChartData(
     selectedRange === "1D" ? 1 : 
@@ -43,8 +86,8 @@ export const MarketChart = () => {
     selectedRange === "1Y" ? 365 : 730
   );
 
-  const currentPrice = chartData[chartData.length - 1]?.price || 0.604;
-  const previousPrice = chartData[0]?.price || 0.604;
+  const currentPrice = chartData[chartData.length - 1]?.close || 0.604;
+  const previousPrice = chartData[0]?.close || 0.604;
   const priceChange = ((currentPrice - previousPrice) / previousPrice) * 100;
   const isPositive = priceChange >= 0;
 
@@ -91,24 +134,50 @@ export const MarketChart = () => {
           </div>
         </div>
 
-        {/* Time Range Selector */}
-        <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-lg">
-          {timeRanges.map((range) => (
+        {/* Chart Type & Time Range */}
+        <div className="flex items-center gap-3">
+          {/* Chart Type Toggle */}
+          <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-lg">
             <button
-              key={range}
-              onClick={() => setSelectedRange(range)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                selectedRange === range
+              onClick={() => setChartType("line")}
+              className={`p-1.5 rounded-md transition-all ${
+                chartType === "line"
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
+              title="Line Chart"
             >
-              {range}
+              <LineChart className="w-4 h-4" />
             </button>
-          ))}
-          <span className="ml-2 text-xs text-primary font-medium cursor-pointer hover:underline">
-            See All
-          </span>
+            <button
+              onClick={() => setChartType("candlestick")}
+              className={`p-1.5 rounded-md transition-all ${
+                chartType === "candlestick"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+              title="Candlestick Chart"
+            >
+              <BarChart3 className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Time Range Selector */}
+          <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-lg">
+            {timeRanges.map((range) => (
+              <button
+                key={range}
+                onClick={() => setSelectedRange(range)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  selectedRange === range
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`}
+              >
+                {range}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -119,7 +188,7 @@ export const MarketChart = () => {
           className={`flex items-center gap-2 text-xs ${!showVolume ? 'text-primary' : 'text-muted-foreground'}`}
         >
           <span className="w-2 h-2 rounded-full bg-primary/60" />
-          Price per unit
+          Price
         </button>
         <button
           onClick={() => setShowVolume(true)}
@@ -134,56 +203,159 @@ export const MarketChart = () => {
       {/* Chart */}
       <div className="h-[280px] -mx-2">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-            <defs>
-              <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid 
-              strokeDasharray="3 3" 
-              vertical={false} 
-              stroke="hsl(var(--border))" 
-              opacity={0.3}
-            />
-            <XAxis 
-              dataKey="date" 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-              dy={10}
-            />
-            <YAxis 
-              orientation="right"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-              domain={['dataMin - 0.002', 'dataMax + 0.002']}
-              tickFormatter={(value) => value.toFixed(4)}
-            />
-            <Tooltip 
-              contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                padding: '12px',
-              }}
-              labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600, marginBottom: '4px' }}
-              itemStyle={{ color: 'hsl(var(--muted-foreground))' }}
-              formatter={(value: number) => [value.toFixed(6), showVolume ? 'Volume' : 'Price']}
-            />
-            <Area
-              type="monotone"
-              dataKey={showVolume ? "volume" : "price"}
-              stroke="hsl(var(--primary))"
-              strokeWidth={2}
-              fill="url(#priceGradient)"
-              dot={false}
-              activeDot={{ r: 6, fill: 'hsl(var(--primary))', stroke: 'white', strokeWidth: 2 }}
-            />
-          </AreaChart>
+          {chartType === "line" ? (
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                vertical={false} 
+                stroke="hsl(var(--border))" 
+                opacity={0.3}
+              />
+              <XAxis 
+                dataKey="date" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                dy={10}
+              />
+              <YAxis 
+                orientation="right"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                domain={['dataMin - 0.002', 'dataMax + 0.002']}
+                tickFormatter={(value) => value.toFixed(4)}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  padding: '12px',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600, marginBottom: '4px' }}
+                itemStyle={{ color: 'hsl(var(--muted-foreground))' }}
+                formatter={(value: number) => [value.toFixed(6), showVolume ? 'Volume' : 'Price']}
+              />
+              <Area
+                type="monotone"
+                dataKey={showVolume ? "volume" : "close"}
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                fill="url(#priceGradient)"
+                dot={false}
+                activeDot={{ r: 6, fill: 'hsl(var(--primary))', stroke: 'white', strokeWidth: 2 }}
+              />
+            </AreaChart>
+          ) : (
+            <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                vertical={false} 
+                stroke="hsl(var(--border))" 
+                opacity={0.3}
+              />
+              <XAxis 
+                dataKey="date" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                dy={10}
+              />
+              <YAxis 
+                orientation="right"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                domain={['dataMin - 0.002', 'dataMax + 0.002']}
+                tickFormatter={(value) => value.toFixed(4)}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  padding: '12px',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600, marginBottom: '4px' }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    const isGreen = data.close >= data.open;
+                    return (
+                      <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+                        <p className="font-semibold text-foreground mb-2">{label}</p>
+                        <div className="space-y-1 text-xs">
+                          <p className="text-muted-foreground">Open: <span className="text-foreground">{data.open.toFixed(4)}</span></p>
+                          <p className="text-muted-foreground">High: <span className="text-foreground">{data.high.toFixed(4)}</span></p>
+                          <p className="text-muted-foreground">Low: <span className="text-foreground">{data.low.toFixed(4)}</span></p>
+                          <p className="text-muted-foreground">Close: <span className={isGreen ? "text-green-600" : "text-red-500"}>{data.close.toFixed(4)}</span></p>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar 
+                dataKey="close" 
+                barSize={8}
+                shape={(props: any) => {
+                  const { x, y, width, height, payload } = props;
+                  const isGreen = payload.close >= payload.open;
+                  const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
+                  
+                  // Calculate body position
+                  const openY = props.yAxis.scale(payload.open);
+                  const closeY = props.yAxis.scale(payload.close);
+                  const highY = props.yAxis.scale(payload.high);
+                  const lowY = props.yAxis.scale(payload.low);
+                  
+                  const bodyTop = Math.min(openY, closeY);
+                  const bodyHeight = Math.abs(openY - closeY) || 2;
+                  const wickX = x + width / 2;
+                  
+                  return (
+                    <g>
+                      {/* Wick */}
+                      <line
+                        x1={wickX}
+                        y1={highY}
+                        x2={wickX}
+                        y2={lowY}
+                        stroke={color}
+                        strokeWidth={1.5}
+                      />
+                      {/* Body */}
+                      <rect
+                        x={x}
+                        y={bodyTop}
+                        width={width}
+                        height={bodyHeight}
+                        fill={color}
+                        rx={1}
+                      />
+                    </g>
+                  );
+                }}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.close >= entry.open ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)"} 
+                  />
+                ))}
+              </Bar>
+            </ComposedChart>
+          )}
         </ResponsiveContainer>
       </div>
 
