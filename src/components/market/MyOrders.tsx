@@ -294,26 +294,35 @@ export const MyOrders = () => {
 
       {/* Cancel Confirmation Dialog */}
       <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-        <DialogContent className="sm:max-w-[400px]">
-          <div className="text-center py-4">
-            <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4">
-              <AlertCircle className="w-8 h-8 text-destructive" />
+        <DialogContent hideClose className="sm:max-w-[420px] p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl rounded-2xl">
+          {/* Close Button */}
+          <button
+            onClick={() => setShowCancelDialog(false)}
+            className="absolute right-4 top-4 w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 z-10"
+          >
+            <X className="w-4 h-4 text-slate-500" />
+          </button>
+
+          <div className="text-center p-8 pt-10">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-red-100">
+              <AlertCircle className="w-8 h-8 text-red-500" />
             </div>
-            <DialogTitle className="text-xl mb-2">Cancel Order?</DialogTitle>
-            <p className="text-sm text-muted-foreground mb-6">
-              Are you sure you want to cancel this {selectedOrder?.type} order for {selectedOrder?.amount.toLocaleString()} {selectedOrder?.payCurrency}? This action cannot be undone.
+            <DialogTitle className="text-xl font-bold text-slate-900 mb-3">Cancel Order?</DialogTitle>
+            <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+              Are you sure you want to cancel this {selectedOrder?.type} order for{" "}
+              <span className="font-semibold text-slate-700">{selectedOrder?.amount.toLocaleString()} {selectedOrder?.payCurrency}</span>?
+              <br />This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <Button
                 variant="outline"
-                className="flex-1"
+                className="flex-1 h-11 text-sm font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl"
                 onClick={() => setShowCancelDialog(false)}
               >
                 Keep Order
               </Button>
               <Button
-                variant="destructive"
-                className="flex-1"
+                className="flex-1 h-11 text-sm font-medium bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-md shadow-red-200"
                 onClick={confirmCancel}
               >
                 Cancel Order
@@ -325,81 +334,91 @@ export const MyOrders = () => {
 
       {/* Modify Order Dialog */}
       <Dialog open={showModifyDialog} onOpenChange={setShowModifyDialog}>
-        <DialogContent className="sm:max-w-[420px]">
-          <DialogHeader>
-            <DialogTitle>Modify Order</DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4 py-4">
-            {/* Order Summary */}
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                selectedOrder?.type === "buy" 
-                  ? "bg-green-500/10" 
-                  : "bg-red-500/10"
-              }`}>
-                {selectedOrder?.type === "buy" ? (
-                  <TrendingUp className="w-4 h-4 text-green-600" />
-                ) : (
-                  <TrendingDown className="w-4 h-4 text-red-500" />
+        <DialogContent hideClose className="sm:max-w-[440px] p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl rounded-2xl">
+          {/* Close Button */}
+          <button
+            onClick={() => setShowModifyDialog(false)}
+            className="absolute right-4 top-4 w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 z-10"
+          >
+            <X className="w-4 h-4 text-slate-500" />
+          </button>
+
+          <div className="p-6">
+            <DialogHeader className="pb-4">
+              <DialogTitle className="text-xl font-bold text-slate-900">Modify Order</DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-5">
+              {/* Order Summary */}
+              <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                  selectedOrder?.type === "buy" 
+                    ? "bg-green-100" 
+                    : "bg-red-100"
+                }`}>
+                  {selectedOrder?.type === "buy" ? (
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                  ) : (
+                    <TrendingDown className="w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    {selectedOrder?.type.toUpperCase()} {selectedOrder?.payCurrency} → {selectedOrder?.receiveCurrency}
+                  </p>
+                  <p className="text-xs text-slate-400">Order ID: {selectedOrder?.id}</p>
+                </div>
+              </div>
+
+              {/* Amount Input */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700">Amount ({selectedOrder?.payCurrency})</label>
+                <input
+                  type="text"
+                  value={modifiedAmount}
+                  onChange={(e) => setModifiedAmount(e.target.value.replace(/[^0-9.]/g, ''))}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                />
+              </div>
+
+              {/* Limit Price Input */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-slate-700">Limit Price</label>
+                  <span className="text-xs text-slate-400">
+                    Market: {selectedOrder?.marketPrice.toFixed(4)}
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={modifiedPrice}
+                  onChange={(e) => setModifiedPrice(e.target.value.replace(/[^0-9.]/g, ''))}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                />
+                {modifiedPrice && (
+                  <p className="text-xs text-slate-500">
+                    {((parseFloat(modifiedPrice) - (selectedOrder?.marketPrice || 0)) / (selectedOrder?.marketPrice || 1) * 100).toFixed(2)}% from market price
+                  </p>
                 )}
               </div>
-              <div>
-                <p className="font-medium text-foreground">
-                  {selectedOrder?.type.toUpperCase()} {selectedOrder?.payCurrency} → {selectedOrder?.receiveCurrency}
-                </p>
-                <p className="text-xs text-muted-foreground">Order ID: {selectedOrder?.id}</p>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-2">
+                <Button
+                  variant="outline"
+                  className="flex-1 h-11 text-sm font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl"
+                  onClick={() => setShowModifyDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="flex-1 h-11 text-sm font-medium bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-primary/20"
+                  onClick={confirmModify}
+                >
+                  <Check className="w-4 h-4 mr-1.5" />
+                  Save Changes
+                </Button>
               </div>
-            </div>
-
-            {/* Amount Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Amount ({selectedOrder?.payCurrency})</label>
-              <input
-                type="text"
-                value={modifiedAmount}
-                onChange={(e) => setModifiedAmount(e.target.value.replace(/[^0-9.]/g, ''))}
-                className="w-full px-4 py-3 rounded-lg bg-muted/30 border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-
-            {/* Limit Price Input */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-foreground">Limit Price</label>
-                <span className="text-xs text-muted-foreground">
-                  Market: {selectedOrder?.marketPrice.toFixed(4)}
-                </span>
-              </div>
-              <input
-                type="text"
-                value={modifiedPrice}
-                onChange={(e) => setModifiedPrice(e.target.value.replace(/[^0-9.]/g, ''))}
-                className="w-full px-4 py-3 rounded-lg bg-muted/30 border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              {modifiedPrice && (
-                <p className="text-xs text-muted-foreground">
-                  {((parseFloat(modifiedPrice) - (selectedOrder?.marketPrice || 0)) / (selectedOrder?.marketPrice || 1) * 100).toFixed(2)}% from market price
-                </p>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setShowModifyDialog(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="flex-1"
-                onClick={confirmModify}
-              >
-                <Check className="w-4 h-4 mr-1.5" />
-                Save Changes
-              </Button>
             </div>
           </div>
         </DialogContent>
