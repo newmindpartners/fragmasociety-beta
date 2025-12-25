@@ -309,27 +309,34 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
                   
                   <AnimatePresence>
                     {showExpirationDropdown && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 top-full mt-2 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden min-w-[160px]"
-                      >
-                        {expirationOptions.map((option) => (
-                          <button
-                            key={option.value}
-                            onClick={() => {
-                              setExpiration(option.value);
-                              setShowExpirationDropdown(false);
-                            }}
-                            className={`w-full flex items-center gap-2 px-3 py-2.5 hover:bg-muted/50 transition-colors text-sm ${
-                              expiration === option.value ? 'bg-primary/10 text-primary' : 'text-foreground'
-                            }`}
-                          >
-                            {option.label}
-                          </button>
-                        ))}
-                      </motion.div>
+                      <>
+                        {/* Backdrop to close dropdown */}
+                        <div 
+                          className="fixed inset-0 z-40" 
+                          onClick={() => setShowExpirationDropdown(false)} 
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute right-0 top-full mt-2 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden min-w-[160px]"
+                        >
+                          {expirationOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              onClick={() => {
+                                setExpiration(option.value);
+                                setShowExpirationDropdown(false);
+                              }}
+                              className={`w-full flex items-center gap-2 px-3 py-2.5 hover:bg-slate-100 transition-colors text-sm ${
+                                expiration === option.value ? 'bg-violet-100 text-violet-700' : 'text-slate-900'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </motion.div>
+                      </>
                     )}
                   </AnimatePresence>
                 </div>
