@@ -366,20 +366,23 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
 
                           <DropdownMenuContent 
                             align="end" 
-                            className="min-w-[180px] z-[1000] bg-white border border-slate-200 shadow-xl"
+                            className="min-w-[180px] z-[1000] bg-white border border-slate-200 shadow-xl rounded-xl p-1 overflow-hidden"
                           >
-                            {expirationOptions.map((option) => (
+                            {expirationOptions.map((option, index) => (
                               <DropdownMenuItem
                                 key={option.value}
                                 onSelect={() => {
                                   setExpiration(option.value);
                                   setShowExpirationDropdown(false);
                                 }}
-                                className={`cursor-pointer hover:!bg-slate-100 focus:!bg-slate-100 ${
+                                className={`cursor-pointer rounded-lg my-0.5 px-3 py-2.5 transition-all duration-150 ease-out hover:scale-[1.02] hover:shadow-sm focus:scale-[1.02] focus:shadow-sm ${
                                   expiration === option.value
-                                    ? "!bg-violet-100 !text-violet-700 font-medium"
-                                    : "!text-slate-900"
+                                    ? "!bg-violet-500 !text-white font-medium shadow-md"
+                                    : "!text-slate-900 hover:!bg-slate-100 focus:!bg-slate-100"
                                 }`}
+                                style={{
+                                  animationDelay: `${index * 30}ms`
+                                }}
                               >
                                 {option.label}
                               </DropdownMenuItem>
