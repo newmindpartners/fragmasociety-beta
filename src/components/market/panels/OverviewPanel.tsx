@@ -20,13 +20,13 @@ export const OverviewPanel = ({ onSubmitTrade }: OverviewPanelProps) => {
     >
       {/* Left Column - Chart & Overview */}
       <div className="space-y-6">
-        <QuickTradeWidget onSubmitTrade={onSubmitTrade} />
         <MarketChart />
         <MarketOverview />
       </div>
 
-      {/* Right Column - Order Panel */}
-      <div>
+      {/* Right Column - Quick Trade & Order Panel */}
+      <div className="space-y-4">
+        <QuickTradeWidget onSubmitTrade={onSubmitTrade} />
         <OrderPanel onSubmitTrade={onSubmitTrade} />
       </div>
     </motion.div>
