@@ -91,7 +91,7 @@ const SecondaryMarket = () => {
             className="mb-8"
           >
             <h1 className="text-2xl lg:text-3xl font-serif font-bold text-foreground mb-2">
-              Secondary Market
+              Market
             </h1>
             <p className="text-muted-foreground">
               Trade tokenized assets on the Fragma Society marketplace
