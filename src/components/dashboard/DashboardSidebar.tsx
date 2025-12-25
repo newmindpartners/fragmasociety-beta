@@ -34,7 +34,7 @@ const mainNavItems: NavItem[] = [
   { icon: FileText, label: "Documents", href: "/dashboard/documents" },
   { icon: Wallet, label: "Wallet", href: "/dashboard/wallet" },
   { icon: TrendingUp, label: "Earnings", href: "/dashboard/earnings" },
-  { icon: BarChart3, label: "Secondary Market", href: "/dashboard/market" },
+  { icon: BarChart3, label: "Market", href: "/dashboard/market" },
 ];
 
 const bottomNavItems: NavItem[] = [
