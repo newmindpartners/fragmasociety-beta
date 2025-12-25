@@ -249,20 +249,23 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
             )}
           </AnimatePresence>
 
-          {/* Show More Button */}
-          <motion.button
-            onClick={() => setShowMoreInfo(!showMoreInfo)}
-            className="mt-6 w-full py-3 flex items-center justify-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 border-t border-slate-200/60 transition-colors group"
-            whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
-          >
-            <span>{showMoreInfo ? "Show less" : "Show more details"}</span>
-            <motion.div
-              animate={{ rotate: showMoreInfo ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
+          {/* Show More Button - Button Style */}
+          <div className="mt-6 pt-4 border-t border-slate-200/60">
+            <motion.button
+              onClick={() => setShowMoreInfo(!showMoreInfo)}
+              className="w-full py-3 px-6 flex items-center justify-center gap-2 text-sm font-medium text-slate-600 bg-white/80 hover:bg-white border border-slate-300 rounded-full transition-all shadow-sm hover:shadow-md hover:border-slate-400"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
             >
-              <ChevronDown className="w-4 h-4" />
-            </motion.div>
-          </motion.button>
+              <span>{showMoreInfo ? "Show less" : "Show more details"}</span>
+              <motion.div
+                animate={{ rotate: showMoreInfo ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChevronDown className="w-4 h-4" />
+              </motion.div>
+            </motion.button>
+          </div>
         </div>
       </Card>
 
