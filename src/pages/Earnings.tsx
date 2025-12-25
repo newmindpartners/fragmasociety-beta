@@ -69,8 +69,8 @@ const Earnings = () => {
                 onDismiss={handleDismissNotification}
               />
 
-              {/* Total Invested Card */}
-              <div className="max-w-2xl">
+              {/* Portfolio Card + Portfolio Earnings - Side by Side */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TotalInvestedCard
                   totalInvested={4250}
                   totalEarnings={312.40}
@@ -80,15 +80,13 @@ const Earnings = () => {
                   inProgress={89.10}
                   upcomingThisMonth={78.10}
                 />
+                <div data-portfolio-section>
+                  <PortfolioEarningsSelector />
+                </div>
               </div>
 
               {/* Recent Payouts */}
               <RecentPayouts onViewAll={() => console.log("View all earnings")} />
-
-              {/* Portfolio Earnings Selector */}
-              <div data-portfolio-section>
-                <PortfolioEarningsSelector />
-              </div>
             </motion.div>
           </div>
         </main>
