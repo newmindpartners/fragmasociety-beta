@@ -29,7 +29,7 @@ export interface TradeDetails {
 
 const SecondaryMarket = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState("Overview");
+  const [activeTab, setActiveTab] = useState("Trade");
   
   // Modal states
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -73,7 +73,7 @@ const SecondaryMarket = () => {
 
   const renderActivePanel = () => {
     switch (activeTab) {
-      case "Overview":
+      case "Trade":
         return <OverviewPanel onSubmitTrade={handleTradeSubmit} />;
       case "Investors":
         return <InvestorsPanel />;

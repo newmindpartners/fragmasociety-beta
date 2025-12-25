@@ -25,9 +25,9 @@ interface AssetInfoHeaderProps {
   onTabChange?: (tab: string) => void;
 }
 
-const tabs = ["Overview", "Investors", "Updates", "Discussion"];
+const tabs = ["Trade", "Investors", "Updates", "Discussion"];
 
-export const AssetInfoHeader = ({ activeTab = "Overview", onTabChange }: AssetInfoHeaderProps) => {
+export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoHeaderProps) => {
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [showMoreInfo, setShowMoreInfo] = useState(false);
 
