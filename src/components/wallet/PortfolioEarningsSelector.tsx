@@ -46,6 +46,36 @@ const mockPortfolioDeals: PortfolioDeal[] = [
     lastPayout: "Oct 15, 2024",
     status: "Active"
   },
+  {
+    id: "independent-film",
+    name: "Independent Film Fund",
+    symbol: "IFF",
+    investedAmount: 1200,
+    currentValue: 1350,
+    totalEarnings: 150,
+    lastPayout: "Dec 1, 2024",
+    status: "Active"
+  },
+  {
+    id: "palisades-rebuild",
+    name: "Palisades Rebuild Project",
+    symbol: "PRP",
+    investedAmount: 3000,
+    currentValue: 3180,
+    totalEarnings: 180,
+    lastPayout: "Nov 15, 2024",
+    status: "Pending"
+  },
+  {
+    id: "music-rights",
+    name: "Music Rights Portfolio",
+    symbol: "MRP",
+    investedAmount: 500,
+    currentValue: 540,
+    totalEarnings: 40,
+    lastPayout: "Sep 30, 2024",
+    status: "Completed"
+  },
 ];
 
 export const PortfolioEarningsSelector = () => {
@@ -110,7 +140,7 @@ export const PortfolioEarningsSelector = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="grid gap-4"
+            className="grid gap-4 max-h-[400px] overflow-y-auto pr-2"
           >
             {mockPortfolioDeals.map((deal, index) => (
               <motion.button
@@ -142,7 +172,6 @@ export const PortfolioEarningsSelector = () => {
                         <TrendingUp className="w-3.5 h-3.5" />
                         +€{deal.totalEarnings.toLocaleString()}
                       </span>
-                      <span>Last: {deal.lastPayout}</span>
                     </div>
                   </div>
 
