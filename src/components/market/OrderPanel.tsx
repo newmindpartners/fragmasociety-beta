@@ -375,10 +375,10 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
                                   setExpiration(option.value);
                                   setShowExpirationDropdown(false);
                                 }}
-                                className={`cursor-pointer text-slate-700 hover:bg-slate-100 focus:bg-slate-100 ${
+                                className={`cursor-pointer hover:!bg-slate-100 focus:!bg-slate-100 ${
                                   expiration === option.value
-                                    ? "bg-violet-100 text-violet-700 font-medium"
-                                    : ""
+                                    ? "!bg-violet-100 !text-violet-700 font-medium"
+                                    : "!text-slate-900"
                                 }`}
                               >
                                 {option.label}
