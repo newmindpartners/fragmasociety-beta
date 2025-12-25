@@ -33,40 +33,40 @@ export const ReviewTradeModal = ({ open, onOpenChange, tradeDetails, onConfirm }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[460px] p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl shadow-slate-200/50 rounded-2xl">
+      <DialogContent hideClose className="sm:max-w-[460px] p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl shadow-slate-200/50 rounded-2xl">
         {/* Header */}
-        <div className="p-6 pb-4">
+        <div className="p-6 pb-2">
           <div className="flex items-start justify-between">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 flex items-center justify-center">
-              <Coins className="w-7 h-7 text-primary" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 flex items-center justify-center">
+              <Coins className="w-6 h-6 text-primary" />
             </div>
             <button
               onClick={() => onOpenChange(false)}
-              className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+              className="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
             >
-              <X className="w-5 h-5 text-slate-500" />
+              <X className="w-4 h-4 text-slate-500" />
             </button>
           </div>
 
-          <h2 className="text-2xl font-bold text-slate-900 mt-5">
+          <h2 className="text-xl font-bold text-slate-900 mt-4">
             Review {tradeDetails.type === "buy" ? "Buy" : "Sell"}
           </h2>
-          <p className="text-sm text-slate-500 mt-1.5">
+          <p className="text-sm text-slate-500 mt-1">
             Double-check the details before confirming.
           </p>
         </div>
 
         {/* Trade Details */}
-        <div className="px-6 pb-6 space-y-6">
+        <div className="px-6 pb-6 space-y-4">
           {/* You Pay */}
-          <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-100">
-            <p className="text-sm font-medium text-slate-500 mb-3">You pay</p>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+            <p className="text-sm font-medium text-slate-500 mb-2">You pay</p>
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                <span className="text-3xl font-bold text-slate-900 tracking-tight">
                   {tradeDetails.payAmount.toLocaleString()}
                 </span>
-                <p className="text-sm text-slate-400 mt-1">
+                <p className="text-sm text-slate-400 mt-0.5">
                   ≈ ${(tradeDetails.payAmount * 0.0224).toFixed(2)} USD
                 </p>
               </div>
@@ -75,14 +75,14 @@ export const ReviewTradeModal = ({ open, onOpenChange, tradeDetails, onConfirm }
           </div>
 
           {/* You Receive */}
-          <div className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/10">
-            <p className="text-sm font-medium text-slate-500 mb-3">You receive</p>
+          <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
+            <p className="text-sm font-medium text-slate-500 mb-2">You receive</p>
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                <span className="text-3xl font-bold text-slate-900 tracking-tight">
                   {tradeDetails.receiveAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
-                <p className="text-sm text-slate-400 mt-1">
+                <p className="text-sm text-slate-400 mt-0.5">
                   ≈ ${(tradeDetails.receiveAmount * 0.0136).toFixed(2)} USD
                 </p>
               </div>
@@ -91,12 +91,12 @@ export const ReviewTradeModal = ({ open, onOpenChange, tradeDetails, onConfirm }
           </div>
 
           {/* Transaction Summary */}
-          <div className="p-5 rounded-xl bg-slate-800 text-white space-y-3">
+          <div className="p-4 rounded-xl bg-slate-800 text-white space-y-2.5">
             <div className="flex justify-between text-sm">
               <span className="text-slate-400">Rate</span>
               <span className="text-white font-medium">
                 {tradeDetails.rate}
-                <span className="text-slate-400 ml-1.5">($1.59)</span>
+                <span className="text-slate-400 ml-1">($1.59)</span>
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -107,17 +107,17 @@ export const ReviewTradeModal = ({ open, onOpenChange, tradeDetails, onConfirm }
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-slate-400">Network cost</span>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center">
-                  <Coins className="w-3 h-3 text-white" />
+              <div className="flex items-center gap-1.5">
+                <div className="w-4 h-4 rounded-full bg-primary/80 flex items-center justify-center">
+                  <Coins className="w-2.5 h-2.5 text-white" />
                 </div>
                 <span className="text-white font-medium">{tradeDetails.networkCost}</span>
               </div>
             </div>
-            <div className="border-t border-slate-700 pt-3 mt-3">
+            <div className="border-t border-slate-600 pt-2.5 mt-2">
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-white">Total</span>
-                <span className="text-lg font-bold text-primary">
+                <span className="font-medium text-white">Total</span>
+                <span className="text-base font-bold text-primary">
                   ≈ {tradeDetails.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {tradeDetails.receiveCurrency}
                 </span>
               </div>
@@ -125,7 +125,7 @@ export const ReviewTradeModal = ({ open, onOpenChange, tradeDetails, onConfirm }
           </div>
 
           {/* Disclaimer */}
-          <p className="text-xs text-center text-slate-400 py-1">
+          <p className="text-xs text-center text-slate-400 pt-1">
             Once confirmed, this swap is final and cannot be reversed.
           </p>
 
@@ -133,13 +133,13 @@ export const ReviewTradeModal = ({ open, onOpenChange, tradeDetails, onConfirm }
           <div className="flex gap-3 pt-1">
             <Button
               variant="outline"
-              className="flex-1 h-12 text-base font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl"
+              className="flex-1 h-11 text-sm font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl"
               onClick={() => onOpenChange(false)}
             >
               Cancel
             </Button>
             <Button
-              className="flex-1 h-12 text-base font-medium bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg shadow-primary/25"
+              className="flex-1 h-11 text-sm font-medium bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-primary/20"
               onClick={onConfirm}
             >
               Confirm swap
