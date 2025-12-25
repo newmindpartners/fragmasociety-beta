@@ -60,49 +60,46 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="space-y-6"
     >
-      {/* Main Asset Card - Premium Glassmorphism Design */}
-      <Card className="relative overflow-hidden border-0 shadow-2xl">
-        {/* Background Image with Gradient Overlay */}
+      {/* Main Asset Card - Premium Light Glassmorphism Design */}
+      <Card className="relative overflow-hidden border-0 shadow-xl rounded-2xl">
+        {/* Background Image with White Gradient Overlay */}
         <div className="absolute inset-0">
           <img 
             src={malibuVilla} 
             alt="" 
             className="w-full h-full object-cover"
           />
-          {/* Multi-layer gradient for premium depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a]/95 via-[#0f0f2a]/90 to-[#1a1a35]/95" />
-          <div className="absolute inset-0 bg-gradient-to-r from-violet-900/20 via-transparent to-purple-900/20" />
-          {/* Glossy highlight overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent" />
-          {/* Top shine effect */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          {/* White vertical gradient overlay - light mode */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/85 to-white/75" />
+          {/* Subtle side gradients for depth */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-100/30 via-transparent to-slate-100/30" />
+          {/* Top glossy highlight */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent" />
+          {/* Bottom subtle shadow */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-200/20 to-transparent" />
         </div>
         
-        {/* Ambient glow orbs */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/15 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
-        <div className="absolute top-1/2 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] translate-x-1/2" />
+        {/* Subtle ambient glow orbs */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-violet-300/10 rounded-full blur-[120px] -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-300/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
         
-        {/* Subtle noise texture */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
-        
-        {/* Inner glow border */}
-        <div className="absolute inset-0 rounded-xl border border-white/[0.1]" />
-        <div className="absolute inset-[1px] rounded-xl border border-white/[0.05]" />
+        {/* Light border */}
+        <div className="absolute inset-0 rounded-2xl border border-slate-200/60" />
+        <div className="absolute inset-[1px] rounded-2xl border border-white/80" />
 
         <div className="relative p-6 lg:p-8">
           {/* Top Row: Logo, Name, Actions */}
           <div className="flex flex-col lg:flex-row lg:items-start gap-6">
             {/* Left: Asset Identity */}
             <div className="flex items-start gap-5 flex-1">
-              {/* Asset Logo - Glassmorphism */}
+              {/* Asset Logo - Light Glassmorphism */}
               <motion.div 
                 className="relative flex-shrink-0"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br from-violet-500/30 via-purple-500/20 to-violet-600/30 border border-white/[0.15] flex items-center justify-center shadow-2xl backdrop-blur-xl">
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/60 flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-md">
                     <Building2 className="w-5 h-5 lg:w-6 lg:h-6 text-white" strokeWidth={1.5} />
                   </div>
                 </div>
@@ -111,7 +108,7 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.3, type: "spring", stiffness: 500 }}
-                  className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-[#1a1a2e] flex items-center justify-center shadow-lg shadow-emerald-500/30"
+                  className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center shadow-md"
                 >
                   <BadgeCheck className="w-3.5 h-3.5 text-white" />
                 </motion.div>
@@ -120,28 +117,28 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
               {/* Asset Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-xl lg:text-2xl font-bold text-white tracking-tight">
+                  <h1 className="text-xl lg:text-2xl font-bold text-slate-900 tracking-tight">
                     {assetData.name}
                   </h1>
-                  <span className="px-2.5 py-1 text-xs font-semibold text-violet-300 bg-violet-500/20 rounded-md border border-violet-500/30 backdrop-blur-sm">
+                  <span className="px-2.5 py-1 text-xs font-semibold text-violet-600 bg-violet-100 rounded-md border border-violet-200">
                     ${assetData.ticker}
                   </span>
                 </div>
-                <p className="text-sm lg:text-base text-white/60 leading-relaxed max-w-2xl">
+                <p className="text-sm lg:text-base text-slate-600 leading-relaxed max-w-2xl">
                   {assetData.tagline}
                 </p>
                 
-                {/* Tags - Glassmorphism style */}
+                {/* Tags - Light Glassmorphism style */}
                 <div className="flex flex-wrap gap-2 mt-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/[0.08] text-white/80 rounded-full border border-white/[0.1] backdrop-blur-sm hover:bg-white/[0.12] transition-colors cursor-default">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/70 text-slate-700 rounded-full border border-slate-200/80 backdrop-blur-sm hover:bg-white transition-colors cursor-default">
                     <Building2 className="w-3 h-3" />
                     {assetData.category}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/[0.08] text-white/80 rounded-full border border-white/[0.1] backdrop-blur-sm hover:bg-white/[0.12] transition-colors cursor-default">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/70 text-slate-700 rounded-full border border-slate-200/80 backdrop-blur-sm hover:bg-white transition-colors cursor-default">
                     <Sparkles className="w-3 h-3" />
                     {assetData.subcategory}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/[0.08] text-white/80 rounded-full border border-white/[0.1] backdrop-blur-sm hover:bg-white/[0.12] transition-colors cursor-default">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/70 text-slate-700 rounded-full border border-slate-200/80 backdrop-blur-sm hover:bg-white transition-colors cursor-default">
                     <MapPin className="w-3 h-3" />
                     {assetData.location.split(',')[0]}
                   </span>
@@ -149,7 +146,7 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
               </div>
             </div>
 
-            {/* Right: Actions - Glassmorphism buttons */}
+            {/* Right: Actions - Light style buttons */}
             <div className="flex items-center gap-3 lg:flex-shrink-0">
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
@@ -157,11 +154,11 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
                   size="sm"
                   onClick={() => setIsWatchlisted(!isWatchlisted)}
                   className={cn(
-                    "gap-2 transition-all duration-300 border-white/20 bg-white/[0.08] backdrop-blur-sm text-white hover:bg-white/[0.15] hover:text-white",
-                    isWatchlisted && "bg-violet-500/30 border-violet-500/50 text-violet-200"
+                    "gap-2 transition-all duration-300 border-slate-300 bg-white/70 backdrop-blur-sm text-slate-700 hover:bg-white hover:border-violet-300",
+                    isWatchlisted && "bg-violet-100 border-violet-300 text-violet-700"
                   )}
                 >
-                  <Heart className={cn("w-4 h-4 transition-all", isWatchlisted && "fill-current text-violet-300")} />
+                  <Heart className={cn("w-4 h-4 transition-all", isWatchlisted && "fill-current text-violet-600")} />
                   {isWatchlisted ? "Watching" : "Watch"}
                 </Button>
               </motion.div>
@@ -169,7 +166,7 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="gap-2 border-white/20 bg-white/[0.08] backdrop-blur-sm text-white hover:bg-white/[0.15] hover:text-white"
+                  className="gap-2 border-slate-300 bg-white/70 backdrop-blur-sm text-slate-700 hover:bg-white hover:border-violet-300"
                 >
                   <Share2 className="w-4 h-4" />
                   Share
@@ -188,21 +185,21 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="overflow-hidden"
               >
-                <div className="mt-6 pt-6 border-t border-white/[0.1]">
+                <div className="mt-6 pt-6 border-t border-slate-200/60">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                     {/* Column 1 */}
                     <div className="space-y-4">
                       <div>
-                        <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Location</span>
-                        <p className="mt-1 text-sm font-medium text-white flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-white/50" />
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Location</span>
+                        <p className="mt-1 text-sm font-medium text-slate-900 flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-slate-400" />
                           {assetData.location}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Inception Date</span>
-                        <p className="mt-1 text-sm font-medium text-white flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-white/50" />
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Inception Date</span>
+                        <p className="mt-1 text-sm font-medium text-slate-900 flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-slate-400" />
                           {assetData.incorporationDate}
                         </p>
                       </div>
@@ -211,16 +208,16 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
                     {/* Column 2 */}
                     <div className="space-y-4">
                       <div>
-                        <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Website</span>
-                        <a href={`https://${assetData.website}`} target="_blank" rel="noopener noreferrer" className="mt-1 text-sm font-medium text-violet-300 hover:text-violet-200 flex items-center gap-2 transition-colors">
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Website</span>
+                        <a href={`https://${assetData.website}`} target="_blank" rel="noopener noreferrer" className="mt-1 text-sm font-medium text-violet-600 hover:text-violet-700 flex items-center gap-2 transition-colors">
                           <Globe className="w-4 h-4" />
                           {assetData.website}
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       </div>
                       <div>
-                        <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Asset ID</span>
-                        <p className="mt-1 text-sm font-medium text-white font-mono">
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Asset ID</span>
+                        <p className="mt-1 text-sm font-medium text-slate-900 font-mono">
                           {assetData.companyNumber}
                         </p>
                       </div>
@@ -229,16 +226,16 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
                     {/* Column 3 */}
                     <div className="space-y-4">
                       <div>
-                        <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Total Raised</span>
-                        <p className="mt-1 text-sm font-medium text-white">
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Raised</span>
+                        <p className="mt-1 text-sm font-medium text-slate-900">
                           ${assetData.totalRaised.toLocaleString()}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Key Features</span>
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Key Features</span>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {assetData.keyFeatures.map((feature) => (
-                            <span key={feature} className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-violet-500/20 text-violet-300 rounded border border-violet-500/30">
+                            <span key={feature} className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-violet-100 text-violet-700 rounded border border-violet-200">
                               <Award className="w-3 h-3" />
                               {feature}
                             </span>
@@ -255,8 +252,8 @@ export const AssetInfoHeader = ({ activeTab = "Trade", onTabChange }: AssetInfoH
           {/* Show More Button */}
           <motion.button
             onClick={() => setShowMoreInfo(!showMoreInfo)}
-            className="mt-6 w-full py-3 flex items-center justify-center gap-2 text-sm font-medium text-white/50 hover:text-white border-t border-white/[0.1] transition-colors group"
-            whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+            className="mt-6 w-full py-3 flex items-center justify-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 border-t border-slate-200/60 transition-colors group"
+            whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
           >
             <span>{showMoreInfo ? "Show less" : "Show more details"}</span>
             <motion.div
