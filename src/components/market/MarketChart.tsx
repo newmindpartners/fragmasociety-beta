@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { ArrowRightLeft, TrendingUp, TrendingDown, BarChart3, LineChart } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, ComposedChart, Customized } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, ComposedChart, Customized, Bar, Cell, BarChart } from "recharts";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 const timeRanges = ["1D", "7D", "1M", "6M", "1Y", "All"];
@@ -145,7 +145,7 @@ const CandlestickRenderer = ({ data, xAxisMap, yAxisMap, offset }: CandlestickRe
 export const MarketChart = () => {
   const [selectedRange, setSelectedRange] = useState("1M");
   const [chartType, setChartType] = useState<ChartType>("line");
-  const [showVolume, setShowVolume] = useState(false);
+  const [showVolume, setShowVolume] = useState(true);
   
   const chartData = generateChartData(
     selectedRange === "1D" ? 1 : 
@@ -252,25 +252,22 @@ export const MarketChart = () => {
 
       {/* Legend */}
       <div className="flex items-center gap-4 mb-4">
-        <button
-          onClick={() => setShowVolume(false)}
-          className={`flex items-center gap-2 text-xs ${!showVolume ? 'text-primary' : 'text-muted-foreground'}`}
-        >
+        <div className="flex items-center gap-2 text-xs text-primary">
           <span className="w-2 h-2 rounded-full bg-primary/60" />
           Price
-        </button>
+        </div>
         <button
-          onClick={() => setShowVolume(true)}
-          className={`flex items-center gap-2 text-xs ${showVolume ? 'text-primary' : 'text-muted-foreground'}`}
+          onClick={() => setShowVolume(!showVolume)}
+          className={`flex items-center gap-2 text-xs transition-colors ${showVolume ? 'text-primary' : 'text-muted-foreground'}`}
         >
-          <span className="w-2 h-2 rounded-full bg-primary" />
-          Volume
+          <span className={`w-2 h-2 rounded-full ${showVolume ? 'bg-primary' : 'bg-muted-foreground/50'}`} />
+          Volume {showVolume ? '(on)' : '(off)'}
         </button>
-        <InfoTooltip content="Toggle between price and volume chart views" />
+        <InfoTooltip content="Toggle volume bars below the price chart" />
       </div>
 
-      {/* Chart */}
-      <div className="h-[280px] -mx-2">
+      {/* Price Chart */}
+      <div className={showVolume ? "h-[200px]" : "h-[280px]"} style={{ marginLeft: '-8px', marginRight: '-8px' }}>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "line" ? (
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -292,6 +289,7 @@ export const MarketChart = () => {
                 tickLine={false}
                 tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                 dy={10}
+                hide={showVolume}
               />
               <YAxis 
                 orientation="right"
@@ -311,11 +309,11 @@ export const MarketChart = () => {
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600, marginBottom: '4px' }}
                 itemStyle={{ color: 'hsl(var(--muted-foreground))' }}
-                formatter={(value: number) => [value.toFixed(6), showVolume ? 'Volume' : 'Price']}
+                formatter={(value: number) => [value.toFixed(6), 'Price']}
               />
               <Area
                 type="monotone"
-                dataKey={showVolume ? "volume" : "close"}
+                dataKey="close"
                 stroke="hsl(var(--primary))"
                 strokeWidth={2}
                 fill="url(#priceGradient)"
@@ -337,6 +335,7 @@ export const MarketChart = () => {
                 tickLine={false}
                 tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                 dy={10}
+                hide={showVolume}
               />
               <YAxis 
                 yAxisId="price"
@@ -384,6 +383,51 @@ export const MarketChart = () => {
           )}
         </ResponsiveContainer>
       </div>
+
+      {/* Volume Chart */}
+      {showVolume && (
+        <div className="h-[80px] mt-1" style={{ marginLeft: '-8px', marginRight: '-8px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
+              <XAxis 
+                dataKey="date" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                dy={5}
+              />
+              <YAxis 
+                orientation="right"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 9 }}
+                tickFormatter={(value) => value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}
+                width={35}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  padding: '8px 12px',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600, marginBottom: '2px', fontSize: '12px' }}
+                formatter={(value: number) => [value.toLocaleString(), 'Volume']}
+              />
+              <Bar dataKey="volume" radius={[2, 2, 0, 0]}>
+                {chartData.map((entry, index) => (
+                  <Cell 
+                    key={`vol-${index}`} 
+                    fill={entry.close >= entry.open ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)"} 
+                    fillOpacity={0.6}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       {/* Interactive Price Line Indicator */}
       <div className="relative mt-2 h-1 bg-muted/30 rounded-full overflow-hidden">
