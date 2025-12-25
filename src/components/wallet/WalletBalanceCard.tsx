@@ -3,6 +3,7 @@ import { Copy, MoreHorizontal, Plus, ArrowUpRight, ArrowDownUp } from "lucide-re
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { WalletSwapModal } from "./WalletSwapModal";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface WalletBalanceCardProps {
   onCredit: () => void;
@@ -82,7 +83,14 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
           </div>
 
           {/* Available Label */}
-          <p className="text-xs text-white/40 uppercase tracking-wider font-medium mb-2">Available Balance</p>
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-xs text-white/40 uppercase tracking-wider font-medium">Available Balance</p>
+            <InfoTooltip 
+              content="Funds available for trading, withdrawals, or reinvestment. This excludes amounts locked in pending orders."
+              iconClassName="text-white/30 hover:text-white/60 w-3 h-3"
+              className="hover:bg-white/10"
+            />
+          </div>
 
           {/* Main USD Balance */}
           <div className="mb-5">
