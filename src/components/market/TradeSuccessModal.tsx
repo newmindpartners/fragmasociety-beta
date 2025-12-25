@@ -110,7 +110,7 @@ export const TradeSuccessModal = ({ open, onOpenChange, tradeDetails, onClose }:
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl rounded-2xl">
+      <DialogContent hideClose className="sm:max-w-[440px] p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl rounded-2xl">
         {/* Confetti Container */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <AnimatePresence>
@@ -128,9 +128,9 @@ export const TradeSuccessModal = ({ open, onOpenChange, tradeDetails, onClose }:
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 z-10"
+          className="absolute right-4 top-4 w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 z-10"
         >
-          <X className="w-5 h-5 text-slate-500" />
+          <X className="w-4 h-4 text-slate-500" />
         </button>
 
         <div className="p-8 pt-10 text-center relative z-10">
