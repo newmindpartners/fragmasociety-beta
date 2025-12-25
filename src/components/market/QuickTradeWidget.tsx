@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Zap, TrendingUp, TrendingDown, Sparkles } from "lucide-react";
+import { Zap, TrendingUp, TrendingDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -10,10 +10,12 @@ interface QuickTradeWidgetProps {
   onSubmitTrade: (details: TradeDetails) => void;
 }
 
-const presetAmounts = [100, 250, 500, 1000];
+const presetUsdAmounts = [100, 250, 500, 1000];
+const presetTokenAmounts = [1, 2, 5, 10];
 
 export const QuickTradeWidget = ({ onSubmitTrade }: QuickTradeWidgetProps) => {
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [selectedBuyAmount, setSelectedBuyAmount] = useState<number | null>(null);
+  const [selectedSellAmount, setSelectedSellAmount] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Mock market data
@@ -22,23 +24,48 @@ export const QuickTradeWidget = ({ onSubmitTrade }: QuickTradeWidgetProps) => {
   const priceChangePercent = 3.21;
   const tokenSymbol = "MLV";
 
-  const handleQuickTrade = (type: "buy" | "sell") => {
-    if (!selectedAmount) return;
+  const handleQuickBuy = () => {
+    if (!selectedBuyAmount) return;
     
     setIsProcessing(true);
     
-    const tokensReceived = selectedAmount / currentPrice;
+    const tokensReceived = selectedBuyAmount / currentPrice;
     
     const details: TradeDetails = {
-      type,
-      payAmount: selectedAmount,
+      type: "buy",
+      payAmount: selectedBuyAmount,
       payCurrency: "USDC",
       receiveAmount: tokensReceived,
       receiveCurrency: "USDC",
       rate: `$${currentPrice.toFixed(2)} per ${tokenSymbol}`,
-      fee: selectedAmount * 0.02,
+      fee: selectedBuyAmount * 0.02,
       networkCost: 2.50,
       total: tokensReceived,
+    };
+    
+    setTimeout(() => {
+      setIsProcessing(false);
+      onSubmitTrade(details);
+    }, 300);
+  };
+
+  const handleQuickSell = () => {
+    if (!selectedSellAmount) return;
+    
+    setIsProcessing(true);
+    
+    const usdReceived = selectedSellAmount * currentPrice;
+    
+    const details: TradeDetails = {
+      type: "sell",
+      payAmount: selectedSellAmount,
+      payCurrency: "USDC",
+      receiveAmount: usdReceived,
+      receiveCurrency: "USDC",
+      rate: `$${currentPrice.toFixed(2)} per ${tokenSymbol}`,
+      fee: usdReceived * 0.02,
+      networkCost: 2.50,
+      total: usdReceived,
     };
     
     setTimeout(() => {
@@ -80,78 +107,83 @@ export const QuickTradeWidget = ({ onSubmitTrade }: QuickTradeWidgetProps) => {
           </div>
         </div>
 
-        {/* Preset Amount Buttons */}
-        <div className="grid grid-cols-4 gap-2 mb-4">
-          {presetAmounts.map((amount, index) => (
-            <motion.button
-              key={amount}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              onClick={() => setSelectedAmount(selectedAmount === amount ? null : amount)}
-              className={cn(
-                "relative py-3 px-2 rounded-xl text-center font-semibold transition-all duration-200 border",
-                selectedAmount === amount
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
-                  : "bg-muted/30 text-foreground border-border/50 hover:bg-muted/50 hover:border-primary/30"
-              )}
-            >
-              {selectedAmount === amount && (
-                <motion.div
-                  layoutId="selectedAmount"
-                  className="absolute inset-0 bg-primary rounded-xl"
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">${amount}</span>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Token Preview */}
-        {selectedAmount && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            className="mb-4 p-3 rounded-lg bg-muted/30 border border-border/50"
-          >
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">You'll receive approximately</span>
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-primary" />
-                <span className="font-bold text-foreground">
-                  {(selectedAmount / currentPrice).toFixed(4)} {tokenSymbol}
-                </span>
-              </div>
+        {/* Buy Section */}
+        <div className="space-y-3 pb-4 border-b border-border/30">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-green-600" />
+            <span className="text-sm font-medium text-foreground">Buy with USD</span>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {presetUsdAmounts.map((amount, index) => (
+              <motion.button
+                key={amount}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                onClick={() => setSelectedBuyAmount(selectedBuyAmount === amount ? null : amount)}
+                className={cn(
+                  "relative py-2.5 px-2 rounded-xl text-center font-semibold text-sm transition-all duration-200 border",
+                  selectedBuyAmount === amount
+                    ? "bg-green-600 text-white border-green-600 shadow-lg shadow-green-600/20"
+                    : "bg-muted/30 text-foreground border-border/50 hover:bg-muted/50 hover:border-green-600/30"
+                )}
+              >
+                ${amount}
+              </motion.button>
+            ))}
+          </div>
+          {selectedBuyAmount && (
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>You'll receive ~{(selectedBuyAmount / currentPrice).toFixed(4)} {tokenSymbol}</span>
             </div>
-          </motion.div>
-        )}
-
-        {/* Quick Action Buttons */}
-        <div className="grid grid-cols-2 gap-3">
+          )}
           <Button
-            onClick={() => handleQuickTrade("buy")}
-            disabled={!selectedAmount || isProcessing}
-            className={cn(
-              "py-5 font-semibold text-sm transition-all",
-              "bg-green-600 hover:bg-green-700 text-white",
-              "disabled:opacity-50 disabled:cursor-not-allowed"
-            )}
+            onClick={handleQuickBuy}
+            disabled={!selectedBuyAmount || isProcessing}
+            className="w-full py-4 font-semibold text-sm bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
           >
             <TrendingUp className="w-4 h-4 mr-2" />
-            {isProcessing ? "Processing..." : "Market Buy"}
+            {isProcessing ? "Processing..." : `Market Buy${selectedBuyAmount ? ` $${selectedBuyAmount}` : ''}`}
           </Button>
+        </div>
+
+        {/* Sell Section */}
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center gap-2">
+            <TrendingDown className="w-4 h-4 text-red-500" />
+            <span className="text-sm font-medium text-foreground">Sell {tokenSymbol} Tokens</span>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {presetTokenAmounts.map((amount, index) => (
+              <motion.button
+                key={amount}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                onClick={() => setSelectedSellAmount(selectedSellAmount === amount ? null : amount)}
+                className={cn(
+                  "relative py-2.5 px-2 rounded-xl text-center font-semibold text-sm transition-all duration-200 border",
+                  selectedSellAmount === amount
+                    ? "bg-red-500 text-white border-red-500 shadow-lg shadow-red-500/20"
+                    : "bg-muted/30 text-foreground border-border/50 hover:bg-muted/50 hover:border-red-500/30"
+                )}
+              >
+                {amount} {tokenSymbol}
+              </motion.button>
+            ))}
+          </div>
+          {selectedSellAmount && (
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>You'll receive ~${(selectedSellAmount * currentPrice).toFixed(2)} USDC</span>
+            </div>
+          )}
           <Button
-            onClick={() => handleQuickTrade("sell")}
-            disabled={!selectedAmount || isProcessing}
-            className={cn(
-              "py-5 font-semibold text-sm transition-all",
-              "bg-red-500 hover:bg-red-600 text-white",
-              "disabled:opacity-50 disabled:cursor-not-allowed"
-            )}
+            onClick={handleQuickSell}
+            disabled={!selectedSellAmount || isProcessing}
+            className="w-full py-4 font-semibold text-sm bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
           >
             <TrendingDown className="w-4 h-4 mr-2" />
-            {isProcessing ? "Processing..." : "Market Sell"}
+            {isProcessing ? "Processing..." : `Market Sell${selectedSellAmount ? ` ${selectedSellAmount} ${tokenSymbol}` : ''}`}
           </Button>
         </div>
 
