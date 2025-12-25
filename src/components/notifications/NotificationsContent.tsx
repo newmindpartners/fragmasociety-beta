@@ -32,6 +32,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { NotificationPreferencesPanel } from "./NotificationPreferencesPanel";
 
 type NotificationType = "investment" | "payout" | "document" | "alert" | "reward" | "system";
 type NotificationFilter = "all" | "unread" | "investment" | "payout" | "document" | "alert";
@@ -168,7 +169,7 @@ export const NotificationsContent = () => {
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [filter, setFilter] = useState<NotificationFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const filteredNotifications = notifications.filter(n => {
@@ -240,12 +241,19 @@ export const NotificationsContent = () => {
           <Button 
             variant="outline" 
             size="sm"
+            onClick={() => setPreferencesOpen(true)}
             className="gap-2 border-slate-300 text-slate-700 hover:bg-slate-50"
           >
             <Settings2 className="w-4 h-4" />
             Settings
           </Button>
         </div>
+
+        {/* Preferences Panel */}
+        <NotificationPreferencesPanel 
+          open={preferencesOpen} 
+          onOpenChange={setPreferencesOpen} 
+        />
       </div>
 
       {/* Filters & Search Bar */}
