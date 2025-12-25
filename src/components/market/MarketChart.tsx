@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { ArrowRightLeft, TrendingUp, TrendingDown, BarChart3, LineChart } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Bar, ComposedChart, Cell } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, ComposedChart, Customized } from "recharts";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 const timeRanges = ["1D", "7D", "1M", "6M", "1Y", "All"];
 
 type ChartType = "line" | "candlestick";
 
+interface OHLCData {
+  date: string;
+  price: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
 // Generate mock chart data with OHLC for candlestick
-const generateChartData = (days: number) => {
-  const data = [];
+const generateChartData = (days: number): OHLCData[] => {
+  const data: OHLCData[] = [];
   const basePrice = 0.604;
   const now = new Date();
   
@@ -39,36 +49,67 @@ const generateChartData = (days: number) => {
   return data;
 };
 
-// Custom Candlestick shape component
-const CandlestickBar = (props: any) => {
-  const { x, y, width, height, open, close, high, low, yAxisScale } = props;
-  const isGreen = close >= open;
-  const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
+// Custom Candlestick SVG renderer
+interface CandlestickRendererProps {
+  data: OHLCData[];
+  xAxisMap?: any;
+  yAxisMap?: any;
+}
+
+const CandlestickRenderer = ({ data, xAxisMap, yAxisMap }: CandlestickRendererProps) => {
+  if (!xAxisMap || !yAxisMap) return null;
   
-  const wickX = x + width / 2;
-  const highY = yAxisScale ? yAxisScale(high) : y;
-  const lowY = yAxisScale ? yAxisScale(low) : y + height;
+  const xAxis = Object.values(xAxisMap)[0] as any;
+  const yAxis = Object.values(yAxisMap)[0] as any;
+  
+  if (!xAxis?.scale || !yAxis?.scale) return null;
+  
+  const xScale = xAxis.scale;
+  const yScale = yAxis.scale;
+  const bandwidth = xAxis.bandSize || 10;
+  const candleWidth = Math.max(bandwidth * 0.6, 4);
   
   return (
-    <g>
-      {/* Wick */}
-      <line
-        x1={wickX}
-        y1={highY}
-        x2={wickX}
-        y2={lowY}
-        stroke={color}
-        strokeWidth={1}
-      />
-      {/* Body */}
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={Math.max(height, 2)}
-        fill={color}
-        rx={1}
-      />
+    <g className="candlestick-layer">
+      {data.map((entry, index) => {
+        const x = xScale(index);
+        if (x === undefined) return null;
+        
+        const highY = yScale(entry.high);
+        const lowY = yScale(entry.low);
+        const openY = yScale(entry.open);
+        const closeY = yScale(entry.close);
+        
+        const isGreen = entry.close >= entry.open;
+        const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
+        
+        const bodyTop = Math.min(openY, closeY);
+        const bodyHeight = Math.max(Math.abs(openY - closeY), 2);
+        const wickX = x + candleWidth / 2;
+        
+        return (
+          <g key={`candle-${index}`}>
+            {/* Wick (high to low line) */}
+            <line
+              x1={wickX}
+              y1={highY}
+              x2={wickX}
+              y2={lowY}
+              stroke={color}
+              strokeWidth={1.5}
+            />
+            {/* Body (open to close rectangle) */}
+            <rect
+              x={x}
+              y={bodyTop}
+              width={candleWidth}
+              height={bodyHeight}
+              fill={color}
+              rx={1}
+            />
+          </g>
+        );
+      })}
     </g>
   );
 };
@@ -306,31 +347,16 @@ export const MarketChart = () => {
                   return null;
                 }}
               />
-              {/* Candlestick bars using individual rectangles */}
-              {chartData.map((entry, index) => {
-                const isGreen = entry.close >= entry.open;
-                return (
-                  <Bar 
-                    key={`candle-${index}`}
-                    yAxisId="price"
-                    dataKey="high" 
-                    fill={isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)"}
-                    hide
+              {/* Custom SVG Candlestick Layer */}
+              <Customized 
+                component={(props: any) => (
+                  <CandlestickRenderer 
+                    data={chartData} 
+                    xAxisMap={props.xAxisMap} 
+                    yAxisMap={props.yAxisMap} 
                   />
-                );
-              })}
-              <Bar 
-                yAxisId="price"
-                dataKey="close" 
-                barSize={8}
-              >
-                {chartData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={entry.close >= entry.open ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)"} 
-                  />
-                ))}
-              </Bar>
+                )}
+              />
             </ComposedChart>
           )}
         </ResponsiveContainer>
