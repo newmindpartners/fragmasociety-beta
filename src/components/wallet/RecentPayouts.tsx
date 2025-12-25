@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { PayoutDetailDrawer } from "./PayoutDetailDrawer";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 type PayoutStatus = "paid" | "processing" | "upcoming";
 
@@ -96,7 +97,13 @@ export const RecentPayouts = ({ onViewAll }: RecentPayoutsProps) => {
     <>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-800">Recent payouts</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-slate-800">Recent payouts</h3>
+            <InfoTooltip 
+              content="Your latest earnings and distributions from active investments. Click on any payout for detailed transaction information."
+              side="right"
+            />
+          </div>
           {onViewAll && (
             <Button
               variant="ghost"

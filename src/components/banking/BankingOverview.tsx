@@ -12,6 +12,7 @@ import { AddBankAccountModal } from "./AddBankAccountModal";
 import { NotificationSettingsModal } from "./NotificationSettingsModal";
 import { usePaymentMethods } from "@/hooks/usePaymentMethods";
 import { toast } from "sonner";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -130,7 +131,13 @@ export const BankingOverview = () => {
                     <CreditCard className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Payment Methods</h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-foreground">Payment Methods</h3>
+                      <InfoTooltip 
+                        content="Add and manage your payment methods for deposits and withdrawals. Your preferred method will be used by default."
+                        side="right"
+                      />
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {paymentMethods.length > 0 
                         ? `${paymentMethods.length} method${paymentMethods.length > 1 ? 's' : ''} connected`

@@ -2,6 +2,7 @@ import { TrendingUp, Calendar, Briefcase, Clock, ChevronRight } from "lucide-rea
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { EarningsDetailsDrawer } from "./EarningsDetailsDrawer";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface TotalInvestedCardProps {
   totalInvested?: number;
@@ -64,7 +65,14 @@ export const TotalInvestedCard = ({
           </div>
 
           {/* Total Invested */}
-          <p className="text-xs text-white/40 uppercase tracking-wider font-medium mb-1">Total Invested</p>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-xs text-white/40 uppercase tracking-wider font-medium">Total Invested</p>
+            <InfoTooltip 
+              content="The total amount you have invested across all active deals in your portfolio." 
+              iconClassName="text-white/30 hover:text-white/60 w-3 h-3"
+              className="hover:bg-white/10"
+            />
+          </div>
           <div className="mb-4">
             <p className="text-[2.5rem] font-bold text-white tracking-tight leading-none">
               <span className="text-white/80">€</span>{totalInvested.toLocaleString()}
@@ -72,7 +80,14 @@ export const TotalInvestedCard = ({
           </div>
 
           {/* Total Earnings */}
-          <p className="text-xs text-white/40 uppercase tracking-wider font-medium mb-1">Total Earnings</p>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-xs text-white/40 uppercase tracking-wider font-medium">Total Earnings</p>
+            <InfoTooltip 
+              content="Your cumulative earnings from all investments, including dividends and capital gains." 
+              iconClassName="text-white/30 hover:text-white/60 w-3 h-3"
+              className="hover:bg-white/10"
+            />
+          </div>
           <div className="flex items-baseline gap-3 mb-4">
             <p className="text-xl font-bold text-white tracking-tight">
               <span className="text-white/80">€</span>{totalEarnings.toLocaleString()}
@@ -95,6 +110,12 @@ export const TotalInvestedCard = ({
                   <Clock className="w-3 h-3 text-amber-400" />
                 </div>
                 <span className="text-[10px] text-amber-400/80 uppercase tracking-wider font-medium">In Progress</span>
+                <InfoTooltip 
+                  content="Earnings currently being processed. These will be available in your wallet soon." 
+                  iconClassName="text-amber-400/50 hover:text-amber-400 w-2.5 h-2.5"
+                  className="hover:bg-amber-500/20 ml-auto"
+                  side="top"
+                />
               </div>
               <p className="text-lg font-bold text-white">€{inProgress.toFixed(2)}</p>
               <div className="flex items-center gap-0.5 mt-1">
@@ -110,6 +131,12 @@ export const TotalInvestedCard = ({
                   <TrendingUp className="w-3 h-3 text-emerald-400" />
                 </div>
                 <span className="text-[10px] text-emerald-400/80 uppercase tracking-wider font-medium">Upcoming</span>
+                <InfoTooltip 
+                  content="Expected earnings scheduled for this month based on your active investments." 
+                  iconClassName="text-emerald-400/50 hover:text-emerald-400 w-2.5 h-2.5"
+                  className="hover:bg-emerald-500/20 ml-auto"
+                  side="top"
+                />
               </div>
               <p className="text-lg font-bold text-white">€{upcomingThisMonth.toFixed(2)}</p>
               <span className="text-[10px] text-white/40">This month</span>

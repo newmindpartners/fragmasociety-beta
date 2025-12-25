@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Briefcase, TrendingUp, X, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DealEarnings } from "@/components/deal-details/DealEarnings";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface PortfolioDeal {
   id: string;
@@ -128,9 +129,17 @@ export const PortfolioEarningsSelector = () => {
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-serif font-semibold text-slate-900">
-            {selectedDeal ? "Deal Earnings" : "My Portfolio"}
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-2xl font-serif font-semibold text-slate-900">
+              {selectedDeal ? "Deal Earnings" : "My Portfolio"}
+            </h2>
+            {!selectedDeal && (
+              <InfoTooltip 
+                content="View all your active investments and click on any deal to see detailed earnings breakdown and payout history."
+                side="right"
+              />
+            )}
+          </div>
           <p className="text-sm text-slate-500 mt-1">
             {selectedDeal 
               ? `Viewing earnings for ${selectedDeal.name}` 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, TrendingUp, Coins, ArrowRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface EarningsNotification {
   id: string;
@@ -114,6 +115,12 @@ export const EarningsNotificationBanner = ({
                   <RefreshCw className="w-3.5 h-3.5 mr-1" />
                   Reinvest
                 </Button>
+                <InfoTooltip 
+                  content="Reinvest your earnings into the same or different deals to compound your returns."
+                  iconClassName="text-white/40 hover:text-white/70 w-3 h-3"
+                  className="hover:bg-white/10"
+                  side="left"
+                />
               </div>
 
               {/* Close Button */}

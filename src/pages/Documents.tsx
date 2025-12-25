@@ -5,6 +5,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DocumentsStatements } from "@/components/documents/DocumentsStatements";
 import { DocumentsTaxDocuments } from "@/components/documents/DocumentsTaxDocuments";
 import { DocumentsUploads } from "@/components/documents/DocumentsUploads";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 import { cn } from "@/lib/utils";
 
 type TabType = "statements" | "tax" | "uploads";
@@ -41,44 +42,74 @@ const Documents = () => {
             >
               {/* Page Header */}
               <div className="mb-6">
-                <h1 className="text-2xl font-serif text-foreground">Documents</h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-serif text-foreground">Documents</h1>
+                  <InfoTooltip 
+                    content="Access your trade statements, tax documents, and uploaded files. All documents are securely stored and encrypted."
+                    side="right"
+                  />
+                </div>
               </div>
 
               {/* Tabs */}
               <div className="flex gap-2 mb-8">
-                <button
-                  onClick={() => setActiveTab("statements")}
-                  className={cn(
-                    "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
-                    activeTab === "statements"
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setActiveTab("statements")}
+                    className={cn(
+                      "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                      activeTab === "statements"
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                    )}
+                  >
+                    Statements
+                  </button>
+                  {activeTab === "statements" && (
+                    <InfoTooltip 
+                      content="Monthly trade statements summarizing your investment activity, transactions, and portfolio performance."
+                      side="bottom"
+                    />
                   )}
-                >
-                  Statements
-                </button>
-                <button
-                  onClick={() => setActiveTab("tax")}
-                  className={cn(
-                    "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
-                    activeTab === "tax"
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setActiveTab("tax")}
+                    className={cn(
+                      "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                      activeTab === "tax"
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                    )}
+                  >
+                    Tax Documents
+                  </button>
+                  {activeTab === "tax" && (
+                    <InfoTooltip 
+                      content="Annual tax forms and reports for your investment income. Consult your tax advisor for specific guidance."
+                      side="bottom"
+                    />
                   )}
-                >
-                  Tax Documents
-                </button>
-                <button
-                  onClick={() => setActiveTab("uploads")}
-                  className={cn(
-                    "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
-                    activeTab === "uploads"
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setActiveTab("uploads")}
+                    className={cn(
+                      "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                      activeTab === "uploads"
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                    )}
+                  >
+                    My Uploads
+                  </button>
+                  {activeTab === "uploads" && (
+                    <InfoTooltip 
+                      content="Documents you've uploaded for verification or record-keeping, such as ID proofs or signed agreements."
+                      side="bottom"
+                    />
                   )}
-                >
-                  My Uploads
-                </button>
+                </div>
               </div>
 
               {/* Tab Content */}
