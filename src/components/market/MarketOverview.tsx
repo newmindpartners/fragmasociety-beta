@@ -17,7 +17,7 @@ export const MarketOverview = () => {
       </div>
 
       <Tabs defaultValue="orderbook" className="w-full">
-        <TabsList className="w-full grid grid-cols-4 bg-muted/30 p-1 rounded-lg">
+        <TabsList className="w-full grid grid-cols-3 bg-muted/30 p-1 rounded-lg">
           <TabsTrigger 
             value="orderbook"
             className="data-[state=active]:bg-card data-[state=active]:shadow-sm rounded-md py-2.5 text-xs sm:text-sm font-medium"
@@ -36,12 +36,6 @@ export const MarketOverview = () => {
           >
             Order History
           </TabsTrigger>
-          <TabsTrigger 
-            value="markethistory"
-            className="data-[state=active]:bg-card data-[state=active]:shadow-sm rounded-md py-2.5 text-xs sm:text-sm font-medium"
-          >
-            Market
-          </TabsTrigger>
         </TabsList>
 
         <div className="mt-6">
@@ -55,10 +49,6 @@ export const MarketOverview = () => {
           
           <TabsContent value="orderhistory" className="m-0">
             <OrderHistory />
-          </TabsContent>
-          
-          <TabsContent value="markethistory" className="m-0">
-            <MarketHistory />
           </TabsContent>
         </div>
       </Tabs>
