@@ -134,14 +134,15 @@ export const PortfolioEarningsSelector = () => {
       <AnimatePresence mode="wait">
         {!selectedDeal ? (
           /* Deal Selection Grid */
-          <motion.div
-            key="portfolio-grid"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="grid gap-4 max-h-[400px] overflow-y-auto pr-2"
-          >
+          <div className="relative">
+            <motion.div
+              key="portfolio-grid"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="grid gap-4 max-h-[400px] overflow-y-auto pr-2 pb-8"
+            >
             {mockPortfolioDeals.map((deal, index) => (
               <motion.button
                 key={deal.id}
@@ -198,7 +199,10 @@ export const PortfolioEarningsSelector = () => {
                 </p>
               </div>
             )}
-          </motion.div>
+            </motion.div>
+            {/* Gradient fade overlay */}
+            <div className="absolute bottom-0 left-0 right-2 h-16 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
+          </div>
         ) : (
           /* Deal Earnings Detail */
           <motion.div
