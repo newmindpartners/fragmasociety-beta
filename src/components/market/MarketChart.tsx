@@ -270,11 +270,12 @@ export const MarketChart = () => {
                 dy={10}
               />
               <YAxis 
+                yAxisId="price"
                 orientation="right"
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-                domain={['dataMin - 0.002', 'dataMax + 0.002']}
+                domain={[(dataMin: number) => dataMin - 0.002, (dataMax: number) => dataMax + 0.002]}
                 tickFormatter={(value) => value.toFixed(4)}
               />
               <Tooltip 
@@ -305,47 +306,23 @@ export const MarketChart = () => {
                   return null;
                 }}
               />
+              {/* Candlestick bars using individual rectangles */}
+              {chartData.map((entry, index) => {
+                const isGreen = entry.close >= entry.open;
+                return (
+                  <Bar 
+                    key={`candle-${index}`}
+                    yAxisId="price"
+                    dataKey="high" 
+                    fill={isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)"}
+                    hide
+                  />
+                );
+              })}
               <Bar 
+                yAxisId="price"
                 dataKey="close" 
                 barSize={8}
-                shape={(props: any) => {
-                  const { x, y, width, height, payload } = props;
-                  const isGreen = payload.close >= payload.open;
-                  const color = isGreen ? "hsl(142, 76%, 36%)" : "hsl(0, 84%, 60%)";
-                  
-                  // Calculate body position
-                  const openY = props.yAxis.scale(payload.open);
-                  const closeY = props.yAxis.scale(payload.close);
-                  const highY = props.yAxis.scale(payload.high);
-                  const lowY = props.yAxis.scale(payload.low);
-                  
-                  const bodyTop = Math.min(openY, closeY);
-                  const bodyHeight = Math.abs(openY - closeY) || 2;
-                  const wickX = x + width / 2;
-                  
-                  return (
-                    <g>
-                      {/* Wick */}
-                      <line
-                        x1={wickX}
-                        y1={highY}
-                        x2={wickX}
-                        y2={lowY}
-                        stroke={color}
-                        strokeWidth={1.5}
-                      />
-                      {/* Body */}
-                      <rect
-                        x={x}
-                        y={bodyTop}
-                        width={width}
-                        height={bodyHeight}
-                        fill={color}
-                        rx={1}
-                      />
-                    </g>
-                  );
-                }}
               >
                 {chartData.map((entry, index) => (
                   <Cell 
