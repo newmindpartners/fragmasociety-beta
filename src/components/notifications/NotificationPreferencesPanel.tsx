@@ -258,7 +258,7 @@ export const NotificationPreferencesPanel = ({
                               <Switch
                                 checked={preferences[category.id][channel.id as keyof ChannelPreferences]}
                                 onCheckedChange={() => togglePreference(category.id, channel.id as keyof ChannelPreferences)}
-                                className="data-[state=checked]:bg-slate-900 data-[state=unchecked]:bg-slate-200"
+                                className="data-[state=checked]:bg-violet-400 data-[state=unchecked]:bg-slate-200"
                               />
                               <div className="flex items-center gap-1.5">
                                 <channel.icon className={cn(
