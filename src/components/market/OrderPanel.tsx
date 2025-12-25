@@ -133,37 +133,47 @@ export const OrderPanel = ({ onSubmitTrade }: OrderPanelProps) => {
     <div className="relative">
       <button
         onClick={() => setShowPayDropdown(!showPayDropdown)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors"
       >
         {currencyConfig[payCurrency].icon}
-        <span className="font-medium text-foreground">{payCurrency}</span>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${showPayDropdown ? 'rotate-180' : ''}`} />
+        <span className="font-medium">{payCurrency}</span>
+        <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${showPayDropdown ? 'rotate-180' : ''}`} />
       </button>
       
       <AnimatePresence>
         {showPayDropdown && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 top-full mt-2 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden min-w-[120px]"
-          >
-            {paymentCurrencies.map((currency) => (
-              <button
-                key={currency}
-                onClick={() => {
-                  setPayCurrency(currency);
-                  setShowPayDropdown(false);
-                }}
-                className={`w-full flex items-center gap-2 px-3 py-2.5 hover:bg-muted/50 transition-colors ${
-                  payCurrency === currency ? 'bg-primary/10' : ''
-                }`}
-              >
-                {currencyConfig[currency].icon}
-                <span className="font-medium text-foreground">{currency}</span>
-              </button>
-            ))}
-          </motion.div>
+          <>
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 z-[999]" 
+              onClick={() => setShowPayDropdown(false)} 
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="absolute right-0 top-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[1000] overflow-hidden min-w-[140px] p-1"
+            >
+              {paymentCurrencies.map((currency, index) => (
+                <button
+                  key={currency}
+                  onClick={() => {
+                    setPayCurrency(currency);
+                    setShowPayDropdown(false);
+                  }}
+                  className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-150 ease-out hover:scale-[1.02] hover:shadow-sm ${
+                    payCurrency === currency 
+                      ? 'bg-violet-500 text-white font-medium shadow-md' 
+                      : 'text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  {currencyConfig[currency].icon}
+                  <span className="font-medium">{currency}</span>
+                </button>
+              ))}
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
