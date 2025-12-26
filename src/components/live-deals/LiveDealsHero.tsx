@@ -29,7 +29,7 @@ export const LiveDealsHero = () => {
 
         {/* Description */}
         <p className="text-base sm:text-lg md:text-xl text-slate-400 font-light max-w-2xl leading-relaxed mb-10 sm:mb-16">
-          Exclusive access to curated extraordinary assets, led by industry icons.
+          Exclusive access to curated assets, led by industry icons.
         </p>
 
         {/* Stats cards - 2x2 grid on mobile, 4 cols on desktop */}
