@@ -93,7 +93,7 @@ export const PaymentMethods = () => {
               {method.type === "card" ? (method.card_brand || "Card") : (method.bank_name || "Bank Account")}
             </span>
             {method.is_default && (
-              <Badge variant="secondary" className="bg-primary/10 text-primary border-0 text-xs">
+              <Badge variant="secondary" className="bg-slate-200 text-slate-700 border-0 text-xs">
                 Default
               </Badge>
             )}
@@ -133,7 +133,7 @@ export const PaymentMethods = () => {
   return (
     <div>
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-primary mb-6">
+      <div className="flex items-center gap-2 text-sm text-slate-700 mb-6">
         <Link to="/dashboard/banking" className="hover:underline">
           Banking
         </Link>
@@ -183,7 +183,7 @@ export const PaymentMethods = () => {
       {/* Add Payment Method Button */}
       <Button
         variant="ghost"
-        className="text-primary hover:text-primary/80 hover:bg-transparent p-0 h-auto font-medium"
+        className="text-slate-700 hover:text-slate-900 hover:bg-transparent p-0 h-auto font-medium"
         onClick={() => setSelectorOpen(true)}
       >
         <Plus className="w-4 h-4 mr-2" />
@@ -193,7 +193,7 @@ export const PaymentMethods = () => {
       {/* Current Balance Card */}
       <div className="bg-card border border-border rounded-2xl p-6 mt-8">
         <h3 className="font-semibold text-foreground mb-2">Your Current Balance</h3>
-        <p className="text-primary text-lg">US$0.00 Available</p>
+        <p className="text-slate-700 text-lg">US$0.00 Available</p>
       </div>
 
       <PaymentMethodSelector 

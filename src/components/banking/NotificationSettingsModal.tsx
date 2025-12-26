@@ -23,8 +23,8 @@ export const NotificationSettingsModal = ({ open, onOpenChange }: NotificationSe
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="theme-dashboard sm:max-w-md bg-white border-gray-200 text-gray-900 max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader className="space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Bell className="w-6 h-6 text-primary" />
+          <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+            <Bell className="w-6 h-6 text-slate-700" />
           </div>
           <div>
             <DialogTitle className="text-xl font-semibold text-foreground">Transfer Notifications</DialogTitle>
@@ -149,7 +149,8 @@ export const NotificationSettingsModal = ({ open, onOpenChange }: NotificationSe
           {/* Action Button */}
           <Button
             type="button"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+            variant="navy"
+            className="w-full"
             onClick={() => onOpenChange(false)}
           >
             Done

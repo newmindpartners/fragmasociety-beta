@@ -127,9 +127,9 @@ export const BankingOverview = () => {
             <div className="bg-card border border-border rounded-2xl p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-primary" strokeWidth={1.5} />
-                  </div>
+130:                   <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+131:                     <CreditCard className="w-5 h-5 text-slate-700" strokeWidth={1.5} />
+132:                   </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-foreground">Payment Methods</h3>
@@ -147,8 +147,9 @@ export const BankingOverview = () => {
                   </div>
                 </div>
                 <Button
+                  variant="navy"
                   size="sm"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-4"
+                  className="rounded-full px-4"
                   onClick={() => setSelectorOpen(true)}
                 >
                   <Plus className="w-4 h-4 mr-1" />
@@ -158,7 +159,7 @@ export const BankingOverview = () => {
 
               {/* Preferred/Default Payment Method */}
               {defaultMethod && (
-                <div className="mt-4 p-4 rounded-xl border-2 border-primary/20 bg-primary/5">
+                <div className="mt-4 p-4 rounded-xl border-2 border-slate-200 bg-slate-50">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-14 h-10 rounded-lg flex items-center justify-center ${
@@ -172,7 +173,7 @@ export const BankingOverview = () => {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="bg-primary/10 text-primary border-0 text-xs">
+                          <Badge variant="secondary" className="bg-slate-200 text-slate-700 border-0 text-xs">
                             Preferred
                           </Badge>
                         </div>
@@ -188,9 +189,9 @@ export const BankingOverview = () => {
                       </div>
                     </div>
                     <Button
-                      variant="outline"
+                      variant="navy-outline"
                       size="sm"
-                      className="border-primary/30 text-primary hover:bg-primary/10 rounded-full px-4"
+                      className="rounded-full px-4"
                       onClick={() => navigate("/dashboard/banking/payment-methods")}
                     >
                       <Pencil className="w-3.5 h-3.5 mr-1.5" />
@@ -293,19 +294,19 @@ export const BankingOverview = () => {
                   className="block cursor-pointer"
                   onClick={() => handleCardClick(action)}
                 >
-                  <div className="bg-card border border-border rounded-2xl p-5 hover:border-primary/30 hover:shadow-sm transition-all cursor-pointer group">
+                  <div className="bg-card border border-border rounded-2xl p-5 hover:border-slate-400 hover:shadow-sm transition-all cursor-pointer group">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-                          <Icon className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+                          <Icon className="w-5 h-5 text-slate-700" strokeWidth={1.5} />
                         </div>
                         <div>
                           <h3 className="font-semibold text-foreground">{action.title}</h3>
                           <p className="text-sm text-muted-foreground">{action.subtitle}</p>
                         </div>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <div className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+                        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-slate-700 transition-colors" />
                       </div>
                     </div>
                   </div>

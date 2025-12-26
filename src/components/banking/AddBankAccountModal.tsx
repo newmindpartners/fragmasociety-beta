@@ -110,8 +110,8 @@ export const AddBankAccountModal = ({ open, onOpenChange }: AddBankAccountModalP
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="theme-dashboard sm:max-w-lg bg-white border-gray-200 text-gray-900 max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader className="space-y-3 flex-shrink-0">
-          <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Building2 className="w-5 h-5 text-primary" />
+          <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-slate-700" />
           </div>
           <div>
             <DialogTitle className="text-lg font-semibold text-gray-900">Add Bank Account</DialogTitle>
@@ -245,8 +245,9 @@ export const AddBankAccountModal = ({ open, onOpenChange }: AddBankAccountModalP
           </Button>
           <Button
             type="button"
+            variant="navy"
             onClick={handleSubmit}
-            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 h-11"
+            className="flex-1 h-11"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
