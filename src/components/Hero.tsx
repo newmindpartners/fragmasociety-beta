@@ -73,36 +73,35 @@ export const Hero = () => {
               </span>
             </motion.div>
 
-            {/* Tagline - Elegant */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.8 }}
-              className="text-sm md:text-base tracking-[0.3em] uppercase text-white/70 font-light mb-6"
-            >
-              Fractional · Liquid · Compliant
-            </motion.p>
-
             {/* Main headline - Large Editorial */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[0.95] tracking-tight mb-4"
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white/80 leading-[1.1] tracking-tight mb-2"
             >
-              Buy and sell
+              I'm part of the story.
             </motion.h1>
             
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[0.95] tracking-tight mb-6"
+            >
+              Own the extraordinary.
+            </motion.h2>
+            
             {/* Animated dynamic word - Editorial style */}
-            <div className="h-[70px] md:h-[90px] lg:h-[100px] xl:h-[120px] overflow-hidden relative mb-10">
+            <div className="h-[50px] md:h-[60px] lg:h-[70px] overflow-hidden relative mb-6">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={currentWordIndex}
-                  initial={{ y: 80, opacity: 0 }}
+                  initial={{ y: 60, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -80, opacity: 0 }}
+                  exit={{ y: -60, opacity: 0 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="block text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[0.95] tracking-tight"
+                  className="block text-2xl md:text-3xl lg:text-4xl font-light text-white/60 leading-[1.2] tracking-tight"
                 >
                   {dynamicWords[currentWordIndex]}
                 </motion.span>
@@ -113,8 +112,8 @@ export const Hero = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="flex items-center gap-2 mb-12 pb-12 border-b border-white/10"
+              transition={{ delay: 0.5 }}
+              className="flex items-center gap-2 mb-10 pb-10 border-b border-white/10"
             >
               {dynamicWords.map((_, index) => (
                 <motion.div
@@ -128,18 +127,27 @@ export const Hero = () => {
               ))}
             </motion.div>
 
-            {/* CTA Buttons - Minimal, matching deal details style */}
+            {/* Subline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-lg md:text-xl text-white/60 max-w-2xl mb-10 font-light"
+            >
+              Exclusive access to curated real-world opportunities—built for trust, designed for pride.
+            </motion.p>
+
+            {/* CTA Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="mb-8"
             >
               <Button 
                 size="lg" 
                 className="bg-white text-neutral-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
               >
-                Register your interest
+                Request access
                 <motion.span
                   className="ml-2"
                   animate={{ x: [0, 4, 0] }}
@@ -149,16 +157,6 @@ export const Hero = () => {
                 </motion.span>
               </Button>
             </motion.div>
-
-            {/* Disclaimer - Elegant */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-sm text-white/50 max-w-lg"
-            >
-              Limited spots available. Register now to secure your place in our exclusive early access program.
-            </motion.p>
           </div>
         </div>
 
