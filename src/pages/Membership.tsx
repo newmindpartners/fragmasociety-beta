@@ -182,9 +182,9 @@ const TierCard = ({
             initial={{ opacity: 0, y: -10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.4 + index * 0.1, duration: 0.4 }}
-            className="absolute -top-4 left-1/2 -translate-x-1/2 z-20"
+            className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20"
           >
-            <div className={`px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shadow-lg ${colors.badge}`}>
+            <div className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider shadow-lg ${colors.badge}`}>
               <span className="flex items-center gap-1.5">
                 {isElite && <Sparkles className="w-3 h-3" />}
                 {tier.badge}
@@ -203,7 +203,7 @@ const TierCard = ({
             : "0 8px 32px -8px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)",
         }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className={`flex flex-col h-full rounded-3xl border-2 p-8 ${colors.bg} ${colors.border} overflow-hidden relative`}
+        className={`flex flex-col h-full rounded-2xl sm:rounded-3xl border-2 p-5 sm:p-8 ${colors.bg} ${colors.border} overflow-hidden relative`}
       >
         {/* Decorative dot pattern */}
         <div className="absolute top-4 left-4 grid grid-cols-4 gap-1.5 opacity-20 pointer-events-none">
@@ -239,62 +239,62 @@ const TierCard = ({
         <motion.div
           animate={{ rotate: isHovered ? 5 : 0, scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.3 }}
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg ${colors.icon}`}
+          className={`w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg ${colors.icon}`}
         >
-          <Icon className="w-7 h-7" strokeWidth={1.5} />
+          <Icon className="w-5 h-5 sm:w-7 sm:h-7" strokeWidth={1.5} />
         </motion.div>
 
         {/* Name & Price */}
-        <div className="mb-8 relative">
-          <h3 className="text-xl font-semibold text-slate-900 mb-2 font-sans">{tier.name}</h3>
+        <div className="mb-6 sm:mb-8 relative">
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-1.5 sm:mb-2 font-sans">{tier.name}</h3>
           <div className="flex items-baseline gap-1">
             <motion.span
               animate={{ scale: isHovered ? 1.02 : 1 }}
-              className="text-5xl font-bold text-slate-900 tracking-tight"
+              className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {tier.price}
             </motion.span>
             {isPaid && (
-              <span className="text-slate-500 text-base font-medium">/month</span>
+              <span className="text-slate-500 text-sm sm:text-base font-medium">/month</span>
             )}
           </div>
-          <p className="text-slate-600 text-sm mt-3 leading-relaxed">{tier.description}</p>
+          <p className="text-slate-600 text-xs sm:text-sm mt-2 sm:mt-3 leading-relaxed">{tier.description}</p>
         </div>
 
         {/* CTA Button */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           {isCurrentPlan ? (
             <Button 
-              className="w-full h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-100 cursor-default shadow-none border border-slate-200"
+              className="w-full h-11 sm:h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-100 cursor-default shadow-none border border-slate-200 text-sm sm:text-base"
               disabled
             >
-              <Check size={18} className="mr-2" />
+              <Check size={16} className="mr-2 sm:mr-2" />
               Current Plan
             </Button>
           ) : !isAuthenticated ? (
             <Link to="/auth" className="block">
               <Button 
-                className={`w-full h-12 rounded-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl ${colors.button}`}
+                className={`w-full h-11 sm:h-12 rounded-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl text-sm sm:text-base ${colors.button}`}
               >
                 {isPaid ? "Sign Up to Subscribe" : "Get Started Free"}
                 <motion.span
                   animate={{ x: isHovered ? 4 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ArrowRight size={18} className="ml-2" />
+                  <ArrowRight size={16} className="ml-2" />
                 </motion.span>
               </Button>
             </Link>
           ) : isPaid ? (
             <Button 
-              className={`w-full h-12 rounded-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl ${colors.button}`}
+              className={`w-full h-11 sm:h-12 rounded-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl text-sm sm:text-base ${colors.button}`}
               onClick={() => onSubscribe(tier.priceId!)}
               disabled={isLoading}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 size={18} className="animate-spin" />
+                  <Loader2 size={16} className="animate-spin" />
                   Processing...
                 </span>
               ) : (
@@ -304,14 +304,14 @@ const TierCard = ({
                     animate={{ x: isHovered ? 4 : 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <ArrowRight size={18} className="ml-2" />
+                    <ArrowRight size={16} className="ml-2" />
                   </motion.span>
                 </>
               )}
             </Button>
           ) : (
             <Button 
-              className="w-full h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-100 cursor-default shadow-none border border-slate-200"
+              className="w-full h-11 sm:h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-100 cursor-default shadow-none border border-slate-200 text-sm sm:text-base"
               disabled
             >
               Free Forever
@@ -320,11 +320,11 @@ const TierCard = ({
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8" />
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-6 sm:mb-8" />
 
         {/* Features */}
         <TooltipProvider delayDuration={200}>
-          <div className="space-y-4 flex-1">
+          <div className="space-y-3 sm:space-y-4 flex-1">
             {tier.features.map((feature, featureIndex) => {
               const FeatureIcon = feature.icon;
               const isHighlight = feature.label.startsWith("Everything in");
@@ -335,28 +335,28 @@ const TierCard = ({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 + featureIndex * 0.05 }}
-                  className="flex items-start gap-3 group/feature"
+                  className="flex items-start gap-2.5 sm:gap-3 group/feature"
                 >
                   <motion.div
                     whileHover={{ scale: 1.1 }}
-                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5 ${
+                    className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center mt-0.5 ${
                       isHighlight ? colors.checkBg : "bg-slate-100/80"
                     }`}
                   >
                     {isHighlight ? (
-                      <Check size={16} className={colors.checkIcon} strokeWidth={2.5} />
+                      <Check size={14} className={`sm:w-4 sm:h-4 ${colors.checkIcon}`} strokeWidth={2.5} />
                     ) : (
-                      <FeatureIcon size={14} className="text-slate-500" />
+                      <FeatureIcon size={12} className="sm:w-3.5 sm:h-3.5 text-slate-500" />
                     )}
                   </motion.div>
-                  <span className={`text-sm leading-relaxed flex-1 pt-1.5 ${
+                  <span className={`text-xs sm:text-sm leading-relaxed flex-1 pt-1 sm:pt-1.5 ${
                     isHighlight ? "font-semibold text-slate-900" : "text-slate-600"
                   }`}>
                     {feature.label}
                   </span>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button className="flex-shrink-0 mt-1.5 opacity-30 hover:opacity-100 transition-opacity">
+                      <button className="flex-shrink-0 mt-1 sm:mt-1.5 opacity-30 hover:opacity-100 transition-opacity min-w-[28px] min-h-[28px] flex items-center justify-center">
                         <Info size={14} className="text-slate-400" />
                       </button>
                     </TooltipTrigger>
@@ -514,13 +514,13 @@ const Membership = () => {
       <Navbar />
 
       {/* Hero Section - Dark Mode with elegant design */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden">
         {/* Dark background with gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
         
         {/* Decorative elements */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-900/20 rounded-full blur-3xl" />
-        <div className="absolute top-40 right-1/4 w-80 h-80 bg-violet-800/15 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-violet-900/20 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-1/4 w-40 sm:w-80 h-40 sm:h-80 bg-violet-800/15 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
         
         {/* Animated grid pattern */}
@@ -530,22 +530,22 @@ const Membership = () => {
           }}
         />
 
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
           >
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-8"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-6 sm:mb-8"
             >
-              <Crown size={14} className="text-violet-400" />
+              <Crown size={12} className="sm:w-3.5 sm:h-3.5 text-violet-400" />
               Investor Membership
             </motion.div>
             
@@ -554,7 +554,7 @@ const Membership = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-6 text-white"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-4 sm:mb-6 text-white"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Choose Your{" "}
@@ -563,7 +563,7 @@ const Membership = () => {
                   Membership
                 </span>
                 <motion.span
-                  className="absolute -bottom-2 left-0 right-0 h-3 bg-violet-500/30 -z-0"
+                  className="absolute -bottom-1 sm:-bottom-2 left-0 right-0 h-2 sm:h-3 bg-violet-500/30 -z-0"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
@@ -576,7 +576,7 @@ const Membership = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed"
+              className="text-sm sm:text-base md:text-lg text-slate-400 max-w-xl mx-auto leading-relaxed px-4 sm:px-0"
             >
               Select the plan that matches your investment goals and unlock exclusive benefits.
             </motion.p>
@@ -589,13 +589,13 @@ const Membership = () => {
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                className="max-w-md mx-auto mb-16"
+                className="max-w-md mx-auto mb-10 sm:mb-16 px-4 sm:px-0"
               >
-                <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-                  <div className="flex items-center justify-between">
+                <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-slate-400 mb-1">Active Membership</p>
-                      <p className="text-xl font-semibold text-white flex items-center gap-2">
+                      <p className="text-xs sm:text-sm text-slate-400 mb-1">Active Membership</p>
+                      <p className="text-lg sm:text-xl font-semibold text-white flex items-center gap-2">
                         {TIERS[currentTierId as keyof typeof TIERS]?.name}
                         <motion.span
                           animate={{ scale: [1, 1.2, 1] }}
@@ -604,7 +604,7 @@ const Membership = () => {
                         />
                       </p>
                       {subscriptionEnd && (
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-[10px] sm:text-xs text-slate-500 mt-1">
                           Renews {new Date(subscriptionEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </p>
                       )}
@@ -614,7 +614,7 @@ const Membership = () => {
                       size="sm"
                       onClick={handleManageSubscription}
                       disabled={isLoading}
-                      className="rounded-xl border-white/20 text-white hover:bg-white/10 hover:border-white/30"
+                      className="rounded-xl border-white/20 text-white hover:bg-white/10 hover:border-white/30 w-full sm:w-auto min-h-[44px] sm:min-h-0"
                     >
                       <RefreshCw size={14} className="mr-2" />
                       Manage
@@ -626,7 +626,7 @@ const Membership = () => {
           </AnimatePresence>
 
           {/* Pricing Cards */}
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-6xl mx-auto mb-10 sm:mb-16 mt-6 sm:mt-0">
             {tierOrder.map((tierId, index) => (
               <TierCard
                 key={tierId}
@@ -645,7 +645,7 @@ const Membership = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
-            className="flex flex-wrap justify-center gap-8 lg:gap-12"
+            className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-4 sm:gap-8 lg:gap-12"
           >
             {[
               { icon: Shield, label: "Secure Payments" },
@@ -656,12 +656,12 @@ const Membership = () => {
               <motion.div
                 key={index}
                 whileHover={{ y: -2 }}
-                className="flex items-center gap-2.5 text-slate-400 group cursor-default"
+                className="flex items-center gap-2 sm:gap-2.5 text-slate-400 group cursor-default"
               >
-                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                  <item.icon size={16} className="text-slate-300" />
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors flex-shrink-0">
+                  <item.icon size={14} className="sm:w-4 sm:h-4 text-slate-300" />
                 </div>
-                <span className="text-sm font-medium">{item.label}</span>
+                <span className="text-xs sm:text-sm font-medium">{item.label}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -669,32 +669,32 @@ const Membership = () => {
       </section>
 
       {/* FAQ Section - Light Mode */}
-      <section className="py-24 bg-gradient-to-b from-white to-slate-50 relative">
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-white to-slate-50 relative">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
         
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-sm font-medium mb-6">
-              <HelpCircle size={14} />
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium mb-4 sm:mb-6">
+              <HelpCircle size={12} className="sm:w-3.5 sm:h-3.5" />
               FAQ
             </div>
-            <h2 className="text-4xl lg:text-5xl font-light text-slate-900 mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-slate-900 mb-3 sm:mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
               Frequently Asked Questions
             </h2>
-            <p className="text-slate-600 text-lg">
+            <p className="text-slate-600 text-sm sm:text-base md:text-lg px-4 sm:px-0">
               Everything you need to know about our membership plans
             </p>
           </motion.div>
 
           <div className="max-w-2xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4">
+            <Accordion type="single" collapsible className="space-y-3 sm:space-y-4">
               {[
                 {
                   value: "billing-1",
@@ -736,17 +736,17 @@ const Membership = () => {
                 >
                   <AccordionItem 
                     value={faq.value} 
-                    className="bg-white border border-slate-200 rounded-2xl px-6 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                    className="bg-white border border-slate-200 rounded-xl sm:rounded-2xl px-4 sm:px-6 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
                   >
-                    <AccordionTrigger className="text-left hover:no-underline py-5 group">
-                      <span className="font-medium text-slate-900 flex items-center gap-3 text-base">
-                        <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-violet-100 transition-colors">
-                          <ChevronDown size={14} className="text-slate-500 group-hover:text-violet-600 transition-colors" />
+                    <AccordionTrigger className="text-left hover:no-underline py-4 sm:py-5 group min-h-[48px]">
+                      <span className="font-medium text-slate-900 flex items-center gap-2.5 sm:gap-3 text-sm sm:text-base">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-violet-100 transition-colors flex-shrink-0">
+                          <ChevronDown size={12} className="sm:w-3.5 sm:h-3.5 text-slate-500 group-hover:text-violet-600 transition-colors" />
                         </div>
                         {faq.question}
                       </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-slate-600 pb-5 pl-9 text-base leading-relaxed">
+                    <AccordionContent className="text-slate-600 pb-4 sm:pb-5 pl-7 sm:pl-9 text-sm sm:text-base leading-relaxed">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
