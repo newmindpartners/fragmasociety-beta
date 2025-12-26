@@ -96,11 +96,11 @@ export const Footer = () => (
           />
           
           <p className="text-slate-600 text-sm leading-relaxed mb-3 max-w-xs">
-            Buy and sell real world assets.
+            Own the extraordinary.
           </p>
           
           <p className="text-slate-400 text-xs leading-relaxed mb-8 max-w-sm">
-            Invest in real-world slices, receive automated profit distributions, and buy or sell your stake in alternative assets.
+            Join a community of discerning investors with exclusive access to curated extraordinary assets.
           </p>
           
           {/* Social Media Icons */}
