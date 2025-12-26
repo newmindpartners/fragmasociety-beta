@@ -37,13 +37,13 @@ export const HowSignatureDealsWork = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section ref={ref} className="py-32 lg:py-40 relative overflow-hidden">
+    <section ref={ref} className="py-16 sm:py-24 lg:py-40 relative overflow-hidden">
       {/* Premium Light Background - matching Features section */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
         {/* Subtle spotlight effects */}
-        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
+        <div className="absolute top-0 left-1/4 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[1000px] h-[250px] sm:h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
       </div>
 
       {/* Subtle grid pattern */}
@@ -51,20 +51,20 @@ export const HowSignatureDealsWork = () => {
         className="absolute inset-0 opacity-[0.015]"
         style={{
           backgroundImage: `linear-gradient(rgba(30,41,59,1) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,1) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
+          backgroundSize: '40px 40px',
         }}
       />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Header Section */}
-        <div className="max-w-4xl mb-24">
+        <div className="max-w-4xl mb-12 sm:mb-16 lg:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
           >
-            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+            <div className="w-10 sm:w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-400 font-medium">
               For Issuers & Investors
             </span>
           </motion.div>
@@ -73,7 +73,7 @@ export const HowSignatureDealsWork = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-6 sm:mb-8"
           >
             Designed with leaders,
             <br />
@@ -84,15 +84,15 @@ export const HowSignatureDealsWork = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
+            className="text-base sm:text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
           >
             We work hand-in-hand with each industry leader to structure a compliant, attractive, 
             and long-term aligned investment product. Every Signature Deal combines:
           </motion.p>
         </div>
 
-        {/* Pillars grid - matching Features section style */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-20">
+        {/* Pillars grid - single column on mobile, 2 on tablet, 4 on desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20">
           {pillars.map((pillar, index) => {
             const isHovered = hoveredIndex === index;
             
@@ -104,10 +104,12 @@ export const HowSignatureDealsWork = () => {
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onTouchStart={() => setHoveredIndex(index)}
+                onTouchEnd={() => setTimeout(() => setHoveredIndex(null), 2000)}
                 className="group cursor-pointer"
               >
                 <motion.div
-                  className="relative p-8 lg:p-10 h-full overflow-hidden rounded-sm"
+                  className="relative p-6 sm:p-8 lg:p-10 h-full overflow-hidden rounded-sm"
                   style={{
                     background: isHovered 
                       ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
@@ -141,7 +143,7 @@ export const HowSignatureDealsWork = () => {
 
                   {/* Large decorative number */}
                   <motion.span 
-                    className={`absolute top-4 right-4 text-[80px] lg:text-[100px] font-extralight leading-none ${
+                    className={`absolute top-3 right-3 sm:top-4 sm:right-4 text-[60px] sm:text-[80px] lg:text-[100px] font-extralight leading-none ${
                       isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.04]'
                     }`}
                     style={{ 
@@ -159,7 +161,7 @@ export const HowSignatureDealsWork = () => {
 
                   {/* Icon container */}
                   <motion.div 
-                    className={`w-14 h-14 mb-8 flex items-center justify-center relative ${
+                    className={`w-12 h-12 sm:w-14 sm:h-14 mb-6 sm:mb-8 flex items-center justify-center relative ${
                       isHovered 
                         ? 'border-slate-600/30 bg-slate-800/40' 
                         : 'border-slate-200 bg-slate-50'
@@ -176,7 +178,7 @@ export const HowSignatureDealsWork = () => {
                     transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
                   >
                     <pillar.icon 
-                      className={`w-6 h-6 ${
+                      className={`w-5 h-5 sm:w-6 sm:h-6 ${
                         isHovered ? 'text-violet-300' : 'text-slate-600'
                       }`} 
                       style={{ transition: 'color 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
@@ -194,7 +196,7 @@ export const HowSignatureDealsWork = () => {
                   
                   {/* Title */}
                   <motion.h3 
-                    className={`text-lg lg:text-xl font-medium mb-3 ${
+                    className={`text-base sm:text-lg lg:text-xl font-medium mb-2 sm:mb-3 ${
                       isHovered ? 'text-white/90' : 'text-slate-900'
                     }`}
                     style={{ transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
@@ -206,7 +208,7 @@ export const HowSignatureDealsWork = () => {
                   
                   {/* Description */}
                   <p 
-                    className={`text-sm leading-relaxed ${
+                    className={`text-xs sm:text-sm leading-relaxed ${
                       isHovered ? 'text-slate-400' : 'text-slate-500'
                     }`}
                     style={{ transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
@@ -234,13 +236,13 @@ export const HowSignatureDealsWork = () => {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="text-center"
         >
-          <p className="text-slate-500 mb-6">
+          <p className="text-sm sm:text-base text-slate-500 mb-5 sm:mb-6">
             Have a vision? Let's create your Signature Deal together.
           </p>
           <Button 
             asChild 
             size="lg" 
-            className="group bg-slate-900 text-white hover:bg-slate-800 rounded-sm px-8"
+            className="group bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-700 rounded-sm px-6 sm:px-8 h-12 sm:h-auto min-h-[48px] text-sm sm:text-base"
           >
             <Link to="/signature-deal">
               Launch your Signature Deal
@@ -254,9 +256,9 @@ export const HowSignatureDealsWork = () => {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="mt-20 flex justify-center"
+          className="mt-12 sm:mt-16 lg:mt-20 flex justify-center"
         >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
         </motion.div>
       </div>
     </section>

@@ -159,26 +159,26 @@ export const SignatureDealsGrid = () => {
   };
 
   return (
-    <section className="py-24 lg:py-32 relative overflow-hidden">
+    <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden">
       {/* Premium Light Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50">
-        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="container mx-auto px-6 lg:px-12 mb-16">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 mb-10 sm:mb-16">
+          <div className="flex flex-col gap-6 sm:gap-8">
             <div className="max-w-2xl">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="flex items-center gap-4 mb-6"
+                className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6"
               >
-                <div className="w-12 h-px bg-slate-300" />
-                <span className="text-[10px] tracking-[0.3em] uppercase text-slate-400 font-medium">
+                <div className="w-8 sm:w-12 h-px bg-slate-300" />
+                <span className="text-[9px] sm:text-[10px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-slate-400 font-medium">
                   Signature Deals
                 </span>
               </motion.div>
@@ -188,7 +188,7 @@ export const SignatureDealsGrid = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1, duration: 0.6 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05]"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05]"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Invest alongside
@@ -197,7 +197,7 @@ export const SignatureDealsGrid = () => {
               </motion.h2>
             </div>
 
-            {/* Navigation Arrows */}
+            {/* Navigation Arrows - stacked on mobile */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -207,13 +207,13 @@ export const SignatureDealsGrid = () => {
             >
               <button
                 onClick={scrollPrev}
-                className="w-14 h-14 rounded-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white flex items-center justify-center transition-all duration-300"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white active:bg-slate-800 flex items-center justify-center transition-all duration-300 min-w-[48px] min-h-[48px]"
               >
                 <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
               </button>
               <button
                 onClick={scrollNext}
-                className="w-14 h-14 rounded-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white flex items-center justify-center transition-all duration-300"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white active:bg-slate-800 flex items-center justify-center transition-all duration-300 min-w-[48px] min-h-[48px]"
               >
                 <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
               </button>
@@ -223,13 +223,13 @@ export const SignatureDealsGrid = () => {
 
         {/* Carousel with dark blur edge on right only */}
         <div className="relative">
-          {/* Right dark blur fade */}
-          <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-40 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
+          {/* Right dark blur fade - smaller on mobile */}
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 lg:w-40 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
 
           {/* Scrollable Cards */}
           <div 
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide px-6 lg:px-24 snap-x snap-mandatory touch-pan-x"
+            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-24 snap-x snap-mandatory touch-pan-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -238,7 +238,7 @@ export const SignatureDealsGrid = () => {
             {signatureDeals.map((deal) => (
               <div 
                 key={deal.id} 
-                className="flex-none w-[320px] sm:w-[360px] lg:w-[400px] snap-start"
+                className="flex-none w-[280px] sm:w-[320px] md:w-[360px] lg:w-[400px] snap-start"
               >
                 <SignatureDealCard
                   {...deal}
@@ -246,6 +246,23 @@ export const SignatureDealsGrid = () => {
                 />
               </div>
             ))}
+          </div>
+          
+          {/* Swipe hint - mobile only */}
+          <div className="flex items-center justify-center gap-1.5 mt-4 text-slate-400 text-xs sm:hidden">
+            <motion.span
+              animate={{ x: [-2, 2, -2] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              ←
+            </motion.span>
+            <span>Swipe to explore</span>
+            <motion.span
+              animate={{ x: [2, -2, 2] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              →
+            </motion.span>
           </div>
         </div>
 
@@ -255,19 +272,20 @@ export const SignatureDealsGrid = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="container mx-auto px-6 lg:px-12 mt-12"
+          className="container mx-auto px-4 sm:px-6 lg:px-12 mt-8 sm:mt-12"
         >
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-2 sm:gap-2">
             {signatureDeals.map((_, index) => (
               <motion.button
                 key={index}
                 onClick={() => scrollToIndex(index)}
-                className={`h-1 rounded-full transition-all duration-500 ${
+                className={`h-1.5 sm:h-1 rounded-full transition-all duration-500 min-w-[12px] min-h-[12px] flex items-center justify-center ${
                   index === currentIndex 
                     ? 'w-8 bg-slate-900' 
-                    : 'w-2 bg-slate-300 hover:bg-slate-400'
+                    : 'w-3 sm:w-2 bg-slate-300 hover:bg-slate-400 active:bg-slate-500'
                 }`}
                 whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               />
             ))}
           </div>
@@ -279,9 +297,9 @@ export const SignatureDealsGrid = () => {
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-20 flex justify-center"
+          className="mt-12 sm:mt-20 flex justify-center"
         >
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
         </motion.div>
       </div>
     </section>
