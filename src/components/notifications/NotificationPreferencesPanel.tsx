@@ -163,7 +163,7 @@ export const NotificationPreferencesPanel = ({
         {/* Header */}
         <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center shadow-lg shadow-slate-900/20">
               <Bell className="w-5 h-5 text-white" strokeWidth={1.5} />
             </div>
             <div>
@@ -195,7 +195,7 @@ export const NotificationPreferencesPanel = ({
                     <div className={cn(
                       "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200",
                       isChannelAllEnabled(channel.id as keyof ChannelPreferences)
-                        ? "bg-violet-100 text-violet-600"
+                        ? "bg-slate-200 text-slate-700"
                         : "bg-slate-100 text-slate-400 group-hover:bg-slate-200"
                     )}>
                       <channel.icon className="w-5 h-5" strokeWidth={1.75} />
@@ -203,7 +203,7 @@ export const NotificationPreferencesPanel = ({
                     <span className={cn(
                       "text-[10px] font-medium transition-colors",
                       isChannelAllEnabled(channel.id as keyof ChannelPreferences)
-                        ? "text-violet-600"
+                        ? "text-slate-700"
                         : "text-slate-500"
                     )}>
                       {channel.label}
@@ -258,7 +258,7 @@ export const NotificationPreferencesPanel = ({
                               <Switch
                                 checked={preferences[category.id][channel.id as keyof ChannelPreferences]}
                                 onCheckedChange={() => togglePreference(category.id, channel.id as keyof ChannelPreferences)}
-                                className="data-[state=checked]:bg-violet-500 data-[state=unchecked]:bg-slate-200"
+                                className="data-[state=checked]:bg-slate-700 data-[state=unchecked]:bg-slate-200"
                               />
                               <div className="flex items-center gap-1.5">
                                 <channel.icon className={cn(
@@ -289,9 +289,9 @@ export const NotificationPreferencesPanel = ({
 
           {/* Pro tip */}
           <div className="px-6 pb-4">
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100">
-              <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-4 h-4 text-violet-600" />
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200">
+              <div className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-4 h-4 text-slate-600" />
               </div>
               <div>
                 <p className="text-sm font-medium text-slate-900">Pro tip</p>
@@ -315,7 +315,8 @@ export const NotificationPreferencesPanel = ({
           <Button 
             onClick={handleSave}
             disabled={saving}
-            className="bg-violet-600 hover:bg-violet-700 text-white gap-2 min-w-[100px]"
+            variant="navy"
+            className="gap-2 min-w-[100px]"
           >
             {saving ? (
               <motion.div

@@ -154,8 +154,8 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
           <div className="relative z-10 p-6">
             {/* Header */}
             <div className="flex items-start justify-between mb-5">
-              <div className="w-12 h-12 rounded-full bg-violet-50 flex items-center justify-center ring-1 ring-violet-200/60">
-                <ArrowDownUp className="w-5 h-5 text-violet-600" />
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center ring-1 ring-slate-200/60">
+                <ArrowDownUp className="w-5 h-5 text-slate-700" />
               </div>
               <button 
                 onClick={handleClose}
@@ -196,15 +196,15 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
               <div className="flex justify-center -my-1 relative z-10">
                 <button 
                   onClick={handleSwapDirection}
-                  className="w-9 h-9 rounded-full bg-violet-100 hover:bg-violet-200 flex items-center justify-center ring-1 ring-violet-200/50 transition-colors"
+                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center ring-1 ring-slate-200/50 transition-colors"
                 >
-                  <ArrowDownUp className="w-4 h-4 text-violet-600" />
+                  <ArrowDownUp className="w-4 h-4 text-slate-700" />
                 </button>
               </div>
 
               {/* To */}
-              <div className="bg-violet-50/80 rounded-xl border border-violet-200/60 p-4">
-                <label className="text-xs text-violet-600 mb-2 block font-medium">To</label>
+              <div className="bg-slate-50/80 rounded-xl border border-slate-200/60 p-4">
+                <label className="text-xs text-slate-700 mb-2 block font-medium">To</label>
                 <div className="flex items-center justify-between">
                   <span className="text-3xl font-bold text-slate-800">{convertedAmount}</span>
                   <CurrencyButton
@@ -238,7 +238,7 @@ export const WalletSwapModal = ({ open, onOpenChange }: WalletSwapModalProps) =>
               <button
                 onClick={handleConfirm}
                 disabled={isSubmitting}
-                className="flex-1 h-12 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-400 hover:to-purple-400 text-white font-medium transition-all shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-medium transition-all shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

@@ -53,9 +53,9 @@ export const WalletWithdrawModal = ({ open, onOpenChange }: WalletWithdrawModalP
           <div className="relative z-10 p-6">
             {/* Header */}
             <div className="flex items-start justify-between mb-5">
-              <div className="w-12 h-12 rounded-full bg-violet-50 flex items-center justify-center ring-1 ring-violet-200/60">
-                <div className="w-8 h-8 rounded-full border-2 border-violet-500 flex items-center justify-center">
-                  <DollarSign className="w-4 h-4 text-violet-600" />
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center ring-1 ring-slate-200/60">
+                <div className="w-8 h-8 rounded-full border-2 border-slate-700 flex items-center justify-center">
+                  <DollarSign className="w-4 h-4 text-slate-700" />
                 </div>
               </div>
               <button 
@@ -76,33 +76,33 @@ export const WalletWithdrawModal = ({ open, onOpenChange }: WalletWithdrawModalP
               <div className="bg-white/80 rounded-xl border border-slate-200/70 p-4">
                 <label className="text-xs text-slate-500 mb-2 block font-medium">You withdraw</label>
                 <div className="flex items-center justify-between">
-                  <Input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="border-0 bg-transparent text-3xl font-bold text-slate-800 p-0 h-auto focus-visible:ring-0 w-32"
-                    placeholder="0"
-                  />
-                  <div className="w-10 h-10 rounded-full border-2 border-violet-500 flex items-center justify-center bg-white">
-                    <DollarSign className="w-4 h-4 text-violet-600" />
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="border-0 bg-transparent text-3xl font-bold text-slate-800 p-0 h-auto focus-visible:ring-0 w-32"
+                      placeholder="0"
+                    />
+                    <div className="w-10 h-10 rounded-full border-2 border-slate-700 flex items-center justify-center bg-white">
+                      <DollarSign className="w-4 h-4 text-slate-700" />
                   </div>
                 </div>
               </div>
 
               {/* Swap Icon */}
               <div className="flex justify-center -my-1 relative z-10">
-                <div className="w-9 h-9 rounded-full bg-violet-100 flex items-center justify-center ring-1 ring-violet-200/50">
-                  <ArrowDownUp className="w-4 h-4 text-violet-600" />
+                <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center ring-1 ring-slate-200/50">
+                  <ArrowDownUp className="w-4 h-4 text-slate-700" />
                 </div>
               </div>
 
               {/* You Receive */}
-              <div className="bg-violet-50/80 rounded-xl border border-violet-200/60 p-4">
-                <label className="text-xs text-violet-600 mb-2 block font-medium">You receive</label>
+              <div className="bg-slate-50/80 rounded-xl border border-slate-200/60 p-4">
+                <label className="text-xs text-slate-700 mb-2 block font-medium">You receive</label>
                 <div className="flex items-center justify-between">
                   <span className="text-3xl font-bold text-slate-800">${amount || "0"}</span>
-                  <div className="px-3 py-1.5 rounded-full bg-white border border-violet-200">
-                    <span className="text-xs font-bold text-violet-700">USD</span>
+                  <div className="px-3 py-1.5 rounded-full bg-white border border-slate-200">
+                    <span className="text-xs font-bold text-slate-700">USD</span>
                   </div>
                 </div>
               </div>
@@ -143,7 +143,7 @@ export const WalletWithdrawModal = ({ open, onOpenChange }: WalletWithdrawModalP
               <button
                 onClick={handleConfirm}
                 disabled={isSubmitting}
-                className="flex-1 h-12 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-400 hover:to-purple-400 text-white font-medium transition-all shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-medium transition-all shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

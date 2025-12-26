@@ -191,12 +191,12 @@ export const ReinvestModal = ({
       <DialogContent className="sm:max-w-[540px] p-0 overflow-hidden bg-white border-slate-200">
         {/* Header */}
         <div className="relative overflow-hidden px-6 pt-6 pb-4 border-b border-slate-100">
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-50 to-purple-50" />
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-violet-200/30 rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100" />
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-slate-200/30 rounded-full blur-3xl" />
           
           <DialogHeader className="relative z-10">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
                 <RefreshCw className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -217,7 +217,7 @@ export const ReinvestModal = ({
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${
                     step === s
-                      ? "bg-violet-600 text-white"
+                      ? "bg-slate-800 text-white"
                       : ["select", "amount", "confirm"].indexOf(step) > i
                       ? "bg-emerald-500 text-white"
                       : "bg-slate-200 text-slate-500"
@@ -274,10 +274,10 @@ export const ReinvestModal = ({
                           : "border-slate-200 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-100/50 bg-white active:scale-[0.99]"
                       }`}
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0">
-                          <DealIcon type={deal.icon} />
-                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white flex-shrink-0">
+                            <DealIcon type={deal.icon} />
+                          </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
                             <h3 className="font-semibold text-slate-900 truncate">
@@ -323,7 +323,7 @@ export const ReinvestModal = ({
                 {/* Selected Deal Summary */}
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white">
                       <DealIcon type={selectedDeal.icon} />
                     </div>
                     <div>
@@ -348,7 +348,7 @@ export const ReinvestModal = ({
                       type="number"
                       value={reinvestAmount}
                       onChange={(e) => setReinvestAmount(e.target.value)}
-                      className="pl-8 h-12 text-lg font-semibold border-slate-200 focus:border-violet-500 focus:ring-violet-500"
+                      className="pl-8 h-12 text-lg font-semibold border-slate-200 focus:border-slate-500 focus:ring-slate-500"
                       placeholder="0.00"
                       min={selectedDeal.minInvestment}
                       max={availableAmount}
@@ -360,7 +360,7 @@ export const ReinvestModal = ({
                     </span>
                     <button
                       onClick={() => setReinvestAmount(availableAmount.toString())}
-                      className="text-xs text-violet-600 hover:text-violet-700 font-medium"
+                      className="text-xs text-slate-700 hover:text-slate-900 font-medium"
                     >
                       Use max: €{availableAmount.toFixed(2)}
                     </button>
@@ -379,7 +379,7 @@ export const ReinvestModal = ({
                       <button
                         key={percent}
                         onClick={() => setReinvestAmount(amount.toFixed(2))}
-                        className="flex-1 py-2 px-3 rounded-lg bg-slate-100 hover:bg-violet-100 text-slate-700 hover:text-violet-700 text-sm font-medium transition-colors"
+                        className="flex-1 py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-sm font-medium transition-colors"
                       >
                         {percent}%
                       </button>
@@ -399,7 +399,8 @@ export const ReinvestModal = ({
                   </Button>
                   <Button
                     onClick={handleConfirmAmount}
-                    className="flex-1 bg-violet-600 hover:bg-violet-700 text-white"
+                    variant="navy"
+                    className="flex-1"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />

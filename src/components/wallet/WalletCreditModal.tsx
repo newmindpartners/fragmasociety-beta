@@ -90,9 +90,9 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
           <div className="relative z-10 p-6">
             {/* Header */}
             <div className="flex items-start justify-between mb-5">
-              <div className="w-12 h-12 rounded-full bg-violet-50 flex items-center justify-center ring-1 ring-violet-200/60">
-                <div className="w-8 h-8 rounded-full border-2 border-violet-500 flex items-center justify-center">
-                  <DollarSign className="w-4 h-4 text-violet-600" />
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center ring-1 ring-slate-200/60">
+                <div className="w-8 h-8 rounded-full border-2 border-slate-700 flex items-center justify-center">
+                  <DollarSign className="w-4 h-4 text-slate-700" />
                 </div>
               </div>
               <button 
@@ -113,21 +113,21 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                 onClick={() => setMethod("card")}
                 className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
                   method === "card" 
-                    ? "border-violet-500 bg-violet-50/50" 
+                    ? "border-slate-700 bg-slate-50/50" 
                     : "border-slate-200 bg-white/60 hover:border-slate-300"
                 }`}
               >
                 <div className={`w-10 h-10 rounded-full mb-3 flex items-center justify-center ${
-                  method === "card" ? "bg-violet-100" : "bg-slate-100"
+                  method === "card" ? "bg-slate-100" : "bg-slate-100"
                 }`}>
-                  <CreditCard className={`w-5 h-5 ${method === "card" ? "text-violet-600" : "text-slate-500"}`} />
+                  <CreditCard className={`w-5 h-5 ${method === "card" ? "text-slate-700" : "text-slate-500"}`} />
                 </div>
-                <p className={`text-sm font-semibold ${method === "card" ? "text-violet-700" : "text-slate-700"}`}>
+                <p className={`text-sm font-semibold ${method === "card" ? "text-slate-800" : "text-slate-700"}`}>
                   Credit Card
                 </p>
                 <p className="text-xs text-slate-400 mt-0.5">Instant deposit</p>
                 {method === "card" && (
-                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-violet-500 flex items-center justify-center">
+                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center">
                     <Check className="w-3 h-3 text-white" />
                   </div>
                 )}
@@ -137,21 +137,21 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                 onClick={() => setMethod("crypto")}
                 className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
                   method === "crypto" 
-                    ? "border-violet-500 bg-violet-50/50" 
+                    ? "border-slate-700 bg-slate-50/50" 
                     : "border-slate-200 bg-white/60 hover:border-slate-300"
                 }`}
               >
                 <div className={`w-10 h-10 rounded-full mb-3 flex items-center justify-center ${
-                  method === "crypto" ? "bg-violet-100" : "bg-slate-100"
+                  method === "crypto" ? "bg-slate-100" : "bg-slate-100"
                 }`}>
-                  <Wallet className={`w-5 h-5 ${method === "crypto" ? "text-violet-600" : "text-slate-500"}`} />
+                  <Wallet className={`w-5 h-5 ${method === "crypto" ? "text-slate-700" : "text-slate-500"}`} />
                 </div>
-                <p className={`text-sm font-semibold ${method === "crypto" ? "text-violet-700" : "text-slate-700"}`}>
+                <p className={`text-sm font-semibold ${method === "crypto" ? "text-slate-800" : "text-slate-700"}`}>
                   Send Crypto
                 </p>
                 <p className="text-xs text-slate-400 mt-0.5">USDC, ADA, BTC</p>
                 {method === "crypto" && (
-                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-violet-500 flex items-center justify-center">
+                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center">
                     <Check className="w-3 h-3 text-white" />
                   </div>
                 )}
@@ -172,8 +172,8 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                       className="border-0 bg-transparent text-3xl font-bold text-slate-800 p-0 h-auto focus-visible:ring-0 w-32"
                       placeholder="0"
                     />
-                    <div className="w-10 h-10 rounded-full border-2 border-violet-500 flex items-center justify-center bg-white">
-                      <DollarSign className="w-4 h-4 text-violet-600" />
+                    <div className="w-10 h-10 rounded-full border-2 border-slate-700 flex items-center justify-center bg-white">
+                      <DollarSign className="w-4 h-4 text-slate-700" />
                     </div>
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                         onClick={() => setSelectedCrypto(crypto)}
                         className={`flex-1 py-2.5 px-3 rounded-lg border-2 transition-all duration-200 flex items-center justify-center gap-2 ${
                           selectedCrypto === crypto
-                            ? "border-violet-500 bg-violet-50"
+                            ? "border-slate-700 bg-slate-50"
                             : "border-slate-200 bg-white hover:border-slate-300"
                         }`}
                       >
@@ -226,7 +226,7 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                           </span>
                         </div>
                         <span className={`text-sm font-semibold ${
-                          selectedCrypto === crypto ? "text-violet-700" : "text-slate-600"
+                          selectedCrypto === crypto ? "text-slate-800" : "text-slate-600"
                         }`}>
                           {crypto}
                         </span>
@@ -236,19 +236,19 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                 </div>
 
                 {/* Deposit Address with QR Code */}
-                <div className="bg-violet-50/80 rounded-xl border border-violet-200/60 p-4">
+                <div className="bg-slate-50/80 rounded-xl border border-slate-200/60 p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-xs text-violet-600 font-medium">Deposit Address</p>
-                    <span className="text-[10px] text-violet-500 bg-violet-100 px-2 py-0.5 rounded-full">
+                    <p className="text-xs text-slate-700 font-medium">Deposit Address</p>
+                    <span className="text-[10px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
                       {currencyInfo[selectedCrypto].network}
                     </span>
                   </div>
                   
                   {/* QR Code */}
                   <div className="flex justify-center mb-3">
-                    <div className="p-3 bg-white rounded-xl border border-violet-100 shadow-sm">
+                    <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
                       <img
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(cryptoAddresses[selectedCrypto])}&bgcolor=ffffff&color=4c1d95`}
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(cryptoAddresses[selectedCrypto])}&bgcolor=ffffff&color=1e293b`}
                         alt={`${selectedCrypto} deposit address QR code`}
                         className="w-[120px] h-[120px]"
                       />
@@ -257,12 +257,12 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
                   
                   {/* Address with copy button */}
                   <div className="flex items-center gap-2">
-                    <p className="text-xs text-slate-700 font-mono bg-white/80 rounded-lg px-3 py-2 flex-1 truncate border border-violet-100">
+                    <p className="text-xs text-slate-700 font-mono bg-white/80 rounded-lg px-3 py-2 flex-1 truncate border border-slate-200">
                       {cryptoAddresses[selectedCrypto]}
                     </p>
                     <button
                       onClick={handleCopyAddress}
-                      className="w-10 h-10 rounded-lg bg-violet-500 hover:bg-violet-600 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-lg bg-slate-900 hover:bg-slate-800 flex items-center justify-center transition-colors"
                     >
                       {copiedAddress ? (
                         <Check className="w-4 h-4 text-white" />
@@ -315,7 +315,7 @@ export const WalletCreditModal = ({ open, onOpenChange }: WalletCreditModalProps
               <button
                 onClick={handleConfirm}
                 disabled={isSubmitting}
-                className="flex-1 h-12 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-400 hover:to-purple-400 text-white font-medium transition-all shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-medium transition-all shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

@@ -72,9 +72,9 @@ export const PayoutDetailDrawer = ({
         );
       case "upcoming":
         return (
-          <div className="bg-violet-50 rounded-2xl border border-violet-200/60 p-5">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200/60 p-5">
             <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-violet-100 text-violet-700 text-sm font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-sm font-medium">
                 <Calendar className="w-3.5 h-3.5" />
                 Upcoming
               </span>

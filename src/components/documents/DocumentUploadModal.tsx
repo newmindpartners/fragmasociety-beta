@@ -200,7 +200,8 @@ export const DocumentUploadModal = ({
             <Button
               onClick={handleUpload}
               disabled={!selectedFile || uploading}
-              className="flex-1 rounded-full bg-primary hover:bg-primary/90"
+              variant="navy"
+              className="flex-1 rounded-full"
             >
               {uploading ? (
                 <>
