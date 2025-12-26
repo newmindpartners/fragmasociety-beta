@@ -347,7 +347,7 @@ export const HowItWorks = () => {
   const currentStep = steps[activeStep];
 
   return (
-    <section ref={sectionRef} className="relative py-16 lg:py-24 overflow-hidden">
+    <section ref={sectionRef} className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
       {/* Luxury Magazine Background */}
       <div className="absolute inset-0 bg-[#fafafa]" />
       
@@ -368,40 +368,40 @@ export const HowItWorks = () => {
       {/* Magazine accent line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
 
-      <div className="container mx-auto px-6 lg:px-16 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
         {/* Editorial Header */}
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-6 mb-6"
+            className="flex items-center gap-3 sm:gap-6 mb-4 sm:mb-6"
           >
-            <span className="text-[11px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+            <span className="text-[9px] sm:text-[11px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-400 font-medium">
               The Process
             </span>
             <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent" />
-            <span className="text-[11px] tracking-[0.2em] uppercase text-slate-300">
+            <span className="text-[9px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-300">
               04 Steps
             </span>
           </motion.div>
           
-          <div className="grid lg:grid-cols-2 gap-8 items-end">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 items-end">
             <motion.h2
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight text-slate-900 leading-[0.95] tracking-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight text-slate-900 leading-[0.95] tracking-tight"
             >
               From Discovery
-              <span className="block font-serif italic text-slate-500 mt-2">to Earnings</span>
+              <span className="block font-serif italic text-slate-500 mt-1 sm:mt-2">to Earnings</span>
             </motion.h2>
             
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-slate-500 text-lg lg:text-xl leading-relaxed max-w-md lg:ml-auto font-light"
+              className="text-slate-500 text-sm sm:text-lg lg:text-xl leading-relaxed max-w-md lg:ml-auto font-light"
             >
               A seamless journey designed for the modern investor. 
               Four steps to transform how you build wealth.
@@ -414,17 +414,17 @@ export const HowItWorks = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="flex justify-start lg:justify-center mb-10 overflow-x-auto pb-4 -mx-6 px-6 lg:mx-0 lg:px-0"
+          className="flex justify-start lg:justify-center mb-6 sm:mb-10 overflow-x-auto pb-2 sm:pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 scrollbar-hide"
         >
-          <div className="inline-flex items-center gap-1 p-1 bg-white border border-slate-200/80 rounded-full shadow-sm">
+          <div className="inline-flex items-center gap-0.5 sm:gap-1 p-0.5 sm:p-1 bg-white border border-slate-200/80 rounded-full shadow-sm">
             {steps.map((step, index) => (
               <button
                 key={index}
                 onClick={() => handleStepClick(index)}
-                className={`relative px-5 lg:px-8 py-3 rounded-full text-sm transition-all duration-500 ${
+                className={`relative px-3 sm:px-5 lg:px-8 py-2 sm:py-3 rounded-full text-xs sm:text-sm transition-all duration-500 active:scale-95 ${
                   activeStep === index
                     ? 'text-white'
-                    : 'text-slate-500 hover:text-slate-800'
+                    : 'text-slate-500 hover:text-slate-800 active:text-slate-800'
                 }`}
               >
                 {activeStep === index && (
@@ -434,11 +434,11 @@ export const HowItWorks = () => {
                     transition={{ type: "spring", damping: 30, stiffness: 400 }}
                   />
                 )}
-                <span className="relative z-10 flex items-center gap-2 font-medium">
-                  <span className={`text-[10px] ${activeStep === index ? 'text-white/60' : 'text-slate-400'}`}>
+                <span className="relative z-10 flex items-center gap-1 sm:gap-2 font-medium whitespace-nowrap">
+                  <span className={`text-[9px] sm:text-[10px] ${activeStep === index ? 'text-white/60' : 'text-slate-400'}`}>
                     0{index + 1}
                   </span>
-                  <span className="hidden sm:inline">{step.title}</span>
+                  <span className="hidden xs:inline sm:inline">{step.title}</span>
                 </span>
               </button>
             ))}
@@ -452,7 +452,7 @@ export const HowItWorks = () => {
           transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-6xl mx-auto"
         >
-          <div className="relative bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/60 border border-slate-100">
+          <div className="relative bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-xl sm:shadow-2xl shadow-slate-200/60 border border-slate-100">
             {/* Elegant progress line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-slate-100">
               <motion.div
@@ -464,96 +464,17 @@ export const HowItWorks = () => {
             </div>
 
             <div className="grid lg:grid-cols-2">
-              {/* Content Side */}
-              <div className="p-8 lg:p-12 xl:p-14">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeStep}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 30 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {/* Step Label */}
-                    <div className="flex items-center gap-4 mb-6">
-                      <span className="text-[10px] tracking-[0.3em] uppercase text-violet-600 font-semibold">
-                        Step {currentStep.step}
-                      </span>
-                      <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
-                    </div>
-
-                    {/* Icon */}
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      className="w-14 h-14 rounded-xl bg-slate-900 flex items-center justify-center mb-5 shadow-xl shadow-slate-900/30"
-                    >
-                      <currentStep.icon className="w-7 h-7 text-white" strokeWidth={1.5} />
-                    </motion.div>
-
-                    {/* Title */}
-                    <motion.h3
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 }}
-                      className="text-2xl lg:text-3xl xl:text-4xl font-light text-slate-900 mb-2 tracking-tight"
-                    >
-                      {currentStep.title}
-                    </motion.h3>
-
-                    {/* Subtitle */}
-                    <motion.p
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="text-lg text-slate-400 font-serif italic mb-5"
-                    >
-                      {currentStep.subtitle}
-                    </motion.p>
-
-                    {/* Description */}
-                    <motion.p
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.25 }}
-                      className="text-slate-600 text-base leading-relaxed mb-6 font-light"
-                    >
-                      {currentStep.content}
-                    </motion.p>
-
-                    {/* Features */}
-                    <motion.ul className="space-y-3">
-                      {currentStep.features.map((feature, i) => (
-                        <motion.li
-                          key={i}
-                          initial={{ opacity: 0, x: -15 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.3 + i * 0.1 }}
-                          className="flex items-center gap-4 text-slate-600"
-                        >
-                          <span className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3 text-slate-600" />
-                          </span>
-                          <span className="font-light">{feature}</span>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Illustration Side */}
-              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-8 lg:p-12 flex items-center justify-center min-h-[320px] border-l border-slate-100/80">
+              {/* Illustration Side - Show first on mobile */}
+              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-6 sm:p-8 lg:p-12 flex items-center justify-center min-h-[200px] sm:min-h-[280px] lg:min-h-[320px] lg:border-l border-b lg:border-b-0 border-slate-100/80 order-first lg:order-last">
                 {/* Large decorative number */}
-                <div className="absolute top-6 right-6 text-[100px] xl:text-[120px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
+                <div className="absolute top-3 right-3 sm:top-6 sm:right-6 text-[60px] sm:text-[80px] xl:text-[120px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
                   0{activeStep + 1}
                 </div>
                 
                 {/* Subtle corner accent */}
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-violet-50/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 w-20 sm:w-32 h-20 sm:h-32 bg-gradient-to-tr from-violet-50/50 to-transparent" />
                 
-                <div className="w-full max-w-[300px] relative z-10">
+                <div className="w-full max-w-[200px] sm:max-w-[260px] lg:max-w-[300px] relative z-10">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeStep}
@@ -567,22 +488,108 @@ export const HowItWorks = () => {
                   </AnimatePresence>
                 </div>
               </div>
+
+              {/* Content Side */}
+              <div className="p-5 sm:p-8 lg:p-12 xl:p-14 order-last lg:order-first">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeStep}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 30 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {/* Step Label */}
+                    <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                      <span className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-violet-600 font-semibold">
+                        Step {currentStep.step}
+                      </span>
+                      <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
+                    </div>
+
+                    {/* Icon */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                      className="w-11 h-11 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-slate-900 flex items-center justify-center mb-4 sm:mb-5 shadow-xl shadow-slate-900/30"
+                    >
+                      <currentStep.icon className="w-5 h-5 sm:w-7 sm:h-7 text-white" strokeWidth={1.5} />
+                    </motion.div>
+
+                    {/* Title */}
+                    <motion.h3
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 }}
+                      className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-light text-slate-900 mb-1 sm:mb-2 tracking-tight"
+                    >
+                      {currentStep.title}
+                    </motion.h3>
+
+                    {/* Subtitle */}
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="text-sm sm:text-lg text-slate-400 font-serif italic mb-3 sm:mb-5"
+                    >
+                      {currentStep.subtitle}
+                    </motion.p>
+
+                    {/* Description */}
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.25 }}
+                      className="text-slate-600 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 font-light"
+                    >
+                      {currentStep.content}
+                    </motion.p>
+
+                    {/* Features */}
+                    <motion.ul className="space-y-2 sm:space-y-3">
+                      {currentStep.features.map((feature, i) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -15 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 + i * 0.1 }}
+                          className="flex items-center gap-3 sm:gap-4 text-slate-600"
+                        >
+                          <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-600" />
+                          </span>
+                          <span className="font-light text-sm sm:text-base">{feature}</span>
+                        </motion.li>
+                      ))}
+                    </motion.ul>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Step dots for mobile */}
-        <div className="flex justify-center gap-3 mt-10 lg:hidden">
+        {/* Step dots for mobile - Enhanced touch targets */}
+        <div className="flex justify-center gap-2 sm:gap-3 mt-6 sm:mt-10 lg:hidden">
           {steps.map((_, index) => (
             <button
               key={index}
               onClick={() => handleStepClick(index)}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
+              className={`h-2 sm:h-1.5 rounded-full transition-all duration-500 active:scale-110 ${
+                activeStep === index 
+                  ? 'w-8 sm:w-8 bg-gradient-to-r from-slate-800 to-indigo-900' 
+                  : 'w-2 sm:w-1.5 bg-slate-300 hover:bg-slate-400 active:bg-slate-500'
+              }`}
+              style={{ minWidth: '32px', minHeight: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <span className={`h-2 sm:h-1.5 rounded-full transition-all duration-500 ${
                 activeStep === index 
                   ? 'w-8 bg-gradient-to-r from-slate-800 to-indigo-900' 
-                  : 'w-1.5 bg-slate-300 hover:bg-slate-400'
-              }`}
-            />
+                  : 'w-2 bg-slate-300'
+              }`} />
+            </button>
           ))}
         </div>
 
@@ -591,14 +598,14 @@ export const HowItWorks = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mt-20"
+          className="text-center mt-12 sm:mt-16 lg:mt-20"
         >
           <Button 
             size="lg" 
-            className="group bg-slate-900 hover:bg-slate-800 text-white px-12 py-7 text-base rounded-full shadow-xl shadow-slate-900/25"
+            className="group bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white px-8 sm:px-12 py-5 sm:py-7 text-sm sm:text-base rounded-full shadow-xl shadow-slate-900/25"
           >
             Register your interest
-            <ChevronRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            <ChevronRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
         </motion.div>
       </div>
