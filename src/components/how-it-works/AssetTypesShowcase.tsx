@@ -92,29 +92,29 @@ export const AssetTypesShowcase = () => {
   const currentAsset = assetTypes[activeAsset];
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Dark Elegant Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
       
       {/* Subtle accent */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-violet-900/10 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-radial from-slate-800/50 via-transparent to-transparent" />
+        <div className="absolute top-0 right-0 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] bg-gradient-radial from-violet-900/10 via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-radial from-slate-800/50 via-transparent to-transparent" />
       </div>
       
       {/* Decorative lines */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="max-w-4xl mb-16 lg:mb-20">
+        <div className="max-w-4xl mb-10 sm:mb-16 lg:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
           >
-            <div className="w-12 h-px bg-gradient-to-r from-violet-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-500 font-medium">
+            <div className="w-8 sm:w-12 h-px bg-gradient-to-r from-violet-400 to-transparent" />
+            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-500 font-medium">
               Asset Classes
             </span>
           </motion.div>
@@ -123,17 +123,17 @@ export const AssetTypesShowcase = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extralight text-white leading-[1.05] mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight text-white leading-[1.1] sm:leading-[1.05] mb-4 sm:mb-6"
           >
             Curated Opportunities
-            <span className="block font-serif italic text-slate-400 mt-2">Across Asset Classes</span>
+            <span className="block font-serif italic text-slate-400 mt-1 sm:mt-2">Across Asset Classes</span>
           </motion.h2>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl"
+            className="text-base sm:text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl"
           >
             From prime real estate to Hollywood productions—diversify across 
             premium asset classes previously reserved for the ultra-wealthy.
@@ -141,9 +141,9 @@ export const AssetTypesShowcase = () => {
         </div>
 
         {/* Asset Type Selector & Display */}
-        <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-12">
           {/* Left: Asset Type Navigation */}
-          <div className="lg:col-span-2 space-y-3">
+          <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 sm:gap-3">
             {assetTypes.map((asset, index) => {
               const isActive = activeAsset === index;
               const Icon = asset.icon;
@@ -155,27 +155,27 @@ export const AssetTypesShowcase = () => {
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.2 + index * 0.1 }}
                   onClick={() => setActiveAsset(index)}
-                  className={`w-full text-left p-5 rounded-xl transition-all duration-300 ${
+                  className={`w-full text-left p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl transition-all duration-300 min-h-[60px] ${
                     isActive 
                       ? 'bg-white/10 border border-violet-500/30' 
-                      : 'bg-white/[0.02] border border-slate-700/50 hover:border-slate-600'
+                      : 'bg-white/[0.02] border border-slate-700/50 hover:border-slate-600 active:border-slate-500'
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                  <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
                       isActive ? 'bg-violet-500/20' : 'bg-slate-800/50'
                     }`}>
-                      <Icon className={`w-5 h-5 transition-colors duration-300 ${
+                      <Icon className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 ${
                         isActive ? 'text-violet-400' : 'text-slate-500'
                       }`} strokeWidth={1.5} />
                     </div>
-                    <div className="flex-1">
-                      <h4 className={`font-medium transition-colors duration-300 ${
+                    <div className="flex-1 min-w-0">
+                      <h4 className={`text-xs sm:text-sm lg:text-base font-medium transition-colors duration-300 truncate ${
                         isActive ? 'text-white' : 'text-slate-300'
                       }`}>
                         {asset.title}
                       </h4>
-                      <p className={`text-sm transition-colors duration-300 ${
+                      <p className={`text-[10px] sm:text-xs lg:text-sm transition-colors duration-300 truncate hidden sm:block ${
                         isActive ? 'text-slate-400' : 'text-slate-500'
                       }`}>
                         {asset.subtitle}
@@ -184,7 +184,7 @@ export const AssetTypesShowcase = () => {
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="w-1.5 h-8 bg-gradient-to-b from-violet-400 to-violet-600 rounded-full"
+                        className="hidden lg:block w-1.5 h-8 bg-gradient-to-b from-violet-400 to-violet-600 rounded-full"
                       />
                     )}
                   </div>
@@ -200,10 +200,10 @@ export const AssetTypesShowcase = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="relative rounded-2xl overflow-hidden bg-slate-800/50 border border-slate-700/50"
+              className="relative rounded-xl sm:rounded-2xl overflow-hidden bg-slate-800/50 border border-slate-700/50"
             >
               {/* Image */}
-              <div className="relative h-64 lg:h-80">
+              <div className="relative h-48 sm:h-64 lg:h-80">
                 <img 
                   src={currentAsset.image} 
                   alt={currentAsset.title}
@@ -212,29 +212,29 @@ export const AssetTypesShowcase = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
                 
                 {/* Floating badge */}
-                <div className="absolute top-6 left-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/10">
-                    <currentAsset.icon className="w-4 h-4 text-violet-400" />
-                    <span className="text-sm font-medium text-white">{currentAsset.title}</span>
+                <div className="absolute top-4 sm:top-6 left-4 sm:left-6">
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/10">
+                    <currentAsset.icon className="w-3 h-3 sm:w-4 sm:h-4 text-violet-400" />
+                    <span className="text-xs sm:text-sm font-medium text-white">{currentAsset.title}</span>
                   </div>
                 </div>
               </div>
               
               {/* Content */}
-              <div className="p-8">
-                <h3 className="text-2xl lg:text-3xl font-light text-white mb-4">
+              <div className="p-4 sm:p-6 lg:p-8">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-light text-white mb-3 sm:mb-4">
                   {currentAsset.subtitle}
                 </h3>
-                <p className="text-slate-400 leading-relaxed mb-8">
+                <p className="text-sm sm:text-base text-slate-400 leading-relaxed mb-6 sm:mb-8">
                   {currentAsset.description}
                 </p>
                 
                 {/* Stats */}
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-3 sm:gap-6">
                   {currentAsset.stats.map((stat) => (
-                    <div key={stat.label} className="bg-slate-800/50 rounded-xl p-4">
-                      <p className="text-2xl font-light text-white mb-1">{stat.value}</p>
-                      <p className="text-xs tracking-wider uppercase text-slate-500">{stat.label}</p>
+                    <div key={stat.label} className="bg-slate-800/50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                      <p className="text-xl sm:text-2xl font-light text-white mb-0.5 sm:mb-1">{stat.value}</p>
+                      <p className="text-[10px] sm:text-xs tracking-wider uppercase text-slate-500">{stat.label}</p>
                     </div>
                   ))}
                 </div>
