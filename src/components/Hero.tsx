@@ -80,7 +80,7 @@ export const Hero = () => {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white/80 leading-[1.1] tracking-tight mb-2"
             >
-              I'm part of the story.
+              Be part of the story.
             </motion.h1>
             
             <motion.h2
