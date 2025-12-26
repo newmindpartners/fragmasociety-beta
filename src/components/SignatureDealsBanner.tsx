@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import bryanImage from "@/assets/bryan-banner.png";
 import philippeImage from "@/assets/philippe-banner.png";
 import timImage from "@/assets/tim-banner.png";
@@ -283,7 +284,7 @@ export const SignatureDealsBanner = () => {
             </div>
 
             {/* Fixed height container for title */}
-            <div className="h-[24px] flex items-center justify-end overflow-hidden">
+            <div className="h-[24px] flex items-center justify-end overflow-hidden mb-4">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`title-${currentIndex}`}
@@ -306,6 +307,23 @@ export const SignatureDealsBanner = () => {
                 </motion.p>
               </AnimatePresence>
             </div>
+
+            {/* CTA Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              <a href="#request-access">
+                <Button
+                  size="sm"
+                  className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 rounded-full px-5 h-9 text-xs font-medium tracking-wide transition-all duration-300 group"
+                >
+                  Register your interest
+                  <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              </a>
+            </motion.div>
           </div>
         </div>
       </div>
