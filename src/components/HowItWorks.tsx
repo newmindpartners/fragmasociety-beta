@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useInView, PanInfo } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Search, CreditCard, TrendingUp, ArrowLeftRight, ChevronRight, Check } from "lucide-react";
 
@@ -323,6 +323,7 @@ const StepIllustration = ({ step, isActive }: { step: number; isActive: boolean 
 export const HowItWorks = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
@@ -343,6 +344,26 @@ export const HowItWorks = () => {
     // Resume after 10 seconds
     setTimeout(() => setIsPaused(false), 10000);
   };
+
+  // Swipe gesture handlers
+  const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const threshold = 50;
+    const velocity = 0.3;
+    
+    if (info.offset.x < -threshold || info.velocity.x < -velocity) {
+      // Swipe left - go to next step
+      setSwipeDirection('left');
+      setIsPaused(true);
+      setActiveStep((prev) => Math.min(prev + 1, 3));
+      setTimeout(() => setIsPaused(false), 10000);
+    } else if (info.offset.x > threshold || info.velocity.x > velocity) {
+      // Swipe right - go to previous step
+      setSwipeDirection('right');
+      setIsPaused(true);
+      setActiveStep((prev) => Math.max(prev - 1, 0));
+      setTimeout(() => setIsPaused(false), 10000);
+    }
+  }, []);
 
   const currentStep = steps[activeStep];
 
@@ -445,16 +466,24 @@ export const HowItWorks = () => {
           </div>
         </motion.div>
 
-        {/* Main Showcase Card */}
+        {/* Main Showcase Card - with swipe gestures on mobile */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-6xl mx-auto"
         >
-          <div className="relative bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-xl sm:shadow-2xl shadow-slate-200/60 border border-slate-100">
+          <motion.div 
+            className="relative bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-xl sm:shadow-2xl shadow-slate-200/60 border border-slate-100 touch-pan-y"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.1}
+            onDragEnd={handleDragEnd}
+            whileTap={{ cursor: "grabbing" }}
+            style={{ touchAction: "pan-y" }}
+          >
             {/* Elegant progress line */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-slate-100">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-slate-100 z-20">
               <motion.div
                 className="h-full bg-gradient-to-r from-slate-700 via-indigo-600 to-violet-600"
                 initial={{ width: "0%" }}
@@ -463,9 +492,26 @@ export const HowItWorks = () => {
               />
             </div>
 
+            {/* Swipe hint indicator - only on mobile */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 text-slate-400 text-[10px] font-medium lg:hidden pointer-events-none">
+              <motion.span
+                animate={{ x: [-2, 2, -2] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                ←
+              </motion.span>
+              <span>Swipe</span>
+              <motion.span
+                animate={{ x: [2, -2, 2] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                →
+              </motion.span>
+            </div>
+
             <div className="grid lg:grid-cols-2">
               {/* Illustration Side - Show first on mobile */}
-              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-6 sm:p-8 lg:p-12 flex items-center justify-center min-h-[200px] sm:min-h-[280px] lg:min-h-[320px] lg:border-l border-b lg:border-b-0 border-slate-100/80 order-first lg:order-last">
+              <div className="relative bg-gradient-to-br from-slate-50 via-slate-100/50 to-white p-6 sm:p-8 lg:p-12 flex items-center justify-center min-h-[200px] sm:min-h-[280px] lg:min-h-[320px] lg:border-l border-b lg:border-b-0 border-slate-100/80 order-first lg:order-last select-none">
                 {/* Large decorative number */}
                 <div className="absolute top-3 right-3 sm:top-6 sm:right-6 text-[60px] sm:text-[80px] xl:text-[120px] font-extralight text-slate-100 leading-none font-serif select-none pointer-events-none">
                   0{activeStep + 1}
@@ -478,10 +524,10 @@ export const HowItWorks = () => {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeStep}
-                      initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, rotate: 2 }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      initial={{ opacity: 0, scale: 0.9, x: swipeDirection === 'left' ? 50 : swipeDirection === 'right' ? -50 : 0 }}
+                      animate={{ opacity: 1, scale: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, x: swipeDirection === 'left' ? -50 : swipeDirection === 'right' ? 50 : 0 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     >
                       <StepIllustration step={activeStep + 1} isActive={true} />
                     </motion.div>
@@ -568,7 +614,7 @@ export const HowItWorks = () => {
                 </AnimatePresence>
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Step dots for mobile - Enhanced touch targets */}
