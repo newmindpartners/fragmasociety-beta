@@ -597,7 +597,7 @@ export const HowItWorks = () => {
             size="lg" 
             className="group bg-slate-900 hover:bg-slate-800 text-white px-12 py-7 text-base rounded-full shadow-xl shadow-slate-900/25"
           >
-            Begin Your Journey
+            Register your interest
             <ChevronRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
         </motion.div>
