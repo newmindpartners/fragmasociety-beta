@@ -25,7 +25,7 @@ const navSections: NavSection[] = [
     label: "Investors",
     items: [
       { label: "Live Deals", href: "/live-deals", description: "Browse current investment opportunities", icon: Zap, isRoute: true, badge: "Hot" },
-      { label: "Buy & Sell", href: "/marketplace", description: "Secondary marketplace for trading", icon: ShoppingCart, isRoute: true },
+      { label: "Buy & Sell", href: "/marketplace", description: "Secondary marketplace for trading", icon: ShoppingCart, isRoute: true, badge: "Coming Soon" },
       { label: "How It Works", href: "/how-it-works", description: "Understand the investment process", icon: HelpCircle, isRoute: true },
       { label: "Investor Membership", href: "/membership", description: "Exclusive benefits for members", icon: Crown, isRoute: true },
     ],
@@ -88,6 +88,8 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
                           <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full ${
                             item.badge === "Hot" 
                               ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
+                              : item.badge === "Coming Soon"
+                              ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
                               : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
                           }`}>
                             {item.badge}
@@ -329,6 +331,8 @@ export const Navbar = () => {
                                   <span className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
                                     item.badge === "Hot" 
                                       ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
+                                      : item.badge === "Coming Soon"
+                                      ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
                                       : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
                                   }`}>
                                     {item.badge}
