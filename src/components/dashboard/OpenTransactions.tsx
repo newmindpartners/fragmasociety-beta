@@ -91,7 +91,7 @@ export const OpenTransactions = () => {
     const styles = {
       active: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
       partial: "bg-amber-500/10 text-amber-600 border-amber-500/20",
-      completed: "bg-primary/10 text-primary border-primary/20",
+      completed: "bg-slate-100 text-slate-700 border-slate-200",
       cancelled: "bg-muted text-muted-foreground border-border",
     };
 
@@ -127,8 +127,9 @@ export const OpenTransactions = () => {
             </button>
           </div>
           <Button
+            variant="navy"
             size="sm"
-            className="rounded-full h-7 px-3 text-xs font-medium bg-primary hover:bg-primary/90 text-white"
+            className="rounded-full h-7 px-3 text-xs"
           >
             <Plus className="w-3 h-3 mr-1" />
             New Order
@@ -157,7 +158,7 @@ export const OpenTransactions = () => {
               {tab.label}
               <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
                 activeTab === tab.key
-                  ? "bg-primary text-white"
+                  ? "bg-slate-900 text-white"
                   : "bg-muted text-muted-foreground"
               }`}>
                 {tab.count}
@@ -283,8 +284,8 @@ export const OpenTransactions = () => {
         <div className="mt-5 pt-4 border-t border-border">
           <Link to="/marketplace">
             <Button 
-              variant="outline" 
-              className="w-full rounded-lg h-10 text-sm font-medium border-primary/30 text-primary hover:bg-primary/5 group"
+              variant="navy-outline" 
+              className="w-full rounded-lg h-10 text-sm group"
             >
               <ExternalLink className="w-4 h-4 mr-2" />
               Explore Secondary Market

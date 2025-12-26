@@ -70,8 +70,8 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
                     className="group flex items-start gap-3 p-3 rounded-lg hover:bg-muted transition-all duration-200 cursor-pointer"
                   >
                     {Icon && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-all duration-200">
-                        <Icon className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center group-hover:bg-slate-200 transition-all duration-200">
+                        <Icon className="w-4 h-4 text-muted-foreground group-hover:text-slate-700" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
@@ -83,7 +83,7 @@ const DropdownMenu = ({ section, isOpen, onClose }: { section: NavSection; isOpe
                           <span className={`px-1.5 py-0.5 text-[10px] font-bold uppercase rounded-full ${
                             item.badge === "Hot" 
                               ? "bg-orange-500/20 text-orange-500" 
-                              : "bg-primary/20 text-primary"
+                              : "bg-slate-200 text-slate-700"
                           }`}>
                             {item.badge}
                           </span>
@@ -182,15 +182,16 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-primary/10 py-2.5 px-6 border-t border-primary/20"
+        className="bg-slate-100 py-2.5 px-6 border-t border-slate-200"
       >
         <div className="flex items-center justify-center gap-4">
-          <span className="text-sm font-medium text-primary">
+          <span className="text-sm font-medium text-slate-700">
             Create your wallet in a few clicks
           </span>
           <Button 
+            variant="navy"
             size="sm" 
-            className="rounded-full h-7 px-4 text-xs font-medium group bg-primary hover:bg-primary/90 text-white"
+            className="rounded-full h-7 px-4 text-xs group"
           >
             <Wallet className="w-3 h-3 mr-1.5" />
             Create Wallet

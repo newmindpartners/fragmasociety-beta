@@ -114,7 +114,7 @@ export const InvestmentOverview = () => {
       </div>
 
       {/* Deposit Button */}
-      <Button className="w-full rounded-full h-14 text-lg font-medium bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all duration-200">
+      <Button variant="navy" className="w-full rounded-full h-14 text-lg">
         Deposit
       </Button>
     </motion.div>
