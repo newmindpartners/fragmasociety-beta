@@ -103,7 +103,7 @@ export const Footer = () => {
   };
 
   return (
-  <footer className="relative pt-24 pb-12 overflow-hidden">
+  <footer className="relative pt-12 sm:pt-16 lg:pt-24 pb-8 sm:pb-12 overflow-hidden">
     {/* Premium Light Gradient Background */}
     {/* Dramatic Gradient Background */}
     <div className="absolute inset-0 bg-gradient-to-br from-[#f0f2f8] via-[#e8eaf3] to-[#dde1ed]" />
@@ -111,71 +111,71 @@ export const Footer = () => {
     {/* Bold Atmospheric Effects */}
     <div className="absolute inset-0">
       {/* Large violet glow top-left */}
-      <div className="absolute -top-32 -left-32 w-[700px] h-[500px] bg-gradient-to-br from-violet-200/40 via-violet-100/30 to-transparent rounded-full blur-3xl" />
+      <div className="absolute -top-32 -left-32 w-[400px] sm:w-[700px] h-[300px] sm:h-[500px] bg-gradient-to-br from-violet-200/40 via-violet-100/30 to-transparent rounded-full blur-3xl" />
       {/* Slate accent top-right */}
-      <div className="absolute -top-20 -right-20 w-[600px] h-[400px] bg-gradient-to-bl from-slate-300/50 via-slate-200/40 to-transparent rounded-full blur-3xl" />
+      <div className="absolute -top-20 -right-20 w-[300px] sm:w-[600px] h-[200px] sm:h-[400px] bg-gradient-to-bl from-slate-300/50 via-slate-200/40 to-transparent rounded-full blur-3xl" />
       {/* Central violet band */}
-      <div className="absolute top-1/3 left-0 right-0 h-[300px] bg-gradient-to-r from-violet-100/30 via-violet-200/20 to-violet-100/30 blur-3xl" />
+      <div className="absolute top-1/3 left-0 right-0 h-[150px] sm:h-[300px] bg-gradient-to-r from-violet-100/30 via-violet-200/20 to-violet-100/30 blur-3xl" />
       {/* Bottom deep gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-60 bg-gradient-to-t from-slate-200/70 via-slate-100/40 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-60 bg-gradient-to-t from-slate-200/70 via-slate-100/40 to-transparent" />
       {/* Right side accent */}
-      <div className="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-gradient-to-l from-violet-200/30 via-slate-200/30 to-transparent rounded-full blur-3xl" />
+      <div className="absolute top-1/2 -right-40 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-gradient-to-l from-violet-200/30 via-slate-200/30 to-transparent rounded-full blur-3xl" />
     </div>
     
     {/* Bold Top Border */}
     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-slate-200 via-violet-300/60 to-slate-200" />
     
-    <div className="container mx-auto px-6 lg:px-16 relative z-10">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
       {/* Main Footer Grid */}
-      <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-8 mb-10 sm:mb-16">
         
         {/* Brand Column - Larger */}
         <div className="lg:col-span-4">
           <img 
             src="/fragma-society-logo.png" 
             alt="Fragma Society" 
-            className="h-7 mb-6 brightness-0"
+            className="h-5 sm:h-6 lg:h-7 mb-4 sm:mb-6 brightness-0"
           />
           
-          <p className="text-slate-600 text-sm leading-relaxed mb-3 max-w-xs">
+          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3 max-w-xs">
             Own the extraordinary.
           </p>
           
-          <p className="text-slate-400 text-xs leading-relaxed mb-6 max-w-sm">
+          <p className="text-slate-400 text-[11px] sm:text-xs leading-relaxed mb-4 sm:mb-6 max-w-sm">
             Join a community of discerning investors with exclusive access to curated extraordinary assets.
           </p>
           
           {/* Newsletter Signup */}
-          <div className="mb-8">
-            <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-3">
+          <div className="mb-6 sm:mb-8">
+            <h5 className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-2 sm:mb-3">
               Stay Updated
             </h5>
             {isSubscribed ? (
-              <div className="flex items-center gap-2 text-emerald-600 text-sm">
-                <Check className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-emerald-600 text-xs sm:text-sm">
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>You're subscribed!</span>
               </div>
             ) : (
-              <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-full text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-full text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
                   disabled={isSubmitting}
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2.5 bg-slate-900 text-white rounded-full text-sm font-medium hover:bg-slate-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                  className="px-4 py-2 sm:py-2.5 bg-slate-900 text-white rounded-full text-xs sm:text-sm font-medium hover:bg-slate-800 active:bg-slate-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                 >
                   {isSubmitting ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
                   ) : (
                     <>
                       Subscribe
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </>
                   )}
                 </button>
@@ -185,7 +185,7 @@ export const Footer = () => {
           
           {/* Social Media Icons */}
           <TooltipProvider delayDuration={100}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {socialLinks.map((social) => (
                 <Tooltip key={social.name}>
                   <TooltipTrigger asChild>
@@ -193,18 +193,18 @@ export const Footer = () => {
                       href={social.comingSoon ? undefined : social.href}
                       target={social.comingSoon ? undefined : "_blank"}
                       rel={social.comingSoon ? undefined : "noopener noreferrer"}
-                      className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
                         social.comingSoon 
                           ? "opacity-40 cursor-not-allowed border-slate-200 text-slate-300" 
-                          : "border-slate-200 text-slate-400 hover:text-slate-800 hover:border-slate-400 hover:bg-slate-50"
+                          : "border-slate-200 text-slate-400 hover:text-slate-800 hover:border-slate-400 hover:bg-slate-50 active:bg-slate-100"
                       }`}
                       aria-label={social.name}
                       onClick={social.comingSoon ? (e) => e.preventDefault() : undefined}
                     >
-                      <social.Icon className="w-4 h-4" />
+                      <social.Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </a>
                   </TooltipTrigger>
-                  <TooltipContent side="top" className="bg-slate-900 text-white border-0 text-xs">
+                  <TooltipContent side="top" className="bg-slate-900 text-white border-0 text-xs hidden sm:block">
                     <p>{social.comingSoon ? `${social.name} - Coming Soon` : social.name}</p>
                   </TooltipContent>
                 </Tooltip>
@@ -215,24 +215,24 @@ export const Footer = () => {
 
         {/* Navigation Columns */}
         <div className="lg:col-span-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
             {/* Investors */}
             <div>
-              <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-5">
+              <h5 className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-3 sm:mb-5">
                 Investors
               </h5>
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {footerNav.investors.map((item) => (
                   <li key={item.label}>
                     <Link 
                       to={item.href} 
-                      className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900"
+                      className="group inline-flex items-center gap-2 text-slate-600 text-xs sm:text-sm transition-all duration-300 hover:text-slate-900 active:text-slate-900"
                     >
                       <span className="relative">
                         {item.label}
                         <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
                       </span>
-                      <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                      <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500 hidden sm:inline">
                         →
                       </span>
                     </Link>
@@ -243,21 +243,21 @@ export const Footer = () => {
 
             {/* Businesses */}
             <div>
-              <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-5">
+              <h5 className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-3 sm:mb-5">
                 Businesses
               </h5>
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {footerNav.businesses.map((item) => (
                   <li key={item.label}>
                     <Link 
                       to={item.href} 
-                      className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900"
+                      className="group inline-flex items-center gap-2 text-slate-600 text-xs sm:text-sm transition-all duration-300 hover:text-slate-900 active:text-slate-900"
                     >
                       <span className="relative">
                         {item.label}
                         <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
                       </span>
-                      <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                      <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500 hidden sm:inline">
                         →
                       </span>
                     </Link>
@@ -267,33 +267,33 @@ export const Footer = () => {
             </div>
 
             {/* Learn */}
-            <div>
-              <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-5">
+            <div className="col-span-2 sm:col-span-1">
+              <h5 className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-3 sm:mb-5">
                 Learn
               </h5>
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {footerNav.learn.map((item) => (
                   <li key={item.label}>
                     {item.href === "#" ? (
-                      <span className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900 cursor-pointer">
+                      <span className="group inline-flex items-center gap-2 text-slate-600 text-xs sm:text-sm transition-all duration-300 hover:text-slate-900 active:text-slate-900 cursor-pointer">
                         <span className="relative">
                           {item.label}
                           <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
                         </span>
-                        <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                        <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500 hidden sm:inline">
                           →
                         </span>
                       </span>
                     ) : (
                       <Link 
                         to={item.href} 
-                        className="group inline-flex items-center gap-2 text-slate-600 text-sm transition-all duration-300 hover:text-slate-900"
+                        className="group inline-flex items-center gap-2 text-slate-600 text-xs sm:text-sm transition-all duration-300 hover:text-slate-900 active:text-slate-900"
                       >
                         <span className="relative">
                           {item.label}
                           <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-500 transition-all duration-300 group-hover:w-full" />
                         </span>
-                        <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500">
+                        <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-violet-500 hidden sm:inline">
                           →
                         </span>
                       </Link>
@@ -309,34 +309,34 @@ export const Footer = () => {
     </div>
     
     {/* Dark Luxury Legal Section */}
-    <div className="relative mt-16">
+    <div className="relative mt-10 sm:mt-16">
       {/* Dark Background with Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
       
       {/* Subtle Glow Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[400px] h-[200px] bg-violet-900/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[300px] h-[150px] bg-slate-700/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-[200px] sm:w-[400px] h-[100px] sm:h-[200px] bg-violet-900/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[150px] sm:w-[300px] h-[75px] sm:h-[150px] bg-slate-700/10 rounded-full blur-3xl" />
       </div>
       
       {/* Top Border Accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
       
-      <div className="container mx-auto px-6 lg:px-16 relative z-10 py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-16 relative z-10 py-8 sm:py-12">
         {/* Legal Content */}
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-10">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 sm:gap-8 mb-6 sm:mb-10">
           <div>
-            <h5 className="text-[11px] tracking-[0.3em] uppercase text-slate-500 font-medium mb-5">
+            <h5 className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-slate-500 font-medium mb-3 sm:mb-5">
               Legal
             </h5>
-            <div className="flex flex-wrap gap-x-8 gap-y-3">
-              <span className="group inline-flex items-center gap-2 text-slate-400 text-sm cursor-pointer transition-all duration-300 hover:text-white">
+            <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-2 sm:gap-y-3">
+              <span className="group inline-flex items-center gap-2 text-slate-400 text-xs sm:text-sm cursor-pointer transition-all duration-300 hover:text-white active:text-white">
                 <span className="relative">
                   Privacy Policy
                   <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-400 transition-all duration-300 group-hover:w-full" />
                 </span>
               </span>
-              <span className="group inline-flex items-center gap-2 text-slate-400 text-sm cursor-pointer transition-all duration-300 hover:text-white">
+              <span className="group inline-flex items-center gap-2 text-slate-400 text-xs sm:text-sm cursor-pointer transition-all duration-300 hover:text-white active:text-white">
                 <span className="relative">
                   Terms of Service
                   <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-400 transition-all duration-300 group-hover:w-full" />
@@ -345,18 +345,18 @@ export const Footer = () => {
             </div>
           </div>
           
-          <p className="text-slate-500 text-xs leading-relaxed max-w-2xl lg:text-right">
+          <p className="text-slate-500 text-[10px] sm:text-xs leading-relaxed max-w-2xl lg:text-right">
             Investing in tokenized assets involves risks, including credit, liquidity, currency, interest rate, volatility, capital repayment, and market risks. These factors may affect the value and performance of your investment.
           </p>
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent mb-8" />
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent mb-6 sm:mb-8" />
 
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="text-xs text-slate-500">© 2025 Fragma Society.</p>
-          <p className="text-xs text-slate-600 text-right">
+        <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:justify-between md:items-center">
+          <p className="text-[10px] sm:text-xs text-slate-500">© 2025 Fragma Society.</p>
+          <p className="text-[10px] sm:text-xs text-slate-600 md:text-right leading-relaxed">
             Gyeld Sàrl, 26 Rue Goethe, L-1637 Luxembourg, Grand-Duché de Luxembourg · RCS B293857
           </p>
         </div>
