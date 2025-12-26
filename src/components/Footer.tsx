@@ -52,7 +52,6 @@ const footerNav = {
   ],
   businesses: [
     { label: "Launch your Signature Deal", href: "/signature-deal" },
-    { label: "Tokenize & List your asset", href: "/tokenize" },
   ],
   learn: [
     { label: "Community Center", href: "#" },
