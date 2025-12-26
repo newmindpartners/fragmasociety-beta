@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight, ChevronDown, Zap, ShoppingCart, HelpCircle, Crown, Briefcase, Rocket, Coins, Users, FileText } from "lucide-react";
+import { Menu, X, ArrowRight, ChevronDown, Zap, ArrowLeftRight, HelpCircle, Crown, Briefcase, Rocket, Coins, Users, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,7 +25,7 @@ const navSections: NavSection[] = [
     label: "Investors",
     items: [
       { label: "Live Deals", href: "/live-deals", description: "Browse current investment opportunities", icon: Zap, isRoute: true, badge: "Hot" },
-      { label: "Buy & Sell", href: "/marketplace", description: "Secondary marketplace for trading", icon: ShoppingCart, isRoute: true, badge: "Coming Soon" },
+      { label: "Trade", href: "/marketplace", description: "Secondary marketplace for trading", icon: ArrowLeftRight, isRoute: true, badge: "Coming Soon" },
       { label: "How It Works", href: "/how-it-works", description: "Understand the investment process", icon: HelpCircle, isRoute: true },
       { label: "Investor Membership", href: "/membership", description: "Exclusive benefits for members", icon: Crown, isRoute: true },
     ],
