@@ -80,7 +80,7 @@ export const SignatureDealsBanner = () => {
 
   return (
     <section 
-      className="relative h-[320px] md:h-[380px] overflow-hidden"
+      className="relative h-[400px] sm:h-[320px] md:h-[380px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -122,12 +122,12 @@ export const SignatureDealsBanner = () => {
         />
         
         {/* Subtle violet glow accents */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[250px] bg-violet-900/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[200px] bg-slate-700/20 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-[300px] sm:w-[500px] h-[150px] sm:h-[250px] bg-violet-900/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[200px] sm:w-[400px] h-[100px] sm:h-[200px] bg-slate-700/20 rounded-full blur-3xl" />
         
         {/* Top spotlight glow */}
         <div 
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px]"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[600px] h-[100px] sm:h-[200px]"
           style={{
             background: 'radial-gradient(ellipse at center top, rgba(148,130,180,0.08) 0%, transparent 70%)'
           }}
@@ -137,62 +137,111 @@ export const SignatureDealsBanner = () => {
       {/* Top Border Accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - hidden on mobile, visible on tablet+ */}
       <button
         onClick={() => { goToPrev(); handleManualNavigation((currentIndex - 1 + leaders.length) % leaders.length); }}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full transition-all duration-300 hover:bg-white/10"
+        className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full transition-all duration-300 hover:bg-white/10"
         style={{ color: 'rgba(255,255,255,0.6)' }}
         aria-label="Previous slide"
       >
-        <ChevronLeft size={28} strokeWidth={1.5} />
+        <ChevronLeft size={24} className="sm:w-7 sm:h-7" strokeWidth={1.5} />
       </button>
       
       <button
         onClick={() => { goToNext(); handleManualNavigation((currentIndex + 1) % leaders.length); }}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full transition-all duration-300 hover:bg-white/10"
+        className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full transition-all duration-300 hover:bg-white/10"
         style={{ color: 'rgba(255,255,255,0.6)' }}
         aria-label="Next slide"
       >
-        <ChevronRight size={28} strokeWidth={1.5} />
+        <ChevronRight size={24} className="sm:w-7 sm:h-7" strokeWidth={1.5} />
       </button>
 
-      {/* Content container */}
-      <div className="container relative z-10 h-full">
-        {/* LEFT - INVEST WITH - Absolute positioning for consistent placement */}
-        <div 
-          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 flex flex-col justify-center items-start"
-          style={{ transform: 'translateY(-50%) translateZ(0)' }}
-        >
-          <div className="flex items-center gap-4 mb-4">
-            <div 
-              className="h-px w-7"
-              style={{ background: 'rgba(255,255,255,0.3)' }}
-            />
-            <span 
-              className="text-[10px] tracking-[0.25em] uppercase font-light"
-              style={{ color: 'rgba(255,255,255,0.5)' }}
-            >
+      {/* Content container - Mobile: stacked layout, Desktop: grid */}
+      <div className="container relative z-10 h-full px-4 sm:px-6">
+        {/* Mobile Layout */}
+        <div className="flex sm:hidden flex-col items-center justify-center h-full text-center pt-4">
+          {/* Signature Deals label */}
+          <div className="flex items-center gap-3 mb-2">
+            <div className="h-px w-5" style={{ background: 'rgba(255,255,255,0.3)' }} />
+            <span className="text-[9px] tracking-[0.2em] uppercase font-light" style={{ color: 'rgba(255,255,255,0.5)' }}>
               Signature Deals
             </span>
+            <div className="h-px w-5" style={{ background: 'rgba(255,255,255,0.3)' }} />
           </div>
           
-          <h3
-            className="text-2xl md:text-4xl font-light tracking-wide uppercase"
-            style={{ 
-              color: 'rgba(255,255,255,0.85)',
-              letterSpacing: '0.15em'
-            }}
-          >
+          <h3 className="text-lg font-light tracking-wide uppercase mb-3" style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.1em' }}>
             Invest with
           </h3>
-
+          
+          {/* Portrait */}
+          <div className="relative h-[160px] mb-3">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={`portrait-mobile-${currentIndex}`}
+                src={current.image}
+                alt={current.name}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="h-full w-auto object-contain"
+                style={{ filter: 'grayscale(100%) contrast(1.15) brightness(1.1)', mixBlendMode: 'luminosity' }}
+              />
+            </AnimatePresence>
+          </div>
+          
+          {/* Name */}
+          <AnimatePresence mode="wait">
+            <motion.h2
+              key={`name-mobile-${currentIndex}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-2xl font-bold tracking-tight leading-none uppercase mb-1"
+              style={{ 
+                background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}
+            >
+              {current.name}
+            </motion.h2>
+          </AnimatePresence>
+          
+          {/* Title */}
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={`title-mobile-${currentIndex}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="text-xs font-serif mb-3"
+              style={{ color: 'rgba(255,255,255,0.5)', fontStyle: 'italic' }}
+            >
+              {current.title}
+            </motion.p>
+          </AnimatePresence>
+          
+          {/* CTA */}
+          <a href="#request-access">
+            <Button
+              size="sm"
+              className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 rounded-full px-4 h-8 text-xs font-medium tracking-wide transition-all duration-300 group"
+            >
+              Register your interest
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
+            </Button>
+          </a>
+          
           {/* Progress dots */}
-          <div className="flex items-center gap-3 mt-8">
+          <div className="flex items-center gap-3 mt-4">
             {leaders.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => handleManualNavigation(idx)}
-                className="group relative p-1"
+                className="p-1"
                 aria-label={`View ${leaders[idx].name}`}
               >
                 <div
@@ -206,19 +255,51 @@ export const SignatureDealsBanner = () => {
             ))}
           </div>
         </div>
+        
+        {/* Desktop Layout - Original grid */}
+        <div className="hidden sm:grid grid-cols-3 items-center h-full gap-4" style={{ transform: 'translateZ(0)' }}>
+          {/* LEFT - INVEST WITH */}
+          <div className="flex flex-col justify-center items-start pl-8 md:pl-12">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-px w-7" style={{ background: 'rgba(255,255,255,0.3)' }} />
+              <span className="text-[10px] tracking-[0.25em] uppercase font-light" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                Signature Deals
+              </span>
+            </div>
+            
+            <h3
+              className="text-2xl md:text-4xl font-light tracking-wide uppercase"
+              style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.15em' }}
+            >
+              Invest with
+            </h3>
 
-        {/* Grid for center portrait and right name */}
-        <div className="grid grid-cols-3 items-center h-full gap-4" style={{ transform: 'translateZ(0)' }}>
-          {/* Empty left column spacer */}
-          <div />
+            {/* Progress dots */}
+            <div className="flex items-center gap-3 mt-8">
+              {leaders.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleManualNavigation(idx)}
+                  className="group relative p-1"
+                  aria-label={`View ${leaders[idx].name}`}
+                >
+                  <div
+                    className="w-2 h-2 rounded-full transition-colors duration-300"
+                    style={{
+                      backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
+                      boxShadow: idx === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* MIDDLE - Leader portrait */}
           <div className="relative h-full flex items-end justify-center">
             <div 
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[400px]"
-              style={{
-                background: 'radial-gradient(ellipse 100% 100% at 50% 100%, rgba(255,250,240,0.06) 0%, transparent 60%)'
-              }}
+              style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 100%, rgba(255,250,240,0.06) 0%, transparent 60%)' }}
             />
             
             <AnimatePresence mode="wait">
@@ -227,21 +308,14 @@ export const SignatureDealsBanner = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ 
-                  duration: 0.6, 
-                  ease: "easeInOut"
-                }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
                 className="relative h-[85%] flex items-end"
-                style={{ transform: 'translateZ(0)' }}
               >
                 <img
                   src={current.image}
                   alt={current.name}
-                  className="h-full w-auto object-contain object-bottom max-w-[280px] md:max-w-[320px]"
-                  style={{ 
-                    filter: 'grayscale(100%) contrast(1.15) brightness(1.1)',
-                    mixBlendMode: 'luminosity'
-                  }}
+                  className="h-full w-auto object-contain object-bottom max-w-[220px] md:max-w-[320px]"
+                  style={{ filter: 'grayscale(100%) contrast(1.15) brightness(1.1)', mixBlendMode: 'luminosity' }}
                 />
                 <div 
                   className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-2xl"
@@ -251,29 +325,23 @@ export const SignatureDealsBanner = () => {
             </AnimatePresence>
           </div>
 
-          {/* RIGHT - Name and position - Fixed positioning */}
-          <div className="flex flex-col justify-center items-end text-right pr-4" style={{ transform: 'translateZ(0)' }}>
-            {/* Fixed height container for name */}
-            <div className="h-[60px] md:h-[80px] flex items-center justify-end mb-3 overflow-hidden">
+          {/* RIGHT - Name and position */}
+          <div className="flex flex-col justify-center items-end text-right pr-4 md:pr-8">
+            <div className="h-[50px] md:h-[80px] flex items-center justify-end mb-3 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.h2
                   key={`name-${currentIndex}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ 
-                    duration: 0.4, 
-                    ease: "easeInOut"
-                  }}
-                  className="text-3xl md:text-[58px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="text-2xl sm:text-3xl md:text-[58px] font-bold tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{ 
-                    transform: 'translateZ(0)',
                     background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
-                    textShadow: '0 0 60px rgba(180, 160, 200, 0.25)',
                     fontWeight: 700,
                     letterSpacing: '-0.02em'
                   }}
@@ -283,7 +351,6 @@ export const SignatureDealsBanner = () => {
               </AnimatePresence>
             </div>
 
-            {/* Fixed height container for title */}
             <div className="h-[24px] flex items-center justify-end overflow-hidden mb-4">
               <AnimatePresence mode="wait">
                 <motion.p
@@ -291,17 +358,9 @@ export const SignatureDealsBanner = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ 
-                    duration: 0.4, 
-                    delay: 0.1,
-                    ease: "easeInOut"
-                  }}
-                  className="text-sm md:text-base font-serif whitespace-nowrap"
-                  style={{ 
-                    color: 'rgba(255,255,255,0.5)',
-                    fontStyle: 'italic',
-                    fontWeight: 300
-                  }}
+                  transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
+                  className="text-xs sm:text-sm md:text-base font-serif whitespace-nowrap"
+                  style={{ color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', fontWeight: 300 }}
                 >
                   {current.title}
                 </motion.p>
@@ -328,12 +387,10 @@ export const SignatureDealsBanner = () => {
         </div>
       </div>
 
-      {/* Decorative bottom line - violet accent */}
+      {/* Decorative bottom line */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-px"
-        style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.3) 50%, transparent 100%)'
-        }}
+        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.3) 50%, transparent 100%)' }}
       />
     </section>
   );
