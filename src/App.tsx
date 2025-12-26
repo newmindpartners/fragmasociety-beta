@@ -26,6 +26,7 @@ import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import OrderDetails from "./pages/OrderDetails";
 import Watchlist from "./pages/Watchlist";
+import HelpCenter from "./pages/HelpCenter";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const App = () => (
             <Route path="/dashboard/market" element={<SecondaryMarket />} />
             <Route path="/dashboard/notifications" element={<Notifications />} />
             <Route path="/dashboard/settings" element={<Settings />} />
+            <Route path="/dashboard/help" element={<HelpCenter />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/fund" element={<Strategy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
