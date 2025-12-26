@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,13 +35,16 @@ const SLIDE_DURATION = 5000;
 export const SignatureDealsBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const goToNext = useCallback(() => {
+    setSwipeDirection('left');
     setCurrentIndex((prev) => (prev + 1) % leaders.length);
   }, []);
 
   const goToPrev = useCallback(() => {
+    setSwipeDirection('right');
     setCurrentIndex((prev) => (prev - 1 + leaders.length) % leaders.length);
   }, []);
 
@@ -69,6 +72,7 @@ export const SignatureDealsBanner = () => {
   }, [isHovered, startAutoplay, stopAutoplay]);
 
   const handleManualNavigation = (index: number) => {
+    setSwipeDirection(index > currentIndex ? 'left' : 'right');
     setCurrentIndex(index);
     // Reset the autoplay timer when manually navigating
     if (!isHovered) {
@@ -76,13 +80,27 @@ export const SignatureDealsBanner = () => {
     }
   };
 
+  // Swipe gesture handler for mobile
+  const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const threshold = 50;
+    const velocity = 0.3;
+    
+    if (info.offset.x < -threshold || info.velocity.x < -velocity) {
+      goToNext();
+    } else if (info.offset.x > threshold || info.velocity.x > velocity) {
+      goToPrev();
+    }
+  }, [goToNext, goToPrev]);
+
   const current = leaders[currentIndex];
 
   return (
     <section 
-      className="relative h-[400px] sm:h-[320px] md:h-[380px] overflow-hidden"
+      className="relative h-[480px] sm:h-[380px] md:h-[400px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setTimeout(() => setIsHovered(false), 3000)}
     >
       {/* Deep Slate/Navy Background - matching legal footer */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
@@ -137,68 +155,75 @@ export const SignatureDealsBanner = () => {
       {/* Top Border Accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
 
-      {/* Navigation Arrows - hidden on mobile, visible on tablet+ */}
+      {/* Navigation Arrows - Larger tap targets */}
       <button
         onClick={() => { goToPrev(); handleManualNavigation((currentIndex - 1 + leaders.length) % leaders.length); }}
-        className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full transition-all duration-300 hover:bg-white/10"
+        className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-2 rounded-full transition-all duration-300 hover:bg-white/10 active:bg-white/20 min-w-[48px] min-h-[48px] flex items-center justify-center"
         style={{ color: 'rgba(255,255,255,0.6)' }}
         aria-label="Previous slide"
       >
-        <ChevronLeft size={24} className="sm:w-7 sm:h-7" strokeWidth={1.5} />
+        <ChevronLeft size={28} className="sm:w-7 sm:h-7" strokeWidth={1.5} />
       </button>
       
       <button
         onClick={() => { goToNext(); handleManualNavigation((currentIndex + 1) % leaders.length); }}
-        className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full transition-all duration-300 hover:bg-white/10"
+        className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-2 rounded-full transition-all duration-300 hover:bg-white/10 active:bg-white/20 min-w-[48px] min-h-[48px] flex items-center justify-center"
         style={{ color: 'rgba(255,255,255,0.6)' }}
         aria-label="Next slide"
       >
-        <ChevronRight size={24} className="sm:w-7 sm:h-7" strokeWidth={1.5} />
+        <ChevronRight size={28} className="sm:w-7 sm:h-7" strokeWidth={1.5} />
       </button>
 
-      {/* Content container - Mobile: stacked layout, Desktop: grid */}
+      {/* Content container - Mobile: stacked layout with swipe, Desktop: grid */}
       <div className="container relative z-10 h-full px-4 sm:px-6">
-        {/* Mobile Layout */}
-        <div className="flex sm:hidden flex-col items-center justify-center h-full text-center pt-4">
+        {/* Mobile Layout - Enhanced with swipe gestures */}
+        <motion.div 
+          className="flex sm:hidden flex-col items-center justify-center h-full text-center pt-6 touch-pan-y select-none"
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.15}
+          onDragEnd={handleDragEnd}
+          style={{ touchAction: "pan-y" }}
+        >
           {/* Signature Deals label */}
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-px w-5" style={{ background: 'rgba(255,255,255,0.3)' }} />
-            <span className="text-[9px] tracking-[0.2em] uppercase font-light" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-px w-6" style={{ background: 'rgba(255,255,255,0.3)' }} />
+            <span className="text-[10px] tracking-[0.25em] uppercase font-light" style={{ color: 'rgba(255,255,255,0.5)' }}>
               Signature Deals
             </span>
-            <div className="h-px w-5" style={{ background: 'rgba(255,255,255,0.3)' }} />
+            <div className="h-px w-6" style={{ background: 'rgba(255,255,255,0.3)' }} />
           </div>
           
-          <h3 className="text-lg font-light tracking-wide uppercase mb-3" style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.1em' }}>
+          <h3 className="text-xl font-light tracking-wide uppercase mb-4" style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.12em' }}>
             Invest with
           </h3>
           
-          {/* Portrait */}
-          <div className="relative h-[160px] mb-3">
+          {/* Portrait - Larger for mobile */}
+          <div className="relative h-[180px] mb-4">
             <AnimatePresence mode="wait">
               <motion.img
                 key={`portrait-mobile-${currentIndex}`}
                 src={current.image}
                 alt={current.name}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0, x: swipeDirection === 'left' ? 60 : swipeDirection === 'right' ? -60 : 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: swipeDirection === 'left' ? -60 : swipeDirection === 'right' ? 60 : 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="h-full w-auto object-contain"
                 style={{ filter: 'grayscale(100%) contrast(1.15) brightness(1.1)', mixBlendMode: 'luminosity' }}
               />
             </AnimatePresence>
           </div>
           
-          {/* Name */}
+          {/* Name - Larger for mobile */}
           <AnimatePresence mode="wait">
             <motion.h2
               key={`name-mobile-${currentIndex}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="text-2xl font-bold tracking-tight leading-none uppercase mb-1"
+              initial={{ opacity: 0, x: swipeDirection === 'left' ? 30 : swipeDirection === 'right' ? -30 : 0 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: swipeDirection === 'left' ? -30 : swipeDirection === 'right' ? 30 : 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="text-2xl sm:text-3xl font-bold tracking-tight leading-none uppercase mb-2"
               style={{ 
                 background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                 WebkitBackgroundClip: 'text',
@@ -217,44 +242,65 @@ export const SignatureDealsBanner = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="text-xs font-serif mb-3"
+              className="text-sm font-serif mb-5 px-4"
               style={{ color: 'rgba(255,255,255,0.5)', fontStyle: 'italic' }}
             >
               {current.title}
             </motion.p>
           </AnimatePresence>
           
-          {/* CTA */}
+          {/* CTA - Larger tap target */}
           <a href="#request-access">
             <Button
-              size="sm"
-              className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 rounded-full px-4 h-8 text-xs font-medium tracking-wide transition-all duration-300 group"
+              size="default"
+              className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 active:bg-white/90 rounded-full px-6 h-11 text-sm font-medium tracking-wide transition-all duration-300 group"
             >
               Register your interest
-              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
             </Button>
           </a>
           
-          {/* Progress dots */}
-          <div className="flex items-center gap-3 mt-4">
+          {/* Progress dots - Larger tap targets */}
+          <div className="flex items-center gap-4 mt-6">
             {leaders.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => handleManualNavigation(idx)}
-                className="p-1"
+                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label={`View ${leaders[idx].name}`}
               >
-                <div
-                  className="w-2 h-2 rounded-full transition-colors duration-300"
+                <motion.div
+                  className="rounded-full transition-all duration-300"
+                  animate={{
+                    width: idx === currentIndex ? 24 : 10,
+                    height: 10,
+                    backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)',
+                  }}
                   style={{
-                    backgroundColor: idx === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
-                    boxShadow: idx === currentIndex ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
+                    boxShadow: idx === currentIndex ? '0 0 12px rgba(255,255,255,0.5)' : 'none'
                   }}
                 />
               </button>
             ))}
           </div>
-        </div>
+          
+          {/* Swipe hint */}
+          <div className="flex items-center gap-1.5 mt-4 text-white/30 text-[10px]">
+            <motion.span
+              animate={{ x: [-2, 2, -2] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              ←
+            </motion.span>
+            <span>Swipe</span>
+            <motion.span
+              animate={{ x: [2, -2, 2] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              →
+            </motion.span>
+          </div>
+        </motion.div>
         
         {/* Desktop Layout - Original grid */}
         <div className="hidden sm:grid grid-cols-3 items-center h-full gap-4" style={{ transform: 'translateZ(0)' }}>
