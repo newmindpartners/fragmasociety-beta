@@ -38,88 +38,50 @@ export const SocialProof = () => (
       <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
       
-      {/* Animated logos - two identical strips for seamless loop */}
+      {/* Animated logos - seamless infinite scroll */}
       <TooltipProvider delayDuration={100}>
-        <div className="flex group/scroll">
-          {/* First strip */}
-          <div
-            className="flex items-center gap-16 shrink-0 animate-scroll-seamless group-hover/scroll:[animation-play-state:paused]"
-          >
-            {partners.map((partner, i) => (
-              <Tooltip key={`${partner.name}-a-${i}`}>
-                <TooltipTrigger asChild>
-                  <a 
-                    href={partner.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
-                  >
-                    <img 
-                      src={partner.logo} 
-                      alt={partner.name}
-                      className="h-full w-auto object-contain max-w-[150px]"
-                    />
-                  </a>
-                </TooltipTrigger>
-                <TooltipContent 
-                  side="bottom" 
-                  className="z-50 bg-slate-900 border-slate-700 px-3 py-1.5"
+        <motion.div 
+          className="flex"
+          animate={{ x: [0, -1 * (partners.length * 166 + 64)] }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 20,
+              ease: "linear",
+            },
+          }}
+        >
+          {/* Triple the logos for seamless loop */}
+          {[...partners, ...partners, ...partners, ...partners].map((partner, i) => (
+            <Tooltip key={`${partner.name}-${i}`}>
+              <TooltipTrigger asChild>
+                <a 
+                  href={partner.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`flex-shrink-0 h-12 mx-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
                 >
-                  <p className="text-xs font-medium text-white">{partner.name}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-            <div className="w-16 shrink-0" />
-          </div>
-          {/* Second strip (duplicate for seamless loop) */}
-          <div
-            className="flex items-center gap-16 shrink-0 animate-scroll-seamless group-hover/scroll:[animation-play-state:paused]"
-          >
-            {partners.map((partner, i) => (
-              <Tooltip key={`${partner.name}-b-${i}`}>
-                <TooltipTrigger asChild>
-                  <a 
-                    href={partner.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`flex-shrink-0 h-12 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
-                  >
-                    <img 
-                      src={partner.logo} 
-                      alt={partner.name}
-                      className="h-full w-auto object-contain max-w-[150px]"
-                    />
-                  </a>
-                </TooltipTrigger>
-                <TooltipContent 
-                  side="bottom" 
-                  className="z-50 bg-slate-900 border-slate-700 px-3 py-1.5"
-                >
-                  <p className="text-xs font-medium text-white">{partner.name}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-            <div className="w-16 shrink-0" />
-          </div>
-        </div>
+                  <img 
+                    src={partner.logo} 
+                    alt={partner.name}
+                    className="h-full w-auto object-contain max-w-[150px]"
+                  />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent 
+                side="bottom" 
+                className="z-50 bg-slate-900 border-slate-700 px-3 py-1.5"
+              >
+                <p className="text-xs font-medium text-white">{partner.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </motion.div>
       </TooltipProvider>
     </div>
     
     {/* Bottom border */}
     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-    
-    <style>{`
-      @keyframes scroll-seamless {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-100%);
-        }
-      }
-      .animate-scroll-seamless {
-        animation: scroll-seamless 25s linear infinite;
-      }
-    `}</style>
   </section>
 );
