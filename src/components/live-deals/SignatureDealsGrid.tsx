@@ -159,7 +159,7 @@ export const SignatureDealsGrid = () => {
   };
 
   return (
-    <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden">
+    <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden">
       {/* Premium Light Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50">
         <div className="absolute top-0 left-1/4 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
@@ -297,9 +297,9 @@ export const SignatureDealsGrid = () => {
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-12 sm:mt-20 flex justify-center"
+          className="mt-8 sm:mt-12 flex justify-center"
         >
-          <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <div className="h-px w-20 sm:w-24 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
         </motion.div>
       </div>
     </section>
