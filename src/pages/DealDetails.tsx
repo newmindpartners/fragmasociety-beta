@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DealHero } from "@/components/deal-details/DealHero";
@@ -24,6 +24,7 @@ import { DealHighlights } from "@/components/deal-details/DealHighlights";
 import { DealSectionFAQ } from "@/components/deal-details/DealSectionFAQ";
 import { DealDiscussion } from "@/components/deal-details/DealDiscussion";
 import { DealUpdates } from "@/components/deal-details/DealUpdates";
+import { PullToRefresh } from "@/components/PullToRefresh";
 
 import { useDeal } from "@/hooks/useDeal";
 import type { DealData } from "@/types/deal";
@@ -179,10 +180,17 @@ const DealDetails = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("overview");
   
-  const { data: dbDeal, isLoading } = useDeal(id);
+  const { data: dbDeal, isLoading, refetch } = useDeal(id);
   
   // Use database deal if available, otherwise fall back to hardcoded data
   const deal = dbDeal || (id ? fallbackDeals[id] : null);
+
+  // Pull-to-refresh handler
+  const handleRefresh = useCallback(async () => {
+    await refetch();
+    // Add a small delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }, [refetch]);
 
   // Define sections based on available deal data
   const sections = [
@@ -348,22 +356,24 @@ const DealDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <DealHero deal={deal} />
-      <div className="relative bg-white">
-        <DealSectionNav 
-          sections={sections} 
-          activeSection={activeSection} 
-          onSectionChange={handleSectionChange} 
-        />
-        <div className="min-h-[60vh] bg-white">
-          {renderSectionContent()}
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <DealHero deal={deal} />
+        <div className="relative bg-white">
+          <DealSectionNav 
+            sections={sections} 
+            activeSection={activeSection} 
+            onSectionChange={handleSectionChange} 
+          />
+          <div className="min-h-[60vh] bg-white">
+            {renderSectionContent()}
+          </div>
         </div>
+        <DealCTA deal={deal} />
+        <Footer />
       </div>
-      <DealCTA deal={deal} />
-      <Footer />
-    </div>
+    </PullToRefresh>
   );
 };
 
