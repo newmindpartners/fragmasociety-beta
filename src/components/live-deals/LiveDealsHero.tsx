@@ -14,7 +14,7 @@ export const LiveDealsHero = () => {
             <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-violet-400" />
           </div>
           <span className="text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase text-violet-400 font-medium">
-            Live Opportunities
+            Extraordinary Assets
           </span>
         </div>
 
@@ -23,13 +23,13 @@ export const LiveDealsHero = () => {
           className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-4 sm:mb-6"
           style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
         >
-          Signature{" "}
-          <span className="italic text-violet-300">Deals</span>
+          Own the{" "}
+          <span className="italic text-violet-300">Extraordinary</span>
         </h1>
 
         {/* Description */}
         <p className="text-base sm:text-lg md:text-xl text-slate-400 font-light max-w-2xl leading-relaxed mb-10 sm:mb-16">
-          Curated investment opportunities in real assets, designed for modern investors.
+          Exclusive access to curated extraordinary assets, led by industry icons.
         </p>
 
         {/* Stats cards - 2x2 grid on mobile, 4 cols on desktop */}

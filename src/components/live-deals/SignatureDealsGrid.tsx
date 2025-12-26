@@ -178,23 +178,23 @@ export const SignatureDealsGrid = () => {
                 className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6"
               >
                 <div className="w-8 sm:w-12 h-px bg-slate-300" />
-                <span className="text-[9px] sm:text-[10px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-slate-400 font-medium">
-                  Signature Deals
-                </span>
-              </motion.div>
-              
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1, duration: 0.6 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05]"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Invest alongside
-                <br />
-                <span className="italic text-slate-500">industry leaders.</span>
-              </motion.h2>
+              <span className="text-[9px] sm:text-[10px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-slate-400 font-medium">
+                Extraordinary Opportunities
+              </span>
+            </motion.div>
+            
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05]"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              Be part of the story.
+              <br />
+              <span className="italic text-slate-500">Invest alongside icons.</span>
+            </motion.h2>
             </div>
 
             {/* Navigation Arrows - stacked on mobile */}

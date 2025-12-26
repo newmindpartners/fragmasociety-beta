@@ -65,7 +65,7 @@ export const HowSignatureDealsWork = () => {
           >
             <div className="w-10 sm:w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
             <span className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-400 font-medium">
-              For Issuers & Investors
+              Extraordinary by Design
             </span>
           </motion.div>
           
@@ -75,9 +75,9 @@ export const HowSignatureDealsWork = () => {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-6 sm:mb-8"
           >
-            Designed with leaders,
+            Crafted with icons,
             <br />
-            <span className="italic text-slate-500 font-serif">built for investors.</span>
+            <span className="italic text-slate-500 font-serif">built for discerning investors.</span>
           </motion.h2>
           
           <motion.p
@@ -86,8 +86,8 @@ export const HowSignatureDealsWork = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-base sm:text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
           >
-            We work hand-in-hand with each industry leader to structure a compliant, attractive, 
-            and long-term aligned investment product. Every Signature Deal combines:
+            We partner with visionary leaders to create extraordinary investment opportunities. 
+            Every deal is structured for transparency, compliance, and long-term value:
           </motion.p>
         </div>
 
