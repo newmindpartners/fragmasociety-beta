@@ -37,13 +37,13 @@ export const PaymentMethodSelector = ({
               onOpenChange(false);
               onSelectCard();
             }}
-            className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50 hover:border-primary hover:bg-primary/5 transition-all group text-left"
+            className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50 hover:border-slate-400 hover:bg-slate-100 transition-all group text-left"
           >
-            <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center group-hover:border-primary/30 transition-colors">
-              <CreditCard className="w-6 h-6 text-gray-600 group-hover:text-primary transition-colors" />
+            <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center group-hover:border-slate-400 transition-colors">
+              <CreditCard className="w-6 h-6 text-gray-600 group-hover:text-slate-700 transition-colors" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors">Credit or Debit Card</h3>
+              <h3 className="font-semibold text-gray-900 group-hover:text-slate-900 transition-colors">Credit or Debit Card</h3>
               <p className="text-sm text-gray-500">Add Visa, Mastercard, or other cards</p>
             </div>
           </button>
@@ -54,13 +54,13 @@ export const PaymentMethodSelector = ({
               onOpenChange(false);
               onSelectBankAccount();
             }}
-            className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50 hover:border-primary hover:bg-primary/5 transition-all group text-left"
+            className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50 hover:border-slate-400 hover:bg-slate-100 transition-all group text-left"
           >
-            <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center group-hover:border-primary/30 transition-colors">
-              <Building2 className="w-6 h-6 text-gray-600 group-hover:text-primary transition-colors" />
+            <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center group-hover:border-slate-400 transition-colors">
+              <Building2 className="w-6 h-6 text-gray-600 group-hover:text-slate-700 transition-colors" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors">Bank Account</h3>
+              <h3 className="font-semibold text-gray-900 group-hover:text-slate-900 transition-colors">Bank Account</h3>
               <p className="text-sm text-gray-500">Add IBAN, SWIFT for wire transfers</p>
             </div>
           </button>

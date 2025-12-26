@@ -162,7 +162,7 @@ export const TransferHistory = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Loader2 className="w-8 h-8 animate-spin text-slate-700" />
       </div>
     );
   }
@@ -182,7 +182,7 @@ export const TransferHistory = () => {
   return (
     <div>
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-primary mb-6">
+      <div className="flex items-center gap-2 text-sm text-slate-700 mb-6">
         <Link to="/dashboard/banking" className="hover:underline">
           Banking
         </Link>
@@ -222,7 +222,7 @@ export const TransferHistory = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: groupIndex * 0.1 }}
             >
-              <h3 className="text-sm font-medium text-primary mb-3">{group.label}</h3>
+              <h3 className="text-sm font-medium text-slate-700 mb-3">{group.label}</h3>
               <div className="space-y-3">
                 {group.transfers.map((transfer, index) => (
                   <motion.div

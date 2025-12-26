@@ -100,8 +100,8 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
   const renderFormStep = () => (
     <>
       <DialogHeader className="space-y-4">
-        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-          <ArrowUpRight className="w-6 h-6 text-primary" />
+        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+          <ArrowUpRight className="w-6 h-6 text-slate-700" />
         </div>
         <div>
           <DialogTitle className="text-xl font-semibold text-gray-900">Withdraw from Fragma</DialogTitle>
@@ -126,7 +126,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
               type="button"
               variant="ghost"
               size="sm"
-              className="text-primary hover:text-primary/80 hover:bg-transparent p-0 h-auto"
+              className="text-slate-700 hover:text-slate-900 hover:bg-transparent p-0 h-auto"
               onClick={() => setAddBankAccountOpen(true)}
             >
               <Plus className="w-4 h-4 mr-1" />
@@ -140,8 +140,8 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                 key={account.id}
                 className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${
                   selectedAccount === account.id
-                    ? "border-primary bg-primary/5"
-                    : "border-gray-200 hover:border-primary/30"
+                    ? "border-slate-900 bg-slate-50"
+                    : "border-gray-200 hover:border-slate-400"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">USD</span>
           </div>
-          <p className="text-sm text-primary">Available ${availableBalance.toLocaleString()}</p>
+          <p className="text-sm text-slate-700">Available ${availableBalance.toLocaleString()}</p>
         </div>
 
         {/* Notice */}
@@ -194,7 +194,8 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
           <Button
             type="button"
             onClick={handleProceedToConfirm}
-            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+            variant="navy"
+            className="flex-1"
           >
             Continue
           </Button>
@@ -273,7 +274,8 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
           <Button
             type="button"
             onClick={handleConfirmWithdrawal}
-            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+            variant="navy"
+            className="flex-1"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -341,7 +343,8 @@ export const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
           </Button>
           <Button
             type="button"
-            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+            variant="navy"
+            className="flex-1"
             onClick={handleViewTransferHistory}
           >
             View Transfer History

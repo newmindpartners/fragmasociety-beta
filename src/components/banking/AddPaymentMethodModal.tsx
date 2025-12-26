@@ -106,8 +106,8 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="theme-dashboard sm:max-w-md bg-white border-gray-200 text-gray-900">
         <DialogHeader className="space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <CreditCard className="w-6 h-6 text-primary" />
+          <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+            <CreditCard className="w-6 h-6 text-slate-700" />
           </div>
           <div>
             <DialogTitle className="text-xl font-semibold text-foreground">Add Payment Method</DialogTitle>
@@ -118,9 +118,9 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
         {/* Recommendation Section */}
         <Collapsible open={recommendationOpen} onOpenChange={setRecommendationOpen}>
           <CollapsibleTrigger asChild>
-            <div className="flex items-center justify-between p-4 rounded-xl border border-primary/30 bg-primary/5 cursor-pointer hover:bg-primary/10 transition-colors">
+            <div className="flex items-center justify-between p-4 rounded-xl border border-slate-300 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors">
               <div>
-                <p className="font-medium text-primary">See Our Recommendation</p>
+                <p className="font-medium text-slate-700">See Our Recommendation</p>
                 <p className="text-sm text-muted-foreground">
                   Check our suggested payment method to find the best option for you.
                 </p>
@@ -208,7 +208,8 @@ export const AddPaymentMethodModal = ({ open, onOpenChange }: AddPaymentMethodMo
             </Button>
             <Button
               type="submit"
-              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+              variant="navy"
+              className="flex-1"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

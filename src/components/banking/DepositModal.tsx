@@ -117,7 +117,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
         type="button"
         variant="ghost"
         size="sm"
-        className="ml-2 h-8 w-8 p-0 hover:bg-primary/10"
+        className="ml-2 h-8 w-8 p-0 hover:bg-slate-100"
         onClick={() => handleCopy(value, fieldName)}
       >
         {copiedField === fieldName ? (
@@ -135,8 +135,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
         {step === "form" && (
           <>
             <DialogHeader className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <ArrowDownLeft className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+                <ArrowDownLeft className="w-6 h-6 text-slate-700" />
               </div>
               <div>
                 <DialogTitle className="text-xl font-semibold text-foreground">Deposit to Fragma</DialogTitle>
@@ -148,7 +148,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
 
             <form onSubmit={handleSubmit} className="space-y-5 mt-4 flex-1 overflow-y-auto">
               {/* Balance Display */}
-              <div className="p-4 rounded-xl border border-primary border-dashed bg-primary/5">
+              <div className="p-4 rounded-xl border border-slate-300 border-dashed bg-slate-50">
                 <p className="text-sm text-muted-foreground">Balance</p>
                 <p className="text-lg font-semibold text-foreground">US ${currentBalance.toLocaleString()}.00 Available</p>
               </div>
@@ -161,7 +161,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="text-primary hover:text-primary/80 hover:bg-transparent p-0 h-auto"
+                    className="text-slate-700 hover:text-slate-900 hover:bg-transparent p-0 h-auto"
                     onClick={() => setAddBankAccountOpen(true)}
                   >
                     <Plus className="w-4 h-4 mr-1" />
@@ -175,8 +175,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                       key={account.id}
                       className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${
                         selectedAccount === account.id
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/30"
+                          ? "border-slate-900 bg-slate-50"
+                          : "border-border hover:border-slate-400"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -208,7 +208,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">USD</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Day Limit: <span className="text-primary font-medium">${dailyLimit.toLocaleString()}</span></p>
+                <p className="text-sm text-muted-foreground">Day Limit: <span className="text-slate-700 font-medium">${dailyLimit.toLocaleString()}</span></p>
               </div>
 
               {/* Notice */}
@@ -228,7 +228,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                  variant="navy"
+                  className="flex-1"
                 >
                   Continue
                 </Button>
@@ -240,8 +241,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
         {step === "confirmation" && (
           <>
             <DialogHeader className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+                <Building2 className="w-6 h-6 text-slate-700" />
               </div>
               <div>
                 <DialogTitle className="text-xl font-semibold text-foreground">Fragma Bank Details</DialogTitle>
@@ -253,7 +254,7 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
 
             <div className="space-y-3 mt-4 flex-1 overflow-y-auto">
               {/* Amount Summary */}
-              <div className="p-4 rounded-xl border border-primary bg-primary/5 text-center">
+              <div className="p-4 rounded-xl border border-slate-300 bg-slate-50 text-center">
                 <p className="text-sm text-muted-foreground">Amount to Deposit</p>
                 <p className="text-2xl font-bold text-foreground">${parseFloat(amount).toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground mt-1">USD</p>
@@ -308,7 +309,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
                 </Button>
                 <Button
                   type="button"
-                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                  variant="navy"
+                  className="flex-1"
                   onClick={handleConfirmDeposit}
                   disabled={isSubmitting}
                 >
@@ -329,8 +331,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
         {step === "success" && (
           <>
             <div className="flex flex-col items-center text-center py-6">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <Clock className="w-8 h-8 text-primary" />
+              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                <Clock className="w-8 h-8 text-slate-700" />
               </div>
               <DialogTitle className="text-xl font-semibold text-foreground mb-2">
                 Deposit Pending
@@ -370,7 +372,8 @@ export const DepositModal = ({ open, onOpenChange }: DepositModalProps) => {
 
               <Button
                 type="button"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                variant="navy"
+                className="w-full"
                 onClick={handleClose}
               >
                 Done
