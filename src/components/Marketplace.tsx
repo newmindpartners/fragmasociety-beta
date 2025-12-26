@@ -166,40 +166,40 @@ export const Marketplace = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative py-20 lg:py-28 overflow-hidden bg-[#f8f9fa]"
+      className="relative py-16 sm:py-20 lg:py-28 overflow-hidden bg-[#f8f9fa]"
     >
       {/* Subtle Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-violet-100/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-[300px] h-[300px] bg-slate-200/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-0 w-[200px] sm:w-[400px] h-[200px] sm:h-[400px] bg-violet-100/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-0 w-[150px] sm:w-[300px] h-[150px] sm:h-[300px] bg-slate-200/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           
           {/* Left - Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="max-w-xl"
+            className="max-w-xl order-2 lg:order-1"
           >
             <motion.span
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.1 }}
-              className="text-[11px] tracking-[0.4em] uppercase text-slate-400 font-medium mb-6 block"
+              className="text-[10px] sm:text-[11px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-400 font-medium mb-4 sm:mb-6 block"
             >
               Secondary Market
             </motion.span>
             
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-4 sm:mb-6">
               Ownership,
               <br />
               <span className="text-slate-500">with an exit.</span>
             </h2>
             
-            <p className="text-lg text-slate-500 leading-relaxed mb-8 max-w-md">
+            <p className="text-base sm:text-lg text-slate-500 leading-relaxed mb-6 sm:mb-8 max-w-md">
               Buy and sell your positions directly with other investors. 
               24/7 liquidity, instant settlement, transparent pricing.
             </p>
@@ -209,7 +209,7 @@ export const Marketplace = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-wrap gap-3 mb-10"
+              className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10"
             >
               {[
                 { icon: Shield, label: "Non-custodial" },
@@ -223,9 +223,9 @@ export const Marketplace = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ delay: 0.5 + index * 0.1, duration: 0.4 }}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-slate-200 bg-white/80 backdrop-blur-sm text-slate-600 text-sm hover:border-slate-300 hover:bg-white transition-all duration-300"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border border-slate-200 bg-white/80 backdrop-blur-sm text-slate-600 text-xs sm:text-sm hover:border-slate-300 hover:bg-white transition-all duration-300"
                 >
-                  <feature.icon className="w-4 h-4 text-slate-400" strokeWidth={1.5} />
+                  <feature.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" strokeWidth={1.5} />
                   <span>{feature.label}</span>
                 </motion.div>
               ))}
@@ -233,7 +233,7 @@ export const Marketplace = () => {
             
             <Button 
               size="lg" 
-              className="bg-slate-400 text-white px-8 py-6 text-base rounded-full cursor-not-allowed opacity-70"
+              className="bg-slate-400 text-white px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base rounded-full cursor-not-allowed opacity-70"
               disabled
             >
               Coming Soon
@@ -241,7 +241,7 @@ export const Marketplace = () => {
           </motion.div>
           
           {/* Right - Photo Grid */}
-          <div className="grid grid-cols-3 gap-3 lg:gap-4 h-[500px] lg:h-[600px]">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 h-[300px] sm:h-[400px] lg:h-[600px] order-1 lg:order-2">
             {assets.map((asset, index) => (
               <PhotoCard
                 key={asset.id}

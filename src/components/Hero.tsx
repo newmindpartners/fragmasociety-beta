@@ -59,16 +59,16 @@ export const Hero = () => {
 
       {/* Content - Bottom aligned like luxury brands */}
       <div className="relative z-10 min-h-screen flex flex-col justify-end">
-        <div className="container mx-auto px-6 lg:px-12 pb-24 pt-32">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 pb-16 sm:pb-24 pt-24 sm:pt-32">
           <div className="max-w-5xl">
             {/* Badge - Minimal */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="mb-8"
+              className="mb-6 sm:mb-8"
             >
-              <span className="inline-block text-xs tracking-[0.4em] uppercase text-white/60 px-4 py-2 border border-white/20 rounded-full backdrop-blur-sm">
+              <span className="inline-block text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase text-white/60 px-3 sm:px-4 py-1.5 sm:py-2 border border-white/20 rounded-full backdrop-blur-sm">
                 Coming Soon
               </span>
             </motion.div>
@@ -78,7 +78,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white/80 leading-[1.1] tracking-tight mb-2"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white/80 leading-[1.1] tracking-tight mb-2"
             >
               Be part of the story.
             </motion.h1>
@@ -87,13 +87,13 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[0.95] tracking-tight mb-6"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white leading-[0.95] tracking-tight mb-4 sm:mb-6"
             >
               Own the extraordinary.
             </motion.h2>
             
             {/* Animated dynamic word - Editorial style */}
-            <div className="h-[50px] md:h-[60px] lg:h-[70px] overflow-hidden relative mb-6">
+            <div className="h-[40px] sm:h-[50px] md:h-[60px] lg:h-[70px] overflow-hidden relative mb-4 sm:mb-6">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={currentWordIndex}
@@ -101,7 +101,7 @@ export const Hero = () => {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -60, opacity: 0 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="block text-2xl md:text-3xl lg:text-4xl font-light text-white/60 leading-[1.2] tracking-tight"
+                  className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-white/60 leading-[1.2] tracking-tight"
                 >
                   {dynamicWords[currentWordIndex]}
                 </motion.span>
@@ -113,15 +113,15 @@ export const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="flex items-center gap-2 mb-10 pb-10 border-b border-white/10"
+              className="flex items-center gap-1.5 sm:gap-2 mb-8 sm:mb-10 pb-8 sm:pb-10 border-b border-white/10"
             >
               {dynamicWords.map((_, index) => (
                 <motion.div
                   key={index}
                   className={`h-0.5 rounded-full transition-all duration-500 ${
                     index === currentWordIndex 
-                      ? "w-8 bg-white" 
-                      : "w-2 bg-white/20"
+                      ? "w-6 sm:w-8 bg-white" 
+                      : "w-1.5 sm:w-2 bg-white/20"
                   }`}
                 />
               ))}
@@ -132,7 +132,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl text-white/60 max-w-2xl mb-10 font-light"
+              className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl mb-8 sm:mb-10 font-light"
             >
               Join a community of discerning investors with exclusive access to curated extraordinary assets.
             </motion.p>
@@ -145,7 +145,7 @@ export const Hero = () => {
             >
               <Button 
                 size="lg" 
-                className="bg-white text-neutral-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
+                className="bg-white text-neutral-900 hover:bg-white/90 rounded-full px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base font-medium"
               >
                 Register your interest
                 <motion.span
@@ -167,7 +167,7 @@ export const Hero = () => {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="border-t border-slate-700/50 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-900/95 backdrop-blur-md"
         >
-          <div className="container mx-auto px-6 lg:px-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-12">
             <div className="grid grid-cols-3 divide-x divide-slate-700/50">
               {[
                 { label: "OWN", desc: "Fractional stakes from €50" },
@@ -179,12 +179,12 @@ export const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                  className="py-6 px-4 md:px-8 text-center group cursor-pointer hover:bg-slate-800/50 transition-colors"
+                  className="py-4 sm:py-6 px-2 sm:px-4 md:px-8 text-center group cursor-pointer hover:bg-slate-800/50 transition-colors"
                 >
-                  <p className="text-xs tracking-[0.2em] uppercase text-violet-400/70 mb-1 group-hover:text-violet-300 transition-colors">
+                  <p className="text-[10px] sm:text-xs tracking-[0.15em] sm:tracking-[0.2em] uppercase text-violet-400/70 mb-0.5 sm:mb-1 group-hover:text-violet-300 transition-colors">
                     {item.label}
                   </p>
-                  <p className="text-sm md:text-base text-slate-300 group-hover:text-white transition-colors">
+                  <p className="text-xs sm:text-sm md:text-base text-slate-300 group-hover:text-white transition-colors line-clamp-2 sm:line-clamp-none">
                     {item.desc}
                   </p>
                 </motion.div>
@@ -194,9 +194,9 @@ export const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - hidden on mobile */}
       <motion.div
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20"
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 hidden sm:block"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >

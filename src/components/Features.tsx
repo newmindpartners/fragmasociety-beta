@@ -27,13 +27,13 @@ export const Features = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section id="features" className="relative py-32 lg:py-40 overflow-hidden">
+    <section id="features" className="relative py-20 sm:py-32 lg:py-40 overflow-hidden">
       {/* Premium Light Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
         {/* Subtle spotlight effects */}
-        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
+        <div className="absolute top-0 left-1/4 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-radial from-slate-100/40 via-slate-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[1000px] h-[250px] sm:h-[500px] bg-gradient-radial from-white via-transparent to-transparent rounded-full blur-2xl opacity-90" />
       </div>
 
       {/* Subtle grid pattern */}
@@ -45,17 +45,17 @@ export const Features = () => {
         }}
       />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Header Section */}
-        <div className="max-w-4xl mb-24">
+        <div className="max-w-4xl mb-12 sm:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
           >
-            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+            <div className="w-10 sm:w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-400 font-medium">
               Why Fragma Society
             </span>
           </motion.div>
@@ -65,7 +65,7 @@ export const Features = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-6 sm:mb-8"
           >
             The rules behind
             <br />
@@ -77,14 +77,14 @@ export const Features = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
+            className="text-base sm:text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
           >
             Fragma curates real-world opportunities—built to feel safe, serious, and real.
           </motion.p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {features.map((feature, index) => {
             const isHovered = hoveredIndex === index;
             
@@ -97,10 +97,12 @@ export const Features = () => {
                 transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onTouchStart={() => setHoveredIndex(index)}
+                onTouchEnd={() => setTimeout(() => setHoveredIndex(null), 1000)}
                 className="group cursor-pointer"
               >
                 <motion.div
-                  className="relative p-10 lg:p-12 h-full overflow-hidden rounded-sm"
+                  className="relative p-6 sm:p-10 lg:p-12 h-full overflow-hidden rounded-sm"
                   style={{
                     background: isHovered 
                       ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
@@ -134,7 +136,7 @@ export const Features = () => {
 
                   {/* Large decorative number */}
                   <motion.span 
-                    className={`absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none ${
+                    className={`absolute top-4 sm:top-6 right-4 sm:right-6 text-[60px] sm:text-[100px] lg:text-[120px] font-extralight leading-none ${
                       isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.04]'
                     }`}
                     style={{ 
@@ -152,7 +154,7 @@ export const Features = () => {
 
                   {/* Icon container */}
                   <motion.div 
-                    className={`w-16 h-16 mb-10 flex items-center justify-center relative ${
+                    className={`w-12 sm:w-16 h-12 sm:h-16 mb-6 sm:mb-10 flex items-center justify-center relative ${
                       isHovered 
                         ? 'border-slate-600/30 bg-slate-800/40' 
                         : 'border-slate-200 bg-slate-50'
