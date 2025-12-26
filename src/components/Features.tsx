@@ -4,20 +4,20 @@ import { useState } from "react";
 
 const features = [
   { 
-    title: "Real assets. Real proof.", 
-    desc: "Verified documentation and investor-ready structure behind every opportunity.", 
+    title: "Proof, not promises", 
+    desc: "Every opportunity is backed by real documentation and structured investor terms.", 
     icon: Gem,
     number: "01"
   },
   { 
-    title: "Built for trust, not hype.", 
-    desc: "Security-first infrastructure, serious custody standards, and transparent reporting.", 
+    title: "Trust you can feel", 
+    desc: "Security-first infrastructure and disciplined operations—built for long-term confidence.", 
     icon: Lock,
     number: "02"
   },
   { 
-    title: "Freedom when you need it.", 
-    desc: "Hold for the long term—or exit when liquidity is available. Your life stays flexible.", 
+    title: "Freedom built in", 
+    desc: "Hold for the journey. And when liquidity is available, you have options.", 
     icon: TrendingUp,
     number: "03"
   }
@@ -67,9 +67,9 @@ export const Features = () => {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
           >
-            Own the extraordinary.
+            The rules behind
             <br />
-            <span className="italic text-slate-500 font-serif">With rules you can trust.</span>
+            <span className="italic text-slate-500 font-serif">the extraordinary.</span>
           </motion.h2>
           
           <motion.p
@@ -79,7 +79,7 @@ export const Features = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
           >
-            Fragma offers curated opportunities—built to feel safe, serious, and real.
+            Fragma curates real-world opportunities—built to feel safe, serious, and real.
           </motion.p>
         </div>
 
