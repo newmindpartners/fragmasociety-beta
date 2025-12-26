@@ -194,9 +194,9 @@ export const Marketplace = () => {
             </motion.span>
             
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-6">
-              Trade
+              Ownership,
               <br />
-              <span className="text-slate-500">real-world assets</span>
+              <span className="text-slate-500">with an exit.</span>
             </h2>
             
             <p className="text-lg text-slate-500 leading-relaxed mb-8 max-w-md">
