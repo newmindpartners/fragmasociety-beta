@@ -57,7 +57,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
         : getCategoryBackground(deal.category));
 
   return (
-    <section className="relative h-screen max-h-[900px] bg-slate-900 overflow-hidden">
+    <section className="relative min-h-screen lg:h-screen lg:max-h-[900px] bg-slate-900 overflow-hidden pb-8 lg:pb-0">
       {/* Full Hero Industry Background */}
       <div className="absolute inset-0">
         <div
@@ -99,8 +99,8 @@ export const DealHero = ({ deal }: DealHeroProps) => {
 
       
       {/* Grid Layout - Content Left, Profile Right */}
-      <div className="relative z-30 h-full container mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 h-full items-end pt-16 pb-6">
+      <div className="relative z-30 h-full container mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 h-full items-end pt-20 sm:pt-16 pb-6">
           
           {/* Left Content */}
           <div className="order-2 lg:order-1 flex flex-col justify-center">
@@ -109,26 +109,28 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex items-center gap-4 mb-5"
+              className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 sm:mb-5"
             >
               {/* Limited Availability Badge */}
-              <span className="px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-slate-800/90 backdrop-blur-sm text-white rounded flex items-center gap-2 border border-slate-500/50 shadow-lg">
-                <Flame className="w-4 h-4 text-slate-200" />
-                Limited Availability
+              <span className="px-3 sm:px-5 py-2 sm:py-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.12em] bg-slate-800/90 backdrop-blur-sm text-white rounded flex items-center gap-2 border border-slate-500/50 shadow-lg">
+                <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-200" />
+                <span className="hidden sm:inline">Limited Availability</span>
+                <span className="sm:hidden">Limited</span>
               </span>
               
               {/* Days Left Badge */}
               <motion.span 
-                className="px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-white/15 backdrop-blur-sm text-white rounded flex items-center gap-2 border border-white/30 shadow-lg"
+                className="px-3 sm:px-5 py-2 sm:py-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.12em] bg-white/15 backdrop-blur-sm text-white rounded flex items-center gap-2 border border-white/30 shadow-lg"
                 animate={{ opacity: [0.85, 1, 0.85] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Clock className="w-4 h-4" />
-                14 Days Left to Invest
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">14 Days Left to Invest</span>
+                <span className="sm:hidden">14 Days Left</span>
               </motion.span>
             </motion.div>
 
-            <div className="max-w-xl rounded-md border border-border/30 bg-background/70 backdrop-blur-md p-6 md:p-8 shadow-lg">
+            <div className="max-w-xl rounded-md border border-border/30 bg-background/70 backdrop-blur-md p-4 sm:p-6 md:p-8 shadow-lg">
               {/* Category Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -147,7 +149,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-xl md:text-2xl font-medium text-white mb-4 leading-snug"
+                className="text-lg sm:text-xl md:text-2xl font-medium text-white mb-3 sm:mb-4 leading-snug"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {deal.title}
@@ -158,7 +160,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-sm text-slate-400 leading-relaxed mb-8 max-w-lg"
+                className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-5 sm:mb-8 max-w-lg"
               >
                 {deal.tagline}
               </motion.p>
@@ -168,24 +170,24 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="grid grid-cols-4 gap-4 mb-8 py-5 border-y border-slate-700/50"
+                className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-8 py-4 sm:py-5 border-y border-slate-700/50"
               >
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Entry</p>
-                  <p className="text-sm font-medium text-white">{deal.minTicket}</p>
+                  <p className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-wider mb-1">Entry</p>
+                  <p className="text-xs sm:text-sm font-medium text-white">{deal.minTicket}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Target*</p>
-                  <p className="text-sm font-medium text-white">{deal.targetReturn}</p>
+                  <p className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-wider mb-1">Target*</p>
+                  <p className="text-xs sm:text-sm font-medium text-white">{deal.targetReturn}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Duration</p>
-                  <p className="text-sm font-medium text-white">{deal.term}</p>
+                  <p className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-wider mb-1">Duration</p>
+                  <p className="text-xs sm:text-sm font-medium text-white">{deal.term}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Risk</p>
+                  <p className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-wider mb-1">Risk</p>
                   <span
-                    className={`inline-block px-2 py-0.5 text-xs font-medium rounded-sm border ${
+                    className={`inline-block px-2 py-0.5 text-[10px] sm:text-xs font-medium rounded-sm border ${
                       deal.risk === "Low"
                         ? "bg-emerald-900/50 text-emerald-400 border-emerald-700/50"
                         : deal.risk === "Medium"
@@ -203,11 +205,11 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-wrap items-center gap-4"
+                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
               >
                 <Button
                   size="lg"
-                  className="bg-white text-slate-900 hover:bg-white/90 rounded-sm px-8 h-12 text-sm font-medium tracking-wide"
+                  className="bg-white text-slate-900 hover:bg-white/90 active:bg-slate-100 rounded-sm px-6 sm:px-8 h-11 sm:h-12 text-sm font-medium tracking-wide w-full sm:w-auto"
                 >
                   Express Interest
                   <motion.span
@@ -221,7 +223,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/30 text-white hover:bg-white hover:text-slate-900 rounded-sm px-8 h-12 text-sm font-medium tracking-wide"
+                  className="border-white/30 text-white hover:bg-white hover:text-slate-900 active:bg-slate-200 rounded-sm px-6 sm:px-8 h-11 sm:h-12 text-sm font-medium tracking-wide w-full sm:w-auto"
                   onClick={handlePlayClick}
                 >
                   <Play className="w-4 h-4 mr-2" fill="currentColor" />
@@ -248,7 +250,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-col items-center mb-4"
+              className="flex flex-col items-center mb-2 sm:mb-4"
             >
               <div className="flex items-center gap-3 mb-2">
                 <div 
@@ -268,7 +270,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               </div>
               
               <h3
-                className="text-xl md:text-2xl font-light tracking-wide uppercase"
+                className="text-lg sm:text-xl md:text-2xl font-light tracking-wide uppercase"
                 style={{ 
                   color: 'rgba(255,255,255,0.85)',
                   letterSpacing: '0.15em'
@@ -282,7 +284,7 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-[4/5] max-h-[65vh] z-30"
+              className="relative aspect-[4/5] max-h-[40vh] sm:max-h-[50vh] lg:max-h-[65vh] z-30"
             >
               {/* Profile image - grayscale/luminosity like SignatureDealsBanner */}
               <img
@@ -376,24 +378,24 @@ export const DealHero = ({ deal }: DealHeroProps) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-center mt-4 relative z-30"
+              className="text-center mt-2 sm:mt-4 relative z-30"
             >
               <h3 
-                className="text-2xl md:text-4xl font-light text-white tracking-wide"
+                className="text-xl sm:text-2xl md:text-4xl font-light text-white tracking-wide"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {deal.leaderName}
               </h3>
-              <p className="text-xs text-slate-400 uppercase tracking-[0.2em] mt-1">
+              <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-[0.2em] mt-1">
                 {deal.leaderRole}
               </p>
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - hidden on mobile */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >

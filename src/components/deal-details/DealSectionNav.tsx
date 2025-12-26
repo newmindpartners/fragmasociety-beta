@@ -27,7 +27,9 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
     const handleScroll = () => {
       if (placeholderRef.current) {
         const rect = placeholderRef.current.getBoundingClientRect();
-        setIsSticky(rect.top <= 64);
+        // Adjust sticky trigger for mobile (smaller navbar)
+        const navHeight = window.innerWidth < 768 ? 56 : 64;
+        setIsSticky(rect.top <= navHeight);
       }
     };
     
@@ -87,7 +89,7 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
   return (
     <>
       {/* Placeholder */}
-      <div ref={placeholderRef} className="h-[48px] bg-white" />
+      <div ref={placeholderRef} className="h-[52px] sm:h-[48px] bg-white" />
       
       {/* Navigation */}
       <motion.div 
@@ -97,10 +99,10 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
         className={cn(
           "w-full z-40 bg-white/95 backdrop-blur-md transition-all duration-300",
           isSticky 
-            ? "fixed top-16 left-0 right-0 shadow-lg shadow-slate-900/5 border-b border-slate-200/60" 
+            ? "fixed top-14 sm:top-16 left-0 right-0 shadow-lg shadow-slate-900/5 border-b border-slate-200/60" 
             : "absolute left-0 right-0 border-b border-slate-100"
         )}
-        style={!isSticky ? { marginTop: '-48px' } : undefined}
+        style={!isSticky ? { marginTop: '-52px' } : undefined}
       >
         <div className="relative">
           {/* Left fade & arrow */}
@@ -110,12 +112,12 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
               showLeftFade ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
           >
-            <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white via-white/90 to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-8 sm:w-12 bg-gradient-to-r from-white via-white/90 to-transparent pointer-events-none" />
             <button 
               onClick={() => scrollTo("left")}
-              className="relative ml-1 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 shadow-sm border border-slate-200/60 text-slate-500 hover:text-violet-600 hover:border-violet-200 transition-all duration-200"
+              className="relative ml-1 w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center rounded-full bg-white/90 shadow-sm border border-slate-200/60 text-slate-500 hover:text-violet-600 hover:border-violet-200 active:bg-slate-100 transition-all duration-200"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5 sm:w-4 sm:h-4" />
             </button>
           </div>
 
@@ -126,19 +128,19 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
               showRightFade ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
           >
-            <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white via-white/90 to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-8 sm:w-12 bg-gradient-to-l from-white via-white/90 to-transparent pointer-events-none" />
             <button 
               onClick={() => scrollTo("right")}
-              className="relative mr-1 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 shadow-sm border border-slate-200/60 text-slate-500 hover:text-violet-600 hover:border-violet-200 transition-all duration-200"
+              className="relative mr-1 w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center rounded-full bg-white/90 shadow-sm border border-slate-200/60 text-slate-500 hover:text-violet-600 hover:border-violet-200 active:bg-slate-100 transition-all duration-200"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5 sm:w-4 sm:h-4" />
             </button>
           </div>
 
           {/* Scrollable container */}
           <div 
             ref={scrollContainerRef}
-            className="flex items-center justify-start lg:justify-center gap-0.5 overflow-x-auto px-10 lg:px-4 scroll-smooth"
+            className="flex items-center justify-start lg:justify-center gap-0.5 overflow-x-auto px-10 sm:px-10 lg:px-4 scroll-smooth"
             style={{ 
               scrollbarWidth: 'none', 
               msOverflowStyle: 'none',
@@ -156,10 +158,10 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
                 ref={activeSection === section.id ? activeButtonRef : null}
                 onClick={() => onSectionChange(section.id)}
                 className={cn(
-                  "relative px-3 lg:px-3.5 py-3 text-[12px] font-medium whitespace-nowrap transition-all duration-200 tracking-wide flex-shrink-0 rounded-lg",
+                  "relative px-3.5 sm:px-3 lg:px-3.5 py-3.5 sm:py-3 text-[13px] sm:text-[12px] font-medium whitespace-nowrap transition-all duration-200 tracking-wide flex-shrink-0 rounded-lg min-h-[44px] flex items-center",
                   activeSection === section.id
                     ? "text-slate-800 bg-slate-100"
-                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50 active:bg-slate-100"
                 )}
               >
                 {section.label}
@@ -184,7 +186,7 @@ export const DealSectionNav = ({ sections, activeSection, onSectionChange }: Dea
                   faqElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
               }}
-              className="relative px-3 lg:px-3.5 py-3 text-[12px] font-medium whitespace-nowrap transition-all duration-200 tracking-wide flex-shrink-0 rounded-lg text-slate-500 hover:text-violet-600 hover:bg-violet-50"
+              className="relative px-3.5 sm:px-3 lg:px-3.5 py-3.5 sm:py-3 text-[13px] sm:text-[12px] font-medium whitespace-nowrap transition-all duration-200 tracking-wide flex-shrink-0 rounded-lg text-slate-500 hover:text-violet-600 hover:bg-violet-50 active:bg-violet-100 min-h-[44px] flex items-center"
             >
               FAQ
             </button>
