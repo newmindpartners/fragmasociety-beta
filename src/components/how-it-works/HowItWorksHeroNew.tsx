@@ -36,7 +36,7 @@ export const HowItWorksHeroNew = () => {
             >
               <span className="inline-flex items-center gap-2 text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-white/70 font-medium">
                 <span className="w-6 sm:w-8 h-px bg-white/30" />
-                Understanding Fragma
+                Extraordinary Assets
               </span>
             </motion.div>
 
@@ -47,8 +47,8 @@ export const HowItWorksHeroNew = () => {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extralight text-white leading-[0.95] tracking-tight mb-4 sm:mb-6"
             >
-              How It
-              <span className="block font-serif italic text-white/80 mt-1 sm:mt-2">Works</span>
+              Own the
+              <span className="block font-serif italic text-white/80 mt-1 sm:mt-2">Extraordinary</span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -58,8 +58,8 @@ export const HowItWorksHeroNew = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-base sm:text-lg md:text-xl text-white/60 leading-relaxed max-w-xl mb-8 sm:mb-10 font-light"
             >
-              From discovering curated opportunities to receiving automated payouts—
-              your journey to fractional ownership made effortlessly elegant.
+              Join a community of discerning investors with exclusive access to 
+              curated extraordinary assets.
             </motion.p>
 
             {/* CTA Buttons */}
