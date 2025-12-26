@@ -222,28 +222,17 @@ export const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <>
-                <Link to="/auth">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium"
-                  >
-                    Login
-                  </Button>
-                </Link>
-                <Link to="/auth">
-                  <Button 
-                    size="sm" 
-                    className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
-                  >
-                    <span className="relative z-10 flex items-center gap-1.5">
-                      Get Started
-                      <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
-                    </span>
-                  </Button>
-                </Link>
-              </>
+              <a href="#request-access">
+                <Button 
+                  size="sm" 
+                  className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
+                >
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    Register Your Interest
+                    <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
+                  </span>
+                </Button>
+              </a>
             )}
           </div>
 
@@ -376,21 +365,14 @@ export const Navbar = () => {
                     </Button>
                   </>
                 ) : (
-                  <>
-                    <Link to="/auth" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50">
-                        Login
-                      </Button>
-                    </Link>
-                    <Link to="/auth" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold group shadow-lg shadow-white/10">
-                        <span className="flex items-center justify-center gap-2">
-                          Get Started
-                          <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-                        </span>
-                      </Button>
-                    </Link>
-                  </>
+                  <a href="#request-access" onClick={() => setIsOpen(false)} className="w-full">
+                    <Button className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold group shadow-lg shadow-white/10">
+                      <span className="flex items-center justify-center gap-2">
+                        Register Your Interest
+                        <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                      </span>
+                    </Button>
+                  </a>
                 )}
               </motion.div>
             </div>
