@@ -178,8 +178,8 @@ export const MarketplaceHero = () => {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 min-h-screen flex items-center pt-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center w-full">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 min-h-screen flex items-center pt-20 pb-12 lg:pb-0">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-8 items-center w-full">
           {/* Left Content */}
           <div className="max-w-xl">
             {/* Badge */}
@@ -214,7 +214,7 @@ export const MarketplaceHero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight mb-3"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight mb-3"
               style={{ 
                 fontFamily: "'Playfair Display', serif",
                 background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
@@ -228,7 +228,7 @@ export const MarketplaceHero = () => {
             </motion.h1>
             
             {/* Animated word */}
-            <div className="h-[60px] md:h-[80px] lg:h-[90px] overflow-hidden relative mb-8">
+            <div className="h-[50px] sm:h-[60px] md:h-[80px] lg:h-[90px] overflow-hidden relative mb-6 sm:mb-8">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={currentIndex}
@@ -236,7 +236,7 @@ export const MarketplaceHero = () => {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -80, opacity: 0 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="block text-5xl md:text-6xl lg:text-7xl font-light text-white/50 italic leading-[0.95] tracking-tight"
+                  className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white/50 italic leading-[0.95] tracking-tight"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {dynamicWords[currentIndex]}
@@ -249,7 +249,7 @@ export const MarketplaceHero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="flex items-center gap-2 mb-10"
+              className="flex items-center gap-1.5 sm:gap-2 mb-8 sm:mb-10"
             >
               {dynamicWords.map((_, i) => (
                 <motion.button
@@ -272,7 +272,7 @@ export const MarketplaceHero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-base text-white/50 max-w-xl mb-10 leading-relaxed"
+              className="text-sm sm:text-base text-white/50 max-w-xl mb-8 sm:mb-10 leading-relaxed"
             >
               The world's first peer-to-peer marketplace for tokenized real-world assets.
               Set your price. Trade on your terms.
@@ -287,7 +287,7 @@ export const MarketplaceHero = () => {
             >
               <Button 
                 size="lg"
-                className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-12 text-sm font-medium tracking-wide"
+                className="bg-white text-slate-900 hover:bg-white/90 active:bg-slate-100 rounded-full px-6 sm:px-8 h-12 text-sm font-medium tracking-wide min-h-[48px]"
               >
                 Explore Marketplace
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -295,7 +295,7 @@ export const MarketplaceHero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-12 text-sm font-medium tracking-wide bg-transparent"
+                className="border-white/20 text-white hover:bg-white/10 active:bg-white/20 rounded-full px-6 sm:px-8 h-12 text-sm font-medium tracking-wide bg-transparent min-h-[48px]"
               >
                 <Play className="w-4 h-4 mr-2" fill="currentColor" />
                 Watch Demo

@@ -115,7 +115,7 @@ export const OptionsTrading = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-32 lg:py-40 relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 sm:py-24 lg:py-40 relative overflow-hidden">
       {/* Stunning Background Image with Overlay */}
       <div className="absolute inset-0">
         <motion.img 
@@ -150,14 +150,14 @@ export const OptionsTrading = () => {
         style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)' }}
       />
       
-      <div className="container mx-auto px-6 lg:px-16 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
         {/* Header with staggered reveal */}
-        <div className="max-w-4xl mb-20">
+        <div className="max-w-4xl mb-12 sm:mb-16 lg:mb-20">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-6 mb-8"
+            className="flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8"
           >
             <motion.div 
               className="w-16 h-px bg-white/30"
@@ -174,7 +174,7 @@ export const OptionsTrading = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-5xl md:text-6xl lg:text-7xl font-extralight leading-[0.95] tracking-tight text-white"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight leading-[0.95] tracking-tight text-white"
           >
             Advanced Strategies for
             <motion.span 
@@ -191,13 +191,13 @@ export const OptionsTrading = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-lg lg:text-xl max-w-xl mt-8 leading-relaxed text-white/50 font-light"
+            className="text-base sm:text-lg lg:text-xl max-w-xl mt-6 sm:mt-8 leading-relaxed text-white/50 font-light"
           >
             Hedge your positions, generate income, or leverage your conviction with institutional-grade options.
           </motion.p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-start">
           {/* Option Selector with premium styling */}
           <div className="space-y-3">
             {(Object.keys(optionsData) as OptionType[]).map((type, index) => {
