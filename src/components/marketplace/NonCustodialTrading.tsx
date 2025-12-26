@@ -34,7 +34,7 @@ export const NonCustodialTrading = () => {
   };
 
   return (
-    <section className="py-32 relative overflow-hidden section-light">
+    <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden section-light">
       {/* Light background with subtle gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-stone-50 via-white to-stone-100" />
       
@@ -51,8 +51,8 @@ export const NonCustodialTrading = () => {
       {/* Top border accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+        <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16 lg:mb-20">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-center justify-center gap-4 mb-8">
             <div className="w-12 h-px bg-slate-300" />
             <span className="text-xs tracking-[0.3em] uppercase font-medium" style={{ color: 'hsl(var(--light-text-muted))' }}>Non-Custodial</span>
@@ -62,7 +62,7 @@ export const NonCustodialTrading = () => {
             initial={{ opacity: 0, y: 30 }} 
             whileInView={{ opacity: 1, y: 0 }} 
             viewport={{ once: true }} 
-            className="text-4xl md:text-5xl font-light leading-[1.1]" 
+            className="text-3xl sm:text-4xl md:text-5xl font-light leading-[1.1]" 
             style={{ 
               fontFamily: "'Playfair Display', serif",
               color: 'hsl(var(--light-text))',

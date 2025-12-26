@@ -166,7 +166,7 @@ export const SmartVaults = () => {
   ];
 
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden">
       {/* Deep slate/navy background - matching rest of site */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" />
       
@@ -183,8 +183,8 @@ export const SmartVaults = () => {
       {/* Top border accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-turquoise/20 to-transparent" />
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 lg:gap-20 items-center">
           {/* Left - Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -196,7 +196,7 @@ export const SmartVaults = () => {
             </span>
             
             <h2 
-              className="text-4xl lg:text-6xl font-serif font-light leading-[1.1] mb-6 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-6xl font-serif font-light leading-[1.1] mb-5 sm:mb-6 tracking-tight"
               style={{ 
                 fontFamily: "'Playfair Display', serif",
                 background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
@@ -211,12 +211,12 @@ export const SmartVaults = () => {
               decentralization.
             </h2>
             
-            <p className="text-lg text-white/50 mb-8 leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-white/50 mb-6 sm:mb-8 leading-relaxed max-w-lg">
               Fragma uses Smart Vaults — an advanced Cardano-based mechanism 
               powered by Genius Yield's architecture.
             </p>
 
-            <div className="bg-white/[0.03] border border-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+            <div className="bg-white/[0.03] border border-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
               <h3 className="text-sm font-semibold text-white mb-4 tracking-wide">What is a Smart Vault?</h3>
               <ul className="space-y-3 text-white/50 text-sm">
                 <li className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export const SmartVaults = () => {
             </div>
 
             <motion.p
-              className="text-white/80 text-sm mb-8 p-4 border-l-2 border-turquoise bg-turquoise/5 rounded-r-lg leading-relaxed"
+              className="text-white/80 text-sm mb-6 sm:mb-8 p-3 sm:p-4 border-l-2 border-turquoise bg-turquoise/5 rounded-r-lg leading-relaxed"
             >
               Neither Fragma nor any third party can move your tokens.
               Only you can approve trades through signed transactions.
@@ -250,10 +250,10 @@ export const SmartVaults = () => {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/10 transition-colors hover:bg-white/[0.05]"
+                  className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/[0.03] border border-white/10 transition-colors hover:bg-white/[0.05]"
                 >
                   <benefit.icon className="w-4 h-4 text-turquoise flex-shrink-0" />
-                  <span className="text-xs text-white/80 leading-snug">{benefit.title}</span>
+                  <span className="text-[11px] sm:text-xs text-white/80 leading-snug">{benefit.title}</span>
                 </motion.div>
               ))}
             </div>

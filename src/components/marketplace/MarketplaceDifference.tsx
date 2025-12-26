@@ -21,7 +21,7 @@ export const MarketplaceDifference = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-32 lg:py-40 overflow-hidden">
+    <section className="relative py-16 sm:py-24 lg:py-40 overflow-hidden">
       {/* Premium Light Background - matching Features */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
         <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-white via-slate-50/60 to-transparent rounded-full blur-3xl opacity-80" />
@@ -38,17 +38,17 @@ export const MarketplaceDifference = () => {
         }}
       />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Header Section */}
-        <div className="max-w-4xl mb-24">
+        <div className="max-w-4xl mb-12 sm:mb-16 lg:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
           >
-            <div className="w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400 font-medium">
+            <div className="w-10 sm:w-16 h-px bg-gradient-to-r from-slate-400 to-transparent" />
+            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-slate-400 font-medium">
               The Difference
             </span>
           </motion.div>
@@ -58,7 +58,7 @@ export const MarketplaceDifference = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-6 sm:mb-8"
           >
             Not just another
             <br />
@@ -70,7 +70,7 @@ export const MarketplaceDifference = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
+            className="text-base sm:text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
           >
             Traditional platforms give you buttons. We give you a real marketplace — 
             100% decentralized, completely non-custodial.
@@ -78,7 +78,7 @@ export const MarketplaceDifference = () => {
         </div>
 
         {/* Highlights Grid - Features style with hover-to-dark */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16">
           {highlights.map((item, index) => {
             const isHovered = hoveredIndex === index;
             
@@ -94,7 +94,7 @@ export const MarketplaceDifference = () => {
                 className="group cursor-pointer"
               >
                 <motion.div
-                  className="relative p-10 lg:p-12 h-full overflow-hidden rounded-sm"
+                  className="relative p-6 sm:p-8 lg:p-12 h-full overflow-hidden rounded-sm"
                   style={{
                     background: isHovered 
                       ? 'linear-gradient(165deg, rgba(15,23,42,0.97) 0%, rgba(30,41,59,0.98) 40%, rgba(51,65,85,0.96) 100%)'
@@ -126,7 +126,7 @@ export const MarketplaceDifference = () => {
 
                   {/* Large decorative number */}
                   <motion.span 
-                    className={`absolute top-6 right-6 text-[100px] lg:text-[120px] font-extralight leading-none ${
+                    className={`absolute top-4 right-4 sm:top-6 sm:right-6 text-[60px] sm:text-[80px] lg:text-[120px] font-extralight leading-none ${
                       isHovered ? 'text-white/[0.04]' : 'text-slate-900/[0.04]'
                     }`}
                     style={{ 
@@ -144,7 +144,7 @@ export const MarketplaceDifference = () => {
 
                   {/* Icon container */}
                   <motion.div 
-                    className={`w-16 h-16 mb-10 flex items-center justify-center relative ${
+                    className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 mb-6 sm:mb-8 lg:mb-10 flex items-center justify-center relative ${
                       isHovered 
                         ? 'border-slate-600/30 bg-slate-800/40' 
                         : 'border-slate-200 bg-slate-50'
@@ -161,7 +161,7 @@ export const MarketplaceDifference = () => {
                     transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
                   >
                     <item.icon 
-                      className={`w-7 h-7 ${
+                      className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 ${
                         isHovered ? 'text-violet-300' : 'text-slate-600'
                       }`} 
                       style={{ transition: 'color 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
@@ -179,7 +179,7 @@ export const MarketplaceDifference = () => {
                   
                   {/* Title */}
                   <motion.h3 
-                    className={`text-xl lg:text-2xl font-medium mb-4 ${
+                    className={`text-lg sm:text-xl lg:text-2xl font-medium mb-3 sm:mb-4 ${
                       isHovered ? 'text-white/90' : 'text-slate-900'
                     }`}
                     style={{ transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
@@ -191,7 +191,7 @@ export const MarketplaceDifference = () => {
                   
                   {/* Description */}
                   <p 
-                    className={`text-base leading-relaxed ${
+                    className={`text-sm sm:text-base leading-relaxed ${
                       isHovered ? 'text-slate-400' : 'text-slate-500'
                     }`}
                     style={{ transition: 'color 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
@@ -253,16 +253,16 @@ export const MarketplaceDifference = () => {
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
             
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 px-8 md:px-12 py-8 border-b border-slate-100">
-              <div className="col-span-6 md:col-span-5">
-                <span className="text-[11px] tracking-[0.3em] uppercase text-primary/70 font-semibold">Feature</span>
+            <div className="grid grid-cols-12 gap-2 sm:gap-4 px-4 sm:px-8 md:px-12 py-6 sm:py-8 border-b border-slate-100">
+              <div className="col-span-5 sm:col-span-6 md:col-span-5">
+                <span className="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-primary/70 font-semibold">Feature</span>
               </div>
-              <div className="col-span-3 md:col-span-4 text-center">
-                <span className="text-[11px] tracking-[0.3em] uppercase text-slate-300 font-medium">Traditional</span>
+              <div className="col-span-3 sm:col-span-3 md:col-span-4 text-center">
+                <span className="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-slate-300 font-medium">Traditional</span>
               </div>
-              <div className="col-span-3 text-center">
-                <div className="inline-flex items-center gap-2">
-                  <span className="text-[11px] tracking-[0.3em] uppercase text-slate-800 font-bold">Fragma</span>
+              <div className="col-span-4 sm:col-span-3 text-center">
+                <div className="inline-flex items-center gap-1.5 sm:gap-2">
+                  <span className="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-slate-800 font-bold">Fragma</span>
                   <motion.div 
                     className="w-1.5 h-1.5 rounded-full bg-primary"
                     animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
@@ -281,32 +281,32 @@ export const MarketplaceDifference = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 + index * 0.08, duration: 0.5 }}
-                  className="group relative grid grid-cols-12 gap-4 px-8 md:px-12 py-6 items-center hover:bg-slate-50/70 transition-all duration-500"
+                  className={`group relative grid grid-cols-12 gap-2 sm:gap-4 px-4 sm:px-8 md:px-12 py-4 sm:py-6 items-center hover:bg-slate-50/70 transition-all duration-500`}
                 >
                   {/* Hover accent */}
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-gradient-to-b from-primary/60 to-primary/20 group-hover:h-full transition-all duration-500 rounded-r" />
                   
-                  <div className="col-span-6 md:col-span-5">
-                    <span className="text-[15px] md:text-base font-medium text-slate-700 group-hover:text-slate-900 transition-colors duration-300">
+                  <div className="col-span-5 sm:col-span-6 md:col-span-5">
+                    <span className="text-xs sm:text-[15px] md:text-base font-medium text-slate-700 group-hover:text-slate-900 transition-colors duration-300">
                       {item.feature}
                     </span>
                   </div>
-                  <div className="col-span-3 md:col-span-4 flex justify-center">
+                  <div className="col-span-3 sm:col-span-3 md:col-span-4 flex justify-center">
                     <motion.div 
                       whileHover={{ scale: 1.1 }}
-                      className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-rose-50 to-rose-100/80 border border-rose-100/80"
+                      className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-rose-50 to-rose-100/80 border border-rose-100/80"
                       style={{ boxShadow: '0 2px 8px -2px rgba(244,63,94,0.15)' }}
                     >
-                      <X className="w-4 h-4 text-rose-400" strokeWidth={2.5} />
+                      <X className="w-3 h-3 sm:w-4 sm:h-4 text-rose-400" strokeWidth={2.5} />
                     </motion.div>
                   </div>
-                  <div className="col-span-3 flex justify-center">
+                  <div className="col-span-4 sm:col-span-3 flex justify-center">
                     <motion.div 
                       whileHover={{ scale: 1.1, rotate: 5 }}
-                      className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100/80 border border-emerald-200/60"
+                      className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100/80 border border-emerald-200/60"
                       style={{ boxShadow: '0 2px 8px -2px rgba(16,185,129,0.2)' }}
                     >
-                      <Check className="w-4 h-4 text-emerald-500" strokeWidth={2.5} />
+                      <Check className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" strokeWidth={2.5} />
                     </motion.div>
                   </div>
                 </motion.div>
@@ -314,11 +314,11 @@ export const MarketplaceDifference = () => {
             </div>
 
             {/* Summary Footer - Premium */}
-            <div className="relative px-8 md:px-12 py-7 bg-gradient-to-r from-slate-50/80 via-white to-slate-50/80 border-t border-slate-100">
+            <div className="relative px-4 sm:px-8 md:px-12 py-5 sm:py-7 bg-gradient-to-r from-slate-50/80 via-white to-slate-50/80 border-t border-slate-100">
               {/* Decorative line */}
               <div className="absolute top-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
               
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <motion.div 
                     whileHover={{ scale: 1.05, rotate: -3 }}
@@ -328,10 +328,10 @@ export const MarketplaceDifference = () => {
                     <Check className="w-5 h-5 text-white" strokeWidth={2.5} />
                   </motion.div>
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-sm text-slate-600">
+                    <span className="text-xs sm:text-sm text-slate-600">
                       All <span className="text-slate-900 font-bold">6 features</span> available on Fragma
                     </span>
-                    <span className="text-[11px] text-slate-400">Complete marketplace capabilities</span>
+                    <span className="text-[10px] sm:text-[11px] text-slate-400">Complete marketplace capabilities</span>
                   </div>
                 </div>
                 
@@ -357,7 +357,7 @@ export const MarketplaceDifference = () => {
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 1 }}
-          className="mt-24 flex flex-col items-center gap-4"
+          className="mt-12 sm:mt-16 lg:mt-24 flex flex-col items-center gap-3 sm:gap-4"
         >
           <div className="h-px w-48 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
           <span className="text-[10px] tracking-[0.4em] uppercase text-slate-300 font-light">Built different</span>
