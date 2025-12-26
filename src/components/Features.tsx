@@ -4,20 +4,20 @@ import { useState } from "react";
 
 const features = [
   { 
-    title: "Backed by audited assets", 
-    desc: "Curated deals in real estate and luxury, vetted with institutional diligence.", 
+    title: "Real assets. Real proof.", 
+    desc: "Verified documentation and investor-ready structure behind every opportunity.", 
     icon: Gem,
     number: "01"
   },
   { 
-    title: "Infrastructure you can trust", 
-    desc: "Bank-level security with institutional custody and audited payouts.", 
+    title: "Built for trust, not hype.", 
+    desc: "Security-first infrastructure, serious custody standards, and transparent reporting.", 
     icon: Lock,
     number: "02"
   },
   { 
-    title: "Liquidity optionality", 
-    desc: "Invest for yield, then trade your slices on our secondary marketplace.", 
+    title: "Freedom when you need it.", 
+    desc: "Hold for the long term—or exit when liquidity is available. Your life stays flexible.", 
     icon: TrendingUp,
     number: "03"
   }
@@ -67,9 +67,9 @@ export const Features = () => {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 leading-[1.05] mb-8"
           >
-            Fractional ownership
+            Own the extraordinary.
             <br />
-            <span className="italic text-slate-500 font-serif">without the complexity.</span>
+            <span className="italic text-slate-500 font-serif">With rules you can trust.</span>
           </motion.h2>
           
           <motion.p
@@ -79,8 +79,7 @@ export const Features = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl"
           >
-            Tokenization is rewriting how the world owns real estate, art, and private markets. 
-            We wrap this power into a simple investing experience.
+            Fragma offers curated opportunities—built to feel safe, serious, and real.
           </motion.p>
         </div>
 
