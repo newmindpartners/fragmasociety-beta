@@ -9,6 +9,7 @@ import { SocialProof } from "@/components/SocialProof";
 import { Footer } from "@/components/Footer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { StrategyCompliance } from "@/components/strategy/StrategyCompliance";
+import { RequestAccessForm } from "@/components/RequestAccessForm";
 
 const Index = () => {
   return (
@@ -36,6 +37,9 @@ const Index = () => {
         </ScrollSection>
         <ScrollSection delay={0.1}>
           <Marketplace />
+        </ScrollSection>
+        <ScrollSection delay={0.1}>
+          <RequestAccessForm />
         </ScrollSection>
         <Footer />
       </div>
