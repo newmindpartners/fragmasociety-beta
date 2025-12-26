@@ -147,7 +147,7 @@ export const Hero = () => {
                 size="lg" 
                 className="bg-white text-neutral-900 hover:bg-white/90 rounded-full px-8 h-14 text-base font-medium"
               >
-                Request access
+                Register your interest
                 <motion.span
                   className="ml-2"
                   animate={{ x: [0, 4, 0] }}
