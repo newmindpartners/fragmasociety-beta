@@ -37,7 +37,7 @@ export const HowSignatureDealsWork = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section ref={ref} className="py-16 sm:py-24 lg:py-40 relative overflow-hidden">
+    <section ref={ref} className="py-12 sm:py-16 lg:py-24 relative overflow-hidden">
       {/* Premium Light Background - matching Features section */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100">
         {/* Subtle spotlight effects */}
