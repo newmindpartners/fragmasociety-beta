@@ -235,32 +235,32 @@ export const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Larger tap target */}
           <motion.button 
-            className="lg:hidden text-white p-2 -mr-2 hover:bg-slate-800/50 rounded-lg transition-colors"
+            className="lg:hidden text-white p-3 -mr-3 hover:bg-slate-800/50 active:bg-slate-700/50 rounded-xl transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
             onClick={() => setIsOpen(!isOpen)}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.92 }}
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
                 <motion.div
                   key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <X size={22} />
+                  <X size={24} strokeWidth={2} />
                 </motion.div>
               ) : (
                 <motion.div
                   key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <Menu size={22} />
+                  <Menu size={24} strokeWidth={2} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -268,114 +268,168 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Slide from right with improved UX */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }} 
-            animate={{ height: 'auto', opacity: 1 }} 
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-gradient-to-b from-slate-900 to-slate-950 backdrop-blur-2xl overflow-hidden border-b border-slate-700/50"
-          >
-            <div className="p-6 max-h-[80vh] overflow-y-auto">
-              {navSections.map((section, sectionIndex) => (
-                <motion.div
-                  key={section.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: sectionIndex * 0.05 }}
-                  className="mb-4"
-                >
-                  <button
-                    onClick={() => setExpandedSection(expandedSection === section.label ? null : section.label)}
-                    className="flex items-center justify-between w-full py-3 text-sm font-semibold text-white uppercase tracking-wider"
-                  >
-                    {section.label}
-                    <ChevronDown 
-                      className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
-                        expandedSection === section.label ? "rotate-180" : ""
-                      }`} 
-                    />
-                  </button>
-                  
-                  <AnimatePresence>
-                    {expandedSection === section.label && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40"
+              onClick={() => setIsOpen(false)}
+            />
+            
+            {/* Slide-in menu panel */}
+            <motion.div 
+              initial={{ x: "100%", opacity: 0.5 }} 
+              animate={{ x: 0, opacity: 1 }} 
+              exit={{ x: "100%", opacity: 0.5 }}
+              transition={{ 
+                type: "spring",
+                damping: 30,
+                stiffness: 300,
+                mass: 0.8
+              }}
+              className="lg:hidden fixed top-16 right-0 bottom-0 w-[85%] max-w-[360px] bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 backdrop-blur-2xl overflow-hidden border-l border-slate-700/50 shadow-2xl shadow-black/50 z-50"
+            >
+              <div className="h-full flex flex-col">
+                {/* Scrollable content area */}
+                <div className="flex-1 overflow-y-auto overscroll-contain py-4 px-5">
+                  {navSections.map((section, sectionIndex) => (
+                    <motion.div
+                      key={section.label}
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: sectionIndex * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className="mb-2"
+                    >
+                      {/* Section header - larger tap target */}
+                      <button
+                        onClick={() => setExpandedSection(expandedSection === section.label ? null : section.label)}
+                        className="flex items-center justify-between w-full py-4 px-3 text-sm font-semibold text-white uppercase tracking-wider rounded-xl hover:bg-slate-800/40 active:bg-slate-700/50 transition-colors min-h-[56px]"
                       >
-                        <div className="pl-2 border-l border-slate-700/50">
-                          {section.items.map((item) => {
-                            const Icon = item.icon;
-                            const content = (
-                              <div className="flex items-center gap-3 py-3 pl-4 text-slate-400 hover:text-white transition-colors">
-                                {Icon && <Icon className="w-4 h-4 text-slate-500" />}
-                                <span className="text-sm">{item.label}</span>
-                                {item.badge && (
-                                  <span className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
-                                    item.badge === "Hot" 
-                                      ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
-                                      : item.badge === "Coming Soon"
-                                      ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
-                                      : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
-                                  }`}>
-                                    {item.badge}
-                                  </span>
-                                )}
-                              </div>
-                            );
+                        <span className="flex items-center gap-3">
+                          <span className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                            expandedSection === section.label ? 'bg-violet-500' : 'bg-slate-600'
+                          }`} />
+                          {section.label}
+                        </span>
+                        <motion.div
+                          animate={{ rotate: expandedSection === section.label ? 180 : 0 }}
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          <ChevronDown className="w-5 h-5 text-slate-400" />
+                        </motion.div>
+                      </button>
+                      
+                      {/* Expandable section items */}
+                      <AnimatePresence>
+                        {expandedSection === section.label && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="ml-4 border-l-2 border-slate-700/50">
+                              {section.items.map((item, itemIndex) => {
+                                const Icon = item.icon;
+                                const content = (
+                                  <motion.div 
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: itemIndex * 0.05, duration: 0.3 }}
+                                    className="flex items-center gap-4 py-4 px-4 ml-2 text-slate-300 hover:text-white active:text-white hover:bg-slate-800/40 active:bg-slate-700/50 rounded-xl transition-all min-h-[56px] group"
+                                  >
+                                    {Icon && (
+                                      <div className="w-10 h-10 rounded-lg bg-slate-800/80 border border-slate-700/50 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-700 group-hover:border-violet-500/30 transition-all">
+                                        <Icon className="w-5 h-5 text-slate-400 group-hover:text-violet-400 transition-colors" />
+                                      </div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <span className="text-sm font-medium">{item.label}</span>
+                                        {item.badge && (
+                                          <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded-full ${
+                                            item.badge === "Hot" 
+                                              ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
+                                              : item.badge === "Coming Soon"
+                                              ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
+                                              : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
+                                          }`}>
+                                            {item.badge}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {item.description && (
+                                        <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>
+                                      )}
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-violet-400 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                                  </motion.div>
+                                );
 
-                            return item.isRoute ? (
-                              <Link key={item.label} to={item.href} onClick={() => setIsOpen(false)}>
-                                {content}
-                              </Link>
-                            ) : (
-                              <a key={item.label} href={item.href} onClick={() => setIsOpen(false)}>
-                                {content}
-                              </a>
-                            );
-                          })}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-              
-              <motion.div 
-                className="flex flex-col gap-3 mt-6 pt-6 border-t border-slate-700/50"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                {user ? (
-                  <>
-                    <Link to="/strategy" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50">
-                        Investor Portal
+                                return item.isRoute ? (
+                                  <Link key={item.label} to={item.href} onClick={() => setIsOpen(false)}>
+                                    {content}
+                                  </Link>
+                                ) : (
+                                  <a key={item.label} href={item.href} onClick={() => setIsOpen(false)}>
+                                    {content}
+                                  </a>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                {/* Fixed bottom CTA section */}
+                <motion.div 
+                  className="flex-shrink-0 p-5 border-t border-slate-700/50 bg-slate-900/80 backdrop-blur-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25, duration: 0.4 }}
+                >
+                  {user ? (
+                    <div className="flex flex-col gap-3">
+                      <Link to="/strategy" onClick={() => setIsOpen(false)} className="w-full">
+                        <Button 
+                          variant="outline" 
+                          className="w-full h-14 border-slate-600 text-slate-200 hover:border-slate-500 hover:bg-slate-800/50 text-base font-medium"
+                        >
+                          Investor Portal
+                        </Button>
+                      </Link>
+                      <Button 
+                        onClick={() => { signOut(); setIsOpen(false); }} 
+                        variant="ghost" 
+                        className="w-full h-12 text-slate-400 hover:text-white hover:bg-slate-800/50"
+                      >
+                        Sign Out
                       </Button>
-                    </Link>
-                    <Button onClick={() => { signOut(); setIsOpen(false); }} variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-800/50">
-                      Sign Out
-                    </Button>
-                  </>
-                ) : (
-                  <a href="#request-access" onClick={() => setIsOpen(false)} className="w-full">
-                    <Button className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold group shadow-lg shadow-white/10">
-                      <span className="flex items-center justify-center gap-2">
-                        Register Your Interest
-                        <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-                      </span>
-                    </Button>
-                  </a>
-                )}
-              </motion.div>
-            </div>
-          </motion.div>
+                    </div>
+                  ) : (
+                    <a href="#request-access" onClick={() => setIsOpen(false)} className="block">
+                      <Button className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10">
+                        <span className="flex items-center justify-center gap-2">
+                          Register Your Interest
+                          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </span>
+                      </Button>
+                    </a>
+                  )}
+                </motion.div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>
