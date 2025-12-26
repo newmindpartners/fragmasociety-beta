@@ -49,7 +49,6 @@ const footerNav = {
     { label: "Buy & Sell - Marketplace", href: "/marketplace" },
     { label: "How it works?", href: "/how-it-works" },
     { label: "Investor Membership", href: "/membership" },
-    { label: "Fragma One - One click for broad RWA exposure", href: "/strategy" },
   ],
   businesses: [
     { label: "Launch your Signature Deal", href: "/signature-deal" },
