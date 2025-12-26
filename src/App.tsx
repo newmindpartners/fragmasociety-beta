@@ -25,6 +25,7 @@ import SecondaryMarket from "./pages/SecondaryMarket";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import OrderDetails from "./pages/OrderDetails";
+import Watchlist from "./pages/Watchlist";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/watchlist" element={<Watchlist />} />
             <Route path="/dashboard/banking" element={<Banking />} />
             <Route path="/dashboard/banking/*" element={<Banking />} />
             <Route path="/dashboard/documents" element={<Documents />} />
