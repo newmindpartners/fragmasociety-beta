@@ -144,11 +144,11 @@ const OrderRow = ({
         } : {}}
         transition={{ duration: 0.6 }}
         className={`
-          grid grid-cols-3 gap-3 p-4 rounded-xl relative overflow-hidden
-          border transition-all duration-500 cursor-pointer
+          grid grid-cols-3 gap-1.5 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl relative overflow-hidden
+          border transition-all duration-500 cursor-pointer min-h-[48px]
           ${isBid 
-            ? 'bg-emerald-500/[0.08] border-emerald-500/20 hover:bg-emerald-500/[0.15] hover:border-emerald-500/40' 
-            : 'bg-rose-500/[0.08] border-rose-500/20 hover:bg-rose-500/[0.15] hover:border-rose-500/40'
+            ? 'bg-emerald-500/[0.08] border-emerald-500/20 hover:bg-emerald-500/[0.15] hover:border-emerald-500/40 active:bg-emerald-500/20' 
+            : 'bg-rose-500/[0.08] border-rose-500/20 hover:bg-rose-500/[0.15] hover:border-rose-500/40 active:bg-rose-500/20'
           }
         `}
       >
@@ -166,13 +166,13 @@ const OrderRow = ({
           ${isBid ? 'bg-emerald-500/10' : 'bg-rose-500/10'}`} 
         />
 
-        <span className={`text-base font-semibold relative z-10 ${isBid ? 'text-emerald-400' : 'text-rose-400'}`}>
+        <span className={`text-xs sm:text-base font-semibold relative z-10 ${isBid ? 'text-emerald-400' : 'text-rose-400'}`}>
           €{order.price.toFixed(2)}
         </span>
-        <span className="text-base text-center relative z-10 text-white/70 font-medium">
+        <span className="text-xs sm:text-base text-center relative z-10 text-white/70 font-medium">
           {order.size.toLocaleString()}
         </span>
-        <span className="text-base text-right relative z-10 text-white/50">
+        <span className="text-xs sm:text-base text-right relative z-10 text-white/50">
           €{order.total}M
         </span>
 
@@ -369,12 +369,12 @@ const AnimatedOrderBook = () => {
       </AnimatePresence>
 
       {/* Asset Header with Image */}
-      <div className="relative p-6 border-b border-white/10">
-        <div className="flex items-center gap-5">
+      <div className="relative p-4 sm:p-6 border-b border-white/10">
+        <div className="flex items-center gap-3 sm:gap-5">
           {/* Asset Image */}
           <motion.div 
-            className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl"
-            animate={{ 
+            className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl flex-shrink-0"
+            animate={{
               opacity: isTransitioning ? 0 : 1,
               scale: isTransitioning ? 0.9 : 1
             }}
@@ -405,23 +405,23 @@ const AnimatedOrderBook = () => {
                 transition={{ duration: 0.3 }}
               >
                 <h3 
-                  className="text-2xl font-light text-white tracking-wide mb-1"
+                  className="text-lg sm:text-2xl font-light text-white tracking-wide mb-1"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {currentAsset.name}
                 </h3>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-mono tracking-wider text-violet-400 bg-violet-500/15 px-2 py-0.5 rounded">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                  <span className="text-[10px] sm:text-xs font-mono tracking-wider text-violet-400 bg-violet-500/15 px-1.5 sm:px-2 py-0.5 rounded">
                     {currentAsset.symbol}
                   </span>
-                  <span className="text-xs text-white/40">{currentAsset.category}</span>
+                  <span className="text-[10px] sm:text-xs text-white/40">{currentAsset.category}</span>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
           
           {/* Live Status */}
-          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/30 rounded-full">
+          <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/30 rounded-full">
             <motion.div
               animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -432,24 +432,24 @@ const AnimatedOrderBook = () => {
         </div>
         
         {/* Asset thumbnail strip - 4 assets */}
-        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+        <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
           {tradingAssets.map((asset, i) => (
             <motion.button
               key={asset.symbol}
               onClick={() => setCurrentAssetIndex(i)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+              className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all duration-300 min-h-[44px] min-w-[44px] ${
                 i === currentAssetIndex 
                   ? 'border-violet-500 shadow-lg shadow-violet-500/30' 
-                  : 'border-white/10 opacity-50 hover:opacity-80'
+                  : 'border-white/10 opacity-50 hover:opacity-80 active:opacity-90'
               }`}
             >
               <img src={asset.image} alt={asset.name} className="w-full h-full object-cover" />
               {i === currentAssetIndex && (
                 <motion.div 
                   layoutId="activeAsset"
-                  className="absolute inset-0 border-2 border-violet-400 rounded-xl"
+                  className="absolute inset-0 border-2 border-violet-400 rounded-lg sm:rounded-xl"
                 />
               )}
             </motion.button>
@@ -459,27 +459,27 @@ const AnimatedOrderBook = () => {
 
       {/* Price Metrics */}
       <div className="grid grid-cols-3 gap-0 bg-white/[0.02] border-b border-white/10">
-        <div className="text-center py-5 px-4 border-r border-white/5">
-          <p className="text-[10px] uppercase tracking-[0.25em] mb-2 text-white/40">Last Price</p>
+        <div className="text-center py-3 sm:py-5 px-2 sm:px-4 border-r border-white/5">
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mb-1 sm:mb-2 text-white/40">Last Price</p>
           <motion.p 
             key={lastPrice} 
             initial={{ opacity: 0.6, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-2xl font-light text-white tabular-nums"
+            className="text-base sm:text-2xl font-light text-white tabular-nums"
           >
             €{lastPrice.toFixed(2)}
           </motion.p>
         </div>
-        <div className="text-center py-5 px-4 border-r border-white/5">
-          <p className="text-[10px] uppercase tracking-[0.25em] mb-2 text-white/40">24h Change</p>
+        <div className="text-center py-3 sm:py-5 px-2 sm:px-4 border-r border-white/5">
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mb-1 sm:mb-2 text-white/40">24h Change</p>
           <div className="flex items-center justify-center gap-1">
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
-            <p className="text-2xl font-light text-emerald-400">+{change24h}%</p>
+            <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
+            <p className="text-base sm:text-2xl font-light text-emerald-400">+{change24h}%</p>
           </div>
         </div>
-        <div className="text-center py-5 px-4">
-          <p className="text-[10px] uppercase tracking-[0.25em] mb-2 text-white/40">Spread</p>
-          <p className="text-2xl font-light text-white/70">0.26%</p>
+        <div className="text-center py-3 sm:py-5 px-2 sm:px-4">
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mb-1 sm:mb-2 text-white/40">Spread</p>
+          <p className="text-base sm:text-2xl font-light text-white/70">0.26%</p>
         </div>
       </div>
 
@@ -497,15 +497,15 @@ const AnimatedOrderBook = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-2 sm:gap-6">
           {/* Bids (Buy) */}
           <div>
-            <div className="grid grid-cols-3 gap-3 mb-3 text-[9px] uppercase tracking-[0.2em] text-white/40 px-4">
+            <div className="grid grid-cols-3 gap-1 sm:gap-3 mb-2 sm:mb-3 text-[7px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.2em] text-white/40 px-2 sm:px-4">
               <span>Price</span>
               <span className="text-center">Size</span>
               <span className="text-right">Total</span>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               {currentAsset.bids.map((bid, i) => (
                 <OrderRow 
                   key={i} 
@@ -521,12 +521,12 @@ const AnimatedOrderBook = () => {
 
           {/* Asks (Sell) */}
           <div>
-            <div className="grid grid-cols-3 gap-3 mb-3 text-[9px] uppercase tracking-[0.2em] text-white/40 px-4">
+            <div className="grid grid-cols-3 gap-1 sm:gap-3 mb-2 sm:mb-3 text-[7px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.2em] text-white/40 px-2 sm:px-4">
               <span>Price</span>
               <span className="text-center">Size</span>
               <span className="text-right">Total</span>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               {currentAsset.asks.map((ask, i) => (
                 <OrderRow 
                   key={i} 
@@ -542,17 +542,17 @@ const AnimatedOrderBook = () => {
         </div>
 
         {/* Match center indicator */}
-        <div className="relative flex items-center justify-center my-6">
+        <div className="relative flex items-center justify-center my-4 sm:my-6">
           <div className="flex-1 h-px bg-white/10" />
           <motion.div
             animate={{ 
               boxShadow: ['0 0 0 rgba(139, 92, 246, 0)', '0 0 20px rgba(139, 92, 246, 0.4)', '0 0 0 rgba(139, 92, 246, 0)']
             }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="mx-4 px-4 py-2 bg-white/5 border border-white/10 rounded-full flex items-center gap-2"
+            className="mx-2 sm:mx-4 px-2 sm:px-4 py-1.5 sm:py-2 bg-white/5 border border-white/10 rounded-full flex items-center gap-1.5 sm:gap-2"
           >
-            <Sparkles className="w-4 h-4 text-violet-400" />
-            <span className="text-xs text-white/60">Orders match automatically</span>
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-violet-400" />
+            <span className="text-[10px] sm:text-xs text-white/60">Auto-match</span>
           </motion.div>
           <div className="flex-1 h-px bg-white/10" />
         </div>
@@ -575,7 +575,7 @@ export const OrderBookExplainer = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-32 relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 sm:py-24 lg:py-32 relative overflow-hidden">
       {/* Deep premium background - solid color */}
       <div className="absolute inset-0 bg-slate-950" />
       
@@ -583,12 +583,12 @@ export const OrderBookExplainer = () => {
       <motion.div 
         animate={{ opacity: [0.15, 0.25, 0.15] }}
         transition={{ duration: 8, repeat: Infinity }}
-        className="absolute top-0 left-1/4 w-[700px] h-[400px] bg-violet-900/20 rounded-full blur-[100px]" 
+        className="absolute top-0 left-1/4 w-[400px] sm:w-[700px] h-[300px] sm:h-[400px] bg-violet-900/20 rounded-full blur-[60px] sm:blur-[100px]" 
       />
       <motion.div 
         animate={{ opacity: [0.1, 0.2, 0.1] }}
         transition={{ duration: 6, repeat: Infinity, delay: 2 }}
-        className="absolute bottom-0 right-1/4 w-[600px] h-[300px] bg-emerald-900/15 rounded-full blur-[80px]" 
+        className="absolute bottom-0 right-1/4 w-[350px] sm:w-[600px] h-[200px] sm:h-[300px] bg-emerald-900/15 rounded-full blur-[50px] sm:blur-[80px]" 
       />
 
       {/* Grid pattern overlay */}
@@ -596,34 +596,34 @@ export const OrderBookExplainer = () => {
         className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '60px 60px'
+          backgroundSize: '40px 40px'
         }}
       />
 
       {/* Top border accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-violet-500/30" />
       
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Header */}
-        <div className="max-w-3xl mb-16 lg:mb-20">
+        <div className="max-w-3xl mb-10 sm:mb-16 lg:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
           >
-            <div className="w-12 h-px bg-white/30" />
-            <span className="text-xs tracking-[0.3em] uppercase font-medium text-white/50">
+            <div className="w-8 sm:w-12 h-px bg-white/30" />
+            <span className="text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase font-medium text-white/50">
               How It Works
             </span>
-            <div className="w-12 h-px bg-white/30" />
+            <div className="w-8 sm:w-12 h-px bg-white/30" />
           </motion.div>
           
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6 text-white"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-[1.1] sm:leading-[1.05] tracking-tight mb-4 sm:mb-6 text-white"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Professional trading,
@@ -635,18 +635,18 @@ export const OrderBookExplainer = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-base md:text-lg max-w-xl leading-relaxed text-white/50"
+            className="text-sm sm:text-base md:text-lg max-w-xl leading-relaxed text-white/50"
           >
             A traditional exchange uses an order book. We bring this same professional tool to real-world assets.
           </motion.p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
           {/* Order Book */}
           <AnimatedOrderBook />
 
           {/* Benefits */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {benefits.map((benefit, index) => {
               const isHovered = hoveredIndex === index;
               
@@ -658,10 +658,11 @@ export const OrderBookExplainer = () => {
                   transition={{ delay: 0.3 + index * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
+                  onTouchStart={() => setHoveredIndex(index)}
                   className="group cursor-pointer"
                 >
                   <motion.div
-                    className={`relative flex items-center gap-5 p-5 overflow-hidden rounded-xl transition-all duration-500 ${
+                    className={`relative flex items-center gap-3 sm:gap-5 p-4 sm:p-5 overflow-hidden rounded-lg sm:rounded-xl transition-all duration-500 min-h-[64px] ${
                       isHovered 
                         ? 'bg-white/[0.08] border border-violet-500/40' 
                         : 'bg-white/[0.03] border border-white/10'
@@ -673,13 +674,13 @@ export const OrderBookExplainer = () => {
                     transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                   >
                     {/* Decorative number */}
-                    <span className="absolute top-2 right-4 text-5xl font-extralight font-serif text-white/[0.03]">
+                    <span className="absolute top-2 right-3 sm:right-4 text-4xl sm:text-5xl font-extralight font-serif text-white/[0.03]">
                       {benefit.number}
                     </span>
 
                     {/* Icon container */}
                     <motion.div 
-                      className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-400 ${
+                      className={`w-11 h-11 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-400 ${
                         isHovered 
                           ? 'border-violet-500/50 bg-violet-500/20 border shadow-lg shadow-violet-500/20' 
                           : 'border-white/20 bg-white/5 border'
@@ -691,19 +692,19 @@ export const OrderBookExplainer = () => {
                       transition={{ duration: 0.4 }}
                     >
                       <benefit.icon 
-                        className={`w-6 h-6 transition-colors duration-400 ${isHovered ? 'text-violet-400' : 'text-white/60'}`}
+                        className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-400 ${isHovered ? 'text-violet-400' : 'text-white/60'}`}
                         strokeWidth={1.5} 
                       />
                     </motion.div>
                     
                     <div className="relative z-10">
                       <h3 
-                        className={`text-lg font-medium mb-0.5 tracking-wide transition-colors duration-400 ${isHovered ? 'text-white' : 'text-white/90'}`}
+                        className={`text-base sm:text-lg font-medium mb-0.5 tracking-wide transition-colors duration-400 ${isHovered ? 'text-white' : 'text-white/90'}`}
                       >
                         {benefit.title}
                       </h3>
                       <p 
-                        className="text-sm transition-colors duration-400"
+                        className="text-xs sm:text-sm transition-colors duration-400"
                         style={{ color: isHovered ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.4)' }}
                       >
                         {benefit.description}
@@ -726,9 +727,9 @@ export const OrderBookExplainer = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="mt-8 p-6 bg-violet-500/10 border-l-2 border-violet-500 rounded-r-xl"
+              className="mt-6 sm:mt-8 p-4 sm:p-6 bg-violet-500/10 border-l-2 border-violet-500 rounded-r-lg sm:rounded-r-xl"
             >
-              <p className="leading-relaxed text-sm text-white/60">
+              <p className="leading-relaxed text-xs sm:text-sm text-white/60">
                 <span className="text-white font-medium">This is not a platform price.</span>{" "}
                 It is a true market where buyers and sellers meet. <span className="text-violet-400">Your price, your terms.</span>
               </p>
