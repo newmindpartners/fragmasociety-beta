@@ -27,6 +27,10 @@ const buttonVariants = cva(
           "bg-white text-background hover:bg-white/95 hover:shadow-[0_12px_40px_-10px_rgba(255,255,255,0.4)] hover:scale-[1.03] active:scale-[0.98] font-semibold",
         "hero-outline":
           "border border-white text-white hover:bg-white hover:text-background hover:shadow-[0_8px_30px_-8px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-[0.98]",
+        navy:
+          "bg-slate-900 text-white hover:bg-slate-800 hover:shadow-[0_8px_30px_-8px_rgba(15,23,42,0.4)] hover:scale-[1.02] active:scale-[0.98] font-medium",
+        "navy-outline":
+          "border border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white hover:shadow-[0_4px_20px_-6px_rgba(15,23,42,0.3)] hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
         default: "h-11 px-6 py-3",

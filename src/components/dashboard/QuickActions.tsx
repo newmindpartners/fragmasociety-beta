@@ -54,11 +54,11 @@ export const QuickActions = () => {
             >
               <Link
                 to={action.href}
-                className="group flex h-full min-h-[124px] flex-col rounded-xl border border-border/70 bg-card p-4 shadow-sm transition-all duration-200 hover:border-primary/30 hover:bg-accent/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="group flex h-full min-h-[124px] flex-col rounded-xl border border-border/70 bg-card p-4 shadow-sm transition-all duration-200 hover:border-slate-400 hover:bg-accent/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/10 transition-colors group-hover:bg-primary/15">
-                    <Icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 ring-1 ring-slate-200 transition-colors group-hover:bg-slate-200">
+                    <Icon className="h-5 w-5 text-slate-700" strokeWidth={1.75} />
                   </div>
                 </div>
 
