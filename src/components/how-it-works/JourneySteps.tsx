@@ -64,14 +64,15 @@ const StepCard = ({
       className="group cursor-pointer"
     >
       <motion.div
-        whileHover={{ y: -8 }}
-        animate={isActive ? { scale: 1.02 } : { scale: 1 }}
-        className={`relative h-full rounded-2xl p-6 border transition-all duration-500 overflow-hidden ${
-          isActive 
-            ? 'bg-white border-turquoise/40 shadow-xl shadow-turquoise/10' 
-            : 'bg-white/80 border-slate-200 hover:border-turquoise/30 hover:bg-white hover:shadow-lg'
-        }`}
-      >
+      whileHover={{ y: -8 }}
+      whileTap={{ scale: 0.98 }}
+      animate={isActive ? { scale: 1.02 } : { scale: 1 }}
+      className={`relative h-full rounded-xl sm:rounded-2xl p-4 sm:p-6 border transition-all duration-500 overflow-hidden min-h-[140px] ${
+        isActive 
+          ? 'bg-white border-turquoise/40 shadow-xl shadow-turquoise/10' 
+          : 'bg-white/80 border-slate-200 hover:border-turquoise/30 hover:bg-white hover:shadow-lg active:bg-white'
+      }`}
+    >
         {/* Active indicator glow */}
         {isActive && (
           <motion.div
@@ -81,23 +82,23 @@ const StepCard = ({
         )}
         
         {/* Top row */}
-        <div className="relative flex items-start justify-between mb-5">
+        <div className="relative flex items-start justify-between mb-3 sm:mb-5">
           <motion.div
             animate={isActive ? { scale: 1.1 } : { scale: 1 }}
-            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-500 ${
+            className={`w-11 h-11 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center transition-all duration-500 ${
               isActive 
                 ? 'bg-turquoise text-white shadow-lg shadow-turquoise/30' 
                 : 'bg-slate-100 text-slate-500 group-hover:bg-turquoise/20 group-hover:text-turquoise'
             }`}
           >
-            <Icon className="w-7 h-7" />
+            <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
           </motion.div>
           
           <motion.span 
             animate={{ 
               color: isActive ? "hsl(var(--turquoise))" : "rgba(0,0,0,0.08)",
             }}
-            className="text-5xl font-serif font-bold italic"
+            className="text-4xl sm:text-5xl font-serif font-bold italic"
           >
             {step.step}
           </motion.span>
@@ -105,12 +106,12 @@ const StepCard = ({
 
         {/* Content */}
         <div className="relative">
-          <h3 className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
+          <h3 className={`text-base sm:text-xl font-semibold mb-1.5 sm:mb-3 transition-colors duration-500 ${
             isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'
           }`}>
             {step.title}
           </h3>
-          <p className={`text-sm leading-relaxed transition-colors duration-500 ${
+          <p className={`text-xs sm:text-sm leading-relaxed transition-colors duration-500 ${
             isActive ? 'text-slate-600' : 'text-slate-500 group-hover:text-slate-600'
           }`}>
             {step.description}
@@ -141,11 +142,11 @@ export const JourneySteps = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 bg-slate-50 relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 sm:py-24 lg:py-32 bg-slate-50 relative overflow-hidden">
       {/* Subtle grid pattern */}
       <div className="absolute inset-0 opacity-50" style={{
         backgroundImage: `linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)`,
-        backgroundSize: '64px 64px'
+        backgroundSize: '48px 48px'
       }} />
       
       {/* Decorative floating elements */}
@@ -153,34 +154,34 @@ export const JourneySteps = () => {
         <motion.div
           animate={{ y: [-15, 15, -15], x: [-5, 5, -5] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-32 left-10 w-64 h-64 rounded-full bg-turquoise/10 blur-3xl"
+          className="absolute top-32 left-5 sm:left-10 w-40 sm:w-64 h-40 sm:h-64 rounded-full bg-turquoise/10 blur-3xl"
         />
         <motion.div
           animate={{ y: [15, -15, 15], x: [5, -5, 5] }}
           transition={{ duration: 10, repeat: Infinity }}
-          className="absolute bottom-32 right-10 w-80 h-80 rounded-full bg-slate-200/50 blur-3xl"
+          className="absolute bottom-32 right-5 sm:right-10 w-52 sm:w-80 h-52 sm:h-80 rounded-full bg-slate-200/50 blur-3xl"
         />
       </div>
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-xs font-semibold tracking-[0.2em] uppercase rounded-full bg-turquoise/10 text-turquoise border border-turquoise/20">
-              <FileCheck className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6 text-[10px] sm:text-xs font-semibold tracking-[0.15em] sm:tracking-[0.2em] uppercase rounded-full bg-turquoise/10 text-turquoise border border-turquoise/20">
+              <FileCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               Your Investment Journey
             </span>
             
-            <h2 className="text-4xl lg:text-6xl font-serif font-light text-slate-900 mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-light text-slate-900 mb-4 sm:mb-6 tracking-tight">
               From discovery
               <br />
               <span className="text-turquoise">to earnings.</span>
             </h2>
             
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed px-2">
               Six simple steps to transform how you build wealth through fractional ownership.
             </p>
           </motion.div>
@@ -190,28 +191,28 @@ export const JourneySteps = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="max-w-4xl mx-auto mb-12"
+          className="max-w-4xl mx-auto mb-8 sm:mb-12"
         >
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
             {steps.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveStep(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer min-h-[12px] min-w-[12px] ${
                   activeStep === i 
-                    ? 'w-12 bg-turquoise' 
-                    : 'w-3 bg-slate-300 hover:bg-slate-400'
+                    ? 'w-10 sm:w-12 bg-turquoise' 
+                    : 'w-3 bg-slate-300 hover:bg-slate-400 active:bg-slate-500'
                 }`}
               />
             ))}
           </div>
-          <p className="text-center text-sm text-slate-500">
+          <p className="text-center text-xs sm:text-sm text-slate-500">
             Step <span className="text-turquoise font-semibold">{activeStep + 1}</span> of 6
           </p>
         </motion.div>
 
         {/* Steps Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
           {steps.map((step, i) => (
             <StepCard 
               key={i} 
@@ -229,21 +230,21 @@ export const JourneySteps = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="mt-20 text-center"
+          className="mt-12 sm:mt-20 text-center"
         >
           <motion.div
             whileHover={{ scale: 1.02, y: -4 }}
-            className="inline-block max-w-2xl bg-white border border-slate-200 rounded-3xl p-10 shadow-lg"
+            className="inline-block max-w-2xl bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-lg"
           >
-            <h3 className="text-2xl lg:text-3xl font-serif font-light text-slate-900 mb-4">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-serif font-light text-slate-900 mb-3 sm:mb-4">
               Built for <span className="text-turquoise">everyone</span>.
             </h3>
-            <p className="text-slate-600 mb-8 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8 leading-relaxed">
               Whether you're new to investing or an experienced portfolio manager, 
               Fragma makes fractional ownership accessible, transparent, and rewarding.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {["Full ownership", "Automated payouts", "Transparent pricing", "Secondary liquidity"].map((tag, i) => (
                 <motion.span
                   key={tag}
@@ -251,7 +252,7 @@ export const JourneySteps = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.6 + i * 0.05 }}
-                  className="px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700 border border-slate-200 font-medium"
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-full bg-slate-100 text-slate-700 border border-slate-200 font-medium"
                 >
                   {tag}
                 </motion.span>
