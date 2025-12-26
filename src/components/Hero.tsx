@@ -134,7 +134,7 @@ export const Hero = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-lg md:text-xl text-white/60 max-w-2xl mb-10 font-light"
             >
-              Exclusive access to curated real-world opportunities—built for trust, designed for pride.
+              Join a community of discerning investors with exclusive access to curated real-world assets.
             </motion.p>
 
             {/* CTA Button */}
