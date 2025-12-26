@@ -130,7 +130,7 @@ export const WalletPortfolio = () => {
                   </Badge>
                 </div>
                 <div className="text-center">
-                  <div className="w-8 h-8 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center font-semibold mx-auto">
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-semibold mx-auto">
                     {project.amount}
                   </div>
                 </div>

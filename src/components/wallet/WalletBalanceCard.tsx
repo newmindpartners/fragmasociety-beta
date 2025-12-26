@@ -137,10 +137,10 @@ export const WalletBalanceCard = ({ onCredit, onWithdraw }: WalletBalanceCardPro
             {/* Swap Button */}
             <button
               onClick={() => setSwapModalOpen(true)}
-              className="bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm rounded-xl border border-violet-500/30 flex flex-col items-center justify-center hover:from-violet-500/30 hover:to-purple-500/30 hover:border-violet-500/40 transition-all duration-300 group"
+              className="bg-gradient-to-br from-slate-500/20 to-slate-600/20 backdrop-blur-sm rounded-xl border border-slate-500/30 flex flex-col items-center justify-center hover:from-slate-500/30 hover:to-slate-600/30 hover:border-slate-500/40 transition-all duration-300 group"
             >
-              <ArrowDownUp className="w-4 h-4 text-violet-400 group-hover:text-violet-300 transition-colors" />
-              <span className="text-[9px] text-violet-400/80 mt-1 font-medium">Swap</span>
+              <ArrowDownUp className="w-4 h-4 text-slate-400 group-hover:text-slate-300 transition-colors" />
+              <span className="text-[9px] text-slate-400/80 mt-1 font-medium">Swap</span>
             </button>
           </div>
 

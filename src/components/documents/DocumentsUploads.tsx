@@ -46,7 +46,8 @@ export const DocumentsUploads = () => {
       <div className="mb-6">
         <Button
           onClick={() => setUploadModalOpen(true)}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6"
+          variant="navy"
+          className="rounded-full px-6"
         >
           <Upload className="w-4 h-4 mr-2" />
           Upload Document
@@ -75,7 +76,8 @@ export const DocumentsUploads = () => {
             
             <Button 
               onClick={() => setUploadModalOpen(true)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6"
+              variant="navy"
+              className="rounded-full px-6"
             >
               <Upload className="w-4 h-4 mr-2" />
               Upload Your First Document

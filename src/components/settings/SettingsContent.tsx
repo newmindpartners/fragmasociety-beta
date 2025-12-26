@@ -133,7 +133,7 @@ export const SettingsContent = () => {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center shadow-lg shadow-slate-900/20">
             <Settings className="w-6 h-6 text-white" strokeWidth={1.5} />
           </div>
           <div>
@@ -170,8 +170,8 @@ export const SettingsContent = () => {
               />
               <defs>
                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#a855f7" />
+                  <stop offset="0%" stopColor="#334155" />
+                  <stop offset="100%" stopColor="#1e293b" />
                 </linearGradient>
               </defs>
             </svg>
@@ -204,16 +204,16 @@ export const SettingsContent = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100"
+        className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200"
       >
-        <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-          <Sparkles className="w-4 h-4 text-violet-600" />
+        <div className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-4 h-4 text-slate-600" />
         </div>
         <div>
           <p className="text-sm font-medium text-slate-900">Need help?</p>
           <p className="text-xs text-slate-600 mt-0.5">
             Contact our support team at{" "}
-            <a href="mailto:support@fragma.io" className="text-violet-600 hover:underline">
+            <a href="mailto:support@fragma.io" className="text-slate-700 font-medium hover:underline">
               support@fragma.io
             </a>{" "}
             or visit our Help Center.
@@ -243,7 +243,7 @@ const SettingsAccordion = ({ section, index, isExpanded, onToggle }: SettingsAcc
       className={cn(
         "rounded-xl border bg-white overflow-hidden transition-all duration-300",
         isExpanded 
-          ? "border-violet-200 shadow-lg shadow-violet-500/5" 
+          ? "border-slate-300 shadow-lg shadow-slate-900/5" 
           : "border-slate-200 hover:border-slate-300 hover:shadow-md"
       )}
     >
