@@ -233,11 +233,10 @@ export const Marketplace = () => {
             
             <Button 
               size="lg" 
-              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-base rounded-full shadow-xl shadow-slate-900/20"
-              onClick={() => window.location.href = '/marketplace'}
+              className="bg-slate-400 text-white px-8 py-6 text-base rounded-full cursor-not-allowed opacity-70"
+              disabled
             >
-              Explore Marketplace
-              <ArrowUpRight className="ml-2 w-5 h-5" />
+              Coming Soon
             </Button>
           </motion.div>
           
