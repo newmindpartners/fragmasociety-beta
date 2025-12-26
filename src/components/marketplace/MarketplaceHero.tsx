@@ -189,7 +189,7 @@ export const MarketplaceHero = () => {
               transition={{ duration: 0.6 }}
               className="mb-8"
             >
-              <span className="inline-flex items-center gap-3 px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase bg-white/5 backdrop-blur-sm text-white/80 border border-white/20 rounded-sm">
+              <span className="inline-flex items-center gap-3 px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase bg-white/5 backdrop-blur-sm text-white/80 border border-white/20 rounded-full">
                 <motion.span
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -287,7 +287,7 @@ export const MarketplaceHero = () => {
             >
               <Button 
                 size="lg"
-                className="bg-white text-slate-900 hover:bg-white/90 rounded-sm px-8 h-12 text-sm font-medium tracking-wide"
+                className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-8 h-12 text-sm font-medium tracking-wide"
               >
                 Explore Marketplace
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -295,7 +295,7 @@ export const MarketplaceHero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 rounded-sm px-8 h-12 text-sm font-medium tracking-wide bg-transparent"
+                className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-12 text-sm font-medium tracking-wide bg-transparent"
               >
                 <Play className="w-4 h-4 mr-2" fill="currentColor" />
                 Watch Demo
