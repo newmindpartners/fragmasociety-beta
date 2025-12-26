@@ -87,12 +87,12 @@ export const SocialProof = () => {
   });
 
   return (
-    <section className="relative w-full py-10 bg-white overflow-hidden">
+    <section className="relative w-full py-6 sm:py-10 bg-white overflow-hidden">
       {/* Top border */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
-      <div className="container mx-auto px-6 mb-6">
-        <p className="text-slate-400 text-[10px] font-medium uppercase tracking-[0.25em] text-center">
+      <div className="container mx-auto px-4 sm:px-6 mb-4 sm:mb-6">
+        <p className="text-slate-400 text-[9px] sm:text-[10px] font-medium uppercase tracking-[0.2em] sm:tracking-[0.25em] text-center">
           Trusted Partners
         </p>
       </div>
@@ -105,9 +105,9 @@ export const SocialProof = () => {
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
       >
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
+        {/* Fade edges - narrower on mobile */}
+        <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-10 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
         <TooltipProvider delayDuration={100}>
           <motion.div className="flex" style={{ x, willChange: "transform" }}>
@@ -120,12 +120,12 @@ export const SocialProof = () => {
                       href={partner.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex-shrink-0 h-12 mx-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
+                      className={`flex-shrink-0 h-8 sm:h-12 mx-4 sm:mx-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 active:opacity-70 active:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
                     >
                       <img
                         src={partner.logo}
                         alt={partner.name}
-                        className="h-full w-auto object-contain max-w-[150px]"
+                        className="h-full w-auto object-contain max-w-[100px] sm:max-w-[150px]"
                         loading="lazy"
                       />
                     </a>
@@ -150,12 +150,12 @@ export const SocialProof = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       tabIndex={-1}
-                      className={`flex-shrink-0 h-12 mx-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
+                      className={`flex-shrink-0 h-8 sm:h-12 mx-4 sm:mx-8 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 active:opacity-70 active:grayscale-0 transition-all duration-300 cursor-pointer ${partner.className}`}
                     >
                       <img
                         src={partner.logo}
                         alt={partner.name}
-                        className="h-full w-auto object-contain max-w-[150px]"
+                        className="h-full w-auto object-contain max-w-[100px] sm:max-w-[150px]"
                         loading="lazy"
                       />
                     </a>
