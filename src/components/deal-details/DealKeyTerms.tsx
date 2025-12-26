@@ -33,26 +33,26 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
   ];
 
   return (
-    <section className="py-12 relative overflow-hidden">
+    <section className="py-8 sm:py-12 relative overflow-hidden">
       {/* Subtle Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-white" />
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Compact Header */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex items-center gap-3 mb-6"
+          className="flex items-center gap-3 mb-4 sm:mb-6"
         >
-          <div className="w-8 h-px bg-slate-300" />
-          <span className="text-xs tracking-[0.3em] uppercase text-slate-500 font-medium">
+          <div className="w-6 sm:w-8 h-px bg-slate-300" />
+          <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-slate-500 font-medium">
             Key Terms
           </span>
         </motion.div>
 
         {/* Compact Terms Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3">
           {terms.map((term, index) => {
             const Icon = termIcons[index];
             const isHovered = hoveredIndex === index;
@@ -66,10 +66,12 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                 transition={{ duration: 0.3, delay: index * 0.03 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onTouchStart={() => setHoveredIndex(index)}
+                onTouchEnd={() => setTimeout(() => setHoveredIndex(null), 300)}
                 className="cursor-pointer"
               >
                 <motion.div
-                  className="relative p-4 h-full bg-white border border-slate-200/80 transition-all duration-300"
+                  className="relative p-3 sm:p-4 h-full bg-white border border-slate-200/80 transition-all duration-300"
                   style={{
                     boxShadow: isHovered 
                       ? '0 8px 24px -8px rgba(15, 23, 42, 0.15)'
@@ -82,17 +84,17 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
                   transition={{ duration: 0.25 }}
                 >
                   {/* Icon */}
-                  <Icon className={`w-4 h-4 mb-3 transition-colors duration-300 ${
+                  <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 mb-2 sm:mb-3 transition-colors duration-300 ${
                     isHovered ? 'text-slate-700' : 'text-slate-400'
                   }`} />
                   
                   {/* Label */}
-                  <p className="text-[9px] tracking-[0.2em] uppercase mb-1 text-slate-400">
+                  <p className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase mb-1 text-slate-400">
                     {term.label}
                   </p>
                   
                   {/* Value */}
-                  <p className={`text-sm font-medium transition-colors duration-300 ${
+                  <p className={`text-xs sm:text-sm font-medium transition-colors duration-300 ${
                     term.highlight ? 'text-slate-900' : 'text-slate-700'
                   }`}>
                     {term.value}
@@ -117,9 +119,9 @@ export const DealKeyTerms = ({ deal }: DealKeyTermsProps) => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="mt-6 text-xs text-slate-500 flex items-center gap-2"
+          className="mt-4 sm:mt-6 text-[10px] sm:text-xs text-slate-500 flex items-start sm:items-center gap-2"
         >
-          <AlertTriangle className="w-3 h-3 text-slate-400 flex-shrink-0" />
+          <AlertTriangle className="w-3 h-3 text-slate-400 flex-shrink-0 mt-0.5 sm:mt-0" />
           <span>*Target returns are projections only. Capital at risk. Past performance is not indicative of future results.</span>
         </motion.p>
       </div>
