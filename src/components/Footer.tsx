@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Instagram } from "lucide-react";
+import { Instagram, ArrowRight, Check, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -60,7 +63,46 @@ const footerNav = {
   ],
 };
 
-export const Footer = () => (
+export const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const { error } = await supabase
+        .from("newsletter_subscribers")
+        .insert({ email: email.trim().toLowerCase() });
+
+      if (error) {
+        if (error.code === "23505") {
+          toast.info("You're already subscribed!");
+          setIsSubscribed(true);
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success("Welcome! You're now subscribed.");
+        setIsSubscribed(true);
+        setEmail("");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
   <footer className="relative pt-24 pb-12 overflow-hidden">
     {/* Premium Light Gradient Background */}
     {/* Dramatic Gradient Background */}
@@ -99,9 +141,47 @@ export const Footer = () => (
             Own the extraordinary.
           </p>
           
-          <p className="text-slate-400 text-xs leading-relaxed mb-8 max-w-sm">
+          <p className="text-slate-400 text-xs leading-relaxed mb-6 max-w-sm">
             Join a community of discerning investors with exclusive access to curated extraordinary assets.
           </p>
+          
+          {/* Newsletter Signup */}
+          <div className="mb-8">
+            <h5 className="text-[11px] tracking-[0.2em] uppercase text-slate-400 font-medium mb-3">
+              Stay Updated
+            </h5>
+            {isSubscribed ? (
+              <div className="flex items-center gap-2 text-emerald-600 text-sm">
+                <Check className="w-4 h-4" />
+                <span>You're subscribed!</span>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-full text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
+                  disabled={isSubmitting}
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2.5 bg-slate-900 text-white rounded-full text-sm font-medium hover:bg-slate-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      Subscribe
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
           
           {/* Social Media Icons */}
           <TooltipProvider delayDuration={100}>
@@ -283,4 +363,5 @@ export const Footer = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};
