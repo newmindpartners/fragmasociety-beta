@@ -119,7 +119,7 @@ export const DisclaimerModal = () => {
         </ScrollArea>
 
         <div className="pt-4">
-          <Button onClick={handleAccept} className="w-full py-3 font-semibold">
+          <Button onClick={handleAccept} variant="navy" className="w-full py-3 font-semibold">
             I UNDERSTAND
           </Button>
         </div>
