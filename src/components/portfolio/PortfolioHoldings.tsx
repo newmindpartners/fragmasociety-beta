@@ -193,9 +193,13 @@ export const PortfolioHoldings = () => {
                       {categories.map((cat) => (
                         <Button
                           key={cat}
-                          variant={selectedCategory === cat ? "default" : "outline"}
+                          variant="outline"
                           size="sm"
-                          className="h-7 text-xs rounded-full px-3"
+                          className={`h-7 text-xs rounded-full px-3 ${
+                            selectedCategory === cat 
+                              ? "bg-slate-900 text-white border-slate-900 hover:bg-slate-800" 
+                              : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                          }`}
                           onClick={() => setSelectedCategory(cat)}
                         >
                           {cat}
@@ -208,7 +212,7 @@ export const PortfolioHoldings = () => {
                     {/* Sort Dropdown */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-7 text-xs rounded-full gap-1 border-violet-300 text-violet-700 hover:bg-violet-50 bg-white">
+                        <Button variant="outline" size="sm" className="h-7 text-xs rounded-full gap-1 border-slate-300 text-slate-700 hover:bg-slate-100 bg-white">
                           Sort: {sortBy}
                           <ChevronDown className="w-3 h-3" />
                         </Button>
