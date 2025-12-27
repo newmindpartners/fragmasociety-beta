@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight, MoreHorizontal, Calendar, PieChart } from "lucide-react";
+import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight, MoreHorizontal, Calendar, PieChart, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -15,6 +15,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Order {
   id: string;
@@ -88,14 +98,26 @@ const orderHistory: Order[] = [
 
 export const OpenTransactions = () => {
   const [activeTab, setActiveTab] = useState<"orders" | "history">("orders");
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [orderToCancel, setOrderToCancel] = useState<Order | null>(null);
   const navigate = useNavigate();
 
   const handleOrderClick = (order: Order) => {
     navigate(`/order/${order.id}`);
   };
 
-  const handleCancelOrder = (orderId: string) => {
-    console.log("Cancel order:", orderId);
+  const handleCancelClick = (order: Order) => {
+    setOrderToCancel(order);
+    setCancelDialogOpen(true);
+  };
+
+  const confirmCancelOrder = () => {
+    if (orderToCancel) {
+      console.log("Cancel order:", orderToCancel.id);
+      // Add actual cancel logic here
+    }
+    setCancelDialogOpen(false);
+    setOrderToCancel(null);
   };
 
   const getStatusConfig = (status: Order["status"]) => {
@@ -344,7 +366,7 @@ export const OpenTransactions = () => {
                                 <DropdownMenuItem 
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleCancelOrder(order.id);
+                                    handleCancelClick(order);
                                   }}
                                   className="text-rose-600 focus:text-rose-600 focus:bg-rose-50"
                                 >
@@ -461,6 +483,50 @@ export const OpenTransactions = () => {
         </Link>
       </div>
     </motion.div>
+
+    {/* Cancel Order Confirmation Dialog */}
+    <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+      <AlertDialogContent className="max-w-md">
+        <AlertDialogHeader>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-rose-600" />
+            </div>
+            <AlertDialogTitle className="text-lg">Cancel Order</AlertDialogTitle>
+          </div>
+          <AlertDialogDescription className="text-muted-foreground">
+            Are you sure you want to cancel this order?
+            {orderToCancel && (
+              <div className="mt-4 p-3 rounded-lg bg-muted/50 border border-border/60">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-foreground">{orderToCancel.assetName}</span>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
+                    orderToCancel.orderType === "buy" 
+                      ? "bg-emerald-100 text-emerald-700" 
+                      : "bg-rose-100 text-rose-600"
+                  }`}>
+                    {orderToCancel.orderType === "buy" ? "Buy" : "Sell"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span>{orderToCancel.tokens} tokens @ {orderToCancel.pricePerToken}</span>
+                  <span className="font-semibold text-foreground">{orderToCancel.totalValue}</span>
+                </div>
+              </div>
+            )}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="gap-2 sm:gap-2">
+          <AlertDialogCancel className="mt-0">Keep Order</AlertDialogCancel>
+          <AlertDialogAction 
+            onClick={confirmCancelOrder}
+            className="bg-rose-600 hover:bg-rose-700 text-white"
+          >
+            Yes, Cancel Order
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
     </TooltipProvider>
   );
 };
