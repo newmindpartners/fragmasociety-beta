@@ -245,44 +245,44 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
                     </div>
                   </div>
 
-                  {/* Financial Grid */}
-                  <div className={`grid grid-cols-3 gap-4 pt-6 border-t transition-colors duration-500 ${
+                  {/* Financial Grid - Stack on mobile */}
+                  <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 border-t transition-colors duration-500 ${
                     isHovered ? 'border-slate-700' : 'border-slate-200'
                   }`}>
                     {property.acquisitionPrice && (
                       <div>
-                        <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
+                        <p className={`text-[9px] sm:text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
                           isHovered ? 'text-slate-500' : 'text-slate-400'
                         }`}>Acquisition</p>
-                        <p className={`text-lg font-medium transition-colors duration-500 ${
+                        <p className={`text-base sm:text-lg font-medium transition-colors duration-500 ${
                           isHovered ? 'text-white' : 'text-slate-900'
                         }`}>{property.acquisitionPrice}</p>
                       </div>
                     )}
                     {property.constructionCost && (
                       <div>
-                        <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
+                        <p className={`text-[9px] sm:text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
                           isHovered ? 'text-slate-500' : 'text-slate-400'
                         }`}>Build Cost</p>
-                        <p className={`text-lg font-medium transition-colors duration-500 ${
+                        <p className={`text-base sm:text-lg font-medium transition-colors duration-500 ${
                           isHovered ? 'text-white' : 'text-slate-900'
                         }`}>{property.constructionCost}</p>
                       </div>
                     )}
                     {property.projectedExitPrice && (
-                      <div className={`relative px-3 py-2 -mx-3 rounded transition-all duration-500 ${
+                      <div className={`relative col-span-2 sm:col-span-1 px-3 py-2 rounded transition-all duration-500 ${
                         isHovered ? 'bg-emerald-500/20' : 'bg-emerald-50'
                       }`}>
                         <div className="flex items-center gap-1.5 mb-1">
                           <TrendingUp className={`w-3 h-3 transition-colors duration-500 ${
                             isHovered ? 'text-emerald-400' : 'text-emerald-600'
                           }`} />
-                          <p className={`text-[10px] tracking-[0.15em] uppercase transition-colors duration-500 ${
+                          <p className={`text-[9px] sm:text-[10px] tracking-[0.15em] uppercase transition-colors duration-500 ${
                             isHovered ? 'text-emerald-400' : 'text-emerald-600'
                           }`}>Exit Target</p>
                         </div>
                         <motion.p 
-                          className={`text-xl font-bold transition-colors duration-500 ${
+                          className={`text-lg sm:text-xl font-bold transition-colors duration-500 ${
                             isHovered ? 'text-emerald-300' : 'text-emerald-700'
                           }`}
                           animate={{ scale: isHovered ? 1.08 : 1 }}
