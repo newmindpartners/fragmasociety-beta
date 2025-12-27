@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, ChevronDown, Zap, ArrowLeftRight, HelpCircle, Crown, Briefcase, Rocket, Coins, Users, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
