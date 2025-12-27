@@ -208,17 +208,20 @@ export const PortfolioHoldings = () => {
                     {/* Sort Dropdown */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-7 text-xs rounded-full gap-1">
+                        <Button variant="outline" size="sm" className="h-7 text-xs rounded-full gap-1 border-violet-300 text-violet-700 hover:bg-violet-50 bg-white">
                           Sort: {sortBy}
                           <ChevronDown className="w-3 h-3" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start">
+                      <DropdownMenuContent align="start" className="bg-white border-slate-200 shadow-lg rounded-xl p-1">
                         {sortOptions.map((option) => (
                           <DropdownMenuItem 
                             key={option} 
                             onClick={() => setSortBy(option)}
-                            className={sortBy === option ? "bg-muted" : ""}
+                            className={sortBy === option 
+                              ? "bg-slate-900 text-white rounded-lg focus:bg-slate-900 focus:text-white" 
+                              : "text-slate-700 hover:bg-slate-100 rounded-lg focus:bg-slate-100"
+                            }
                           >
                             {option}
                           </DropdownMenuItem>
