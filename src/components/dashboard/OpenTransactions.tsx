@@ -486,20 +486,20 @@ export const OpenTransactions = () => {
 
     {/* Cancel Order Confirmation Dialog */}
     <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
-      <AlertDialogContent className="max-w-md">
+      <AlertDialogContent className="max-w-md bg-white border-slate-200 shadow-xl">
         <AlertDialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-rose-600" />
             </div>
-            <AlertDialogTitle className="text-lg">Cancel Order</AlertDialogTitle>
+            <AlertDialogTitle className="text-lg text-slate-900">Cancel Order</AlertDialogTitle>
           </div>
-          <AlertDialogDescription className="text-muted-foreground">
+          <AlertDialogDescription className="text-slate-500">
             Are you sure you want to cancel this order?
             {orderToCancel && (
-              <div className="mt-4 p-3 rounded-lg bg-muted/50 border border-border/60">
+              <div className="mt-4 p-3 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-foreground">{orderToCancel.assetName}</span>
+                  <span className="font-medium text-slate-900">{orderToCancel.assetName}</span>
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
                     orderToCancel.orderType === "buy" 
                       ? "bg-emerald-100 text-emerald-700" 
@@ -508,16 +508,16 @@ export const OpenTransactions = () => {
                     {orderToCancel.orderType === "buy" ? "Buy" : "Sell"}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div className="flex items-center justify-between text-sm text-slate-500">
                   <span>{orderToCancel.tokens} tokens @ {orderToCancel.pricePerToken}</span>
-                  <span className="font-semibold text-foreground">{orderToCancel.totalValue}</span>
+                  <span className="font-semibold text-slate-900">{orderToCancel.totalValue}</span>
                 </div>
               </div>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-2 sm:gap-2">
-          <AlertDialogCancel className="mt-0">Keep Order</AlertDialogCancel>
+          <AlertDialogCancel className="mt-0 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900">Keep Order</AlertDialogCancel>
           <AlertDialogAction 
             onClick={confirmCancelOrder}
             className="bg-rose-600 hover:bg-rose-700 text-white"
