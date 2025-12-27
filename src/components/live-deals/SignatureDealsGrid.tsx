@@ -1,8 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { SignatureDealCard } from "./SignatureDealCard";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import bryanImage from "@/assets/bryan-balsinger.png";
 import philippeImage from "@/assets/philippe-naouri.png";
@@ -87,22 +88,33 @@ export const SignatureDealsGrid = () => {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const isMobile = useIsMobile();
+  
+  // Touch gesture state
+  const dragX = useMotionValue(0);
+  const dragProgress = useTransform(dragX, [-100, 0, 100], [-1, 0, 1]);
 
-  // Minimum swipe distance (in px)
-  const minSwipeDistance = 50;
+  const getCardWidth = useCallback(() => {
+    if (typeof window === 'undefined') return 320;
+    if (window.innerWidth < 640) return 296; // 280px card + 16px gap
+    if (window.innerWidth < 768) return 344; // 320px card + 24px gap
+    if (window.innerWidth < 1024) return 384; // 360px card + 24px gap
+    return 424; // 400px card + 24px gap
+  }, []);
 
   const scrollToIndex = useCallback((index: number) => {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
-    const cardWidth = container.scrollWidth / signatureDeals.length;
+    const cardWidth = getCardWidth();
+    const targetScroll = cardWidth * index;
+    
     container.scrollTo({
-      left: cardWidth * index,
+      left: targetScroll,
       behavior: 'smooth'
     });
     setCurrentIndex(index);
-  }, []);
+  }, [getCardWidth]);
 
   const scrollPrev = useCallback(() => {
     const newIndex = currentIndex === 0 ? signatureDeals.length - 1 : currentIndex - 1;
@@ -114,27 +126,26 @@ export const SignatureDealsGrid = () => {
     scrollToIndex(newIndex);
   }, [currentIndex, scrollToIndex]);
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
+  // Enhanced drag handlers for mobile
+  const handleDragStart = () => {
+    setIsDragging(true);
   };
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
+    setIsDragging(false);
+    const threshold = 50;
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
     
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-    
-    if (isLeftSwipe) {
+    // Use velocity for quick swipes, offset for slow drags
+    if (velocity < -500 || (offset < -threshold && velocity <= 0)) {
       scrollNext();
-    } else if (isRightSwipe) {
+    } else if (velocity > 500 || (offset > threshold && velocity >= 0)) {
       scrollPrev();
     }
+    
+    // Reset drag position
+    animate(dragX, 0, { type: "spring", stiffness: 400, damping: 30 });
   };
 
   // Update current index based on scroll position
@@ -143,16 +154,17 @@ export const SignatureDealsGrid = () => {
     if (!container) return;
 
     const handleScroll = () => {
-      const cardWidth = container.scrollWidth / signatureDeals.length;
+      if (isDragging) return;
+      const cardWidth = getCardWidth();
       const newIndex = Math.round(container.scrollLeft / cardWidth);
       if (newIndex !== currentIndex && newIndex >= 0 && newIndex < signatureDeals.length) {
         setCurrentIndex(newIndex);
       }
     };
 
-    container.addEventListener('scroll', handleScroll);
+    container.addEventListener('scroll', handleScroll, { passive: true });
     return () => container.removeEventListener('scroll', handleScroll);
-  }, [currentIndex]);
+  }, [currentIndex, isDragging, getCardWidth]);
 
   const handleSeeDeal = (dealId: string) => {
     navigate(`/deal/${dealId}`);
@@ -226,27 +238,58 @@ export const SignatureDealsGrid = () => {
           {/* Right dark blur fade - smaller on mobile */}
           <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 lg:w-40 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
 
-          {/* Scrollable Cards */}
-          <div 
-            ref={scrollRef}
-            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-24 snap-x snap-mandatory touch-pan-x"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            {signatureDeals.map((deal) => (
-              <div 
-                key={deal.id} 
-                className="flex-none w-[280px] sm:w-[320px] md:w-[360px] lg:w-[400px] snap-start"
-              >
-                <SignatureDealCard
-                  {...deal}
-                  onSeeDeal={() => handleSeeDeal(deal.id)}
-                />
-              </div>
-            ))}
-          </div>
+          {/* Scrollable Cards with gesture support */}
+          {isMobile ? (
+            <motion.div
+              ref={scrollRef as any}
+              className="flex gap-4 overflow-x-auto scrollbar-hide px-4 snap-x snap-mandatory"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', x: dragX }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.1}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
+              {signatureDeals.map((deal, index) => (
+                <motion.div 
+                  key={deal.id} 
+                  className="flex-none w-[280px] snap-start"
+                  style={{
+                    scale: currentIndex === index ? 1 : 0.95,
+                    opacity: currentIndex === index ? 1 : 0.7,
+                  }}
+                  animate={{
+                    scale: currentIndex === index ? 1 : 0.95,
+                    opacity: currentIndex === index ? 1 : 0.85,
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <SignatureDealCard
+                    {...deal}
+                    onSeeDeal={() => handleSeeDeal(deal.id)}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <div 
+              ref={scrollRef}
+              className="flex gap-6 overflow-x-auto scrollbar-hide px-6 lg:px-24 snap-x snap-mandatory"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {signatureDeals.map((deal) => (
+                <div 
+                  key={deal.id} 
+                  className="flex-none w-[320px] md:w-[360px] lg:w-[400px] snap-start"
+                >
+                  <SignatureDealCard
+                    {...deal}
+                    onSeeDeal={() => handleSeeDeal(deal.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           
           {/* Swipe hint - mobile only */}
           <div className="flex items-center justify-center gap-1.5 mt-4 text-slate-400 text-xs sm:hidden">
