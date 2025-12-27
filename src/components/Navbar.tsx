@@ -160,6 +160,7 @@ const NavDropdown = ({ section }: { section: NavSection }) => {
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [renderMobileMenu, setRenderMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const { user, signOut } = useAuth();
@@ -171,6 +172,11 @@ export const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Keep the portal mounted long enough for exit animations to complete
+  useEffect(() => {
+    if (isOpen) setRenderMobileMenu(true);
+  }, [isOpen]);
 
   return (
     <nav 
@@ -270,184 +276,238 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu - Slide from right with improved UX */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden fixed inset-0 bg-black/70 backdrop-blur-sm"
-              style={{ zIndex: 9998 }}
-              onClick={() => setIsOpen(false)}
-            />
-            
-            {/* Slide-in menu panel */}
-            <motion.div 
-              initial={{ x: "100%", opacity: 0.5 }} 
-              animate={{ x: 0, opacity: 1 }} 
-              exit={{ x: "100%", opacity: 0.5 }}
-              transition={{ 
-                type: "spring",
-                damping: 30,
-                stiffness: 300,
-                mass: 0.8
-              }}
-              className="lg:hidden fixed top-0 right-0 bottom-0 w-[85%] max-w-[360px] bg-slate-900 overflow-hidden border-l border-slate-700/50 shadow-2xl"
-              style={{ zIndex: 9999 }}
-            >
-              <div className="h-full flex flex-col">
-                {/* Menu Header with Logo and Close */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700/50 bg-slate-900">
-                  <img src={fragmaLogo} alt="Fragma Society" className="h-6" />
-                  <button
+      {/* Mobile Menu - Portaled so it always overlays all page content */}
+      {renderMobileMenu && typeof document !== "undefined"
+        ? createPortal(
+            <AnimatePresence onExitComplete={() => setRenderMobileMenu(false)}>
+              {isOpen && (
+                <>
+                  {/* Backdrop overlay */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="lg:hidden fixed inset-0 bg-black/70 backdrop-blur-sm"
+                    style={{ zIndex: 9998 }}
                     onClick={() => setIsOpen(false)}
-                    className="p-2 text-white hover:bg-slate-800 active:bg-slate-700 rounded-lg transition-colors"
-                    aria-label="Close menu"
-                  >
-                    <X size={24} strokeWidth={2} />
-                  </button>
-                </div>
-                
-                {/* Scrollable content area */}
-                <div className="flex-1 overflow-y-auto overscroll-contain py-4 px-5">
-                  {navSections.map((section, sectionIndex) => (
-                    <motion.div
-                      key={section.label}
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: sectionIndex * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      className="mb-2"
-                    >
-                      {/* Section header - larger tap target */}
-                      <button
-                        onClick={() => setExpandedSection(expandedSection === section.label ? null : section.label)}
-                        className="flex items-center justify-between w-full py-4 px-3 text-sm font-semibold text-white uppercase tracking-wider rounded-xl hover:bg-slate-800/40 active:bg-slate-700/50 transition-colors min-h-[56px]"
-                      >
-                        <span className="flex items-center gap-3">
-                          <span className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                            expandedSection === section.label ? 'bg-violet-500' : 'bg-slate-600'
-                          }`} />
-                          {section.label}
-                        </span>
-                        <motion.div
-                          animate={{ rotate: expandedSection === section.label ? 180 : 0 }}
-                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <ChevronDown className="w-5 h-5 text-slate-400" />
-                        </motion.div>
-                      </button>
-                      
-                      {/* Expandable section items */}
-                      <AnimatePresence>
-                        {expandedSection === section.label && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className="overflow-hidden"
-                          >
-                            <div className="ml-4 border-l-2 border-slate-700/50">
-                              {section.items.map((item, itemIndex) => {
-                                const Icon = item.icon;
-                                const content = (
-                                  <motion.div 
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: itemIndex * 0.05, duration: 0.3 }}
-                                    className="flex items-center gap-4 py-4 px-4 ml-2 text-slate-300 hover:text-white active:text-white hover:bg-slate-800/40 active:bg-slate-700/50 rounded-xl transition-all min-h-[56px] group"
-                                  >
-                                    {Icon && (
-                                      <div className="w-10 h-10 rounded-lg bg-slate-800/80 border border-slate-700/50 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-700 group-hover:border-violet-500/30 transition-all">
-                                        <Icon className="w-5 h-5 text-slate-400 group-hover:text-violet-400 transition-colors" />
-                                      </div>
-                                    )}
-                                    <div className="flex-1 min-w-0">
-                                      <div className="flex items-center gap-2 flex-wrap">
-                                        <span className="text-sm font-medium">{item.label}</span>
-                                        {item.badge && (
-                                          <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded-full ${
-                                            item.badge === "Hot" 
-                                              ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" 
-                                              : item.badge === "Coming Soon"
-                                              ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
-                                              : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
-                                          }`}>
-                                            {item.badge}
-                                          </span>
-                                        )}
-                                      </div>
-                                      {item.description && (
-                                        <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>
-                                      )}
-                                    </div>
-                                    <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-violet-400 group-hover:translate-x-1 transition-all flex-shrink-0" />
-                                  </motion.div>
-                                );
+                  />
 
-                                return item.isRoute ? (
-                                  <Link key={item.label} to={item.href} onClick={() => setIsOpen(false)}>
-                                    {content}
-                                  </Link>
-                                ) : (
-                                  <a key={item.label} href={item.href} onClick={() => setIsOpen(false)}>
-                                    {content}
-                                  </a>
-                                );
-                              })}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  ))}
-                </div>
-                
-                {/* Fixed bottom CTA section */}
-                <motion.div 
-                  className="flex-shrink-0 p-5 border-t border-slate-700/50 bg-slate-900/80 backdrop-blur-sm"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25, duration: 0.4 }}
-                >
-                  {user ? (
-                    <div className="flex flex-col gap-3">
-                      <Link to="/strategy" onClick={() => setIsOpen(false)} className="w-full">
-                        <Button 
-                          variant="outline" 
-                          className="w-full h-14 border-slate-600 text-slate-200 hover:border-slate-500 hover:bg-slate-800/50 text-base font-medium"
+                  {/* Slide-in menu panel */}
+                  <motion.div
+                    initial={{ x: "100%", opacity: 0.5 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: "100%", opacity: 0.5 }}
+                    transition={{
+                      type: "spring",
+                      damping: 30,
+                      stiffness: 300,
+                      mass: 0.8,
+                    }}
+                    className="lg:hidden fixed top-0 right-0 bottom-0 w-[85%] max-w-[360px] bg-slate-900 overflow-hidden border-l border-slate-700/50 shadow-2xl"
+                    style={{ zIndex: 9999 }}
+                  >
+                    <div className="h-full flex flex-col">
+                      {/* Menu Header with Logo and Close */}
+                      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700/50 bg-slate-900">
+                        <img src={fragmaLogo} alt="Fragma Society" className="h-6" />
+                        <button
+                          onClick={() => setIsOpen(false)}
+                          className="p-2 text-white hover:bg-slate-800 active:bg-slate-700 rounded-lg transition-colors"
+                          aria-label="Close menu"
                         >
-                          Investor Portal
-                        </Button>
-                      </Link>
-                      <Button 
-                        onClick={() => { signOut(); setIsOpen(false); }} 
-                        variant="ghost" 
-                        className="w-full h-12 text-slate-400 hover:text-white hover:bg-slate-800/50"
+                          <X size={24} strokeWidth={2} />
+                        </button>
+                      </div>
+
+                      {/* Scrollable content area */}
+                      <div className="flex-1 overflow-y-auto overscroll-contain py-4 px-5">
+                        {navSections.map((section, sectionIndex) => (
+                          <motion.div
+                            key={section.label}
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              delay: sectionIndex * 0.08,
+                              duration: 0.4,
+                              ease: [0.16, 1, 0.3, 1],
+                            }}
+                            className="mb-2"
+                          >
+                            {/* Section header - larger tap target */}
+                            <button
+                              onClick={() =>
+                                setExpandedSection(
+                                  expandedSection === section.label ? null : section.label
+                                )
+                              }
+                              className="flex items-center justify-between w-full py-4 px-3 text-sm font-semibold text-white uppercase tracking-wider rounded-xl hover:bg-slate-800/40 active:bg-slate-700/50 transition-colors min-h-[56px]"
+                            >
+                              <span className="flex items-center gap-3">
+                                <span
+                                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                                    expandedSection === section.label
+                                      ? "bg-violet-500"
+                                      : "bg-slate-600"
+                                  }`}
+                                />
+                                {section.label}
+                              </span>
+                              <motion.div
+                                animate={{
+                                  rotate: expandedSection === section.label ? 180 : 0,
+                                }}
+                                transition={{
+                                  duration: 0.3,
+                                  ease: [0.16, 1, 0.3, 1],
+                                }}
+                              >
+                                <ChevronDown className="w-5 h-5 text-slate-400" />
+                              </motion.div>
+                            </button>
+
+                            {/* Expandable section items */}
+                            <AnimatePresence>
+                              {expandedSection === section.label && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{
+                                    duration: 0.3,
+                                    ease: [0.16, 1, 0.3, 1],
+                                  }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="ml-4 border-l-2 border-slate-700/50">
+                                    {section.items.map((item, itemIndex) => {
+                                      const Icon = item.icon;
+                                      const content = (
+                                        <motion.div
+                                          initial={{ opacity: 0, x: 20 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{
+                                            delay: itemIndex * 0.05,
+                                            duration: 0.3,
+                                          }}
+                                          className="flex items-center gap-4 py-4 px-4 ml-2 text-slate-300 hover:text-white active:text-white hover:bg-slate-800/40 active:bg-slate-700/50 rounded-xl transition-all min-h-[56px] group"
+                                        >
+                                          {Icon && (
+                                            <div className="w-10 h-10 rounded-lg bg-slate-800/80 border border-slate-700/50 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-700 group-hover:border-violet-500/30 transition-all">
+                                              <Icon className="w-5 h-5 text-slate-400 group-hover:text-violet-400 transition-colors" />
+                                            </div>
+                                          )}
+                                          <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                              <span className="text-sm font-medium">{item.label}</span>
+                                              {item.badge && (
+                                                <span
+                                                  className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded-full ${
+                                                    item.badge === "Hot"
+                                                      ? "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                                                      : item.badge === "Coming Soon"
+                                                      ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
+                                                      : "bg-violet-500/20 text-violet-300 border border-violet-500/30"
+                                                  }`}
+                                                >
+                                                  {item.badge}
+                                                </span>
+                                              )}
+                                            </div>
+                                            {item.description && (
+                                              <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+                                                {item.description}
+                                              </p>
+                                            )}
+                                          </div>
+                                          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-violet-400 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                                        </motion.div>
+                                      );
+
+                                      return item.isRoute ? (
+                                        <Link
+                                          key={item.label}
+                                          to={item.href}
+                                          onClick={() => setIsOpen(false)}
+                                        >
+                                          {content}
+                                        </Link>
+                                      ) : (
+                                        <a
+                                          key={item.label}
+                                          href={item.href}
+                                          onClick={() => setIsOpen(false)}
+                                        >
+                                          {content}
+                                        </a>
+                                      );
+                                    })}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Fixed bottom CTA section */}
+                      <motion.div
+                        className="flex-shrink-0 p-5 border-t border-slate-700/50 bg-slate-900/80 backdrop-blur-sm"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25, duration: 0.4 }}
                       >
-                        Sign Out
-                      </Button>
+                        {user ? (
+                          <div className="flex flex-col gap-3">
+                            <Link
+                              to="/strategy"
+                              onClick={() => setIsOpen(false)}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="outline"
+                                className="w-full h-14 border-slate-600 text-slate-200 hover:border-slate-500 hover:bg-slate-800/50 text-base font-medium"
+                              >
+                                Investor Portal
+                              </Button>
+                            </Link>
+                            <Button
+                              onClick={() => {
+                                signOut();
+                                setIsOpen(false);
+                              }}
+                              variant="ghost"
+                              className="w-full h-12 text-slate-400 hover:text-white hover:bg-slate-800/50"
+                            >
+                              Sign Out
+                            </Button>
+                          </div>
+                        ) : (
+                          <a
+                            href="#request-access"
+                            onClick={() => setIsOpen(false)}
+                            className="block"
+                          >
+                            <Button className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10">
+                              <span className="flex items-center justify-center gap-2">
+                                Register Your Interest
+                                <ArrowRight
+                                  size={18}
+                                  className="group-hover:translate-x-1 transition-transform duration-300"
+                                />
+                              </span>
+                            </Button>
+                          </a>
+                        )}
+                      </motion.div>
                     </div>
-                  ) : (
-                    <a href="#request-access" onClick={() => setIsOpen(false)} className="block">
-                      <Button className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10">
-                        <span className="flex items-center justify-center gap-2">
-                          Register Your Interest
-                          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
-                        </span>
-                      </Button>
-                    </a>
-                  )}
-                </motion.div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>,
+            document.body
+          )
+        : null}
     </nav>
   );
 };
