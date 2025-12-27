@@ -8,7 +8,7 @@ export const FAQContact = () => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section ref={ref} className="relative py-24 lg:py-32 overflow-hidden bg-slate-900">
+    <section ref={ref} className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-slate-900">
       {/* Subtle grid pattern */}
       <div 
         className="absolute inset-0 opacity-[0.03]"
@@ -18,8 +18,8 @@ export const FAQContact = () => {
         }}
       />
 
-      {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Decorative elements - hidden on mobile */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block">
         <motion.div
           animate={{ opacity: [0.1, 0.2, 0.1] }}
           transition={{ duration: 6, repeat: Infinity }}
@@ -37,7 +37,7 @@ export const FAQContact = () => {
       {/* Top accent line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -49,9 +49,9 @@ export const FAQContact = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center justify-center w-16 h-16 mb-8 rounded-2xl bg-turquoise/10 border border-turquoise/20"
+            className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 mb-6 sm:mb-8 rounded-xl sm:rounded-2xl bg-turquoise/10 border border-turquoise/20"
           >
-            <MessageCircle className="w-7 h-7 text-turquoise" strokeWidth={1.5} />
+            <MessageCircle className="w-5 h-5 sm:w-7 sm:h-7 text-turquoise" strokeWidth={1.5} />
           </motion.div>
 
           {/* Heading */}
@@ -59,7 +59,7 @@ export const FAQContact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-light text-white leading-[1.1] mb-6"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-light text-white leading-[1.1] mb-4 sm:mb-6"
           >
             Still have <span className="text-turquoise italic">questions?</span>
           </motion.h2>
@@ -69,7 +69,7 @@ export const FAQContact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-white/50 mb-10 max-w-lg mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/50 mb-8 sm:mb-10 max-w-lg mx-auto leading-relaxed px-2"
           >
             Our investor relations team is here to help. Reach out and we'll get back to you within 24 hours.
           </motion.p>
@@ -87,11 +87,11 @@ export const FAQContact = () => {
             >
               <Button
                 size="lg"
-                className="bg-white hover:bg-white/90 text-slate-900 font-medium px-8 py-6 h-auto text-base rounded-full shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300 group"
+                className="bg-white hover:bg-white/90 text-slate-900 font-medium px-6 sm:px-8 py-5 sm:py-6 h-auto text-sm sm:text-base rounded-full shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300 group"
               >
-                <Mail className="w-4 h-4 mr-3" strokeWidth={1.5} />
+                <Mail className="w-4 h-4 mr-2 sm:mr-3" strokeWidth={1.5} />
                 Contact Support
-                <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} />
+                <ArrowRight className="w-4 h-4 ml-2 sm:ml-3 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} />
               </Button>
             </motion.a>
           </motion.div>
@@ -101,18 +101,18 @@ export const FAQContact = () => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-8 text-sm text-white/30"
+            className="mt-6 sm:mt-8 text-xs sm:text-sm text-white/30"
           >
             support@fragma.io · Response within 24 hours
           </motion.p>
         </motion.div>
 
-        {/* Bottom decorative element */}
+        {/* Bottom decorative element - hidden on mobile */}
         <motion.div 
           initial={{ opacity: 0, scaleX: 0 }}
           animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-16 flex justify-center"
+          className="mt-12 sm:mt-16 hidden sm:flex justify-center"
         >
           <div className="h-px w-32 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         </motion.div>
