@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Volume2, VolumeX, ChevronLeft, ChevronRight, Camera, Film, Maximize2, X, Eye } from "lucide-react";
-import { useState, useRef } from "react";
+import { Play, Volume2, VolumeX, ChevronLeft, ChevronRight, Camera, Film, Maximize2, X, Eye, Minimize2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import type { DealData } from "@/types/deal";
 
 interface DealAssetProps {
@@ -13,24 +14,70 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
   const [activeTab, setActiveTab] = useState<'video' | 'gallery'>('video');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fullscreenVideoRef = useRef<HTMLVideoElement>(null);
+
+  // Sync fullscreen video with main video
+  useEffect(() => {
+    if (isFullscreen && fullscreenVideoRef.current && videoRef.current) {
+      fullscreenVideoRef.current.currentTime = videoRef.current.currentTime;
+      fullscreenVideoRef.current.muted = isMuted;
+      if (isPlaying) {
+        fullscreenVideoRef.current.play();
+      }
+    }
+  }, [isFullscreen]);
+
+  // Lock body scroll when fullscreen
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFullscreen]);
 
   const handlePlayClick = () => {
-    if (videoRef.current) {
+    const video = isFullscreen ? fullscreenVideoRef.current : videoRef.current;
+    if (video) {
       if (isPlaying) {
-        videoRef.current.pause();
+        video.pause();
+        if (!isFullscreen && videoRef.current) videoRef.current.pause();
+        if (isFullscreen && fullscreenVideoRef.current) fullscreenVideoRef.current.pause();
       } else {
-        videoRef.current.play();
+        video.play();
+        if (!isFullscreen && videoRef.current) videoRef.current.play();
+        if (isFullscreen && fullscreenVideoRef.current) fullscreenVideoRef.current.play();
       }
       setIsPlaying(!isPlaying);
     }
   };
 
   const toggleMute = () => {
+    const newMuted = !isMuted;
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      videoRef.current.muted = newMuted;
     }
+    if (fullscreenVideoRef.current) {
+      fullscreenVideoRef.current.muted = newMuted;
+    }
+    setIsMuted(newMuted);
+  };
+
+  const openFullscreen = () => {
+    setIsFullscreen(true);
+  };
+
+  const closeFullscreen = () => {
+    // Sync time back to main video
+    if (fullscreenVideoRef.current && videoRef.current) {
+      videoRef.current.currentTime = fullscreenVideoRef.current.currentTime;
+    }
+    setIsFullscreen(false);
   };
 
   const nextImage = () => {
@@ -281,10 +328,107 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                             <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                           )}
                         </button>
+                        {/* Fullscreen button */}
+                        <button
+                          onClick={openFullscreen}
+                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                        >
+                          <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                        </button>
                       </div>
                     </div>
                   </div>
                 </motion.div>
+              )}
+
+              {/* Fullscreen Video Modal */}
+              {isFullscreen && createPortal(
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+                  onClick={closeFullscreen}
+                >
+                  {/* Video */}
+                  <video
+                    ref={fullscreenVideoRef}
+                    src={deal.assetVideoUrl}
+                    poster={deal.assetImages[0]}
+                    loop
+                    muted={isMuted}
+                    playsInline
+                    autoPlay={isPlaying}
+                    className="w-full h-full object-contain"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePlayClick();
+                    }}
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                  />
+
+                  {/* Play overlay when paused */}
+                  {!isPlaying && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    >
+                      <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center">
+                        <Play className="w-8 h-8 text-slate-900 ml-1" fill="currentColor" />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Close button */}
+                  <button
+                    onClick={closeFullscreen}
+                    className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+
+                  {/* Bottom controls */}
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlayClick();
+                      }}
+                      className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                    >
+                      {isPlaying ? (
+                        <div className="flex gap-1">
+                          <div className="w-1 h-4 bg-white rounded-full" />
+                          <div className="w-1 h-4 bg-white rounded-full" />
+                        </div>
+                      ) : (
+                        <Play className="w-5 h-5 text-white ml-0.5" fill="currentColor" />
+                      )}
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleMute();
+                      }}
+                      className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                    >
+                      {isMuted ? (
+                        <VolumeX className="w-5 h-5 text-white" />
+                      ) : (
+                        <Volume2 className="w-5 h-5 text-white" />
+                      )}
+                    </button>
+                    <button
+                      onClick={closeFullscreen}
+                      className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                    >
+                      <Minimize2 className="w-5 h-5 text-white" />
+                    </button>
+                  </div>
+                </motion.div>,
+                document.body
               )}
 
               {/* Gallery Tab */}
