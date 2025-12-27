@@ -178,9 +178,9 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                   className="relative"
                 >
                   {/* Main Video Container */}
-                  <div className="relative aspect-[21/9] rounded-3xl overflow-hidden bg-slate-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)]">
+                  <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)]">
                     {/* Decorative frame */}
-                    <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10 pointer-events-none z-20" />
+                    <div className="absolute inset-0 rounded-2xl sm:rounded-3xl ring-1 ring-white/10 pointer-events-none z-20" />
                     
                     <video
                       ref={videoRef}
@@ -222,14 +222,14 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                             transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
                           />
                           
-                          <div className="w-28 h-28 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-2xl">
-                            <Play className="w-10 h-10 text-slate-900 ml-1.5" fill="currentColor" />
+                          <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-2xl">
+                            <Play className="w-8 h-8 sm:w-10 sm:h-10 text-slate-900 ml-1" fill="currentColor" />
                           </div>
                         </motion.div>
                         
-                        {/* Label */}
+                        {/* Label - hidden on mobile */}
                         <motion.div 
-                          className="absolute bottom-1/4 left-1/2 -translate-x-1/2"
+                          className="absolute bottom-1/4 left-1/2 -translate-x-1/2 hidden sm:block"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.3 }}
@@ -240,45 +240,45 @@ export const DealAsset = ({ deal }: DealAssetProps) => {
                     )}
 
                     {/* Bottom Controls Bar */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between z-10">
-                      {/* Left: Info */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex items-end justify-between z-10">
+                      {/* Left: Info - hidden on small mobile */}
                       <motion.div 
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-4"
+                        className="hidden sm:flex items-center gap-4"
                       >
-                        <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
-                          <Film className="w-5 h-5 text-white" />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+                          <Film className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
                         <div>
-                          <p className="text-white font-medium">Property Walkthrough</p>
-                          <p className="text-white/60 text-sm">Exclusive virtual tour</p>
+                          <p className="text-white font-medium text-sm sm:text-base">Property Walkthrough</p>
+                          <p className="text-white/60 text-xs sm:text-sm">Exclusive virtual tour</p>
                         </div>
                       </motion.div>
 
                       {/* Right: Controls */}
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3 ml-auto">
                         {isPlaying && (
                           <motion.button
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             onClick={handlePlayClick}
-                            className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
                           >
                             <div className="flex gap-1">
-                              <div className="w-1 h-4 bg-white rounded-full" />
-                              <div className="w-1 h-4 bg-white rounded-full" />
+                              <div className="w-1 h-3 sm:h-4 bg-white rounded-full" />
+                              <div className="w-1 h-3 sm:h-4 bg-white rounded-full" />
                             </div>
                           </motion.button>
                         )}
                         <button
                           onClick={toggleMute}
-                          className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
+                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors"
                         >
                           {isMuted ? (
-                            <VolumeX className="w-5 h-5 text-white" />
+                            <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                           ) : (
-                            <Volume2 className="w-5 h-5 text-white" />
+                            <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                           )}
                         </button>
                       </div>
