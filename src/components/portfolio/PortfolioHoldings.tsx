@@ -1,7 +1,16 @@
-import { motion } from "framer-motion";
-import { Building2, Film, Music, TrendingUp, TrendingDown, ExternalLink, MoreHorizontal, Filter } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Building2, Film, Music, Landmark, TrendingUp, TrendingDown, ExternalLink, MoreHorizontal, Filter, Search, ChevronDown, Eye, Repeat, Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const holdings = [
   {
@@ -17,7 +26,7 @@ const holdings = [
     nextPayout: "Jan 15, 2025",
     payoutAmount: 625,
     tokens: 500,
-    image: null,
+    color: "hsl(280, 88%, 37%)",
   },
   {
     id: "film-production-fund",
@@ -32,7 +41,7 @@ const holdings = [
     nextPayout: "Feb 1, 2025",
     payoutAmount: 350,
     tokens: 350,
-    image: null,
+    color: "hsl(222, 90%, 56%)",
   },
   {
     id: "music-rights-portfolio",
@@ -47,7 +56,7 @@ const holdings = [
     nextPayout: "Jan 20, 2025",
     payoutAmount: 312,
     tokens: 250,
-    image: null,
+    color: "hsl(222, 47%, 31%)",
   },
   {
     id: "malibu-villa",
@@ -62,11 +71,62 @@ const holdings = [
     nextPayout: "Jan 25, 2025",
     payoutAmount: 475,
     tokens: 150,
-    image: null,
+    color: "hsl(280, 88%, 37%)",
+  },
+  {
+    id: "private-credit-fund",
+    name: "Private Credit Fund II",
+    category: "Private Credit",
+    icon: Landmark,
+    invested: 18750,
+    currentValue: 20000,
+    returns: 1250,
+    returnPercent: 6.7,
+    status: "Active",
+    nextPayout: "Feb 10, 2025",
+    payoutAmount: 200,
+    tokens: 188,
+    color: "hsl(215, 16%, 57%)",
   },
 ];
 
+const categories = ["All", "Real Estate", "Film & Media", "Music Rights", "Private Credit"];
+const sortOptions = ["Newest", "Highest Value", "Best Returns", "Name A-Z"];
+
 export const PortfolioHoldings = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("Highest Value");
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Filter and sort holdings
+  const filteredHoldings = holdings
+    .filter(h => {
+      const matchesSearch = h.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory === "All" || h.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "Highest Value":
+          return b.currentValue - a.currentValue;
+        case "Best Returns":
+          return b.returnPercent - a.returnPercent;
+        case "Name A-Z":
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("All");
+    setSortBy("Highest Value");
+  };
+
+  const hasActiveFilters = searchQuery || selectedCategory !== "All" || sortBy !== "Highest Value";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -75,23 +135,113 @@ export const PortfolioHoldings = () => {
       className="bg-card rounded-2xl border border-border overflow-hidden"
     >
       {/* Header */}
-      <div className="p-6 border-b border-border">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-serif font-semibold text-foreground">Your Holdings</h3>
-            <p className="text-sm text-muted-foreground">
-              {holdings.length} active investments across {new Set(holdings.map(h => h.category)).size} categories
-            </p>
+      <div className="p-5 border-b border-border">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-serif font-semibold text-foreground">Your Holdings</h3>
+              <p className="text-xs text-muted-foreground">
+                {filteredHoldings.length} of {holdings.length} investments
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant={showFilters ? "default" : "outline"} 
+                size="sm" 
+                className="h-8 gap-1.5 text-xs rounded-full"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="w-3.5 h-3.5" />
+                Filter
+                {hasActiveFilters && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary ml-1" />
+                )}
+              </Button>
+              <Link to="/dashboard/deals">
+                <Button variant="outline" size="sm" className="h-8 text-xs rounded-full">
+                  View All Deals
+                </Button>
+              </Link>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="rounded-full h-9 gap-2">
-              <Filter className="w-4 h-4" />
-              Filter
-            </Button>
-            <Button variant="outline" size="sm" className="rounded-full h-9">
-              View All
-            </Button>
-          </div>
+
+          {/* Filter Panel */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="pt-3 border-t border-border space-y-3">
+                  {/* Search */}
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search holdings..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9 h-9 text-sm rounded-lg"
+                    />
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Category Filter */}
+                    <div className="flex items-center gap-1 flex-wrap">
+                      {categories.map((cat) => (
+                        <Button
+                          key={cat}
+                          variant={selectedCategory === cat ? "default" : "outline"}
+                          size="sm"
+                          className="h-7 text-xs rounded-full px-3"
+                          onClick={() => setSelectedCategory(cat)}
+                        >
+                          {cat}
+                        </Button>
+                      ))}
+                    </div>
+
+                    <div className="w-px h-6 bg-border mx-1" />
+
+                    {/* Sort Dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="h-7 text-xs rounded-full gap-1">
+                          Sort: {sortBy}
+                          <ChevronDown className="w-3 h-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        {sortOptions.map((option) => (
+                          <DropdownMenuItem 
+                            key={option} 
+                            onClick={() => setSortBy(option)}
+                            className={sortBy === option ? "bg-muted" : ""}
+                          >
+                            {option}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {hasActiveFilters && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs rounded-full text-muted-foreground gap-1"
+                        onClick={clearFilters}
+                      >
+                        <X className="w-3 h-3" />
+                        Clear
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -100,16 +250,16 @@ export const PortfolioHoldings = () => {
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-muted/30">
-              <th className="text-left py-4 px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Asset</th>
-              <th className="text-right py-4 px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden sm:table-cell">Invested</th>
-              <th className="text-right py-4 px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Current Value</th>
-              <th className="text-right py-4 px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden md:table-cell">Returns</th>
-              <th className="text-right py-4 px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden lg:table-cell">Next Payout</th>
-              <th className="text-right py-4 px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
+              <th className="text-left py-3 px-5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Asset</th>
+              <th className="text-right py-3 px-5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider hidden sm:table-cell">Invested</th>
+              <th className="text-right py-3 px-5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Value</th>
+              <th className="text-right py-3 px-5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider hidden md:table-cell">Returns</th>
+              <th className="text-right py-3 px-5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider hidden lg:table-cell">Next Payout</th>
+              <th className="text-right py-3 px-5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {holdings.map((holding, index) => {
+            {filteredHoldings.map((holding, index) => {
               const Icon = holding.icon;
               const isPositive = holding.returnPercent >= 0;
               
@@ -118,76 +268,110 @@ export const PortfolioHoldings = () => {
                   key={holding.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.05 }}
+                  transition={{ delay: 0.1 + index * 0.03 }}
                   className="border-b border-border/50 last:border-0 hover:bg-muted/20 transition-colors group"
                 >
                   {/* Asset */}
-                  <td className="py-4 px-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <Icon className="w-5 h-5 text-primary" />
+                  <td className="py-3 px-5">
+                    <Link to={`/deal/${holding.id}`} className="flex items-center gap-3 group/link">
+                      <div 
+                        className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform group-hover/link:scale-105"
+                        style={{ backgroundColor: `${holding.color}15` }}
+                      >
+                        <Icon className="w-4 h-4" style={{ color: holding.color }} />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-foreground truncate">{holding.name}</p>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs text-muted-foreground">{holding.category}</span>
-                          <span className="text-xs text-muted-foreground">•</span>
-                          <span className="text-xs text-muted-foreground">{holding.tokens} tokens</span>
+                        <p className="text-sm font-medium text-foreground truncate group-hover/link:text-primary transition-colors">{holding.name}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span 
+                            className="w-1.5 h-1.5 rounded-full" 
+                            style={{ backgroundColor: holding.color }}
+                          />
+                          <span className="text-[10px] text-muted-foreground">{holding.category}</span>
+                          <span className="text-muted-foreground/30">•</span>
+                          <span className="text-[10px] text-muted-foreground">{holding.tokens} tokens</span>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </td>
 
                   {/* Invested */}
-                  <td className="py-4 px-6 text-right hidden sm:table-cell">
-                    <p className="font-medium text-foreground">€{holding.invested.toLocaleString()}</p>
+                  <td className="py-3 px-5 text-right hidden sm:table-cell">
+                    <p className="text-sm text-foreground">€{holding.invested.toLocaleString()}</p>
                   </td>
 
                   {/* Current Value */}
-                  <td className="py-4 px-6 text-right">
-                    <p className="font-semibold text-foreground">€{holding.currentValue.toLocaleString()}</p>
+                  <td className="py-3 px-5 text-right">
+                    <p className="text-sm font-semibold text-foreground">€{holding.currentValue.toLocaleString()}</p>
                   </td>
 
                   {/* Returns */}
-                  <td className="py-4 px-6 text-right hidden md:table-cell">
+                  <td className="py-3 px-5 text-right hidden md:table-cell">
                     <div className="flex items-center justify-end gap-2">
-                      <span className={`font-semibold ${isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
+                      <span className={`text-sm font-medium ${isPositive ? 'text-primary' : 'text-destructive'}`}>
                         {isPositive ? '+' : ''}€{holding.returns.toLocaleString()}
                       </span>
-                      <span className={`flex items-center gap-0.5 text-xs font-medium px-2 py-0.5 rounded-full ${
-                        isPositive ? 'bg-emerald-500/10 text-emerald-600' : 'bg-red-500/10 text-red-600'
+                      <span className={`flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+                        isPositive ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'
                       }`}>
-                        {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                        {isPositive ? '+' : ''}{holding.returnPercent.toFixed(1)}%
+                        {isPositive ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
+                        {holding.returnPercent.toFixed(1)}%
                       </span>
                     </div>
                   </td>
 
                   {/* Next Payout */}
-                  <td className="py-4 px-6 text-right hidden lg:table-cell">
-                    <p className="font-medium text-foreground">€{holding.payoutAmount}</p>
-                    <p className="text-xs text-muted-foreground">{holding.nextPayout}</p>
+                  <td className="py-3 px-5 text-right hidden lg:table-cell">
+                    <p className="text-sm font-medium text-foreground">€{holding.payoutAmount}</p>
+                    <p className="text-[10px] text-muted-foreground">{holding.nextPayout}</p>
                   </td>
 
                   {/* Actions */}
-                  <td className="py-4 px-6 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="py-3 px-5 text-right">
+                    <div className="flex items-center justify-end gap-1">
                       <Link to={`/deal/${holding.id}`}>
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="rounded-full h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="rounded-full h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <Eye className="w-3.5 h-3.5" />
                         </Button>
                       </Link>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="rounded-full h-8 w-8 p-0"
-                      >
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="rounded-full h-7 w-7 p-0"
+                          >
+                            <MoreHorizontal className="w-3.5 h-3.5" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuItem asChild>
+                            <Link to={`/deal/${holding.id}`} className="flex items-center gap-2">
+                              <Eye className="w-4 h-4" />
+                              View Details
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to={`/dashboard/market/${holding.id}`} className="flex items-center gap-2">
+                              <ExternalLink className="w-4 h-4" />
+                              Trade on Market
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="flex items-center gap-2">
+                            <Repeat className="w-4 h-4" />
+                            Reinvest Dividends
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="flex items-center gap-2">
+                            <Download className="w-4 h-4" />
+                            Download Statement
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </td>
                 </motion.tr>
@@ -195,39 +379,48 @@ export const PortfolioHoldings = () => {
             })}
           </tbody>
         </table>
+
+        {filteredHoldings.length === 0 && (
+          <div className="py-12 text-center">
+            <p className="text-sm text-muted-foreground">No holdings match your filters</p>
+            <Button variant="ghost" size="sm" className="mt-2" onClick={clearFilters}>
+              Clear Filters
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Summary Footer */}
-      <div className="p-6 bg-muted/20 border-t border-border">
+      <div className="p-5 bg-muted/20 border-t border-border">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
             <div>
-              <p className="text-xs text-muted-foreground">Total Invested</p>
-              <p className="text-lg font-serif font-bold text-foreground">
-                €{holdings.reduce((sum, h) => sum + h.invested, 0).toLocaleString()}
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Invested</p>
+              <p className="text-base font-serif font-bold text-foreground">
+                €{filteredHoldings.reduce((sum, h) => sum + h.invested, 0).toLocaleString()}
               </p>
             </div>
             <div className="w-px h-8 bg-border" />
             <div>
-              <p className="text-xs text-muted-foreground">Total Value</p>
-              <p className="text-lg font-serif font-bold text-foreground">
-                €{holdings.reduce((sum, h) => sum + h.currentValue, 0).toLocaleString()}
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Current Value</p>
+              <p className="text-base font-serif font-bold text-foreground">
+                €{filteredHoldings.reduce((sum, h) => sum + h.currentValue, 0).toLocaleString()}
               </p>
             </div>
             <div className="w-px h-8 bg-border hidden sm:block" />
             <div className="hidden sm:block">
-              <p className="text-xs text-muted-foreground">Total Returns</p>
-              <p className="text-lg font-serif font-bold text-emerald-600">
-                +€{holdings.reduce((sum, h) => sum + h.returns, 0).toLocaleString()}
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Returns</p>
+              <p className="text-base font-serif font-bold text-primary">
+                +€{filteredHoldings.reduce((sum, h) => sum + h.returns, 0).toLocaleString()}
               </p>
             </div>
           </div>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Next Total Payout</p>
-            <p className="text-lg font-serif font-bold text-primary">
-              €{holdings.reduce((sum, h) => sum + h.payoutAmount, 0).toLocaleString()}
-            </p>
-          </div>
+          <Link to="/dashboard/earnings">
+            <Button size="sm" className="h-8 text-xs rounded-full gap-1.5">
+              View Earnings
+              <ExternalLink className="w-3 h-3" />
+            </Button>
+          </Link>
         </div>
       </div>
     </motion.div>
