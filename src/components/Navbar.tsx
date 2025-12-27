@@ -235,11 +235,12 @@ export const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button - Larger tap target */}
+          {/* Mobile Menu Button - Always visible with solid background */}
           <motion.button 
-            className="lg:hidden text-white p-3 -mr-3 hover:bg-slate-800/50 active:bg-slate-700/50 rounded-xl transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
+            className="lg:hidden text-white p-3 -mr-2 bg-slate-800/90 hover:bg-slate-700 active:bg-slate-600 rounded-xl transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center border border-slate-700/50 shadow-lg"
             onClick={() => setIsOpen(!isOpen)}
             whileTap={{ scale: 0.92 }}
+            aria-label="Toggle menu"
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
@@ -250,7 +251,7 @@ export const Navbar = () => {
                   exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <X size={24} strokeWidth={2} />
+                  <X size={24} strokeWidth={2.5} />
                 </motion.div>
               ) : (
                 <motion.div
@@ -260,7 +261,7 @@ export const Navbar = () => {
                   exit={{ rotate: -90, opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <Menu size={24} strokeWidth={2} />
+                  <Menu size={24} strokeWidth={2.5} />
                 </motion.div>
               )}
             </AnimatePresence>
