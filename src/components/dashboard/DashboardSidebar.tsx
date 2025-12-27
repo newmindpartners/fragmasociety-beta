@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   LucideIcon,
+  DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import fragmaLogo from "@/assets/fragma-logo-new.png";
@@ -30,6 +31,7 @@ interface NavItem {
 const mainNavItems: NavItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: TrendingUp, label: "My Portfolio", href: "/dashboard/portfolio" },
+  { icon: DollarSign, label: "Earnings", href: "/dashboard/earnings" },
   { icon: Heart, label: "Watchlist", href: "/dashboard/watchlist" },
   { icon: Building2, label: "Banking", href: "/dashboard/banking" },
   { icon: FileText, label: "Documents", href: "/dashboard/documents" },
