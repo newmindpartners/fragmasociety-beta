@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Wallet, PiggyBank, ArrowUpRight, ArrowDownRight, Sparkles } from "lucide-react";
+import { TrendingUp, Wallet, PiggyBank, ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const stats = [
@@ -7,8 +7,8 @@ const stats = [
     label: "Total Invested",
     value: "€125,000",
     icon: Wallet,
-    color: "text-primary",
-    bgColor: "bg-primary/10",
+    iconBg: "bg-primary/10",
+    iconColor: "text-primary",
   },
   {
     label: "Total Returns",
@@ -16,109 +16,124 @@ const stats = [
     change: "+15%",
     isPositive: true,
     icon: TrendingUp,
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-500/10",
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
   },
   {
     label: "Pending Payouts",
     value: "€2,340",
     subtitle: "Next: Jan 15",
     icon: PiggyBank,
-    color: "text-amber-600",
-    bgColor: "bg-amber-500/10",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-600",
   },
 ];
 
 export const PortfolioHero = () => {
   const totalPortfolioValue = 143750;
   const portfolioChange = 15.0;
-  const isPositive = portfolioChange > 0;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative overflow-hidden"
+      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="relative"
     >
-      {/* Main Value Card */}
-      <div className="relative rounded-2xl border border-border bg-card p-8 lg:p-10 overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/5 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-emerald-500/5 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" />
-        
-        {/* Grid pattern overlay */}
+      {/* Main Card */}
+      <div className="relative rounded-2xl border border-border bg-card overflow-hidden">
+        {/* Subtle grid pattern */}
         <div 
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
           style={{
-            backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
+            backgroundImage: `
+              linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px),
+              linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
           }}
         />
-
-        <div className="relative z-10">
-          {/* Top Row - Portfolio Label & Actions */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-            <div className="flex items-center gap-3">
+        
+        {/* Content */}
+        <div className="relative z-10 p-8 lg:p-10">
+          {/* Header Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+            <div className="flex items-center gap-4">
               <motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.2 }}
-                className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
+                className="relative"
               >
-                <Sparkles className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/25">
+                  <Sparkles className="w-7 h-7 text-white" strokeWidth={1.5} />
+                </div>
+                {/* Glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl -z-10" />
               </motion.div>
               <div>
-                <p className="text-sm text-muted-foreground font-medium">Portfolio Value</p>
-                <p className="text-xs text-muted-foreground/70">Updated just now</p>
+                <h2 className="text-base font-semibold text-foreground tracking-tight">Portfolio Value</h2>
+                <p className="text-sm text-muted-foreground">Updated just now</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" className="rounded-full h-9 px-5">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex items-center gap-3"
+            >
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-10 px-5 rounded-full border-primary text-primary hover:bg-primary/5 font-medium"
+              >
                 Export Report
               </Button>
-              <Button size="sm" className="rounded-full h-9 px-5 bg-primary hover:bg-primary/90">
+              <Button 
+                size="sm" 
+                className="h-10 px-5 rounded-full bg-primary hover:bg-primary/90 font-medium shadow-lg shadow-primary/25"
+              >
                 Add Investment
               </Button>
-            </div>
+            </motion.div>
           </div>
 
           {/* Main Value Display */}
-          <div className="mb-10">
+          <div className="mb-12">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, type: "spring" }}
-              className="flex items-baseline gap-4 flex-wrap"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="flex items-baseline gap-5 flex-wrap"
             >
-              <h2 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-foreground tracking-tight">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-serif font-bold text-foreground tracking-tight leading-none">
                 €{totalPortfolioValue.toLocaleString()}
-              </h2>
+              </h1>
               <motion.div 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${
-                  isPositive 
-                    ? 'bg-emerald-500/10 text-emerald-600' 
-                    : 'bg-red-500/10 text-red-600'
-                }`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.35, type: "spring", stiffness: 300 }}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600"
               >
-                {isPositive ? (
-                  <ArrowUpRight className="w-4 h-4" />
-                ) : (
-                  <ArrowDownRight className="w-4 h-4" />
-                )}
-                {isPositive ? '+' : ''}{portfolioChange}%
+                <ArrowUpRight className="w-4 h-4" strokeWidth={2.5} />
+                <span className="text-sm font-bold">+{portfolioChange}%</span>
               </motion.div>
             </motion.div>
-            <p className="text-muted-foreground mt-2">
-              <span className="text-emerald-600 font-medium">+€18,750</span> all-time returns
-            </p>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-muted-foreground mt-3 text-base"
+            >
+              <span className="text-emerald-600 font-semibold">+€18,750</span>
+              <span className="ml-1">all-time returns</span>
+            </motion.p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border/50 rounded-2xl overflow-hidden border border-border/50">
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
@@ -126,23 +141,28 @@ export const PortfolioHero = () => {
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  className="group relative bg-background/50 rounded-xl border border-border/50 p-5 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+                  transition={{ delay: 0.3 + index * 0.08, duration: 0.5 }}
+                  className="group relative bg-card p-6 hover:bg-muted/30 transition-colors duration-300"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center transition-transform group-hover:scale-110`}>
-                      <Icon className={`w-5 h-5 ${stat.color}`} />
-                    </div>
+                  <div className="flex items-start justify-between mb-4">
+                    <motion.div 
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                      className={`w-12 h-12 rounded-xl ${stat.iconBg} flex items-center justify-center`}
+                    >
+                      <Icon className={`w-6 h-6 ${stat.iconColor}`} strokeWidth={1.75} />
+                    </motion.div>
                     {stat.change && (
-                      <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                        stat.isPositive ? 'bg-emerald-500/10 text-emerald-600' : 'bg-red-500/10 text-red-600'
-                      }`}>
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600">
                         {stat.change}
                       </span>
                     )}
                   </div>
-                  <p className="text-2xl font-serif font-bold text-foreground mb-1">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  
+                  <p className="text-3xl font-serif font-bold text-foreground mb-1 tracking-tight">
+                    {stat.value}
+                  </p>
+                  <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
                   {stat.subtitle && (
                     <p className="text-xs text-muted-foreground/70 mt-1">{stat.subtitle}</p>
                   )}
