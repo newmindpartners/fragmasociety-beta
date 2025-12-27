@@ -75,10 +75,11 @@ export const FAQCategories = ({ categories, searchQuery }: FAQCategoriesProps) =
                 {categories.map((category, categoryIndex) => (
                   <motion.div
                     key={category.id}
+                    id={`faq-category-${category.id}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: categoryIndex * 0.08, duration: 0.5 }}
-                    className="group"
+                    className="group scroll-mt-24"
                   >
                     <div className="h-full bg-white rounded-xl sm:rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-slate-300/80 transition-all duration-500 overflow-hidden">
                       {/* Category Header */}

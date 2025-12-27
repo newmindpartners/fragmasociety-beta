@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FAQHero } from "@/components/faq/FAQHero";
 import { FAQSearch } from "@/components/faq/FAQSearch";
+import { FAQQuickJump } from "@/components/faq/FAQQuickJump";
 import { FAQCategories } from "@/components/faq/FAQCategories";
 import { FAQContact } from "@/components/faq/FAQContact";
 import { faqCategories } from "@/components/faq/faqData";
@@ -41,6 +42,10 @@ const FAQ = () => {
           setSearchQuery={setSearchQuery}
           totalResults={totalResults}
         />
+        {/* Show quick jump only when not searching */}
+        {!searchQuery && (
+          <FAQQuickJump categories={faqCategories} />
+        )}
         <FAQCategories 
           categories={filteredCategories}
           searchQuery={searchQuery}
