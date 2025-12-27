@@ -27,6 +27,7 @@ import Settings from "./pages/Settings";
 import OrderDetails from "./pages/OrderDetails";
 import Watchlist from "./pages/Watchlist";
 import HelpCenter from "./pages/HelpCenter";
+import MyPortfolio from "./pages/MyPortfolio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/portfolio" element={<MyPortfolio />} />
             <Route path="/dashboard/watchlist" element={<Watchlist />} />
             <Route path="/dashboard/banking" element={<Banking />} />
             <Route path="/dashboard/banking/*" element={<Banking />} />
