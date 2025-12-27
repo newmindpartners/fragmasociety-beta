@@ -146,19 +146,23 @@ export const PortfolioHoldings = () => {
             </div>
             <div className="flex items-center gap-2">
               <Button 
-                variant={showFilters ? "default" : "outline"} 
+                variant="outline" 
                 size="sm" 
-                className="h-8 gap-1.5 text-xs rounded-full"
+                className={`h-8 gap-1.5 text-xs rounded-full ${
+                  showFilters 
+                    ? "bg-slate-900 text-white border-slate-900 hover:bg-slate-800" 
+                    : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                }`}
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <Filter className="w-3.5 h-3.5" />
                 Filter
                 {hasActiveFilters && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary ml-1" />
+                  <span className={`w-1.5 h-1.5 rounded-full ml-1 ${showFilters ? "bg-white" : "bg-slate-900"}`} />
                 )}
               </Button>
               <Link to="/dashboard/deals">
-                <Button variant="outline" size="sm" className="h-8 text-xs rounded-full">
+                <Button variant="outline" size="sm" className="h-8 text-xs rounded-full bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
                   View All Deals
                 </Button>
               </Link>
@@ -423,7 +427,7 @@ export const PortfolioHoldings = () => {
             </div>
           </div>
           <Link to="/dashboard/earnings">
-            <Button size="sm" className="h-8 text-xs rounded-full gap-1.5">
+            <Button size="sm" className="h-8 text-xs rounded-full gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
               View Earnings
               <ExternalLink className="w-3 h-3" />
             </Button>
