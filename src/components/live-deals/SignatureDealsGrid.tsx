@@ -235,8 +235,8 @@ export const SignatureDealsGrid = () => {
 
         {/* Carousel with dark blur edge on right only */}
         <div className="relative">
-          {/* Right dark blur fade - smaller on mobile */}
-          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 lg:w-40 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
+          {/* Right dark blur fade - hidden on mobile, visible on larger screens */}
+          <div className="absolute right-0 top-0 bottom-0 hidden sm:block sm:w-24 lg:w-40 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
 
           {/* Scrollable Cards with gesture support */}
           {isMobile ? (
