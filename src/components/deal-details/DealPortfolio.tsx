@@ -1,8 +1,9 @@
-import { motion } from "framer-motion";
-import { MapPin, Hammer, CheckCircle, TrendingUp, Clock, Building, Eye } from "lucide-react";
+import { motion, useMotionValue, animate } from "framer-motion";
+import { MapPin, Hammer, CheckCircle, TrendingUp, Clock, Building, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import type { DealData, DealProperty } from "@/types/deal";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Local fallback images
 import deerheadRoad from "@/assets/properties/deerhead-road.jpg";
@@ -89,8 +90,33 @@ const PropertyGraphic = ({ index, isHovered }: { index: number; isHovered: boole
 
 export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const isMobile = useIsMobile();
+  const dragX = useMotionValue(0);
 
   if (!deal.currentProperties || deal.currentProperties.length === 0) return null;
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % deal.currentProperties!.length);
+  };
+
+  const goToPrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + deal.currentProperties!.length) % deal.currentProperties!.length);
+  };
+
+  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
+    const threshold = 50;
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
+
+    if (offset < -threshold || velocity < -500) {
+      goToNext();
+    } else if (offset > threshold || velocity > 500) {
+      goToPrev();
+    }
+    
+    animate(dragX, 0, { type: "spring", stiffness: 400, damping: 30 });
+  };
 
   return (
     <section className="py-32 relative overflow-hidden min-h-screen">
@@ -145,167 +171,298 @@ export const DealPortfolio = ({ deal }: DealPortfolioProps) => {
           </motion.div>
         </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {deal.currentProperties.map((property, index) => {
-            const statusInfo = getStatusInfo(property.status);
-            const StatusIcon = statusInfo.icon;
-            const isHovered = hoveredIndex === index;
-            
-            return (
-              <motion.article
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="cursor-pointer overflow-hidden bg-white border border-slate-200/50"
-              >
-                {/* Large Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <motion.img 
-                    src={getPropertyImage(property, index)} 
-                    alt={property.address}
-                    className="w-full h-full object-cover"
-                    animate={{ scale: isHovered ? 1.08 : 1 }}
-                    transition={{ duration: 0.7 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  
-                  {/* Status Badge */}
-                  <motion.div 
-                    className="absolute top-6 left-6"
-                    animate={{ y: isHovered ? 0 : 0, opacity: 1 }}
-                  >
-                    <span 
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium transition-all duration-500 ${
-                        isHovered 
-                          ? 'bg-slate-800 text-white' 
-                          : 'bg-white/90 text-slate-700'
-                      }`}
-                    >
-                      <StatusIcon className="w-3.5 h-3.5" />
-                      {statusInfo.label}
-                    </span>
-                  </motion.div>
-
-                  {/* View button */}
-                  <motion.div 
-                    className="absolute bottom-6 right-6"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ 
-                      opacity: isHovered ? 1 : 0, 
-                      scale: isHovered ? 1 : 0.8 
-                    }}
+        {/* Mobile Swipeable Carousel */}
+        {isMobile ? (
+          <div className="relative">
+            <motion.div
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleDragEnd}
+              style={{ x: dragX }}
+              className="cursor-grab active:cursor-grabbing touch-pan-y"
+            >
+              {deal.currentProperties.map((property, index) => {
+                const statusInfo = getStatusInfo(property.status);
+                const StatusIcon = statusInfo.icon;
+                const isActive = index === currentIndex;
+                
+                if (!isActive) return null;
+                
+                return (
+                  <motion.article
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.3 }}
+                    className="overflow-hidden bg-white border border-slate-200/50"
                   >
-                    <button className="w-14 h-14 flex items-center justify-center bg-white hover:bg-slate-800 hover:text-white transition-colors group">
-                      <Eye className="w-5 h-5 text-slate-800 group-hover:text-white transition-colors" />
-                    </button>
-                  </motion.div>
-                </div>
+                    {/* Large Image */}
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img 
+                        src={getPropertyImage(property, index)} 
+                        alt={property.address}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      
+                      {/* Status Badge */}
+                      <div className="absolute top-4 left-4">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/90 text-slate-700">
+                          <StatusIcon className="w-3.5 h-3.5" />
+                          {statusInfo.label}
+                        </span>
+                      </div>
+                    </div>
 
-                {/* Content */}
-                <motion.div 
-                  className={`p-8 relative transition-all duration-500 ${
-                    isHovered ? 'bg-slate-800' : 'bg-white'
-                  }`}
+                    {/* Content */}
+                    <div className="p-6 bg-slate-800">
+                      {/* Address */}
+                      <div className="flex items-start gap-3 mb-5">
+                        <div className="w-10 h-10 border border-slate-600 bg-slate-700 flex items-center justify-center flex-shrink-0">
+                          <MapPin className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-medium text-white">{property.address}</h3>
+                          {(property.size || property.specs) && (
+                            <p className="text-sm mt-1 text-slate-400">
+                              {[property.size, property.specs].filter(Boolean).join(' • ')}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Financial Grid */}
+                      <div className="grid grid-cols-2 gap-3 pt-5 border-t border-slate-700">
+                        {property.acquisitionPrice && (
+                          <div>
+                            <p className="text-[9px] tracking-[0.15em] uppercase mb-1 text-slate-500">Acquisition</p>
+                            <p className="text-base font-medium text-white">{property.acquisitionPrice}</p>
+                          </div>
+                        )}
+                        {property.constructionCost && (
+                          <div>
+                            <p className="text-[9px] tracking-[0.15em] uppercase mb-1 text-slate-500">Build Cost</p>
+                            <p className="text-base font-medium text-white">{property.constructionCost}</p>
+                          </div>
+                        )}
+                        {property.projectedExitPrice && (
+                          <div className="col-span-2 px-3 py-2 rounded bg-emerald-500/20 mt-2">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <TrendingUp className="w-3 h-3 text-emerald-400" />
+                              <p className="text-[9px] tracking-[0.15em] uppercase text-emerald-400">Exit Target</p>
+                            </div>
+                            <p className="text-lg font-bold text-emerald-300">{property.projectedExitPrice}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </motion.div>
+
+            {/* Mobile Navigation */}
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <button
+                onClick={goToPrev}
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
+              >
+                <ChevronLeft className="w-5 h-5 text-slate-600" />
+              </button>
+              
+              {/* Progress Dots */}
+              <div className="flex items-center gap-2">
+                {deal.currentProperties.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentIndex(i)}
+                    className="relative"
+                  >
+                    <div className={`h-2 rounded-full transition-all duration-300 ${
+                      i === currentIndex ? 'w-6 bg-slate-800' : 'w-2 bg-slate-300'
+                    }`} />
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={goToNext}
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
+              >
+                <ChevronRight className="w-5 h-5 text-slate-600" />
+              </button>
+            </div>
+
+            {/* Swipe hint */}
+            <p className="text-center text-xs text-slate-400 mt-4">
+              Swipe to browse properties
+            </p>
+          </div>
+        ) : (
+          /* Desktop Grid */
+          <div className="grid md:grid-cols-2 gap-8">
+            {deal.currentProperties.map((property, index) => {
+              const statusInfo = getStatusInfo(property.status);
+              const StatusIcon = statusInfo.icon;
+              const isHovered = hoveredIndex === index;
+              
+              return (
+                <motion.article
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="cursor-pointer overflow-hidden bg-white border border-slate-200/50"
                 >
-                  {/* Decorative graphic */}
-                  <div className={`absolute top-6 right-6 w-16 h-16 transition-opacity duration-500 ${isHovered ? 'opacity-10' : 'opacity-[0.04]'}`}>
-                    <PropertyGraphic index={index} isHovered={isHovered} />
-                  </div>
-
-                  {/* Address */}
-                  <div className="flex items-start gap-3 mb-6">
+                  {/* Large Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <motion.img 
+                      src={getPropertyImage(property, index)} 
+                      alt={property.address}
+                      className="w-full h-full object-cover"
+                      animate={{ scale: isHovered ? 1.08 : 1 }}
+                      transition={{ duration: 0.7 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                    
+                    {/* Status Badge */}
                     <motion.div 
-                      className={`w-10 h-10 border flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
-                        isHovered ? 'border-slate-600 bg-slate-700' : 'border-slate-200 bg-slate-50'
-                      }`}
-                      animate={{ rotate: isHovered ? 6 : 0, scale: isHovered ? 1.1 : 1 }}
+                      className="absolute top-6 left-6"
+                      animate={{ y: isHovered ? 0 : 0, opacity: 1 }}
+                    >
+                      <span 
+                        className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium transition-all duration-500 ${
+                          isHovered 
+                            ? 'bg-slate-800 text-white' 
+                            : 'bg-white/90 text-slate-700'
+                        }`}
+                      >
+                        <StatusIcon className="w-3.5 h-3.5" />
+                        {statusInfo.label}
+                      </span>
+                    </motion.div>
+
+                    {/* View button */}
+                    <motion.div 
+                      className="absolute bottom-6 right-6"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ 
+                        opacity: isHovered ? 1 : 0, 
+                        scale: isHovered ? 1 : 0.8 
+                      }}
                       transition={{ duration: 0.3 }}
                     >
-                      <MapPin className={`w-4 h-4 transition-colors duration-500 ${
-                        isHovered ? 'text-white' : 'text-slate-500'
-                      }`} />
+                      <button className="w-14 h-14 flex items-center justify-center bg-white hover:bg-slate-800 hover:text-white transition-colors group">
+                        <Eye className="w-5 h-5 text-slate-800 group-hover:text-white transition-colors" />
+                      </button>
                     </motion.div>
-                    <div>
-                      <h3 className={`text-xl font-medium transition-colors duration-500 ${
-                        isHovered ? 'text-white' : 'text-slate-900'
-                      }`}>{property.address}</h3>
-                      {(property.size || property.specs) && (
-                        <p className={`text-sm mt-1 transition-colors duration-500 ${
-                          isHovered ? 'text-slate-400' : 'text-slate-500'
+                  </div>
+
+                  {/* Content */}
+                  <motion.div 
+                    className={`p-8 relative transition-all duration-500 ${
+                      isHovered ? 'bg-slate-800' : 'bg-white'
+                    }`}
+                  >
+                    {/* Decorative graphic */}
+                    <div className={`absolute top-6 right-6 w-16 h-16 transition-opacity duration-500 ${isHovered ? 'opacity-10' : 'opacity-[0.04]'}`}>
+                      <PropertyGraphic index={index} isHovered={isHovered} />
+                    </div>
+
+                    {/* Address */}
+                    <div className="flex items-start gap-3 mb-6">
+                      <motion.div 
+                        className={`w-10 h-10 border flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                          isHovered ? 'border-slate-600 bg-slate-700' : 'border-slate-200 bg-slate-50'
+                        }`}
+                        animate={{ rotate: isHovered ? 6 : 0, scale: isHovered ? 1.1 : 1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <MapPin className={`w-4 h-4 transition-colors duration-500 ${
+                          isHovered ? 'text-white' : 'text-slate-500'
+                        }`} />
+                      </motion.div>
+                      <div>
+                        <h3 className={`text-xl font-medium transition-colors duration-500 ${
+                          isHovered ? 'text-white' : 'text-slate-900'
+                        }`}>{property.address}</h3>
+                        {(property.size || property.specs) && (
+                          <p className={`text-sm mt-1 transition-colors duration-500 ${
+                            isHovered ? 'text-slate-400' : 'text-slate-500'
+                          }`}>
+                            {[property.size, property.specs].filter(Boolean).join(' • ')}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Financial Grid */}
+                    <div className={`grid grid-cols-3 gap-4 pt-6 border-t transition-colors duration-500 ${
+                      isHovered ? 'border-slate-700' : 'border-slate-200'
+                    }`}>
+                      {property.acquisitionPrice && (
+                        <div>
+                          <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
+                            isHovered ? 'text-slate-500' : 'text-slate-400'
+                          }`}>Acquisition</p>
+                          <p className={`text-lg font-medium transition-colors duration-500 ${
+                            isHovered ? 'text-white' : 'text-slate-900'
+                          }`}>{property.acquisitionPrice}</p>
+                        </div>
+                      )}
+                      {property.constructionCost && (
+                        <div>
+                          <p className={`text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
+                            isHovered ? 'text-slate-500' : 'text-slate-400'
+                          }`}>Build Cost</p>
+                          <p className={`text-lg font-medium transition-colors duration-500 ${
+                            isHovered ? 'text-white' : 'text-slate-900'
+                          }`}>{property.constructionCost}</p>
+                        </div>
+                      )}
+                      {property.projectedExitPrice && (
+                        <div className={`relative px-3 py-2 -mx-3 rounded transition-all duration-500 ${
+                          isHovered ? 'bg-emerald-500/20' : 'bg-emerald-50'
                         }`}>
-                          {[property.size, property.specs].filter(Boolean).join(' • ')}
-                        </p>
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <TrendingUp className={`w-3 h-3 transition-colors duration-500 ${
+                              isHovered ? 'text-emerald-400' : 'text-emerald-600'
+                            }`} />
+                            <p className={`text-[10px] tracking-[0.15em] uppercase transition-colors duration-500 ${
+                              isHovered ? 'text-emerald-400' : 'text-emerald-600'
+                            }`}>Exit Target</p>
+                          </div>
+                          <motion.p 
+                            className={`text-xl font-bold transition-colors duration-500 ${
+                              isHovered ? 'text-emerald-300' : 'text-emerald-700'
+                            }`}
+                            animate={{ scale: isHovered ? 1.08 : 1 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            {property.projectedExitPrice}
+                          </motion.p>
+                        </div>
                       )}
                     </div>
-                  </div>
 
-                  {/* Financial Grid - Stack on mobile */}
-                  <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 border-t transition-colors duration-500 ${
-                    isHovered ? 'border-slate-700' : 'border-slate-200'
-                  }`}>
-                    {property.acquisitionPrice && (
-                      <div>
-                        <p className={`text-[9px] sm:text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
-                          isHovered ? 'text-slate-500' : 'text-slate-400'
-                        }`}>Acquisition</p>
-                        <p className={`text-base sm:text-lg font-medium transition-colors duration-500 ${
-                          isHovered ? 'text-white' : 'text-slate-900'
-                        }`}>{property.acquisitionPrice}</p>
-                      </div>
-                    )}
-                    {property.constructionCost && (
-                      <div>
-                        <p className={`text-[9px] sm:text-[10px] tracking-[0.15em] uppercase mb-1 transition-colors duration-500 ${
-                          isHovered ? 'text-slate-500' : 'text-slate-400'
-                        }`}>Build Cost</p>
-                        <p className={`text-base sm:text-lg font-medium transition-colors duration-500 ${
-                          isHovered ? 'text-white' : 'text-slate-900'
-                        }`}>{property.constructionCost}</p>
-                      </div>
-                    )}
-                    {property.projectedExitPrice && (
-                      <div className={`relative col-span-2 sm:col-span-1 px-3 py-2 rounded transition-all duration-500 ${
-                        isHovered ? 'bg-emerald-500/20' : 'bg-emerald-50'
-                      }`}>
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <TrendingUp className={`w-3 h-3 transition-colors duration-500 ${
-                            isHovered ? 'text-emerald-400' : 'text-emerald-600'
-                          }`} />
-                          <p className={`text-[9px] sm:text-[10px] tracking-[0.15em] uppercase transition-colors duration-500 ${
-                            isHovered ? 'text-emerald-400' : 'text-emerald-600'
-                          }`}>Exit Target</p>
-                        </div>
-                        <motion.p 
-                          className={`text-lg sm:text-xl font-bold transition-colors duration-500 ${
-                            isHovered ? 'text-emerald-300' : 'text-emerald-700'
-                          }`}
-                          animate={{ scale: isHovered ? 1.08 : 1 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {property.projectedExitPrice}
-                        </motion.p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Bottom accent */}
-                  <motion.div 
-                    className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-slate-600 via-slate-400 to-slate-600"
-                    initial={{ width: 0 }}
-                    animate={{ width: isHovered ? '100%' : 0 }}
-                    transition={{ duration: 0.4 }}
-                  />
-                </motion.div>
-              </motion.article>
-            );
-          })}
-        </div>
+                    {/* Bottom accent */}
+                    <motion.div 
+                      className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-slate-600 via-slate-400 to-slate-600"
+                      initial={{ width: 0 }}
+                      animate={{ width: isHovered ? '100%' : 0 }}
+                      transition={{ duration: 0.4 }}
+                    />
+                  </motion.div>
+                </motion.article>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
