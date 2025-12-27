@@ -176,7 +176,7 @@ export const Navbar = () => {
       className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled 
           ? "bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-900/95 backdrop-blur-2xl border-b border-slate-700/50 shadow-lg shadow-black/20" 
-          : "bg-transparent border-b border-transparent"
+          : "bg-slate-900/80 backdrop-blur-xl lg:bg-transparent lg:backdrop-blur-none border-b border-slate-700/30 lg:border-transparent"
       }`}
     >
       <div className="container mx-auto px-6">
