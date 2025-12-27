@@ -6,7 +6,8 @@ const assets = [
     name: "Real Estate", 
     value: 65000, 
     percentage: 45, 
-    color: "#8B5CF6", // Violet
+    color: "hsl(280, 88%, 37%)", // Primary violet
+    bgColor: "bg-primary/10",
     icon: Building2,
     deals: 3,
   },
@@ -14,7 +15,8 @@ const assets = [
     name: "Film & Media", 
     value: 35000, 
     percentage: 24, 
-    color: "#EC4899", // Pink
+    color: "hsl(222, 90%, 56%)", // Blue accent
+    bgColor: "bg-blue-500/10",
     icon: Film,
     deals: 2,
   },
@@ -22,7 +24,8 @@ const assets = [
     name: "Music Rights", 
     value: 25000, 
     percentage: 18, 
-    color: "#F59E0B", // Amber
+    color: "hsl(222, 47%, 31%)", // Navy
+    bgColor: "bg-slate-700/10",
     icon: Music,
     deals: 1,
   },
@@ -30,7 +33,8 @@ const assets = [
     name: "Private Credit", 
     value: 18750, 
     percentage: 13, 
-    color: "#10B981", // Emerald
+    color: "hsl(215, 16%, 57%)", // Grey
+    bgColor: "bg-slate-400/10",
     icon: Landmark,
     deals: 2,
   },
@@ -71,89 +75,73 @@ export const PortfolioAssetAllocation = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="relative rounded-2xl overflow-hidden h-full"
+      className="bg-card rounded-2xl border border-border p-5 h-full"
     >
-      {/* Dark gradient background */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 50% 40% at 80% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(230, 60%, 8%) 0%, hsl(230, 65%, 5%) 100%)
-          `
-        }}
-      />
-      
-      {/* Border */}
-      <div className="absolute inset-0 rounded-2xl border border-white/[0.08]" />
-      
-      <div className="relative z-10 p-5">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h3 className="text-base font-serif font-semibold text-white">Asset Allocation</h3>
-            <p className="text-xs text-white/40">By investment category</p>
-          </div>
-          <div className="w-9 h-9 rounded-lg bg-violet-500/15 border border-violet-500/20 flex items-center justify-center">
-            <TrendingUp className="w-4 h-4 text-violet-400" />
-          </div>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h3 className="text-base font-serif font-semibold text-foreground">Asset Allocation</h3>
+          <p className="text-xs text-muted-foreground">By investment category</p>
         </div>
+        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+          <TrendingUp className="w-4 h-4 text-primary" />
+        </div>
+      </div>
 
-        {/* Donut Chart */}
-        <div className="relative w-full aspect-square max-w-[160px] mx-auto mb-5">
-          <svg viewBox="0 0 200 200" className="w-full h-full transform -rotate-90">
-            {segments.map((segment, index) => (
-              <motion.path
-                key={segment.name}
-                d={createArcPath(segment.startAngle, segment.endAngle, 80, 50)}
-                fill={segment.color}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-                style={{ transformOrigin: 'center' }}
-              />
-            ))}
-          </svg>
-          
-          {/* Center text */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <p className="text-xl font-serif font-bold text-white">€{(total / 1000).toFixed(0)}K</p>
-            <p className="text-[10px] text-white/40">Total Invested</p>
-          </div>
+      {/* Donut Chart */}
+      <div className="relative w-full aspect-square max-w-[160px] mx-auto mb-5">
+        <svg viewBox="0 0 200 200" className="w-full h-full transform -rotate-90">
+          {segments.map((segment, index) => (
+            <motion.path
+              key={segment.name}
+              d={createArcPath(segment.startAngle, segment.endAngle, 80, 50)}
+              fill={segment.color}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
+              className="hover:opacity-80 transition-opacity cursor-pointer"
+              style={{ transformOrigin: 'center' }}
+            />
+          ))}
+        </svg>
+        
+        {/* Center text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <p className="text-xl font-serif font-bold text-foreground">€{(total / 1000).toFixed(0)}K</p>
+          <p className="text-[10px] text-muted-foreground">Total Invested</p>
         </div>
+      </div>
 
-        {/* Legend */}
-        <div className="space-y-1.5">
-          {assets.map((asset, index) => {
-            const Icon = asset.icon;
-            return (
-              <motion.div
-                key={asset.name}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + index * 0.08 }}
-                whileHover={{ x: 2 }}
-                className="flex items-center justify-between group hover:bg-white/[0.03] rounded-lg p-2 -mx-2 transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div 
-                    className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: asset.color }}
-                  />
-                  <div className="w-7 h-7 rounded-md bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
-                    <Icon className="w-3.5 h-3.5 text-white/50" />
-                  </div>
-                  <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">{asset.name}</span>
+      {/* Legend */}
+      <div className="space-y-1.5">
+        {assets.map((asset, index) => {
+          const Icon = asset.icon;
+          return (
+            <motion.div
+              key={asset.name}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 + index * 0.08 }}
+              whileHover={{ x: 2 }}
+              className="flex items-center justify-between group hover:bg-muted/50 rounded-lg p-2 -mx-2 transition-all cursor-pointer"
+            >
+              <div className="flex items-center gap-2.5">
+                <div 
+                  className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: asset.color }}
+                />
+                <div className={`w-7 h-7 rounded-md ${asset.bgColor} border border-border/50 flex items-center justify-center`}>
+                  <Icon className="w-3.5 h-3.5 text-muted-foreground" />
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-white/90">{asset.percentage}%</p>
-                  <p className="text-[10px] text-white/35">{asset.deals} deals</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                <span className="text-sm font-medium text-foreground">{asset.name}</span>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-semibold text-foreground">{asset.percentage}%</p>
+                <p className="text-[10px] text-muted-foreground">{asset.deals} deals</p>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </motion.div>
   );
