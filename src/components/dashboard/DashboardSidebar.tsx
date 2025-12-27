@@ -29,11 +29,11 @@ interface NavItem {
 
 const mainNavItems: NavItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
+  { icon: TrendingUp, label: "My Portfolio", href: "/dashboard/portfolio" },
   { icon: Heart, label: "Watchlist", href: "/dashboard/watchlist" },
   { icon: Building2, label: "Banking", href: "/dashboard/banking" },
   { icon: FileText, label: "Documents", href: "/dashboard/documents" },
   { icon: Wallet, label: "Wallet", href: "/dashboard/wallet" },
-  { icon: TrendingUp, label: "Earnings", href: "/dashboard/earnings" },
   { icon: BarChart3, label: "Market", href: "/dashboard/market" },
 ];
 
