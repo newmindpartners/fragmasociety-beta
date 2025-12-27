@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, animate } from "framer-motion";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { 
   Palette, 
@@ -63,6 +63,9 @@ export const SignatureDealWhy = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
+  // Swipe gesture
+  const dragX = useMotionValue(0);
 
   const paginate = useCallback((newDirection: number) => {
     setCurrentIndex((prevIndex) => {
@@ -72,6 +75,20 @@ export const SignatureDealWhy = () => {
       return newIndex;
     });
   }, []);
+
+  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
+    const threshold = 50;
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
+
+    if (offset < -threshold || velocity < -500) {
+      paginate(1);
+    } else if (offset > threshold || velocity > 500) {
+      paginate(-1);
+    }
+    
+    animate(dragX, 0, { type: "spring", stiffness: 400, damping: 30 });
+  };
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -168,7 +185,13 @@ export const SignatureDealWhy = () => {
                     duration: 0.5, 
                     ease: [0.25, 0.46, 0.45, 0.94]
                   }}
-                  className="absolute inset-0"
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={handleDragEnd}
+                  style={{ x: dragX }}
+                  className="absolute inset-0 cursor-grab active:cursor-grabbing touch-pan-y"
+                  whileTap={{ cursor: "grabbing" }}
                 >
                   {/* Card */}
                   <div 
