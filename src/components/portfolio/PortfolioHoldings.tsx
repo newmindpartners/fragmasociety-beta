@@ -402,32 +402,32 @@ export const PortfolioHoldings = () => {
       </div>
 
       {/* Summary Footer */}
-      <div className="p-5 bg-muted/20 border-t border-border">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-5">
+      <div className="p-6 sm:p-8 bg-gradient-to-r from-slate-50 to-slate-100 border-t-2 border-slate-200 shadow-inner">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="flex items-center gap-6 sm:gap-10">
             <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Invested</p>
-              <p className="text-base font-serif font-bold text-foreground">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-1">Total Invested</p>
+              <p className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
                 €{filteredHoldings.reduce((sum, h) => sum + h.invested, 0).toLocaleString()}
               </p>
             </div>
-            <div className="w-px h-8 bg-border" />
+            <div className="w-px h-14 bg-slate-300" />
             <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Current Value</p>
-              <p className="text-base font-serif font-bold text-foreground">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-1">Current Value</p>
+              <p className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
                 €{filteredHoldings.reduce((sum, h) => sum + h.currentValue, 0).toLocaleString()}
               </p>
             </div>
-            <div className="w-px h-8 bg-border hidden sm:block" />
+            <div className="w-px h-14 bg-slate-300 hidden sm:block" />
             <div className="hidden sm:block">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Returns</p>
-              <p className="text-base font-serif font-bold text-primary">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-1">Total Returns</p>
+              <p className="text-2xl sm:text-3xl font-serif font-bold text-violet-600">
                 +€{filteredHoldings.reduce((sum, h) => sum + h.returns, 0).toLocaleString()}
               </p>
             </div>
           </div>
           <Link to="/dashboard/earnings">
-            <Button size="sm" className="h-8 text-xs rounded-full gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
+            <Button size="sm" className="h-9 text-xs rounded-full gap-1.5 bg-slate-900 text-white hover:bg-slate-800 px-5">
               View Earnings
               <ExternalLink className="w-3 h-3" />
             </Button>
