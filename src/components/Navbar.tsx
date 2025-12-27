@@ -279,7 +279,8 @@ export const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40"
+              className="lg:hidden fixed inset-0 bg-black/70 backdrop-blur-sm"
+              style={{ zIndex: 9998 }}
               onClick={() => setIsOpen(false)}
             />
             
@@ -294,9 +295,22 @@ export const Navbar = () => {
                 stiffness: 300,
                 mass: 0.8
               }}
-              className="lg:hidden fixed top-16 right-0 bottom-0 w-[85%] max-w-[360px] bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 backdrop-blur-2xl overflow-hidden border-l border-slate-700/50 shadow-2xl shadow-black/50 z-50"
+              className="lg:hidden fixed top-0 right-0 bottom-0 w-[85%] max-w-[360px] bg-slate-900 overflow-hidden border-l border-slate-700/50 shadow-2xl"
+              style={{ zIndex: 9999 }}
             >
               <div className="h-full flex flex-col">
+                {/* Menu Header with Logo and Close */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700/50 bg-slate-900">
+                  <img src={fragmaLogo} alt="Fragma Society" className="h-6" />
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 text-white hover:bg-slate-800 active:bg-slate-700 rounded-lg transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <X size={24} strokeWidth={2} />
+                  </button>
+                </div>
+                
                 {/* Scrollable content area */}
                 <div className="flex-1 overflow-y-auto overscroll-contain py-4 px-5">
                   {navSections.map((section, sectionIndex) => (
