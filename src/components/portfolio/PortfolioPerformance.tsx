@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, Calendar, ChevronDown } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const performanceData = [
@@ -29,14 +29,14 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-card border border-border rounded-xl p-4 shadow-xl">
-        <p className="text-sm font-medium text-muted-foreground mb-2">{label} 2024</p>
-        <div className="space-y-1">
-          <p className="text-lg font-serif font-bold text-foreground">
+      <div className="bg-[hsl(230,65%,12%)] border border-white/10 rounded-xl p-3 shadow-xl backdrop-blur-sm">
+        <p className="text-xs font-medium text-white/50 mb-1.5">{label} 2024</p>
+        <div className="space-y-0.5">
+          <p className="text-base font-serif font-bold text-white">
             €{payload[0].value.toLocaleString()}
           </p>
           {payload[1] && (
-            <p className={`text-sm font-medium ${payload[1].value >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p className={`text-xs font-medium ${payload[1].value >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
               {payload[1].value >= 0 ? '+' : ''}€{payload[1].value.toLocaleString()} returns
             </p>
           )}
@@ -48,109 +48,122 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 };
 
 export const PortfolioPerformance = () => {
-  const [selectedRange, setSelectedRange] = useState("1Y");
+  const [selectedRange, setSelectedRange] = useState("All");
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className="bg-card rounded-2xl border border-border p-6 h-full"
+      className="relative rounded-2xl overflow-hidden h-full"
     >
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-emerald-600" />
+      {/* Dark gradient background */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 60% 40% at 20% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(230, 60%, 8%) 0%, hsl(230, 65%, 5%) 100%)
+          `
+        }}
+      />
+      
+      {/* Border */}
+      <div className="absolute inset-0 rounded-2xl border border-white/[0.08]" />
+      
+      <div className="relative z-10 p-5">
+        {/* Header */}
+        <div className="flex items-center justify-between gap-4 mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
+            </div>
+            <div>
+              <h3 className="text-base font-serif font-semibold text-white">Performance</h3>
+              <p className="text-xs text-white/40">Portfolio growth over time</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-serif font-semibold text-foreground">Performance</h3>
-            <p className="text-sm text-muted-foreground">Portfolio growth over time</p>
+
+          {/* Time Range Selector */}
+          <div className="flex items-center gap-0.5 bg-white/[0.03] border border-white/[0.06] rounded-lg p-1">
+            {timeRanges.map((range) => (
+              <motion.button
+                key={range}
+                onClick={() => setSelectedRange(range)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+                  selectedRange === range
+                    ? 'bg-white/10 text-white border border-white/10'
+                    : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                {range}
+              </motion.button>
+            ))}
           </div>
         </div>
 
-        {/* Time Range Selector */}
-        <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
-          {timeRanges.map((range) => (
-            <button
-              key={range}
-              onClick={() => setSelectedRange(range)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                selectedRange === range
-                  ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+        {/* Stats Row */}
+        <div className="grid grid-cols-3 gap-3 mb-5">
+          <div className="p-3 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+            <p className="text-[10px] text-white/40 mb-1">Starting Value</p>
+            <p className="text-lg font-serif font-bold text-white/90">€125,000</p>
+          </div>
+          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+            <p className="text-[10px] text-white/40 mb-1">Current Value</p>
+            <p className="text-lg font-serif font-bold text-emerald-400">€143,750</p>
+          </div>
+          <div className="p-3 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+            <p className="text-[10px] text-white/40 mb-1">Total Return</p>
+            <p className="text-lg font-serif font-bold text-white/90">+15.0%</p>
+          </div>
+        </div>
+
+        {/* Chart */}
+        <div className="h-[220px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={performanceData}
+              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
             >
-              {range}
-            </button>
-          ))}
+              <defs>
+                <linearGradient id="colorValueDark" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(139, 92, 246, 0.4)" />
+                  <stop offset="100%" stopColor="rgba(139, 92, 246, 0)" />
+                </linearGradient>
+              </defs>
+              <CartesianGrid 
+                strokeDasharray="4 4" 
+                stroke="rgba(255,255,255,0.06)" 
+                vertical={false}
+              />
+              <XAxis 
+                dataKey="month" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }}
+                dy={8}
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }}
+                tickFormatter={(value) => `€${(value / 1000).toFixed(0)}K`}
+                dx={-5}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="rgba(139, 92, 246, 1)"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorValueDark)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
-      </div>
-
-      {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="text-center p-3 bg-muted/30 rounded-xl">
-          <p className="text-xs text-muted-foreground mb-1">Starting Value</p>
-          <p className="text-lg font-serif font-bold text-foreground">€125,000</p>
-        </div>
-        <div className="text-center p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/20">
-          <p className="text-xs text-muted-foreground mb-1">Current Value</p>
-          <p className="text-lg font-serif font-bold text-emerald-600">€143,750</p>
-        </div>
-        <div className="text-center p-3 bg-muted/30 rounded-xl">
-          <p className="text-xs text-muted-foreground mb-1">Total Return</p>
-          <p className="text-lg font-serif font-bold text-foreground">+15.0%</p>
-        </div>
-      </div>
-
-      {/* Chart */}
-      <div className="h-[280px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={performanceData}
-            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(262, 84%, 64%)" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="hsl(262, 84%, 64%)" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorReturns" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(160, 84%, 39%)" stopOpacity={0.2} />
-                <stop offset="95%" stopColor="hsl(160, 84%, 39%)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid 
-              strokeDasharray="3 3" 
-              stroke="hsl(var(--border))" 
-              opacity={0.5}
-              vertical={false}
-            />
-            <XAxis 
-              dataKey="month" 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              dy={10}
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              tickFormatter={(value) => `€${(value / 1000).toFixed(0)}K`}
-              dx={-10}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Area
-              type="monotone"
-              dataKey="value"
-              stroke="hsl(262, 84%, 64%)"
-              strokeWidth={2.5}
-              fillOpacity={1}
-              fill="url(#colorValue)"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
       </div>
     </motion.div>
   );
