@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight, MoreHorizontal, Calendar, PieChart, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -115,6 +116,9 @@ export const OpenTransactions = () => {
     if (orderToCancel) {
       console.log("Cancel order:", orderToCancel.id);
       // Add actual cancel logic here
+      toast.success("Order cancelled", {
+        description: `Your ${orderToCancel.orderType} order for ${orderToCancel.assetName} has been cancelled.`,
+      });
     }
     setCancelDialogOpen(false);
     setOrderToCancel(null);
