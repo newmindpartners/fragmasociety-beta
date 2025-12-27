@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
 import { 
   LayoutDashboard, 
   Heart, 
@@ -15,9 +14,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   LucideIcon,
-  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import fragmaLogo from "@/assets/fragma-logo-new.png";
@@ -28,18 +25,10 @@ interface NavItem {
   label: string;
   href: string;
   badge?: number;
-  children?: NavItem[];
 }
 
 const mainNavItems: NavItem[] = [
-  { 
-    icon: Briefcase, 
-    label: "My Portfolio", 
-    href: "/dashboard",
-    children: [
-      { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    ]
-  },
+  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: Heart, label: "Watchlist", href: "/dashboard/watchlist" },
   { icon: Building2, label: "Banking", href: "/dashboard/banking" },
   { icon: FileText, label: "Documents", href: "/dashboard/documents" },
@@ -61,84 +50,10 @@ interface DashboardSidebarProps {
 
 export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProps) => {
   const location = useLocation();
-  const [expandedItems, setExpandedItems] = useState<string[]>(["My Portfolio"]);
 
-  const toggleExpanded = (label: string) => {
-    setExpandedItems(prev => 
-      prev.includes(label) 
-        ? prev.filter(item => item !== label)
-        : [...prev, label]
-    );
-  };
-
-  const NavLink = ({ item, index, isChild = false }: { item: NavItem; index: number; isChild?: boolean }) => {
+  const NavLink = ({ item, index }: { item: NavItem; index: number }) => {
     const isActive = location.pathname === item.href;
     const Icon = item.icon;
-    const hasChildren = item.children && item.children.length > 0;
-    const isExpanded = expandedItems.includes(item.label);
-
-    if (hasChildren) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 + index * 0.03 }}
-        >
-          <button
-            onClick={() => toggleExpanded(item.label)}
-            className={cn(
-              "w-full group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden",
-              isCollapsed ? "justify-center" : "",
-              "text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))]"
-            )}
-          >
-            <Icon 
-              className="w-[18px] h-[18px] flex-shrink-0 transition-all duration-300 text-[hsl(var(--sidebar-muted))] group-hover:text-[hsl(var(--sidebar-foreground))]"
-              strokeWidth={1.75} 
-            />
-            
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.span 
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: "auto" }}
-                  exit={{ opacity: 0, width: 0 }}
-                  className="font-medium text-sm whitespace-nowrap overflow-hidden flex-1 text-left"
-                >
-                  {item.label}
-                </motion.span>
-              )}
-            </AnimatePresence>
-
-            {!isCollapsed && (
-              <ChevronDown 
-                className={cn(
-                  "w-4 h-4 transition-transform duration-200 text-[hsl(var(--sidebar-muted))]",
-                  isExpanded && "rotate-180"
-                )} 
-              />
-            )}
-          </button>
-
-          {/* Children */}
-          <AnimatePresence>
-            {isExpanded && !isCollapsed && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="ml-4 mt-1 space-y-0.5 border-l border-[hsl(var(--sidebar-border))] pl-3"
-              >
-                {item.children!.map((child, childIndex) => (
-                  <NavLink key={child.href} item={child} index={childIndex} isChild />
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      );
-    }
 
     return (
       <motion.div
@@ -151,7 +66,6 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
           className={cn(
             "group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden",
             isCollapsed ? "justify-center" : "",
-            isChild ? "py-2" : "",
             isActive 
               ? "bg-white/10 text-white border border-white/20" 
               : "text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))]"
@@ -159,8 +73,7 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
         >
           <Icon 
             className={cn(
-              "flex-shrink-0 transition-all duration-300",
-              isChild ? "w-4 h-4" : "w-[18px] h-[18px]",
+              "w-[18px] h-[18px] flex-shrink-0 transition-all duration-300",
               isActive ? "text-white" : "text-[hsl(var(--sidebar-muted))] group-hover:text-[hsl(var(--sidebar-foreground))]",
               !isCollapsed && "group-hover:scale-105"
             )} 
@@ -173,10 +86,7 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
                 initial={{ opacity: 0, width: 0 }}
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
-                className={cn(
-                  "font-medium whitespace-nowrap overflow-hidden",
-                  isChild ? "text-xs" : "text-sm"
-                )}
+                className="font-medium text-sm whitespace-nowrap overflow-hidden"
               >
                 {item.label}
               </motion.span>
