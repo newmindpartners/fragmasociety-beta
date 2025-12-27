@@ -391,157 +391,150 @@ const MobileSwipeableCards = ({
   handleSubscribe: (priceId: string) => void;
   isLoading: boolean;
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(1); // Start at Premium (middle)
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const minSwipeDistance = 50;
+  const getCardWidth = () => {
+    if (typeof window === "undefined") return 300;
+    return Math.min(window.innerWidth - 48, 340); // Max 340px, with 24px padding on each side
+  };
 
-  const scrollToIndex = useCallback((index: number) => {
-    if (scrollRef.current) {
-      const cardWidth = scrollRef.current.offsetWidth * 0.85;
-      const gap = 16;
-      const scrollPosition = index * (cardWidth + gap);
-      scrollRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-      setCurrentIndex(index);
-    }
+  const [cardWidth, setCardWidth] = useState(getCardWidth());
+
+  useEffect(() => {
+    const handleResize = () => setCardWidth(getCardWidth());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
+  const scrollToIndex = useCallback(
+    (index: number) => {
+      const clampedIndex = Math.max(0, Math.min(index, tierOrder.length - 1));
+      setCurrentIndex(clampedIndex);
+    },
+    [tierOrder.length]
+  );
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
+  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
+    const threshold = 50;
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
 
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe && currentIndex < tierOrder.length - 1) {
+    if (velocity < -300 || (offset < -threshold && velocity <= 0)) {
       scrollToIndex(currentIndex + 1);
-    } else if (isRightSwipe && currentIndex > 0) {
+    } else if (velocity > 300 || (offset > threshold && velocity >= 0)) {
       scrollToIndex(currentIndex - 1);
     }
   };
-
-  // Handle scroll end to update current index
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollRef.current) {
-        const cardWidth = scrollRef.current.offsetWidth * 0.85;
-        const gap = 16;
-        const scrollPosition = scrollRef.current.scrollLeft;
-        const newIndex = Math.round(scrollPosition / (cardWidth + gap));
-        if (newIndex !== currentIndex && newIndex >= 0 && newIndex < tierOrder.length) {
-          setCurrentIndex(newIndex);
-        }
-      }
-    };
-
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      scrollElement.addEventListener("scroll", handleScroll);
-      return () => scrollElement.removeEventListener("scroll", handleScroll);
-    }
-  }, [currentIndex, tierOrder.length]);
-
-  // Scroll to Premium (index 1) on mount for mobile
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToIndex(1);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [scrollToIndex]);
 
   return (
     <div className="max-w-6xl mx-auto mb-10 sm:mb-16 mt-6 sm:mt-0">
       {/* Mobile Carousel */}
       <div className="md:hidden">
-        {/* Navigation Arrows */}
-        <div className="flex justify-between items-center px-4 mb-4">
+        {/* Navigation Arrows & Dots */}
+        <div className="flex justify-center items-center gap-4 mb-6">
           <button
-            onClick={() => scrollToIndex(Math.max(0, currentIndex - 1))}
-            className={`p-2 rounded-full bg-white/10 border border-white/20 transition-all ${
-              currentIndex === 0 ? "opacity-30 cursor-not-allowed" : "hover:bg-white/20"
+            onClick={() => scrollToIndex(currentIndex - 1)}
+            className={`w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center transition-all ${
+              currentIndex === 0 ? "opacity-30 cursor-not-allowed" : "hover:bg-slate-700 active:bg-slate-600"
             }`}
             disabled={currentIndex === 0}
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </button>
+          
           <div className="flex gap-2">
             {tierOrder.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
+                className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? "bg-violet-500 w-6"
-                    : "bg-white/30 hover:bg-white/50"
+                    ? "bg-violet-500 w-8"
+                    : "bg-slate-600 w-2 hover:bg-slate-500"
                 }`}
               />
             ))}
           </div>
+          
           <button
-            onClick={() => scrollToIndex(Math.min(tierOrder.length - 1, currentIndex + 1))}
-            className={`p-2 rounded-full bg-white/10 border border-white/20 transition-all ${
-              currentIndex === tierOrder.length - 1 ? "opacity-30 cursor-not-allowed" : "hover:bg-white/20"
+            onClick={() => scrollToIndex(currentIndex + 1)}
+            className={`w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center transition-all ${
+              currentIndex === tierOrder.length - 1 ? "opacity-30 cursor-not-allowed" : "hover:bg-slate-700 active:bg-slate-600"
             }`}
             disabled={currentIndex === tierOrder.length - 1}
           >
-            <ChevronLeft className="w-5 h-5 text-white rotate-180" />
+            <ChevronRight className="w-5 h-5 text-white" />
           </button>
         </div>
 
-        {/* Swipeable Container */}
+        {/* Swipeable Cards Container */}
         <div
-          ref={scrollRef}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4"
-          style={{
-            scrollSnapType: "x mandatory",
-            WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
+          ref={containerRef}
+          className="relative overflow-hidden"
+          style={{ minHeight: "580px" }}
         >
-          {tierOrder.map((tierId, index) => (
-            <div
-              key={tierId}
-              className="flex-shrink-0 snap-center"
-              style={{ width: "85%" }}
-            >
-              <TierCard
-                tier={TIERS[tierId]}
-                isCurrentPlan={currentTierId === tierId}
-                isAuthenticated={isAuthenticated}
-                onSubscribe={handleSubscribe}
-                isLoading={isLoading}
-                index={index}
-              />
-            </div>
-          ))}
+          <motion.div
+            className="flex"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.1}
+            onDragEnd={handleDragEnd}
+            animate={{
+              x: `calc(50% - ${cardWidth / 2}px - ${currentIndex * (cardWidth + 16)}px)`,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+            }}
+            style={{ gap: "16px" }}
+          >
+            {tierOrder.map((tierId, index) => (
+              <motion.div
+                key={tierId}
+                className="flex-shrink-0"
+                style={{ width: cardWidth }}
+                animate={{
+                  scale: index === currentIndex ? 1 : 0.9,
+                  opacity: index === currentIndex ? 1 : 0.5,
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <TierCard
+                  tier={TIERS[tierId]}
+                  isCurrentPlan={currentTierId === tierId}
+                  isAuthenticated={isAuthenticated}
+                  onSubscribe={handleSubscribe}
+                  isLoading={isLoading}
+                  index={index}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
 
         {/* Swipe Hint */}
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="text-center text-xs text-slate-400 mt-4"
+          className="flex items-center justify-center gap-2 text-slate-400 text-xs mt-4"
         >
-          Swipe to compare plans
-        </motion.p>
+          <motion.span
+            animate={{ x: [-3, 3, -3] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            ←
+          </motion.span>
+          <span>Swipe to compare plans</span>
+          <motion.span
+            animate={{ x: [3, -3, 3] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            →
+          </motion.span>
+        </motion.div>
       </div>
 
       {/* Desktop/Tablet Grid */}
