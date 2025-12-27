@@ -1,4 +1,4 @@
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { 
   Send, 
@@ -6,7 +6,9 @@ import {
   Layout, 
   Rocket, 
   BarChart3,
-  Check
+  Check,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 const steps = [
@@ -61,6 +63,10 @@ export const SignatureDealProcess = () => {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   const [activeStep, setActiveStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  
+  // Swipe gesture state
+  const dragX = useMotionValue(0);
+  const dragProgress = useTransform(dragX, [-100, 0, 100], [-1, 0, 1]);
 
   // Auto-play logic
   useEffect(() => {
@@ -77,6 +83,32 @@ export const SignatureDealProcess = () => {
     setIsPaused(true);
     setActiveStep(index);
     setTimeout(() => setIsPaused(false), 10000);
+  };
+
+  const goToNext = () => {
+    setIsPaused(true);
+    setActiveStep((prev) => (prev + 1) % steps.length);
+    setTimeout(() => setIsPaused(false), 10000);
+  };
+
+  const goToPrev = () => {
+    setIsPaused(true);
+    setActiveStep((prev) => (prev - 1 + steps.length) % steps.length);
+    setTimeout(() => setIsPaused(false), 10000);
+  };
+
+  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
+    const threshold = 50;
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
+
+    if (offset < -threshold || velocity < -500) {
+      goToNext();
+    } else if (offset > threshold || velocity > 500) {
+      goToPrev();
+    }
+    
+    animate(dragX, 0, { type: "spring", stiffness: 400, damping: 30 });
   };
 
   const currentStep = steps[activeStep];
@@ -175,9 +207,9 @@ export const SignatureDealProcess = () => {
           </div>
         </motion.div>
 
-        {/* Main Content Grid */}
+        {/* Main Content - Swipeable on Mobile */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left - Active Step Detail */}
+          {/* Left - Active Step Detail (Swipeable on Mobile) */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -191,8 +223,13 @@ export const SignatureDealProcess = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4 }}
-                className="bg-white border border-slate-200 p-8 lg:p-10 rounded-sm"
-                style={{ boxShadow: '0 8px 40px -10px rgba(0, 0, 0, 0.1)' }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={handleDragEnd}
+                style={{ x: dragX }}
+                className="bg-white border border-slate-200 p-8 lg:p-10 rounded-sm cursor-grab active:cursor-grabbing touch-pan-y"
+                whileTap={{ cursor: "grabbing" }}
               >
                 <div className="flex items-start justify-between mb-8">
                   <div className="w-16 h-16 bg-slate-900 flex items-center justify-center">
@@ -249,6 +286,38 @@ export const SignatureDealProcess = () => {
                 </div>
               </motion.div>
             </AnimatePresence>
+
+            {/* Mobile Navigation Arrows */}
+            <div className="flex items-center justify-center gap-4 mt-6 lg:hidden">
+              <button
+                onClick={goToPrev}
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
+              >
+                <ChevronLeft className="w-5 h-5 text-slate-600" />
+              </button>
+              
+              {/* Progress Dots */}
+              <div className="flex items-center gap-2">
+                {steps.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleStepClick(i)}
+                    className="relative"
+                  >
+                    <div className={`h-2 rounded-full transition-all duration-300 ${
+                      i === activeStep ? 'w-6 bg-slate-900' : 'w-2 bg-slate-300'
+                    }`} />
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={goToNext}
+                className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
+              >
+                <ChevronRight className="w-5 h-5 text-slate-600" />
+              </button>
+            </div>
           </motion.div>
 
           {/* Right - Step Cards Grid */}
