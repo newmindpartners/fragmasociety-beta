@@ -174,26 +174,24 @@ const TierCard = ({
       transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`relative flex flex-col h-full ${isPremium ? "lg:-mt-6 lg:mb-6 z-10" : ""}`}
+      className={`relative flex flex-col h-full pt-5 ${isPremium ? "lg:-mt-6 lg:mb-6 z-10" : ""}`}
     >
-      {/* Badge */}
-      <AnimatePresence>
-        {tier.badge && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.4 + index * 0.1, duration: 0.4 }}
-            className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20"
-          >
-            <div className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider shadow-lg ${colors.badge}`}>
-              <span className="flex items-center gap-1.5">
-                {isElite && <Sparkles className="w-3 h-3" />}
-                {tier.badge}
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Badge - positioned inside the card flow on mobile */}
+      {tier.badge && (
+        <motion.div
+          initial={{ opacity: 0, y: -10, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.4 + index * 0.1, duration: 0.4 }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 z-20"
+        >
+          <div className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider shadow-lg ${colors.badge}`}>
+            <span className="flex items-center gap-1.5 whitespace-nowrap">
+              {isElite && <Sparkles className="w-3 h-3" />}
+              {tier.badge}
+            </span>
+          </div>
+        </motion.div>
+      )}
 
       {/* Card */}
       <motion.div
@@ -204,7 +202,7 @@ const TierCard = ({
             : "0 8px 32px -8px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)",
         }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className={`flex flex-col h-full rounded-2xl sm:rounded-3xl border-2 p-5 sm:p-8 ${colors.bg} ${colors.border} overflow-hidden relative`}
+        className={`flex flex-col h-full rounded-2xl sm:rounded-3xl border-2 p-5 sm:p-8 ${colors.bg} ${colors.border} overflow-hidden relative mt-3`}
       >
         {/* Decorative dot pattern */}
         <div className="absolute top-4 left-4 grid grid-cols-4 gap-1.5 opacity-20 pointer-events-none">
