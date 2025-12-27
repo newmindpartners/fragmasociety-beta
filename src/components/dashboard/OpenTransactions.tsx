@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight, MoreHorizontal } from "lucide-react";
+import { Info, ArrowRight, Clock, X, Plus, ExternalLink, TrendingUp, TrendingDown, ChevronRight, MoreHorizontal, Calendar, PieChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -9,6 +9,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Order {
   id: string;
@@ -118,15 +124,35 @@ export const OpenTransactions = () => {
     return config[status];
   };
 
+  const formatExpiryDate = (dateStr?: string) => {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffTime = date.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) return { text: "Expired", urgent: true };
+    if (diffDays === 0) return { text: "Expires today", urgent: true };
+    if (diffDays === 1) return { text: "Expires tomorrow", urgent: true };
+    if (diffDays <= 7) return { text: `Expires in ${diffDays} days`, urgent: true };
+    return { text: `Expires ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`, urgent: false };
+  };
+
+  const getFillPercentage = (order: Order) => {
+    if (order.filledTokens === undefined) return 0;
+    return Math.round((order.filledTokens / order.tokens) * 100);
+  };
+
   const orders = activeTab === "orders" ? activeOrders : orderHistory;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-      className="bg-card rounded-2xl border border-border/60 shadow-sm h-full flex flex-col overflow-hidden"
-    >
+    <TooltipProvider delayDuration={200}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-card rounded-2xl border border-border/60 shadow-sm h-full flex flex-col overflow-hidden"
+      >
       {/* Header */}
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-center justify-between mb-1">
@@ -221,6 +247,77 @@ export const OpenTransactions = () => {
                             <span className="text-[11px] text-muted-foreground">{order.assetType}</span>
                             <span className="text-muted-foreground/30">·</span>
                             <span className="text-[11px] text-muted-foreground">{order.createdAt}</span>
+                            
+                            {/* Tooltip Indicators */}
+                            {order.expiresAt && (
+                              <>
+                                <span className="text-muted-foreground/30">·</span>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button 
+                                      onClick={(e) => e.stopPropagation()}
+                                      className={`flex items-center gap-1 text-[11px] ${
+                                        formatExpiryDate(order.expiresAt)?.urgent 
+                                          ? "text-amber-600" 
+                                          : "text-muted-foreground"
+                                      } hover:text-foreground transition-colors`}
+                                    >
+                                      <Calendar className="w-3 h-3" />
+                                      {formatExpiryDate(order.expiresAt)?.text}
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="bottom" className="text-xs">
+                                    <div className="space-y-1">
+                                      <p className="font-medium">Order Expiry</p>
+                                      <p className="text-muted-foreground">
+                                        {new Date(order.expiresAt).toLocaleDateString('en-US', { 
+                                          weekday: 'long',
+                                          year: 'numeric', 
+                                          month: 'long', 
+                                          day: 'numeric' 
+                                        })}
+                                      </p>
+                                    </div>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </>
+                            )}
+                            
+                            {order.filledTokens !== undefined && order.filledTokens > 0 && (
+                              <>
+                                <span className="text-muted-foreground/30">·</span>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button 
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+                                    >
+                                      <PieChart className="w-3 h-3" />
+                                      {getFillPercentage(order)}% filled
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="bottom" className="text-xs">
+                                    <div className="space-y-1.5">
+                                      <p className="font-medium">Fill Progress</p>
+                                      <div className="flex items-center justify-between gap-4 text-muted-foreground">
+                                        <span>Filled</span>
+                                        <span className="font-medium text-foreground">{order.filledTokens} tokens</span>
+                                      </div>
+                                      <div className="flex items-center justify-between gap-4 text-muted-foreground">
+                                        <span>Remaining</span>
+                                        <span className="font-medium text-foreground">{order.tokens - order.filledTokens} tokens</span>
+                                      </div>
+                                      <div className="h-1.5 bg-muted rounded-full overflow-hidden mt-1">
+                                        <div 
+                                          className="h-full bg-amber-500 rounded-full"
+                                          style={{ width: `${getFillPercentage(order)}%` }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </>
+                            )}
                           </div>
                         </div>
                         
@@ -364,5 +461,6 @@ export const OpenTransactions = () => {
         </Link>
       </div>
     </motion.div>
+    </TooltipProvider>
   );
 };
