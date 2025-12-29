@@ -1,13 +1,14 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import ctaBg from "@/assets/how-it-works-cta-bg.jpg";
+import { EarlyAccessModal } from "@/components/early-access/EarlyAccessModal";
 
 export const HowItWorksCTANew = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section ref={sectionRef} className="relative py-20 sm:py-32 lg:py-40 overflow-hidden">
@@ -73,16 +74,17 @@ export const HowItWorksCTANew = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
           >
-            <Link to="/membership">
-              <Button 
-                size="lg" 
-                className="bg-white text-slate-900 hover:bg-white/90 active:bg-white/80 rounded-full px-8 sm:px-10 h-12 sm:h-14 text-sm sm:text-base font-medium group min-h-[48px]"
-              >
-                Register Your Interest
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              onClick={() => setIsModalOpen(true)}
+              className="bg-white text-slate-900 hover:bg-white/90 active:bg-white/80 rounded-full px-8 sm:px-10 h-12 sm:h-14 text-sm sm:text-base font-medium group min-h-[48px]"
+            >
+              Register Your Interest
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
           </motion.div>
+
+          <EarlyAccessModal open={isModalOpen} onOpenChange={setIsModalOpen} />
           
           {/* Trust indicators */}
           <motion.div

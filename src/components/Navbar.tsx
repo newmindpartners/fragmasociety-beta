@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import fragmaLogo from "@/assets/fragma-logo-new.png";
+import { EarlyAccessModal } from "./early-access/EarlyAccessModal";
 
 interface MenuItem {
   label: string;
@@ -163,6 +164,7 @@ export const Navbar = () => {
   const [renderMobileMenu, setRenderMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
   const { user, signOut } = useAuth();
 
   useEffect(() => {
@@ -228,17 +230,16 @@ export const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <a href="#request-access">
-                <Button 
-                  size="sm" 
-                  className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
-                >
-                  <span className="relative z-10 flex items-center gap-1.5">
-                    Register Your Interest
-                    <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
-                  </span>
-                </Button>
-              </a>
+              <Button 
+                size="sm" 
+                onClick={() => setIsEarlyAccessOpen(true)}
+                className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
+              >
+                <span className="relative z-10 flex items-center gap-1.5">
+                  Register Your Interest
+                  <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
+                </span>
+              </Button>
             )}
           </div>
 
@@ -483,21 +484,21 @@ export const Navbar = () => {
                             </Button>
                           </div>
                         ) : (
-                          <a
-                            href="#request-access"
-                            onClick={() => setIsOpen(false)}
-                            className="block"
+                          <Button 
+                            onClick={() => {
+                              setIsOpen(false);
+                              setIsEarlyAccessOpen(true);
+                            }}
+                            className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10"
                           >
-                            <Button className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10">
-                              <span className="flex items-center justify-center gap-2">
-                                Register Your Interest
-                                <ArrowRight
-                                  size={18}
-                                  className="group-hover:translate-x-1 transition-transform duration-300"
-                                />
-                              </span>
-                            </Button>
-                          </a>
+                            <span className="flex items-center justify-center gap-2">
+                              Register Your Interest
+                              <ArrowRight
+                                size={18}
+                                className="group-hover:translate-x-1 transition-transform duration-300"
+                              />
+                            </span>
+                          </Button>
                         )}
                       </motion.div>
                     </div>
@@ -508,6 +509,8 @@ export const Navbar = () => {
             document.body
           )
         : null}
+
+      <EarlyAccessModal open={isEarlyAccessOpen} onOpenChange={setIsEarlyAccessOpen} />
     </nav>
   );
 };

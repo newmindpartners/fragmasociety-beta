@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { EarlyAccessModal } from "./early-access/EarlyAccessModal";
 
 // Dynamic words that cycle through
 const dynamicWords = ["Real Estate", "Film & Entertainment", "Luxury Assets", "Music Rights", "Sports", "Infrastructure Technology", "Hospitality"];
@@ -9,6 +10,7 @@ const dynamicWords = ["Real Estate", "Film & Entertainment", "Luxury Assets", "M
 export const Hero = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -145,6 +147,7 @@ export const Hero = () => {
             >
               <Button 
                 size="lg" 
+                onClick={() => setIsModalOpen(true)}
                 className="bg-white text-neutral-900 hover:bg-white/90 rounded-full px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base font-medium"
               >
                 Register your interest
@@ -157,6 +160,8 @@ export const Hero = () => {
                 </motion.span>
               </Button>
             </motion.div>
+
+            <EarlyAccessModal open={isModalOpen} onOpenChange={setIsModalOpen} />
           </div>
         </div>
 
