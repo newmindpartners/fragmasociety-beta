@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.send-early-access-confirmation]
 verify_jwt = false
+
+[functions.submit-typeform]
+verify_jwt = false
