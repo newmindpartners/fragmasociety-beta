@@ -87,7 +87,7 @@ export const RequestAccessForm = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] mb-4">
-              Request access
+              Register your interest
             </h2>
             <p className="text-lg text-white/60">
               Join our exclusive investor community
