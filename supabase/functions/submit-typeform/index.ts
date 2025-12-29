@@ -12,83 +12,44 @@ serve(async (req) => {
   }
 
   try {
-    const typeformApiToken = Deno.env.get('TYPEFORM_API_TOKEN');
-    const typeformFormId = Deno.env.get('TYPEFORM_FORM_ID');
-
-    if (!typeformApiToken || !typeformFormId) {
-      console.error('Missing Typeform configuration');
-      throw new Error('Typeform configuration not set');
-    }
-
     const { email, country, investorType, interests } = await req.json();
 
-    console.log('Submitting to Typeform:', { email, country, investorType, interests });
+    console.log('=== Typeform Sync Request ===');
+    console.log('Email:', email);
+    console.log('Country:', country);
+    console.log('Investor Type:', investorType);
+    console.log('Interests:', interests);
 
-    // Create a Typeform response submission
-    // Note: Typeform's Responses API requires field IDs from your form
-    // You'll need to update these field IDs to match your Typeform form
-    const typeformResponse = await fetch(
-      `https://api.typeform.com/forms/${typeformFormId}/responses`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${typeformApiToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          answers: [
-            {
-              field: { ref: 'email_field' },
-              type: 'email',
-              email: email,
-            },
-            {
-              field: { ref: 'country_field' },
-              type: 'text',
-              text: country,
-            },
-            {
-              field: { ref: 'investor_type_field' },
-              type: 'choice',
-              choice: { label: investorType },
-            },
-            {
-              field: { ref: 'interests_field' },
-              type: 'choices',
-              choices: { labels: interests },
-            },
-          ],
-          metadata: {
-            platform: 'web',
-            source: 'fragma-website',
-          },
-        }),
-      }
-    );
-
-    if (!typeformResponse.ok) {
-      const errorText = await typeformResponse.text();
-      console.error('Typeform API error:', errorText);
-      
-      // If the Responses API doesn't work, try using a webhook or hidden fields approach
-      // For now, log the submission and return success
-      console.log('Form data captured:', { email, country, investorType, interests });
-      
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: 'Interest registered successfully',
-          note: 'Data logged for manual sync'
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    // Note: Typeform's Responses API only allows READING responses, not creating them.
+    // To get form submissions into Typeform, you have two options:
+    // 
+    // Option 1: Set up a Typeform webhook that posts TO your Supabase edge function
+    //           (reverse the data flow - Typeform -> Your DB)
+    //
+    // Option 2: Use Typeform's embed with hidden fields pre-populated
+    //           (users fill out the actual Typeform)
+    //
+    // For now, we log the data for manual review or future webhook integration.
+    
+    const typeformFormId = Deno.env.get('TYPEFORM_FORM_ID');
+    
+    if (!typeformFormId) {
+      console.log('TYPEFORM_FORM_ID not configured');
+    } else {
+      console.log('Typeform Form ID:', typeformFormId);
+      console.log('Data ready for sync - consider setting up Typeform webhook integration');
     }
 
-    const result = await typeformResponse.json();
-    console.log('Typeform submission successful:', result);
-
+    // Data is already stored in Supabase early_access_submissions table
+    // This function serves as a placeholder for future Typeform webhook integration
+    
     return new Response(
-      JSON.stringify({ success: true, message: 'Interest registered with Typeform' }),
+      JSON.stringify({ 
+        success: true, 
+        message: 'Data logged for Typeform sync',
+        note: 'Typeform API does not support creating responses. Data stored in Supabase.',
+        data: { email, country, investorType, interests }
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error: unknown) {
