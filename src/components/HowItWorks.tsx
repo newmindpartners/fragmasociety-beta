@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useInView, PanInfo } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Search, CreditCard, TrendingUp, ArrowLeftRight, ChevronRight, Check } from "lucide-react";
+import { EarlyAccessModal } from "./early-access/EarlyAccessModal";
 
 const steps = [
   {
@@ -324,6 +325,7 @@ export const HowItWorks = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
@@ -648,12 +650,15 @@ export const HowItWorks = () => {
         >
           <Button 
             size="lg" 
+            onClick={() => setIsModalOpen(true)}
             className="group bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white px-8 sm:px-12 py-5 sm:py-7 text-sm sm:text-base rounded-full shadow-xl shadow-slate-900/25"
           >
             Register your interest
             <ChevronRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
         </motion.div>
+
+        <EarlyAccessModal open={isModalOpen} onOpenChange={setIsModalOpen} />
       </div>
       
       {/* Bottom accent line */}

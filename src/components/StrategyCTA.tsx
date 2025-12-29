@@ -11,7 +11,7 @@ import {
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { EarlyAccessModal } from "./early-access/EarlyAccessModal";
 
 const features = [
   { icon: Shield, label: "Managed Portfolio" },
@@ -22,6 +22,7 @@ const features = [
 
 export const StrategyCTA = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="relative overflow-hidden">
@@ -85,16 +86,16 @@ export const StrategyCTA = () => {
 
             {/* CTA Button */}
             <Button 
-              asChild 
               size="lg" 
+              onClick={() => setIsModalOpen(true)}
               className="group bg-white text-slate-900 hover:bg-slate-100 px-6 py-5 text-sm rounded-none transition-all duration-500"
             >
-              <Link to="/auth" className="flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5" />
-                <span>Register your interest</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
+              <Lock className="w-3.5 h-3.5" />
+              <span className="ml-2">Register your interest</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
+
+            <EarlyAccessModal open={isModalOpen} onOpenChange={setIsModalOpen} />
 
             {/* Trust indicators */}
             <div className="flex flex-wrap gap-4 mt-6 text-[10px] text-slate-500">
