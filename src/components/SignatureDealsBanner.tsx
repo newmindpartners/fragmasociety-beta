@@ -32,6 +32,16 @@ const leaders = [
 
 const SLIDE_DURATION = 5000;
 
+// Calculate dynamic font size based on name length
+const getNameFontSize = (name: string) => {
+  const length = name.length;
+  // Base size decreases as name gets longer
+  if (length <= 8) return 'clamp(2.5rem, 8vw, 5rem)';
+  if (length <= 12) return 'clamp(2rem, 6.5vw, 4.5rem)';
+  if (length <= 15) return 'clamp(1.75rem, 5.5vw, 4rem)';
+  return 'clamp(1.5rem, 4.5vw, 3.5rem)';
+};
+
 export const SignatureDealsBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -381,8 +391,9 @@ export const SignatureDealsBanner = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-none uppercase whitespace-nowrap"
+                  className="font-bold tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{ 
+                    fontSize: getNameFontSize(current.name),
                     background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
                     WebkitBackgroundClip: 'text',
