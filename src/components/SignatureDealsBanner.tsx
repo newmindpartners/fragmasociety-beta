@@ -372,7 +372,7 @@ export const SignatureDealsBanner = () => {
           </div>
 
           {/* RIGHT - Name and position */}
-          <div className="flex flex-col justify-center items-end text-right pr-4 md:pr-12 lg:pr-16">
+          <div className="flex flex-col justify-center items-end text-right pr-4 md:pr-6">
             <div className="flex items-center justify-end mb-3">
               <AnimatePresence mode="wait">
                 <motion.h2
@@ -381,7 +381,7 @@ export const SignatureDealsBanner = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[58px] font-bold tracking-tight leading-none uppercase"
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{ 
                     background: 'linear-gradient(135deg, #ffffff 0%, #c4b5d4 40%, #9a8cb0 60%, #ffffff 100%)',
                     backgroundSize: '200% 200%',
