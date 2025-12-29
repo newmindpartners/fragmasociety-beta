@@ -53,7 +53,7 @@ export function ThankYouStep({ onClose }: ThankYouStepProps) {
           asChild
           className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-6"
         >
-          <a href="https://t.me/fragmasociety" target="_blank" rel="noopener noreferrer">
+          <a href="https://t.me/+BGJB5RBN2wAwODY0" target="_blank" rel="noopener noreferrer">
             Join Community
             <ExternalLink className="w-4 h-4 ml-2" />
           </a>
