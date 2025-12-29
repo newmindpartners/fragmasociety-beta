@@ -66,35 +66,45 @@ export const RequestAccessForm = () => {
           alt="" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-900/90 to-slate-950/95" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/98 via-slate-900/95 to-slate-950/98" />
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
       
-      {/* Subtle glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-violet-500/5 rounded-full blur-3xl" />
+      {/* Subtle glows */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-violet-500/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-xl mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-12"
+            className="text-center mb-14"
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] mb-4">
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium tracking-wider uppercase mb-6"
+            >
+              Exclusive Access
+            </motion.span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] mb-5">
               Register your interest
             </h2>
-            <p className="text-lg text-white/60">
+            <p className="text-lg text-white/50 font-light">
               Join our exclusive investor community
             </p>
           </motion.div>
 
-          {/* Form */}
+          {/* Form Card */}
           {!isSubmitted ? (
             <motion.form
               initial={{ opacity: 0, y: 30 }}
@@ -102,12 +112,15 @@ export const RequestAccessForm = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
               onSubmit={handleSubmit}
-              className="space-y-8"
+              className="relative bg-white/[0.02] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-8 md:p-10 space-y-7"
             >
+              {/* Glass reflection effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.05] via-transparent to-transparent pointer-events-none" />
+              
               {/* Email */}
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-white/80 text-sm font-medium">
-                  Email
+              <div className="relative space-y-2.5">
+                <Label htmlFor="email" className="text-white/70 text-sm font-medium tracking-wide">
+                  Email Address
                 </Label>
                 <Input
                   id="email"
@@ -115,26 +128,26 @@ export const RequestAccessForm = () => {
                   placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 h-14 rounded-xl focus:border-violet-500/50 focus:ring-violet-500/20"
+                  className="bg-white/[0.03] border-white/[0.08] text-white placeholder:text-white/25 h-13 rounded-xl focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all duration-300"
                   required
                 />
               </div>
 
               {/* Country */}
-              <div className="space-y-3">
-                <Label className="text-white/80 text-sm font-medium">
+              <div className="relative space-y-2.5">
+                <Label className="text-white/70 text-sm font-medium tracking-wide">
                   Country / Residency
                 </Label>
                 <Select value={country} onValueChange={setCountry}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white h-14 rounded-xl focus:border-violet-500/50 focus:ring-violet-500/20">
+                  <SelectTrigger className="bg-white/[0.03] border-white/[0.08] text-white h-13 rounded-xl focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all duration-300 [&>span]:text-white/50 [&[data-state=open]>span]:text-white">
                     <SelectValue placeholder="Select your country" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-slate-900/95 backdrop-blur-xl border-white/10 rounded-xl">
                     {countries.map((c) => (
                       <SelectItem 
                         key={c} 
                         value={c}
-                        className="text-white hover:bg-white/10 focus:bg-white/10"
+                        className="text-white/80 hover:bg-white/10 focus:bg-white/10 focus:text-white rounded-lg cursor-pointer"
                       >
                         {c}
                       </SelectItem>
@@ -144,34 +157,34 @@ export const RequestAccessForm = () => {
               </div>
 
               {/* Investor Type */}
-              <div className="space-y-3">
-                <Label className="text-white/80 text-sm font-medium">
+              <div className="relative space-y-2.5">
+                <Label className="text-white/70 text-sm font-medium tracking-wide">
                   Investor Type
                 </Label>
                 <Select value={investorType} onValueChange={setInvestorType}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white h-14 rounded-xl focus:border-violet-500/50 focus:ring-violet-500/20">
+                  <SelectTrigger className="bg-white/[0.03] border-white/[0.08] text-white h-13 rounded-xl focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all duration-300 [&>span]:text-white/50 [&[data-state=open]>span]:text-white">
                     <SelectValue placeholder="Select investor type" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
-                    <SelectItem value="retail" className="text-white hover:bg-white/10 focus:bg-white/10">
-                      Retail
+                  <SelectContent className="bg-slate-900/95 backdrop-blur-xl border-white/10 rounded-xl">
+                    <SelectItem value="retail" className="text-white/80 hover:bg-white/10 focus:bg-white/10 focus:text-white rounded-lg cursor-pointer">
+                      Retail Investor
                     </SelectItem>
-                    <SelectItem value="professional" className="text-white hover:bg-white/10 focus:bg-white/10">
-                      Professional
+                    <SelectItem value="professional" className="text-white/80 hover:bg-white/10 focus:bg-white/10 focus:text-white rounded-lg cursor-pointer">
+                      Professional Investor
                     </SelectItem>
-                    <SelectItem value="accredited" className="text-white hover:bg-white/10 focus:bg-white/10">
-                      Accredited
+                    <SelectItem value="accredited" className="text-white/80 hover:bg-white/10 focus:bg-white/10 focus:text-white rounded-lg cursor-pointer">
+                      Accredited Investor
                     </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {/* Interests */}
-              <div className="space-y-4">
-                <Label className="text-white/80 text-sm font-medium">
-                  What stories are you drawn to?
+              <div className="relative space-y-4">
+                <Label className="text-white/70 text-sm font-medium tracking-wide">
+                  Areas of Interest
                 </Label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="flex flex-wrap gap-2.5">
                   {interests.map((interest) => {
                     const isSelected = selectedInterests.includes(interest.id);
                     return (
@@ -179,24 +192,26 @@ export const RequestAccessForm = () => {
                         key={interest.id}
                         type="button"
                         onClick={() => toggleInterest(interest.id)}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`relative px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 border ${
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        className={`relative px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
                           isSelected
-                            ? "bg-violet-500/20 border-violet-500/50 text-white"
-                            : "bg-white/5 border-white/10 text-white/70 hover:border-white/20 hover:text-white"
+                            ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
+                            : "bg-white/[0.02] border-white/[0.08] text-white/60 hover:border-white/20 hover:text-white/80"
                         }`}
                       >
-                        {isSelected && (
-                          <motion.span
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="absolute top-2 right-2"
-                          >
-                            <Check className="w-3.5 h-3.5 text-violet-400" />
-                          </motion.span>
-                        )}
-                        {interest.label}
+                        <span className="flex items-center gap-2">
+                          {isSelected && (
+                            <motion.span
+                              initial={{ scale: 0, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0, opacity: 0 }}
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                            </motion.span>
+                          )}
+                          {interest.label}
+                        </span>
                       </motion.button>
                     );
                   })}
@@ -209,22 +224,22 @@ export const RequestAccessForm = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="pt-4"
+                className="pt-3"
               >
                 <Button
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="w-full bg-white text-slate-900 hover:bg-white/90 rounded-full h-14 text-base font-medium shadow-xl shadow-white/10 disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 hover:from-amber-400 hover:to-amber-500 rounded-full h-14 text-base font-semibold shadow-lg shadow-amber-500/20 disabled:opacity-50 transition-all duration-300"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <motion.span
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 border-2 border-slate-900/20 border-t-slate-900 rounded-full"
+                        className="w-5 h-5 border-2 border-slate-950/20 border-t-slate-950 rounded-full"
                       />
-                      Submitting...
+                      Processing...
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
@@ -236,7 +251,7 @@ export const RequestAccessForm = () => {
               </motion.div>
 
               {/* Disclaimer */}
-              <p className="text-center text-xs text-white/40 pt-2">
+              <p className="text-center text-xs text-white/30 pt-1">
                 Capital at risk. Access depends on eligibility and jurisdiction.
               </p>
             </motion.form>
@@ -244,20 +259,20 @@ export const RequestAccessForm = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-12"
+              className="relative bg-white/[0.02] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-12 text-center"
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", damping: 10 }}
-                className="w-20 h-20 rounded-full bg-violet-500/20 border border-violet-500/40 flex items-center justify-center mx-auto mb-6"
+                className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-500/5 border border-amber-500/30 flex items-center justify-center mx-auto mb-6"
               >
-                <Check className="w-10 h-10 text-violet-400" />
+                <Check className="w-10 h-10 text-amber-400" />
               </motion.div>
-              <h3 className="text-2xl font-medium text-white mb-3">
+              <h3 className="font-serif text-2xl font-medium text-white mb-3">
                 Thank you for registering
               </h3>
-              <p className="text-white/60">
+              <p className="text-white/50 font-light">
                 We'll review your application and be in touch soon.
               </p>
             </motion.div>
