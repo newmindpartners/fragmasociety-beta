@@ -263,6 +263,20 @@ export function useEarlyAccessForm() {
         return false;
       }
 
+      // Send confirmation email (don't block on failure)
+      try {
+        await supabase.functions.invoke('send-early-access-confirmation', {
+          body: {
+            fullName: formData.fullName,
+            email: formData.email,
+          },
+        });
+        console.log('Confirmation email sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+        // Don't fail the submission if email fails
+      }
+
       return true;
     } catch (error) {
       console.error('Submission error:', error);
