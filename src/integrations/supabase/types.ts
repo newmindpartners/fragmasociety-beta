@@ -217,6 +217,99 @@ export type Database = {
         }
         Relationships: []
       }
+      early_access_submissions: {
+        Row: {
+          annual_income: string | null
+          asset_interests: string[] | null
+          consent_to_contact: boolean | null
+          country: string
+          created_at: string
+          email: string
+          entity_name: string | null
+          eu_professional_qualifications: string[] | null
+          eu_qualifications_count: string | null
+          full_name: string
+          id: string
+          investable_capital: string | null
+          investment_amount_3_6_months: string | null
+          investment_horizon: string | null
+          investment_priorities: string[] | null
+          investor_status: string | null
+          is_pep: boolean | null
+          is_sanctioned: boolean | null
+          is_us_person: boolean | null
+          marketing_consent: boolean | null
+          other_rwa_description: string | null
+          phone_whatsapp_number: string | null
+          preferred_contact_channel: string | null
+          preferred_ticket_size: string | null
+          registering_as: string
+          tags: string[] | null
+          updated_at: string
+          us_accredited_qualifications: string[] | null
+        }
+        Insert: {
+          annual_income?: string | null
+          asset_interests?: string[] | null
+          consent_to_contact?: boolean | null
+          country: string
+          created_at?: string
+          email: string
+          entity_name?: string | null
+          eu_professional_qualifications?: string[] | null
+          eu_qualifications_count?: string | null
+          full_name: string
+          id?: string
+          investable_capital?: string | null
+          investment_amount_3_6_months?: string | null
+          investment_horizon?: string | null
+          investment_priorities?: string[] | null
+          investor_status?: string | null
+          is_pep?: boolean | null
+          is_sanctioned?: boolean | null
+          is_us_person?: boolean | null
+          marketing_consent?: boolean | null
+          other_rwa_description?: string | null
+          phone_whatsapp_number?: string | null
+          preferred_contact_channel?: string | null
+          preferred_ticket_size?: string | null
+          registering_as: string
+          tags?: string[] | null
+          updated_at?: string
+          us_accredited_qualifications?: string[] | null
+        }
+        Update: {
+          annual_income?: string | null
+          asset_interests?: string[] | null
+          consent_to_contact?: boolean | null
+          country?: string
+          created_at?: string
+          email?: string
+          entity_name?: string | null
+          eu_professional_qualifications?: string[] | null
+          eu_qualifications_count?: string | null
+          full_name?: string
+          id?: string
+          investable_capital?: string | null
+          investment_amount_3_6_months?: string | null
+          investment_horizon?: string | null
+          investment_priorities?: string[] | null
+          investor_status?: string | null
+          is_pep?: boolean | null
+          is_sanctioned?: boolean | null
+          is_us_person?: boolean | null
+          marketing_consent?: boolean | null
+          other_rwa_description?: string | null
+          phone_whatsapp_number?: string | null
+          preferred_contact_channel?: string | null
+          preferred_ticket_size?: string | null
+          registering_as?: string
+          tags?: string[] | null
+          updated_at?: string
+          us_accredited_qualifications?: string[] | null
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           email: string
