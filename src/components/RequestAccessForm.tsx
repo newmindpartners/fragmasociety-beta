@@ -4,9 +4,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Checkbox } from "./ui/checkbox";
 import { toast } from "sonner";
 import { ArrowRight, Check } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 import ctaBg from "@/assets/signature-deal-cta-bg.jpg";
 
@@ -49,12 +49,35 @@ export const RequestAccessForm = () => {
 
     setIsSubmitting(true);
     
-    // Simulate submission - replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    toast.success("Thank you! We'll be in touch soon.");
+    try {
+      const interestLabels = selectedInterests.map(id => 
+        interests.find(i => i.id === id)?.label || id
+      );
+
+      const { data, error } = await supabase.functions.invoke('submit-typeform', {
+        body: {
+          email,
+          country,
+          investorType,
+          interests: interestLabels,
+        },
+      });
+
+      if (error) {
+        console.error('Typeform submission error:', error);
+        toast.error("Something went wrong. Please try again.");
+        return;
+      }
+
+      console.log('Typeform submission response:', data);
+      setIsSubmitted(true);
+      toast.success("Thank you! We'll be in touch soon.");
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
