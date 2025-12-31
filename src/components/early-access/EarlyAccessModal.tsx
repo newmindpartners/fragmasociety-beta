@@ -14,6 +14,7 @@ import { ContactStep } from "./steps/ContactStep";
 import { AuthStep } from "./steps/AuthStep";
 import { ThankYouStep } from "./steps/ThankYouStep";
 import { FormProgress } from "./FormProgress";
+import { toast } from "sonner";
 
 interface EarlyAccessModalProps {
   open: boolean;
@@ -43,11 +44,16 @@ export function EarlyAccessModal({ open, onOpenChange }: EarlyAccessModalProps) 
         form.goNext();
       }
     } else if (form.currentStep === 'auth') {
-      console.log('User signed in, triggering confirmation email...');
-      const emailResult = await form.sendConfirmationEmail();
-      if (!emailResult.success) {
-        console.error('Email failed:', emailResult.error);
-        toast.error('Account created, but we couldn\'t send the confirmation email. Our team will contact you soon.');
+      // Only try to send email if Clerk is available (user actually authenticated)
+      const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+      if (isClerkAvailable) {
+        console.log('User signed in, triggering confirmation email...');
+        const emailResult = await form.sendConfirmationEmail();
+        if (!emailResult.success) {
+          console.error('Email failed:', emailResult.error);
+          // Don't show error to user - registration was successful, email is just a nice-to-have
+          console.warn('Email confirmation skipped - will be handled manually');
+        }
       }
       form.goNext();
     } else {
