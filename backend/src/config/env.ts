@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 const envSchema = z.object({
   // Server
-  PORT: z.string().default('3001'),
+  PORT: z.string().default('3001').transform((val) => parseInt(val, 10)),
   HOST: z.string().default('0.0.0.0'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
