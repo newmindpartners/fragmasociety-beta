@@ -2,12 +2,16 @@ import { SignUp, useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 
+// Check if Clerk is available
+const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
 interface AuthStepProps {
   email: string;
   onNext: () => void;
 }
 
-export function AuthStep({ email, onNext }: AuthStepProps) {
+// Component that uses Clerk hooks (only rendered when Clerk is available)
+function ClerkAuthStep({ email, onNext }: AuthStepProps) {
   const { user, isLoaded } = useUser();
 
   // If user is already signed in or just finished signing up, move to next step
@@ -75,4 +79,23 @@ export function AuthStep({ email, onNext }: AuthStepProps) {
       </motion.div>
     </div>
   );
+}
+
+// Fallback when Clerk is not available - auto-skip to next step
+function NoAuthStep({ onNext }: { onNext: () => void }) {
+  useEffect(() => {
+    // Auto-proceed when Clerk is not available
+    onNext();
+  }, [onNext]);
+
+  return null;
+}
+
+export function AuthStep({ email, onNext }: AuthStepProps) {
+  // If Clerk is not available, skip this step
+  if (!isClerkAvailable) {
+    return <NoAuthStep onNext={onNext} />;
+  }
+
+  return <ClerkAuthStep email={email} onNext={onNext} />;
 }
