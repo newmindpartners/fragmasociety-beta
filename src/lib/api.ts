@@ -201,12 +201,12 @@ export async function unsubscribeNewsletter(email: string): Promise<ApiResponse>
  */
 export async function checkHealth(): Promise<{ status: string; ready: boolean }> {
   try {
-    const response = await fetch(`${API_URL}/health/ready`);
-    const result = (await response.json()) as { status: string };
+    const response = await fetch(`${API_URL}/api/health`);
+    const result = (await response.json()) as { status: string; database?: string };
 
     return {
       status: result.status,
-      ready: response.ok && result.status === 'ready',
+      ready: response.ok && result.status === 'ok',
     };
   } catch {
     return {
