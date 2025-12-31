@@ -11,9 +11,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the app (VITE_API_URL comes from Railway build args)
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
+# Build the app with API URL
+ENV VITE_API_URL=https://fragmasociety-beta-production.up.railway.app
 
 RUN npm run build
 
