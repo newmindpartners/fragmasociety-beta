@@ -11,8 +11,13 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the app with API URL
-ENV VITE_API_URL=https://fragmasociety-beta-production.up.railway.app
+# Build arguments for Vite (passed from Railway)
+ARG VITE_API_URL
+ARG VITE_CLERK_PUBLISHABLE_KEY
+
+# Set environment variables for build
+ENV VITE_API_URL=${VITE_API_URL:-https://fragmasociety-beta-production.up.railway.app}
+ENV VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY}
 
 RUN npm run build
 
