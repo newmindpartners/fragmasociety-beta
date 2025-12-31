@@ -23,22 +23,21 @@ COPY . .
 # Build the app
 RUN npm run build
 
-# Production stage - serve static files
-FROM nginx:alpine
+# Production stage - serve static files with Node
+FROM node:20-alpine
 
-# Copy built files to nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copy nginx config for SPA routing
-RUN echo 'server { \
-    listen 80; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html; \
-        try_files $uri $uri/ /index.html; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
+# Install serve globally
+RUN npm install -g serve
 
-EXPOSE 80
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
 
-CMD ["nginx", "-g", "daemon off;"]
+# Railway provides PORT env variable
+ENV PORT=3000
+
+EXPOSE $PORT
+
+# Serve the static files (-s for SPA mode)
+CMD ["sh", "-c", "serve dist -s -l $PORT"]
