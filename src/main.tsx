@@ -5,17 +5,10 @@ import "./index.css";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-// Allow running without Clerk in development for testing
-const isDevelopment = import.meta.env.DEV;
-
-if (!PUBLISHABLE_KEY && !isDevelopment) {
-  throw new Error("Missing Publishable Key");
-}
-
 const AppWrapper = () => {
-  // In development without Clerk key, render app without Clerk provider
+  // Allow running without Clerk if key is not set
   if (!PUBLISHABLE_KEY) {
-    console.warn("⚠️ Running without Clerk authentication (dev mode)");
+    console.warn("⚠️ Running without Clerk authentication");
     return <App />;
   }
 
