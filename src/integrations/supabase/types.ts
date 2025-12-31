@@ -221,6 +221,7 @@ export type Database = {
         Row: {
           annual_income: string | null
           asset_interests: string[] | null
+          city: string | null
           consent_to_contact: boolean | null
           country: string
           created_at: string
@@ -251,6 +252,7 @@ export type Database = {
         Insert: {
           annual_income?: string | null
           asset_interests?: string[] | null
+          city?: string | null
           consent_to_contact?: boolean | null
           country: string
           created_at?: string
@@ -281,6 +283,7 @@ export type Database = {
         Update: {
           annual_income?: string | null
           asset_interests?: string[] | null
+          city?: string | null
           consent_to_contact?: boolean | null
           country?: string
           created_at?: string

@@ -77,6 +77,21 @@ export function IdentityStep({ formData, updateField, onNext, onBack }: Identity
             </SelectContent>
           </Select>
         </div>
+
+        {/* City */}
+        <div className="space-y-2">
+          <Label htmlFor="city" className="text-white/80 text-sm font-medium">
+            City of residence
+          </Label>
+          <Input
+            id="city"
+            type="text"
+            placeholder="New York"
+            value={formData.city}
+            onChange={(e) => updateField('city', e.target.value)}
+            className="bg-white/5 border-white/10 text-white placeholder:text-white/30 h-12 rounded-xl focus:border-violet-500/50 focus:ring-violet-500/20"
+          />
+        </div>
       </div>
 
       {/* Navigation */}
@@ -91,7 +106,7 @@ export function IdentityStep({ formData, updateField, onNext, onBack }: Identity
         </Button>
         <Button
           onClick={onNext}
-          className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-6"
+          className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-6"
         >
           Continue
           <ArrowRight className="w-4 h-4 ml-2" />

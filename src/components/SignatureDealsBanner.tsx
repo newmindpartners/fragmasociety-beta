@@ -2,6 +2,7 @@ import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EarlyAccessModal } from "@/components/early-access/EarlyAccessModal";
 import bryanImage from "@/assets/bryan-banner.png";
 import philippeImage from "@/assets/philippe-banner.png";
 import timImage from "@/assets/tim-banner.png";
@@ -46,6 +47,7 @@ export const SignatureDealsBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const goToNext = useCallback(() => {
@@ -260,15 +262,14 @@ export const SignatureDealsBanner = () => {
           </AnimatePresence>
           
           {/* CTA - Larger tap target */}
-          <a href="#request-access">
-            <Button
-              size="default"
-              className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 active:bg-white/90 rounded-full px-6 h-11 text-sm font-medium tracking-wide transition-all duration-300 group"
-            >
-              Register your interest
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
-            </Button>
-          </a>
+          <Button
+            size="default"
+            onClick={() => setIsModalOpen(true)}
+            className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 active:bg-white/90 rounded-full px-6 h-11 text-sm font-medium tracking-wide transition-all duration-300 group"
+          >
+            Register your interest
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+          </Button>
           
           {/* Progress dots - Larger tap targets */}
           <div className="flex items-center gap-4 mt-6">
@@ -430,15 +431,14 @@ export const SignatureDealsBanner = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <a href="#request-access">
-                <Button
-                  size="sm"
-                  className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 rounded-full px-5 h-9 text-xs font-medium tracking-wide transition-all duration-300 group"
-                >
-                  Register your interest
-                  <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
-                </Button>
-              </a>
+              <Button
+                size="sm"
+                onClick={() => setIsModalOpen(true)}
+                className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-slate-900 rounded-full px-5 h-9 text-xs font-medium tracking-wide transition-all duration-300 group"
+              >
+                Register your interest
+                <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -449,6 +449,9 @@ export const SignatureDealsBanner = () => {
         className="absolute bottom-0 left-0 right-0 h-px"
         style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.3) 50%, transparent 100%)' }}
       />
+
+      {/* Early Access Modal */}
+      <EarlyAccessModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   );
 };

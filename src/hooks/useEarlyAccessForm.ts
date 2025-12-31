@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { 
   EarlyAccessFormData, 
@@ -7,6 +6,10 @@ import {
   FormStep,
   computeTags 
 } from '@/types/earlyAccess';
+import { 
+  submitEarlyAccess, 
+  sendEarlyAccessConfirmation as sendConfirmationApi 
+} from '@/lib/api';
 
 export function useEarlyAccessForm() {
   const [formData, setFormData] = useState<EarlyAccessFormData>(initialFormData);
@@ -52,6 +55,8 @@ export function useEarlyAccessForm() {
       case 'asset_interests':
         return 'contact';
       case 'contact':
+        return 'auth';
+      case 'auth':
         return 'thank_you';
       default:
         return 'thank_you';
@@ -76,6 +81,8 @@ export function useEarlyAccessForm() {
         return 'investment_preferences';
       case 'contact':
         return 'asset_interests';
+      case 'auth':
+        return 'contact';
       default:
         return 'welcome';
     }
@@ -106,6 +113,10 @@ export function useEarlyAccessForm() {
         }
         if (!formData.country) {
           toast.error('Please select your country of residence');
+          return false;
+        }
+        if (!formData.city.trim()) {
+          toast.error('Please enter your city of residence');
           return false;
         }
         return true;
@@ -227,65 +238,51 @@ export function useEarlyAccessForm() {
     try {
       const tags = computeTags(formData);
 
-      const { error } = await supabase
-        .from('early_access_submissions')
-        .insert({
-          full_name: formData.fullName,
-          email: formData.email,
-          country: formData.country,
-          registering_as: formData.registeringAs,
-          entity_name: formData.entityName || null,
-          is_us_person: formData.isUsPerson,
-          investor_status: formData.investorStatus,
-          eu_professional_qualifications: formData.euProfessionalQualifications.length > 0 ? formData.euProfessionalQualifications : null,
-          eu_qualifications_count: formData.euQualificationsCount || null,
-          us_accredited_qualifications: formData.usAccreditedQualifications.length > 0 ? formData.usAccreditedQualifications : null,
-          annual_income: formData.annualIncome,
-          investable_capital: formData.investableCapital,
-          is_pep: formData.isPep,
-          is_sanctioned: formData.isSanctioned,
-          investment_amount_3_6_months: formData.investmentAmount3to6Months,
-          preferred_ticket_size: formData.preferredTicketSize,
-          investment_horizon: formData.investmentHorizon,
-          investment_priorities: formData.investmentPriorities,
-          asset_interests: formData.assetInterests,
-          other_rwa_description: formData.otherRwaDescription || null,
-          preferred_contact_channel: formData.preferredContactChannel,
-          phone_whatsapp_number: formData.phoneWhatsappNumber || null,
-          consent_to_contact: formData.consentToContact,
-          marketing_consent: formData.marketingConsent,
-          tags: tags,
-        });
+      // Build submission data for the API
+      const submissionData = {
+        full_name: formData.fullName.trim(),
+        email: formData.email.trim().toLowerCase(),
+        country: formData.country,
+        city: formData.city.trim() || null,
+        registering_as: formData.registeringAs,
+        entity_name: formData.entityName?.trim() || null,
+        is_us_person: formData.isUsPerson,
+        investor_status: formData.investorStatus || null,
+        eu_professional_qualifications: formData.euProfessionalQualifications,
+        eu_qualifications_count: formData.euQualificationsCount || null,
+        us_accredited_qualifications: formData.usAccreditedQualifications,
+        annual_income: formData.annualIncome || null,
+        investable_capital: formData.investableCapital || null,
+        is_pep: formData.isPep,
+        is_sanctioned: formData.isSanctioned,
+        investment_amount_3_6_months: formData.investmentAmount3to6Months || null,
+        preferred_ticket_size: formData.preferredTicketSize || null,
+        investment_horizon: formData.investmentHorizon || null,
+        investment_priorities: formData.investmentPriorities,
+        asset_interests: formData.assetInterests,
+        other_rwa_description: formData.otherRwaDescription?.trim() || null,
+        preferred_contact_channel: formData.preferredContactChannel || null,
+        phone_whatsapp_number: formData.phoneWhatsappNumber?.trim() || null,
+        consent_to_contact: formData.consentToContact,
+        marketing_consent: formData.marketingConsent,
+        tags: tags,
+      };
 
-      if (error) {
-        console.error('Submission error:', error);
-        toast.error('Something went wrong. Please try again.');
+      // Submit to backend API (handles DB insert + n8n webhook)
+      const result = await submitEarlyAccess(submissionData);
+
+      if (!result.success) {
+        console.error('Submission error:', result.error);
+        
+        if (result.alreadyRegistered) {
+          toast.error('This email is already registered for early access.');
+        } else {
+          toast.error(`Submission failed: ${result.error || 'Please try again.'}`);
+        }
         return false;
       }
 
-      // Send confirmation email and sync to Typeform (don't block on failure)
-      await Promise.allSettled([
-        // Send confirmation email
-        supabase.functions.invoke('send-early-access-confirmation', {
-          body: {
-            fullName: formData.fullName,
-            email: formData.email,
-          },
-        }).then(() => console.log('Confirmation email sent successfully'))
-          .catch((err) => console.error('Failed to send confirmation email:', err)),
-        
-        // Sync to Typeform
-        supabase.functions.invoke('submit-typeform', {
-          body: {
-            email: formData.email,
-            country: formData.country,
-            investorType: formData.registeringAs,
-            interests: formData.assetInterests,
-          },
-        }).then(() => console.log('Typeform sync successful'))
-          .catch((err) => console.error('Failed to sync to Typeform:', err)),
-      ]);
-
+      console.log('Early access submission successful, id:', result.id);
       return true;
     } catch (error) {
       console.error('Submission error:', error);
@@ -295,6 +292,22 @@ export function useEarlyAccessForm() {
       setIsSubmitting(false);
     }
   }, [formData]);
+
+  const sendConfirmationEmail = useCallback(async () => {
+    try {
+      const result = await sendConfirmationApi(formData.fullName, formData.email);
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to send confirmation email');
+      }
+      
+      console.log('Confirmation email sent successfully');
+      return { success: true };
+    } catch (err) {
+      console.error('Failed to send confirmation email:', err);
+      return { success: false, error: err };
+    }
+  }, [formData.fullName, formData.email]);
 
   const resetForm = useCallback(() => {
     setFormData(initialFormData);
@@ -324,7 +337,7 @@ export function useEarlyAccessForm() {
   const steps: FormStep[] = [
     'welcome', 'identity', 'investor_profile', 'investor_details', 
     'financial_profile', 'compliance', 'investment_preferences', 
-    'asset_interests', 'contact', 'thank_you'
+    'asset_interests', 'contact', 'auth', 'thank_you'
   ];
   const currentStepIndex = steps.indexOf(currentStep);
   const progress = Math.round((currentStepIndex / (steps.length - 1)) * 100);
@@ -341,6 +354,7 @@ export function useEarlyAccessForm() {
     goToStep,
     validateCurrentStep,
     submitForm,
+    sendConfirmationEmail,
     resetForm,
     shouldShowInvestorDetails,
     requiresEntityName,

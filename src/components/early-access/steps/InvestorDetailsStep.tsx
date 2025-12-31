@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
@@ -16,9 +17,15 @@ export function InvestorDetailsStep({ formData, updateField, toggleArrayField, o
   const showEuQuestions = formData.investorStatus === 'professional_eu' || formData.investorStatus === 'not_sure';
   const showUsQuestions = formData.investorStatus === 'accredited_us' || formData.investorStatus === 'not_sure';
 
-  // If neither applies, skip this step
+  // If neither applies, skip this step using useEffect to avoid setState during render
+  useEffect(() => {
+    if (!showEuQuestions && !showUsQuestions) {
+      onNext();
+    }
+  }, [showEuQuestions, showUsQuestions, onNext]);
+
+  // Don't render if skipping
   if (!showEuQuestions && !showUsQuestions) {
-    onNext();
     return null;
   }
 
@@ -165,7 +172,7 @@ export function InvestorDetailsStep({ formData, updateField, toggleArrayField, o
         </Button>
         <Button
           onClick={onNext}
-          className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-6"
+          className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-6"
         >
           Continue
           <ArrowRight className="w-4 h-4 ml-2" />

@@ -132,9 +132,9 @@ export const Footer = () => {
         {/* Brand Column - Larger */}
         <div className="lg:col-span-4">
           <img 
-            src="/fragma-society-logo.png" 
+            src="/fragma-logo-v2.png" 
             alt="Fragma Society" 
-            className="h-5 sm:h-6 lg:h-7 mb-4 sm:mb-6 brightness-0"
+            className="h-5 sm:h-6 lg:h-7 mb-4 sm:mb-6"
           />
           
           <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3 max-w-xs">

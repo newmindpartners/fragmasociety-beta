@@ -5,7 +5,8 @@ import { Menu, X, ArrowRight, ChevronDown, Zap, ArrowLeftRight, HelpCircle, Crow
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import fragmaLogo from "@/assets/fragma-logo-new.png";
+import { UserButton } from "@clerk/clerk-react";
+import fragmaLogo from "@/assets/fragma-logo-v2.png";
 import { EarlyAccessModal } from "./early-access/EarlyAccessModal";
 
 interface MenuItem {
@@ -208,38 +209,43 @@ export const Navbar = () => {
           </div>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-4">
             {user ? (
+              <UserButton fallbackRedirectUrl="/" />
+            ) : (
               <>
-                <Link to="/strategy">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-slate-400 hover:text-white hover:bg-slate-800/50"
-                  >
-                    Investor Portal
-                  </Button>
-                </Link>
+                <div className="flex items-center gap-1">
+                  <Link to="/auth">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/auth#signup">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    >
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+                <div className="h-4 w-px bg-slate-700/50 mx-1" />
                 <Button 
-                  variant="outline" 
                   size="sm" 
-                  onClick={() => signOut()}
-                  className="border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50 hover:text-white"
+                  onClick={() => setIsEarlyAccessOpen(true)}
+                  className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
                 >
-                  Sign Out
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    Register Your Interest
+                    <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
+                  </span>
                 </Button>
               </>
-            ) : (
-              <Button 
-                size="sm" 
-                onClick={() => setIsEarlyAccessOpen(true)}
-                className="bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 group relative overflow-hidden shadow-lg shadow-white/10 hover:shadow-white/20 transition-all duration-300"
-              >
-                <span className="relative z-10 flex items-center gap-1.5">
-                  Register Your Interest
-                  <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
-                </span>
-              </Button>
             )}
           </div>
 
@@ -459,46 +465,45 @@ export const Navbar = () => {
                         transition={{ delay: 0.25, duration: 0.4 }}
                       >
                         {user ? (
-                          <div className="flex flex-col gap-3">
-                            <Link
-                              to="/strategy"
-                              onClick={() => setIsOpen(false)}
-                              className="w-full"
-                            >
-                              <Button
-                                variant="outline"
-                                className="w-full h-14 border-slate-600 text-slate-200 hover:border-slate-500 hover:bg-slate-800/50 text-base font-medium"
-                              >
-                                Investor Portal
-                              </Button>
-                            </Link>
-                            <Button
-                              onClick={() => {
-                                signOut();
-                                setIsOpen(false);
-                              }}
-                              variant="ghost"
-                              className="w-full h-12 text-slate-400 hover:text-white hover:bg-slate-800/50"
-                            >
-                              Sign Out
-                            </Button>
+                          <div className="flex justify-center py-2">
+                            <UserButton fallbackRedirectUrl="/" />
                           </div>
                         ) : (
-                          <Button 
-                            onClick={() => {
-                              setIsOpen(false);
-                              setIsEarlyAccessOpen(true);
-                            }}
-                            className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10"
-                          >
-                            <span className="flex items-center justify-center gap-2">
-                              Register Your Interest
-                              <ArrowRight
-                                size={18}
-                                className="group-hover:translate-x-1 transition-transform duration-300"
-                              />
-                            </span>
-                          </Button>
+                          <div className="flex flex-col gap-3">
+                            <div className="grid grid-cols-2 gap-3 mb-1">
+                              <Link to="/auth" onClick={() => setIsOpen(false)}>
+                                <Button 
+                                  variant="outline" 
+                                  className="w-full h-12 border-slate-700 text-slate-300 hover:bg-slate-800/50"
+                                >
+                                  Login
+                                </Button>
+                              </Link>
+                              <Link to="/auth#signup" onClick={() => setIsOpen(false)}>
+                                <Button 
+                                  variant="outline" 
+                                  className="w-full h-12 border-slate-700 text-slate-300 hover:bg-slate-800/50"
+                                >
+                                  Sign Up
+                                </Button>
+                              </Link>
+                            </div>
+                            <Button 
+                              onClick={() => {
+                                setIsOpen(false);
+                                setIsEarlyAccessOpen(true);
+                              }}
+                              className="w-full h-14 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-semibold text-base group shadow-lg shadow-white/10"
+                            >
+                              <span className="flex items-center justify-center gap-2">
+                                Register Your Interest
+                                <ArrowRight
+                                  size={18}
+                                  className="group-hover:translate-x-1 transition-transform duration-300"
+                                />
+                              </span>
+                            </Button>
+                          </div>
                         )}
                       </motion.div>
                     </div>

@@ -1,4 +1,5 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEarlyAccessForm } from "@/hooks/useEarlyAccessForm";
 import { WelcomeStep } from "./steps/WelcomeStep";
@@ -10,6 +11,7 @@ import { ComplianceStep } from "./steps/ComplianceStep";
 import { InvestmentPreferencesStep } from "./steps/InvestmentPreferencesStep";
 import { AssetInterestsStep } from "./steps/AssetInterestsStep";
 import { ContactStep } from "./steps/ContactStep";
+import { AuthStep } from "./steps/AuthStep";
 import { ThankYouStep } from "./steps/ThankYouStep";
 import { FormProgress } from "./FormProgress";
 
@@ -40,6 +42,14 @@ export function EarlyAccessModal({ open, onOpenChange }: EarlyAccessModalProps) 
       if (success) {
         form.goNext();
       }
+    } else if (form.currentStep === 'auth') {
+      console.log('User signed in, triggering confirmation email...');
+      const emailResult = await form.sendConfirmationEmail();
+      if (!emailResult.success) {
+        console.error('Email failed:', emailResult.error);
+        toast.error('Account created, but we couldn\'t send the confirmation email. Our team will contact you soon.');
+      }
+      form.goNext();
     } else {
       form.goNext();
     }
@@ -74,6 +84,8 @@ export function EarlyAccessModal({ open, onOpenChange }: EarlyAccessModalProps) 
         return <AssetInterestsStep {...stepProps} requiresOtherRwaDescription={form.requiresOtherRwaDescription} />;
       case 'contact':
         return <ContactStep {...stepProps} requiresPhoneNumber={form.requiresPhoneNumber} />;
+      case 'auth':
+        return <AuthStep email={form.formData.email} onNext={handleNext} />;
       case 'thank_you':
         return <ThankYouStep onClose={handleClose} />;
       default:
@@ -88,7 +100,13 @@ export function EarlyAccessModal({ open, onOpenChange }: EarlyAccessModalProps) 
       <DialogContent 
         className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-950 border-white/10 p-0"
         hideClose={form.currentStep === 'welcome' || form.currentStep === 'thank_you'}
+        aria-describedby={undefined}
       >
+        <VisuallyHidden>
+          <DialogTitle>Early Access Registration</DialogTitle>
+          <DialogDescription>Register for early access to Fragma Society</DialogDescription>
+        </VisuallyHidden>
+        
         {showProgress && (
           <FormProgress progress={form.progress} currentStep={form.currentStep} />
         )}

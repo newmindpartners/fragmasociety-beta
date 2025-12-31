@@ -1,95 +1,26 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { Eye, EyeOff, ArrowRight, Shield, AlertTriangle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-
-const authSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters")
-});
+import { SignIn, SignUp, useUser } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Shield } from "lucide-react";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
-  
-  const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const location = useLocation();
+  const [isLogin, setIsLogin] = useState(!location.hash.includes("signup"));
+  const { user, isLoaded } = useUser();
 
   useEffect(() => {
-    if (!loading && user) {
-      navigate("/strategy");
+    setIsLogin(!location.hash.includes("signup"));
+  }, [location.hash]);
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      navigate("/");
     }
-  }, [user, loading, navigate]);
+  }, [user, isLoaded, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-
-    // Validate input
-    const result = authSchema.safeParse({ email, password });
-    if (!result.success) {
-      const fieldErrors: { email?: string; password?: string } = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path[0] === "email") fieldErrors.email = issue.message;
-        if (issue.path[0] === "password") fieldErrors.password = issue.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-
-    if (!isLogin && !disclaimerAccepted) {
-      toast({
-        title: "Disclaimer Required",
-        description: "Please accept the risk disclaimer to continue.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      const { error } = isLogin 
-        ? await signIn(email, password)
-        : await signUp(email, password);
-
-      if (error) {
-        let message = error.message;
-        if (error.message.includes("User already registered")) {
-          message = "An account with this email already exists. Please sign in.";
-        } else if (error.message.includes("Invalid login credentials")) {
-          message = "Invalid email or password. Please try again.";
-        }
-        toast({
-          title: "Authentication Error",
-          description: message,
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: isLogin ? "Welcome back!" : "Account created!",
-          description: isLogin ? "You have successfully signed in." : "Your investor account has been created."
-        });
-        navigate("/strategy");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (loading) {
+  if (!isLoaded) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-pulse text-muted-foreground">Loading...</div>
@@ -100,115 +31,86 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
-        >
-          <div className="mb-8">
-            <img src="/fragma-society-logo.png" alt="Fragma" className="h-10 mb-8" />
-            <h1 className="text-3xl font-serif font-bold text-foreground mb-2">
-              {isLogin ? "Investor Access" : "Register as Investor"}
-            </h1>
-            <p className="text-muted-foreground">
-              {isLogin 
-                ? "Sign in to access detailed strategy information." 
-                : "Create an account to view strategy details and metrics."}
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="mt-1.5"
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive mt-1">{errors.email}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <div className="relative mt-1.5">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-sm text-destructive mt-1">{errors.password}</p>
-              )}
-            </div>
-
-            {!isLogin && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="glass rounded-lg p-4 space-y-3"
-              >
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-muted-foreground">
-                    <p className="font-medium text-foreground mb-2">Risk Acknowledgement</p>
-                    <ul className="space-y-1.5 text-xs">
-                      <li>• Target returns only. No guarantee. Capital at risk.</li>
-                      <li>• Unlisted, illiquid securities – you may not be able to sell quickly or at all.</li>
-                      <li>• Past performance and targets are not reliable indicators of future results.</li>
-                    </ul>
-                  </div>
-                </div>
-                <label className="flex items-start gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={disclaimerAccepted}
-                    onChange={(e) => setDisclaimerAccepted(e.target.checked)}
-                    className="mt-1 rounded border-border"
-                  />
-                  <span className="text-xs text-muted-foreground">
-                    I confirm I am a professional / qualified investor and I understand and accept these risks.
-                  </span>
-                </label>
-              </motion.div>
-            )}
-
-            <Button 
-              type="submit" 
-              className="w-full group" 
-              size="lg"
-              disabled={isLoading}
-            >
-              {isLoading ? "Processing..." : (isLogin ? "Sign In" : "Create Account")}
-              <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </form>
-
-          <p className="text-center text-sm text-muted-foreground mt-6">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-primary hover:underline font-medium"
-            >
-              {isLogin ? "Register" : "Sign In"}
-            </button>
+      <div className="flex-1 flex flex-col items-center justify-center p-8">
+        <div className="w-full max-w-md mb-8 text-center lg:text-left">
+          <img src="/fragma-logo-v2.png" alt="Fragma" className="h-10 mb-8 mx-auto lg:mx-0" />
+          <h1 className="text-3xl font-serif font-bold text-foreground mb-2">
+            {isLogin ? "Investor Access" : "Register as Investor"}
+          </h1>
+          <p className="text-muted-foreground">
+            {isLogin 
+              ? "Sign in to access detailed strategy information." 
+              : "Create an account to view strategy details and metrics."}
           </p>
-        </motion.div>
+        </div>
+
+        <div className="w-full max-w-md flex justify-center">
+          {isLogin ? (
+            <SignIn 
+              routing="hash" 
+              signUpUrl="/auth#signup" 
+              fallbackRedirectUrl="/"
+              forceRedirectUrl="/"
+              appearance={{
+                layout: {
+                  socialButtonsVariant: "iconButton",
+                  socialButtonsPlacement: "top",
+                  logoPlacement: "none",
+                },
+                elements: {
+                  socialButtonsBlockButton: "h-14 text-lg flex",
+                  socialButtonsBlockButton__linkedin: { order: -3 },
+                  socialButtonsBlockButton__google: { order: -2 },
+                  socialButtonsBlockButton__discord: { order: -1 },
+                  socialButtonsIconButton: "h-20 w-20",
+                  socialButtonsIconButton__linkedin: { order: -3 },
+                  socialButtonsIconButton__google: { order: -2 },
+                  socialButtonsIconButton__discord: { order: -1 },
+                  socialButtonsIconButton__logo: "h-10 w-10",
+                  socialButtonsBlockButtonText: "font-medium",
+                  socialButtonsBlockButton__logo: "h-6 w-6",
+                }
+              }}
+            />
+          ) : (
+            <SignUp 
+              routing="hash" 
+              signInUrl="/auth" 
+              fallbackRedirectUrl="/"
+              forceRedirectUrl="/"
+              appearance={{
+                layout: {
+                  socialButtonsVariant: "iconButton",
+                  socialButtonsPlacement: "top",
+                  logoPlacement: "none",
+                },
+                elements: {
+                  socialButtonsBlockButton: "h-14 text-lg flex",
+                  socialButtonsBlockButton__linkedin: { order: -3 },
+                  socialButtonsBlockButton__google: { order: -2 },
+                  socialButtonsBlockButton__discord: { order: -1 },
+                  socialButtonsIconButton: "h-20 w-20",
+                  socialButtonsIconButton__linkedin: { order: -3 },
+                  socialButtonsIconButton__google: { order: -2 },
+                  socialButtonsIconButton__discord: { order: -1 },
+                  socialButtonsIconButton__logo: "h-10 w-10",
+                  socialButtonsBlockButtonText: "font-medium",
+                  socialButtonsBlockButton__logo: "h-6 w-6",
+                }
+              }}
+            />
+          )}
+        </div>
+
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+          <button
+            onClick={() => navigate(isLogin ? "/auth#signup" : "/auth")}
+            className="text-primary hover:underline font-medium"
+          >
+            {isLogin ? "Register" : "Sign In"}
+          </button>
+        </p>
       </div>
 
       {/* Right side - Info */}
@@ -222,23 +124,23 @@ const Auth = () => {
         <div className="relative z-10 max-w-md">
           <Shield className="w-12 h-12 text-primary mb-6" />
           <h2 className="text-2xl font-serif font-bold text-foreground mb-4">
-            Investor Portal
+            Investor Access
           </h2>
           <p className="text-muted-foreground mb-6">
-            Access detailed strategy information, target return metrics, and investment documentation.
+            Access exclusive RWA investment opportunities, automated yield distributions, and a secondary market for liquidity.
           </p>
           <div className="space-y-3 text-sm">
             <div className="flex items-center gap-3 text-muted-foreground">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <span>Strategy documentation & PPM</span>
+              <span>Direct RWA Ownership</span>
             </div>
             <div className="flex items-center gap-3 text-muted-foreground">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <span>Target return information</span>
+              <span>Automated Payouts</span>
             </div>
             <div className="flex items-center gap-3 text-muted-foreground">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <span>Allocation process</span>
+              <span>Secondary Market Trading</span>
             </div>
           </div>
         </div>

@@ -15,12 +15,13 @@ const stepLabels: Record<FormStep, string> = {
   investment_preferences: 'Investment Preferences',
   asset_interests: 'Asset Interests',
   contact: 'Contact',
+  auth: 'Account',
   thank_you: 'Complete',
 };
 
 export function FormProgress({ progress, currentStep }: FormProgressProps) {
   return (
-    <div className="px-6 md:px-8 pt-6">
+    <div className="pl-6 md:pl-8 pt-6 pr-20">
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-medium text-white/60">
           {stepLabels[currentStep]}

@@ -3,6 +3,7 @@ export interface EarlyAccessFormData {
   fullName: string;
   email: string;
   country: string;
+  city: string;
 
   // Investor Profile
   registeringAs: 'individual' | 'company_spv' | 'family_office' | 'fund_asset_manager' | '';
@@ -46,6 +47,7 @@ export const initialFormData: EarlyAccessFormData = {
   fullName: '',
   email: '',
   country: '',
+  city: '',
   registeringAs: '',
   entityName: '',
   isUsPerson: null,
@@ -207,6 +209,7 @@ export type FormStep =
   | 'investment_preferences'
   | 'asset_interests'
   | 'contact'
+  | 'auth'
   | 'thank_you';
 
 export function computeTags(data: EarlyAccessFormData): string[] {

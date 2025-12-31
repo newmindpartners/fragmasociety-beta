@@ -18,7 +18,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import fragmaLogo from "@/assets/fragma-logo-new.png";
+import fragmaLogo from "@/assets/fragma-logo-v2.png";
 import fragmaIcon from "@/assets/fragma-icon.png";
 
 interface NavItem {
@@ -143,7 +143,7 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
                 key="logo"
                 src={fragmaLogo} 
                 alt="Fragma" 
-                className="h-7 w-auto brightness-0 invert"
+                className="h-7 w-auto"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}

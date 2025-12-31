@@ -51,7 +51,7 @@ export function ThankYouStep({ onClose }: ThankYouStepProps) {
         </Button>
         <Button
           asChild
-          className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-6"
+          className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-6"
         >
           <a href="https://t.me/+BGJB5RBN2wAwODY0" target="_blank" rel="noopener noreferrer">
             Join Community

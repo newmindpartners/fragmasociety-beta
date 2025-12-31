@@ -111,7 +111,7 @@ export function FinancialProfileStep({ formData, updateField, onNext, onBack }: 
         </Button>
         <Button
           onClick={onNext}
-          className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-6"
+          className="bg-white text-slate-900 hover:bg-white/90 rounded-full px-6"
         >
           Continue
           <ArrowRight className="w-4 h-4 ml-2" />

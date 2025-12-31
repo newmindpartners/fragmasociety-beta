@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model EarlyAccessSubmission {
+  id                           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fullName                     String   @map("full_name")
+  email                        String
+  country                      String
+  registeringAs                String   @map("registering_as")
+  entityName                   String?  @map("entity_name")
+  isUsPerson                   Boolean? @map("is_us_person")
+  investorStatus               String?  @map("investor_status")
+  euProfessionalQualifications String[] @map("eu_professional_qualifications")
+  euQualificationsCount        String?  @map("eu_qualifications_count")
+  usAccreditedQualifications   String[] @map("us_accredited_qualifications")
+  annualIncome                 String?  @map("annual_income")
+  investableCapital            String?  @map("investable_capital")
+  isPep                        Boolean? @map("is_pep")
+  isSanctioned                 Boolean? @map("is_sanctioned")
+  investmentAmount3to6Months   String?  @map("investment_amount_3_6_months")
+  preferredTicketSize          String?  @map("preferred_ticket_size")
+  investmentHorizon            String?  @map("investment_horizon")
+  investmentPriorities         String[] @map("investment_priorities")
+  assetInterests               String[] @map("asset_interests")
+  otherRwaDescription          String?  @map("other_rwa_description")
+  preferredContactChannel      String?  @map("preferred_contact_channel")
+  phoneWhatsappNumber          String?  @map("phone_whatsapp_number")
+  consentToContact             Boolean? @default(false) @map("consent_to_contact")
+  marketingConsent             Boolean? @default(false) @map("marketing_consent")
+  tags                         String[] @default([])
+  createdAt                    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  city                         String?
+
+  @@map("early_access_submissions")
+}
