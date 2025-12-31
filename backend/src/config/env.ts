@@ -10,8 +10,8 @@ const envSchema = z.object({
   // Database
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
 
-  // CORS
-  CORS_ORIGIN: z.string().default('http://localhost:5173'),
+  // CORS - default includes Railway frontend
+  CORS_ORIGIN: z.string().default('https://fragma-beta-frontend-production.up.railway.app,http://localhost:5173,http://localhost:8080'),
 
   // n8n webhook (optional for local dev)
   N8N_WEBHOOK_URL: z.string().url().optional(),
