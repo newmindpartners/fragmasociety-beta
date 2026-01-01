@@ -98,8 +98,12 @@ export async function sendEarlyAccessConfirmation(
   fullName: string,
   email: string
 ): Promise<ConfirmationEmailResponse> {
+  console.log('📧 Sending confirmation email to:', email);
   try {
-    const response = await fetch(`${API_URL}/api/early-access/send-confirmation`, {
+    const url = `${API_URL}/api/early-access/send-confirmation`;
+    console.log('📧 Email API URL:', url);
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +111,9 @@ export async function sendEarlyAccessConfirmation(
       body: JSON.stringify({ fullName, email }),
     });
 
+    console.log('📧 Email API response status:', response.status);
     const result = (await response.json()) as ConfirmationEmailResponse;
+    console.log('📧 Email API response:', result);
 
     if (!response.ok) {
       return {
@@ -119,7 +125,7 @@ export async function sendEarlyAccessConfirmation(
     return result;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Network error';
-    console.error('Send confirmation email error:', message);
+    console.error('📧 Send confirmation email error:', message);
     return {
       success: false,
       error: message,
