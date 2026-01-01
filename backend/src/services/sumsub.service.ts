@@ -126,34 +126,38 @@ export async function generateAccessToken(
   // Signature for POST with no body
   const signature = generateSignature(ts, 'POST', urlPath, '');
 
-  try {
-    console.log('Sumsub request:', { urlPath, ts, level, externalUserId });
-    
-    const response = await axios({
-      method: 'POST',
-      url: `${SUMSUB_BASE_URL}${urlPath}`,
-      headers: {
-        'Accept': 'application/json',
-        'X-App-Token': env.SUMSUB_APP_TOKEN,
-        'X-App-Access-Ts': ts.toString(),
-        'X-App-Access-Sig': signature,
-      },
-    });
+  console.log('Sumsub request:', { 
+    url: `${SUMSUB_BASE_URL}${urlPath}`,
+    ts, 
+    level, 
+    externalUserId,
+    appToken: env.SUMSUB_APP_TOKEN?.substring(0, 10) + '...',
+  });
 
-    console.log('Sumsub response:', response.data);
-    
-    return {
-      token: response.data.token,
-      userId: response.data.userId,
-    };
-  } catch (error: any) {
-    console.error('Sumsub access token error:', {
-      status: error.response?.status,
-      data: error.response?.data,
-      message: error.message,
-    });
-    throw new Error(error.response?.data?.description || error.response?.data?.message || error.response?.data?.error || 'Failed to generate access token');
+  // Use native fetch to ensure no unwanted body is sent
+  const response = await fetch(`${SUMSUB_BASE_URL}${urlPath}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'X-App-Token': env.SUMSUB_APP_TOKEN,
+      'X-App-Access-Ts': ts.toString(),
+      'X-App-Access-Sig': signature,
+    },
+  });
+
+  const data = await response.json();
+  
+  console.log('Sumsub response:', { status: response.status, data });
+
+  if (!response.ok) {
+    console.error('Sumsub error response:', data);
+    throw new Error(data.description || data.message || data.error || `Sumsub API error: ${response.status}`);
   }
+
+  return {
+    token: data.token,
+    userId: data.userId,
+  };
 }
 
 /**
