@@ -1,25 +1,59 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { SignIn, useUser } from "@clerk/clerk-react";
+import { SignIn } from "@clerk/clerk-react";
 import { Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import fragmaLogo from "@/assets/fragma-logo-v2.png";
 
+// Check if Clerk is available
+const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const { user, isLoaded } = useUser();
-  const { isAdmin } = useAuth();
+  const { user, isAuthenticated, isAdmin, loading } = useAuth();
 
   // Redirect to admin dashboard if already authenticated as admin
   useEffect(() => {
-    if (isLoaded && user && isAdmin) {
+    if (!loading && isAuthenticated && isAdmin) {
       navigate('/admin');
     }
-  }, [user, isLoaded, isAdmin, navigate]);
+  }, [isAuthenticated, isAdmin, loading, navigate]);
+
+  // If Clerk is not configured, show demo mode message and auto-redirect
+  if (!isClerkAvailable) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-violet-950 to-slate-900 flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <img 
+            src={fragmaLogo} 
+            alt="Fragma" 
+            className="h-10 mx-auto mb-4"
+          />
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Shield className="w-5 h-5 text-violet-400" />
+            <span className="text-sm font-bold text-violet-400 uppercase tracking-wider">
+              Admin Portal
+            </span>
+          </div>
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 mb-6">
+            <p className="text-amber-400 text-sm">
+              ⚠️ Running in demo mode (Clerk not configured)
+            </p>
+          </div>
+          <a 
+            href="/admin" 
+            className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors"
+          >
+            Enter Admin Dashboard →
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   // If authenticated but not admin, show access denied
-  if (isLoaded && user && !isAdmin) {
+  if (!loading && isAuthenticated && !isAdmin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-violet-950 to-slate-900 flex items-center justify-center p-4">
         <div className="text-center max-w-md">
