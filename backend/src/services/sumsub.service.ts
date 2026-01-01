@@ -1,8 +1,8 @@
 import crypto from 'crypto';
-import https from 'https';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { env } from '../config/env.js';
 
+// These parameters should be used for all requests
 const SUMSUB_BASE_URL = 'https://api.sumsub.com';
 
 // Helper to get cleaned tokens (remove any accidental whitespace)
@@ -10,78 +10,81 @@ const getAppToken = () => env.SUMSUB_APP_TOKEN?.trim() || '';
 const getSecretKey = () => env.SUMSUB_SECRET_KEY?.trim() || '';
 
 /**
- * Generate signature for Sumsub API requests
- * Format: HMAC-SHA256(secret, ts + method + path + body)
+ * Create signature for request - matches official Sumsub JS example exactly
+ * https://github.com/SumSubstance/AppTokenUsageExamples/blob/master/JS/AppTokenJsExample.js
  */
-function generateSignature(
-  ts: number,
-  httpMethod: string,
-  urlPath: string,
-  body: string = ''
-): string {
+function createSignedRequest(
+  method: string,
+  url: string,
+  body?: object
+): { headers: Record<string, string>; data?: string } {
+  const ts = Math.floor(Date.now() / 1000);
   const secretKey = getSecretKey();
-  if (!secretKey) {
-    throw new Error('SUMSUB_SECRET_KEY is not configured');
+  const appToken = getAppToken();
+  
+  if (!secretKey || !appToken) {
+    throw new Error('Sumsub credentials are not configured');
   }
+
+  // Create signature exactly as in official example
+  const signature = crypto.createHmac('sha256', secretKey);
+  signature.update(ts + method.toUpperCase() + url);
   
-  // Sumsub expects: timestamp (as string) + method (uppercase) + url path (including query) + body
-  const dataToSign = ts.toString() + httpMethod.toUpperCase() + urlPath + body;
-  
-  console.log('Signature data:', { 
-    ts: ts.toString(), 
-    method: httpMethod.toUpperCase(), 
-    path: urlPath, 
-    bodyLength: body.length,
+  let bodyString: string | undefined;
+  if (body) {
+    bodyString = JSON.stringify(body);
+    signature.update(bodyString);
+  }
+
+  const sig = signature.digest('hex');
+
+  console.log('Sumsub request:', {
+    method: method.toUpperCase(),
+    url,
+    ts,
+    bodyLength: bodyString?.length || 0,
   });
-  
-  const signature = crypto
-    .createHmac('sha256', secretKey)
-    .update(dataToSign)
-    .digest('hex');
-  
-  return signature;
+
+  const headers: Record<string, string> = {
+    'Accept': 'application/json',
+    'X-App-Token': appToken,
+    'X-App-Access-Ts': ts.toString(),
+    'X-App-Access-Sig': sig,
+  };
+
+  if (body) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  return { headers, data: bodyString };
 }
 
 /**
  * Create an applicant in Sumsub
+ * https://docs.sumsub.com/reference/create-applicant
  */
 export async function createApplicant(
   externalUserId: string,
   email?: string,
   phone?: string
 ): Promise<{ id: string; inspectionId: string }> {
-  const appToken = getAppToken();
-  if (!appToken) {
-    throw new Error('Sumsub credentials are not configured');
-  }
-
-  const ts = Math.floor(Date.now() / 1000);
-  const urlPath = `/resources/applicants?levelName=${env.SUMSUB_LEVEL_NAME}`;
+  const levelName = env.SUMSUB_LEVEL_NAME;
+  const url = '/resources/applicants?levelName=' + encodeURIComponent(levelName);
   
-  // Only include defined fields in body
-  const bodyObj: { externalUserId: string; email?: string; phone?: string } = {
+  const body: { externalUserId: string; email?: string; phone?: string } = {
     externalUserId,
   };
-  if (email) bodyObj.email = email;
-  if (phone) bodyObj.phone = phone;
-  const body = JSON.stringify(bodyObj);
+  if (email) body.email = email;
+  if (phone) body.phone = phone;
 
-  const signature = generateSignature(ts, 'POST', urlPath, body);
+  const { headers, data } = createSignedRequest('POST', url, body);
 
-  console.log('Creating Sumsub applicant:', { externalUserId, urlPath });
+  console.log('Creating Sumsub applicant:', { externalUserId, url });
 
   const response = await axios.post(
-    `${SUMSUB_BASE_URL}${urlPath}`,
-    body,
-    {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-App-Token': appToken,
-        'X-App-Access-Ts': ts.toString(),
-        'X-App-Access-Sig': signature,
-      },
-    }
+    SUMSUB_BASE_URL + url,
+    data,
+    { headers }
   );
 
   console.log('Applicant created:', response.data.id);
@@ -98,27 +101,14 @@ export async function createApplicant(
 export async function getApplicantByExternalUserId(
   externalUserId: string
 ): Promise<{ id: string; inspectionId: string; reviewStatus: string } | null> {
-  const appToken = getAppToken();
-  if (!appToken) {
-    throw new Error('Sumsub credentials are not configured');
-  }
+  const url = `/resources/applicants/-;externalUserId=${encodeURIComponent(externalUserId)}/one`;
+  
+  const { headers } = createSignedRequest('GET', url);
 
-  const ts = Math.floor(Date.now() / 1000);
-  const urlPath = `/resources/applicants/-;externalUserId=${encodeURIComponent(externalUserId)}/one`;
-
-  const signature = generateSignature(ts, 'GET', urlPath, '');
-
-  console.log('Looking up applicant:', { externalUserId, urlPath });
+  console.log('Looking up applicant:', { externalUserId, url });
 
   try {
-    const response = await axios.get(`${SUMSUB_BASE_URL}${urlPath}`, {
-      headers: {
-        'Accept': 'application/json',
-        'X-App-Token': appToken,
-        'X-App-Access-Ts': ts.toString(),
-        'X-App-Access-Sig': signature,
-      },
-    });
+    const response = await axios.get(SUMSUB_BASE_URL + url, { headers });
 
     console.log('Applicant found:', response.data.id);
 
@@ -139,73 +129,64 @@ export async function getApplicantByExternalUserId(
 
 /**
  * Generate access token for WebSDK
- * Tries multiple approaches to generate a token
+ * https://docs.sumsub.com/reference/generate-access-token
+ * Matches official JS example exactly
  */
 export async function generateAccessToken(
   externalUserId: string,
-  levelName?: string
+  levelName?: string,
+  ttlInSecs: number = 600
 ): Promise<{ token: string; userId: string }> {
-  const appToken = getAppToken();
-  const secretKey = getSecretKey();
-  
-  if (!appToken || !secretKey) {
-    throw new Error('Sumsub credentials are not configured');
-  }
-
   const level = levelName || env.SUMSUB_LEVEL_NAME;
-  const ts = Math.floor(Date.now() / 1000);
   
-  // Try simple query params approach - minimal URL
-  const urlPath = `/resources/accessTokens?userId=${externalUserId}&levelName=${level}`;
+  // Use /resources/accessTokens/sdk with JSON body - exactly as in official example
+  const url = '/resources/accessTokens/sdk';
   
-  // Signature for POST with NO body
-  const signature = generateSignature(ts, 'POST', urlPath, '');
+  const body = {
+    userId: externalUserId,
+    levelName: level,
+    ttlInSecs: ttlInSecs,
+  };
+
+  const { headers, data } = createSignedRequest('POST', url, body);
 
   console.log('Sumsub access token request:', { 
-    url: `${SUMSUB_BASE_URL}${urlPath}`,
-    ts, 
+    url: SUMSUB_BASE_URL + url,
     level, 
     externalUserId,
+    body: data,
   });
 
-  // Use native fetch with NO body
-  const response = await fetch(`${SUMSUB_BASE_URL}${urlPath}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'X-App-Token': appToken,
-      'X-App-Access-Ts': ts.toString(),
-      'X-App-Access-Sig': signature,
-    },
-  });
+  try {
+    const response = await axios.post(
+      SUMSUB_BASE_URL + url,
+      data,
+      { headers }
+    );
 
-  const responseText = await response.text();
-  console.log('Sumsub raw response:', { 
-    status: response.status, 
-    statusText: response.statusText,
-    body: responseText.substring(0, 500),
-  });
+    console.log('Sumsub access token success:', response.data);
 
-  if (!response.ok) {
-    let errorMsg = responseText;
-    try {
-      const errorData = JSON.parse(responseText);
-      errorMsg = errorData.description || errorData.message || errorData.error || responseText;
-    } catch {
-      // Keep responseText as error
-    }
+    return {
+      token: response.data.token,
+      userId: response.data.userId,
+    };
+  } catch (error: any) {
+    console.error('Sumsub access token error:', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+    });
+    
+    const errorData = error.response?.data;
+    const errorMsg = errorData?.description || errorData?.message || errorData?.error || error.message;
     throw new Error(errorMsg);
   }
-
-  const data = JSON.parse(responseText);
-  return {
-    token: data.token,
-    userId: data.userId,
-  };
 }
 
 /**
  * Get applicant verification status
+ * https://docs.sumsub.com/reference/get-applicant-review-status
  */
 export async function getApplicantStatus(
   applicantId: string
@@ -217,23 +198,11 @@ export async function getApplicantStatus(
     reviewRejectType?: string;
   };
 }> {
-  if (!env.SUMSUB_APP_TOKEN || !env.SUMSUB_SECRET_KEY) {
-    throw new Error('Sumsub credentials are not configured');
-  }
+  const url = `/resources/applicants/${applicantId}/status`;
+  
+  const { headers } = createSignedRequest('GET', url);
 
-  const ts = Math.floor(Date.now() / 1000);
-  const urlPath = `/resources/applicants/${applicantId}/status`;
-
-  const signature = generateSignature(ts, 'GET', urlPath);
-
-  const response = await axios.get(`${SUMSUB_BASE_URL}${urlPath}`, {
-    headers: {
-      'Accept': 'application/json',
-      'X-App-Token': env.SUMSUB_APP_TOKEN,
-      'X-App-Access-Ts': ts.toString(),
-      'X-App-Access-Sig': signature,
-    },
-  });
+  const response = await axios.get(SUMSUB_BASE_URL + url, { headers });
 
   return {
     reviewStatus: response.data.reviewStatus,
