@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Users, 
   Mail, 
@@ -32,6 +33,7 @@ interface RecentSubmission {
 }
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentSubmissions, setRecentSubmissions] = useState<RecentSubmission[]>([]);
@@ -122,8 +124,8 @@ const AdminDashboard = () => {
       <AdminSidebar
         isCollapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-        adminName="Admin User"
-        adminEmail="admin@fragma.io"
+        adminName={user?.fullName || user?.firstName || 'Admin'}
+        adminEmail={user?.email || ''}
       />
 
       {/* Main Content */}

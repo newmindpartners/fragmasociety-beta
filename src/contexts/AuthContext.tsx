@@ -4,12 +4,24 @@ import { useUser, useClerk, useSession } from "@clerk/clerk-react";
 // Check if Clerk is available (publishable key is set)
 const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
+// Admin roles
+export type AdminRole = 'super_admin' | 'admin' | 'moderator';
+
 interface AuthContextType {
-  user: { id: string; email?: string } | null;
+  user: { 
+    id: string; 
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    fullName?: string;
+    imageUrl?: string;
+  } | null;
   session: any | null;
   loading: boolean;
   isLoading: boolean; // Alias for loading
   isAuthenticated: boolean;
+  isAdmin: boolean;
+  adminRole: AdminRole | null;
   signOut: () => Promise<void>;
 }
 
@@ -23,17 +35,27 @@ const ClerkAuthProvider = ({ children }: { children: ReactNode }) => {
 
   const loading = !userLoaded || !sessionLoaded;
   const isAuthenticated = !!user;
+  
+  // Check admin role from user's public metadata
+  const adminRole = (user?.publicMetadata?.role as AdminRole) || null;
+  const isAdmin = !!adminRole;
 
   return (
     <AuthContext.Provider value={{ 
       user: user ? {
         id: user.id,
-        email: user.primaryEmailAddress?.emailAddress
+        email: user.primaryEmailAddress?.emailAddress,
+        firstName: user.firstName || undefined,
+        lastName: user.lastName || undefined,
+        fullName: user.fullName || undefined,
+        imageUrl: user.imageUrl || undefined,
       } : null, 
       session: session ?? null, 
       loading,
       isLoading: loading,
       isAuthenticated,
+      isAdmin,
+      adminRole,
       signOut: () => signOut().then(() => {}) 
     }}>
       {children}
@@ -43,10 +65,14 @@ const ClerkAuthProvider = ({ children }: { children: ReactNode }) => {
 
 // Mock provider for development without Clerk
 const MockAuthProvider = ({ children }: { children: ReactNode }) => {
-  // Provide a demo user for development/testing
+  // Provide a demo admin user for development/testing
   const demoUser = {
     id: 'demo-user-123',
-    email: 'demo@fragma.io'
+    email: 'hi@fragmasociety.com',
+    firstName: 'Admin',
+    lastName: 'User',
+    fullName: 'Admin User',
+    imageUrl: undefined,
   };
 
   return (
@@ -56,6 +82,8 @@ const MockAuthProvider = ({ children }: { children: ReactNode }) => {
       loading: false,
       isLoading: false,
       isAuthenticated: true, // Assume authenticated for demo
+      isAdmin: true, // Demo user is admin
+      adminRole: 'super_admin',
       signOut: async () => {} 
     }}>
       {children}

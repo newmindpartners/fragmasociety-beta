@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { env } from '../config/env.js';
 import crypto from 'crypto';
 
 // Simple password hashing (in production, use bcrypt)
@@ -345,6 +346,149 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
       return reply.status(500).send({
         success: false,
         error: 'Failed to delete submission',
+      });
+    }
+  });
+
+  // ============================================
+  // Clerk Role Management Endpoints
+  // ============================================
+
+  const setRoleSchema = z.object({
+    userId: z.string().min(1, 'User ID is required'),
+    role: z.enum(['super_admin', 'admin', 'moderator']).nullable(),
+  });
+
+  /**
+   * POST /api/admin/set-role
+   * Set admin role for a Clerk user (updates publicMetadata)
+   * Requires CLERK_SECRET_KEY to be configured
+   */
+  app.post('/api/admin/set-role', async (request, reply) => {
+    try {
+      if (!env.CLERK_SECRET_KEY) {
+        return reply.status(503).send({
+          success: false,
+          error: 'Clerk integration not configured. Set CLERK_SECRET_KEY in environment.',
+        });
+      }
+
+      const result = setRoleSchema.safeParse(request.body);
+      if (!result.success) {
+        return reply.status(400).send({
+          success: false,
+          error: 'Validation failed',
+          details: result.error.flatten().fieldErrors,
+        });
+      }
+
+      const { userId, role } = result.data;
+
+      // Update user's publicMetadata via Clerk Backend API
+      const response = await fetch(`https://api.clerk.com/v1/users/${userId}/metadata`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${env.CLERK_SECRET_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          public_metadata: {
+            role: role, // null to remove role
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Clerk API error:', errorData);
+        return reply.status(response.status).send({
+          success: false,
+          error: 'Failed to update user role in Clerk',
+          details: errorData,
+        });
+      }
+
+      const updatedUser = await response.json();
+
+      return reply.send({
+        success: true,
+        message: role ? `User role set to ${role}` : 'User role removed',
+        user: {
+          id: updatedUser.id,
+          email: updatedUser.email_addresses?.[0]?.email_address,
+          role: updatedUser.public_metadata?.role || null,
+        },
+      });
+    } catch (error) {
+      console.error('Set role error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: 'Failed to set user role',
+      });
+    }
+  });
+
+  /**
+   * GET /api/admin/users
+   * Get all Clerk users with their roles
+   * Requires CLERK_SECRET_KEY to be configured
+   */
+  app.get('/api/admin/users', async (request, reply) => {
+    try {
+      if (!env.CLERK_SECRET_KEY) {
+        return reply.status(503).send({
+          success: false,
+          error: 'Clerk integration not configured. Set CLERK_SECRET_KEY in environment.',
+        });
+      }
+
+      const { limit = '20', offset = '0' } = request.query as {
+        limit?: string;
+        offset?: string;
+      };
+
+      const response = await fetch(
+        `https://api.clerk.com/v1/users?limit=${limit}&offset=${offset}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${env.CLERK_SECRET_KEY}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Clerk API error:', errorData);
+        return reply.status(response.status).send({
+          success: false,
+          error: 'Failed to fetch users from Clerk',
+        });
+      }
+
+      const users = await response.json();
+
+      // Map to a simpler format
+      const mappedUsers = users.map((user: any) => ({
+        id: user.id,
+        email: user.email_addresses?.[0]?.email_address || '',
+        firstName: user.first_name,
+        lastName: user.last_name,
+        imageUrl: user.image_url,
+        role: user.public_metadata?.role || null,
+        createdAt: user.created_at,
+        lastSignInAt: user.last_sign_in_at,
+      }));
+
+      return reply.send({
+        success: true,
+        users: mappedUsers,
+        total: users.length,
+      });
+    } catch (error) {
+      console.error('Fetch users error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: 'Failed to fetch users',
       });
     }
   });

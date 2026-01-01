@@ -48,7 +48,7 @@ export const AdminSidebar = ({
   isCollapsed, 
   onToggle, 
   adminName = "Admin",
-  adminEmail = "admin@fragma.io"
+  adminEmail = "hi@fragmasociety.com"
 }: AdminSidebarProps) => {
   const location = useLocation();
 
