@@ -118,19 +118,22 @@ export async function generateAccessToken(
 
   const level = levelName || env.SUMSUB_LEVEL_NAME;
   const ts = Math.floor(Date.now() / 1000);
+  const urlPath = '/resources/accessTokens';
   
-  // Use the SDK token endpoint with proper URL encoding
-  const encodedUserId = encodeURIComponent(externalUserId);
-  const encodedLevel = encodeURIComponent(level);
-  const urlPath = `/resources/accessTokens?userId=${encodedUserId}&levelName=${encodedLevel}&ttlInSecs=1800`;
+  // Request body as per Sumsub API documentation
+  const requestBody = JSON.stringify({
+    userId: externalUserId,
+    levelName: level,
+    ttlInSecs: 1800,
+  });
 
-  // For POST with no body, signature should not include body
-  const signature = generateSignature(ts, 'POST', urlPath, '');
+  // Signature includes the request body
+  const signature = generateSignature(ts, 'POST', urlPath, requestBody);
 
   try {
     const response = await axios.post(
       `${SUMSUB_BASE_URL}${urlPath}`,
-      '', // Empty body
+      requestBody,
       {
         headers: {
           'Accept': 'application/json',
