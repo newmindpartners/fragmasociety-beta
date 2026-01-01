@@ -173,39 +173,42 @@ export async function generateAccessToken(
     body: bodyString,
   });
 
-  try {
-    const response = await axios({
-      method: 'POST',
-      url: `${SUMSUB_BASE_URL}${urlPath}`,
-      data: bodyString,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Content-Encoding': 'utf-8',
-        'X-App-Token': appToken,
-        'X-App-Access-Ts': ts.toString(),
-        'X-App-Access-Sig': signature,
-      },
-    });
+  // Use native fetch for complete control over the request
+  const response = await fetch(`${SUMSUB_BASE_URL}${urlPath}`, {
+    method: 'POST',
+    body: bodyString,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-App-Token': appToken,
+      'X-App-Access-Ts': ts.toString(),
+      'X-App-Access-Sig': signature,
+    },
+  });
 
-    console.log('Sumsub access token success:', response.data);
+  const responseText = await response.text();
+  console.log('Sumsub raw response:', { 
+    status: response.status, 
+    statusText: response.statusText,
+    body: responseText,
+  });
 
-    return {
-      token: response.data.token,
-      userId: response.data.userId,
-    };
-  } catch (error: any) {
-    console.error('Sumsub access token error:', {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      message: error.message,
-    });
-    
-    const errorData = error.response?.data;
-    const errorMsg = errorData?.description || errorData?.message || errorData?.error || error.message;
+  if (!response.ok) {
+    let errorMsg = responseText;
+    try {
+      const errorData = JSON.parse(responseText);
+      errorMsg = errorData.description || errorData.message || errorData.error || responseText;
+    } catch {
+      // Keep responseText as error
+    }
     throw new Error(errorMsg);
   }
+
+  const data = JSON.parse(responseText);
+  return {
+    token: data.token,
+    userId: data.userId,
+  };
 }
 
 /**
