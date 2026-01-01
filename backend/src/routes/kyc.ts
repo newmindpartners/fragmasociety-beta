@@ -20,6 +20,11 @@ export async function kycRoutes(app: FastifyInstance) {
       status: 'ok',
       configured,
       levelName: env.SUMSUB_LEVEL_NAME,
+      // Show first/last few chars of token for debugging (safe to expose)
+      tokenPreview: env.SUMSUB_APP_TOKEN ? 
+        `${env.SUMSUB_APP_TOKEN.substring(0, 8)}...${env.SUMSUB_APP_TOKEN.substring(env.SUMSUB_APP_TOKEN.length - 4)}` : 
+        'not set',
+      secretKeyLength: env.SUMSUB_SECRET_KEY?.length || 0,
     });
   });
 
