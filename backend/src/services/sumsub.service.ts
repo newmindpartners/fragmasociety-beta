@@ -155,10 +155,12 @@ export async function generateAccessToken(
     method: 'POST',
     headers: {
       'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'X-App-Token': env.SUMSUB_APP_TOKEN,
       'X-App-Access-Ts': ts.toString(),
       'X-App-Access-Sig': signature,
     },
+    body: '', // Explicitly empty body
   });
 
   const responseText = await response.text();
