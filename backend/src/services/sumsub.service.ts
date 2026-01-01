@@ -161,13 +161,22 @@ export async function generateAccessToken(
     },
   });
 
-  const data = await response.json();
+  const responseText = await response.text();
+  console.log('Sumsub raw response:', { status: response.status, statusText: response.statusText, body: responseText });
   
-  console.log('Sumsub response:', { status: response.status, data });
+  let data: any;
+  try {
+    data = JSON.parse(responseText);
+  } catch {
+    console.error('Failed to parse Sumsub response:', responseText);
+    throw new Error(`Sumsub returned invalid JSON: ${responseText.substring(0, 100)}`);
+  }
 
   if (!response.ok) {
-    console.error('Sumsub error response:', data);
-    throw new Error(data.description || data.message || data.error || `Sumsub API error: ${response.status}`);
+    console.error('Sumsub error response:', { status: response.status, data });
+    // Sumsub error format varies - try multiple fields
+    const errorMsg = data.description || data.message || data.error || data.errorMessage || JSON.stringify(data);
+    throw new Error(errorMsg);
   }
 
   return {
