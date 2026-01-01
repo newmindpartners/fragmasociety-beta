@@ -150,17 +150,17 @@ export async function generateAccessToken(
     appToken: env.SUMSUB_APP_TOKEN?.substring(0, 10) + '...',
   });
 
-  // Use native fetch to ensure no unwanted body is sent
+  // POST with query parameters only - NO body, NO Content-Type
+  // As per Sumsub docs: https://docs.sumsub.com/reference/generate-access-token
   const response = await fetch(`${SUMSUB_BASE_URL}${urlPath}`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'X-App-Token': env.SUMSUB_APP_TOKEN,
+      'X-App-Token': env.SUMSUB_APP_TOKEN!,
       'X-App-Access-Ts': ts.toString(),
       'X-App-Access-Sig': signature,
     },
-    body: '', // Explicitly empty body
+    // Note: No body property - this is a POST without body
   });
 
   const responseText = await response.text();
