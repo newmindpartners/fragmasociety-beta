@@ -55,11 +55,17 @@ export async function kycRoutes(app: FastifyInstance) {
         userId: result.userId,
       });
     } catch (error: any) {
-      console.error('Error generating access token:', error);
+      console.error('Error generating access token:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
       return reply.status(500).send({
         success: false,
         error: error.message || 'Failed to generate access token',
-        details: error.response?.data || null,
+        // Include more details for debugging
+        sumsub_error: error.response?.data || null,
+        hint: 'Check SUMSUB_APP_TOKEN format - should use underscore (sbx_xxx) not colon',
       });
     }
   });
