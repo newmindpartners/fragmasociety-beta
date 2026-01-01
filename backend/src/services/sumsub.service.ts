@@ -50,7 +50,8 @@ export async function createApplicant(
   email?: string,
   phone?: string
 ): Promise<{ id: string; inspectionId: string }> {
-  if (!env.SUMSUB_APP_TOKEN || !env.SUMSUB_SECRET_KEY) {
+  const appToken = getAppToken();
+  if (!appToken) {
     throw new Error('Sumsub credentials are not configured');
   }
 
@@ -65,6 +66,8 @@ export async function createApplicant(
 
   const signature = generateSignature(ts, 'POST', urlPath, body);
 
+  console.log('Creating Sumsub applicant:', { externalUserId, urlPath });
+
   const response = await axios.post(
     `${SUMSUB_BASE_URL}${urlPath}`,
     body,
@@ -72,12 +75,14 @@ export async function createApplicant(
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-App-Token': env.SUMSUB_APP_TOKEN,
+        'X-App-Token': appToken,
         'X-App-Access-Ts': ts.toString(),
         'X-App-Access-Sig': signature,
       },
     }
   );
+
+  console.log('Applicant created:', response.data.id);
 
   return {
     id: response.data.id,
@@ -91,24 +96,29 @@ export async function createApplicant(
 export async function getApplicantByExternalUserId(
   externalUserId: string
 ): Promise<{ id: string; inspectionId: string; reviewStatus: string } | null> {
-  if (!env.SUMSUB_APP_TOKEN || !env.SUMSUB_SECRET_KEY) {
+  const appToken = getAppToken();
+  if (!appToken) {
     throw new Error('Sumsub credentials are not configured');
   }
 
   const ts = Math.floor(Date.now() / 1000);
-  const urlPath = `/resources/applicants/-;externalUserId=${externalUserId}/one`;
+  const urlPath = `/resources/applicants/-;externalUserId=${encodeURIComponent(externalUserId)}/one`;
 
-  const signature = generateSignature(ts, 'GET', urlPath);
+  const signature = generateSignature(ts, 'GET', urlPath, '');
+
+  console.log('Looking up applicant:', { externalUserId, urlPath });
 
   try {
     const response = await axios.get(`${SUMSUB_BASE_URL}${urlPath}`, {
       headers: {
         'Accept': 'application/json',
-        'X-App-Token': env.SUMSUB_APP_TOKEN,
+        'X-App-Token': appToken,
         'X-App-Access-Ts': ts.toString(),
         'X-App-Access-Sig': signature,
       },
     });
+
+    console.log('Applicant found:', response.data.id);
 
     return {
       id: response.data.id,
@@ -117,15 +127,17 @@ export async function getApplicantByExternalUserId(
     };
   } catch (error: any) {
     if (error.response?.status === 404) {
+      console.log('Applicant not found for:', externalUserId);
       return null;
     }
+    console.error('Error looking up applicant:', error.response?.data || error.message);
     throw error;
   }
 }
 
 /**
  * Generate access token for WebSDK
- * Uses query parameters as per Sumsub API documentation
+ * Uses the applicant-based approach as fallback
  */
 export async function generateAccessToken(
   externalUserId: string,
@@ -139,68 +151,56 @@ export async function generateAccessToken(
   }
 
   const level = levelName || env.SUMSUB_LEVEL_NAME;
+  
+  // First, try to get or create an applicant
+  let applicant = await getApplicantByExternalUserId(externalUserId);
+  
+  if (!applicant) {
+    // Create applicant first
+    console.log('Creating new applicant for:', externalUserId);
+    applicant = await createApplicant(externalUserId);
+  }
+  
+  console.log('Applicant found/created:', applicant.id);
+  
+  // Now generate access token for this applicant using the SDK token endpoint
   const ts = Math.floor(Date.now() / 1000);
+  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}`;
   
-  // Endpoint for access tokens (as per docs.sumsub.com/reference/generate-access-token)
-  const urlPath = '/resources/accessTokens';
-  
-  // Request body - try minimal body first
-  const requestBody: { userId: string; levelName: string; ttlInSecs?: number } = {
-    userId: externalUserId,
-    levelName: level,
-  };
-  // Only add ttlInSecs if explicitly needed
-  // requestBody.ttlInSecs = 1800;
-  const bodyString = JSON.stringify(requestBody);
+  // Signature for POST with no body
+  const signature = generateSignature(ts, 'POST', urlPath, '');
 
-  // Signature includes the body
-  const signature = generateSignature(ts, 'POST', urlPath, bodyString);
-
-  console.log('Sumsub request details:', { 
+  console.log('Sumsub access token request:', { 
     url: `${SUMSUB_BASE_URL}${urlPath}`,
     ts, 
     level, 
     externalUserId,
-    appTokenPreview: `${appToken.substring(0, 10)}...${appToken.substring(appToken.length - 4)}`,
-    bodyString: bodyString,
-    signaturePreview: signature.substring(0, 20) + '...',
+    applicantId: applicant.id,
   });
 
-  // POST with JSON body - send exact string to match signature
   try {
-    const response = await axios.post(
-      `${SUMSUB_BASE_URL}${urlPath}`,
-      bodyString, // Send as string, not object
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-App-Token': appToken,
-          'X-App-Access-Ts': ts.toString(),
-          'X-App-Access-Sig': signature,
-        },
-      }
-    );
+    const response = await axios({
+      method: 'POST',
+      url: `${SUMSUB_BASE_URL}${urlPath}`,
+      headers: {
+        'Accept': 'application/json',
+        'X-App-Token': appToken,
+        'X-App-Access-Ts': ts.toString(),
+        'X-App-Access-Sig': signature,
+      },
+    });
 
-    console.log('Sumsub success response:', response.data);
+    console.log('Sumsub access token success:', response.data);
 
     return {
       token: response.data.token,
       userId: response.data.userId,
     };
   } catch (error: any) {
-    console.error('Sumsub API error details:', {
+    console.error('Sumsub access token error:', {
       status: error.response?.status,
-      statusText: error.response?.statusText,
-      headers: error.response?.headers,
-      data: JSON.stringify(error.response?.data),
+      data: error.response?.data,
       message: error.message,
-      config: {
-        url: error.config?.url,
-        method: error.config?.method,
-        headers: error.config?.headers,
-        data: error.config?.data,
-      },
     });
     
     const errorData = error.response?.data;
