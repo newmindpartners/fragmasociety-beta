@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
@@ -6,58 +6,37 @@ import { KYCVerification } from "@/components/kyc/KYCVerification";
 import { motion } from "framer-motion";
 import { Shield, CheckCircle2, AlertCircle, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getKycStatus } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-
-type KycStatus = 'loading' | 'not_started' | 'pending' | 'approved' | 'rejected' | 'retry';
+import { useKYC } from "@/contexts/KYCContext";
 
 const KYC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [kycStatus, setKycStatus] = useState<KycStatus>('loading');
   const [showVerification, setShowVerification] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuth();
+  const { kycStatus, refreshKycStatus } = useKYC();
   const navigate = useNavigate();
 
   // Generate a user ID - use Clerk user ID if available, otherwise generate from email
   const userId = user?.id || (user?.email ? `user-${user.email.replace(/[^a-zA-Z0-9]/g, '-')}` : 'demo-user');
   const userEmail = user?.email || 'demo@fragma.io';
 
-  const fetchKycStatus = useCallback(async () => {
-    if (!userId) return;
-    
-    try {
-      const result = await getKycStatus(userId);
-      if (result.success) {
-        setKycStatus(result.status);
-      } else {
-        setKycStatus('not_started');
-      }
-    } catch (error) {
-      console.error('Error fetching KYC status:', error);
-      setKycStatus('not_started');
-    }
-  }, [userId]);
-
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate('/auth');
       return;
     }
-    
-    if (userId) {
-      fetchKycStatus();
-    }
-  }, [isLoading, isAuthenticated, navigate, fetchKycStatus, userId]);
+  }, [isLoading, isAuthenticated, navigate]);
 
   const handleStartKYC = () => {
     setShowVerification(true);
   };
 
-  const handleKYCComplete = () => {
+  const handleKYCComplete = async () => {
     setShowVerification(false);
-    setKycStatus('pending');
-    // Refresh status after a short delay
-    setTimeout(fetchKycStatus, 2000);
+    // Refresh the global KYC context status
+    await refreshKycStatus();
+    // Refresh again after a delay in case Sumsub needs time to update
+    setTimeout(refreshKycStatus, 3000);
   };
 
   const handleKYCError = (error: string) => {
@@ -88,7 +67,11 @@ const KYC = () => {
               Your identity has been successfully verified. You now have full access to all investment opportunities.
             </p>
             <Button
-              onClick={() => navigate('/dashboard')}
+              onClick={async () => {
+                // Refresh KYC status before navigating to ensure sidebar unlocks
+                await refreshKycStatus();
+                navigate('/dashboard');
+              }}
               className="bg-violet-600 hover:bg-violet-700 text-white"
             >
               Go to Dashboard
@@ -113,7 +96,7 @@ const KYC = () => {
             </p>
             <Button
               variant="outline"
-              onClick={fetchKycStatus}
+              onClick={refreshKycStatus}
               className="border-violet-200 text-violet-700 hover:bg-violet-50"
             >
               Check Status
