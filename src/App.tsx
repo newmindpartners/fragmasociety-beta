@@ -34,6 +34,7 @@ import KYC from "./pages/KYC";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminSubmissions from "./pages/admin/AdminSubmissions";
 import { AdminRoute } from "./components/admin/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -83,6 +84,7 @@ const App = () => (
               {/* Admin Routes - separate authentication */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path="/admin/submissions" element={<AdminRoute><AdminSubmissions /></AdminRoute>} />
               <Route path="/admin/*" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               
               {/* Catch-all */}
