@@ -141,8 +141,8 @@ export async function generateAccessToken(
   const level = levelName || env.SUMSUB_LEVEL_NAME;
   const ts = Math.floor(Date.now() / 1000);
   
-  // Endpoint for SDK access tokens
-  const urlPath = '/resources/accessTokens/sdk';
+  // Endpoint for access tokens (as per docs.sumsub.com/reference/generate-access-token)
+  const urlPath = '/resources/accessTokens';
   
   // Request body
   const requestBody = {
