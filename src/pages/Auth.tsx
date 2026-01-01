@@ -24,14 +24,23 @@ const Auth = () => {
   useEffect(() => {
     if (isLoaded && user) {
       const userEmail = user.primaryEmailAddress?.emailAddress?.toLowerCase();
-      const isAdminByEmail = userEmail && SUPER_ADMIN_EMAILS.includes(userEmail);
+      const isAdminByEmail = userEmail ? SUPER_ADMIN_EMAILS.includes(userEmail) : false;
       const isAdminByMetadata = !!user.publicMetadata?.role;
+      
+      console.log('Auth redirect check:', {
+        userEmail,
+        isAdminByEmail,
+        isAdminByMetadata,
+        adminEmails: SUPER_ADMIN_EMAILS,
+      });
       
       // Redirect admins to admin dashboard, others to KYC
       if (isAdminByEmail || isAdminByMetadata) {
-        navigate("/admin");
+        console.log('Redirecting to /admin');
+        navigate("/admin", { replace: true });
       } else {
-        navigate("/dashboard/kyc");
+        console.log('Redirecting to /dashboard/kyc');
+        navigate("/dashboard/kyc", { replace: true });
       }
     }
   }, [user, isLoaded, navigate]);
@@ -65,8 +74,7 @@ const Auth = () => {
             <SignIn 
               routing="hash" 
               signUpUrl="/auth#signup" 
-              fallbackRedirectUrl="/dashboard/kyc"
-              forceRedirectUrl="/dashboard/kyc"
+              afterSignInUrl="/auth"
               appearance={{
                 layout: {
                   socialButtonsVariant: "iconButton",
@@ -92,8 +100,7 @@ const Auth = () => {
             <SignUp 
               routing="hash" 
               signInUrl="/auth" 
-              fallbackRedirectUrl="/dashboard/kyc"
-              forceRedirectUrl="/dashboard/kyc"
+              afterSignUpUrl="/auth"
               appearance={{
                 layout: {
                   socialButtonsVariant: "iconButton",
