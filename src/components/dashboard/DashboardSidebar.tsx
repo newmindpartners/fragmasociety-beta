@@ -241,9 +241,12 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
       {/* Main Navigation */}
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto overflow-x-hidden">
         <div className="space-y-0.5">
-          {mainNavItems.map((item, index) => (
-            <NavLink key={item.href} item={item} index={index} />
-          ))}
+          {mainNavItems
+            // Hide Verification link when user is already verified
+            .filter(item => !(item.href === '/dashboard/kyc' && isKycApproved))
+            .map((item, index) => (
+              <NavLink key={item.href} item={item} index={index} />
+            ))}
         </div>
 
         {/* Divider */}

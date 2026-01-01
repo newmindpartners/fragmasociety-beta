@@ -2,6 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { env } from '../config/env.js';
+import { getApplicantByExternalUserId, getApplicantStatus } from '../services/sumsub.service.js';
 import crypto from 'crypto';
 
 // Simple password hashing (in production, use bcrypt)
@@ -229,19 +230,21 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
 
   /**
    * GET /api/admin/submissions
-   * Get all early access submissions with pagination
+   * Get all early access submissions with pagination and optional KYC status
    */
   app.get('/api/admin/submissions', async (request, reply) => {
     try {
-      const { page = '1', limit = '20', search = '' } = request.query as {
+      const { page = '1', limit = '20', search = '', includeKyc = 'false' } = request.query as {
         page?: string;
         limit?: string;
         search?: string;
+        includeKyc?: string;
       };
 
       const pageNum = parseInt(page, 10);
       const limitNum = Math.min(parseInt(limit, 10), 100);
       const skip = (pageNum - 1) * limitNum;
+      const shouldIncludeKyc = includeKyc === 'true';
 
       const where = search
         ? {
@@ -263,9 +266,70 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
         prisma.earlyAccessSubmission.count({ where }),
       ]);
 
+      // Optionally fetch KYC status for each submission
+      let submissionsWithKyc = submissions;
+      if (shouldIncludeKyc && env.SUMSUB_APP_TOKEN && env.SUMSUB_SECRET_KEY) {
+        submissionsWithKyc = await Promise.all(
+          submissions.map(async (submission) => {
+            try {
+              // Use email as the external user ID for Sumsub lookup
+              const applicant = await getApplicantByExternalUserId(submission.email);
+              
+              if (!applicant) {
+                return {
+                  ...submission,
+                  kycStatus: 'not_started' as const,
+                  kycVerified: false,
+                };
+              }
+
+              const status = await getApplicantStatus(applicant.id);
+              
+              let kycStatus: 'not_started' | 'pending' | 'approved' | 'rejected' | 'retry' = 'not_started';
+              let kycVerified = false;
+
+              switch (status.reviewStatus) {
+                case 'init':
+                case 'pending':
+                case 'queued':
+                case 'onHold':
+                  kycStatus = 'pending';
+                  break;
+                case 'completed':
+                  if (status.reviewResult?.reviewAnswer === 'GREEN') {
+                    kycStatus = 'approved';
+                    kycVerified = true;
+                  } else if (status.reviewResult?.reviewAnswer === 'RED') {
+                    kycStatus = 'rejected';
+                  } else {
+                    kycStatus = 'retry';
+                  }
+                  break;
+                default:
+                  kycStatus = 'pending';
+              }
+
+              return {
+                ...submission,
+                kycStatus,
+                kycVerified,
+                kycReviewResult: status.reviewResult,
+              };
+            } catch (err) {
+              console.error(`Failed to get KYC for ${submission.email}:`, err);
+              return {
+                ...submission,
+                kycStatus: 'error' as const,
+                kycVerified: false,
+              };
+            }
+          })
+        );
+      }
+
       return reply.send({
         success: true,
-        submissions,
+        submissions: submissionsWithKyc,
         pagination: {
           page: pageNum,
           limit: limitNum,
@@ -278,6 +342,89 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
       return reply.status(500).send({
         success: false,
         error: 'Failed to fetch submissions',
+      });
+    }
+  });
+
+  /**
+   * GET /api/admin/submissions/:id/kyc
+   * Get KYC status for a specific submission
+   */
+  app.get('/api/admin/submissions/:id/kyc', async (request, reply) => {
+    try {
+      const { id } = request.params as { id: string };
+
+      if (!env.SUMSUB_APP_TOKEN || !env.SUMSUB_SECRET_KEY) {
+        return reply.status(503).send({
+          success: false,
+          error: 'KYC service is not configured',
+        });
+      }
+
+      // Get the submission
+      const submission = await prisma.earlyAccessSubmission.findUnique({
+        where: { id },
+      });
+
+      if (!submission) {
+        return reply.status(404).send({
+          success: false,
+          error: 'Submission not found',
+        });
+      }
+
+      // Look up KYC status using email as external user ID
+      const applicant = await getApplicantByExternalUserId(submission.email);
+
+      if (!applicant) {
+        return reply.send({
+          success: true,
+          email: submission.email,
+          kycStatus: 'not_started',
+          kycVerified: false,
+        });
+      }
+
+      const status = await getApplicantStatus(applicant.id);
+
+      let kycStatus: 'not_started' | 'pending' | 'approved' | 'rejected' | 'retry' = 'not_started';
+      let kycVerified = false;
+
+      switch (status.reviewStatus) {
+        case 'init':
+        case 'pending':
+        case 'queued':
+        case 'onHold':
+          kycStatus = 'pending';
+          break;
+        case 'completed':
+          if (status.reviewResult?.reviewAnswer === 'GREEN') {
+            kycStatus = 'approved';
+            kycVerified = true;
+          } else if (status.reviewResult?.reviewAnswer === 'RED') {
+            kycStatus = 'rejected';
+          } else {
+            kycStatus = 'retry';
+          }
+          break;
+        default:
+          kycStatus = 'pending';
+      }
+
+      return reply.send({
+        success: true,
+        email: submission.email,
+        kycStatus,
+        kycVerified,
+        reviewStatus: status.reviewStatus,
+        reviewResult: status.reviewResult,
+        applicantId: applicant.id,
+      });
+    } catch (error) {
+      console.error('Get submission KYC error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: 'Failed to get KYC status',
       });
     }
   });

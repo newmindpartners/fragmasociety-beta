@@ -25,7 +25,13 @@ const KYC = () => {
       navigate('/auth');
       return;
     }
-  }, [isLoading, isAuthenticated, navigate]);
+    
+    // Redirect verified users to dashboard - they don't need to see this page
+    if (kycStatus === 'approved') {
+      navigate('/dashboard', { replace: true });
+      return;
+    }
+  }, [isLoading, isAuthenticated, navigate, kycStatus]);
 
   const handleStartKYC = () => {
     setShowVerification(true);
