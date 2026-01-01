@@ -23,16 +23,19 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = req.url === '/' ? '/index.html' : req.url;
+  // Remove query string first
+  let filePath = req.url.split('?')[0];
   
-  // Remove query string
-  filePath = filePath.split('?')[0];
+  // Handle root path
+  if (filePath === '/' || filePath === '') {
+    filePath = '/index.html';
+  }
   
   let fullPath = path.join(DIST_DIR, filePath);
 
-  fs.access(fullPath, fs.constants.F_OK, (err) => {
-    // If file doesn't exist, serve index.html (SPA routing)
-    if (err) {
+  fs.stat(fullPath, (err, stats) => {
+    // If file doesn't exist OR it's a directory, serve index.html (SPA routing)
+    if (err || stats.isDirectory()) {
       fullPath = path.join(DIST_DIR, 'index.html');
     }
 
