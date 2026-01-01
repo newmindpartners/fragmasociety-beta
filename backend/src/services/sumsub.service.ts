@@ -139,8 +139,7 @@ export async function getApplicantByExternalUserId(
 
 /**
  * Generate access token for WebSDK
- * Uses /resources/accessTokens/sdk endpoint as per official Sumsub example
- * https://github.com/SumSubstance/AppTokenUsageExamples/blob/master/Python/AppTokenPythonExample.py
+ * Tries multiple approaches to generate a token
  */
 export async function generateAccessToken(
   externalUserId: string,
@@ -156,30 +155,24 @@ export async function generateAccessToken(
   const level = levelName || env.SUMSUB_LEVEL_NAME;
   const ts = Math.floor(Date.now() / 1000);
   
-  // Use /resources/accessTokens/sdk endpoint with JSON body
-  // This is the approach from the official Sumsub Python example
-  const urlPath = '/resources/accessTokens/sdk';
-  const bodyObj = { userId: externalUserId, levelName: level };
-  const bodyString = JSON.stringify(bodyObj);
+  // Try approach 1: /resources/accessTokens with query params (for existing applicants)
+  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}&ttlInSecs=3600`;
   
-  // Signature includes the body
-  const signature = generateSignature(ts, 'POST', urlPath, bodyString);
+  // Signature for POST with NO body
+  const signature = generateSignature(ts, 'POST', urlPath, '');
 
-  console.log('Sumsub SDK access token request:', { 
+  console.log('Sumsub access token request:', { 
     url: `${SUMSUB_BASE_URL}${urlPath}`,
     ts, 
     level, 
     externalUserId,
-    body: bodyString,
   });
 
-  // Use native fetch for complete control over the request
+  // Use native fetch with NO body
   const response = await fetch(`${SUMSUB_BASE_URL}${urlPath}`, {
     method: 'POST',
-    body: bodyString,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
       'X-App-Token': appToken,
       'X-App-Access-Ts': ts.toString(),
       'X-App-Access-Sig': signature,
@@ -190,7 +183,7 @@ export async function generateAccessToken(
   console.log('Sumsub raw response:', { 
     status: response.status, 
     statusText: response.statusText,
-    body: responseText,
+    body: responseText.substring(0, 500),
   });
 
   if (!response.ok) {
