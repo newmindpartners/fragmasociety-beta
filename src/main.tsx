@@ -15,10 +15,10 @@ const AppWrapper = () => {
   return (
     <ClerkProvider 
       publishableKey={PUBLISHABLE_KEY} 
-      afterSignInUrl="/"
-      afterSignUpUrl="/"
-      signInFallbackRedirectUrl="/"
-      signUpFallbackRedirectUrl="/"
+      signInFallbackRedirectUrl="/dashboard/kyc"
+      signUpFallbackRedirectUrl="/dashboard/kyc"
+      signInForceRedirectUrl="/dashboard/kyc"
+      signUpForceRedirectUrl="/dashboard/kyc"
       appearance={{
         layout: {
           logoImageUrl: window.location.origin + "/fragma-logo-v2.png",
