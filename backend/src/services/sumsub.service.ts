@@ -107,6 +107,7 @@ export async function getApplicantByExternalUserId(
 
 /**
  * Generate access token for WebSDK
+ * Uses query parameters as per Sumsub API documentation
  */
 export async function generateAccessToken(
   externalUserId: string,
@@ -118,40 +119,40 @@ export async function generateAccessToken(
 
   const level = levelName || env.SUMSUB_LEVEL_NAME;
   const ts = Math.floor(Date.now() / 1000);
-  const urlPath = '/resources/accessTokens';
   
-  // Request body as per Sumsub API documentation
-  const requestBody = JSON.stringify({
-    userId: externalUserId,
-    levelName: level,
-    ttlInSecs: 1800,
-  });
+  // Build URL with query parameters (userId here maps to externalUserId)
+  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}`;
 
-  // Signature includes the request body
-  const signature = generateSignature(ts, 'POST', urlPath, requestBody);
+  // Signature for POST with no body
+  const signature = generateSignature(ts, 'POST', urlPath, '');
 
   try {
-    const response = await axios.post(
-      `${SUMSUB_BASE_URL}${urlPath}`,
-      requestBody,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-App-Token': env.SUMSUB_APP_TOKEN,
-          'X-App-Access-Ts': ts.toString(),
-          'X-App-Access-Sig': signature,
-        },
-      }
-    );
+    console.log('Sumsub request:', { urlPath, ts, level, externalUserId });
+    
+    const response = await axios({
+      method: 'POST',
+      url: `${SUMSUB_BASE_URL}${urlPath}`,
+      headers: {
+        'Accept': 'application/json',
+        'X-App-Token': env.SUMSUB_APP_TOKEN,
+        'X-App-Access-Ts': ts.toString(),
+        'X-App-Access-Sig': signature,
+      },
+    });
 
+    console.log('Sumsub response:', response.data);
+    
     return {
       token: response.data.token,
       userId: response.data.userId,
     };
   } catch (error: any) {
-    console.error('Sumsub access token error:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.description || error.response?.data?.message || 'Failed to generate access token');
+    console.error('Sumsub access token error:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
+    throw new Error(error.response?.data?.description || error.response?.data?.message || error.response?.data?.error || 'Failed to generate access token');
   }
 }
 
