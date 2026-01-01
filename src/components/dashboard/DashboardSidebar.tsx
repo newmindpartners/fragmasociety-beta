@@ -17,8 +17,11 @@ import {
   LucideIcon,
   DollarSign,
   Shield,
+  Lock,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useKYC } from "@/contexts/KYCContext";
 import fragmaLogo from "@/assets/fragma-logo-v2.png";
 import fragmaIcon from "@/assets/fragma-icon.png";
 
@@ -27,24 +30,25 @@ interface NavItem {
   label: string;
   href: string;
   badge?: number;
+  requiresKyc?: boolean;
 }
 
 const mainNavItems: NavItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: Shield, label: "Verification", href: "/dashboard/kyc" },
-  { icon: TrendingUp, label: "My Portfolio", href: "/dashboard/portfolio" },
-  { icon: DollarSign, label: "Earnings", href: "/dashboard/earnings" },
-  { icon: Heart, label: "Watchlist", href: "/dashboard/watchlist" },
-  { icon: Building2, label: "Banking", href: "/dashboard/banking" },
-  { icon: FileText, label: "Documents", href: "/dashboard/documents" },
-  { icon: Wallet, label: "Wallet", href: "/dashboard/wallet" },
-  { icon: BarChart3, label: "Market", href: "/dashboard/market" },
+  { icon: Shield, label: "Verification", href: "/dashboard/kyc", requiresKyc: false },
+  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard", requiresKyc: true },
+  { icon: TrendingUp, label: "My Portfolio", href: "/dashboard/portfolio", requiresKyc: true },
+  { icon: DollarSign, label: "Earnings", href: "/dashboard/earnings", requiresKyc: true },
+  { icon: Heart, label: "Watchlist", href: "/dashboard/watchlist", requiresKyc: true },
+  { icon: Building2, label: "Banking", href: "/dashboard/banking", requiresKyc: true },
+  { icon: FileText, label: "Documents", href: "/dashboard/documents", requiresKyc: true },
+  { icon: Wallet, label: "Wallet", href: "/dashboard/wallet", requiresKyc: true },
+  { icon: BarChart3, label: "Market", href: "/dashboard/market", requiresKyc: true },
 ];
 
 const bottomNavItems: NavItem[] = [
-  { icon: Bell, label: "Notifications", href: "/dashboard/notifications", badge: 3 },
-  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
-  { icon: HelpCircle, label: "Help Center", href: "/faq" },
+  { icon: Bell, label: "Notifications", href: "/dashboard/notifications", badge: 3, requiresKyc: true },
+  { icon: Settings, label: "Settings", href: "/dashboard/settings", requiresKyc: true },
+  { icon: HelpCircle, label: "Help Center", href: "/faq", requiresKyc: false },
 ];
 
 interface DashboardSidebarProps {
@@ -54,10 +58,69 @@ interface DashboardSidebarProps {
 
 export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProps) => {
   const location = useLocation();
+  const { isKycApproved, kycStatus } = useKYC();
 
   const NavLink = ({ item, index }: { item: NavItem; index: number }) => {
     const isActive = location.pathname === item.href;
     const Icon = item.icon;
+    const isLocked = item.requiresKyc && !isKycApproved;
+    const isVerificationItem = item.href === '/dashboard/kyc';
+
+    // Show verification status indicator
+    const getVerificationIcon = () => {
+      if (!isVerificationItem) return null;
+      if (kycStatus === 'approved') {
+        return <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />;
+      }
+      return null;
+    };
+
+    if (isLocked) {
+      return (
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 + index * 0.03 }}
+        >
+          <div
+            className={cn(
+              "group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden cursor-not-allowed opacity-50",
+              isCollapsed ? "justify-center" : "",
+              "text-[hsl(var(--sidebar-muted))]"
+            )}
+            title="Complete KYC verification to unlock"
+          >
+            <Icon 
+              className="w-[18px] h-[18px] flex-shrink-0 text-[hsl(var(--sidebar-muted))]"
+              strokeWidth={1.75} 
+            />
+            
+            <AnimatePresence>
+              {!isCollapsed && (
+                <motion.span 
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                >
+                  {item.label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+            
+            {!isCollapsed && (
+              <Lock className="ml-auto w-3.5 h-3.5 text-[hsl(var(--sidebar-muted))]" />
+            )}
+
+            {isCollapsed && (
+              <span className="absolute -top-0.5 -right-0.5">
+                <Lock className="w-2.5 h-2.5 text-[hsl(var(--sidebar-muted))]" />
+              </span>
+            )}
+          </div>
+        </motion.div>
+      );
+    }
 
     return (
       <motion.div
@@ -96,6 +159,9 @@ export const DashboardSidebar = ({ isCollapsed, onToggle }: DashboardSidebarProp
               </motion.span>
             )}
           </AnimatePresence>
+          
+          {/* Verification status icon */}
+          {!isCollapsed && getVerificationIcon()}
           
           {item.badge && !isCollapsed && (
             <motion.span 

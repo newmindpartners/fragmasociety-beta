@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { KYCProvider } from "@/contexts/KYCContext";
+import { KYCProtectedRoute } from "@/components/kyc/KYCProtectedRoute";
 import { DisclaimerModal } from "@/components/DisclaimerModal";
 import Index from "./pages/Index";
 import Strategy from "./pages/Strategy";
@@ -39,48 +41,56 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <DisclaimerModal />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            {/* <Route path="/strategy" element={<Strategy />} /> */}
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/membership" element={<Membership />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/tokenize" element={<Tokenize />} />
-            <Route path="/signature-deal" element={<SignatureDeal />} />
-            <Route path="/live-deals" element={<LiveDeals />} />
-            <Route path="/deal/:id" element={<DealDetails />} />
-            <Route path="/order/:orderId" element={<OrderDetails />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/portfolio" element={<MyPortfolio />} />
-            <Route path="/dashboard/watchlist" element={<Watchlist />} />
-            <Route path="/dashboard/banking" element={<Banking />} />
-            <Route path="/dashboard/banking/*" element={<Banking />} />
-            <Route path="/dashboard/documents" element={<Documents />} />
-            <Route path="/dashboard/wallet" element={<Wallet />} />
-            <Route path="/dashboard/earnings" element={<Earnings />} />
-            <Route path="/dashboard/market" element={<SecondaryMarket />} />
-            <Route path="/dashboard/notifications" element={<Notifications />} />
-            <Route path="/dashboard/settings" element={<Settings />} />
-            <Route path="/dashboard/help" element={<HelpCenter />} />
-            <Route path="/dashboard/kyc" element={<KYC />} />
-            <Route path="/dashboard/*" element={<Dashboard />} />
-            <Route path="/fund" element={<Strategy />} />
-            {/* Admin Routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            <Route path="/admin/*" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <KYCProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <DisclaimerModal />
+          <BrowserRouter>
+            <Routes>
+              {/* Public routes - no KYC required */}
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/membership" element={<Membership />} />
+              <Route path="/signature-deal" element={<SignatureDeal />} />
+              
+              {/* KYC page - accessible without KYC approval */}
+              <Route path="/dashboard/kyc" element={<KYC />} />
+              
+              {/* Protected routes - require KYC approval */}
+              <Route path="/marketplace" element={<KYCProtectedRoute><Marketplace /></KYCProtectedRoute>} />
+              <Route path="/tokenize" element={<KYCProtectedRoute><Tokenize /></KYCProtectedRoute>} />
+              <Route path="/live-deals" element={<KYCProtectedRoute><LiveDeals /></KYCProtectedRoute>} />
+              <Route path="/deal/:id" element={<KYCProtectedRoute><DealDetails /></KYCProtectedRoute>} />
+              <Route path="/order/:orderId" element={<KYCProtectedRoute><OrderDetails /></KYCProtectedRoute>} />
+              <Route path="/dashboard" element={<KYCProtectedRoute><Dashboard /></KYCProtectedRoute>} />
+              <Route path="/dashboard/portfolio" element={<KYCProtectedRoute><MyPortfolio /></KYCProtectedRoute>} />
+              <Route path="/dashboard/watchlist" element={<KYCProtectedRoute><Watchlist /></KYCProtectedRoute>} />
+              <Route path="/dashboard/banking" element={<KYCProtectedRoute><Banking /></KYCProtectedRoute>} />
+              <Route path="/dashboard/banking/*" element={<KYCProtectedRoute><Banking /></KYCProtectedRoute>} />
+              <Route path="/dashboard/documents" element={<KYCProtectedRoute><Documents /></KYCProtectedRoute>} />
+              <Route path="/dashboard/wallet" element={<KYCProtectedRoute><Wallet /></KYCProtectedRoute>} />
+              <Route path="/dashboard/earnings" element={<KYCProtectedRoute><Earnings /></KYCProtectedRoute>} />
+              <Route path="/dashboard/market" element={<KYCProtectedRoute><SecondaryMarket /></KYCProtectedRoute>} />
+              <Route path="/dashboard/notifications" element={<KYCProtectedRoute><Notifications /></KYCProtectedRoute>} />
+              <Route path="/dashboard/settings" element={<KYCProtectedRoute><Settings /></KYCProtectedRoute>} />
+              <Route path="/dashboard/help" element={<KYCProtectedRoute><HelpCenter /></KYCProtectedRoute>} />
+              <Route path="/dashboard/*" element={<KYCProtectedRoute><Dashboard /></KYCProtectedRoute>} />
+              <Route path="/fund" element={<KYCProtectedRoute><Strategy /></KYCProtectedRoute>} />
+              
+              {/* Admin Routes - separate authentication */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path="/admin/*" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              
+              {/* Catch-all */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </KYCProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

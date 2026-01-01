@@ -24,6 +24,9 @@ const envSchema = z.object({
   SUMSUB_APP_TOKEN: z.string().optional(),
   SUMSUB_SECRET_KEY: z.string().optional(),
   SUMSUB_LEVEL_NAME: z.string().default('id-and-liveness'),
+
+  // Clerk (for admin role management)
+  CLERK_SECRET_KEY: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
