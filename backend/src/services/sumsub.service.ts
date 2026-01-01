@@ -155,12 +155,14 @@ export async function generateAccessToken(
   // Signature includes the body
   const signature = generateSignature(ts, 'POST', urlPath, bodyString);
 
-  console.log('Sumsub request:', { 
+  console.log('Sumsub request details:', { 
     url: `${SUMSUB_BASE_URL}${urlPath}`,
     ts, 
     level, 
     externalUserId,
     appTokenPreview: `${appToken.substring(0, 10)}...${appToken.substring(appToken.length - 4)}`,
+    bodyString: bodyString,
+    signaturePreview: signature.substring(0, 20) + '...',
   });
 
   // POST with JSON body
@@ -186,11 +188,18 @@ export async function generateAccessToken(
       userId: response.data.userId,
     };
   } catch (error: any) {
-    console.error('Sumsub API error:', {
+    console.error('Sumsub API error details:', {
       status: error.response?.status,
       statusText: error.response?.statusText,
-      data: error.response?.data,
+      headers: error.response?.headers,
+      data: JSON.stringify(error.response?.data),
       message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        headers: error.config?.headers,
+        data: error.config?.data,
+      },
     });
     
     const errorData = error.response?.data;
