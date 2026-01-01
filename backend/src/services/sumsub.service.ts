@@ -144,8 +144,9 @@ export async function generateAccessToken(
   // Build URL with query parameters (userId here maps to externalUserId)
   const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}&ttlInSecs=1800`;
 
-  // Signature for POST with no body
-  const signature = generateSignature(ts, 'POST', urlPath, '');
+  // Signature includes empty JSON body "{}"
+  const bodyString = '{}';
+  const signature = generateSignature(ts, 'POST', urlPath, bodyString);
 
   console.log('Sumsub request:', { 
     url: `${SUMSUB_BASE_URL}${urlPath}`,
@@ -156,60 +157,41 @@ export async function generateAccessToken(
     appTokenLength: appToken.length,
   });
 
-  // POST with query parameters only - NO body
-  // Using native https to have full control over request
-  return new Promise((resolve, reject) => {
-    const options = {
-      hostname: 'api.sumsub.com',
-      path: urlPath,
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'X-App-Token': appToken,
-        'X-App-Access-Ts': ts.toString(),
-        'X-App-Access-Sig': signature,
-      },
+  // POST with query parameters and empty JSON body
+  // As per Sumsub examples: axios.post(url, {}, { headers })
+  try {
+    const response = await axios.post(
+      `${SUMSUB_BASE_URL}${urlPath}`,
+      {}, // Empty object as body
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-App-Token': appToken,
+          'X-App-Access-Ts': ts.toString(),
+          'X-App-Access-Sig': signature,
+        },
+      }
+    );
+
+    console.log('Sumsub success response:', response.data);
+
+    return {
+      token: response.data.token,
+      userId: response.data.userId,
     };
-
-    console.log('Sumsub https request options:', {
-      hostname: options.hostname,
-      path: options.path,
-      method: options.method,
-      headers: { ...options.headers, 'X-App-Token': appToken.substring(0, 10) + '...' },
+  } catch (error: any) {
+    console.error('Sumsub API error:', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
     });
-
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', (chunk) => { data += chunk; });
-      res.on('end', () => {
-        console.log('Sumsub response:', { status: res.statusCode, body: data });
-        
-        try {
-          const parsed = JSON.parse(data);
-          
-          if (res.statusCode !== 200 && res.statusCode !== 201) {
-            reject(new Error(parsed.description || parsed.message || parsed.error || `HTTP ${res.statusCode}`));
-            return;
-          }
-          
-          resolve({
-            token: parsed.token,
-            userId: parsed.userId,
-          });
-        } catch (e) {
-          reject(new Error(`Failed to parse response: ${data.substring(0, 100)}`));
-        }
-      });
-    });
-
-    req.on('error', (e) => {
-      console.error('Sumsub request error:', e);
-      reject(e);
-    });
-
-    // End request without body
-    req.end();
-  });
+    
+    const errorData = error.response?.data;
+    const errorMsg = errorData?.description || errorData?.message || errorData?.error || error.message;
+    throw new Error(errorMsg);
+  }
 }
 
 /**
