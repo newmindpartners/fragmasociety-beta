@@ -121,7 +121,8 @@ export async function generateAccessToken(
   const ts = Math.floor(Date.now() / 1000);
   
   // Build URL with query parameters (userId here maps to externalUserId)
-  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}`;
+  // Try with 'basic-kyc-level' as fallback if the configured level doesn't exist
+  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}&ttlInSecs=1800`;
 
   // Signature for POST with no body
   const signature = generateSignature(ts, 'POST', urlPath, '');
