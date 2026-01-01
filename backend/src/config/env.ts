@@ -23,7 +23,7 @@ const envSchema = z.object({
   // Sumsub KYC (optional for local dev)
   SUMSUB_APP_TOKEN: z.string().optional(),
   SUMSUB_SECRET_KEY: z.string().optional(),
-  SUMSUB_LEVEL_NAME: z.string().default('basic-kyc-level'),
+  SUMSUB_LEVEL_NAME: z.string().default('id-and-liveness'),
 });
 
 export type Env = z.infer<typeof envSchema>;
