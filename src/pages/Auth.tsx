@@ -16,7 +16,8 @@ const Auth = () => {
 
   useEffect(() => {
     if (isLoaded && user) {
-      navigate("/");
+      // Redirect to KYC verification after login
+      navigate("/dashboard/kyc");
     }
   }, [user, isLoaded, navigate]);
 
@@ -49,8 +50,8 @@ const Auth = () => {
             <SignIn 
               routing="hash" 
               signUpUrl="/auth#signup" 
-              fallbackRedirectUrl="/"
-              forceRedirectUrl="/"
+              fallbackRedirectUrl="/dashboard/kyc"
+              forceRedirectUrl="/dashboard/kyc"
               appearance={{
                 layout: {
                   socialButtonsVariant: "iconButton",
@@ -76,8 +77,8 @@ const Auth = () => {
             <SignUp 
               routing="hash" 
               signInUrl="/auth" 
-              fallbackRedirectUrl="/"
-              forceRedirectUrl="/"
+              fallbackRedirectUrl="/dashboard/kyc"
+              forceRedirectUrl="/dashboard/kyc"
               appearance={{
                 layout: {
                   socialButtonsVariant: "iconButton",
