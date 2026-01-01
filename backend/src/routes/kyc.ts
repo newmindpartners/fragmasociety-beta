@@ -18,6 +18,8 @@ export async function kycRoutes(app: FastifyInstance) {
     const configured = !!(env.SUMSUB_APP_TOKEN && env.SUMSUB_SECRET_KEY);
     
     let apiTest = 'not tested';
+    let apiDetails = {};
+    
     if (configured) {
       try {
         // Try to get applicant levels to test API connection
@@ -25,6 +27,10 @@ export async function kycRoutes(app: FastifyInstance) {
         apiTest = testResult === null ? 'connected (no user found)' : 'connected (user found)';
       } catch (err: any) {
         apiTest = `error: ${err.message}`;
+        apiDetails = {
+          errorMessage: err.message,
+          responseData: err.response?.data,
+        };
       }
     }
     
@@ -33,6 +39,7 @@ export async function kycRoutes(app: FastifyInstance) {
       configured,
       levelName: env.SUMSUB_LEVEL_NAME,
       apiTest,
+      apiDetails,
       tokenPreview: env.SUMSUB_APP_TOKEN ? 
         `${env.SUMSUB_APP_TOKEN.substring(0, 8)}...${env.SUMSUB_APP_TOKEN.substring(env.SUMSUB_APP_TOKEN.length - 4)}` : 
         'not set',
