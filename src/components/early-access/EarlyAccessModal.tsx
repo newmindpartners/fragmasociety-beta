@@ -41,20 +41,19 @@ export function EarlyAccessModal({ open, onOpenChange }: EarlyAccessModalProps) 
     if (form.currentStep === 'contact') {
       const success = await form.submitForm();
       if (success) {
-        form.goNext();
-      }
-    } else if (form.currentStep === 'auth') {
-      // Only try to send email if Clerk is available (user actually authenticated)
-      const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-      if (isClerkAvailable) {
-        console.log('User signed in, triggering confirmation email...');
+        // Send confirmation email immediately after successful form submission
+        console.log('Form submitted, sending confirmation email...');
         const emailResult = await form.sendConfirmationEmail();
         if (!emailResult.success) {
           console.error('Email failed:', emailResult.error);
-          // Don't show error to user - registration was successful, email is just a nice-to-have
-          console.warn('Email confirmation skipped - will be handled manually');
+          // Don't block - form submission was successful
+        } else {
+          console.log('Confirmation email sent successfully');
         }
+        form.goNext();
       }
+    } else if (form.currentStep === 'auth') {
+      // Just advance to next step - email already sent after form submission
       form.goNext();
     } else {
       form.goNext();
