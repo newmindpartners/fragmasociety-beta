@@ -150,41 +150,39 @@ export async function generateAccessToken(
     appToken: env.SUMSUB_APP_TOKEN?.substring(0, 10) + '...',
   });
 
-  // POST with query parameters only - NO body, NO Content-Type
+  // POST with query parameters only - NO body
   // As per Sumsub docs: https://docs.sumsub.com/reference/generate-access-token
-  const response = await fetch(`${SUMSUB_BASE_URL}${urlPath}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'X-App-Token': env.SUMSUB_APP_TOKEN!,
-      'X-App-Access-Ts': ts.toString(),
-      'X-App-Access-Sig': signature,
-    },
-    // Note: No body property - this is a POST without body
-  });
-
-  const responseText = await response.text();
-  console.log('Sumsub raw response:', { status: response.status, statusText: response.statusText, body: responseText });
-  
-  let data: any;
   try {
-    data = JSON.parse(responseText);
-  } catch {
-    console.error('Failed to parse Sumsub response:', responseText);
-    throw new Error(`Sumsub returned invalid JSON: ${responseText.substring(0, 100)}`);
-  }
+    const response = await axios({
+      method: 'POST',
+      url: `${SUMSUB_BASE_URL}${urlPath}`,
+      headers: {
+        'Accept': 'application/json',
+        'X-App-Token': env.SUMSUB_APP_TOKEN!,
+        'X-App-Access-Ts': ts.toString(),
+        'X-App-Access-Sig': signature,
+      },
+      // No data property = no body
+    });
 
-  if (!response.ok) {
-    console.error('Sumsub error response:', { status: response.status, data });
-    // Sumsub error format varies - try multiple fields
-    const errorMsg = data.description || data.message || data.error || data.errorMessage || JSON.stringify(data);
+    console.log('Sumsub success response:', response.data);
+
+    return {
+      token: response.data.token,
+      userId: response.data.userId,
+    };
+  } catch (error: any) {
+    console.error('Sumsub API error:', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+    });
+    
+    const errorData = error.response?.data;
+    const errorMsg = errorData?.description || errorData?.message || errorData?.error || error.message;
     throw new Error(errorMsg);
   }
-
-  return {
-    token: data.token,
-    userId: data.userId,
-  };
 }
 
 /**
