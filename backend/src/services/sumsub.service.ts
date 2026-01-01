@@ -144,12 +144,13 @@ export async function generateAccessToken(
   // Endpoint for access tokens (as per docs.sumsub.com/reference/generate-access-token)
   const urlPath = '/resources/accessTokens';
   
-  // Request body
-  const requestBody = {
+  // Request body - try minimal body first
+  const requestBody: { userId: string; levelName: string; ttlInSecs?: number } = {
     userId: externalUserId,
     levelName: level,
-    ttlInSecs: 1800,
   };
+  // Only add ttlInSecs if explicitly needed
+  // requestBody.ttlInSecs = 1800;
   const bodyString = JSON.stringify(requestBody);
 
   // Signature includes the body
