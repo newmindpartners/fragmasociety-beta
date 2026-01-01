@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import https from 'https';
 import axios from 'axios';
 import { env } from '../config/env.js';
 
@@ -156,38 +157,59 @@ export async function generateAccessToken(
   });
 
   // POST with query parameters only - NO body
-  // As per Sumsub docs: https://docs.sumsub.com/reference/generate-access-token
-  try {
-    const response = await axios({
+  // Using native https to have full control over request
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.sumsub.com',
+      path: urlPath,
       method: 'POST',
-      url: `${SUMSUB_BASE_URL}${urlPath}`,
       headers: {
         'Accept': 'application/json',
         'X-App-Token': appToken,
         'X-App-Access-Ts': ts.toString(),
         'X-App-Access-Sig': signature,
       },
-      // No data property = no body
-    });
-
-    console.log('Sumsub success response:', response.data);
-
-    return {
-      token: response.data.token,
-      userId: response.data.userId,
     };
-  } catch (error: any) {
-    console.error('Sumsub API error:', {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      message: error.message,
+
+    console.log('Sumsub https request options:', {
+      hostname: options.hostname,
+      path: options.path,
+      method: options.method,
+      headers: { ...options.headers, 'X-App-Token': appToken.substring(0, 10) + '...' },
     });
-    
-    const errorData = error.response?.data;
-    const errorMsg = errorData?.description || errorData?.message || errorData?.error || error.message;
-    throw new Error(errorMsg);
-  }
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        console.log('Sumsub response:', { status: res.statusCode, body: data });
+        
+        try {
+          const parsed = JSON.parse(data);
+          
+          if (res.statusCode !== 200 && res.statusCode !== 201) {
+            reject(new Error(parsed.description || parsed.message || parsed.error || `HTTP ${res.statusCode}`));
+            return;
+          }
+          
+          resolve({
+            token: parsed.token,
+            userId: parsed.userId,
+          });
+        } catch (e) {
+          reject(new Error(`Failed to parse response: ${data.substring(0, 100)}`));
+        }
+      });
+    });
+
+    req.on('error', (e) => {
+      console.error('Sumsub request error:', e);
+      reject(e);
+    });
+
+    // End request without body
+    req.end();
+  });
 }
 
 /**
