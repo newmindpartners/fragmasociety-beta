@@ -13,14 +13,26 @@ interface StatusParams {
 }
 
 export async function kycRoutes(app: FastifyInstance) {
-  // Health check for KYC service
+  // Health check for KYC service - also tests Sumsub API connection
   app.get('/api/kyc/health', async (_request: FastifyRequest, reply: FastifyReply) => {
     const configured = !!(env.SUMSUB_APP_TOKEN && env.SUMSUB_SECRET_KEY);
+    
+    let apiTest = 'not tested';
+    if (configured) {
+      try {
+        // Try to get applicant levels to test API connection
+        const testResult = await getApplicantByExternalUserId('test-health-check-user');
+        apiTest = testResult === null ? 'connected (no user found)' : 'connected (user found)';
+      } catch (err: any) {
+        apiTest = `error: ${err.message}`;
+      }
+    }
+    
     return reply.send({
       status: 'ok',
       configured,
       levelName: env.SUMSUB_LEVEL_NAME,
-      // Show first/last few chars of token for debugging (safe to expose)
+      apiTest,
       tokenPreview: env.SUMSUB_APP_TOKEN ? 
         `${env.SUMSUB_APP_TOKEN.substring(0, 8)}...${env.SUMSUB_APP_TOKEN.substring(env.SUMSUB_APP_TOKEN.length - 4)}` : 
         'not set',
