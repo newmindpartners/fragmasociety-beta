@@ -7,6 +7,13 @@ const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 // Admin roles
 export type AdminRole = 'super_admin' | 'admin' | 'moderator';
 
+// Hardcoded super admin emails (fallback if Clerk metadata not set)
+const SUPER_ADMIN_EMAILS = [
+  'hi@fragmasociety.com',
+  'laurent@fragmasociety.com',
+  'admin@fragmasociety.com',
+];
+
 interface AuthContextType {
   user: { 
     id: string; 
@@ -36,8 +43,10 @@ const ClerkAuthProvider = ({ children }: { children: ReactNode }) => {
   const loading = !userLoaded || !sessionLoaded;
   const isAuthenticated = !!user;
   
-  // Check admin role from user's public metadata
-  const adminRole = (user?.publicMetadata?.role as AdminRole) || null;
+  // Check admin role from user's public metadata OR hardcoded email list
+  const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+  const isSuperAdminByEmail = userEmail && SUPER_ADMIN_EMAILS.includes(userEmail);
+  const adminRole = (user?.publicMetadata?.role as AdminRole) || (isSuperAdminByEmail ? 'super_admin' : null);
   const isAdmin = !!adminRole;
 
   return (

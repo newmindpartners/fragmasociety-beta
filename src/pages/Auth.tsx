@@ -4,6 +4,13 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Shield } from "lucide-react";
 
+// Super admin emails for redirect check
+const SUPER_ADMIN_EMAILS = [
+  'hi@fragmasociety.com',
+  'laurent@fragmasociety.com',
+  'admin@fragmasociety.com',
+];
+
 const Auth = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,8 +23,16 @@ const Auth = () => {
 
   useEffect(() => {
     if (isLoaded && user) {
-      // Redirect to KYC verification after login
-      navigate("/dashboard/kyc");
+      const userEmail = user.primaryEmailAddress?.emailAddress?.toLowerCase();
+      const isAdminByEmail = userEmail && SUPER_ADMIN_EMAILS.includes(userEmail);
+      const isAdminByMetadata = !!user.publicMetadata?.role;
+      
+      // Redirect admins to admin dashboard, others to KYC
+      if (isAdminByEmail || isAdminByMetadata) {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard/kyc");
+      }
     }
   }, [user, isLoaded, navigate]);
 
