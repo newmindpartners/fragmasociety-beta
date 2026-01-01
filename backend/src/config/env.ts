@@ -19,6 +19,11 @@ const envSchema = z.object({
   // Resend email service (optional for local dev)
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().default('Fragma Society <noreply@fragma.io>'),
+
+  // Sumsub KYC (optional for local dev)
+  SUMSUB_APP_TOKEN: z.string().optional(),
+  SUMSUB_SECRET_KEY: z.string().optional(),
+  SUMSUB_LEVEL_NAME: z.string().default('basic-kyc-level'),
 });
 
 export type Env = z.infer<typeof envSchema>;

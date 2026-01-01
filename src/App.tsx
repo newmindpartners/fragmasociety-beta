@@ -28,7 +28,10 @@ import OrderDetails from "./pages/OrderDetails";
 import Watchlist from "./pages/Watchlist";
 import HelpCenter from "./pages/HelpCenter";
 import MyPortfolio from "./pages/MyPortfolio";
+import KYC from "./pages/KYC";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +68,7 @@ const App = () => (
             <Route path="/dashboard/notifications" element={<Notifications />} />
             <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="/dashboard/help" element={<HelpCenter />} />
+            <Route path="/dashboard/kyc" element={<KYC />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/fund" element={<Strategy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

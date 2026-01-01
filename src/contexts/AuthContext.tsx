@@ -5,9 +5,11 @@ import { useUser, useClerk, useSession } from "@clerk/clerk-react";
 const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 interface AuthContextType {
-  user: any | null;
+  user: { id: string; email?: string } | null;
   session: any | null;
   loading: boolean;
+  isLoading: boolean; // Alias for loading
+  isAuthenticated: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -20,15 +22,18 @@ const ClerkAuthProvider = ({ children }: { children: ReactNode }) => {
   const { signOut } = useClerk();
 
   const loading = !userLoaded || !sessionLoaded;
+  const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider value={{ 
       user: user ? {
-        ...user,
+        id: user.id,
         email: user.primaryEmailAddress?.emailAddress
       } : null, 
       session: session ?? null, 
-      loading, 
+      loading,
+      isLoading: loading,
+      isAuthenticated,
       signOut: () => signOut().then(() => {}) 
     }}>
       {children}
@@ -38,11 +43,19 @@ const ClerkAuthProvider = ({ children }: { children: ReactNode }) => {
 
 // Mock provider for development without Clerk
 const MockAuthProvider = ({ children }: { children: ReactNode }) => {
+  // Provide a demo user for development/testing
+  const demoUser = {
+    id: 'demo-user-123',
+    email: 'demo@fragma.io'
+  };
+
   return (
     <AuthContext.Provider value={{ 
-      user: null, 
+      user: demoUser, 
       session: null, 
-      loading: false, 
+      loading: false,
+      isLoading: false,
+      isAuthenticated: true, // Assume authenticated for demo
       signOut: async () => {} 
     }}>
       {children}

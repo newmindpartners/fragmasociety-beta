@@ -222,10 +222,103 @@ export async function checkHealth(): Promise<{ status: string; ready: boolean }>
   }
 }
 
+// ============================================
+// KYC API Functions (Sumsub Integration)
+// ============================================
+
+interface KycAccessTokenResponse {
+  success: boolean;
+  token?: string;
+  userId?: string;
+  error?: string;
+}
+
+interface KycStatusResponse {
+  success: boolean;
+  status: 'not_started' | 'pending' | 'approved' | 'rejected' | 'retry';
+  verified: boolean;
+  reviewStatus?: string;
+  reviewResult?: {
+    reviewAnswer: string;
+    rejectLabels?: string[];
+    reviewRejectType?: string;
+  };
+  error?: string;
+}
+
+/**
+ * Get Sumsub access token for WebSDK
+ */
+export async function getKycAccessToken(
+  userId: string,
+  levelName?: string
+): Promise<KycAccessTokenResponse> {
+  try {
+    const response = await fetch(`${API_URL}/api/kyc/access-token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, levelName }),
+    });
+
+    const result = await response.json() as KycAccessTokenResponse;
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: result.error || `Request failed with status ${response.status}`,
+      };
+    }
+
+    return result;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    console.error('Get KYC access token error:', message);
+    return {
+      success: false,
+      error: message,
+    };
+  }
+}
+
+/**
+ * Get KYC verification status for a user
+ */
+export async function getKycStatus(userId: string): Promise<KycStatusResponse> {
+  try {
+    const response = await fetch(`${API_URL}/api/kyc/status/${encodeURIComponent(userId)}`);
+
+    const result = await response.json() as KycStatusResponse;
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: 'not_started',
+        verified: false,
+        error: result.error || `Request failed with status ${response.status}`,
+      };
+    }
+
+    return result;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    console.error('Get KYC status error:', message);
+    return {
+      success: false,
+      status: 'not_started',
+      verified: false,
+      error: message,
+    };
+  }
+}
+
 // Export types for use in components
 export type {
   EarlyAccessSubmission,
   EarlyAccessResponse,
   NewsletterResponse,
   ApiResponse,
+  KycAccessTokenResponse,
+  KycStatusResponse,
 };
