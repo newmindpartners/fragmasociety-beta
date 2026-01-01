@@ -294,17 +294,22 @@ export function useEarlyAccessForm() {
   }, [formData]);
 
   const sendConfirmationEmail = useCallback(async () => {
+    console.log('🔔 sendConfirmationEmail called with:', { fullName: formData.fullName, email: formData.email });
     try {
+      if (!formData.email) {
+        console.error('🔔 No email in formData!');
+        return { success: false, error: 'No email provided' };
+      }
       const result = await sendConfirmationApi(formData.fullName, formData.email);
       
       if (!result.success) {
         throw new Error(result.error || 'Failed to send confirmation email');
       }
       
-      console.log('Confirmation email sent successfully');
+      console.log('🔔 Confirmation email sent successfully');
       return { success: true };
     } catch (err) {
-      console.error('Failed to send confirmation email:', err);
+      console.error('🔔 Failed to send confirmation email:', err);
       return { success: false, error: err };
     }
   }, [formData.fullName, formData.email]);
