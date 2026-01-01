@@ -4,6 +4,10 @@ import { env } from '../config/env.js';
 
 const SUMSUB_BASE_URL = 'https://api.sumsub.com';
 
+// Helper to get cleaned tokens (remove any accidental whitespace)
+const getAppToken = () => env.SUMSUB_APP_TOKEN?.trim() || '';
+const getSecretKey = () => env.SUMSUB_SECRET_KEY?.trim() || '';
+
 /**
  * Generate signature for Sumsub API requests
  * Format: HMAC-SHA256(secret, ts + method + path + body)
@@ -14,7 +18,8 @@ function generateSignature(
   urlPath: string,
   body: string = ''
 ): string {
-  if (!env.SUMSUB_SECRET_KEY) {
+  const secretKey = getSecretKey();
+  if (!secretKey) {
     throw new Error('SUMSUB_SECRET_KEY is not configured');
   }
   
@@ -26,15 +31,12 @@ function generateSignature(
     method: httpMethod.toUpperCase(), 
     path: urlPath, 
     bodyLength: body.length,
-    dataToSign: dataToSign.substring(0, 100) + '...',
   });
   
   const signature = crypto
-    .createHmac('sha256', env.SUMSUB_SECRET_KEY)
+    .createHmac('sha256', secretKey)
     .update(dataToSign)
     .digest('hex');
-    
-  console.log('Generated signature:', signature.substring(0, 20) + '...');
   
   return signature;
 }
@@ -128,7 +130,10 @@ export async function generateAccessToken(
   externalUserId: string,
   levelName?: string
 ): Promise<{ token: string; userId: string }> {
-  if (!env.SUMSUB_APP_TOKEN || !env.SUMSUB_SECRET_KEY) {
+  const appToken = getAppToken();
+  const secretKey = getSecretKey();
+  
+  if (!appToken || !secretKey) {
     throw new Error('Sumsub credentials are not configured');
   }
 
@@ -136,7 +141,6 @@ export async function generateAccessToken(
   const ts = Math.floor(Date.now() / 1000);
   
   // Build URL with query parameters (userId here maps to externalUserId)
-  // Try with 'basic-kyc-level' as fallback if the configured level doesn't exist
   const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}&ttlInSecs=1800`;
 
   // Signature for POST with no body
@@ -147,7 +151,8 @@ export async function generateAccessToken(
     ts, 
     level, 
     externalUserId,
-    appToken: env.SUMSUB_APP_TOKEN?.substring(0, 10) + '...',
+    appTokenPreview: `${appToken.substring(0, 10)}...${appToken.substring(appToken.length - 4)}`,
+    appTokenLength: appToken.length,
   });
 
   // POST with query parameters only - NO body
@@ -158,7 +163,7 @@ export async function generateAccessToken(
       url: `${SUMSUB_BASE_URL}${urlPath}`,
       headers: {
         'Accept': 'application/json',
-        'X-App-Token': env.SUMSUB_APP_TOKEN!,
+        'X-App-Token': appToken,
         'X-App-Access-Ts': ts.toString(),
         'X-App-Access-Sig': signature,
       },
