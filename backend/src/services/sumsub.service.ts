@@ -139,7 +139,8 @@ export async function getApplicantByExternalUserId(
 
 /**
  * Generate access token for WebSDK
- * Uses the applicant-based approach as fallback
+ * Uses /resources/accessTokens/sdk endpoint as per official Sumsub example
+ * https://github.com/SumSubstance/AppTokenUsageExamples/blob/master/Python/AppTokenPythonExample.py
  */
 export async function generateAccessToken(
   externalUserId: string,
@@ -153,39 +154,34 @@ export async function generateAccessToken(
   }
 
   const level = levelName || env.SUMSUB_LEVEL_NAME;
-  
-  // First, try to get or create an applicant
-  let applicant = await getApplicantByExternalUserId(externalUserId);
-  
-  if (!applicant) {
-    // Create applicant first
-    console.log('Creating new applicant for:', externalUserId);
-    applicant = await createApplicant(externalUserId);
-  }
-  
-  console.log('Applicant found/created:', applicant.id);
-  
-  // Now generate access token for this applicant using the SDK token endpoint
   const ts = Math.floor(Date.now() / 1000);
-  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}`;
   
-  // Signature for POST with no body
-  const signature = generateSignature(ts, 'POST', urlPath, '');
+  // Use /resources/accessTokens/sdk endpoint with JSON body
+  // This is the approach from the official Sumsub Python example
+  const urlPath = '/resources/accessTokens/sdk';
+  const bodyObj = { userId: externalUserId, levelName: level };
+  const bodyString = JSON.stringify(bodyObj);
+  
+  // Signature includes the body
+  const signature = generateSignature(ts, 'POST', urlPath, bodyString);
 
-  console.log('Sumsub access token request:', { 
+  console.log('Sumsub SDK access token request:', { 
     url: `${SUMSUB_BASE_URL}${urlPath}`,
     ts, 
     level, 
     externalUserId,
-    applicantId: applicant.id,
+    body: bodyString,
   });
 
   try {
     const response = await axios({
       method: 'POST',
       url: `${SUMSUB_BASE_URL}${urlPath}`,
+      data: bodyString,
       headers: {
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Content-Encoding': 'utf-8',
         'X-App-Token': appToken,
         'X-App-Access-Ts': ts.toString(),
         'X-App-Access-Sig': signature,
@@ -201,6 +197,7 @@ export async function generateAccessToken(
   } catch (error: any) {
     console.error('Sumsub access token error:', {
       status: error.response?.status,
+      statusText: error.response?.statusText,
       data: error.response?.data,
       message: error.message,
     });
