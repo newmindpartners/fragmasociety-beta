@@ -212,7 +212,7 @@ const KYC = () => {
           marginLeft: sidebarCollapsed ? 72 : 256,
         }}
       >
-        <DashboardHeader onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+        <DashboardHeader onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)} hideWalletBanner={true} />
         <main className="flex-1 min-w-0 bg-background px-6 py-6 lg:px-10 lg:py-8">
           <div className="mx-auto w-full max-w-[1000px]">
             {/* Header */}

@@ -147,9 +147,10 @@ const NavDropdown = ({ section }: { section: NavSection }) => {
 
 interface DashboardHeaderProps {
   onMenuToggle?: () => void;
+  hideWalletBanner?: boolean;
 }
 
-export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
+export const DashboardHeader = ({ onMenuToggle, hideWalletBanner = false }: DashboardHeaderProps) => {
   return (
     <header className="sticky top-0 z-30 bg-card/95 backdrop-blur-xl border-b border-border">
       {/* Main Header */}
@@ -177,27 +178,29 @@ export const DashboardHeader = ({ onMenuToggle }: DashboardHeaderProps) => {
         </div>
       </div>
 
-      {/* Connect Wallet Banner - Below Menu */}
-      <motion.div 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="bg-slate-100 py-2.5 px-6 border-t border-slate-200"
-      >
-        <div className="flex items-center justify-center gap-4">
-          <span className="text-sm font-medium text-slate-700">
-            Create your wallet in a few clicks
-          </span>
-          <Button 
-            variant="navy"
-            size="sm" 
-            className="rounded-full h-7 px-4 text-xs group"
-          >
-            <Wallet className="w-3 h-3 mr-1.5" />
-            Create Wallet
-            <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
-          </Button>
-        </div>
-      </motion.div>
+      {/* Connect Wallet Banner - Below Menu (hidden on KYC page) */}
+      {!hideWalletBanner && (
+        <motion.div 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="bg-slate-100 py-2.5 px-6 border-t border-slate-200"
+        >
+          <div className="flex items-center justify-center gap-4">
+            <span className="text-sm font-medium text-slate-700">
+              Create your wallet in a few clicks
+            </span>
+            <Button 
+              variant="navy"
+              size="sm" 
+              className="rounded-full h-7 px-4 text-xs group"
+            >
+              <Wallet className="w-3 h-3 mr-1.5" />
+              Create Wallet
+              <ArrowRight className="w-3 h-3 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
+            </Button>
+          </div>
+        </motion.div>
+      )}
     </header>
   );
 };
