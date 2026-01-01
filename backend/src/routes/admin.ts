@@ -408,7 +408,11 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
         });
       }
 
-      const updatedUser = await response.json();
+      const updatedUser = await response.json() as {
+        id: string;
+        email_addresses?: { email_address: string }[];
+        public_metadata?: { role?: string };
+      };
 
       return reply.send({
         success: true,
@@ -465,10 +469,19 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
         });
       }
 
-      const users = await response.json();
+      const users = await response.json() as Array<{
+        id: string;
+        email_addresses?: { email_address: string }[];
+        first_name?: string;
+        last_name?: string;
+        image_url?: string;
+        public_metadata?: { role?: string };
+        created_at?: number;
+        last_sign_in_at?: number;
+      }>;
 
       // Map to a simpler format
-      const mappedUsers = users.map((user: any) => ({
+      const mappedUsers = users.map((user) => ({
         id: user.id,
         email: user.email_addresses?.[0]?.email_address || '',
         firstName: user.first_name,
