@@ -6,6 +6,7 @@ const SUMSUB_BASE_URL = 'https://api.sumsub.com';
 
 /**
  * Generate signature for Sumsub API requests
+ * Format: HMAC-SHA256(secret, ts + method + path + body)
  */
 function generateSignature(
   ts: number,
@@ -17,11 +18,25 @@ function generateSignature(
     throw new Error('SUMSUB_SECRET_KEY is not configured');
   }
   
-  const data = ts + httpMethod.toUpperCase() + urlPath + body;
-  return crypto
+  // Sumsub expects: timestamp (as string) + method (uppercase) + url path (including query) + body
+  const dataToSign = ts.toString() + httpMethod.toUpperCase() + urlPath + body;
+  
+  console.log('Signature data:', { 
+    ts: ts.toString(), 
+    method: httpMethod.toUpperCase(), 
+    path: urlPath, 
+    bodyLength: body.length,
+    dataToSign: dataToSign.substring(0, 100) + '...',
+  });
+  
+  const signature = crypto
     .createHmac('sha256', env.SUMSUB_SECRET_KEY)
-    .update(data)
+    .update(dataToSign)
     .digest('hex');
+    
+  console.log('Generated signature:', signature.substring(0, 20) + '...');
+  
+  return signature;
 }
 
 /**

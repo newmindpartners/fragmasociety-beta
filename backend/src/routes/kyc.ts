@@ -50,10 +50,11 @@ export async function kycRoutes(app: FastifyInstance) {
         userId: result.userId,
       });
     } catch (error: any) {
-      console.error('Error generating access token:', error.response?.data || error.message);
+      console.error('Error generating access token:', error);
       return reply.status(500).send({
         success: false,
-        error: error.response?.data?.description || error.message || 'Failed to generate access token',
+        error: error.message || 'Failed to generate access token',
+        details: error.response?.data || null,
       });
     }
   });
