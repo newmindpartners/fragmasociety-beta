@@ -165,11 +165,11 @@ export async function generateAccessToken(
     signaturePreview: signature.substring(0, 20) + '...',
   });
 
-  // POST with JSON body
+  // POST with JSON body - send exact string to match signature
   try {
     const response = await axios.post(
       `${SUMSUB_BASE_URL}${urlPath}`,
-      requestBody,
+      bodyString, // Send as string, not object
       {
         headers: {
           'Accept': 'application/json',
