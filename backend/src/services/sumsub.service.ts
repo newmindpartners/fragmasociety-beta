@@ -58,11 +58,13 @@ export async function createApplicant(
   const ts = Math.floor(Date.now() / 1000);
   const urlPath = `/resources/applicants?levelName=${env.SUMSUB_LEVEL_NAME}`;
   
-  const body = JSON.stringify({
+  // Only include defined fields in body
+  const bodyObj: { externalUserId: string; email?: string; phone?: string } = {
     externalUserId,
-    email,
-    phone,
-  });
+  };
+  if (email) bodyObj.email = email;
+  if (phone) bodyObj.phone = phone;
+  const body = JSON.stringify(bodyObj);
 
   const signature = generateSignature(ts, 'POST', urlPath, body);
 
