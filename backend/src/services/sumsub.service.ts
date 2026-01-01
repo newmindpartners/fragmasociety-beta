@@ -155,8 +155,8 @@ export async function generateAccessToken(
   const level = levelName || env.SUMSUB_LEVEL_NAME;
   const ts = Math.floor(Date.now() / 1000);
   
-  // Try approach 1: /resources/accessTokens with query params (for existing applicants)
-  const urlPath = `/resources/accessTokens?userId=${encodeURIComponent(externalUserId)}&levelName=${encodeURIComponent(level)}&ttlInSecs=3600`;
+  // Try simple query params approach - minimal URL
+  const urlPath = `/resources/accessTokens?userId=${externalUserId}&levelName=${level}`;
   
   // Signature for POST with NO body
   const signature = generateSignature(ts, 'POST', urlPath, '');
