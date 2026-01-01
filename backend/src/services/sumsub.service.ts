@@ -118,27 +118,38 @@ export async function generateAccessToken(
 
   const level = levelName || env.SUMSUB_LEVEL_NAME;
   const ts = Math.floor(Date.now() / 1000);
-  const urlPath = `/resources/accessTokens?userId=${externalUserId}&levelName=${level}&ttlInSecs=1800`;
+  
+  // Use the SDK token endpoint with proper URL encoding
+  const encodedUserId = encodeURIComponent(externalUserId);
+  const encodedLevel = encodeURIComponent(level);
+  const urlPath = `/resources/accessTokens?userId=${encodedUserId}&levelName=${encodedLevel}&ttlInSecs=1800`;
 
-  const signature = generateSignature(ts, 'POST', urlPath);
+  // For POST with no body, signature should not include body
+  const signature = generateSignature(ts, 'POST', urlPath, '');
 
-  const response = await axios.post(
-    `${SUMSUB_BASE_URL}${urlPath}`,
-    null,
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X-App-Token': env.SUMSUB_APP_TOKEN,
-        'X-App-Access-Ts': ts.toString(),
-        'X-App-Access-Sig': signature,
-      },
-    }
-  );
+  try {
+    const response = await axios.post(
+      `${SUMSUB_BASE_URL}${urlPath}`,
+      '', // Empty body
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-App-Token': env.SUMSUB_APP_TOKEN,
+          'X-App-Access-Ts': ts.toString(),
+          'X-App-Access-Sig': signature,
+        },
+      }
+    );
 
-  return {
-    token: response.data.token,
-    userId: response.data.userId,
-  };
+    return {
+      token: response.data.token,
+      userId: response.data.userId,
+    };
+  } catch (error: any) {
+    console.error('Sumsub access token error:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.description || error.response?.data?.message || 'Failed to generate access token');
+  }
 }
 
 /**
