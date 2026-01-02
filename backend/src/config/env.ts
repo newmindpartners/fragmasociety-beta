@@ -28,9 +28,17 @@ const envSchema = z.object({
   // Clerk (for admin role management)
   CLERK_SECRET_KEY: z.string().optional(),
 
-  // OpenAI (for AI Compliance Agent)
+  // AI Models (for AI Compliance Agent)
+  // OpenAI
   OPENAI_API_KEY: z.string().optional(),
-  OPENAI_MODEL: z.string().default('gpt-4o'),
+  OPENAI_MODEL: z.string().default('gpt-4.5-preview'), // GPT-5.2 when available, fallback to latest
+  
+  // Google Gemini
+  GOOGLE_AI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().default('gemini-2.0-flash-exp'), // Gemini 3 when available
+  
+  // AI Provider preference: 'gemini' | 'openai' | 'auto' (tries both)
+  AI_PROVIDER: z.enum(['gemini', 'openai', 'auto']).default('auto'),
 });
 
 export type Env = z.infer<typeof envSchema>;

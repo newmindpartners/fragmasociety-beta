@@ -7,8 +7,12 @@
  */
 
 import OpenAI from 'openai';
+import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { env } from '../config/env.js';
 import { JURISDICTION_RULES, checkJurisdictionEligibility, InvestorProfile, EligibilityResult } from './jurisdiction.service.js';
+
+// AI Provider type
+type AIProvider = 'gemini' | 'openai';
 
 // =============================================
 // TYPES
@@ -198,17 +202,74 @@ Provide a JSON response with:
 
 class ComplianceAIService {
   private openai: OpenAI | null = null;
+  private gemini: GoogleGenerativeAI | null = null;
+  private geminiModel: GenerativeModel | null = null;
+  private activeProvider: AIProvider | null = null;
 
   constructor() {
+    // Initialize OpenAI if configured
     if (env.OPENAI_API_KEY) {
       this.openai = new OpenAI({
         apiKey: env.OPENAI_API_KEY,
       });
+      console.log(`✅ OpenAI initialized with model: ${env.OPENAI_MODEL}`);
+    }
+
+    // Initialize Gemini if configured
+    if (env.GOOGLE_AI_API_KEY) {
+      this.gemini = new GoogleGenerativeAI(env.GOOGLE_AI_API_KEY);
+      this.geminiModel = this.gemini.getGenerativeModel({ 
+        model: env.GEMINI_MODEL,
+        generationConfig: {
+          temperature: 0.3,
+          topP: 0.95,
+          topK: 40,
+          maxOutputTokens: 4096,
+        },
+      });
+      console.log(`✅ Gemini initialized with model: ${env.GEMINI_MODEL}`);
+    }
+
+    // Determine active provider based on preference
+    this.activeProvider = this.determineProvider();
+    if (this.activeProvider) {
+      console.log(`🤖 AI Compliance Officer using: ${this.activeProvider.toUpperCase()}`);
     }
   }
 
+  private determineProvider(): AIProvider | null {
+    const preference = env.AI_PROVIDER;
+
+    if (preference === 'gemini' && this.gemini) {
+      return 'gemini';
+    }
+    if (preference === 'openai' && this.openai) {
+      return 'openai';
+    }
+    if (preference === 'auto') {
+      // Prefer Gemini (Gemini 3), fallback to OpenAI (GPT-5.2)
+      if (this.gemini) return 'gemini';
+      if (this.openai) return 'openai';
+    }
+    return null;
+  }
+
   private isConfigured(): boolean {
-    return this.openai !== null;
+    return this.activeProvider !== null;
+  }
+
+  getActiveProvider(): string | null {
+    return this.activeProvider;
+  }
+
+  getModelInfo(): { provider: string; model: string } | null {
+    if (this.activeProvider === 'gemini') {
+      return { provider: 'Google Gemini', model: env.GEMINI_MODEL };
+    }
+    if (this.activeProvider === 'openai') {
+      return { provider: 'OpenAI', model: env.OPENAI_MODEL };
+    }
+    return null;
   }
 
   private async chat(
@@ -216,8 +277,43 @@ class ComplianceAIService {
     userMessage: string,
     temperature: number = 0.3
   ): Promise<string> {
+    if (this.activeProvider === 'gemini' && this.geminiModel) {
+      return this.chatWithGemini(systemPrompt, userMessage, temperature);
+    }
+    if (this.activeProvider === 'openai' && this.openai) {
+      return this.chatWithOpenAI(systemPrompt, userMessage, temperature);
+    }
+    throw new Error('No AI provider configured. Please set GOOGLE_AI_API_KEY or OPENAI_API_KEY.');
+  }
+
+  private async chatWithGemini(
+    systemPrompt: string,
+    userMessage: string,
+    temperature: number = 0.3
+  ): Promise<string> {
+    if (!this.geminiModel) {
+      throw new Error('Gemini is not configured.');
+    }
+
+    // Gemini uses a different format - combine system prompt with user message
+    const fullPrompt = `${systemPrompt}\n\n---\n\nUser Query:\n${userMessage}`;
+    
+    const result = await this.geminiModel.generateContent({
+      contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+      generationConfig: { temperature },
+    });
+
+    const response = result.response;
+    return response.text() || '';
+  }
+
+  private async chatWithOpenAI(
+    systemPrompt: string,
+    userMessage: string,
+    temperature: number = 0.3
+  ): Promise<string> {
     if (!this.openai) {
-      throw new Error('OpenAI is not configured. Please set OPENAI_API_KEY environment variable.');
+      throw new Error('OpenAI is not configured.');
     }
 
     const response = await this.openai.chat.completions.create({
@@ -227,7 +323,7 @@ class ComplianceAIService {
         { role: 'user', content: userMessage },
       ],
       temperature,
-      max_tokens: 2000,
+      max_tokens: 4096,
     });
 
     return response.choices[0]?.message?.content || '';
@@ -238,8 +334,52 @@ class ComplianceAIService {
     messages: ChatMessage[],
     temperature: number = 0.5
   ): Promise<string> {
+    if (this.activeProvider === 'gemini' && this.geminiModel) {
+      return this.chatWithHistoryGemini(systemPrompt, messages, temperature);
+    }
+    if (this.activeProvider === 'openai' && this.openai) {
+      return this.chatWithHistoryOpenAI(systemPrompt, messages, temperature);
+    }
+    throw new Error('No AI provider configured.');
+  }
+
+  private async chatWithHistoryGemini(
+    systemPrompt: string,
+    messages: ChatMessage[],
+    temperature: number = 0.5
+  ): Promise<string> {
+    if (!this.geminiModel) {
+      throw new Error('Gemini is not configured.');
+    }
+
+    // Build conversation history for Gemini
+    const history = messages.slice(0, -1).map(m => ({
+      role: m.role === 'assistant' ? 'model' as const : 'user' as const,
+      parts: [{ text: m.content }],
+    }));
+
+    const chat = this.geminiModel.startChat({
+      history,
+      generationConfig: { temperature },
+    });
+
+    // Add system prompt context to the last user message
+    const lastMessage = messages[messages.length - 1];
+    const contextualMessage = messages.length === 1 
+      ? `${systemPrompt}\n\n---\n\nUser Query:\n${lastMessage.content}`
+      : lastMessage.content;
+
+    const result = await chat.sendMessage(contextualMessage);
+    return result.response.text() || '';
+  }
+
+  private async chatWithHistoryOpenAI(
+    systemPrompt: string,
+    messages: ChatMessage[],
+    temperature: number = 0.5
+  ): Promise<string> {
     if (!this.openai) {
-      throw new Error('OpenAI is not configured. Please set OPENAI_API_KEY environment variable.');
+      throw new Error('OpenAI is not configured.');
     }
 
     const formattedMessages = [
@@ -251,7 +391,7 @@ class ComplianceAIService {
       model: env.OPENAI_MODEL,
       messages: formattedMessages,
       temperature,
-      max_tokens: 2000,
+      max_tokens: 4096,
     });
 
     return response.choices[0]?.message?.content || '';

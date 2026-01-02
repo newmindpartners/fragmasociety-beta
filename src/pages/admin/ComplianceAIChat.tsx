@@ -26,6 +26,16 @@ interface Message {
   timestamp: Date;
 }
 
+interface AIStatus {
+  available: boolean;
+  message: string;
+  provider?: string;
+  model?: {
+    provider: string;
+    model: string;
+  };
+}
+
 const SUGGESTED_QUESTIONS = [
   "What are the requirements for Professional investor classification?",
   "How do I assess suitability for a high-risk investment?",
@@ -41,7 +51,7 @@ const ComplianceAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [aiStatus, setAiStatus] = useState<{ available: boolean; message: string } | null>(null);
+  const [aiStatus, setAiStatus] = useState<AIStatus | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -224,7 +234,11 @@ const ComplianceAIChat = () => {
                   ) : (
                     <AlertCircle className="w-3 h-3" />
                   )}
-                  {aiStatus.available ? 'AI Online' : 'Rule-based Mode'}
+                  {aiStatus.available && aiStatus.model 
+                    ? `${aiStatus.model.provider} · ${aiStatus.model.model}` 
+                    : aiStatus.available 
+                      ? 'AI Online' 
+                      : 'Rule-based Mode'}
                 </div>
               )}
               <button

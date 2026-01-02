@@ -1310,11 +1310,16 @@ export async function complianceRoutes(fastify: FastifyInstance) {
     request: FastifyRequest,
     reply: FastifyReply
   ) => {
+    const modelInfo = complianceAI.getModelInfo();
+    const provider = complianceAI.getActiveProvider();
+    
     return reply.status(200).send({
       success: true,
       available: complianceAI.isAvailable(),
-      message: complianceAI.isAvailable() 
-        ? 'AI Compliance Officer is online and ready'
+      provider: provider,
+      model: modelInfo,
+      message: complianceAI.isAvailable()
+        ? `AI Compliance Officer online - ${modelInfo?.provider} (${modelInfo?.model})`
         : 'AI service not configured - using rule-based fallbacks',
     });
   });
