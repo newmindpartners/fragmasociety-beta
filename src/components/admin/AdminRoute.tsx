@@ -3,6 +3,9 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Shield, Loader2 } from "lucide-react";
 
+// Check if Clerk is available (demo mode bypass)
+const isClerkAvailable = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
 interface AdminRouteProps {
   children: ReactNode;
 }
@@ -11,10 +14,17 @@ interface AdminRouteProps {
  * AdminRoute - Protects admin routes by checking:
  * 1. User is authenticated (via Clerk)
  * 2. User has admin role in their publicMetadata
+ * 
+ * In demo mode (Clerk not configured), allows access to admin pages.
  */
 export const AdminRoute = ({ children }: AdminRouteProps) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   const location = useLocation();
+
+  // Demo mode - allow access when Clerk is not configured
+  if (!isClerkAvailable) {
+    return <>{children}</>;
+  }
 
   // Show loading state while checking auth
   if (loading) {

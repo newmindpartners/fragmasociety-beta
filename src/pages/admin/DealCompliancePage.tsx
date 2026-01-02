@@ -9,17 +9,13 @@ import {
   Building2,
   AlertTriangle,
   CheckCircle2,
-  Clock,
   Users,
   Globe,
-  ChevronRight,
   Edit,
-  Eye,
   RefreshCw,
   Save,
   X,
   Loader2,
-  Database,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -58,7 +54,6 @@ const DealCompliancePage = () => {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [seeding, setSeeding] = useState(false);
 
   // Edit form state
   const [editForm, setEditForm] = useState({
@@ -93,28 +88,6 @@ const DealCompliancePage = () => {
       console.error('Failed to fetch deals:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const seedMockData = async () => {
-    setSeeding(true);
-    try {
-      const response = await fetch(`${API_URL}/api/compliance/admin/seed-mock-data`, {
-        method: 'POST',
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        alert(`✅ ${data.message}`);
-        fetchDeals();
-      } else {
-        alert(`❌ Failed to seed data: ${data.error}`);
-      }
-    } catch (error) {
-      console.error('Failed to seed data:', error);
-      alert('Failed to seed mock data');
-    } finally {
-      setSeeding(false);
     }
   };
 
@@ -234,21 +207,13 @@ const DealCompliancePage = () => {
             </div>
             <div className="flex items-center gap-3">
               <button 
-                onClick={seedMockData}
-                disabled={seeding}
-                className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm disabled:opacity-50"
-              >
-                {seeding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
-                Seed Mock Data
-              </button>
-              <button 
                 onClick={fetchDeals}
-                className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg transition-colors text-sm"
               >
                 <RefreshCw className="w-4 h-4" />
                 Refresh
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 rounded-lg transition-colors text-white text-sm font-medium">
+              <button className="flex items-center gap-2 px-4 py-2 bg-foreground hover:bg-foreground/90 rounded-lg transition-colors text-background text-sm font-medium">
                 <Plus className="w-4 h-4" />
                 New Deal
               </button>
@@ -323,13 +288,7 @@ const DealCompliancePage = () => {
             <div className="text-center py-12">
               <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
               <p className="text-muted-foreground mb-4">No deals found</p>
-              <button 
-                onClick={seedMockData}
-                disabled={seeding}
-                className="px-4 py-2 bg-violet-600 hover:bg-violet-700 rounded-lg transition-colors text-white text-sm"
-              >
-                Seed Mock Data
-              </button>
+              <p className="text-xs text-muted-foreground">Deals are loaded from your Supabase database</p>
             </div>
           ) : (
             /* Deals List */

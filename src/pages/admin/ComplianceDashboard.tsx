@@ -245,7 +245,7 @@ const ComplianceDashboard = () => {
             <button
               onClick={fetchComplianceData}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground hover:bg-foreground/90 text-background rounded-lg transition-colors disabled:opacity-50 font-medium text-sm"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               Refresh
@@ -501,10 +501,10 @@ const ComplianceDashboard = () => {
         <footer className="mt-auto border-t border-border/60 bg-card px-6 py-4 lg:px-10">
           <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 sm:flex-row">
             <p className="text-xs text-muted-foreground">
-              © 2024 Fragma Finance - Compliance Engine
+              © 2024 Fragma Finance. All rights reserved.
             </p>
-            <p className="text-xs text-violet-400">
-              v1.0.0 - Luxembourg Securitisation Law Compliant
+            <p className="text-xs text-muted-foreground">
+              Luxembourg Securitisation Law Compliant
             </p>
           </div>
         </footer>

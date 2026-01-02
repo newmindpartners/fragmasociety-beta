@@ -962,11 +962,22 @@ export async function complianceRoutes(fastify: FastifyInstance) {
   });
   
   // =============================================
-  // ADMIN: INVESTOR MANAGEMENT
+  // ADMIN: INVESTOR MANAGEMENT (from EarlyAccessSubmission)
   // =============================================
   
+  // Country code mapping
+  const COUNTRY_CODE_MAP: Record<string, string> = {
+    'France': 'FR', 'Germany': 'DE', 'Italy': 'IT', 'Spain': 'ES', 'Portugal': 'PT',
+    'Netherlands': 'NL', 'Belgium': 'BE', 'Luxembourg': 'LU', 'Switzerland': 'CH',
+    'United Kingdom': 'GB', 'UK': 'GB', 'United States': 'US', 'USA': 'US',
+    'Canada': 'CA', 'Australia': 'AU', 'Japan': 'JP', 'Singapore': 'SG',
+    'United Arab Emirates': 'AE', 'UAE': 'AE', 'Dubai': 'AE', 'Saudi Arabia': 'SA',
+    'Qatar': 'QA', 'Monaco': 'MC', 'Liechtenstein': 'LI', 'Austria': 'AT',
+    'Ireland': 'IE', 'Sweden': 'SE', 'Denmark': 'DK', 'Norway': 'NO', 'Finland': 'FI',
+  };
+  
   /**
-   * List all investors with compliance status
+   * List all investors from EarlyAccessSubmission
    */
   fastify.get('/api/compliance/admin/investors', async (
     request: FastifyRequest<{ 
@@ -983,39 +994,86 @@ export async function complianceRoutes(fastify: FastifyInstance) {
     try {
       const { status, investorType, countryCode, limit = 50, offset = 0 } = request.query;
       
-      const where: any = {};
-      if (status) where.complianceStatus = status;
-      if (investorType) where.investorType = investorType;
-      if (countryCode) where.countryCode = countryCode;
+      // Fetch from EarlyAccessSubmission table
+      const submissions = await prisma.earlyAccessSubmission.findMany({
+        orderBy: { createdAt: 'desc' },
+        take: Number(limit),
+        skip: Number(offset),
+      });
       
-      const [investors, total] = await Promise.all([
-        prisma.investor.findMany({
-          where,
-          orderBy: { createdAt: 'desc' },
-          take: Number(limit),
-          skip: Number(offset),
-          include: {
-            complianceChecks: {
-              orderBy: { createdAt: 'desc' },
-              take: 1,
-            },
-          },
-        }),
-        prisma.investor.count({ where }),
-      ]);
+      const total = await prisma.earlyAccessSubmission.count();
       
-      // Get counts by status
-      const statusCounts = await prisma.investor.groupBy({
-        by: ['complianceStatus'],
-        _count: true,
+      // Transform to investor format
+      const investors = submissions.map(sub => {
+        // Determine investor type based on investorStatus
+        let type: string = 'RETAIL';
+        if (sub.investorStatus === 'professional') type = 'PROFESSIONAL';
+        else if (sub.investorStatus === 'qualified') type = 'QUALIFIED';
+        else if (sub.investorStatus === 'accredited') type = 'ACCREDITED';
+        
+        // Get country code
+        const countryCodeVal = COUNTRY_CODE_MAP[sub.country] || sub.country?.substring(0, 2).toUpperCase() || 'XX';
+        
+        // Determine compliance status based on tags
+        let complianceStatus = 'PENDING_REVIEW';
+        if (sub.tags.includes('APPROVED')) complianceStatus = 'APPROVED';
+        else if (sub.tags.includes('REJECTED')) complianceStatus = 'REJECTED';
+        else if (sub.tags.includes('REQUIRES_DOCS')) complianceStatus = 'REQUIRES_DOCUMENTS';
+        
+        return {
+          id: sub.id,
+          email: sub.email,
+          firstName: sub.fullName.split(' ')[0],
+          lastName: sub.fullName.split(' ').slice(1).join(' ') || '',
+          countryCode: countryCodeVal,
+          investorType: type,
+          complianceStatus,
+          kycStatus: 'pending',
+          riskScore: sub.isPep ? 8 : sub.isSanctioned ? 10 : 3,
+          totalAssets: sub.investableCapital || '',
+          isPep: sub.isPep,
+          isSanctioned: sub.isSanctioned,
+          createdAt: sub.createdAt.toISOString(),
+          fullName: sub.fullName,
+          registeringAs: sub.registeringAs,
+          entityName: sub.entityName,
+          annualIncome: sub.annualIncome,
+          investableCapital: sub.investableCapital,
+          investmentHorizon: sub.investmentHorizon,
+          preferredTicketSize: sub.preferredTicketSize,
+          assetInterests: sub.assetInterests,
+          city: sub.city,
+          tags: sub.tags,
+        };
+      });
+      
+      // Apply filters
+      let filtered = investors;
+      if (status) {
+        filtered = filtered.filter(i => i.complianceStatus === status);
+      }
+      if (investorType) {
+        filtered = filtered.filter(i => i.investorType === investorType);
+      }
+      if (countryCode) {
+        filtered = filtered.filter(i => i.countryCode === countryCode);
+      }
+      
+      // Calculate status counts from all submissions
+      const statusCounts: Record<string, number> = {
+        'PENDING_REVIEW': 0,
+        'APPROVED': 0,
+        'REJECTED': 0,
+        'REQUIRES_DOCUMENTS': 0,
+      };
+      investors.forEach(i => {
+        statusCounts[i.complianceStatus] = (statusCounts[i.complianceStatus] || 0) + 1;
       });
       
       return reply.status(200).send({
         success: true,
-        investors,
-        statusCounts: Object.fromEntries(
-          statusCounts.map(s => [s.complianceStatus, s._count])
-        ),
+        investors: filtered,
+        statusCounts,
         pagination: {
           total,
           limit: Number(limit),
@@ -1033,13 +1091,13 @@ export async function complianceRoutes(fastify: FastifyInstance) {
   });
   
   /**
-   * Update investor compliance status
+   * Update investor compliance status (updates tags on EarlyAccessSubmission)
    */
   fastify.put('/api/compliance/admin/investors/:investorId/status', async (
     request: FastifyRequest<{ 
       Params: { investorId: string };
       Body: { 
-        status: ComplianceStatus;
+        status: string;
         notes?: string;
         reviewedBy: string;
       };
@@ -1050,61 +1108,44 @@ export async function complianceRoutes(fastify: FastifyInstance) {
       const { investorId } = request.params;
       const { status, notes, reviewedBy } = request.body;
       
-      const investor = await prisma.investor.findUnique({
+      // Find the EarlyAccessSubmission
+      const submission = await prisma.earlyAccessSubmission.findUnique({
         where: { id: investorId },
       });
       
-      if (!investor) {
+      if (!submission) {
         return reply.status(404).send({
           success: false,
           error: 'Investor not found',
         });
       }
       
-      const previousStatus = investor.complianceStatus;
+      // Update tags to reflect new status
+      const statusTags = ['PENDING_REVIEW', 'APPROVED', 'REJECTED', 'REQUIRES_DOCS', 'SUSPENDED'];
+      let newTags = submission.tags.filter(t => !statusTags.includes(t));
       
-      // Update investor
-      const updated = await prisma.investor.update({
+      // Add the new status tag
+      if (status === 'APPROVED') newTags.push('APPROVED');
+      else if (status === 'REJECTED') newTags.push('REJECTED');
+      else if (status === 'REQUIRES_DOCUMENTS') newTags.push('REQUIRES_DOCS');
+      else if (status === 'SUSPENDED') newTags.push('SUSPENDED');
+      // PENDING_REVIEW is the default, no tag needed
+      
+      // Update the submission
+      const updated = await prisma.earlyAccessSubmission.update({
         where: { id: investorId },
         data: {
-          complianceStatus: status,
-          complianceNotes: notes,
-          lastReviewDate: new Date(),
-          lastReviewedBy: reviewedBy,
-        },
-      });
-      
-      // Create compliance check
-      await prisma.complianceCheck.create({
-        data: {
-          investorId,
-          checkType: 'ADMIN_REVIEW',
-          status: status === 'APPROVED' ? 'passed' : status === 'REJECTED' ? 'failed' : 'pending',
-          adminReview: notes,
-          reviewedBy,
-          reviewedAt: new Date(),
-        },
-      });
-      
-      // Audit log
-      await prisma.complianceAuditLog.create({
-        data: {
-          actorType: 'admin',
-          actorId: reviewedBy,
-          targetType: 'investor',
-          targetId: investorId,
-          investorId,
-          action: 'status_updated',
-          category: 'compliance',
-          previousValue: { status: previousStatus },
-          newValue: { status },
-          reason: notes,
+          tags: newTags,
         },
       });
       
       return reply.status(200).send({
         success: true,
-        investor: updated,
+        investor: {
+          ...updated,
+          complianceStatus: status,
+        },
+        message: `Status updated to ${status}`,
       });
       
     } catch (error: any) {
@@ -1117,13 +1158,13 @@ export async function complianceRoutes(fastify: FastifyInstance) {
   });
   
   /**
-   * Reclassify investor type
+   * Reclassify investor type (updates tags on EarlyAccessSubmission)
    */
   fastify.put('/api/compliance/admin/investors/:investorId/reclassify', async (
     request: FastifyRequest<{ 
       Params: { investorId: string };
       Body: { 
-        investorType: InvestorType;
+        investorType: string;
         reason: string;
         classifiedBy: string;
       };
@@ -1134,65 +1175,42 @@ export async function complianceRoutes(fastify: FastifyInstance) {
       const { investorId } = request.params;
       const { investorType, reason, classifiedBy } = request.body;
       
-      const investor = await prisma.investor.findUnique({
+      // Find the EarlyAccessSubmission
+      const submission = await prisma.earlyAccessSubmission.findUnique({
         where: { id: investorId },
       });
       
-      if (!investor) {
+      if (!submission) {
         return reply.status(404).send({
           success: false,
           error: 'Investor not found',
         });
       }
       
-      const previousType = investor.investorType;
+      // Determine previous type from tags
+      const typeTags = ['RETAIL', 'PROFESSIONAL', 'QUALIFIED', 'ACCREDITED', 'WHOLESALE', 'QII'];
+      const previousType = submission.tags.find(t => typeTags.includes(t)) || 'RETAIL';
       
-      // Update investor
-      const updated = await prisma.investor.update({
+      // Update tags with new investor type
+      let newTags = submission.tags.filter(t => !typeTags.includes(t));
+      newTags.push(investorType);
+      
+      // Update the submission
+      const updated = await prisma.earlyAccessSubmission.update({
         where: { id: investorId },
         data: {
-          investorType,
-          classificationDate: new Date(),
-          classifiedBy,
-        },
-      });
-      
-      // Create compliance check
-      await prisma.complianceCheck.create({
-        data: {
-          investorId,
-          checkType: 'RECLASSIFICATION',
-          status: 'passed',
-          adminReview: reason,
-          reviewedBy: classifiedBy,
-          reviewedAt: new Date(),
-          metadata: JSON.parse(JSON.stringify({
-            previousType,
-            newType: investorType,
-          })),
-        },
-      });
-      
-      // Audit log
-      await prisma.complianceAuditLog.create({
-        data: {
-          actorType: 'admin',
-          actorId: classifiedBy,
-          targetType: 'investor',
-          targetId: investorId,
-          investorId,
-          action: 'reclassified',
-          category: 'classification',
-          previousValue: { investorType: previousType },
-          newValue: { investorType },
-          reason,
+          tags: newTags,
         },
       });
       
       return reply.status(200).send({
         success: true,
-        investor: updated,
+        investor: {
+          ...updated,
+          investorType,
+        },
         previousType,
+        message: `Reclassified from ${previousType} to ${investorType}`,
       });
       
     } catch (error: any) {
@@ -1806,49 +1824,91 @@ export async function complianceRoutes(fastify: FastifyInstance) {
   });
 
   // =============================================
-  // DEAL MANAGEMENT
+  // DEAL MANAGEMENT (from Supabase deals table)
   // =============================================
 
   /**
-   * Get all deals
+   * Get all deals from Supabase deals table
    */
   fastify.get('/api/compliance/deals', async (
     request: FastifyRequest<{
-      Querystring: { status?: string; compartment?: string };
+      Querystring: { status?: string; category?: string };
     }>,
     reply: FastifyReply
   ) => {
     try {
-      const { status, compartment } = request.query;
-
-      const where: any = {};
-      if (status && status !== 'all') {
-        where.status = status;
+      // Fetch deals from Supabase via the existing admin submissions endpoint pattern
+      // Using direct Supabase query would be ideal, but we'll adapt existing data
+      
+      // For now, return formatted deals from Supabase
+      const supabaseUrl = process.env.SUPABASE_URL;
+      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        return reply.status(500).send({
+          success: false,
+          error: 'Supabase not configured',
+        });
       }
-      if (compartment && compartment !== 'all') {
-        where.compartmentType = compartment;
-      }
 
-      const deals = await prisma.deal.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          _count: {
-            select: {
-              eligibleInvestors: true,
-              jurisdictions: true,
-            },
-          },
+      const response = await fetch(`${supabaseUrl}/rest/v1/deals?select=*&order=created_at.desc`, {
+        headers: {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`Supabase error: ${response.statusText}`);
+      }
+
+      const supabaseDeals = await response.json() as Array<{
+        id: string;
+        title: string;
+        description: string;
+        category: string;
+        subcategory: string;
+        min_ticket: string;
+        max_ticket: string | null;
+        total_raise: string;
+        current_raised: string | null;
+        currency: string;
+        risk: string;
+        instrument_type: string;
+        leader_name: string;
+        investor_count: number | null;
+        created_at: string;
+      }>;
+
+      // Transform to compliance format
+      const deals = supabaseDeals.map(deal => ({
+        id: deal.id,
+        name: deal.title,
+        slug: deal.id,
+        description: deal.description,
+        compartmentType: deal.instrument_type === 'Notes' ? 'RETAIL' : 'PROFESSIONAL',
+        assetClass: deal.category,
+        assetCoName: deal.leader_name,
+        minimumInvestment: parseFloat(deal.min_ticket.replace(/[^0-9.]/g, '')) || 0,
+        maximumInvestment: deal.max_ticket ? parseFloat(deal.max_ticket.replace(/[^0-9.]/g, '')) : null,
+        targetRaise: parseFloat(deal.total_raise.replace(/[^0-9.]/g, '')) || 0,
+        currentRaise: deal.current_raised ? parseFloat(deal.current_raised.replace(/[^0-9.]/g, '')) : 0,
+        currency: deal.currency || 'EUR',
+        riskLevel: deal.risk === 'High' ? 8 : deal.risk === 'Medium' ? 5 : 3,
+        liquidityRisk: 'medium',
+        requiresProspectus: deal.instrument_type === 'Notes',
+        requiresPRIIPSKID: deal.instrument_type === 'Notes',
+        requiresPPM: deal.instrument_type !== 'Notes',
+        cssfApproved: false,
+        capitalAtRisk: true,
+        status: 'active',
+        investorCount: deal.investor_count || 0,
+        createdAt: deal.created_at,
+      }));
+
       return reply.status(200).send({
         success: true,
-        deals: deals.map(deal => ({
-          ...deal,
-          eligibleInvestorsCount: deal._count.eligibleInvestors,
-          jurisdictionsCount: deal._count.jurisdictions,
-        })),
+        deals,
         count: deals.length,
       });
 
@@ -2018,79 +2078,6 @@ export async function complianceRoutes(fastify: FastifyInstance) {
 
     } catch (error: any) {
       console.error('Update deal error:', error);
-      return reply.status(500).send({
-        success: false,
-        error: error.message,
-      });
-    }
-  });
-
-  /**
-   * Seed mock data (admin only)
-   */
-  fastify.post('/api/compliance/admin/seed-mock-data', async (
-    request: FastifyRequest,
-    reply: FastifyReply
-  ) => {
-    try {
-      // Mock investors
-      const mockInvestors = [
-        { clerkUserId: 'user_demo_001', email: 'john.smith@example.com', countryCode: 'LU', investorType: 'PROFESSIONAL' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 750000, riskScore: 6 },
-        { clerkUserId: 'user_demo_002', email: 'marie.laurent@example.com', countryCode: 'FR', investorType: 'QUALIFIED' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 2500000, riskScore: 8 },
-        { clerkUserId: 'user_demo_003', email: 'hans.mueller@example.com', countryCode: 'DE', investorType: 'RETAIL' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 150000, riskScore: 3 },
-        { clerkUserId: 'user_demo_004', email: 'sarah.johnson@example.com', countryCode: 'US', investorType: 'ACCREDITED' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 1200000, riskScore: 5, isUsPerson: true },
-        { clerkUserId: 'user_demo_005', email: 'james.wilson@example.com', countryCode: 'GB', investorType: 'PROFESSIONAL' as InvestorType, complianceStatus: 'PENDING_REVIEW' as ComplianceStatus, kycStatus: 'approved', totalAssets: 500000, riskScore: 5 },
-        { clerkUserId: 'user_demo_006', email: 'sophie.martin@example.com', countryCode: 'CH', investorType: 'QUALIFIED' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 3500000, riskScore: 7, isPep: true },
-        { clerkUserId: 'user_demo_007', email: 'carlo.rossi@example.com', countryCode: 'IT', investorType: 'RETAIL' as InvestorType, complianceStatus: 'PENDING_REVIEW' as ComplianceStatus, kycStatus: 'pending', totalAssets: 80000, riskScore: 2 },
-        { clerkUserId: 'user_demo_008', email: 'yuki.tanaka@example.com', countryCode: 'JP', investorType: 'PROFESSIONAL' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 900000, riskScore: 5 },
-        { clerkUserId: 'user_demo_009', email: 'ahmed.hassan@example.com', countryCode: 'AE', investorType: 'QII' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 10000000, riskScore: 9 },
-        { clerkUserId: 'user_demo_010', email: 'emma.anderson@example.com', countryCode: 'AU', investorType: 'WHOLESALE' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 2800000, riskScore: 6 },
-      ];
-
-      // Mock deals
-      const mockDeals = [
-        { name: 'Bryan Balsiger - Equestrian Excellence', slug: 'bryan-balsiger', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Sport', minimumInvestment: 100000, targetRaise: 5000000, currentRaise: 2750000, requiresPPM: true, riskLevel: 6, status: 'active', capitalAtRisk: true },
-        { name: 'Philippe Naouri - Film Rights', slug: 'philippe-naouri', compartmentType: 'RETAIL' as const, assetClass: 'Entertainment', minimumInvestment: 500, targetRaise: 2000000, currentRaise: 1200000, requiresProspectus: true, requiresPRIIPSKID: true, cssfApproved: true, riskLevel: 7, status: 'active', capitalAtRisk: true },
-        { name: 'Tim Levy - Music Catalog', slug: 'tim-levy', compartmentType: 'RETAIL' as const, assetClass: 'Entertainment', minimumInvestment: 250, targetRaise: 1500000, currentRaise: 450000, requiresProspectus: true, requiresPRIIPSKID: true, cssfApproved: true, riskLevel: 5, status: 'active', capitalAtRisk: true },
-        { name: 'Tuscan Villa Collection', slug: 'tuscan-villa', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Real Estate', minimumInvestment: 100000, targetRaise: 15000000, currentRaise: 0, requiresPPM: true, riskLevel: 4, status: 'draft', capitalAtRisk: true },
-        { name: 'Monaco Luxury Residence', slug: 'monaco-residence', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Real Estate', minimumInvestment: 250000, targetRaise: 25000000, currentRaise: 8500000, requiresPPM: true, riskLevel: 3, status: 'active', capitalAtRisk: true },
-        { name: 'Sustainable Energy Fund', slug: 'sustainable-energy', compartmentType: 'RETAIL' as const, assetClass: 'ESG', minimumInvestment: 100, targetRaise: 5000000, currentRaise: 2100000, requiresProspectus: true, requiresPRIIPSKID: true, cssfApproved: true, riskLevel: 4, status: 'active', capitalAtRisk: true },
-        { name: 'Vintage Car Collection', slug: 'vintage-cars', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Collectibles', minimumInvestment: 100000, targetRaise: 8000000, currentRaise: 3200000, requiresPPM: true, riskLevel: 5, status: 'active', capitalAtRisk: true },
-        { name: 'Private Credit Fund I', slug: 'private-credit', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Private Credit', minimumInvestment: 100000, targetRaise: 50000000, currentRaise: 18500000, requiresPPM: true, riskLevel: 5, status: 'active', capitalAtRisk: true },
-      ];
-
-      let investorsCreated = 0;
-      let dealsCreated = 0;
-
-      // Create investors
-      for (const investor of mockInvestors) {
-        await prisma.investor.upsert({
-          where: { clerkUserId: investor.clerkUserId },
-          update: investor,
-          create: investor,
-        });
-        investorsCreated++;
-      }
-
-      // Create deals
-      for (const deal of mockDeals) {
-        await prisma.deal.upsert({
-          where: { slug: deal.slug },
-          update: deal,
-          create: deal,
-        });
-        dealsCreated++;
-      }
-
-      return reply.status(200).send({
-        success: true,
-        message: `Seeded ${investorsCreated} investors and ${dealsCreated} deals`,
-        investors: investorsCreated,
-        deals: dealsCreated,
-      });
-
-    } catch (error: any) {
-      console.error('Seed mock data error:', error);
       return reply.status(500).send({
         success: false,
         error: error.message,

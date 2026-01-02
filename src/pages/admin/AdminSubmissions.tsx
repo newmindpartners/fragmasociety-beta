@@ -264,7 +264,7 @@ const AdminSubmissions = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={exportToCsv}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg transition-colors text-sm"
               >
                 <Download className="w-4 h-4" />
                 Export CSV
@@ -272,7 +272,7 @@ const AdminSubmissions = () => {
               <button
                 onClick={() => fetchSubmissions(pagination.page)}
                 disabled={loading}
-                className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-foreground hover:bg-foreground/90 text-background rounded-lg transition-colors disabled:opacity-50 font-medium text-sm"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                 Refresh
@@ -308,7 +308,7 @@ const AdminSubmissions = () => {
                 </label>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors"
+                  className="px-4 py-2 bg-foreground hover:bg-foreground/90 text-background rounded-lg transition-colors font-medium text-sm"
                 >
                   Search
                 </button>
@@ -680,7 +680,7 @@ const AdminSubmissions = () => {
 
                 {/* Section: KYC Status */}
                 <div>
-                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                     KYC Verification
                   </h3>
                   <div className="bg-muted/20 rounded-lg p-4">
@@ -696,12 +696,12 @@ const AdminSubmissions = () => {
                 {/* Section: Tags */}
                 {selectedSubmission.tags && selectedSubmission.tags.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                       Tags
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedSubmission.tags.map((tag, i) => (
-                        <span key={i} className="px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-xs uppercase">
+                        <span key={i} className="px-3 py-1 bg-violet-50 text-violet-700 border border-violet-200 rounded-full text-xs uppercase">
                           {tag}
                         </span>
                       ))}
@@ -733,10 +733,10 @@ const AdminSubmissions = () => {
         <footer className="mt-auto border-t border-border/60 bg-card px-6 py-4 lg:px-10">
           <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center justify-between gap-3 sm:flex-row">
             <p className="text-xs text-muted-foreground">
-              © 2024 Fragma Finance Admin Panel
+              © 2024 Fragma Finance. All rights reserved.
             </p>
-            <p className="text-xs text-violet-400">
-              v1.0.0
+            <p className="text-xs text-muted-foreground">
+              {pagination.total} users registered
             </p>
           </div>
         </footer>
