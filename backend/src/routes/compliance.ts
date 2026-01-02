@@ -1804,4 +1804,297 @@ export async function complianceRoutes(fastify: FastifyInstance) {
       });
     }
   });
+
+  // =============================================
+  // DEAL MANAGEMENT
+  // =============================================
+
+  /**
+   * Get all deals
+   */
+  fastify.get('/api/compliance/deals', async (
+    request: FastifyRequest<{
+      Querystring: { status?: string; compartment?: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { status, compartment } = request.query;
+
+      const where: any = {};
+      if (status && status !== 'all') {
+        where.status = status;
+      }
+      if (compartment && compartment !== 'all') {
+        where.compartmentType = compartment;
+      }
+
+      const deals = await prisma.deal.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          _count: {
+            select: {
+              eligibleInvestors: true,
+              jurisdictions: true,
+            },
+          },
+        },
+      });
+
+      return reply.status(200).send({
+        success: true,
+        deals: deals.map(deal => ({
+          ...deal,
+          eligibleInvestorsCount: deal._count.eligibleInvestors,
+          jurisdictionsCount: deal._count.jurisdictions,
+        })),
+        count: deals.length,
+      });
+
+    } catch (error: any) {
+      console.error('Get deals error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Get single deal
+   */
+  fastify.get('/api/compliance/deals/:dealId', async (
+    request: FastifyRequest<{ Params: { dealId: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { dealId } = request.params;
+
+      const deal = await prisma.deal.findUnique({
+        where: { id: dealId },
+        include: {
+          eligibleInvestors: {
+            include: { investor: true },
+          },
+          jurisdictions: {
+            include: { jurisdiction: true },
+          },
+          documents: true,
+        },
+      });
+
+      if (!deal) {
+        return reply.status(404).send({
+          success: false,
+          error: 'Deal not found',
+        });
+      }
+
+      return reply.status(200).send({
+        success: true,
+        deal,
+      });
+
+    } catch (error: any) {
+      console.error('Get deal error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Update deal compliance settings
+   */
+  fastify.put('/api/compliance/deals/:dealId', async (
+    request: FastifyRequest<{
+      Params: { dealId: string };
+      Body: {
+        requiresProspectus?: boolean;
+        requiresPRIIPSKID?: boolean;
+        requiresPPM?: boolean;
+        cssfApproved?: boolean;
+        cssfApprovalDate?: string;
+        riskLevel?: number;
+        liquidityRisk?: string;
+        capitalAtRisk?: boolean;
+        status?: string;
+        minimumInvestment?: number;
+        maximumInvestment?: number;
+      };
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { dealId } = request.params;
+      const updates = request.body;
+
+      // Validate deal exists
+      const existingDeal = await prisma.deal.findUnique({
+        where: { id: dealId },
+      });
+
+      if (!existingDeal) {
+        return reply.status(404).send({
+          success: false,
+          error: 'Deal not found',
+        });
+      }
+
+      // Build update object
+      const updateData: any = {};
+      
+      if (updates.requiresProspectus !== undefined) {
+        updateData.requiresProspectus = updates.requiresProspectus;
+      }
+      if (updates.requiresPRIIPSKID !== undefined) {
+        updateData.requiresPRIIPSKID = updates.requiresPRIIPSKID;
+      }
+      if (updates.requiresPPM !== undefined) {
+        updateData.requiresPPM = updates.requiresPPM;
+      }
+      if (updates.cssfApproved !== undefined) {
+        updateData.cssfApproved = updates.cssfApproved;
+        if (updates.cssfApproved && !existingDeal.cssfApprovalDate) {
+          updateData.cssfApprovalDate = new Date();
+        }
+      }
+      if (updates.cssfApprovalDate) {
+        updateData.cssfApprovalDate = new Date(updates.cssfApprovalDate);
+      }
+      if (updates.riskLevel !== undefined) {
+        updateData.riskLevel = updates.riskLevel;
+      }
+      if (updates.liquidityRisk) {
+        updateData.liquidityRisk = updates.liquidityRisk;
+      }
+      if (updates.capitalAtRisk !== undefined) {
+        updateData.capitalAtRisk = updates.capitalAtRisk;
+      }
+      if (updates.status) {
+        updateData.status = updates.status;
+      }
+      if (updates.minimumInvestment !== undefined) {
+        updateData.minimumInvestment = updates.minimumInvestment;
+      }
+      if (updates.maximumInvestment !== undefined) {
+        updateData.maximumInvestment = updates.maximumInvestment;
+      }
+
+      const updatedDeal = await prisma.deal.update({
+        where: { id: dealId },
+        data: updateData,
+      });
+
+      // Audit log (non-blocking)
+      try {
+        await prisma.complianceAuditLog.create({
+          data: {
+            actorType: 'admin',
+            actorId: 'admin',
+            targetType: 'deal',
+            targetId: dealId,
+            action: 'compliance_updated',
+            category: 'deal_compliance',
+            previousValue: JSON.parse(JSON.stringify({
+              requiresProspectus: existingDeal.requiresProspectus,
+              requiresPRIIPSKID: existingDeal.requiresPRIIPSKID,
+              requiresPPM: existingDeal.requiresPPM,
+              cssfApproved: existingDeal.cssfApproved,
+            })),
+            newValue: JSON.parse(JSON.stringify(updateData)),
+          },
+        });
+      } catch (auditError) {
+        console.warn('Audit log failed:', auditError);
+      }
+
+      return reply.status(200).send({
+        success: true,
+        deal: updatedDeal,
+      });
+
+    } catch (error: any) {
+      console.error('Update deal error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Seed mock data (admin only)
+   */
+  fastify.post('/api/compliance/admin/seed-mock-data', async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      // Mock investors
+      const mockInvestors = [
+        { clerkUserId: 'user_demo_001', email: 'john.smith@example.com', countryCode: 'LU', investorType: 'PROFESSIONAL' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 750000, riskScore: 6 },
+        { clerkUserId: 'user_demo_002', email: 'marie.laurent@example.com', countryCode: 'FR', investorType: 'QUALIFIED' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 2500000, riskScore: 8 },
+        { clerkUserId: 'user_demo_003', email: 'hans.mueller@example.com', countryCode: 'DE', investorType: 'RETAIL' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 150000, riskScore: 3 },
+        { clerkUserId: 'user_demo_004', email: 'sarah.johnson@example.com', countryCode: 'US', investorType: 'ACCREDITED' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 1200000, riskScore: 5, isUsPerson: true },
+        { clerkUserId: 'user_demo_005', email: 'james.wilson@example.com', countryCode: 'GB', investorType: 'PROFESSIONAL' as InvestorType, complianceStatus: 'PENDING_REVIEW' as ComplianceStatus, kycStatus: 'approved', totalAssets: 500000, riskScore: 5 },
+        { clerkUserId: 'user_demo_006', email: 'sophie.martin@example.com', countryCode: 'CH', investorType: 'QUALIFIED' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 3500000, riskScore: 7, isPep: true },
+        { clerkUserId: 'user_demo_007', email: 'carlo.rossi@example.com', countryCode: 'IT', investorType: 'RETAIL' as InvestorType, complianceStatus: 'PENDING_REVIEW' as ComplianceStatus, kycStatus: 'pending', totalAssets: 80000, riskScore: 2 },
+        { clerkUserId: 'user_demo_008', email: 'yuki.tanaka@example.com', countryCode: 'JP', investorType: 'PROFESSIONAL' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 900000, riskScore: 5 },
+        { clerkUserId: 'user_demo_009', email: 'ahmed.hassan@example.com', countryCode: 'AE', investorType: 'QII' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 10000000, riskScore: 9 },
+        { clerkUserId: 'user_demo_010', email: 'emma.anderson@example.com', countryCode: 'AU', investorType: 'WHOLESALE' as InvestorType, complianceStatus: 'APPROVED' as ComplianceStatus, kycStatus: 'approved', totalAssets: 2800000, riskScore: 6 },
+      ];
+
+      // Mock deals
+      const mockDeals = [
+        { name: 'Bryan Balsiger - Equestrian Excellence', slug: 'bryan-balsiger', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Sport', minimumInvestment: 100000, targetRaise: 5000000, currentRaise: 2750000, requiresPPM: true, riskLevel: 6, status: 'active', capitalAtRisk: true },
+        { name: 'Philippe Naouri - Film Rights', slug: 'philippe-naouri', compartmentType: 'RETAIL' as const, assetClass: 'Entertainment', minimumInvestment: 500, targetRaise: 2000000, currentRaise: 1200000, requiresProspectus: true, requiresPRIIPSKID: true, cssfApproved: true, riskLevel: 7, status: 'active', capitalAtRisk: true },
+        { name: 'Tim Levy - Music Catalog', slug: 'tim-levy', compartmentType: 'RETAIL' as const, assetClass: 'Entertainment', minimumInvestment: 250, targetRaise: 1500000, currentRaise: 450000, requiresProspectus: true, requiresPRIIPSKID: true, cssfApproved: true, riskLevel: 5, status: 'active', capitalAtRisk: true },
+        { name: 'Tuscan Villa Collection', slug: 'tuscan-villa', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Real Estate', minimumInvestment: 100000, targetRaise: 15000000, currentRaise: 0, requiresPPM: true, riskLevel: 4, status: 'draft', capitalAtRisk: true },
+        { name: 'Monaco Luxury Residence', slug: 'monaco-residence', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Real Estate', minimumInvestment: 250000, targetRaise: 25000000, currentRaise: 8500000, requiresPPM: true, riskLevel: 3, status: 'active', capitalAtRisk: true },
+        { name: 'Sustainable Energy Fund', slug: 'sustainable-energy', compartmentType: 'RETAIL' as const, assetClass: 'ESG', minimumInvestment: 100, targetRaise: 5000000, currentRaise: 2100000, requiresProspectus: true, requiresPRIIPSKID: true, cssfApproved: true, riskLevel: 4, status: 'active', capitalAtRisk: true },
+        { name: 'Vintage Car Collection', slug: 'vintage-cars', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Collectibles', minimumInvestment: 100000, targetRaise: 8000000, currentRaise: 3200000, requiresPPM: true, riskLevel: 5, status: 'active', capitalAtRisk: true },
+        { name: 'Private Credit Fund I', slug: 'private-credit', compartmentType: 'PROFESSIONAL' as const, assetClass: 'Private Credit', minimumInvestment: 100000, targetRaise: 50000000, currentRaise: 18500000, requiresPPM: true, riskLevel: 5, status: 'active', capitalAtRisk: true },
+      ];
+
+      let investorsCreated = 0;
+      let dealsCreated = 0;
+
+      // Create investors
+      for (const investor of mockInvestors) {
+        await prisma.investor.upsert({
+          where: { clerkUserId: investor.clerkUserId },
+          update: investor,
+          create: investor,
+        });
+        investorsCreated++;
+      }
+
+      // Create deals
+      for (const deal of mockDeals) {
+        await prisma.deal.upsert({
+          where: { slug: deal.slug },
+          update: deal,
+          create: deal,
+        });
+        dealsCreated++;
+      }
+
+      return reply.status(200).send({
+        success: true,
+        message: `Seeded ${investorsCreated} investors and ${dealsCreated} deals`,
+        investors: investorsCreated,
+        deals: dealsCreated,
+      });
+
+    } catch (error: any) {
+      console.error('Seed mock data error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
 }
