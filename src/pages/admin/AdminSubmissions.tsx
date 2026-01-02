@@ -467,8 +467,8 @@ const AdminSubmissions = () => {
               <div className="p-6 space-y-8">
                 {/* Section: Basic Info */}
                 <div>
-                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4 flex items-center gap-2">
-                    <Users className="w-4 h-4" />
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-muted-foreground" />
                     Basic Information
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/20 rounded-lg p-4">
@@ -493,7 +493,7 @@ const AdminSubmissions = () => {
 
                 {/* Section: Investor Classification */}
                 <div>
-                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                     Investor Classification
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-muted/20 rounded-lg p-4">
@@ -527,13 +527,13 @@ const AdminSubmissions = () => {
                 {/* Section: EU Professional Qualifications */}
                 {selectedSubmission.euProfessionalQualifications && selectedSubmission.euProfessionalQualifications.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wide mb-4">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                       EU Professional Qualifications
                     </h3>
-                    <div className="bg-blue-500/10 rounded-lg p-4">
+                    <div className="bg-muted/30 rounded-lg p-4 border border-border">
                       <div className="flex flex-wrap gap-2 mb-3">
                         {selectedSubmission.euProfessionalQualifications.map((qual, i) => (
-                          <span key={i} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">
+                          <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-xs">
                             {qual.replace(/_/g, ' ')}
                           </span>
                         ))}
@@ -550,13 +550,13 @@ const AdminSubmissions = () => {
                 {/* Section: US Accredited Qualifications */}
                 {selectedSubmission.usAccreditedQualifications && selectedSubmission.usAccreditedQualifications.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-amber-400 uppercase tracking-wide mb-4">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                       US Accredited Investor Qualifications
                     </h3>
-                    <div className="bg-amber-500/10 rounded-lg p-4">
+                    <div className="bg-muted/30 rounded-lg p-4 border border-border">
                       <div className="flex flex-wrap gap-2">
                         {selectedSubmission.usAccreditedQualifications.map((qual, i) => (
-                          <span key={i} className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs">
+                          <span key={i} className="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-xs">
                             {qual.replace(/_/g, ' ')}
                           </span>
                         ))}
@@ -567,19 +567,20 @@ const AdminSubmissions = () => {
 
                 {/* Section: PEP & Sanctions */}
                 <div>
-                  <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide mb-4">
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
                     Compliance Flags
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className={`rounded-lg p-4 ${selectedSubmission.isPep ? 'bg-red-500/20 border border-red-500/30' : 'bg-green-500/10'}`}>
+                    <div className={`rounded-lg p-4 border ${selectedSubmission.isPep ? 'bg-red-50 border-red-200' : 'bg-muted/30 border-border'}`}>
                       <label className="text-xs text-muted-foreground uppercase">Politically Exposed Person (PEP)</label>
-                      <p className={`font-semibold ${selectedSubmission.isPep ? 'text-red-400' : 'text-green-400'}`}>
+                      <p className={`font-semibold mt-1 ${selectedSubmission.isPep ? 'text-red-600' : 'text-green-600'}`}>
                         {selectedSubmission.isPep ? '⚠️ Yes - Requires Review' : '✓ No'}
                       </p>
                     </div>
-                    <div className={`rounded-lg p-4 ${selectedSubmission.isSanctioned ? 'bg-red-500/20 border border-red-500/30' : 'bg-green-500/10'}`}>
+                    <div className={`rounded-lg p-4 border ${selectedSubmission.isSanctioned ? 'bg-red-50 border-red-200' : 'bg-muted/30 border-border'}`}>
                       <label className="text-xs text-muted-foreground uppercase">Sanctioned</label>
-                      <p className={`font-semibold ${selectedSubmission.isSanctioned ? 'text-red-400' : 'text-green-400'}`}>
+                      <p className={`font-semibold mt-1 ${selectedSubmission.isSanctioned ? 'text-red-600' : 'text-green-600'}`}>
                         {selectedSubmission.isSanctioned ? '🚫 Yes - BLOCKED' : '✓ No'}
                       </p>
                     </div>
@@ -588,7 +589,7 @@ const AdminSubmissions = () => {
 
                 {/* Section: Investment Preferences */}
                 <div>
-                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                     Investment Preferences
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/20 rounded-lg p-4">
@@ -614,12 +615,12 @@ const AdminSubmissions = () => {
                 {/* Section: Investment Priorities */}
                 {selectedSubmission.investmentPriorities && selectedSubmission.investmentPriorities.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                       Investment Priorities
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedSubmission.investmentPriorities.map((priority, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-violet-500/20 text-violet-300 rounded-full text-sm">
+                        <span key={i} className="px-3 py-1.5 bg-violet-50 text-violet-700 border border-violet-200 rounded-full text-sm">
                           {priority.replace(/_/g, ' ')}
                         </span>
                       ))}
@@ -630,12 +631,12 @@ const AdminSubmissions = () => {
                 {/* Section: Asset Interests */}
                 {selectedSubmission.assetInterests && selectedSubmission.assetInterests.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                       Asset Class Interests
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedSubmission.assetInterests.map((asset, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-slate-500/20 text-slate-300 rounded-full text-sm capitalize">
+                        <span key={i} className="px-3 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-full text-sm capitalize">
                           {asset.replace(/_/g, ' ')}
                         </span>
                       ))}
@@ -650,7 +651,7 @@ const AdminSubmissions = () => {
 
                 {/* Section: Contact Preferences */}
                 <div>
-                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">
                     Contact Preferences
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/20 rounded-lg p-4">
