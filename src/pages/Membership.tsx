@@ -44,8 +44,9 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 import { Link, useSearchParams } from "react-router-dom";
 
 // Stripe product/price mapping
@@ -584,13 +585,16 @@ const Membership = () => {
     if (!session) return;
 
     try {
-      const { data, error } = await supabase.functions.invoke("check-subscription", {
+      const response = await fetch(`${API_URL}/api/subscription/check`, {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Failed to check subscription');
+
+      const data = await response.json();
 
       if (data.subscribed) {
         setCurrentProductId(data.productId);
@@ -625,14 +629,18 @@ const Membership = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId },
+      const response = await fetch(`${API_URL}/api/subscription/create-checkout`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ priceId }),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Checkout failed');
+
+      const data = await response.json();
 
       if (data.url) {
         window.open(data.url, "_blank");
@@ -655,13 +663,17 @@ const Membership = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("customer-portal", {
+      const response = await fetch(`${API_URL}/api/subscription/customer-portal`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Portal failed');
+
+      const data = await response.json();
 
       if (data.url) {
         window.open(data.url, "_blank");

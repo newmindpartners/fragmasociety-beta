@@ -321,11 +321,70 @@ model User {
 }
 
 // =============================================
+// ISSUER MODEL (Deal Sponsor/Owner)
+// =============================================
+
+model Issuer {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // ===== COMPANY INFO =====
+  companyName           String           @map("company_name")
+  legalName             String?          @map("legal_name")
+  tradingName           String?          @map("trading_name")
+  
+  // ===== REGISTRATION =====
+  registrationNumber    String?          @map("registration_number")
+  lei                   String?          // Legal Entity Identifier
+  jurisdiction          String           // Country/State of incorporation
+  companyType           String?          @map("company_type") // LLC, Corporation, LP, etc.
+  incorporationDate     DateTime?        @map("incorporation_date")
+  
+  // ===== CONTACT INFO =====
+  address               Json?            // {street, city, state, country, postal}
+  website               String?
+  email                 String?
+  phone                 String?
+  
+  // ===== PEOPLE =====
+  directors             Json?            // [{name, role, nationality, appointedAt}]
+  beneficialOwners      Json?            @map("beneficial_owners") // [{name, ownership, isPEP}]
+  keyPersons            Json?            @map("key_persons") // [{name, role, bio}]
+  
+  // ===== REGULATORY =====
+  regulatoryStatus      String?          @map("regulatory_status")
+  licenses              Json?            // [{type, number, issuer, expiresAt}]
+  
+  // ===== DOCUMENTS =====
+  documents             Json?            // [{type, name, url, uploadedAt}]
+  
+  // ===== STATUS =====
+  isActive              Boolean          @default(true) @map("is_active")
+  isVerified            Boolean          @default(false) @map("is_verified")
+  verifiedAt            DateTime?        @map("verified_at")
+  verifiedBy            String?          @map("verified_by")
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  // ===== RELATIONS =====
+  deals                 Deal[]
+  
+  @@index([companyName])
+  @@index([jurisdiction])
+  @@map("issuers")
+}
+
+// =============================================
 // DEAL MODEL (comprehensive)
 // =============================================
 
 model Deal {
   id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // ===== ISSUER RELATION =====
+  issuerId              String?          @map("issuer_id") @db.Uuid
+  issuer                Issuer?          @relation(fields: [issuerId], references: [id])
   
   // ===== BASIC INFO =====
   title                 String
@@ -339,10 +398,13 @@ model Deal {
   assetClass            String?          @map("asset_class")
   instrumentType        String           @default("Notes") @map("instrument_type")
   
-  // ===== LEADERSHIP =====
+  // ===== LEADERSHIP / SPONSOR =====
   leaderName            String           @map("leader_name")
   leaderRole            String           @map("leader_role")
   leaderImage           String?          @map("leader_image")
+  leaderBio             String?          @map("leader_bio")
+  leaderCredentials     Json?            @map("leader_credentials") // string[]
+  leaderPressLinks      Json?            @map("leader_press_links") // [{title, source, url}]
   
   // ===== INVESTMENT TERMS =====
   currency              String           @default("EUR")
@@ -387,7 +449,7 @@ model Deal {
   assetVideoUrl         String?          @map("asset_video_url")
   assetImages           Json?            @map("asset_images")
   
-  // ===== DEAL DATA (JSON) =====
+  // ===== DEAL DATA (JSON) - UNIVERSAL =====
   financials            Json?
   marketData            Json?            @map("market_data")
   marketHighlights      Json?            @map("market_highlights")
@@ -398,6 +460,13 @@ model Deal {
   caseStudies           Json?            @map("case_studies")
   currentProperties     Json?            @map("current_properties")
   specialOpportunity    Json?            @map("special_opportunity")
+  totalPastProfit       String?          @map("total_past_profit")
+  
+  // ===== CATEGORY-SPECIFIC DATA (JSON) =====
+  realEstateData        Json?            @map("real_estate_data")   // Properties, locations, exits
+  sportsData            Json?            @map("sports_data")        // Athletes, performance rights
+  artData               Json?            @map("art_data")           // Artworks, provenance, authentication
+  privateEquityData     Json?            @map("private_equity_data") // Portfolio companies, NAV
   
   // ===== STATUS =====
   status                DealStatus       @default(DRAFT)
@@ -427,6 +496,7 @@ model Deal {
   @@index([category])
   @@index([status])
   @@index([compartmentType])
+  @@index([issuerId])
   @@map("deals")
 }
 

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Upload, Image, Check } from "lucide-react";
+import { Upload, Image, Check, Loader2 } from "lucide-react";
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 interface DealImageUploaderProps {
   dealId: string;
@@ -38,32 +39,20 @@ export const DealImageUploader = ({
     setUploading(true);
 
     try {
-      // Generate unique filename
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${dealId}/banner-${Date.now()}.${fileExt}`;
+      // Create form data for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('dealId', dealId);
 
-      // Upload to storage
-      const { error: uploadError } = await supabase.storage
-        .from('deal-images')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: true
-        });
+      const response = await fetch(`${API_URL}/api/admin/deals/${dealId}/image`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (uploadError) throw uploadError;
+      if (!response.ok) throw new Error('Upload failed');
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('deal-images')
-        .getPublicUrl(fileName);
-
-      // Update deal in database
-      const { error: updateError } = await supabase
-        .from('deals')
-        .update({ banner_image: publicUrl })
-        .eq('id', dealId);
-
-      if (updateError) throw updateError;
+      const data = await response.json();
+      const publicUrl = data.imageUrl;
 
       setPreviewUrl(publicUrl);
       onUploadComplete?.(publicUrl);
@@ -80,41 +69,54 @@ export const DealImageUploader = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <Input
-          type="file"
-          accept="image/*"
-          onChange={handleFileUpload}
-          disabled={uploading}
-          className="max-w-xs"
-        />
-        <Button disabled={uploading} variant="outline">
-          {uploading ? (
-            <>
-              <Upload className="w-4 h-4 mr-2 animate-spin" />
-              Uploading...
-            </>
-          ) : (
-            <>
-              <Image className="w-4 h-4 mr-2" />
-              Upload Banner
-            </>
-          )}
-        </Button>
+        <div className="relative">
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            disabled={uploading}
+            className="absolute inset-0 opacity-0 cursor-pointer"
+          />
+          <Button 
+            variant="outline" 
+            disabled={uploading}
+            className="pointer-events-none"
+          >
+            {uploading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              <>
+                <Upload className="mr-2 h-4 w-4" />
+                Upload Banner Image
+              </>
+            )}
+          </Button>
+        </div>
+        
+        {previewUrl && (
+          <span className="flex items-center text-sm text-green-600">
+            <Check className="mr-1 h-4 w-4" />
+            Image uploaded
+          </span>
+        )}
       </div>
 
       {previewUrl && (
-        <div className="relative">
-          <div className="flex items-center gap-2 text-sm text-emerald-600 mb-2">
-            <Check className="w-4 h-4" />
-            Banner uploaded
-          </div>
+        <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden border">
           <img 
             src={previewUrl} 
             alt="Banner preview" 
-            className="max-h-64 rounded-lg border border-border object-contain bg-slate-900"
+            className="w-full h-full object-cover"
           />
         </div>
       )}
+
+      <p className="text-xs text-muted-foreground">
+        Recommended: 1920x1080px, max 5MB, JPG or PNG
+      </p>
     </div>
   );
 };

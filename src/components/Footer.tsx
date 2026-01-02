@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Instagram, ArrowRight, Check, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 import {
   Tooltip,
   TooltipContent,
@@ -79,16 +80,20 @@ export const Footer = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .insert({ email: email.trim().toLowerCase() });
+      const response = await fetch(`${API_URL}/api/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
 
-      if (error) {
-        if (error.code === "23505") {
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.error?.includes('already subscribed')) {
           toast.info("You're already subscribed!");
           setIsSubscribed(true);
         } else {
-          throw error;
+          throw new Error(data.error || 'Failed to subscribe');
         }
       } else {
         toast.success("Welcome! You're now subscribed.");

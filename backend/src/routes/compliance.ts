@@ -352,11 +352,11 @@ export async function complianceRoutes(fastify: FastifyInstance) {
   });
 
   // =============================================
-  // DEAL MANAGEMENT (from Supabase)
+  // DEAL MANAGEMENT (from PostgreSQL via Prisma)
   // =============================================
 
   /**
-   * Get all deals from Supabase
+   * Get all deals from database
    */
   fastify.get('/api/compliance/deals', async (
     request: FastifyRequest<{
@@ -365,60 +365,47 @@ export async function complianceRoutes(fastify: FastifyInstance) {
     reply: FastifyReply
   ) => {
     try {
-      const supabaseUrl = env.SUPABASE_URL;
-      const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY;
+      const { status, category } = request.query;
       
-      if (!supabaseUrl || !supabaseKey) {
-        return reply.status(200).send({
-          success: true,
-          deals: [],
-          count: 0,
-          message: 'Supabase not configured',
-        });
-      }
+      // Build filter
+      const where: any = {};
+      if (status) where.status = status;
+      if (category) where.category = category;
 
-      const response = await fetch(`${supabaseUrl}/rest/v1/deals?select=*&order=created_at.desc`, {
-        headers: {
-          'apikey': supabaseKey,
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
+      const deals = await prisma.deal.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
       });
 
-      if (!response.ok) {
-        throw new Error(`Supabase error: ${response.statusText}`);
-      }
-
-      const supabaseDeals = await response.json() as Array<any>;
-
-      const deals = supabaseDeals.map(deal => ({
+      const formattedDeals = deals.map(deal => ({
         id: deal.id,
         name: deal.title,
-        slug: deal.id,
+        slug: deal.slug,
         description: deal.description,
-        compartmentType: deal.instrument_type === 'Notes' ? 'RETAIL' : 'PROFESSIONAL',
+        compartmentType: deal.compartmentType,
         assetClass: deal.category,
-        assetCoName: deal.leader_name,
-        minimumInvestment: parseFloat(deal.min_ticket?.replace(/[^0-9.]/g, '')) || 0,
-        maximumInvestment: deal.max_ticket ? parseFloat(deal.max_ticket.replace(/[^0-9.]/g, '')) : null,
-        targetRaise: parseFloat(deal.total_raise?.replace(/[^0-9.]/g, '')) || 0,
-        currentRaise: deal.current_raised ? parseFloat(deal.current_raised.replace(/[^0-9.]/g, '')) : 0,
-        currency: deal.currency || 'EUR',
-        riskLevel: deal.risk === 'High' ? 8 : deal.risk === 'Medium' ? 5 : 3,
-        liquidityRisk: 'medium',
-        requiresProspectus: deal.instrument_type === 'Notes',
-        requiresPRIIPSKID: deal.instrument_type === 'Notes',
-        requiresPPM: deal.instrument_type !== 'Notes',
-        cssfApproved: false,
-        capitalAtRisk: true,
-        status: 'active',
-        investorCount: deal.investor_count || 0,
-        createdAt: deal.created_at,
+        assetCoName: deal.leaderName,
+        minimumInvestment: Number(deal.minTicket),
+        maximumInvestment: deal.maxTicket ? Number(deal.maxTicket) : null,
+        targetRaise: Number(deal.totalRaise),
+        currentRaise: Number(deal.currentRaised),
+        currency: deal.currency,
+        riskLevel: deal.riskLevel,
+        liquidityRisk: deal.liquidityRisk || 'medium',
+        requiresProspectus: deal.requiresProspectus,
+        requiresPRIIPSKID: deal.requiresPRIIPSKID,
+        requiresPPM: deal.requiresPPM,
+        cssfApproved: deal.cssfApproved,
+        capitalAtRisk: deal.capitalAtRisk,
+        status: deal.status,
+        investorCount: deal.investorCount,
+        createdAt: deal.createdAt,
       }));
 
       return reply.status(200).send({
         success: true,
-        deals,
-        count: deals.length,
+        deals: formattedDeals,
+        count: formattedDeals.length,
       });
 
     } catch (error: any) {

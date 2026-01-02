@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 export interface Transfer {
   id: string;
-  user_id: string;
-  type: "deposit" | "withdrawal";
+  userId: string;
+  type: "DEPOSIT" | "WITHDRAWAL" | "INVESTMENT" | "DISTRIBUTION" | "FEE" | "REFUND";
   amount: number;
   currency: string;
-  status: "pending" | "processing" | "completed" | "failed";
+  status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "CANCELLED";
   reference: string | null;
-  bank_name: string | null;
-  account_last4: string | null;
+  bankName: string | null;
+  accountLast4: string | null;
   notes: string | null;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const useTransfers = () => {
@@ -23,88 +24,69 @@ export const useTransfers = () => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
 
-  const fetchTransfers = async () => {
-    if (!user) {
+  const fetchTransfers = useCallback(async () => {
+    if (!user?.id) {
       setTransfers([]);
       setLoading(false);
       return;
     }
 
     try {
-      const { data, error: fetchError } = await supabase
-        .from("transfers")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      setLoading(true);
+      const response = await fetch(
+        `${API_URL}/api/users/me/transfers?clerkUserId=${user.id}`
+      );
 
-      if (fetchError) throw fetchError;
-      setTransfers((data as Transfer[]) || []);
+      if (!response.ok) {
+        if (response.status === 404) {
+          setTransfers([]);
+          return;
+        }
+        throw new Error('Failed to fetch transfers');
+      }
+
+      const data = await response.json();
+      setTransfers(data.transfers || []);
     } catch (err: any) {
       console.error("Error fetching transfers:", err);
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
 
-  const createTransfer = async (transfer: Omit<Transfer, "id" | "user_id" | "created_at" | "updated_at">) => {
-    if (!user) throw new Error("User not authenticated");
+  const createTransfer = async (transfer: {
+    type: Transfer['type'];
+    amount: number;
+    currency?: string;
+    bankName?: string;
+    accountLast4?: string;
+    notes?: string;
+  }) => {
+    if (!user?.id) throw new Error("User not authenticated");
 
-    const { data, error: insertError } = await supabase
-      .from("transfers")
-      .insert({
+    const response = await fetch(`${API_URL}/api/transfers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         ...transfer,
-        user_id: user.id,
-      })
-      .select()
-      .single();
+        clerkUserId: user.id,
+      }),
+    });
 
-    if (insertError) throw insertError;
-    return data as Transfer;
+    if (!response.ok) throw new Error('Failed to create transfer');
+    
+    const data = await response.json();
+    
+    // Add to local state
+    setTransfers(prev => [data.transfer, ...prev]);
+    
+    return data.transfer as Transfer;
   };
 
   useEffect(() => {
     fetchTransfers();
-  }, [user]);
-
-  // Set up realtime subscription
-  useEffect(() => {
-    if (!user) return;
-
-    const channel = supabase
-      .channel("transfers-realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "transfers",
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          console.log("Realtime update:", payload);
-
-          if (payload.eventType === "INSERT") {
-            setTransfers((prev) => [payload.new as Transfer, ...prev]);
-          } else if (payload.eventType === "UPDATE") {
-            setTransfers((prev) =>
-              prev.map((t) =>
-                t.id === (payload.new as Transfer).id ? (payload.new as Transfer) : t
-              )
-            );
-          } else if (payload.eventType === "DELETE") {
-            setTransfers((prev) =>
-              prev.filter((t) => t.id !== (payload.old as Transfer).id)
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user]);
+  }, [fetchTransfers]);
 
   return {
     transfers,

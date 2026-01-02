@@ -10,6 +10,8 @@ import { adminRoutes } from './routes/admin.js';
 import { complianceRoutes } from './routes/compliance.js';
 import clerkWebhookRoutes from './routes/clerk-webhooks.js';
 import userRoutes from './routes/users.js';
+import { dealRoutes } from './routes/deals.js';
+import { issuerRoutes } from './routes/issuers.js';
 
 const app = Fastify({
   logger: {
@@ -42,6 +44,8 @@ await app.register(adminRoutes);
 await app.register(complianceRoutes);
 await app.register(clerkWebhookRoutes);
 await app.register(userRoutes);
+await app.register(dealRoutes);
+await app.register(issuerRoutes);
 
 // Start server
 const start = async () => {

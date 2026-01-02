@@ -20,6 +20,9 @@ import {
   Bot,
   ClipboardList,
   Briefcase,
+  Building2,
+  PieChart,
+  FolderOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import fragmaLogo from "@/assets/fragma-logo-v2.png";
@@ -46,13 +49,23 @@ const mainNavItems: NavItem[] = [
   { icon: FileText, label: "Reports", href: "/admin/reports" },
 ];
 
+const dealsCategory: NavCategory = {
+  icon: Briefcase,
+  label: "Deals",
+  items: [
+    { icon: FolderOpen, label: "All Deals", href: "/admin/deals" },
+    { icon: Building2, label: "Issuers", href: "/admin/deals/issuers" },
+    { icon: PieChart, label: "Cap Tables", href: "/admin/deals/cap-tables" },
+  ],
+};
+
 const complianceCategory: NavCategory = {
   icon: Scale,
   label: "Compliance",
   items: [
     { icon: LayoutDashboard, label: "Overview", href: "/admin/compliance" },
     { icon: UserCheck, label: "Investors", href: "/admin/compliance/investors" },
-    { icon: Briefcase, label: "Deals", href: "/admin/compliance/deals" },
+    { icon: Briefcase, label: "Deal Compliance", href: "/admin/compliance/deals" },
     { icon: Globe, label: "Jurisdictions", href: "/admin/compliance/jurisdictions" },
     { icon: ClipboardList, label: "Audit Log", href: "/admin/compliance/audit" },
     { icon: Bot, label: "AI Assistant", href: "/admin/compliance/ai-assistant" },
@@ -78,6 +91,9 @@ export const AdminSidebar = ({
   adminEmail = "hi@fragmasociety.com"
 }: AdminSidebarProps) => {
   const location = useLocation();
+  const [dealsOpen, setDealsOpen] = useState(() => 
+    location.pathname.startsWith('/admin/deals')
+  );
   const [complianceOpen, setComplianceOpen] = useState(() => 
     location.pathname.startsWith('/admin/compliance')
   );
@@ -219,6 +235,117 @@ export const AdminSidebar = ({
             <NavLink key={item.href} item={item} index={index} />
           ))}
         </div>
+
+        {/* Deals Category */}
+        <div className="my-4 border-t border-[hsl(var(--sidebar-border))]" />
+        
+        {/* Deals Collapsible Header */}
+        <motion.button
+          onClick={() => !isCollapsed && setDealsOpen(!dealsOpen)}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group",
+            isCollapsed ? "justify-center" : "",
+            location.pathname.startsWith('/admin/deals')
+              ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+              : "text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))]"
+          )}
+        >
+          <Briefcase 
+            className={cn(
+              "w-[18px] h-[18px] flex-shrink-0 transition-all duration-300",
+              location.pathname.startsWith('/admin/deals') 
+                ? "text-blue-400" 
+                : "text-[hsl(var(--sidebar-muted))] group-hover:text-[hsl(var(--sidebar-foreground))]"
+            )} 
+            strokeWidth={1.75} 
+          />
+          
+          <AnimatePresence>
+            {!isCollapsed && (
+              <>
+                <motion.span 
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  className="font-semibold text-sm whitespace-nowrap overflow-hidden flex-1 text-left"
+                >
+                  Deals
+                </motion.span>
+                <motion.div
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: dealsOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="w-4 h-4 text-[hsl(var(--sidebar-muted))]" />
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </motion.button>
+
+        {/* Deals Submenu */}
+        <AnimatePresence>
+          {(dealsOpen || isCollapsed) && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className={cn(
+                "overflow-hidden",
+                !isCollapsed && "ml-3 pl-3 border-l border-blue-500/20"
+              )}
+            >
+              <div className="space-y-0.5 pt-1">
+                {dealsCategory.items.map((item, index) => {
+                  const isActive = location.pathname === item.href;
+                  const Icon = item.icon;
+                  
+                  return (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.03 }}
+                    >
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 text-sm",
+                          isCollapsed ? "justify-center" : "",
+                          isActive 
+                            ? "bg-blue-500/20 text-blue-300" 
+                            : "text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-accent))]/50 hover:text-[hsl(var(--sidebar-foreground))]"
+                        )}
+                      >
+                        <Icon 
+                          className={cn(
+                            "w-4 h-4 flex-shrink-0",
+                            isActive ? "text-blue-400" : "text-[hsl(var(--sidebar-muted))]"
+                          )} 
+                          strokeWidth={1.75} 
+                        />
+                        
+                        <AnimatePresence>
+                          {!isCollapsed && (
+                            <motion.span 
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="whitespace-nowrap"
+                            >
+                              {item.label}
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Compliance Category */}
         <div className="my-4 border-t border-[hsl(var(--sidebar-border))]" />

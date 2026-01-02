@@ -2,7 +2,6 @@ import { motion, useMotionValue, animate } from "framer-motion";
 import { MapPin, Hammer, CheckCircle, TrendingUp, Clock, Building, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import type { DealData, DealProperty } from "@/types/deal";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Local fallback images
@@ -26,13 +25,14 @@ const localFallbacks: Record<string, string> = {
 };
 
 const getPropertyImage = (property: DealProperty, index: number): string => {
-  // Priority 1: Cloud storage URL
+  // Priority 1: Direct URL
   if (property.imageUrl) {
-    const { data } = supabase.storage.from('deal-images').getPublicUrl(property.imageUrl);
-    if (data?.publicUrl) {
-      // Check if it's a valid storage URL, otherwise use local fallback
-      return localFallbacks[property.imageUrl] || data.publicUrl;
+    // Check if it's a local fallback path
+    if (localFallbacks[property.imageUrl]) {
+      return localFallbacks[property.imageUrl];
     }
+    // Otherwise use the URL directly (could be a CDN URL)
+    return property.imageUrl;
   }
   // Priority 2: Local fallback by index
   const fallbackImages = [deerheadRoad, coolOakWay, bigRockDrive, rockpointWay, serraRoad];

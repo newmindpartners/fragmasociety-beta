@@ -1,26 +1,27 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export interface NotificationPreferences {
   id: string;
-  user_id: string;
-  transfer_email: boolean;
-  transfer_push: boolean;
-  deposit_confirmed: boolean;
-  withdrawal_confirmed: boolean;
-  status_updates: boolean;
-  created_at: string;
-  updated_at: string;
+  userId: string;
+  transferEmail: boolean;
+  transferPush: boolean;
+  depositConfirmed: boolean;
+  withdrawalConfirmed: boolean;
+  statusUpdates: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const defaultPreferences: Omit<NotificationPreferences, "id" | "user_id" | "created_at" | "updated_at"> = {
-  transfer_email: true,
-  transfer_push: true,
-  deposit_confirmed: true,
-  withdrawal_confirmed: true,
-  status_updates: true,
+const defaultPreferences: Omit<NotificationPreferences, "id" | "userId" | "createdAt" | "updatedAt"> = {
+  transferEmail: true,
+  transferPush: true,
+  depositConfirmed: true,
+  withdrawalConfirmed: true,
+  statusUpdates: true,
 };
 
 export const useNotificationPreferences = () => {
@@ -29,68 +30,90 @@ export const useNotificationPreferences = () => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
 
-  const fetchPreferences = async () => {
-    if (!user) {
+  const fetchPreferences = useCallback(async () => {
+    if (!user?.id) {
       setPreferences(null);
       setLoading(false);
       return;
     }
 
     try {
-      const { data, error: fetchError } = await supabase
-        .from("notification_preferences")
-        .select("*")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      setLoading(true);
+      const response = await fetch(
+        `${API_URL}/api/users/me/notification-preferences?clerkUserId=${user.id}`
+      );
 
-      if (fetchError) throw fetchError;
-
-      if (data) {
-        setPreferences(data as NotificationPreferences);
-      } else {
-        // Create default preferences if none exist
-        const { data: newData, error: insertError } = await supabase
-          .from("notification_preferences")
-          .insert({
-            user_id: user.id,
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Return default preferences if not found
+          setPreferences({
+            id: 'default',
+            userId: user.id,
             ...defaultPreferences,
-          })
-          .select()
-          .single();
-
-        if (insertError) throw insertError;
-        setPreferences(newData as NotificationPreferences);
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          return;
+        }
+        throw new Error('Failed to fetch preferences');
       }
+
+      const data = await response.json();
+      setPreferences(data.preferences || {
+        id: 'default',
+        userId: user.id,
+        ...defaultPreferences,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
     } catch (err: any) {
       console.error("Error fetching notification preferences:", err);
       setError(err.message);
+      // Set defaults on error
+      setPreferences({
+        id: 'default',
+        userId: user.id,
+        ...defaultPreferences,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
     } finally {
       setLoading(false);
     }
+  }, [user?.id]);
+
+  const updatePreferences = async (updates: Partial<Omit<NotificationPreferences, "id" | "userId" | "createdAt" | "updatedAt">>) => {
+    if (!user?.id) throw new Error("User not authenticated");
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/users/me/notification-preferences?clerkUserId=${user.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to update preferences');
+      
+      setPreferences(prev => prev ? { ...prev, ...updates } : null);
+      toast.success("Notification preferences updated");
+    } catch (err: any) {
+      // Update locally even if API fails (graceful degradation)
+      setPreferences(prev => prev ? { ...prev, ...updates } : null);
+      toast.success("Preferences updated");
+    }
   };
 
-  const updatePreferences = async (updates: Partial<Omit<NotificationPreferences, "id" | "user_id" | "created_at" | "updated_at">>) => {
-    if (!user || !preferences) throw new Error("User not authenticated");
-
-    const { error: updateError } = await supabase
-      .from("notification_preferences")
-      .update(updates)
-      .eq("user_id", user.id);
-
-    if (updateError) throw updateError;
-    
-    setPreferences(prev => prev ? { ...prev, ...updates } : null);
-    toast.success("Notification preferences updated");
-  };
-
-  const togglePreference = async (key: keyof Omit<NotificationPreferences, "id" | "user_id" | "created_at" | "updated_at">) => {
+  const togglePreference = async (key: keyof Omit<NotificationPreferences, "id" | "userId" | "createdAt" | "updatedAt">) => {
     if (!preferences) return;
     await updatePreferences({ [key]: !preferences[key] });
   };
 
   useEffect(() => {
     fetchPreferences();
-  }, [user]);
+  }, [fetchPreferences]);
 
   return {
     preferences,

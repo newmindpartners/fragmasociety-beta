@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 export type InvestmentStep = 
   | 'verify_identity'
@@ -12,16 +13,18 @@ export type InvestmentStep =
 
 export interface UserInvestment {
   id: string;
-  user_id: string;
-  deal_id: string;
-  current_step: InvestmentStep;
-  step_deadline: string | null;
-  created_at: string;
-  updated_at: string;
+  userId: string;
+  dealId: string;
+  currentStep: InvestmentStep;
+  stepDeadline: string | null;
+  amount: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
   deal?: {
     id: string;
     title: string;
-    banner_image: string | null;
+    bannerImage: string | null;
     category: string;
   };
 }
@@ -55,17 +58,17 @@ export const useUserInvestments = () => {
     queryFn: async () => {
       if (!user?.id) return [];
       
-      const { data, error } = await supabase
-        .from('user_investments')
-        .select(`
-          *,
-          deal:deals(id, title, banner_image, category)
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+      const response = await fetch(
+        `${API_URL}/api/users/me/investments?clerkUserId=${user.id}`
+      );
 
-      if (error) throw error;
-      return data as UserInvestment[];
+      if (!response.ok) {
+        if (response.status === 404) return [];
+        throw new Error('Failed to fetch investments');
+      }
+
+      const data = await response.json();
+      return (data.investments || []) as UserInvestment[];
     },
     enabled: !!user?.id,
   });
@@ -77,16 +80,18 @@ export const useAdvanceInvestmentStep = () => {
 
   return useMutation({
     mutationFn: async ({ investmentId, newStep }: { investmentId: string; newStep: InvestmentStep }) => {
-      const { data, error } = await supabase
-        .from('user_investments')
-        .update({ current_step: newStep })
-        .eq('id', investmentId)
-        .eq('user_id', user?.id)
-        .select()
-        .single();
+      const response = await fetch(
+        `${API_URL}/api/investments/${investmentId}/step?clerkUserId=${user?.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: newStep }),
+        }
+      );
 
-      if (error) throw error;
-      return data;
+      if (!response.ok) throw new Error('Failed to update investment step');
+      const data = await response.json();
+      return data.investment;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-investments'] });
@@ -102,18 +107,19 @@ export const useCreateInvestment = () => {
     mutationFn: async ({ dealId, initialStep = 'verify_identity' }: { dealId: string; initialStep?: InvestmentStep }) => {
       if (!user?.id) throw new Error('User not authenticated');
       
-      const { data, error } = await supabase
-        .from('user_investments')
-        .insert({
-          user_id: user.id,
-          deal_id: dealId,
-          current_step: initialStep,
-        })
-        .select()
-        .single();
+      const response = await fetch(`${API_URL}/api/investments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clerkUserId: user.id,
+          dealId,
+          initialStep,
+        }),
+      });
 
-      if (error) throw error;
-      return data;
+      if (!response.ok) throw new Error('Failed to create investment');
+      const data = await response.json();
+      return data.investment;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-investments'] });

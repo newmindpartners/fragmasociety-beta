@@ -40,6 +40,9 @@ import InvestorReview from "./pages/admin/InvestorReview";
 import JurisdictionsPage from "./pages/admin/JurisdictionsPage";
 import ComplianceAIChat from "./pages/admin/ComplianceAIChat";
 import DealCompliancePage from "./pages/admin/DealCompliancePage";
+import DealsListPage from "./pages/admin/DealsListPage";
+import DealEditorPage from "./pages/admin/DealEditorPage";
+import IssuersPage from "./pages/admin/IssuersPage";
 import { AdminRoute } from "./components/admin/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -101,6 +104,14 @@ const App = () => (
               <Route path="/admin/compliance/ai-assistant" element={<AdminRoute><ComplianceAIChat /></AdminRoute>} />
               <Route path="/admin/compliance/deals" element={<AdminRoute><DealCompliancePage /></AdminRoute>} />
               <Route path="/admin/compliance/deals/:dealId" element={<AdminRoute><DealCompliancePage /></AdminRoute>} />
+
+              {/* Deals Management Routes */}
+              <Route path="/admin/deals" element={<AdminRoute><DealsListPage /></AdminRoute>} />
+              <Route path="/admin/deals/new" element={<AdminRoute><DealEditorPage /></AdminRoute>} />
+              <Route path="/admin/deals/:dealId/edit" element={<AdminRoute><DealEditorPage /></AdminRoute>} />
+              <Route path="/admin/deals/issuers" element={<AdminRoute><IssuersPage /></AdminRoute>} />
+              <Route path="/admin/deals/issuers/:issuerId" element={<AdminRoute><IssuersPage /></AdminRoute>} />
+              <Route path="/admin/deals/cap-tables" element={<AdminRoute><DealsListPage /></AdminRoute>} />
 
               <Route path="/admin/*" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               

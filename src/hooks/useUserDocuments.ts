@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 interface UserDocument {
   id: string;
-  user_id: string;
-  file_name: string;
-  file_url: string;
-  file_size: number | null;
-  file_type: string | null;
+  userId: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number | null;
+  fileType: string | null;
   category: string | null;
-  created_at: string;
-  updated_at: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const useUserDocuments = () => {
@@ -26,14 +28,17 @@ export const useUserDocuments = () => {
     queryFn: async () => {
       if (!user?.id) return [];
       
-      const { data, error } = await supabase
-        .from("user_documents")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      const response = await fetch(
+        `${API_URL}/api/users/me/documents?clerkUserId=${user.id}`
+      );
 
-      if (error) throw error;
-      return data as UserDocument[];
+      if (!response.ok) {
+        if (response.status === 404) return [];
+        throw new Error('Failed to fetch documents');
+      }
+
+      const data = await response.json();
+      return (data.documents || []) as UserDocument[];
     },
     enabled: !!user?.id,
   });
@@ -51,36 +56,20 @@ export const useUserDocuments = () => {
     setUploading(true);
 
     try {
-      // Upload file to storage
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${user.id}/${Date.now()}-${file.name}`;
+      // Create form data for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('category', category);
+      formData.append('clerkUserId', user.id);
 
-      const { error: uploadError } = await supabase.storage
-        .from("user-documents")
-        .upload(fileName, file);
+      const response = await fetch(`${API_URL}/api/users/me/documents`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (uploadError) throw uploadError;
+      if (!response.ok) throw new Error('Failed to upload document');
 
-      // Get the file URL
-      const { data: urlData } = supabase.storage
-        .from("user-documents")
-        .getPublicUrl(fileName);
-
-      // Create database record
-      const { data, error: dbError } = await supabase
-        .from("user_documents")
-        .insert({
-          user_id: user.id,
-          file_name: file.name,
-          file_url: urlData.publicUrl,
-          file_size: file.size,
-          file_type: file.type,
-          category,
-        })
-        .select()
-        .single();
-
-      if (dbError) throw dbError;
+      const data = await response.json();
 
       toast({
         title: "Success",
@@ -88,7 +77,7 @@ export const useUserDocuments = () => {
       });
 
       queryClient.invalidateQueries({ queryKey: ["user-documents", user.id] });
-      return data;
+      return data.document;
     } catch (error: any) {
       console.error("Upload error:", error);
       toast({
@@ -106,23 +95,12 @@ export const useUserDocuments = () => {
     mutationFn: async (document: UserDocument) => {
       if (!user?.id) throw new Error("Not authenticated");
 
-      // Extract file path from URL
-      const filePath = `${user.id}/${document.file_url.split("/").pop()}`;
+      const response = await fetch(
+        `${API_URL}/api/users/me/documents/${document.id}?clerkUserId=${user.id}`,
+        { method: 'DELETE' }
+      );
 
-      // Delete from storage
-      const { error: storageError } = await supabase.storage
-        .from("user-documents")
-        .remove([filePath]);
-
-      if (storageError) console.error("Storage delete error:", storageError);
-
-      // Delete from database
-      const { error: dbError } = await supabase
-        .from("user_documents")
-        .delete()
-        .eq("id", document.id);
-
-      if (dbError) throw dbError;
+      if (!response.ok) throw new Error('Failed to delete document');
     },
     onSuccess: () => {
       toast({
@@ -141,26 +119,11 @@ export const useUserDocuments = () => {
   });
 
   const downloadDocument = async (document: UserDocument) => {
-    if (!user?.id) return;
+    if (!user?.id || !document.fileUrl) return;
 
     try {
-      const filePath = `${user.id}/${document.file_url.split("/").pop()}`;
-      
-      const { data, error } = await supabase.storage
-        .from("user-documents")
-        .download(filePath);
-
-      if (error) throw error;
-
-      // Create download link
-      const url = URL.createObjectURL(data);
-      const a = window.document.createElement("a");
-      a.href = url;
-      a.download = document.file_name;
-      window.document.body.appendChild(a);
-      a.click();
-      window.document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      // Open file URL in new tab or trigger download
+      window.open(document.fileUrl, '_blank');
     } catch (error: any) {
       toast({
         title: "Download Failed",

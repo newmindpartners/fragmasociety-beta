@@ -12,7 +12,8 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "migrate:early-access": "tsx src/scripts/migrate-early-access-users.ts"
+    "migrate:early-access": "tsx src/scripts/migrate-early-access-users.ts",
+    "seed:naouri": "tsx prisma/seed-naouri-deal.ts"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.2",

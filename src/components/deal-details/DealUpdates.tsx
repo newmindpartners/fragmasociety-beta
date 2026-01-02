@@ -1,16 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Calendar, ImageIcon, ArrowRight, Sparkles } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 interface Update {
   id: string;
-  deal_id: string;
+  dealId: string;
   title: string;
   content: string;
-  image_url: string | null;
-  published_at: string;
+  imageUrl: string | null;
+  publishedAt: string;
 }
 
 interface DealUpdatesProps {
@@ -22,24 +23,31 @@ export const DealUpdates = ({ dealId }: DealUpdatesProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedUpdate, setSelectedUpdate] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchUpdates = async () => {
-      const { data, error } = await supabase
-        .from("deal_updates")
-        .select("*")
-        .eq("deal_id", dealId)
-        .order("published_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching updates:", error);
-      } else {
-        setUpdates(data || []);
+  const fetchUpdates = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/deals/${dealId}/updates`);
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          setUpdates([]);
+          return;
+        }
+        throw new Error('Failed to fetch updates');
       }
-      setIsLoading(false);
-    };
 
-    fetchUpdates();
+      const data = await response.json();
+      setUpdates(data.updates || []);
+    } catch (error) {
+      console.error("Error fetching updates:", error);
+      setUpdates([]);
+    } finally {
+      setIsLoading(false);
+    }
   }, [dealId]);
+
+  useEffect(() => {
+    fetchUpdates();
+  }, [fetchUpdates]);
 
   return (
     <section className="py-32 relative overflow-hidden">
@@ -149,9 +157,9 @@ export const DealUpdates = ({ dealId }: DealUpdatesProps) => {
                   <div className="grid lg:grid-cols-2">
                     {/* Image */}
                     <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full overflow-hidden bg-slate-100">
-                      {updates[0].image_url ? (
+                      {updates[0].imageUrl ? (
                         <img
-                          src={updates[0].image_url}
+                          src={updates[0].imageUrl}
                           alt={updates[0].title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
@@ -173,7 +181,7 @@ export const DealUpdates = ({ dealId }: DealUpdatesProps) => {
                           <Calendar className="w-5 h-5 text-amber-600" />
                         </div>
                         <span className="text-sm text-slate-500 font-medium">
-                          {format(new Date(updates[0].published_at), "MMMM d, yyyy")}
+                          {format(new Date(updates[0].publishedAt), "MMMM d, yyyy")}
                         </span>
                       </div>
 
@@ -233,9 +241,9 @@ export const DealUpdates = ({ dealId }: DealUpdatesProps) => {
                   >
                     {/* Image */}
                     <div className="relative aspect-[2/1] overflow-hidden bg-slate-100">
-                      {update.image_url ? (
+                      {update.imageUrl ? (
                         <img
-                          src={update.image_url}
+                          src={update.imageUrl}
                           alt={update.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
@@ -250,7 +258,7 @@ export const DealUpdates = ({ dealId }: DealUpdatesProps) => {
                     <div className="p-6">
                       <div className="flex items-center gap-2 text-xs text-slate-500 mb-3">
                         <Calendar className="w-3.5 h-3.5" />
-                        {format(new Date(update.published_at), "MMMM d, yyyy")}
+                        {format(new Date(update.publishedAt), "MMMM d, yyyy")}
                       </div>
 
                       <h3 className="text-lg font-medium text-slate-900 mb-2 group-hover:text-slate-700 transition-colors line-clamp-2">
