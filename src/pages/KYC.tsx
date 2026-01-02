@@ -17,8 +17,9 @@ const KYC = () => {
   const navigate = useNavigate();
 
   // Generate a user ID - use Clerk user ID if available, otherwise generate from email
-  const userId = user?.id || (user?.email ? `user-${user.email.replace(/[^a-zA-Z0-9]/g, '-')}` : 'demo-user');
-  const userEmail = user?.email || 'demo@fragma.io';
+  // Require actual user data - no demo/mock fallbacks
+  const userId = user?.id || (user?.email ? `user-${user.email.replace(/[^a-zA-Z0-9]/g, '-')}` : '');
+  const userEmail = user?.email || '';
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {

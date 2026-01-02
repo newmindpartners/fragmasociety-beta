@@ -72,27 +72,18 @@ const ClerkAuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Mock provider for development without Clerk
+// Mock provider for development without Clerk - no fake users
 const MockAuthProvider = ({ children }: { children: ReactNode }) => {
-  // Provide a demo admin user for development/testing
-  const demoUser = {
-    id: 'demo-user-123',
-    email: 'hi@fragmasociety.com',
-    firstName: 'Admin',
-    lastName: 'User',
-    fullName: 'Admin User',
-    imageUrl: undefined,
-  };
-
+  // No mock user - require real authentication
   return (
     <AuthContext.Provider value={{ 
-      user: demoUser, 
+      user: null, 
       session: null, 
       loading: false,
       isLoading: false,
-      isAuthenticated: true, // Assume authenticated for demo
-      isAdmin: true, // Demo user is admin
-      adminRole: 'super_admin',
+      isAuthenticated: false,
+      isAdmin: false,
+      adminRole: null,
       signOut: async () => {} 
     }}>
       {children}

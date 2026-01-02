@@ -33,7 +33,7 @@ export function IdentityStep({ formData, updateField, onNext, onBack }: Identity
           <Input
             id="fullName"
             type="text"
-            placeholder="John Smith"
+            placeholder="Your full name"
             value={formData.fullName}
             onChange={(e) => updateField('fullName', e.target.value)}
             className="bg-white/5 border-white/10 text-white placeholder:text-white/30 h-12 rounded-xl focus:border-violet-500/50 focus:ring-violet-500/20"
@@ -48,7 +48,7 @@ export function IdentityStep({ formData, updateField, onNext, onBack }: Identity
           <Input
             id="email"
             type="email"
-            placeholder="john@example.com"
+            placeholder="your@email.com"
             value={formData.email}
             onChange={(e) => updateField('email', e.target.value)}
             className="bg-white/5 border-white/10 text-white placeholder:text-white/30 h-12 rounded-xl focus:border-violet-500/50 focus:ring-violet-500/20"

@@ -23,12 +23,8 @@ export const PaymentMethods = () => {
   
   const { paymentMethods, loading, setAsDefault, deletePaymentMethod } = usePaymentMethods();
 
-  // Mock data for display when no real data exists
-  const mockPaymentMethods = [
-    { id: "mock-1", type: "card" as const, card_brand: "mastercard", last4: "1244", is_default: true, bank_name: null, account_holder_name: null },
-    { id: "mock-2", type: "card" as const, card_brand: "visa", last4: "4532", is_default: false, bank_name: null, account_holder_name: null },
-    { id: "mock-3", type: "bank" as const, card_brand: null, last4: "7890", is_default: false, bank_name: "Chase Bank", account_holder_name: "John Doe" },
-  ];
+  // Empty state - no mock data, show real user payment methods only
+  const mockPaymentMethods: typeof paymentMethods = [];
 
   const displayMethods = paymentMethods.length > 0 ? paymentMethods : mockPaymentMethods;
 
