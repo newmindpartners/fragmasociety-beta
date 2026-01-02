@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,7 +14,10 @@ import {
   Users,
   FileText,
   Building,
-  Filter,
+  Building2,
+  Download,
+  Eye,
+  X,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -58,12 +61,21 @@ const REGION_LABELS: Record<string, string> = {
 };
 
 const REGION_COLORS: Record<string, string> = {
-  EU: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  EEA: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-  EU_EQUIVALENT: 'bg-violet-500/10 text-violet-400 border-violet-500/20',
-  THIRD_COUNTRY_FRIENDLY: 'bg-green-500/10 text-green-400 border-green-500/20',
-  THIRD_COUNTRY_RESTRICTED: 'bg-red-500/10 text-red-400 border-red-500/20',
+  EU: 'bg-blue-50 text-blue-700 border-blue-200',
+  EEA: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+  EU_EQUIVALENT: 'bg-violet-50 text-violet-700 border-violet-200',
+  THIRD_COUNTRY_FRIENDLY: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  THIRD_COUNTRY_RESTRICTED: 'bg-red-50 text-red-700 border-red-200',
 };
+
+// Helper function to get flag emoji
+function getFlagEmoji(countryCode: string): string {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}
 
 const JurisdictionsPage = () => {
   const { user } = useAuth();
@@ -76,7 +88,7 @@ const JurisdictionsPage = () => {
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [regionFilter, setRegionFilter] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [showPassportingOnly, setShowPassportingOnly] = useState(false);
   
   // Selected jurisdiction for detail view
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<Jurisdiction | null>(null);
@@ -126,28 +138,68 @@ const JurisdictionsPage = () => {
     fetchJurisdictions();
   }, []);
 
-  const filteredJurisdictions = jurisdictions.filter(j => {
-    if (regionFilter && j.region !== regionFilter) return false;
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      return (
-        j.countryCode.toLowerCase().includes(query) ||
-        j.countryName.toLowerCase().includes(query) ||
-        j.regulatorName?.toLowerCase().includes(query)
-      );
-    }
-    return true;
-  });
+  const filteredJurisdictions = useMemo(() => {
+    return jurisdictions.filter(j => {
+      if (regionFilter && j.region !== regionFilter) return false;
+      if (showPassportingOnly && !j.passportingAllowed) return false;
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        return (
+          j.countryCode.toLowerCase().includes(query) ||
+          j.countryName.toLowerCase().includes(query) ||
+          j.regulatorName?.toLowerCase().includes(query)
+        );
+      }
+      return true;
+    });
+  }, [jurisdictions, regionFilter, showPassportingOnly, searchQuery]);
 
-  const getInvestorTypesAllowed = (j: Jurisdiction) => {
-    const types = [];
-    if (j.retailAllowed) types.push('Retail');
-    if (j.professionalAllowed) types.push('Professional');
-    if (j.qualifiedAllowed) types.push('Qualified');
-    if (j.accreditedAllowed) types.push('Accredited');
-    if (j.wholesaleAllowed) types.push('Wholesale');
-    return types;
+  // Quick stats
+  const stats = useMemo(() => {
+    const total = jurisdictions.length;
+    const retailAllowed = jurisdictions.filter(j => j.retailAllowed).length;
+    const professionalAllowed = jurisdictions.filter(j => j.professionalAllowed).length;
+    const passportingCountries = jurisdictions.filter(j => j.passportingAllowed).length;
+    const blocked = jurisdictions.filter(j => j.blockedReasons).length;
+    
+    return { total, retailAllowed, professionalAllowed, passportingCountries, blocked };
+  }, [jurisdictions]);
+
+  const exportToCsv = () => {
+    const headers = ['Country Code', 'Country Name', 'Region', 'Retail', 'Professional', 'Qualified', 'Accredited', 'Wholesale', 'Passporting', 'Regulator', 'Prospectus Required', 'Local Language'];
+    const rows = filteredJurisdictions.map(j => [
+      j.countryCode,
+      j.countryName,
+      j.region,
+      j.retailAllowed ? 'Yes' : 'No',
+      j.professionalAllowed ? 'Yes' : 'No',
+      j.qualifiedAllowed ? 'Yes' : 'No',
+      j.accreditedAllowed ? 'Yes' : 'No',
+      j.wholesaleAllowed ? 'Yes' : 'No',
+      j.passportingAllowed ? 'Yes' : 'No',
+      j.regulatorName || '',
+      j.requiresProspectus ? 'Yes' : 'No',
+      j.localLanguage || ''
+    ]);
+    
+    const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'jurisdictions-export.csv';
+    a.click();
   };
+
+  const renderCell = (allowed: boolean) => (
+    <div className="flex items-center justify-center">
+      {allowed ? (
+        <CheckCircle2 className="w-4 h-4 text-green-600" />
+      ) : (
+        <XCircle className="w-4 h-4 text-muted-foreground/30" />
+      )}
+    </div>
+  );
 
   return (
     <div className="theme-dashboard relative flex min-h-screen w-full bg-background text-foreground">
@@ -170,19 +222,27 @@ const JurisdictionsPage = () => {
         <header className="sticky top-0 z-30 border-b border-border/60 bg-card/80 backdrop-blur-xl px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Globe className="w-5 h-5 text-blue-400" />
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <Globe className="w-5 h-5 text-blue-600" />
               </div>
               <div>
                 <h1 className="text-xl font-serif font-semibold text-foreground">Jurisdictions</h1>
-                <p className="text-sm text-muted-foreground">Geographic eligibility rules and marketing restrictions</p>
+                <p className="text-sm text-muted-foreground">Geographic eligibility rules & investor classification by country</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <button
+                onClick={exportToCsv}
+                disabled={loading || jurisdictions.length === 0}
+                className="flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg transition-colors text-sm disabled:opacity-50"
+              >
+                <Download className="w-4 h-4" />
+                Export CSV
+              </button>
+              <button
                 onClick={seedJurisdictions}
                 disabled={loading}
-                className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg transition-colors text-sm disabled:opacity-50"
               >
                 <Building className="w-4 h-4" />
                 Seed DB
@@ -201,277 +261,277 @@ const JurisdictionsPage = () => {
 
         {/* Page Content */}
         <main className="flex-1 min-w-0 bg-background px-6 py-6 lg:px-10 lg:py-8">
-          <div className="mx-auto w-full max-w-[1400px]">
+          <div className="mx-auto w-full max-w-[1600px]">
             {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 flex items-center justify-between">
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center justify-between">
                 <span>{error}</span>
-                <button onClick={() => setError(null)} className="text-red-400 hover:text-red-300">
-                  <XCircle className="w-4 h-4" />
+                <button onClick={() => setError(null)} className="text-red-600 hover:text-red-800">
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             )}
 
-            {/* Stats */}
+            {/* Quick Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+              <div className="bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Globe className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <p className="text-2xl font-bold text-foreground">{stats.total}</p>
+                <p className="text-xs text-muted-foreground">Total Countries</p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Users className="w-4 h-4 text-blue-600" />
+                </div>
+                <p className="text-2xl font-bold text-blue-600">{stats.retailAllowed}</p>
+                <p className="text-xs text-muted-foreground">Retail Allowed</p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Building2 className="w-4 h-4 text-violet-600" />
+                </div>
+                <p className="text-2xl font-bold text-violet-600">{stats.professionalAllowed}</p>
+                <p className="text-xs text-muted-foreground">Professional Allowed</p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <CheckCircle2 className="w-4 h-4 text-green-600" />
+                </div>
+                <p className="text-2xl font-bold text-green-600">{stats.passportingCountries}</p>
+                <p className="text-xs text-muted-foreground">EU Passporting</p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <AlertTriangle className="w-4 h-4 text-red-600" />
+                </div>
+                <p className="text-2xl font-bold text-red-600">{stats.blocked}</p>
+                <p className="text-xs text-muted-foreground">Blocked</p>
+              </div>
+            </div>
+
+            {/* Region Filter Chips */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              <button
+                onClick={() => setRegionFilter('')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  regionFilter === '' 
+                    ? 'bg-foreground text-background' 
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                All Regions
+              </button>
               {Object.entries(REGION_LABELS).map(([key, label]) => {
                 const count = grouped?.[key as keyof GroupedJurisdictions]?.length || 0;
                 return (
                   <button
                     key={key}
                     onClick={() => setRegionFilter(regionFilter === key ? '' : key)}
-                    className={`p-4 rounded-xl border transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                       regionFilter === key 
-                        ? 'border-violet-500 bg-violet-500/10' 
-                        : 'border-border bg-card hover:border-violet-500/40'
+                        ? 'bg-foreground text-background' 
+                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
                     }`}
                   >
-                    <p className="text-2xl font-bold text-foreground">{count}</p>
-                    <p className="text-xs text-muted-foreground">{label}</p>
+                    {label}
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      regionFilter === key 
+                        ? 'bg-background/20 text-background' 
+                        : 'bg-background text-foreground'
+                    }`}>
+                      {count}
+                    </span>
                   </button>
                 );
               })}
             </div>
 
-            {/* Filters Row */}
-            <div className="flex flex-wrap gap-4 mb-6">
-              {/* Search */}
+            {/* Search and Filters */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <div className="relative flex-1 min-w-[200px] max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Search country or regulator..."
+                  placeholder="Search country, code, or regulator..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+                  className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
 
-              {/* Region Filter */}
-              <div className="relative">
-                <select
-                  value={regionFilter}
-                  onChange={(e) => setRegionFilter(e.target.value)}
-                  className="appearance-none pl-4 pr-10 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50"
-                >
-                  <option value="">All Regions</option>
-                  {Object.entries(REGION_LABELS).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-              </div>
+              <label className="flex items-center gap-2 text-sm cursor-pointer bg-card border border-border px-3 py-2 rounded-lg">
+                <input
+                  type="checkbox"
+                  checked={showPassportingOnly}
+                  onChange={(e) => setShowPassportingOnly(e.target.checked)}
+                  className="w-4 h-4 rounded border-border text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-muted-foreground">EU Passporting only</span>
+              </label>
 
-              {/* View Toggle */}
-              <div className="flex border border-border rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`px-3 py-2 text-sm ${viewMode === 'grid' ? 'bg-violet-600 text-white' : 'bg-card text-muted-foreground hover:bg-muted'}`}
-                >
-                  Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('table')}
-                  className={`px-3 py-2 text-sm ${viewMode === 'table' ? 'bg-violet-600 text-white' : 'bg-card text-muted-foreground hover:bg-muted'}`}
-                >
-                  Table
-                </button>
+              <div className="text-sm text-muted-foreground">
+                Showing <span className="font-medium text-foreground">{filteredJurisdictions.length}</span> of {jurisdictions.length} jurisdictions
               </div>
             </div>
 
-            {/* Jurisdictions Grid */}
-            {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {loading ? (
-                  Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className="h-40 bg-card rounded-xl border border-border animate-pulse" />
-                  ))
-                ) : filteredJurisdictions.length === 0 ? (
-                  <div className="col-span-full py-12 text-center text-muted-foreground">
-                    <Globe className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                    <p>No jurisdictions found</p>
-                  </div>
-                ) : (
-                  filteredJurisdictions.map((jurisdiction, index) => (
-                    <motion.div
-                      key={jurisdiction.countryCode}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.02 }}
-                      onClick={() => setSelectedJurisdiction(jurisdiction)}
-                      className="bg-card rounded-xl border border-border p-4 hover:border-violet-500/40 hover:shadow-lg transition-all cursor-pointer"
-                    >
-                      {/* Header */}
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-lg">
-                            {jurisdiction.countryCode}
-                          </div>
-                          <div>
-                            <p className="font-medium text-foreground text-sm">{jurisdiction.countryName}</p>
-                            <p className="text-xs text-muted-foreground">{jurisdiction.regulatorName || 'N/A'}</p>
-                          </div>
-                        </div>
-                        {jurisdiction.blockedReasons ? (
-                          <AlertTriangle className="w-4 h-4 text-red-400" />
-                        ) : jurisdiction.passportingAllowed ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-400" />
-                        ) : (
-                          <Shield className="w-4 h-4 text-yellow-400" />
-                        )}
-                      </div>
-
-                      {/* Region Badge */}
-                      <div className="mb-3">
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full border ${REGION_COLORS[jurisdiction.region]}`}>
-                          {REGION_LABELS[jurisdiction.region]}
-                        </span>
-                      </div>
-
-                      {/* Investor Types */}
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {getInvestorTypesAllowed(jurisdiction).length > 0 ? (
-                          getInvestorTypesAllowed(jurisdiction).map(type => (
-                            <span key={type} className="text-[10px] px-1.5 py-0.5 bg-muted rounded text-muted-foreground">
-                              {type}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-[10px] text-red-400">Blocked</span>
-                        )}
-                      </div>
-
-                      {/* Quick Info */}
-                      <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                        {jurisdiction.retailAllowed && (
-                          <span className="flex items-center gap-1">
-                            <Users className="w-3 h-3" /> Retail
-                          </span>
-                        )}
-                        {jurisdiction.requiresProspectus && (
-                          <span className="flex items-center gap-1">
-                            <FileText className="w-3 h-3" /> Prospectus
-                          </span>
-                        )}
-                        {jurisdiction.requiresLocalLanguage && (
-                          <span className="flex items-center gap-1">
-                            🌐 {jurisdiction.localLanguage?.toUpperCase()}
-                          </span>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))
-                )}
+            {/* Legend */}
+            <div className="flex flex-wrap items-center gap-4 mb-4 p-3 bg-muted/30 rounded-lg border border-border">
+              <span className="text-xs font-medium text-muted-foreground">Legend:</span>
+              <div className="flex items-center gap-1.5 text-xs">
+                <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                <span className="text-muted-foreground">Allowed</span>
               </div>
-            ) : (
-              /* Table View */
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-card rounded-xl border border-border overflow-hidden"
-              >
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-border bg-muted/30">
-                        <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Country</th>
-                        <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Region</th>
-                        <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Regulator</th>
-                        <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Retail</th>
-                        <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Professional</th>
-                        <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Passport</th>
-                        <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Prospectus</th>
-                        <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">Local Lang</th>
+              <div className="flex items-center gap-1.5 text-xs">
+                <XCircle className="w-3.5 h-3.5 text-muted-foreground/30" />
+                <span className="text-muted-foreground">Not Allowed</span>
+              </div>
+              <div className="h-4 border-l border-border mx-1" />
+              {Object.entries(REGION_LABELS).map(([key, label]) => (
+                <span key={key} className={`text-[10px] px-2 py-0.5 rounded border ${REGION_COLORS[key]}`}>
+                  {key.replace(/_/g, ' ')}
+                </span>
+              ))}
+            </div>
+
+            {/* Jurisdictions Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-card rounded-xl border border-border overflow-hidden"
+            >
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[1000px]">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/50">
+                      <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide sticky left-0 bg-muted/50 z-10">
+                        Country
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Region
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Retail
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Professional
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Qualified
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Accredited
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Wholesale
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Passporting
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Regulator
+                      </th>
+                      <th className="text-center py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {loading ? (
+                      <tr>
+                        <td colSpan={10} className="py-16 text-center text-muted-foreground">
+                          <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-3" />
+                          <p>Loading jurisdictions...</p>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {loading ? (
-                        <tr>
-                          <td colSpan={8} className="py-12 text-center text-muted-foreground">
-                            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2" />
-                            Loading...
-                          </td>
-                        </tr>
-                      ) : filteredJurisdictions.length === 0 ? (
-                        <tr>
-                          <td colSpan={8} className="py-12 text-center text-muted-foreground">
-                            No jurisdictions found
-                          </td>
-                        </tr>
-                      ) : (
-                        filteredJurisdictions.map((j) => (
-                          <tr 
-                            key={j.countryCode} 
-                            className="border-b border-border/50 hover:bg-muted/30 transition-colors cursor-pointer"
-                            onClick={() => setSelectedJurisdiction(j)}
-                          >
-                            <td className="py-3 px-4">
-                              <div className="flex items-center gap-2">
-                                <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">{j.countryCode}</span>
-                                <span className="text-sm text-foreground">{j.countryName}</span>
+                    ) : filteredJurisdictions.length === 0 ? (
+                      <tr>
+                        <td colSpan={10} className="py-16 text-center text-muted-foreground">
+                          <Globe className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p className="mb-2">No jurisdictions found</p>
+                          {jurisdictions.length === 0 && (
+                            <button
+                              onClick={seedJurisdictions}
+                              className="text-sm text-blue-600 hover:underline"
+                            >
+                              Seed database with default jurisdictions
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredJurisdictions.map((j, index) => (
+                        <motion.tr 
+                          key={j.countryCode}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: index * 0.01 }}
+                          className={`border-b border-border/50 hover:bg-muted/30 transition-colors ${j.blockedReasons ? 'bg-red-50/30' : ''}`}
+                        >
+                          <td className="py-3 px-4 sticky left-0 bg-card z-10">
+                            <div className="flex items-center gap-3">
+                              <span className="text-xl">{getFlagEmoji(j.countryCode)}</span>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm font-medium text-foreground">{j.countryName}</p>
+                                  {j.blockedReasons && (
+                                    <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
+                                  )}
+                                </div>
+                                <p className="text-xs text-muted-foreground font-mono">{j.countryCode}</p>
                               </div>
-                            </td>
-                            <td className="py-3 px-4">
-                              <span className={`text-xs px-2 py-0.5 rounded-full border ${REGION_COLORS[j.region]}`}>
-                                {j.region.replace(/_/g, ' ')}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4 text-sm text-muted-foreground">{j.regulatorName || '-'}</td>
-                            <td className="py-3 px-4 text-center">
-                              {j.retailAllowed ? (
-                                <CheckCircle2 className="w-4 h-4 text-green-400 mx-auto" />
-                              ) : (
-                                <XCircle className="w-4 h-4 text-red-400 mx-auto" />
-                              )}
-                            </td>
-                            <td className="py-3 px-4 text-center">
-                              {j.professionalAllowed ? (
-                                <CheckCircle2 className="w-4 h-4 text-green-400 mx-auto" />
-                              ) : (
-                                <XCircle className="w-4 h-4 text-red-400 mx-auto" />
-                              )}
-                            </td>
-                            <td className="py-3 px-4 text-center">
-                              {j.passportingAllowed ? (
-                                <CheckCircle2 className="w-4 h-4 text-green-400 mx-auto" />
-                              ) : (
-                                <XCircle className="w-4 h-4 text-muted-foreground mx-auto" />
-                              )}
-                            </td>
-                            <td className="py-3 px-4 text-center">
-                              {j.requiresProspectus ? (
-                                <CheckCircle2 className="w-4 h-4 text-yellow-400 mx-auto" />
-                              ) : (
-                                <span className="text-xs text-muted-foreground">-</span>
-                              )}
-                            </td>
-                            <td className="py-3 px-4 text-center">
-                              {j.requiresLocalLanguage ? (
-                                <span className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">
-                                  {j.localLanguage?.toUpperCase()}
-                                </span>
-                              ) : (
-                                <span className="text-xs text-muted-foreground">-</span>
-                              )}
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </motion.div>
-            )}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className={`text-xs px-2 py-1 rounded border ${REGION_COLORS[j.region]}`}>
+                              {j.region.replace(/_/g, ' ')}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">{renderCell(j.retailAllowed)}</td>
+                          <td className="py-3 px-4">{renderCell(j.professionalAllowed)}</td>
+                          <td className="py-3 px-4">{renderCell(j.qualifiedAllowed)}</td>
+                          <td className="py-3 px-4">{renderCell(j.accreditedAllowed)}</td>
+                          <td className="py-3 px-4">{renderCell(j.wholesaleAllowed)}</td>
+                          <td className="py-3 px-4">{renderCell(j.passportingAllowed)}</td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground max-w-[150px] truncate">
+                            {j.regulatorName || '-'}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <button
+                              onClick={() => setSelectedJurisdiction(j)}
+                              className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                              title="View details"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </motion.tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
+            {/* Footer Info */}
+            <div className="mt-6 p-4 bg-muted/30 rounded-lg border border-border">
+              <p className="text-xs text-muted-foreground">
+                <strong>Note:</strong> This matrix shows general eligibility based on Luxembourg securitisation law and EU passporting rules. 
+                Actual eligibility may vary based on specific deal characteristics, investor documentation, and regulatory changes. 
+                Always verify eligibility with the compliance team before proceeding.
+              </p>
+            </div>
           </div>
         </main>
 
         {/* Footer */}
         <footer className="mt-auto border-t border-border/60 bg-card px-6 py-4 lg:px-10">
-          <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 sm:flex-row">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center justify-between gap-3 sm:flex-row">
             <p className="text-xs text-muted-foreground">
               © 2024 Fragma Finance. All rights reserved.
             </p>
             <p className="text-xs text-muted-foreground">
-              {jurisdictions.length} jurisdictions configured
+              {jurisdictions.length} jurisdictions configured • Luxembourg Securitisation Law Compliant
             </p>
           </div>
         </footer>
@@ -481,33 +541,34 @@ const JurisdictionsPage = () => {
       {selectedJurisdiction && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setSelectedJurisdiction(null)}
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full max-w-2xl bg-card rounded-xl border border-border shadow-2xl overflow-hidden max-h-[80vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="relative w-full max-w-2xl bg-card rounded-xl border border-border shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto"
           >
             {/* Modal Header */}
             <div className="sticky top-0 p-6 border-b border-border bg-card z-10">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center text-xl font-bold">
-                    {selectedJurisdiction.countryCode}
-                  </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-4xl">{getFlagEmoji(selectedJurisdiction.countryCode)}</span>
                   <div>
-                    <h2 className="text-lg font-semibold text-foreground">{selectedJurisdiction.countryName}</h2>
-                    <span className={`text-xs px-2 py-0.5 rounded-full border ${REGION_COLORS[selectedJurisdiction.region]}`}>
-                      {REGION_LABELS[selectedJurisdiction.region]}
-                    </span>
+                    <h2 className="text-xl font-semibold text-foreground">{selectedJurisdiction.countryName}</h2>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm font-mono text-muted-foreground">{selectedJurisdiction.countryCode}</span>
+                      <span className={`text-xs px-2 py-0.5 rounded border ${REGION_COLORS[selectedJurisdiction.region]}`}>
+                        {REGION_LABELS[selectedJurisdiction.region]}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedJurisdiction(null)}
                   className="p-2 rounded-lg hover:bg-muted transition-colors"
                 >
-                  <XCircle className="w-5 h-5 text-muted-foreground" />
+                  <X className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
             </div>
@@ -516,18 +577,21 @@ const JurisdictionsPage = () => {
             <div className="p-6 space-y-6">
               {/* Blocked Warning */}
               {selectedJurisdiction.blockedReasons && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                  <div className="flex items-center gap-2 text-red-400 mb-2">
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-red-700 mb-2">
                     <AlertTriangle className="w-4 h-4" />
                     <span className="font-medium">Blocked Jurisdiction</span>
                   </div>
-                  <p className="text-sm text-red-400/80">{selectedJurisdiction.blockedReasons}</p>
+                  <p className="text-sm text-red-600">{selectedJurisdiction.blockedReasons}</p>
                 </div>
               )}
 
               {/* Investor Types */}
               <div>
-                <h3 className="text-sm font-medium text-foreground mb-3">Allowed Investor Types</h3>
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Users className="w-4 h-4 text-muted-foreground" />
+                  Allowed Investor Types
+                </h3>
                 <div className="grid grid-cols-3 gap-3">
                   {[
                     { key: 'retailAllowed', label: 'Retail', value: selectedJurisdiction.retailAllowed },
@@ -536,14 +600,14 @@ const JurisdictionsPage = () => {
                     { key: 'accreditedAllowed', label: 'Accredited', value: selectedJurisdiction.accreditedAllowed },
                     { key: 'wholesaleAllowed', label: 'Wholesale', value: selectedJurisdiction.wholesaleAllowed },
                   ].map(item => (
-                    <div key={item.key} className={`p-3 rounded-lg border ${item.value ? 'bg-green-500/10 border-green-500/20' : 'bg-muted border-border'}`}>
+                    <div key={item.key} className={`p-3 rounded-lg border ${item.value ? 'bg-green-50 border-green-200' : 'bg-muted/50 border-border'}`}>
                       <div className="flex items-center gap-2">
                         {item.value ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-400" />
+                          <CheckCircle2 className="w-4 h-4 text-green-600" />
                         ) : (
-                          <XCircle className="w-4 h-4 text-muted-foreground" />
+                          <XCircle className="w-4 h-4 text-muted-foreground/50" />
                         )}
-                        <span className={`text-sm ${item.value ? 'text-green-400' : 'text-muted-foreground'}`}>
+                        <span className={`text-sm font-medium ${item.value ? 'text-green-700' : 'text-muted-foreground'}`}>
                           {item.label}
                         </span>
                       </div>
@@ -554,21 +618,24 @@ const JurisdictionsPage = () => {
 
               {/* Regulatory Info */}
               <div>
-                <h3 className="text-sm font-medium text-foreground mb-3">Regulatory Information</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between py-2 border-b border-border/50">
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-muted-foreground" />
+                  Regulatory Information
+                </h3>
+                <div className="bg-muted/30 rounded-lg border border-border divide-y divide-border">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Regulator</span>
                     <span className="text-sm font-medium text-foreground">{selectedJurisdiction.regulatorName || 'N/A'}</span>
                   </div>
-                  <div className="flex items-center justify-between py-2 border-b border-border/50">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Notification Required</span>
-                    <span className="text-sm font-medium text-foreground">
+                    <span className={`text-sm font-medium ${selectedJurisdiction.regulatorNotification ? 'text-amber-600' : 'text-muted-foreground'}`}>
                       {selectedJurisdiction.regulatorNotification ? 'Yes' : 'No'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2 border-b border-border/50">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">EU Passporting</span>
-                    <span className={`text-sm font-medium ${selectedJurisdiction.passportingAllowed ? 'text-green-400' : 'text-muted-foreground'}`}>
+                    <span className={`text-sm font-medium ${selectedJurisdiction.passportingAllowed ? 'text-green-600' : 'text-muted-foreground'}`}>
                       {selectedJurisdiction.passportingAllowed ? 'Yes' : 'No'}
                     </span>
                   </div>
@@ -577,26 +644,29 @@ const JurisdictionsPage = () => {
 
               {/* Documentation Requirements */}
               <div>
-                <h3 className="text-sm font-medium text-foreground mb-3">Documentation Requirements</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between py-2 border-b border-border/50">
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-muted-foreground" />
+                  Documentation Requirements
+                </h3>
+                <div className="bg-muted/30 rounded-lg border border-border divide-y divide-border">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Prospectus Required</span>
-                    <span className={`text-sm font-medium ${selectedJurisdiction.requiresProspectus ? 'text-yellow-400' : 'text-muted-foreground'}`}>
+                    <span className={`text-sm font-medium ${selectedJurisdiction.requiresProspectus ? 'text-amber-600' : 'text-muted-foreground'}`}>
                       {selectedJurisdiction.requiresProspectus ? 'Yes' : 'No'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2 border-b border-border/50">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Local KID Required</span>
-                    <span className="text-sm font-medium text-foreground">
+                    <span className={`text-sm font-medium ${selectedJurisdiction.requiresLocalKID ? 'text-amber-600' : 'text-muted-foreground'}`}>
                       {selectedJurisdiction.requiresLocalKID ? 'Yes' : 'No'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Local Language</span>
                     <span className="text-sm font-medium text-foreground">
                       {selectedJurisdiction.requiresLocalLanguage 
-                        ? selectedJurisdiction.localLanguage?.toUpperCase() || 'Yes'
-                        : 'No'}
+                        ? selectedJurisdiction.localLanguage?.toUpperCase() || 'Required'
+                        : 'Not Required'}
                     </span>
                   </div>
                 </div>
@@ -604,17 +674,20 @@ const JurisdictionsPage = () => {
 
               {/* Marketing Restrictions */}
               <div>
-                <h3 className="text-sm font-medium text-foreground mb-3">Marketing Restrictions</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between py-2 border-b border-border/50">
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Building className="w-4 h-4 text-muted-foreground" />
+                  Marketing Restrictions
+                </h3>
+                <div className="bg-muted/30 rounded-lg border border-border divide-y divide-border">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Cold Calling Allowed</span>
-                    <span className={`text-sm font-medium ${selectedJurisdiction.coldCallingAllowed ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`text-sm font-medium ${selectedJurisdiction.coldCallingAllowed ? 'text-green-600' : 'text-red-600'}`}>
                       {selectedJurisdiction.coldCallingAllowed ? 'Yes' : 'No'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center justify-between p-3">
                     <span className="text-sm text-muted-foreground">Advertising Allowed</span>
-                    <span className={`text-sm font-medium ${selectedJurisdiction.advertisingAllowed ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`text-sm font-medium ${selectedJurisdiction.advertisingAllowed ? 'text-green-600' : 'text-red-600'}`}>
                       {selectedJurisdiction.advertisingAllowed ? 'Yes' : 'No'}
                     </span>
                   </div>

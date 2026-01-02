@@ -11,7 +11,7 @@
 
 import { prisma } from '../db/prisma.js';
 import { JURISDICTION_RULES, checkJurisdictionEligibility, InvestorProfile } from './jurisdiction.service.js';
-import { InvestorType, CompartmentType, ComplianceStatus } from '@prisma/client';
+import { InvestorType, CompartmentType, ComplianceStatus, DealStatus } from '@prisma/client';
 
 // =============================================
 // TYPES
@@ -242,13 +242,13 @@ export async function matchInvestorToDeal(
   investorId: string,
   dealId: string
 ): Promise<MatchedDeal> {
-  // Fetch investor
-  const investor = await prisma.investor.findUnique({
+  // Fetch user (investor)
+  const user = await prisma.user.findUnique({
     where: { id: investorId },
   });
 
-  if (!investor) {
-    throw new Error(`Investor not found: ${investorId}`);
+  if (!user) {
+    throw new Error(`User not found: ${investorId}`);
   }
 
   // Fetch deal
@@ -268,7 +268,7 @@ export async function matchInvestorToDeal(
   let eligibilityScore = 100;
 
   // 1. Check compartment eligibility
-  const compartmentCheck = canInvestInCompartment(investor.investorType, deal.compartmentType);
+  const compartmentCheck = canInvestInCompartment(user.investorType, deal.compartmentType);
   if (!compartmentCheck.allowed) {
     eligible = false;
     eligibilityScore = 0;
@@ -279,13 +279,13 @@ export async function matchInvestorToDeal(
 
   // 2. Check jurisdiction eligibility
   const investorProfile: InvestorProfile = {
-    countryCode: investor.countryCode,
-    investorType: investor.investorType,
-    isUsPerson: investor.isUsPerson,
-    totalAssets: investor.totalAssets ? Number(investor.totalAssets) : undefined,
+    countryCode: user.country || 'XX',
+    investorType: user.investorType,
+    isUsPerson: user.isUsPerson,
+    totalAssets: user.totalAssets ? Number(user.totalAssets) : undefined,
   };
 
-  const jurisdictionResult = checkJurisdictionEligibility(investorProfile, investor.countryCode);
+  const jurisdictionResult = checkJurisdictionEligibility(investorProfile, user.country || 'XX');
   
   if (!jurisdictionResult.eligible) {
     eligible = false;
@@ -298,7 +298,7 @@ export async function matchInvestorToDeal(
   }
 
   // 3. Check KYC status - always required for investment
-  if (investor.kycStatus !== 'approved') {
+  if (user.kycStatus !== 'APPROVED') {
     eligible = false;
     eligibilityScore = Math.min(eligibilityScore, 30);
     reasons.push('KYC verification required but not completed');
@@ -306,11 +306,11 @@ export async function matchInvestorToDeal(
   }
 
   // 4. Check compliance status - required for all active deals
-  if (investor.complianceStatus !== 'APPROVED') {
-    if (investor.complianceStatus === 'PENDING_REVIEW') {
+  if (user.complianceStatus !== 'APPROVED') {
+    if (user.complianceStatus === 'PENDING_REVIEW') {
       restrictions.push('Awaiting compliance review approval');
       requiredActions.push('Wait for compliance team review');
-    } else if (investor.complianceStatus === 'REJECTED') {
+    } else if (user.complianceStatus === 'REJECTED') {
       eligible = false;
       eligibilityScore = 0;
       reasons.push('Compliance status: Rejected');
@@ -321,8 +321,8 @@ export async function matchInvestorToDeal(
 
   // 5. Check risk alignment
   const riskCheck = calculateRiskAlignment(
-    investor.riskScore,
-    investor.riskProfile,
+    user.riskScore,
+    user.riskProfile,
     deal.riskLevel
   );
   
@@ -333,7 +333,7 @@ export async function matchInvestorToDeal(
   eligibilityScore = Math.min(eligibilityScore, riskCheck.score);
 
   // 6. Check investment limits
-  const investmentLimits = checkInvestmentMinimum(deal.compartmentType, Number(deal.minimumInvestment));
+  const investmentLimits = checkInvestmentMinimum(deal.compartmentType, Number(deal.minTicket));
 
   // 7. Capital at risk warning
   if (deal.capitalAtRisk) {
@@ -343,8 +343,8 @@ export async function matchInvestorToDeal(
   // 8. Get required documentation
   const requiredDocs = getRequiredDocumentation(
     deal.compartmentType,
-    investor.countryCode,
-    investor.investorType
+    user.country || 'XX',
+    user.investorType
   );
   
   if (requiredDocs.length > 0) {
@@ -353,9 +353,9 @@ export async function matchInvestorToDeal(
 
   return {
     dealId: deal.id,
-    dealName: deal.name,
+    dealName: deal.title,
     compartmentType: deal.compartmentType,
-    assetClass: deal.assetClass,
+    assetClass: deal.assetClass || deal.category,
     eligible,
     eligibilityScore,
     reasons,
@@ -372,18 +372,18 @@ export async function matchInvestorToDeal(
 export async function matchInvestorToAllDeals(
   investorId: string
 ): Promise<MatchingResult> {
-  // Fetch investor
-  const investor = await prisma.investor.findUnique({
+  // Fetch user (investor)
+  const user = await prisma.user.findUnique({
     where: { id: investorId },
   });
 
-  if (!investor) {
-    throw new Error(`Investor not found: ${investorId}`);
+  if (!user) {
+    throw new Error(`User not found: ${investorId}`);
   }
 
-  // Fetch all active deals (status = 'active')
+  // Fetch all active deals
   const deals = await prisma.deal.findMany({
-    where: { status: 'active' },
+    where: { status: 'ACTIVE' },
   });
 
   const eligibleDeals: MatchedDeal[] = [];
@@ -417,11 +417,11 @@ export async function matchInvestorToAllDeals(
     .map(([r]) => r);
 
   return {
-    investorId: investor.id,
-    investorType: investor.investorType,
-    countryCode: investor.countryCode,
-    kycApproved: investor.kycStatus === 'approved',
-    complianceApproved: investor.complianceStatus === 'APPROVED',
+    investorId: user.id,
+    investorType: user.investorType,
+    countryCode: user.country || 'XX',
+    kycApproved: user.kycStatus === 'APPROVED',
+    complianceApproved: user.complianceStatus === 'APPROVED',
     eligibleDeals,
     ineligibleDeals,
     summary: {
@@ -447,24 +447,24 @@ export async function findEligibleInvestorsForDeal(
     throw new Error(`Deal not found: ${dealId}`);
   }
 
-  // Get all approved investors
-  const investors = await prisma.investor.findMany({
+  // Get all approved users
+  const users = await prisma.user.findMany({
     where: {
       complianceStatus: 'APPROVED',
-      kycStatus: 'approved',
+      kycStatus: 'APPROVED',
     },
   });
 
   const eligibleInvestors: { investorId: string; investorType: InvestorType; countryCode: string; score: number }[] = [];
 
-  for (const investor of investors) {
-    const match = await matchInvestorToDeal(investor.id, dealId);
+  for (const user of users) {
+    const match = await matchInvestorToDeal(user.id, dealId);
     
     if (match.eligible) {
       eligibleInvestors.push({
-        investorId: investor.id,
-        investorType: investor.investorType,
-        countryCode: investor.countryCode,
+        investorId: user.id,
+        investorType: user.investorType,
+        countryCode: user.country || 'XX',
         score: match.eligibilityScore,
       });
     }

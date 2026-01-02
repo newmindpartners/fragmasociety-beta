@@ -30,8 +30,9 @@ const envSchema = z.object({
   SUMSUB_SECRET_KEY: z.string().optional(),
   SUMSUB_LEVEL_NAME: z.string().default('id-and-liveness'),
 
-  // Clerk (for admin role management)
+  // Clerk (for admin role management and webhooks)
   CLERK_SECRET_KEY: z.string().optional(),
+  CLERK_WEBHOOK_SECRET: z.string().optional(),
 
   // AI Models (for AI Compliance Agent)
   // OpenAI

@@ -8,6 +8,10 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// =============================================
+// EXISTING TABLES (preserved)
+// =============================================
+
 model EarlyAccessSubmission {
   id                           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   fullName                     String   @map("full_name")
@@ -38,6 +42,10 @@ model EarlyAccessSubmission {
   createdAt                    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt                    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   city                         String?
+  
+  // Link to User when they sign up
+  userId                       String?  @map("user_id") @db.Uuid
+  user                         User?    @relation(fields: [userId], references: [id])
 
   @@map("early_access_submissions")
 }
@@ -51,15 +59,705 @@ model NewsletterSubscriber {
   @@map("newsletter_subscribers")
 }
 
-// Admin user role enum
+// =============================================
+// ENUMS
+// =============================================
+
 enum AdminRole {
   SUPER_ADMIN
   ADMIN
   MODERATOR
   COMPLIANCE_OFFICER
+  SUPPORT
 }
 
-// Admin users table
+enum InvestorType {
+  RETAIL
+  PROFESSIONAL
+  QUALIFIED
+  ACCREDITED      // For US/Canada/Singapore
+  WHOLESALE       // For Australia
+  QII             // For Japan (Qualified Institutional Investor)
+}
+
+enum KYCStatus {
+  PENDING
+  IN_PROGRESS
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum ComplianceStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  REQUIRES_DOCUMENTS
+  SUSPENDED
+  UNDER_INVESTIGATION
+}
+
+enum MembershipTier {
+  FREE
+  BASIC
+  PREMIUM
+  VIP
+  INSTITUTIONAL
+}
+
+enum CompartmentType {
+  PROFESSIONAL
+  RETAIL
+}
+
+enum DealStatus {
+  DRAFT
+  PENDING_APPROVAL
+  ACTIVE
+  FUNDED
+  CLOSED
+  CANCELLED
+}
+
+enum InvestmentStatus {
+  PENDING
+  IN_PROGRESS
+  FUNDED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum InvestmentStep {
+  VERIFY_IDENTITY
+  SELECT_DEAL
+  REVIEW_DOCUMENTS
+  PAYMENT_PROCESSING
+  FUNDS_IN_ESCROW
+  INVESTMENT_COMPLETE
+}
+
+enum OrderType {
+  BUY
+  SELL
+}
+
+enum OrderStatus {
+  PENDING
+  ACTIVE
+  PARTIAL
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum WalletType {
+  FIAT
+  CRYPTO
+}
+
+enum TransferType {
+  DEPOSIT
+  WITHDRAWAL
+  INVESTMENT
+  DISTRIBUTION
+  FEE
+  REFUND
+}
+
+enum TransferStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum JurisdictionRegion {
+  EU
+  EEA
+  EU_EQUIVALENT
+  THIRD_COUNTRY_FRIENDLY
+  THIRD_COUNTRY_RESTRICTED
+}
+
+// =============================================
+// USER MODEL (synced with Clerk)
+// =============================================
+
+model User {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // ===== CLERK SYNC =====
+  clerkUserId           String           @unique @map("clerk_user_id")
+  email                 String           @unique
+  emailVerified         Boolean          @default(false) @map("email_verified")
+  
+  // ===== PERSONAL INFO =====
+  firstName             String?          @map("first_name")
+  lastName              String?          @map("last_name")
+  fullName              String?          @map("full_name")
+  displayName           String?          @map("display_name")
+  avatarUrl             String?          @map("avatar_url")
+  bio                   String?
+  phone                 String?
+  phoneVerified         Boolean          @default(false) @map("phone_verified")
+  dateOfBirth           DateTime?        @map("date_of_birth")
+  
+  // ===== LOCATION =====
+  country               String?          // ISO 3166-1 alpha-2 (FR, US, CH, etc.)
+  countryName           String?          @map("country_name")
+  city                  String?
+  address               String?
+  postalCode            String?          @map("postal_code")
+  taxResidency          String?          @map("tax_residency")
+  nationality           String?
+  
+  // ===== INVESTOR CLASSIFICATION =====
+  registeringAs         String           @default("individual") @map("registering_as") // individual, entity, trust
+  entityName            String?          @map("entity_name")
+  entityType            String?          @map("entity_type") // LLC, Corporation, Trust, etc.
+  investorType          InvestorType     @default(RETAIL) @map("investor_type")
+  investorStatus        String?          @map("investor_status") // From early form
+  classificationDate    DateTime?        @map("classification_date")
+  classifiedBy          String?          @map("classified_by") // admin, AI, self-declared
+  
+  // ===== KYC / COMPLIANCE =====
+  kycStatus             KYCStatus        @default(PENDING) @map("kyc_status")
+  kycApprovedAt         DateTime?        @map("kyc_approved_at")
+  kycExpiresAt          DateTime?        @map("kyc_expires_at")
+  sumsubApplicantId     String?          @map("sumsub_applicant_id")
+  sumsubReviewId        String?          @map("sumsub_review_id")
+  
+  complianceStatus      ComplianceStatus @default(PENDING_REVIEW) @map("compliance_status")
+  complianceNotes       String?          @map("compliance_notes")
+  lastComplianceReview  DateTime?        @map("last_compliance_review")
+  reviewedBy            String?          @map("reviewed_by")
+  
+  // ===== RISK & PEP =====
+  isPep                 Boolean          @default(false) @map("is_pep")
+  pepDetails            String?          @map("pep_details")
+  isSanctioned          Boolean          @default(false) @map("is_sanctioned")
+  riskProfile           String?          @map("risk_profile") // conservative, moderate, aggressive
+  riskScore             Int?             @map("risk_score") // 1-10
+  suitabilityScore      Int?             @map("suitability_score") // 1-100
+  
+  // ===== FINANCIAL PROFILE =====
+  annualIncome          String?          @map("annual_income") // Range
+  investableCapital     String?          @map("investable_capital") // Range
+  totalAssets           Decimal?         @map("total_assets") @db.Decimal(18, 2)
+  financialAssets       Decimal?         @map("financial_assets") @db.Decimal(18, 2)
+  netWorth              Decimal?         @map("net_worth") @db.Decimal(18, 2)
+  sourceOfFunds         String?          @map("source_of_funds")
+  
+  // ===== US / ACCREDITED STATUS =====
+  isUsPerson            Boolean          @default(false) @map("is_us_person")
+  usState               String?          @map("us_state")
+  usAccreditedStatus    String?          @map("us_accredited_status")
+  usAccreditedQualifications String[]    @map("us_accredited_qualifications")
+  
+  // ===== EU PROFESSIONAL STATUS =====
+  euProfessionalQualifications String[]  @map("eu_professional_qualifications")
+  euQualificationsCount String?          @map("eu_qualifications_count")
+  professionalStatus    Boolean          @default(false) @map("professional_status")
+  institutionalInvestor Boolean          @default(false) @map("institutional_investor")
+  
+  // ===== INVESTMENT PREFERENCES =====
+  investmentHorizon     String?          @map("investment_horizon")
+  preferredTicketSize   String?          @map("preferred_ticket_size")
+  investmentPriorities  String[]         @map("investment_priorities")
+  assetInterests        String[]         @map("asset_interests")
+  
+  // ===== CONTACT PREFERENCES =====
+  preferredContactChannel String?        @map("preferred_contact_channel")
+  marketingConsent      Boolean          @default(false) @map("marketing_consent")
+  consentToContact      Boolean          @default(false) @map("consent_to_contact")
+  
+  // ===== MEMBERSHIP =====
+  membershipTier        MembershipTier   @default(FREE) @map("membership_tier")
+  membershipStartDate   DateTime?        @map("membership_start_date")
+  membershipEndDate     DateTime?        @map("membership_end_date")
+  referralCode          String?          @unique @map("referral_code")
+  referredBy            String?          @map("referred_by") @db.Uuid
+  
+  // ===== AGGREGATED STATS =====
+  totalInvested         Decimal          @default(0) @map("total_invested") @db.Decimal(18, 2)
+  totalReturns          Decimal          @default(0) @map("total_returns") @db.Decimal(18, 2)
+  activeInvestments     Int              @default(0) @map("active_investments")
+  completedInvestments  Int              @default(0) @map("completed_investments")
+  
+  // ===== ADMIN FLAGS =====
+  isAdmin               Boolean          @default(false) @map("is_admin")
+  adminRole             AdminRole?       @map("admin_role")
+  isActive              Boolean          @default(true) @map("is_active")
+  isBanned              Boolean          @default(false) @map("is_banned")
+  banReason             String?          @map("ban_reason")
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  lastLoginAt           DateTime?        @map("last_login_at") @db.Timestamptz(6)
+  lastActivityAt        DateTime?        @map("last_activity_at") @db.Timestamptz(6)
+  
+  // ===== RELATIONS =====
+  investments           UserInvestment[]
+  orders                Order[]
+  wallets               Wallet[]
+  transfers             Transfer[]
+  documents             UserDocument[]
+  notifications         Notification[]
+  watchlist             Watchlist[]
+  earlyAccessSubmission EarlyAccessSubmission[]
+  distributions         Distribution[]
+  
+  @@index([email])
+  @@index([clerkUserId])
+  @@index([country])
+  @@index([investorType])
+  @@index([kycStatus])
+  @@index([complianceStatus])
+  @@map("users")
+}
+
+// =============================================
+// DEAL MODEL (comprehensive)
+// =============================================
+
+model Deal {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // ===== BASIC INFO =====
+  title                 String
+  slug                  String           @unique
+  description           String?
+  tagline               String?
+  
+  // ===== CATEGORIZATION =====
+  category              String           // Real Estate, Entertainment, Art, etc.
+  subcategory           String?
+  assetClass            String?          @map("asset_class")
+  instrumentType        String           @default("Notes") @map("instrument_type")
+  
+  // ===== LEADERSHIP =====
+  leaderName            String           @map("leader_name")
+  leaderRole            String           @map("leader_role")
+  leaderImage           String?          @map("leader_image")
+  
+  // ===== INVESTMENT TERMS =====
+  currency              String           @default("EUR")
+  minTicket             Decimal          @map("min_ticket") @db.Decimal(18, 2)
+  maxTicket             Decimal?         @map("max_ticket") @db.Decimal(18, 2)
+  tokenPrice            Decimal?         @map("token_price") @db.Decimal(18, 2)
+  totalRaise            Decimal          @map("total_raise") @db.Decimal(18, 2)
+  currentRaised         Decimal          @default(0) @map("current_raised") @db.Decimal(18, 2)
+  targetReturn          String?          @map("target_return")
+  term                  String?
+  distributionFrequency String?          @map("distribution_frequency")
+  
+  // ===== COMPARTMENT & COMPLIANCE =====
+  compartmentType       CompartmentType  @default(PROFESSIONAL) @map("compartment_type")
+  
+  requiresProspectus    Boolean          @default(false) @map("requires_prospectus")
+  prospectusUrl         String?          @map("prospectus_url")
+  prospectusApprovalDate DateTime?       @map("prospectus_approval_date")
+  
+  requiresPRIIPSKID     Boolean          @default(false) @map("requires_priips_kid")
+  priipsKidUrl          String?          @map("priips_kid_url")
+  
+  requiresPPM           Boolean          @default(false) @map("requires_ppm")
+  ppmUrl                String?          @map("ppm_url")
+  
+  cssfApproved          Boolean          @default(false) @map("cssf_approved")
+  cssfApprovalDate      DateTime?        @map("cssf_approval_date")
+  cssfApprovalNumber    String?          @map("cssf_approval_number")
+  
+  // ===== RISK DISCLOSURE =====
+  riskLevel             Int              @default(5) @map("risk_level")
+  risk                  String?
+  liquidityRisk         String?          @map("liquidity_risk")
+  capitalAtRisk         Boolean          @default(true) @map("capital_at_risk")
+  risks                 Json?
+  
+  // ===== MEDIA =====
+  bannerImage           String?          @map("banner_image")
+  heroVideoUrl          String?          @map("hero_video_url")
+  pitchVideoUrl         String?          @map("pitch_video_url")
+  teamVideoUrl          String?          @map("team_video_url")
+  assetVideoUrl         String?          @map("asset_video_url")
+  assetImages           Json?            @map("asset_images")
+  
+  // ===== DEAL DATA (JSON) =====
+  financials            Json?
+  marketData            Json?            @map("market_data")
+  marketHighlights      Json?            @map("market_highlights")
+  strategies            Json?
+  team                  Json?
+  timeline              Json?
+  trackRecord           Json?            @map("track_record")
+  caseStudies           Json?            @map("case_studies")
+  currentProperties     Json?            @map("current_properties")
+  specialOpportunity    Json?            @map("special_opportunity")
+  
+  // ===== STATUS =====
+  status                DealStatus       @default(DRAFT)
+  launchDate            DateTime?        @map("launch_date")
+  closeDate             DateTime?        @map("close_date")
+  investorCount         Int              @default(0) @map("investor_count")
+  
+  // ===== GEOGRAPHIC RESTRICTIONS =====
+  allowedCountries      String[]         @map("allowed_countries")
+  blockedCountries      String[]         @map("blocked_countries")
+  allowedInvestorTypes  InvestorType[]   @map("allowed_investor_types")
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  publishedAt           DateTime?        @map("published_at")
+  
+  // ===== RELATIONS =====
+  investments           UserInvestment[]
+  orders                Order[]
+  documents             DealDocument[]
+  updates               DealUpdate[]
+  comments              DealComment[]
+  watchedBy             Watchlist[]
+  
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([compartmentType])
+  @@map("deals")
+}
+
+// =============================================
+// INVESTMENT MODEL
+// =============================================
+
+model UserInvestment {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  userId                String           @map("user_id") @db.Uuid
+  dealId                String           @map("deal_id") @db.Uuid
+  
+  // ===== INVESTMENT DETAILS =====
+  amount                Decimal          @db.Decimal(18, 2)
+  tokens                Int?
+  tokenPrice            Decimal?         @map("token_price") @db.Decimal(18, 2)
+  currency              String           @default("EUR")
+  
+  // ===== STATUS =====
+  status                InvestmentStatus @default(PENDING)
+  currentStep           InvestmentStep   @default(VERIFY_IDENTITY) @map("current_step")
+  stepDeadline          DateTime?        @map("step_deadline")
+  
+  // ===== COMPLIANCE SIGN-OFFS =====
+  kycVerified           Boolean          @default(false) @map("kyc_verified")
+  suitabilityConfirmed  Boolean          @default(false) @map("suitability_confirmed")
+  documentsAcknowledged Boolean          @default(false) @map("documents_acknowledged")
+  riskDisclosureSigned  Boolean          @default(false) @map("risk_disclosure_signed")
+  termsAccepted         Boolean          @default(false) @map("terms_accepted")
+  termsAcceptedAt       DateTime?        @map("terms_accepted_at")
+  
+  // ===== RETURNS =====
+  totalReturns          Decimal          @default(0) @map("total_returns") @db.Decimal(18, 2)
+  lastDistribution      Decimal?         @map("last_distribution") @db.Decimal(18, 2)
+  lastDistributionDate  DateTime?        @map("last_distribution_date")
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  completedAt           DateTime?        @map("completed_at")
+  cancelledAt           DateTime?        @map("cancelled_at")
+  
+  // ===== RELATIONS =====
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal                  Deal             @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  orders                Order[]
+  distributions         Distribution[]
+  
+  @@unique([userId, dealId])
+  @@index([userId])
+  @@index([dealId])
+  @@index([status])
+  @@map("user_investments")
+}
+
+// =============================================
+// ORDER MODEL (Buy/Sell)
+// =============================================
+
+model Order {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transactionId         String           @unique @map("transaction_id") // TXN-2024-00142
+  
+  userId                String           @map("user_id") @db.Uuid
+  dealId                String           @map("deal_id") @db.Uuid
+  investmentId          String?          @map("investment_id") @db.Uuid
+  
+  // ===== ORDER DETAILS =====
+  orderType             OrderType        @map("order_type")
+  tokens                Int
+  pricePerToken         Decimal          @map("price_per_token") @db.Decimal(18, 2)
+  totalAmount           Decimal          @map("total_amount") @db.Decimal(18, 2)
+  fees                  Decimal          @default(0) @db.Decimal(18, 2)
+  currency              String           @default("EUR")
+  
+  // ===== STATUS =====
+  status                OrderStatus      @default(PENDING)
+  filledTokens          Int              @default(0) @map("filled_tokens")
+  
+  // ===== EXPIRY =====
+  expiresAt             DateTime?        @map("expires_at")
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  executedAt            DateTime?        @map("executed_at")
+  cancelledAt           DateTime?        @map("cancelled_at")
+  
+  // ===== RELATIONS =====
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal                  Deal             @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  investment            UserInvestment?  @relation(fields: [investmentId], references: [id])
+  
+  @@index([userId])
+  @@index([dealId])
+  @@index([status])
+  @@index([transactionId])
+  @@map("orders")
+}
+
+// =============================================
+// WALLET MODEL
+// =============================================
+
+model Wallet {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String           @map("user_id") @db.Uuid
+  
+  // ===== WALLET INFO =====
+  type                  WalletType       @default(FIAT)
+  currency              String           @default("EUR")
+  balance               Decimal          @default(0) @db.Decimal(18, 2)
+  pendingBalance        Decimal          @default(0) @map("pending_balance") @db.Decimal(18, 2)
+  
+  // ===== CRYPTO WALLET (if applicable) =====
+  walletAddress         String?          @map("wallet_address")
+  chainId               String?          @map("chain_id")
+  
+  // ===== STATUS =====
+  isActive              Boolean          @default(true) @map("is_active")
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  // ===== RELATIONS =====
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transfers             Transfer[]
+  
+  @@unique([userId, type, currency])
+  @@index([userId])
+  @@map("wallets")
+}
+
+// =============================================
+// TRANSFER MODEL
+// =============================================
+
+model Transfer {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reference             String           @unique
+  
+  userId                String           @map("user_id") @db.Uuid
+  walletId              String?          @map("wallet_id") @db.Uuid
+  
+  // ===== TRANSFER DETAILS =====
+  type                  TransferType
+  amount                Decimal          @db.Decimal(18, 2)
+  currency              String           @default("EUR")
+  
+  // ===== BANK DETAILS =====
+  bankName              String?          @map("bank_name")
+  accountLast4          String?          @map("account_last4")
+  
+  // ===== STATUS =====
+  status                TransferStatus   @default(PENDING)
+  
+  // ===== NOTES =====
+  notes                 String?
+  
+  // ===== TIMESTAMPS =====
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  completedAt           DateTime?        @map("completed_at")
+  
+  // ===== RELATIONS =====
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                Wallet?          @relation(fields: [walletId], references: [id])
+  
+  @@index([userId])
+  @@index([reference])
+  @@index([status])
+  @@map("transfers")
+}
+
+// =============================================
+// DISTRIBUTION MODEL
+// =============================================
+
+model Distribution {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String           @map("user_id") @db.Uuid
+  investmentId          String           @map("investment_id") @db.Uuid
+  
+  amount                Decimal          @db.Decimal(18, 2)
+  currency              String           @default("EUR")
+  type                  String           // dividend, interest, capital_return
+  
+  status                TransferStatus   @default(PENDING)
+  paidAt                DateTime?        @map("paid_at")
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  investment            UserInvestment   @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([investmentId])
+  @@map("distributions")
+}
+
+// =============================================
+// SUPPORTING MODELS
+// =============================================
+
+model Watchlist {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String           @map("user_id") @db.Uuid
+  dealId                String           @map("deal_id") @db.Uuid
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal                  Deal             @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, dealId])
+  @@map("watchlist")
+}
+
+model Notification {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String           @map("user_id") @db.Uuid
+  
+  type                  String           // investment, payout, system, marketing
+  title                 String
+  message               String
+  data                  Json?
+  
+  read                  Boolean          @default(false)
+  readAt                DateTime?        @map("read_at")
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([read])
+  @@map("notifications")
+}
+
+model UserDocument {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String           @map("user_id") @db.Uuid
+  
+  documentType          String           @map("document_type") // ID, PROOF_OF_ADDRESS, ACCREDITED_CERT, etc.
+  category              String?
+  fileName              String           @map("file_name")
+  fileUrl               String?          @map("file_url")
+  fileSize              Int?             @map("file_size")
+  fileType              String?          @map("file_type")
+  
+  status                String           @default("pending") // pending, approved, rejected
+  verifiedAt            DateTime?        @map("verified_at")
+  verifiedBy            String?          @map("verified_by")
+  expiresAt             DateTime?        @map("expires_at")
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@map("user_documents")
+}
+
+model DealDocument {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId                String           @map("deal_id") @db.Uuid
+  
+  documentType          String           @map("document_type") // PROSPECTUS, PRIIPS_KID, PPM, RISK_DISCLOSURE
+  language              String           @default("en")
+  version               String           @default("1.0")
+  
+  fileName              String           @map("file_name")
+  fileUrl               String?          @map("file_url")
+  
+  isActive              Boolean          @default(true) @map("is_active")
+  effectiveDate         DateTime?        @map("effective_date")
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  deal                  Deal             @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  @@index([dealId])
+  @@map("deal_documents")
+}
+
+model DealUpdate {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId                String           @map("deal_id") @db.Uuid
+  
+  title                 String
+  content               String
+  imageUrl              String?          @map("image_url")
+  
+  publishedAt           DateTime         @default(now()) @map("published_at")
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  deal                  Deal             @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  @@index([dealId])
+  @@map("deal_updates")
+}
+
+model DealComment {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId                String           @map("deal_id") @db.Uuid
+  
+  userId                String           @map("user_id")
+  userName              String           @map("user_name")
+  userAvatar            String?          @map("user_avatar")
+  
+  content               String
+  parentId              String?          @map("parent_id") @db.Uuid
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  deal                  Deal             @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  parent                DealComment?     @relation("CommentReplies", fields: [parentId], references: [id])
+  replies               DealComment[]    @relation("CommentReplies")
+  
+  @@index([dealId])
+  @@map("deal_comments")
+}
+
+// =============================================
+// ADMIN USER (legacy - for password auth)
+// =============================================
+
 model AdminUser {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email        String    @unique
@@ -75,438 +773,21 @@ model AdminUser {
 }
 
 // =============================================
-// COMPLIANCE ENGINE MODELS
+// COMPLIANCE AUDIT LOG
 // =============================================
 
-// Investor type classification
-enum InvestorType {
-  RETAIL
-  PROFESSIONAL
-  QUALIFIED
-  ACCREDITED      // For US/Canada/Singapore
-  WHOLESALE       // For Australia
-  QII             // For Japan (Qualified Institutional Investor)
-}
-
-// Compartment type for Luxembourg securitisation
-enum CompartmentType {
-  PROFESSIONAL
-  RETAIL
-}
-
-// Compliance review status
-enum ComplianceStatus {
-  PENDING_REVIEW
-  APPROVED
-  REJECTED
-  REQUIRES_DOCUMENTS
-  SUSPENDED
-  UNDER_INVESTIGATION
-}
-
-// Region classification
-enum JurisdictionRegion {
-  EU
-  EEA
-  EU_EQUIVALENT
-  THIRD_COUNTRY_FRIENDLY
-  THIRD_COUNTRY_RESTRICTED
-}
-
-// Investor profile - linked to Clerk user
-model Investor {
-  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkUserId           String           @unique @map("clerk_user_id")
-  email                 String           @unique
-  firstName             String?          @map("first_name")
-  lastName              String?          @map("last_name")
-  
-  // Country of residence/tax
-  countryCode           String           @map("country_code") // ISO 3166-1 alpha-2
-  taxResidency          String?          @map("tax_residency")
-  nationality           String?
-  
-  // Investor classification
-  investorType          InvestorType     @default(RETAIL) @map("investor_type")
-  classificationDate    DateTime?        @map("classification_date")
-  classifiedBy          String?          @map("classified_by") // Admin or AI
-  
-  // KYC status from Sumsub
-  kycStatus             String?          @map("kyc_status")
-  kycApprovedAt         DateTime?        @map("kyc_approved_at")
-  sumsubApplicantId     String?          @map("sumsub_applicant_id")
-  
-  // Professional/Qualified criteria
-  totalAssets           Decimal?         @map("total_assets") @db.Decimal(18, 2)
-  annualIncome          Decimal?         @map("annual_income") @db.Decimal(18, 2)
-  financialAssets       Decimal?         @map("financial_assets") @db.Decimal(18, 2)
-  professionalStatus    Boolean          @default(false) @map("professional_status")
-  institutionalInvestor Boolean          @default(false) @map("institutional_investor")
-  
-  // US-specific
-  isUsPerson            Boolean          @default(false) @map("is_us_person")
-  usAccreditedStatus    String?          @map("us_accredited_status")
-  
-  // Risk assessment
-  riskProfile           String?          @map("risk_profile") // conservative, moderate, aggressive
-  riskScore             Int?             @map("risk_score") // 1-10
-  suitabilityScore      Int?             @map("suitability_score") // 1-100
-  
-  // Compliance status
-  complianceStatus      ComplianceStatus @default(PENDING_REVIEW) @map("compliance_status")
-  complianceNotes       String?          @map("compliance_notes")
-  lastReviewDate        DateTime?        @map("last_review_date")
-  lastReviewedBy        String?          @map("last_reviewed_by")
-  
-  // PEP/Sanctions
-  isPep                 Boolean          @default(false) @map("is_pep")
-  isSanctioned          Boolean          @default(false) @map("is_sanctioned")
-  pepDetails            String?          @map("pep_details")
-  
-  // Relations
-  investments           Investment[]
-  eligibleDeals         DealEligibility[]
-  complianceChecks      ComplianceCheck[]
-  jurisdictionEligibility InvestorJurisdiction[]
-  documents             InvestorDocument[]
-  auditLogs             ComplianceAuditLog[]
-  
-  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  @@map("investors")
-}
-
-// Deal / Investment opportunity
-model Deal {
-  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                  String
-  slug                  String           @unique
-  description           String?
-  
-  // Compartment and asset
-  compartmentType       CompartmentType  @map("compartment_type")
-  assetClass            String           @map("asset_class") // real_estate, film, art, etc.
-  assetCoName           String?          @map("asset_co_name")
-  
-  // Investment terms
-  minimumInvestment     Decimal          @map("minimum_investment") @db.Decimal(18, 2)
-  maximumInvestment     Decimal?         @map("maximum_investment") @db.Decimal(18, 2)
-  targetRaise           Decimal          @map("target_raise") @db.Decimal(18, 2)
-  currentRaise          Decimal          @default(0) @map("current_raise") @db.Decimal(18, 2)
-  currency              String           @default("EUR")
-  
-  // Compliance requirements
-  requiresProspectus    Boolean          @default(false) @map("requires_prospectus")
-  requiresPRIIPSKID     Boolean          @default(false) @map("requires_priips_kid")
-  requiresPPM           Boolean          @default(false) @map("requires_ppm")
-  cssfApproved          Boolean          @default(false) @map("cssf_approved")
-  cssfApprovalDate      DateTime?        @map("cssf_approval_date")
-  
-  // Risk classification
-  riskLevel             Int              @default(5) @map("risk_level") // 1-10
-  liquidityRisk         String?          @map("liquidity_risk") // low, medium, high
-  capitalAtRisk         Boolean          @default(true) @map("capital_at_risk")
-  
-  // Status
-  status                String           @default("draft") // draft, active, closed, cancelled
-  launchDate            DateTime?        @map("launch_date")
-  closeDate             DateTime?        @map("close_date")
-  
-  // Relations
-  eligibleInvestors     DealEligibility[]
-  investments           Investment[]
-  jurisdictions         DealJurisdiction[]
-  documents             DealDocument[]
-  
-  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  @@map("deals")
-}
-
-// Investor-Deal eligibility mapping
-model DealEligibility {
-  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  investorId    String      @map("investor_id") @db.Uuid
-  dealId        String      @map("deal_id") @db.Uuid
-  
-  eligible      Boolean
-  reason        String?
-  eligibilityType String?   @map("eligibility_type") // investor_type, jurisdiction, suitability
-  
-  // AI or admin check
-  checkedAt     DateTime    @default(now()) @map("checked_at") @db.Timestamptz(6)
-  checkedBy     String?     @map("checked_by") // AI or Admin ID
-  aiConfidence  Float?      @map("ai_confidence") // 0-1 confidence score
-  
-  investor      Investor    @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  deal          Deal        @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  
-  @@unique([investorId, dealId])
-  @@map("deal_eligibility")
-}
-
-// Investment transaction
-model Investment {
-  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  investorId    String      @map("investor_id") @db.Uuid
-  dealId        String      @map("deal_id") @db.Uuid
-  
-  amount        Decimal     @db.Decimal(18, 2)
-  currency      String      @default("EUR")
-  status        String      @default("pending") // pending, confirmed, cancelled, refunded
-  
-  // Compliance sign-offs
-  suitabilityConfirmed Boolean @default(false) @map("suitability_confirmed")
-  documentsAcknowledged Boolean @default(false) @map("documents_acknowledged")
-  riskDisclosureSigned Boolean @default(false) @map("risk_disclosure_signed")
-  
-  investor      Investor    @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  deal          Deal        @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  
-  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  @@map("investments")
-}
-
-// Compliance check records
-model ComplianceCheck {
-  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  investorId    String      @map("investor_id") @db.Uuid
-  
-  checkType     String      @map("check_type") // KYC, SUITABILITY, RISK_ASSESSMENT, DOCUMENT_REVIEW, CLASSIFICATION
-  status        String      // passed, failed, pending, review_required
-  
-  // AI analysis
-  aiAnalysis    String?     @map("ai_analysis")
-  aiScore       Float?      @map("ai_score") // 0-1
-  aiRecommendation String?  @map("ai_recommendation")
-  
-  // Admin review
-  adminReview   String?     @map("admin_review")
-  reviewedBy    String?     @map("reviewed_by")
-  reviewedAt    DateTime?   @map("reviewed_at") @db.Timestamptz(6)
-  
-  // Metadata
-  metadata      Json?       // Additional check-specific data
-  
-  investor      Investor    @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  
-  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  @@map("compliance_checks")
-}
-
-// =============================================
-// JURISDICTION / GEOGRAPHIC ELIGIBILITY
-// =============================================
-
-// Jurisdiction rules per country
-model Jurisdiction {
-  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  countryCode           String              @unique @map("country_code") // ISO 3166-1 alpha-2
-  countryName           String              @map("country_name")
-  region                JurisdictionRegion
-  
-  // Eligibility by investor type
-  retailAllowed         Boolean             @default(false) @map("retail_allowed")
-  professionalAllowed   Boolean             @default(true) @map("professional_allowed")
-  qualifiedAllowed      Boolean             @default(true) @map("qualified_allowed")
-  accreditedAllowed     Boolean             @default(false) @map("accredited_allowed")
-  wholesaleAllowed      Boolean             @default(false) @map("wholesale_allowed")
-  
-  // Investment limits (in EUR equivalent)
-  minInvestmentRetail   Decimal?            @map("min_investment_retail") @db.Decimal(18, 2)
-  minInvestmentPro      Decimal?            @map("min_investment_pro") @db.Decimal(18, 2)
-  maxInvestmentRetail   Decimal?            @map("max_investment_retail") @db.Decimal(18, 2)
-  
-  // Accredited/Qualified investor thresholds
-  accreditedIncomeThreshold  Decimal?       @map("accredited_income_threshold") @db.Decimal(18, 2)
-  accreditedAssetThreshold   Decimal?       @map("accredited_asset_threshold") @db.Decimal(18, 2)
-  accreditedNetWorthThreshold Decimal?      @map("accredited_net_worth_threshold") @db.Decimal(18, 2)
-  
-  // Documentation requirements
-  requiresProspectus    Boolean             @default(false) @map("requires_prospectus")
-  requiresLocalKID      Boolean             @default(false) @map("requires_local_kid")
-  requiresLocalLanguage Boolean             @default(false) @map("requires_local_language")
-  localLanguage         String?             @map("local_language")
-  
-  // Regulatory
-  regulatorName         String?             @map("regulator_name")
-  regulatorNotification Boolean             @default(false) @map("regulator_notification")
-  passportingAllowed    Boolean             @default(false) @map("passporting_allowed")
-  
-  // Marketing restrictions
-  coldCallingAllowed    Boolean             @default(false) @map("cold_calling_allowed")
-  advertisingAllowed    Boolean             @default(true) @map("advertising_allowed")
-  riskWarningsRequired  Boolean             @default(true) @map("risk_warnings_required")
-  coolingOffPeriod      Int?                @map("cooling_off_period") // days
-  
-  // Special conditions (JSON for flexibility)
-  specialRequirements   Json?               @map("special_requirements")
-  blockedReasons        String?             @map("blocked_reasons")
-  
-  // Sub-jurisdictions (e.g., US states, Canadian provinces, UAE emirates)
-  hasSubJurisdictions   Boolean             @default(false) @map("has_sub_jurisdictions")
-  parentJurisdiction    String?             @map("parent_jurisdiction")
-  
-  // Status
-  isActive              Boolean             @default(true) @map("is_active")
-  lastReviewedAt        DateTime?           @map("last_reviewed_at") @db.Timestamptz(6)
-  reviewedBy            String?             @map("reviewed_by")
-  
-  // Relations
-  investorEligibilities InvestorJurisdiction[]
-  dealRestrictions      DealJurisdiction[]
-  subJurisdictions      SubJurisdiction[]
-  
-  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt             DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  @@map("jurisdictions")
-}
-
-// Sub-jurisdictions (US states, Canadian provinces, UAE emirates)
-model SubJurisdiction {
-  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  jurisdictionId        String              @map("jurisdiction_id") @db.Uuid
-  code                  String              // e.g., "CA", "NY", "ON", "DIFC"
-  name                  String
-  
-  // Override parent rules
-  retailAllowed         Boolean?            @map("retail_allowed")
-  accreditedAllowed     Boolean?            @map("accredited_allowed")
-  specialRequirements   Json?               @map("special_requirements")
-  blockedReasons        String?             @map("blocked_reasons")
-  
-  isActive              Boolean             @default(true) @map("is_active")
-  
-  jurisdiction          Jurisdiction        @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade)
-  
-  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-
-  @@unique([jurisdictionId, code])
-  @@map("sub_jurisdictions")
-}
-
-// Investor eligibility per jurisdiction
-model InvestorJurisdiction {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  investorId      String        @map("investor_id") @db.Uuid
-  jurisdictionId  String        @map("jurisdiction_id") @db.Uuid
-  
-  // Eligibility result
-  eligible        Boolean
-  eligibleAsType  InvestorType? @map("eligible_as_type") // What type they qualify as in this jurisdiction
-  reason          String?
-  
-  // Required actions
-  documentsNeeded String[]      @map("documents_needed") // List of required documents
-  checksRequired  String[]      @map("checks_required") // Additional checks needed
-  
-  // Compliance status
-  complianceStatus String       @default("pending") @map("compliance_status")
-  
-  investor        Investor      @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  jurisdiction    Jurisdiction  @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade)
-  
-  checkedAt       DateTime      @default(now()) @map("checked_at") @db.Timestamptz(6)
-  
-  @@unique([investorId, jurisdictionId])
-  @@map("investor_jurisdictions")
-}
-
-// Deal availability per jurisdiction
-model DealJurisdiction {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  dealId          String        @map("deal_id") @db.Uuid
-  jurisdictionId  String        @map("jurisdiction_id") @db.Uuid
-  
-  // Marketing status
-  marketingAllowed Boolean      @default(false) @map("marketing_allowed")
-  approvalStatus   String       @default("pending") @map("approval_status") // pending, approved, rejected
-  approvalDate     DateTime?    @map("approval_date") @db.Timestamptz(6)
-  
-  // Local requirements met
-  localProspectus  Boolean      @default(false) @map("local_prospectus")
-  localDocuments   String[]     @map("local_documents")
-  regulatorNotified Boolean     @default(false) @map("regulator_notified")
-  
-  deal            Deal          @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  jurisdiction    Jurisdiction  @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade)
-  
-  @@unique([dealId, jurisdictionId])
-  @@map("deal_jurisdictions")
-}
-
-// =============================================
-// DOCUMENTS
-// =============================================
-
-// Investor documents
-model InvestorDocument {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  investorId      String        @map("investor_id") @db.Uuid
-  
-  documentType    String        @map("document_type") // ID, PROOF_OF_ADDRESS, ACCREDITED_CERT, etc.
-  fileName        String        @map("file_name")
-  fileUrl         String?       @map("file_url")
-  
-  status          String        @default("pending") // pending, approved, rejected
-  verifiedAt      DateTime?     @map("verified_at") @db.Timestamptz(6)
-  verifiedBy      String?       @map("verified_by")
-  
-  expiresAt       DateTime?     @map("expires_at") @db.Timestamptz(6)
-  
-  investor        Investor      @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-
-  @@map("investor_documents")
-}
-
-// Deal documents (prospectus, KID, PPM, etc.)
-model DealDocument {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  dealId          String        @map("deal_id") @db.Uuid
-  
-  documentType    String        @map("document_type") // PROSPECTUS, PRIIPS_KID, PPM, RISK_DISCLOSURE
-  language        String        @default("en")
-  version         String        @default("1.0")
-  
-  fileName        String        @map("file_name")
-  fileUrl         String?       @map("file_url")
-  
-  isActive        Boolean       @default(true) @map("is_active")
-  effectiveDate   DateTime?     @map("effective_date") @db.Timestamptz(6)
-  
-  deal            Deal          @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-
-  @@map("deal_documents")
-}
-
-// =============================================
-// AUDIT LOGGING
-// =============================================
-
-// Comprehensive audit log for compliance
 model ComplianceAuditLog {
   id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   
   // Actor
-  actorType       String        @map("actor_type") // admin, system, ai, investor
+  actorType       String        @map("actor_type") // admin, system, ai, user
   actorId         String?       @map("actor_id")
   actorEmail      String?       @map("actor_email")
   
   // Target
-  targetType      String        @map("target_type") // investor, deal, compliance_check, etc.
+  targetType      String        @map("target_type") // user, deal, compliance_check, etc.
   targetId        String        @map("target_id")
-  investorId      String?       @map("investor_id") @db.Uuid
+  userId          String?       @map("user_id") @db.Uuid
   
   // Action
   action          String        // created, updated, approved, rejected, classified, etc.
@@ -526,11 +807,9 @@ model ComplianceAuditLog {
   ipAddress       String?       @map("ip_address")
   userAgent       String?       @map("user_agent")
   
-  investor        Investor?     @relation(fields: [investorId], references: [id], onDelete: SetNull)
-  
   createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  @@index([investorId])
+  @@index([userId])
   @@index([targetType, targetId])
   @@index([action])
   @@index([createdAt])

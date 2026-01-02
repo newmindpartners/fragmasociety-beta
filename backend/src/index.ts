@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import fastifyRawBody from 'fastify-raw-body';
 import { env } from './config/env.js';
 import { healthRoutes } from './routes/health.js';
 import { earlyAccessRoutes } from './routes/early-access.js';
@@ -7,11 +8,21 @@ import { newsletterRoutes } from './routes/newsletter.js';
 import { kycRoutes } from './routes/kyc.js';
 import { adminRoutes } from './routes/admin.js';
 import { complianceRoutes } from './routes/compliance.js';
+import clerkWebhookRoutes from './routes/clerk-webhooks.js';
+import userRoutes from './routes/users.js';
 
 const app = Fastify({
   logger: {
     level: env.NODE_ENV === 'development' ? 'debug' : 'info',
   },
+});
+
+// Register raw body plugin for webhook signature verification
+await app.register(fastifyRawBody, {
+  field: 'rawBody',
+  global: false,
+  encoding: 'utf8',
+  runFirst: true,
 });
 
 // Register CORS
@@ -29,6 +40,8 @@ await app.register(newsletterRoutes);
 await app.register(kycRoutes);
 await app.register(adminRoutes);
 await app.register(complianceRoutes);
+await app.register(clerkWebhookRoutes);
+await app.register(userRoutes);
 
 // Start server
 const start = async () => {

@@ -19,7 +19,6 @@ import {
   UserCheck,
   Bot,
   ClipboardList,
-  Grid3X3,
   Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -55,7 +54,6 @@ const complianceCategory: NavCategory = {
     { icon: UserCheck, label: "Investors", href: "/admin/compliance/investors" },
     { icon: Briefcase, label: "Deals", href: "/admin/compliance/deals" },
     { icon: Globe, label: "Jurisdictions", href: "/admin/compliance/jurisdictions" },
-    { icon: Grid3X3, label: "Eligibility Matrix", href: "/admin/compliance/matrix" },
     { icon: ClipboardList, label: "Audit Log", href: "/admin/compliance/audit" },
     { icon: Bot, label: "AI Assistant", href: "/admin/compliance/ai-assistant" },
   ],
