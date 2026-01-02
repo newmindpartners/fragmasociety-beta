@@ -10,6 +10,11 @@ const envSchema = z.object({
   // Database
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
 
+  // Supabase (for REST API access to deals table)
+  SUPABASE_URL: z.string().optional(),
+  SUPABASE_ANON_KEY: z.string().optional(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
+
   // CORS - default includes Railway frontend
   CORS_ORIGIN: z.string().default('https://fragma-beta-frontend-production.up.railway.app,http://localhost:5173,http://localhost:8080'),
 

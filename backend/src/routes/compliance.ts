@@ -8,6 +8,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { prisma } from '../db/prisma.js';
 import { InvestorType, ComplianceStatus, JurisdictionRegion } from '@prisma/client';
+import { env } from '../config/env.js';
 import {
   JURISDICTION_RULES,
   checkJurisdictionEligibility,
@@ -1837,17 +1838,18 @@ export async function complianceRoutes(fastify: FastifyInstance) {
     reply: FastifyReply
   ) => {
     try {
-      // Fetch deals from Supabase via the existing admin submissions endpoint pattern
-      // Using direct Supabase query would be ideal, but we'll adapt existing data
-      
-      // For now, return formatted deals from Supabase
-      const supabaseUrl = process.env.SUPABASE_URL;
-      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+      // Fetch deals from Supabase REST API
+      const supabaseUrl = env.SUPABASE_URL;
+      const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY;
       
       if (!supabaseUrl || !supabaseKey) {
-        return reply.status(500).send({
-          success: false,
-          error: 'Supabase not configured',
+        // Fallback: return empty array if Supabase not configured
+        console.warn('Supabase not configured, returning empty deals list');
+        return reply.status(200).send({
+          success: true,
+          deals: [],
+          count: 0,
+          message: 'Supabase not configured - add SUPABASE_URL and SUPABASE_ANON_KEY to environment',
         });
       }
 
