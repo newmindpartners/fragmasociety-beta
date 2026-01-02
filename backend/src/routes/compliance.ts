@@ -1393,27 +1393,32 @@ export async function complianceRoutes(fastify: FastifyInstance) {
       
       const response = await complianceAI.chat_with_officer(messages, contextData);
       
-      // Log the interaction
-      await prisma.complianceAuditLog.create({
-        data: {
-          actorType: 'ai',
-          actorId: 'compliance-ai-officer',
-          targetType: 'ai_chat',
-          targetId: 'chat_session',
-          action: 'chat_response',
-          category: 'ai_assistant',
-          newValue: JSON.parse(JSON.stringify({
-            messageCount: messages.length,
-            hasContext: Object.keys(contextData).length > 0,
-          })),
-          aiModel: 'gpt-4o',
-        },
-      });
+      // Log the interaction (non-blocking, don't fail if table doesn't exist)
+      try {
+        await prisma.complianceAuditLog.create({
+          data: {
+            actorType: 'ai',
+            actorId: 'compliance-ai-officer',
+            targetType: 'ai_chat',
+            targetId: 'chat_session',
+            action: 'chat_response',
+            category: 'ai_assistant',
+            newValue: JSON.parse(JSON.stringify({
+              messageCount: messages.length,
+              hasContext: Object.keys(contextData).length > 0,
+            })),
+            aiModel: complianceAI.getActiveProvider() || 'unknown',
+          },
+        });
+      } catch (auditError) {
+        console.warn('Audit log failed (table may not exist):', auditError);
+      }
       
       return reply.status(200).send({
         success: true,
         response,
         aiAvailable: complianceAI.isAvailable(),
+        model: complianceAI.getModelInfo(),
       });
       
     } catch (error: any) {
@@ -1595,24 +1600,28 @@ export async function complianceRoutes(fastify: FastifyInstance) {
         },
       });
       
-      // Audit log
-      await prisma.complianceAuditLog.create({
-        data: {
-          actorType: 'ai',
-          actorId: 'compliance-ai-officer',
-          targetType: 'investor',
-          targetId: investorId,
-          investorId,
-          action: 'case_reviewed',
-          category: 'ai_review',
-          newValue: JSON.parse(JSON.stringify({
-            decision: review.decision,
-            confidence: review.confidence,
-          })),
-          aiModel: 'gpt-4o',
-          aiConfidence: review.confidence,
-        },
-      });
+      // Audit log (non-blocking)
+      try {
+        await prisma.complianceAuditLog.create({
+          data: {
+            actorType: 'ai',
+            actorId: 'compliance-ai-officer',
+            targetType: 'investor',
+            targetId: investorId,
+            investorId,
+            action: 'case_reviewed',
+            category: 'ai_review',
+            newValue: JSON.parse(JSON.stringify({
+              decision: review.decision,
+              confidence: review.confidence,
+            })),
+            aiModel: complianceAI.getActiveProvider() || 'unknown',
+            aiConfidence: review.confidence,
+          },
+        });
+      } catch (auditError) {
+        console.warn('Audit log failed:', auditError);
+      }
       
       return reply.status(200).send({
         success: true,
