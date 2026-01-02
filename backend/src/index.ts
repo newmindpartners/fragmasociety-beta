@@ -20,7 +20,7 @@ const app = Fastify({
 // Register raw body plugin for webhook signature verification
 await app.register(fastifyRawBody, {
   field: 'rawBody',
-  global: false,
+  global: true,
   encoding: 'utf8',
   runFirst: true,
 });

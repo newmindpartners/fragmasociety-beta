@@ -72,13 +72,18 @@ export default async function clerkWebhookRoutes(fastify: FastifyInstance) {
       let rawBody: string;
       if ((request as any).rawBody) {
         rawBody = (request as any).rawBody;
+        console.log('Using rawBody from plugin');
       } else if (typeof request.body === 'string') {
         rawBody = request.body;
+        console.log('Using string body');
       } else {
+        // Stringify with consistent formatting (no spaces)
         rawBody = JSON.stringify(request.body);
+        console.log('Using stringified body');
       }
       
       console.log('Raw body length:', rawBody.length);
+      console.log('Raw body preview:', rawBody.substring(0, 100));
 
       // Verify the webhook
       const wh = new Webhook(CLERK_WEBHOOK_SECRET);
