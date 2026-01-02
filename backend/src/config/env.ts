@@ -27,6 +27,10 @@ const envSchema = z.object({
 
   // Clerk (for admin role management)
   CLERK_SECRET_KEY: z.string().optional(),
+
+  // OpenAI (for AI Compliance Agent)
+  OPENAI_API_KEY: z.string().optional(),
+  OPENAI_MODEL: z.string().default('gpt-4o'),
 });
 
 export type Env = z.infer<typeof envSchema>;

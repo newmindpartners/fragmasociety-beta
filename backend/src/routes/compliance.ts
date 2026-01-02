@@ -17,6 +17,12 @@ import {
   canMarketInJurisdiction,
   InvestorProfile,
 } from '../services/jurisdiction.service.js';
+import {
+  complianceAI,
+  ChatMessage,
+  InvestorQuestionnaire,
+  ComplianceCase,
+} from '../services/compliance-ai.service.js';
 
 // =============================================
 // TYPES
@@ -1286,6 +1292,331 @@ export async function complianceRoutes(fastify: FastifyInstance) {
       
     } catch (error: any) {
       console.error('Seed jurisdictions error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+  
+  // =============================================
+  // AI COMPLIANCE OFFICER
+  // =============================================
+  
+  /**
+   * Check AI service status
+   */
+  fastify.get('/api/compliance/ai/status', async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    return reply.status(200).send({
+      success: true,
+      available: complianceAI.isAvailable(),
+      message: complianceAI.isAvailable() 
+        ? 'AI Compliance Officer is online and ready'
+        : 'AI service not configured - using rule-based fallbacks',
+    });
+  });
+  
+  /**
+   * Chat with AI Compliance Officer
+   */
+  fastify.post('/api/compliance/ai/chat', async (
+    request: FastifyRequest<{ 
+      Body: { 
+        messages: ChatMessage[];
+        context?: {
+          investorId?: string;
+          dealId?: string;
+          jurisdictionCode?: string;
+        };
+      } 
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { messages, context } = request.body;
+      
+      if (!messages || messages.length === 0) {
+        return reply.status(400).send({
+          success: false,
+          error: 'Messages array is required',
+        });
+      }
+      
+      // Build context data if IDs provided
+      let contextData: any = {};
+      
+      if (context?.investorId) {
+        const investor = await prisma.investor.findUnique({
+          where: { id: context.investorId },
+          select: {
+            email: true,
+            countryCode: true,
+            investorType: true,
+            complianceStatus: true,
+            kycStatus: true,
+            riskProfile: true,
+            totalAssets: true,
+          },
+        });
+        if (investor) {
+          contextData.investorData = investor;
+        }
+      }
+      
+      if (context?.dealId) {
+        const deal = await prisma.deal.findUnique({
+          where: { id: context.dealId },
+          select: {
+            name: true,
+            compartmentType: true,
+            assetClass: true,
+            riskLevel: true,
+            minimumInvestment: true,
+          },
+        });
+        if (deal) {
+          contextData.dealData = deal;
+        }
+      }
+      
+      if (context?.jurisdictionCode) {
+        contextData.jurisdictionCode = context.jurisdictionCode;
+      }
+      
+      const response = await complianceAI.chat_with_officer(messages, contextData);
+      
+      // Log the interaction
+      await prisma.complianceAuditLog.create({
+        data: {
+          actorType: 'ai',
+          actorId: 'compliance-ai-officer',
+          targetType: 'ai_chat',
+          targetId: 'chat_session',
+          action: 'chat_response',
+          category: 'ai_assistant',
+          newValue: JSON.parse(JSON.stringify({
+            messageCount: messages.length,
+            hasContext: Object.keys(contextData).length > 0,
+          })),
+          aiModel: 'gpt-4o',
+        },
+      });
+      
+      return reply.status(200).send({
+        success: true,
+        response,
+        aiAvailable: complianceAI.isAvailable(),
+      });
+      
+    } catch (error: any) {
+      console.error('AI chat error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+  
+  /**
+   * AI-powered investor classification
+   */
+  fastify.post('/api/compliance/ai/classify', async (
+    request: FastifyRequest<{ Body: { questionnaire: InvestorQuestionnaire } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { questionnaire } = request.body;
+      
+      if (!questionnaire || !questionnaire.countryCode) {
+        return reply.status(400).send({
+          success: false,
+          error: 'Questionnaire with countryCode is required',
+        });
+      }
+      
+      const classification = await complianceAI.classifyInvestor(questionnaire);
+      
+      return reply.status(200).send({
+        success: true,
+        classification,
+        aiAvailable: complianceAI.isAvailable(),
+      });
+      
+    } catch (error: any) {
+      console.error('AI classification error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+  
+  /**
+   * AI-powered suitability assessment
+   */
+  fastify.post('/api/compliance/ai/suitability', async (
+    request: FastifyRequest<{ 
+      Body: { 
+        investorId: string;
+        dealId: string;
+      } 
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { investorId, dealId } = request.body;
+      
+      const investor = await prisma.investor.findUnique({
+        where: { id: investorId },
+      });
+      
+      const deal = await prisma.deal.findUnique({
+        where: { id: dealId },
+      });
+      
+      if (!investor || !deal) {
+        return reply.status(404).send({
+          success: false,
+          error: 'Investor or deal not found',
+        });
+      }
+      
+      const result = await complianceAI.assessSuitability(
+        {
+          investorType: investor.investorType,
+          riskProfile: investor.riskProfile || undefined,
+          riskScore: investor.riskScore || undefined,
+          totalAssets: investor.totalAssets ? Number(investor.totalAssets) : undefined,
+        },
+        {
+          name: deal.name,
+          compartmentType: deal.compartmentType,
+          riskLevel: deal.riskLevel,
+          minimumInvestment: Number(deal.minimumInvestment),
+          assetClass: deal.assetClass,
+          liquidityRisk: deal.liquidityRisk || undefined,
+          capitalAtRisk: deal.capitalAtRisk,
+        }
+      );
+      
+      // Log the assessment
+      await prisma.complianceCheck.create({
+        data: {
+          investorId,
+          checkType: 'AI_SUITABILITY',
+          status: result.suitable ? 'passed' : 'failed',
+          aiAnalysis: result.reasoning,
+          aiScore: result.score / 100,
+          aiRecommendation: result.recommendations.join('; '),
+          metadata: JSON.parse(JSON.stringify({
+            dealId,
+            warnings: result.warnings,
+            requiredDisclosures: result.requiredDisclosures,
+          })),
+        },
+      });
+      
+      return reply.status(200).send({
+        success: true,
+        result,
+        aiAvailable: complianceAI.isAvailable(),
+      });
+      
+    } catch (error: any) {
+      console.error('AI suitability error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+  
+  /**
+   * AI-powered compliance case review
+   */
+  fastify.post('/api/compliance/ai/review-case', async (
+    request: FastifyRequest<{ Body: { investorId: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { investorId } = request.body;
+      
+      const investor = await prisma.investor.findUnique({
+        where: { id: investorId },
+      });
+      
+      if (!investor) {
+        return reply.status(404).send({
+          success: false,
+          error: 'Investor not found',
+        });
+      }
+      
+      const caseData: ComplianceCase = {
+        investorId: investor.id,
+        investorEmail: investor.email,
+        investorType: investor.investorType,
+        countryCode: investor.countryCode,
+        kycStatus: investor.kycStatus || undefined,
+        totalAssets: investor.totalAssets ? Number(investor.totalAssets) : undefined,
+        annualIncome: investor.annualIncome ? Number(investor.annualIncome) : undefined,
+        complianceStatus: investor.complianceStatus,
+        complianceNotes: investor.complianceNotes || undefined,
+        isPep: investor.isPep,
+        isSanctioned: investor.isSanctioned,
+      };
+      
+      const review = await complianceAI.reviewComplianceCase(caseData);
+      
+      // Log the review
+      await prisma.complianceCheck.create({
+        data: {
+          investorId,
+          checkType: 'AI_CASE_REVIEW',
+          status: review.decision === 'approve' ? 'passed' : 
+                  review.decision === 'reject' ? 'failed' : 'pending',
+          aiAnalysis: review.reasoning,
+          aiScore: review.confidence,
+          aiRecommendation: review.recommendations.join('; '),
+          metadata: JSON.parse(JSON.stringify({
+            decision: review.decision,
+            riskFactors: review.riskFactors,
+            mitigatingFactors: review.mitigatingFactors,
+            requiredActions: review.requiredActions,
+          })),
+        },
+      });
+      
+      // Audit log
+      await prisma.complianceAuditLog.create({
+        data: {
+          actorType: 'ai',
+          actorId: 'compliance-ai-officer',
+          targetType: 'investor',
+          targetId: investorId,
+          investorId,
+          action: 'case_reviewed',
+          category: 'ai_review',
+          newValue: JSON.parse(JSON.stringify({
+            decision: review.decision,
+            confidence: review.confidence,
+          })),
+          aiModel: 'gpt-4o',
+          aiConfidence: review.confidence,
+        },
+      });
+      
+      return reply.status(200).send({
+        success: true,
+        review,
+        aiAvailable: complianceAI.isAvailable(),
+      });
+      
+    } catch (error: any) {
+      console.error('AI case review error:', error);
       return reply.status(500).send({
         success: false,
         error: error.message,
