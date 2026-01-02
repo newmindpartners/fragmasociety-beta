@@ -9,10 +9,15 @@ import { OpenTransactions } from "@/components/dashboard/OpenTransactions";
 import { MyInvestments } from "@/components/dashboard/MyInvestments";
 import { InvestmentStatus } from "@/components/dashboard/InvestmentStatus";
 import { SupportSection } from "@/components/dashboard/SupportSection";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 
 const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { profile, stats, loading } = useUserProfile();
+
+  // Get display name
+  const displayName = profile?.firstName || profile?.displayName || profile?.fullName?.split(' ')[0] || 'Investor';
 
   return (
     <div className="theme-dashboard relative flex min-h-screen w-full bg-background text-foreground">
@@ -42,7 +47,7 @@ const Dashboard = () => {
               className="mb-6"
             >
               <h1 className="text-2xl font-serif text-foreground">
-                Welcome back, <span className="font-semibold">Investor</span>
+                Welcome back, <span className="font-semibold">{loading ? '...' : displayName}</span>
               </h1>
               <p className="text-muted-foreground text-sm mt-1">
                 Here's an overview of your portfolio and recent activity.

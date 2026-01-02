@@ -1,37 +1,91 @@
 import { motion } from "framer-motion";
-import { TrendingUp, Wallet, BarChart3, Target } from "lucide-react";
+import { TrendingUp, Wallet, BarChart3, Target, Loader2 } from "lucide-react";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
-const stats = [
-  {
-    icon: TrendingUp,
-    label: "Total Returns",
-    value: "€0",
-    change: "+0%",
-  },
-  {
-    icon: Wallet,
-    label: "Available Balance",
-    value: "€0",
-    change: "Ready to invest",
-  },
-  {
-    icon: BarChart3,
-    label: "Active Investments",
-    value: "0",
-    change: "0 pending",
-  },
-  {
-    icon: Target,
-    label: "Avg. Annual Return",
-    value: "—",
-    change: "Target: 15-25%",
-  },
-];
+const formatCurrency = (value: number): string => {
+  if (value === 0) return "€0";
+  if (value >= 1000000) {
+    return `€${(value / 1000000).toFixed(1)}M`;
+  }
+  if (value >= 1000) {
+    return `€${(value / 1000).toFixed(1)}K`;
+  }
+  return `€${value.toFixed(0)}`;
+};
 
 export const DashboardStats = () => {
+  const { profile, stats, loading } = useUserProfile();
+
+  // Calculate available balance from wallets
+  const availableBalance = profile?.wallets?.reduce(
+    (sum, w) => sum + Number(w.balance || 0),
+    0
+  ) || 0;
+
+  const pendingBalance = profile?.wallets?.reduce(
+    (sum, w) => sum + Number(w.pendingBalance || 0),
+    0
+  ) || 0;
+
+  const totalReturns = stats?.totalReturns || Number(profile?.totalReturns) || 0;
+  const activeInvestments = stats?.activeInvestments || profile?.activeInvestments || 0;
+  const completedInvestments = stats?.completedInvestments || profile?.completedInvestments || 0;
+  const avgReturn = stats?.averageReturn || 0;
+
+  const statsData = [
+    {
+      icon: TrendingUp,
+      label: "Total Returns",
+      value: formatCurrency(totalReturns),
+      change: totalReturns > 0 ? `+${avgReturn.toFixed(1)}%` : "No returns yet",
+    },
+    {
+      icon: Wallet,
+      label: "Available Balance",
+      value: formatCurrency(availableBalance),
+      change: pendingBalance > 0 ? `${formatCurrency(pendingBalance)} pending` : "Ready to invest",
+    },
+    {
+      icon: BarChart3,
+      label: "Active Investments",
+      value: activeInvestments.toString(),
+      change: `${completedInvestments} completed`,
+    },
+    {
+      icon: Target,
+      label: "Avg. Annual Return",
+      value: avgReturn > 0 ? `${avgReturn.toFixed(1)}%` : "—",
+      change: "Target: 15-25%",
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className="bg-card rounded-xl border border-border p-6 shadow-sm animate-pulse"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
+                <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
+              </div>
+              <div className="h-3 w-20 bg-muted rounded"></div>
+            </div>
+            <div className="flex items-end justify-between">
+              <div className="h-7 w-16 bg-muted rounded"></div>
+              <div className="h-3 w-12 bg-muted rounded"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat, index) => {
+      {statsData.map((stat, index) => {
         const Icon = stat.icon;
         return (
           <motion.div
