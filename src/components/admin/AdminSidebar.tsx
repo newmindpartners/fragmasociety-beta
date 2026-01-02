@@ -17,6 +17,7 @@ import {
   UserCheck,
   Bot,
   ClipboardList,
+  Grid3X3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import fragmaLogo from "@/assets/fragma-logo-v2.png";
@@ -40,7 +41,9 @@ const mainNavItems: NavItem[] = [
 const complianceNavItems: NavItem[] = [
   { icon: Scale, label: "Compliance", href: "/admin/compliance" },
   { icon: UserCheck, label: "Investors", href: "/admin/compliance/investors" },
+  { icon: FileText, label: "Deals", href: "/admin/compliance/deals" },
   { icon: Globe, label: "Jurisdictions", href: "/admin/compliance/jurisdictions" },
+  { icon: Grid3X3, label: "Eligibility Matrix", href: "/admin/compliance/matrix" },
   { icon: ClipboardList, label: "Audit Log", href: "/admin/compliance/audit" },
   { icon: Bot, label: "AI Assistant", href: "/admin/compliance/ai-assistant" },
 ];

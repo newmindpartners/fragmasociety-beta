@@ -39,6 +39,8 @@ import ComplianceDashboard from "./pages/admin/ComplianceDashboard";
 import InvestorReview from "./pages/admin/InvestorReview";
 import JurisdictionsPage from "./pages/admin/JurisdictionsPage";
 import ComplianceAIChat from "./pages/admin/ComplianceAIChat";
+import DealCompliancePage from "./pages/admin/DealCompliancePage";
+import EligibilityMatrixPage from "./pages/admin/EligibilityMatrixPage";
 import { AdminRoute } from "./components/admin/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -98,7 +100,10 @@ const App = () => (
               <Route path="/admin/compliance/jurisdictions/:countryCode" element={<AdminRoute><JurisdictionsPage /></AdminRoute>} />
               <Route path="/admin/compliance/audit" element={<AdminRoute><ComplianceDashboard /></AdminRoute>} />
               <Route path="/admin/compliance/ai-assistant" element={<AdminRoute><ComplianceAIChat /></AdminRoute>} />
-              
+              <Route path="/admin/compliance/deals" element={<AdminRoute><DealCompliancePage /></AdminRoute>} />
+              <Route path="/admin/compliance/deals/:dealId" element={<AdminRoute><DealCompliancePage /></AdminRoute>} />
+              <Route path="/admin/compliance/matrix" element={<AdminRoute><EligibilityMatrixPage /></AdminRoute>} />
+
               <Route path="/admin/*" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               
               {/* Catch-all */}

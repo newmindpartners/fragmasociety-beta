@@ -381,9 +381,9 @@ export async function matchInvestorToAllDeals(
     throw new Error(`Investor not found: ${investorId}`);
   }
 
-  // Fetch all active deals
+  // Fetch all active deals (status = 'active')
   const deals = await prisma.deal.findMany({
-    where: { isActive: true },
+    where: { status: 'active' },
   });
 
   const eligibleDeals: MatchedDeal[] = [];
