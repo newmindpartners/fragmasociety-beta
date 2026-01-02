@@ -581,68 +581,87 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
 
   /**
    * GET /api/admin/users
-   * Get all Clerk users with their roles
-   * Requires CLERK_SECRET_KEY to be configured
+   * Get all users from database
    */
   app.get('/api/admin/users', async (request, reply) => {
     try {
-      if (!env.CLERK_SECRET_KEY) {
-        return reply.status(503).send({
-          success: false,
-          error: 'Clerk integration not configured. Set CLERK_SECRET_KEY in environment.',
-        });
-      }
-
-      const { limit = '20', offset = '0' } = request.query as {
+      const { limit = '100', offset = '0', search, kycStatus, investorType } = request.query as {
         limit?: string;
         offset?: string;
+        search?: string;
+        kycStatus?: string;
+        investorType?: string;
       };
 
-      const response = await fetch(
-        `https://api.clerk.com/v1/users?limit=${limit}&offset=${offset}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${env.CLERK_SECRET_KEY}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Clerk API error:', errorData);
-        return reply.status(response.status).send({
-          success: false,
-          error: 'Failed to fetch users from Clerk',
-        });
+      // Build filter
+      const where: any = {};
+      
+      if (search) {
+        where.OR = [
+          { email: { contains: search, mode: 'insensitive' } },
+          { fullName: { contains: search, mode: 'insensitive' } },
+          { country: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+      
+      if (kycStatus && kycStatus !== 'all') {
+        where.kycStatus = kycStatus;
+      }
+      
+      if (investorType && investorType !== 'all') {
+        where.investorType = investorType;
       }
 
-      const users = await response.json() as Array<{
-        id: string;
-        email_addresses?: { email_address: string }[];
-        first_name?: string;
-        last_name?: string;
-        image_url?: string;
-        public_metadata?: { role?: string };
-        created_at?: number;
-        last_sign_in_at?: number;
-      }>;
+      const [users, total] = await Promise.all([
+        prisma.user.findMany({
+          where,
+          orderBy: { createdAt: 'desc' },
+          take: parseInt(limit),
+          skip: parseInt(offset),
+          include: {
+            _count: {
+              select: { investments: true },
+            },
+          },
+        }),
+        prisma.user.count({ where }),
+      ]);
 
-      // Map to a simpler format
+      // Map to response format
       const mappedUsers = users.map((user) => ({
         id: user.id,
-        email: user.email_addresses?.[0]?.email_address || '',
-        firstName: user.first_name,
-        lastName: user.last_name,
-        imageUrl: user.image_url,
-        role: user.public_metadata?.role || null,
-        createdAt: user.created_at,
-        lastSignInAt: user.last_sign_in_at,
+        clerkUserId: user.clerkUserId,
+        email: user.email,
+        fullName: user.fullName,
+        displayName: user.displayName,
+        avatarUrl: user.avatarUrl,
+        phone: user.phone,
+        country: user.country,
+        countryName: user.countryName,
+        city: user.city,
+        investorType: user.investorType,
+        investorStatus: user.investorStatus,
+        kycStatus: user.kycStatus,
+        complianceStatus: user.complianceStatus,
+        membershipTier: user.membershipTier,
+        totalInvested: Number(user.totalInvested),
+        totalReturns: Number(user.totalReturns),
+        activeInvestments: user.activeInvestments,
+        completedInvestments: user.completedInvestments,
+        investmentCount: user._count.investments,
+        isAdmin: user.isAdmin,
+        isActive: user.isActive,
+        isBanned: user.isBanned,
+        createdAt: user.createdAt,
+        lastLoginAt: user.lastLoginAt,
       }));
 
       return reply.send({
         success: true,
         users: mappedUsers,
-        total: users.length,
+        total,
+        limit: parseInt(limit),
+        offset: parseInt(offset),
       });
     } catch (error) {
       console.error('Fetch users error:', error);

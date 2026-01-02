@@ -178,7 +178,7 @@ export async function dealRoutes(fastify: FastifyInstance) {
     reply: FastifyReply
   ) => {
     try {
-      const body = request.body;
+      const body = request.body as Record<string, any>;
 
       // Generate slug from title if not provided
       const slug = body.slug || body.title
@@ -270,7 +270,7 @@ export async function dealRoutes(fastify: FastifyInstance) {
   ) => {
     try {
       const { dealId } = request.params;
-      const body = request.body;
+      const body = request.body as Record<string, any>;
 
       const deal = await prisma.deal.update({
         where: { id: dealId },
