@@ -20,6 +20,17 @@ interface WebhookPayload {
 
 export default async function clerkWebhookRoutes(fastify: FastifyInstance) {
   /**
+   * Clerk Webhook Health Check
+   */
+  fastify.get('/api/webhooks/clerk', async (request: FastifyRequest, reply: FastifyReply) => {
+    return reply.status(200).send({
+      success: true,
+      message: 'Clerk webhook endpoint is active',
+      configured: !!process.env.CLERK_WEBHOOK_SECRET,
+    });
+  });
+
+  /**
    * Clerk Webhook Endpoint
    * 
    * Receives webhooks from Clerk for user events
@@ -30,6 +41,8 @@ export default async function clerkWebhookRoutes(fastify: FastifyInstance) {
     },
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
+      console.log('Clerk webhook received');
+      
       const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
       
       if (!CLERK_WEBHOOK_SECRET) {
@@ -45,6 +58,8 @@ export default async function clerkWebhookRoutes(fastify: FastifyInstance) {
       const svixTimestamp = request.headers['svix-timestamp'] as string;
       const svixSignature = request.headers['svix-signature'] as string;
 
+      console.log('Svix headers:', { svixId: !!svixId, svixTimestamp: !!svixTimestamp, svixSignature: !!svixSignature });
+
       if (!svixId || !svixTimestamp || !svixSignature) {
         console.warn('Missing Svix headers');
         return reply.status(400).send({
@@ -53,8 +68,17 @@ export default async function clerkWebhookRoutes(fastify: FastifyInstance) {
         });
       }
 
-      // Get the raw body
-      const rawBody = (request as any).rawBody || JSON.stringify(request.body);
+      // Get the raw body - try multiple approaches
+      let rawBody: string;
+      if ((request as any).rawBody) {
+        rawBody = (request as any).rawBody;
+      } else if (typeof request.body === 'string') {
+        rawBody = request.body;
+      } else {
+        rawBody = JSON.stringify(request.body);
+      }
+      
+      console.log('Raw body length:', rawBody.length);
 
       // Verify the webhook
       const wh = new Webhook(CLERK_WEBHOOK_SECRET);
@@ -66,11 +90,12 @@ export default async function clerkWebhookRoutes(fastify: FastifyInstance) {
           'svix-timestamp': svixTimestamp,
           'svix-signature': svixSignature,
         }) as WebhookPayload;
-      } catch (err) {
-        console.error('Webhook verification failed:', err);
+      } catch (err: any) {
+        console.error('Webhook verification failed:', err.message);
         return reply.status(400).send({
           success: false,
           error: 'Invalid webhook signature',
+          details: err.message,
         });
       }
 

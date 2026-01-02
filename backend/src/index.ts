@@ -29,7 +29,7 @@ await app.register(fastifyRawBody, {
 await app.register(cors, {
   origin: env.CORS_ORIGIN.split(',').map(o => o.trim()),
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'svix-id', 'svix-timestamp', 'svix-signature'],
   credentials: true,
 });
 
