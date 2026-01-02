@@ -28,11 +28,34 @@ interface Submission {
   entityName?: string;
   isUsPerson?: boolean;
   investorStatus?: string;
+  // EU Professional qualifications
+  euProfessionalQualifications?: string[];
+  euQualificationsCount?: string;
+  // US Accredited qualifications
+  usAccreditedQualifications?: string[];
+  // Financial info
+  annualIncome?: string;
   investableCapital?: string;
+  // PEP/Sanctions
+  isPep?: boolean;
+  isSanctioned?: boolean;
+  // Investment preferences
+  investmentAmount3to6Months?: string;
   preferredTicketSize?: string;
   investmentHorizon?: string;
+  investmentPriorities?: string[];
+  assetInterests?: string[];
+  otherRwaDescription?: string;
+  // Contact preferences
+  preferredContactChannel?: string;
+  phoneWhatsappNumber?: string;
+  consentToContact?: boolean;
+  marketingConsent?: boolean;
+  // Metadata
   tags: string[];
   createdAt: string;
+  updatedAt?: string;
+  // KYC
   kycStatus?: 'not_started' | 'pending' | 'approved' | 'rejected' | 'retry' | 'error';
   kycVerified?: boolean;
 }
@@ -158,7 +181,16 @@ const AdminSubmissions = () => {
   };
 
   const exportToCsv = () => {
-    const headers = ['Name', 'Email', 'Country', 'City', 'Type', 'Entity', 'KYC Status', 'Registered At'];
+    const headers = [
+      'Name', 'Email', 'Country', 'City', 'Type', 'Entity',
+      'US Person', 'Investor Status', 'Annual Income', 'Investable Capital',
+      'Preferred Ticket Size', 'Investment Horizon', '3-6 Month Investment',
+      'EU Qualifications', 'US Accredited Qualifications',
+      'Is PEP', 'Is Sanctioned',
+      'Investment Priorities', 'Asset Interests', 'Other RWA',
+      'Contact Channel', 'Phone/WhatsApp', 'Consent to Contact', 'Marketing Consent',
+      'Tags', 'KYC Status', 'Registered At'
+    ];
     const rows = submissions.map(s => [
       s.fullName,
       s.email,
@@ -166,12 +198,31 @@ const AdminSubmissions = () => {
       s.city || '',
       formatInvestorType(s.registeringAs),
       s.entityName || '',
+      s.isUsPerson ? 'Yes' : 'No',
+      s.investorStatus || '',
+      s.annualIncome || '',
+      s.investableCapital || '',
+      s.preferredTicketSize || '',
+      s.investmentHorizon || '',
+      s.investmentAmount3to6Months || '',
+      (s.euProfessionalQualifications || []).join('; '),
+      (s.usAccreditedQualifications || []).join('; '),
+      s.isPep ? 'Yes' : 'No',
+      s.isSanctioned ? 'Yes' : 'No',
+      (s.investmentPriorities || []).join('; '),
+      (s.assetInterests || []).join('; '),
+      s.otherRwaDescription || '',
+      s.preferredContactChannel || '',
+      s.phoneWhatsappNumber || '',
+      s.consentToContact ? 'Yes' : 'No',
+      s.marketingConsent ? 'Yes' : 'No',
+      (s.tags || []).join('; '),
       s.kycStatus || 'not_started',
       formatDate(s.createdAt),
     ]);
     
     const csvContent = [headers, ...rows]
-      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
       .join('\n');
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -397,11 +448,14 @@ const AdminSubmissions = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-card rounded-xl border border-border shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-card rounded-xl border border-border shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
             >
-              <div className="p-6 border-b border-border">
+              <div className="sticky top-0 p-6 border-b border-border bg-card z-10">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-foreground">User Details</h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-foreground">{selectedSubmission.fullName}</h2>
+                    <p className="text-sm text-muted-foreground">{selectedSubmission.email}</p>
+                  </div>
                   <button
                     onClick={() => setSelectedSubmission(null)}
                     className="p-2 hover:bg-muted rounded-lg transition-colors"
@@ -410,80 +464,243 @@ const AdminSubmissions = () => {
                   </button>
                 </div>
               </div>
-              <div className="p-6 space-y-6">
-                {/* Basic Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Full Name</label>
-                    <p className="text-foreground font-medium">{selectedSubmission.fullName}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Email</label>
-                    <p className="text-foreground">{selectedSubmission.email}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Country</label>
-                    <p className="text-foreground">{selectedSubmission.country}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">City</label>
-                    <p className="text-foreground">{selectedSubmission.city || '-'}</p>
-                  </div>
-                </div>
-
-                {/* Investor Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Registering As</label>
-                    <p className="text-foreground">{formatInvestorType(selectedSubmission.registeringAs)}</p>
-                  </div>
-                  {selectedSubmission.entityName && (
+              <div className="p-6 space-y-8">
+                {/* Section: Basic Info */}
+                <div>
+                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4 flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    Basic Information
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/20 rounded-lg p-4">
                     <div>
-                      <label className="text-xs text-muted-foreground uppercase">Entity Name</label>
-                      <p className="text-foreground">{selectedSubmission.entityName}</p>
+                      <label className="text-xs text-muted-foreground uppercase">Full Name</label>
+                      <p className="text-foreground font-medium">{selectedSubmission.fullName}</p>
                     </div>
-                  )}
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">US Person</label>
-                    <p className="text-foreground">{selectedSubmission.isUsPerson ? 'Yes' : 'No'}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Investor Status</label>
-                    <p className="text-foreground">{selectedSubmission.investorStatus || '-'}</p>
-                  </div>
-                </div>
-
-                {/* Investment Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Investable Capital</label>
-                    <p className="text-foreground">{selectedSubmission.investableCapital || '-'}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Preferred Ticket Size</label>
-                    <p className="text-foreground">{selectedSubmission.preferredTicketSize || '-'}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground uppercase">Investment Horizon</label>
-                    <p className="text-foreground">{selectedSubmission.investmentHorizon || '-'}</p>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Email</label>
+                      <p className="text-foreground break-all">{selectedSubmission.email}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Country</label>
+                      <p className="text-foreground">{selectedSubmission.country}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">City</label>
+                      <p className="text-foreground">{selectedSubmission.city || '-'}</p>
+                    </div>
                   </div>
                 </div>
 
-                {/* KYC Status */}
-                <div className="p-4 bg-muted/30 rounded-lg">
-                  <label className="text-xs text-muted-foreground uppercase">KYC Verification Status</label>
-                  <div className="mt-2">
-                    {getKycStatusBadge(selectedSubmission.kycStatus)}
+                {/* Section: Investor Classification */}
+                <div>
+                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    Investor Classification
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-muted/20 rounded-lg p-4">
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Registering As</label>
+                      <p className="text-foreground">{formatInvestorType(selectedSubmission.registeringAs)}</p>
+                    </div>
+                    {selectedSubmission.entityName && (
+                      <div>
+                        <label className="text-xs text-muted-foreground uppercase">Entity Name</label>
+                        <p className="text-foreground">{selectedSubmission.entityName}</p>
+                      </div>
+                    )}
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">US Person</label>
+                      <p className={`font-medium ${selectedSubmission.isUsPerson ? 'text-amber-400' : 'text-green-400'}`}>
+                        {selectedSubmission.isUsPerson ? 'Yes' : 'No'}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Investor Status</label>
+                      <p className="text-foreground capitalize">{selectedSubmission.investorStatus?.replace(/_/g, ' ') || '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Annual Income</label>
+                      <p className="text-foreground">{selectedSubmission.annualIncome?.replace(/_/g, ' - ') || '-'}</p>
+                    </div>
                   </div>
                 </div>
 
-                {/* Tags */}
+                {/* Section: EU Professional Qualifications */}
+                {selectedSubmission.euProfessionalQualifications && selectedSubmission.euProfessionalQualifications.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wide mb-4">
+                      EU Professional Qualifications
+                    </h3>
+                    <div className="bg-blue-500/10 rounded-lg p-4">
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {selectedSubmission.euProfessionalQualifications.map((qual, i) => (
+                          <span key={i} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">
+                            {qual.replace(/_/g, ' ')}
+                          </span>
+                        ))}
+                      </div>
+                      {selectedSubmission.euQualificationsCount && (
+                        <p className="text-xs text-muted-foreground">
+                          Qualifications met: {selectedSubmission.euQualificationsCount}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Section: US Accredited Qualifications */}
+                {selectedSubmission.usAccreditedQualifications && selectedSubmission.usAccreditedQualifications.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-amber-400 uppercase tracking-wide mb-4">
+                      US Accredited Investor Qualifications
+                    </h3>
+                    <div className="bg-amber-500/10 rounded-lg p-4">
+                      <div className="flex flex-wrap gap-2">
+                        {selectedSubmission.usAccreditedQualifications.map((qual, i) => (
+                          <span key={i} className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs">
+                            {qual.replace(/_/g, ' ')}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Section: PEP & Sanctions */}
+                <div>
+                  <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide mb-4">
+                    Compliance Flags
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className={`rounded-lg p-4 ${selectedSubmission.isPep ? 'bg-red-500/20 border border-red-500/30' : 'bg-green-500/10'}`}>
+                      <label className="text-xs text-muted-foreground uppercase">Politically Exposed Person (PEP)</label>
+                      <p className={`font-semibold ${selectedSubmission.isPep ? 'text-red-400' : 'text-green-400'}`}>
+                        {selectedSubmission.isPep ? '⚠️ Yes - Requires Review' : '✓ No'}
+                      </p>
+                    </div>
+                    <div className={`rounded-lg p-4 ${selectedSubmission.isSanctioned ? 'bg-red-500/20 border border-red-500/30' : 'bg-green-500/10'}`}>
+                      <label className="text-xs text-muted-foreground uppercase">Sanctioned</label>
+                      <p className={`font-semibold ${selectedSubmission.isSanctioned ? 'text-red-400' : 'text-green-400'}`}>
+                        {selectedSubmission.isSanctioned ? '🚫 Yes - BLOCKED' : '✓ No'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section: Investment Preferences */}
+                <div>
+                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    Investment Preferences
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/20 rounded-lg p-4">
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Investable Capital</label>
+                      <p className="text-foreground">{selectedSubmission.investableCapital?.replace(/_/g, ' - ') || '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Preferred Ticket Size</label>
+                      <p className="text-foreground">{selectedSubmission.preferredTicketSize?.replace(/_/g, ' - ') || '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Investment Horizon</label>
+                      <p className="text-foreground">{selectedSubmission.investmentHorizon?.replace(/_/g, ' ') || '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">3-6 Month Investment</label>
+                      <p className="text-foreground">{selectedSubmission.investmentAmount3to6Months?.replace(/_/g, ' - ') || '-'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section: Investment Priorities */}
+                {selectedSubmission.investmentPriorities && selectedSubmission.investmentPriorities.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                      Investment Priorities
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedSubmission.investmentPriorities.map((priority, i) => (
+                        <span key={i} className="px-3 py-1.5 bg-violet-500/20 text-violet-300 rounded-full text-sm">
+                          {priority.replace(/_/g, ' ')}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Section: Asset Interests */}
+                {selectedSubmission.assetInterests && selectedSubmission.assetInterests.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                      Asset Class Interests
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedSubmission.assetInterests.map((asset, i) => (
+                        <span key={i} className="px-3 py-1.5 bg-slate-500/20 text-slate-300 rounded-full text-sm capitalize">
+                          {asset.replace(/_/g, ' ')}
+                        </span>
+                      ))}
+                    </div>
+                    {selectedSubmission.otherRwaDescription && (
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        Other interests: {selectedSubmission.otherRwaDescription}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Section: Contact Preferences */}
+                <div>
+                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    Contact Preferences
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/20 rounded-lg p-4">
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Preferred Channel</label>
+                      <p className="text-foreground capitalize">{selectedSubmission.preferredContactChannel || '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Phone/WhatsApp</label>
+                      <p className="text-foreground">{selectedSubmission.phoneWhatsappNumber || '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Consent to Contact</label>
+                      <p className={selectedSubmission.consentToContact ? 'text-green-400' : 'text-muted-foreground'}>
+                        {selectedSubmission.consentToContact ? '✓ Yes' : 'No'}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Marketing Consent</label>
+                      <p className={selectedSubmission.marketingConsent ? 'text-green-400' : 'text-muted-foreground'}>
+                        {selectedSubmission.marketingConsent ? '✓ Yes' : 'No'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section: KYC Status */}
+                <div>
+                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                    KYC Verification
+                  </h3>
+                  <div className="bg-muted/20 rounded-lg p-4">
+                    <div className="flex items-center gap-4">
+                      {getKycStatusBadge(selectedSubmission.kycStatus)}
+                      <span className="text-sm text-muted-foreground">
+                        {selectedSubmission.kycVerified ? 'Identity verified via Sumsub' : 'Verification pending or not started'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section: Tags */}
                 {selectedSubmission.tags && selectedSubmission.tags.length > 0 && (
                   <div>
-                    <label className="text-xs text-muted-foreground uppercase">Tags</label>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wide mb-4">
+                      Tags
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
                       {selectedSubmission.tags.map((tag, i) => (
-                        <span key={i} className="px-2 py-1 bg-violet-500/10 text-violet-400 rounded text-xs">
+                        <span key={i} className="px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-xs uppercase">
                           {tag}
                         </span>
                       ))}
@@ -491,10 +708,20 @@ const AdminSubmissions = () => {
                   </div>
                 )}
 
-                {/* Timestamps */}
-                <div>
-                  <label className="text-xs text-muted-foreground uppercase">Registered At</label>
-                  <p className="text-foreground">{formatDate(selectedSubmission.createdAt)}</p>
+                {/* Section: Timestamps */}
+                <div className="border-t border-border pt-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <label className="text-xs text-muted-foreground uppercase">Registered At</label>
+                      <p className="text-foreground">{formatDate(selectedSubmission.createdAt)}</p>
+                    </div>
+                    {selectedSubmission.updatedAt && (
+                      <div>
+                        <label className="text-xs text-muted-foreground uppercase">Last Updated</label>
+                        <p className="text-foreground">{formatDate(selectedSubmission.updatedAt)}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </motion.div>

@@ -23,6 +23,13 @@ import {
   InvestorQuestionnaire,
   ComplianceCase,
 } from '../services/compliance-ai.service.js';
+import {
+  matchInvestorToDeal,
+  matchInvestorToAllDeals,
+  findEligibleInvestorsForDeal,
+  getRecommendedDeals,
+  canInvest,
+} from '../services/deal-matcher.service.js';
 
 // =============================================
 // TYPES
@@ -1631,6 +1638,166 @@ export async function complianceRoutes(fastify: FastifyInstance) {
       
     } catch (error: any) {
       console.error('AI case review error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  // =============================================
+  // DEAL MATCHING
+  // =============================================
+
+  /**
+   * Match an investor with a specific deal
+   */
+  fastify.post('/api/compliance/match', async (
+    request: FastifyRequest<{
+      Body: { investorId: string; dealId: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { investorId, dealId } = request.body;
+
+      if (!investorId || !dealId) {
+        return reply.status(400).send({
+          success: false,
+          error: 'investorId and dealId are required',
+        });
+      }
+
+      const match = await matchInvestorToDeal(investorId, dealId);
+
+      return reply.status(200).send({
+        success: true,
+        match,
+      });
+
+    } catch (error: any) {
+      console.error('Match error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Get all matching deals for an investor
+   */
+  fastify.get('/api/compliance/match/investor/:investorId', async (
+    request: FastifyRequest<{ Params: { investorId: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { investorId } = request.params;
+
+      const result = await matchInvestorToAllDeals(investorId);
+
+      return reply.status(200).send({
+        success: true,
+        ...result,
+      });
+
+    } catch (error: any) {
+      console.error('Investor match error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Get all eligible investors for a deal
+   */
+  fastify.get('/api/compliance/match/deal/:dealId', async (
+    request: FastifyRequest<{ Params: { dealId: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { dealId } = request.params;
+
+      const investors = await findEligibleInvestorsForDeal(dealId);
+
+      return reply.status(200).send({
+        success: true,
+        dealId,
+        eligibleInvestors: investors,
+        count: investors.length,
+      });
+
+    } catch (error: any) {
+      console.error('Deal match error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Get recommended deals for an investor
+   */
+  fastify.get('/api/compliance/recommendations/:investorId', async (
+    request: FastifyRequest<{
+      Params: { investorId: string };
+      Querystring: { limit?: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { investorId } = request.params;
+      const limit = parseInt(request.query.limit || '5', 10);
+
+      const recommendations = await getRecommendedDeals(investorId, limit);
+
+      return reply.status(200).send({
+        success: true,
+        investorId,
+        recommendations,
+        count: recommendations.length,
+      });
+
+    } catch (error: any) {
+      console.error('Recommendations error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
+  /**
+   * Quick eligibility check
+   */
+  fastify.post('/api/compliance/can-invest', async (
+    request: FastifyRequest<{
+      Body: { investorId: string; dealId: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { investorId, dealId } = request.body;
+
+      if (!investorId || !dealId) {
+        return reply.status(400).send({
+          success: false,
+          error: 'investorId and dealId are required',
+        });
+      }
+
+      const result = await canInvest(investorId, dealId);
+
+      return reply.status(200).send({
+        success: true,
+        ...result,
+      });
+
+    } catch (error: any) {
+      console.error('Can invest check error:', error);
       return reply.status(500).send({
         success: false,
         error: error.message,
