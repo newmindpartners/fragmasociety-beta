@@ -113,8 +113,16 @@ function generateReferralCode(): string {
  */
 export async function createUserFromClerk(userData: ClerkUserData) {
   const email = getPrimaryEmail(userData);
+  
+  // Handle test payloads from Clerk (no email)
   if (!email) {
-    throw new Error('No email found in Clerk user data');
+    console.log('Test webhook received (no email in payload). Skipping user creation.');
+    return { 
+      id: 'test', 
+      clerkUserId: userData.id,
+      email: 'test@example.com',
+      isTest: true 
+    };
   }
 
   const phone = getPrimaryPhone(userData);
@@ -244,8 +252,16 @@ export async function createUserFromClerk(userData: ClerkUserData) {
  */
 export async function updateUserFromClerk(userData: ClerkUserData) {
   const email = getPrimaryEmail(userData);
+  
+  // Handle test payloads from Clerk (no email)
   if (!email) {
-    throw new Error('No email found in Clerk user data');
+    console.log('Test webhook received (no email in payload). Skipping user update.');
+    return { 
+      id: 'test', 
+      clerkUserId: userData.id,
+      email: 'test@example.com',
+      isTest: true 
+    };
   }
 
   const phone = getPrimaryPhone(userData);
