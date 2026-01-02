@@ -56,6 +56,7 @@ enum AdminRole {
   SUPER_ADMIN
   ADMIN
   MODERATOR
+  COMPLIANCE_OFFICER
 }
 
 // Admin users table
@@ -71,4 +72,467 @@ model AdminUser {
   updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("admin_users")
+}
+
+// =============================================
+// COMPLIANCE ENGINE MODELS
+// =============================================
+
+// Investor type classification
+enum InvestorType {
+  RETAIL
+  PROFESSIONAL
+  QUALIFIED
+  ACCREDITED      // For US/Canada/Singapore
+  WHOLESALE       // For Australia
+  QII             // For Japan (Qualified Institutional Investor)
+}
+
+// Compartment type for Luxembourg securitisation
+enum CompartmentType {
+  PROFESSIONAL
+  RETAIL
+}
+
+// Compliance review status
+enum ComplianceStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  REQUIRES_DOCUMENTS
+  SUSPENDED
+  UNDER_INVESTIGATION
+}
+
+// Region classification
+enum JurisdictionRegion {
+  EU
+  EEA
+  EU_EQUIVALENT
+  THIRD_COUNTRY_FRIENDLY
+  THIRD_COUNTRY_RESTRICTED
+}
+
+// Investor profile - linked to Clerk user
+model Investor {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerkUserId           String           @unique @map("clerk_user_id")
+  email                 String           @unique
+  firstName             String?          @map("first_name")
+  lastName              String?          @map("last_name")
+  
+  // Country of residence/tax
+  countryCode           String           @map("country_code") // ISO 3166-1 alpha-2
+  taxResidency          String?          @map("tax_residency")
+  nationality           String?
+  
+  // Investor classification
+  investorType          InvestorType     @default(RETAIL) @map("investor_type")
+  classificationDate    DateTime?        @map("classification_date")
+  classifiedBy          String?          @map("classified_by") // Admin or AI
+  
+  // KYC status from Sumsub
+  kycStatus             String?          @map("kyc_status")
+  kycApprovedAt         DateTime?        @map("kyc_approved_at")
+  sumsubApplicantId     String?          @map("sumsub_applicant_id")
+  
+  // Professional/Qualified criteria
+  totalAssets           Decimal?         @map("total_assets") @db.Decimal(18, 2)
+  annualIncome          Decimal?         @map("annual_income") @db.Decimal(18, 2)
+  financialAssets       Decimal?         @map("financial_assets") @db.Decimal(18, 2)
+  professionalStatus    Boolean          @default(false) @map("professional_status")
+  institutionalInvestor Boolean          @default(false) @map("institutional_investor")
+  
+  // US-specific
+  isUsPerson            Boolean          @default(false) @map("is_us_person")
+  usAccreditedStatus    String?          @map("us_accredited_status")
+  
+  // Risk assessment
+  riskProfile           String?          @map("risk_profile") // conservative, moderate, aggressive
+  riskScore             Int?             @map("risk_score") // 1-10
+  suitabilityScore      Int?             @map("suitability_score") // 1-100
+  
+  // Compliance status
+  complianceStatus      ComplianceStatus @default(PENDING_REVIEW) @map("compliance_status")
+  complianceNotes       String?          @map("compliance_notes")
+  lastReviewDate        DateTime?        @map("last_review_date")
+  lastReviewedBy        String?          @map("last_reviewed_by")
+  
+  // PEP/Sanctions
+  isPep                 Boolean          @default(false) @map("is_pep")
+  isSanctioned          Boolean          @default(false) @map("is_sanctioned")
+  pepDetails            String?          @map("pep_details")
+  
+  // Relations
+  investments           Investment[]
+  eligibleDeals         DealEligibility[]
+  complianceChecks      ComplianceCheck[]
+  jurisdictionEligibility InvestorJurisdiction[]
+  documents             InvestorDocument[]
+  auditLogs             ComplianceAuditLog[]
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("investors")
+}
+
+// Deal / Investment opportunity
+model Deal {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  slug                  String           @unique
+  description           String?
+  
+  // Compartment and asset
+  compartmentType       CompartmentType  @map("compartment_type")
+  assetClass            String           @map("asset_class") // real_estate, film, art, etc.
+  assetCoName           String?          @map("asset_co_name")
+  
+  // Investment terms
+  minimumInvestment     Decimal          @map("minimum_investment") @db.Decimal(18, 2)
+  maximumInvestment     Decimal?         @map("maximum_investment") @db.Decimal(18, 2)
+  targetRaise           Decimal          @map("target_raise") @db.Decimal(18, 2)
+  currentRaise          Decimal          @default(0) @map("current_raise") @db.Decimal(18, 2)
+  currency              String           @default("EUR")
+  
+  // Compliance requirements
+  requiresProspectus    Boolean          @default(false) @map("requires_prospectus")
+  requiresPRIIPSKID     Boolean          @default(false) @map("requires_priips_kid")
+  requiresPPM           Boolean          @default(false) @map("requires_ppm")
+  cssfApproved          Boolean          @default(false) @map("cssf_approved")
+  cssfApprovalDate      DateTime?        @map("cssf_approval_date")
+  
+  // Risk classification
+  riskLevel             Int              @default(5) @map("risk_level") // 1-10
+  liquidityRisk         String?          @map("liquidity_risk") // low, medium, high
+  capitalAtRisk         Boolean          @default(true) @map("capital_at_risk")
+  
+  // Status
+  status                String           @default("draft") // draft, active, closed, cancelled
+  launchDate            DateTime?        @map("launch_date")
+  closeDate             DateTime?        @map("close_date")
+  
+  // Relations
+  eligibleInvestors     DealEligibility[]
+  investments           Investment[]
+  jurisdictions         DealJurisdiction[]
+  documents             DealDocument[]
+  
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("deals")
+}
+
+// Investor-Deal eligibility mapping
+model DealEligibility {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  investorId    String      @map("investor_id") @db.Uuid
+  dealId        String      @map("deal_id") @db.Uuid
+  
+  eligible      Boolean
+  reason        String?
+  eligibilityType String?   @map("eligibility_type") // investor_type, jurisdiction, suitability
+  
+  // AI or admin check
+  checkedAt     DateTime    @default(now()) @map("checked_at") @db.Timestamptz(6)
+  checkedBy     String?     @map("checked_by") // AI or Admin ID
+  aiConfidence  Float?      @map("ai_confidence") // 0-1 confidence score
+  
+  investor      Investor    @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  deal          Deal        @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  @@unique([investorId, dealId])
+  @@map("deal_eligibility")
+}
+
+// Investment transaction
+model Investment {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  investorId    String      @map("investor_id") @db.Uuid
+  dealId        String      @map("deal_id") @db.Uuid
+  
+  amount        Decimal     @db.Decimal(18, 2)
+  currency      String      @default("EUR")
+  status        String      @default("pending") // pending, confirmed, cancelled, refunded
+  
+  // Compliance sign-offs
+  suitabilityConfirmed Boolean @default(false) @map("suitability_confirmed")
+  documentsAcknowledged Boolean @default(false) @map("documents_acknowledged")
+  riskDisclosureSigned Boolean @default(false) @map("risk_disclosure_signed")
+  
+  investor      Investor    @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  deal          Deal        @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("investments")
+}
+
+// Compliance check records
+model ComplianceCheck {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  investorId    String      @map("investor_id") @db.Uuid
+  
+  checkType     String      @map("check_type") // KYC, SUITABILITY, RISK_ASSESSMENT, DOCUMENT_REVIEW, CLASSIFICATION
+  status        String      // passed, failed, pending, review_required
+  
+  // AI analysis
+  aiAnalysis    String?     @map("ai_analysis")
+  aiScore       Float?      @map("ai_score") // 0-1
+  aiRecommendation String?  @map("ai_recommendation")
+  
+  // Admin review
+  adminReview   String?     @map("admin_review")
+  reviewedBy    String?     @map("reviewed_by")
+  reviewedAt    DateTime?   @map("reviewed_at") @db.Timestamptz(6)
+  
+  // Metadata
+  metadata      Json?       // Additional check-specific data
+  
+  investor      Investor    @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("compliance_checks")
+}
+
+// =============================================
+// JURISDICTION / GEOGRAPHIC ELIGIBILITY
+// =============================================
+
+// Jurisdiction rules per country
+model Jurisdiction {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  countryCode           String              @unique @map("country_code") // ISO 3166-1 alpha-2
+  countryName           String              @map("country_name")
+  region                JurisdictionRegion
+  
+  // Eligibility by investor type
+  retailAllowed         Boolean             @default(false) @map("retail_allowed")
+  professionalAllowed   Boolean             @default(true) @map("professional_allowed")
+  qualifiedAllowed      Boolean             @default(true) @map("qualified_allowed")
+  accreditedAllowed     Boolean             @default(false) @map("accredited_allowed")
+  wholesaleAllowed      Boolean             @default(false) @map("wholesale_allowed")
+  
+  // Investment limits (in EUR equivalent)
+  minInvestmentRetail   Decimal?            @map("min_investment_retail") @db.Decimal(18, 2)
+  minInvestmentPro      Decimal?            @map("min_investment_pro") @db.Decimal(18, 2)
+  maxInvestmentRetail   Decimal?            @map("max_investment_retail") @db.Decimal(18, 2)
+  
+  // Accredited/Qualified investor thresholds
+  accreditedIncomeThreshold  Decimal?       @map("accredited_income_threshold") @db.Decimal(18, 2)
+  accreditedAssetThreshold   Decimal?       @map("accredited_asset_threshold") @db.Decimal(18, 2)
+  accreditedNetWorthThreshold Decimal?      @map("accredited_net_worth_threshold") @db.Decimal(18, 2)
+  
+  // Documentation requirements
+  requiresProspectus    Boolean             @default(false) @map("requires_prospectus")
+  requiresLocalKID      Boolean             @default(false) @map("requires_local_kid")
+  requiresLocalLanguage Boolean             @default(false) @map("requires_local_language")
+  localLanguage         String?             @map("local_language")
+  
+  // Regulatory
+  regulatorName         String?             @map("regulator_name")
+  regulatorNotification Boolean             @default(false) @map("regulator_notification")
+  passportingAllowed    Boolean             @default(false) @map("passporting_allowed")
+  
+  // Marketing restrictions
+  coldCallingAllowed    Boolean             @default(false) @map("cold_calling_allowed")
+  advertisingAllowed    Boolean             @default(true) @map("advertising_allowed")
+  riskWarningsRequired  Boolean             @default(true) @map("risk_warnings_required")
+  coolingOffPeriod      Int?                @map("cooling_off_period") // days
+  
+  // Special conditions (JSON for flexibility)
+  specialRequirements   Json?               @map("special_requirements")
+  blockedReasons        String?             @map("blocked_reasons")
+  
+  // Sub-jurisdictions (e.g., US states, Canadian provinces, UAE emirates)
+  hasSubJurisdictions   Boolean             @default(false) @map("has_sub_jurisdictions")
+  parentJurisdiction    String?             @map("parent_jurisdiction")
+  
+  // Status
+  isActive              Boolean             @default(true) @map("is_active")
+  lastReviewedAt        DateTime?           @map("last_reviewed_at") @db.Timestamptz(6)
+  reviewedBy            String?             @map("reviewed_by")
+  
+  // Relations
+  investorEligibilities InvestorJurisdiction[]
+  dealRestrictions      DealJurisdiction[]
+  subJurisdictions      SubJurisdiction[]
+  
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("jurisdictions")
+}
+
+// Sub-jurisdictions (US states, Canadian provinces, UAE emirates)
+model SubJurisdiction {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  jurisdictionId        String              @map("jurisdiction_id") @db.Uuid
+  code                  String              // e.g., "CA", "NY", "ON", "DIFC"
+  name                  String
+  
+  // Override parent rules
+  retailAllowed         Boolean?            @map("retail_allowed")
+  accreditedAllowed     Boolean?            @map("accredited_allowed")
+  specialRequirements   Json?               @map("special_requirements")
+  blockedReasons        String?             @map("blocked_reasons")
+  
+  isActive              Boolean             @default(true) @map("is_active")
+  
+  jurisdiction          Jurisdiction        @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade)
+  
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([jurisdictionId, code])
+  @@map("sub_jurisdictions")
+}
+
+// Investor eligibility per jurisdiction
+model InvestorJurisdiction {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  investorId      String        @map("investor_id") @db.Uuid
+  jurisdictionId  String        @map("jurisdiction_id") @db.Uuid
+  
+  // Eligibility result
+  eligible        Boolean
+  eligibleAsType  InvestorType? @map("eligible_as_type") // What type they qualify as in this jurisdiction
+  reason          String?
+  
+  // Required actions
+  documentsNeeded String[]      @map("documents_needed") // List of required documents
+  checksRequired  String[]      @map("checks_required") // Additional checks needed
+  
+  // Compliance status
+  complianceStatus String       @default("pending") @map("compliance_status")
+  
+  investor        Investor      @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  jurisdiction    Jurisdiction  @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade)
+  
+  checkedAt       DateTime      @default(now()) @map("checked_at") @db.Timestamptz(6)
+  
+  @@unique([investorId, jurisdictionId])
+  @@map("investor_jurisdictions")
+}
+
+// Deal availability per jurisdiction
+model DealJurisdiction {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId          String        @map("deal_id") @db.Uuid
+  jurisdictionId  String        @map("jurisdiction_id") @db.Uuid
+  
+  // Marketing status
+  marketingAllowed Boolean      @default(false) @map("marketing_allowed")
+  approvalStatus   String       @default("pending") @map("approval_status") // pending, approved, rejected
+  approvalDate     DateTime?    @map("approval_date") @db.Timestamptz(6)
+  
+  // Local requirements met
+  localProspectus  Boolean      @default(false) @map("local_prospectus")
+  localDocuments   String[]     @map("local_documents")
+  regulatorNotified Boolean     @default(false) @map("regulator_notified")
+  
+  deal            Deal          @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  jurisdiction    Jurisdiction  @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade)
+  
+  @@unique([dealId, jurisdictionId])
+  @@map("deal_jurisdictions")
+}
+
+// =============================================
+// DOCUMENTS
+// =============================================
+
+// Investor documents
+model InvestorDocument {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  investorId      String        @map("investor_id") @db.Uuid
+  
+  documentType    String        @map("document_type") // ID, PROOF_OF_ADDRESS, ACCREDITED_CERT, etc.
+  fileName        String        @map("file_name")
+  fileUrl         String?       @map("file_url")
+  
+  status          String        @default("pending") // pending, approved, rejected
+  verifiedAt      DateTime?     @map("verified_at") @db.Timestamptz(6)
+  verifiedBy      String?       @map("verified_by")
+  
+  expiresAt       DateTime?     @map("expires_at") @db.Timestamptz(6)
+  
+  investor        Investor      @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("investor_documents")
+}
+
+// Deal documents (prospectus, KID, PPM, etc.)
+model DealDocument {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId          String        @map("deal_id") @db.Uuid
+  
+  documentType    String        @map("document_type") // PROSPECTUS, PRIIPS_KID, PPM, RISK_DISCLOSURE
+  language        String        @default("en")
+  version         String        @default("1.0")
+  
+  fileName        String        @map("file_name")
+  fileUrl         String?       @map("file_url")
+  
+  isActive        Boolean       @default(true) @map("is_active")
+  effectiveDate   DateTime?     @map("effective_date") @db.Timestamptz(6)
+  
+  deal            Deal          @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("deal_documents")
+}
+
+// =============================================
+// AUDIT LOGGING
+// =============================================
+
+// Comprehensive audit log for compliance
+model ComplianceAuditLog {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // Actor
+  actorType       String        @map("actor_type") // admin, system, ai, investor
+  actorId         String?       @map("actor_id")
+  actorEmail      String?       @map("actor_email")
+  
+  // Target
+  targetType      String        @map("target_type") // investor, deal, compliance_check, etc.
+  targetId        String        @map("target_id")
+  investorId      String?       @map("investor_id") @db.Uuid
+  
+  // Action
+  action          String        // created, updated, approved, rejected, classified, etc.
+  category        String        // kyc, classification, eligibility, investment, etc.
+  
+  // Details
+  previousValue   Json?         @map("previous_value")
+  newValue        Json?         @map("new_value")
+  reason          String?
+  notes           String?
+  
+  // AI specific
+  aiModel         String?       @map("ai_model")
+  aiConfidence    Float?        @map("ai_confidence")
+  
+  // Metadata
+  ipAddress       String?       @map("ip_address")
+  userAgent       String?       @map("user_agent")
+  
+  investor        Investor?     @relation(fields: [investorId], references: [id], onDelete: SetNull)
+  
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([investorId])
+  @@index([targetType, targetId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("compliance_audit_logs")
 }

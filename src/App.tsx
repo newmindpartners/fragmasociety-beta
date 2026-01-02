@@ -35,6 +35,9 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminSubmissions from "./pages/admin/AdminSubmissions";
+import ComplianceDashboard from "./pages/admin/ComplianceDashboard";
+import InvestorReview from "./pages/admin/InvestorReview";
+import JurisdictionsPage from "./pages/admin/JurisdictionsPage";
 import { AdminRoute } from "./components/admin/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -85,6 +88,16 @@ const App = () => (
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               <Route path="/admin/submissions" element={<AdminRoute><AdminSubmissions /></AdminRoute>} />
+              
+              {/* Compliance Engine Routes */}
+              <Route path="/admin/compliance" element={<AdminRoute><ComplianceDashboard /></AdminRoute>} />
+              <Route path="/admin/compliance/investors" element={<AdminRoute><InvestorReview /></AdminRoute>} />
+              <Route path="/admin/compliance/investors/:investorId" element={<AdminRoute><InvestorReview /></AdminRoute>} />
+              <Route path="/admin/compliance/jurisdictions" element={<AdminRoute><JurisdictionsPage /></AdminRoute>} />
+              <Route path="/admin/compliance/jurisdictions/:countryCode" element={<AdminRoute><JurisdictionsPage /></AdminRoute>} />
+              <Route path="/admin/compliance/audit" element={<AdminRoute><ComplianceDashboard /></AdminRoute>} />
+              <Route path="/admin/compliance/ai-assistant" element={<AdminRoute><ComplianceDashboard /></AdminRoute>} />
+              
               <Route path="/admin/*" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               
               {/* Catch-all */}

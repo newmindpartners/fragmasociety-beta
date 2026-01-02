@@ -6,6 +6,7 @@ import { earlyAccessRoutes } from './routes/early-access.js';
 import { newsletterRoutes } from './routes/newsletter.js';
 import { kycRoutes } from './routes/kyc.js';
 import { adminRoutes } from './routes/admin.js';
+import { complianceRoutes } from './routes/compliance.js';
 
 const app = Fastify({
   logger: {
@@ -27,6 +28,7 @@ await app.register(earlyAccessRoutes);
 await app.register(newsletterRoutes);
 await app.register(kycRoutes);
 await app.register(adminRoutes);
+await app.register(complianceRoutes);
 
 // Start server
 const start = async () => {

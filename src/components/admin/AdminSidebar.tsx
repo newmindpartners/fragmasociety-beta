@@ -12,6 +12,11 @@ import {
   Shield,
   BarChart3,
   FileText,
+  Scale,
+  Globe,
+  UserCheck,
+  Bot,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import fragmaLogo from "@/assets/fragma-logo-v2.png";
@@ -30,6 +35,14 @@ const mainNavItems: NavItem[] = [
   { icon: Mail, label: "Newsletter", href: "/admin/newsletter" },
   { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
   { icon: FileText, label: "Reports", href: "/admin/reports" },
+];
+
+const complianceNavItems: NavItem[] = [
+  { icon: Scale, label: "Compliance", href: "/admin/compliance" },
+  { icon: UserCheck, label: "Investors", href: "/admin/compliance/investors" },
+  { icon: Globe, label: "Jurisdictions", href: "/admin/compliance/jurisdictions" },
+  { icon: ClipboardList, label: "Audit Log", href: "/admin/compliance/audit" },
+  { icon: Bot, label: "AI Assistant", href: "/admin/compliance/ai-assistant" },
 ];
 
 const bottomNavItems: NavItem[] = [
@@ -195,13 +208,32 @@ export const AdminSidebar = ({
           ))}
         </div>
 
+        {/* Compliance Section Divider */}
+        <div className="my-4 border-t border-[hsl(var(--sidebar-border))]" />
+        
+        {!isCollapsed && (
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="px-3 py-1 text-[10px] font-semibold text-violet-400 uppercase tracking-wider"
+          >
+            Compliance
+          </motion.p>
+        )}
+        
+        <div className="space-y-0.5">
+          {complianceNavItems.map((item, index) => (
+            <NavLink key={item.href} item={item} index={index + mainNavItems.length} />
+          ))}
+        </div>
+
         {/* Divider */}
         <div className="my-4 border-t border-[hsl(var(--sidebar-border))]" />
 
         {/* Bottom Navigation */}
         <div className="space-y-0.5">
           {bottomNavItems.map((item, index) => (
-            <NavLink key={item.href} item={item} index={index + mainNavItems.length} />
+            <NavLink key={item.href} item={item} index={index + mainNavItems.length + complianceNavItems.length} />
           ))}
         </div>
       </nav>
